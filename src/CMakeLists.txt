@@ -131,10 +131,10 @@ axl_set_pch (
 
 target_link_libraries (
 	doxyrest
-	axl_xml
-	axl_lex
-	axl_lua
 	axl_st
+	axl_lua
+	axl_lex
+	axl_xml
 	axl_io
 	axl_core
 	expat

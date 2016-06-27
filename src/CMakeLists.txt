@@ -141,4 +141,19 @@ target_link_libraries (
 	lua
 	)
 
+if (UNIX)
+	target_link_libraries (
+		doxyrest
+		pthread
+		dl
+		)
+
+	if (NOT APPLE)
+		target_link_libraries (
+			doxyrest
+			rt
+			)
+	endif ()
+endif ()
+
 #..............................................................................

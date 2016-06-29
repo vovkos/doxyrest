@@ -450,6 +450,7 @@ main (
 	int result;
 
 	xml::registerExpatErrorProvider ();
+	lex::registerParseErrorProvider ();
 
 	CmdLine cmdLine;
 	CmdLineParser parser (&cmdLine);

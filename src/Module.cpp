@@ -160,9 +160,9 @@ Member::luaExport (lua::LuaState* luaState)
 {
 	luaState->createTable ();
 
-	luaState->setMemberInteger ("m_memberKind", m_memberKind);
-	luaState->setMemberInteger ("m_protectionKind", m_protectionKind);
-	luaState->setMemberInteger ("m_virtualKind", m_virtualKind);
+	luaState->setMemberString ("m_memberKind", getMemberKindString (m_memberKind));
+	luaState->setMemberString ("m_protectionKind", getProtectionKindString (m_protectionKind));
+	luaState->setMemberString ("m_virtualKind", getVirtualKindString (m_virtualKind));
 	luaState->setMemberInteger ("m_flags", m_flags);
 	luaState->setMemberString ("m_id", m_id);
 	luaState->setMemberString ("m_name", m_name);
@@ -233,7 +233,7 @@ Compound::luaExport (lua::LuaState* luaState)
 		}
 	}
 
-	luaState->setMemberInteger ("m_compoundKind", m_compoundKind);
+	luaState->setMemberString ("m_compoundKind", getCompoundKindString (m_compoundKind));	
 	luaState->setMemberString ("m_name", unqualifiedName);
 	luaState->setMemberString ("m_id", m_id);
 	

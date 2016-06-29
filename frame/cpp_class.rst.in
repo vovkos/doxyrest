@@ -1,0 +1,147 @@
+%{
+local argArray = table.pack (...)
+local class = argArray [1]
+}
+.. _doxid-$(class.m_id):
+
+$(getTitle (class.m_compoundKind .. " " .. class.m_name, "="))
+
+.. toctree::
+	:titlesonly:
+
+$(getCompoundTocTree (class, "\t"))
+
+%{
+if #class.m_enumArray > 0 then
+}
+Member Enums
+------------
+
+%{
+	for i = 1, #class.m_enumArray do
+		local item = class.m_enumArray [i]
+}
+| :ref:`enum $(item.m_name) <doxid-$(item.m_id)>`
+%{
+	end -- for
+}
+
+$(#class.m_enumArray) total enums
+
+%{
+end -- if
+
+if #class.m_structArray > 0 then
+}
+Member Structs
+--------------
+
+%{
+	for i = 1, #class.m_structArray do
+		local item = class.m_structArray [i]
+}
+| :ref:`struct $(item.m_name) <doxid-$(item.m_id)>`
+%{
+	end -- for
+}
+
+$(#class.m_structArray) total structs
+
+%{
+end -- if
+
+if #class.m_unionArray > 0 then
+}
+Member Unions
+-------------
+
+%{
+	for i = 1, #class.m_unionArray do
+		local item = class.m_unionArray [i]
+}
+| :ref:`union $(item.m_name) <doxid-$(item.m_id)>`
+%{
+	end -- for
+}
+
+$(#class.m_structArray) total unions
+
+%{
+end -- if
+
+if #class.m_classArray > 0 then
+}
+Member Classes
+--------------
+
+%{
+	for i = 1, #class.m_classArray do
+		local item = class.m_classArray [i]
+}
+| :ref:`class $(item.m_name) <doxid-$(item.m_id)>`
+%{
+	end -- for
+}
+
+$(#class.m_classArray) total classes
+
+%{
+end -- if
+
+if #class.m_typedefArray > 0 then
+}
+Member Typedefs
+---------------
+
+%{
+	for i = 1, #class.m_typedefArray do
+		local item = class.m_typedefArray [i]
+}
+| typedef $(item.m_type) $(item.m_name)
+%{
+	end -- for
+}
+
+$(#class.m_typedefArray) total typedefs
+
+%{
+end -- if
+
+if #class.m_variableArray > 0 then
+}
+Member Fields
+-------------
+
+%{
+	for i = 1, #class.m_variableArray do
+		local item = class.m_variableArray [i]
+}
+| $(item.m_type) $(item.m_name)
+%{
+	end -- for
+}
+
+$(#class.m_variableArray) total fields
+
+%{
+end -- if
+
+if #class.m_functionArray > 0 then
+}
+Member Methods
+--------------
+
+%{
+	for i = 1, #class.m_functionArray do
+		local item = class.m_functionArray [i]
+}
+| $(item.m_returnType) 
+| $(item.m_name) $(getFunctionArgString (item.m_paramArray))
+%{
+	end -- for
+}
+
+$(#class.m_functionArray) total methods
+%{
+end -- if
+}

@@ -38,6 +38,24 @@ source_group (
 
 # . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 #
+# frame folder
+#
+
+file (	
+	GLOB FRAME_LIST 
+	${DOXYREST_ROOT_DIR}/frame/*.*
+	)
+
+message ("FRAME_LIST = ${FRAME_LIST}")
+
+source_group (
+	frame
+	FILES
+	${FRAME_LIST}
+	)
+
+# . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+#
 # res folder
 #
 
@@ -119,6 +137,7 @@ add_executable (
 	${PCH_CPP}
 	${APP_H_LIST}
 	${APP_CPP_LIST}
+	${FRAME_LIST}
 	${RES_RC_LIST}
 	${GEN_H_LIST}
 	)

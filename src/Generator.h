@@ -57,7 +57,8 @@ protected:
 	bool
 	processFile (
 		const char* targetFileName,
-		const char* frameFileName
+		const char* frameFileName,
+		size_t baseArgCount
 		);
 };
 

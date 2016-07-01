@@ -6,10 +6,15 @@
 //.............................................................................
 
 void
-Generator::prepare (GlobalNamespace* globalNamespace)
+Generator::prepare (
+	Module* module,	
+	GlobalNamespace* globalNamespace
+	)
 {
 	m_stringTemplate.create ();
 	globalNamespace->luaExport (&m_stringTemplate.m_luaState);
+	m_stringTemplate.m_luaState.setGlobalInteger ("g_indexedItemCount", module->m_indexedItemCount);
+
 	m_stringTemplate.m_luaState.registerFunction ("includeFile", includeFile_lua, (intptr_t) this);
 	m_stringTemplate.m_luaState.registerFunction ("generateFile", generateFile_lua, (intptr_t) this);
 	m_stringTemplate.m_luaState.registerFunction ("getItem", generateFile_lua, (intptr_t) this);

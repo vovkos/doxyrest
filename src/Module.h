@@ -6,6 +6,39 @@ struct Namespace;
 
 //.............................................................................
 
+struct RefText: sl::ListLink
+{
+	RefKind m_refKind;
+	sl::String m_text;
+	sl::String m_id;
+	sl::String m_external;
+	sl::String m_tooltip;
+
+	RefText ()
+	{
+		m_refKind = RefKind_Undefined;
+	}
+
+	void
+	luaExport (lua::LuaState* luaState);
+};
+
+//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+struct LinkedText
+{
+	sl::String m_plainText;
+	sl::StdList <RefText> m_refTextList;
+
+	void
+	luaExport (lua::LuaState* luaState);
+
+	void
+	normalize ();
+};
+
+//.............................................................................
+
 enum DocBlockKind
 {
 	DocBlockKind_Undefined,
@@ -42,7 +75,7 @@ struct DocBlock: sl::ListLink
 
 struct DocParagraphBlock: DocBlock
 {
-	sl::String m_contents;
+	LinkedText m_contents;
 
 	virtual 
 	void
@@ -79,12 +112,12 @@ struct Description
 
 struct Param: sl::ListLink
 {
+	LinkedText m_type;
 	sl::String m_declarationName;
 	sl::String m_definitionName;
-	sl::String m_type;
 	sl::String m_array;
-	sl::String m_defaultValue;
-	sl::String m_typeConstraint;
+	LinkedText m_defaultValue;
+	LinkedText m_typeConstraint;
 
 	Description m_briefDescription;
 
@@ -96,15 +129,24 @@ struct Param: sl::ListLink
 
 struct EnumValue: sl::ListLink
 {
+	ProtectionKind m_protectionKind;
+
+	sl::String m_id;
 	sl::String m_name;
-	sl::String m_initializer;
+	LinkedText m_initializer;
 
 	Description m_briefDescription;
 	Description m_detailedDescription;
 
+	EnumValue ()
+	{
+		m_protectionKind = ProtectionKind_Undefined;
+	}
+
 	void
 	luaExport (lua::LuaState* luaState);
 };
+
 
 //.............................................................................
 
@@ -154,21 +196,25 @@ getMemberFlagString (uint_t flags);
 
 struct Member: sl::ListLink
 {
+	size_t m_index;
+
 	MemberKind m_memberKind;
 	ProtectionKind m_protectionKind;
 	VirtualKind m_virtualKind;
 	uint_t m_flags;
 
 	sl::String m_id;
+	LinkedText m_type;
 	sl::String m_name;
-	sl::String m_type;
 	sl::String m_definition;
 	sl::String m_argString;
 	sl::String m_bitField;
-	sl::String m_initializer;
-	sl::String m_exceptions;
+	LinkedText m_initializer;
+	LinkedText m_exceptions;
+
 	sl::StdList <Param> m_paramList;
 	sl::StdList <Param> m_templateParamList;
+	sl::StdList <Param> m_templateSpecParamList;
 	sl::StdList <EnumValue> m_enumValueList;
 
 	Description m_briefDescription;
@@ -202,14 +248,17 @@ struct Ref: sl::ListLink
 
 struct Compound: sl::ListLink
 {
+	size_t m_index;
+
 	CompoundKind m_compoundKind;
 	LanguageKind m_languageKind;
 	ProtectionKind m_protectionKind;
-
+		
 	sl::String m_id;
 	sl::String m_name;
 	sl::String m_title;
 	sl::StdList <Param> m_templateParamList;
+	sl::StdList <Param> m_templateSpecParamList;
 	sl::StdList <Member> m_memberList;
 
 	sl::StdList <Ref> m_baseRefList;
@@ -234,6 +283,15 @@ struct Compound: sl::ListLink
 	luaExport (lua::LuaState* luaState);
 	
 	void
+	unqualifyName ();
+
+	void
+	unspecializeName ();
+
+	Param*
+	createTemplateSpecParam (const sl::StringRef& name);
+
+	void
 	preparePath ();
 };
 
@@ -241,10 +299,17 @@ struct Compound: sl::ListLink
 
 struct Module
 {
+	size_t m_indexedItemCount;
+
 	sl::String m_version;
 	sl::StdList <Compound> m_compoundList;
 	sl::Array <Compound*> m_namespaceArray;
 	sl::StringHashTableMap <Compound*> m_compoundMap;
+
+	Module ()
+	{
+		m_indexedItemCount = 0;
+	}
 };
 
 //.............................................................................

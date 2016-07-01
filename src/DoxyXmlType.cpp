@@ -160,10 +160,11 @@ CompoundDefType::create (
 	const char** attributes
 	)
 {
+	Module* module = parser->getModule ();
+
 	m_parser = parser;
 	m_compound = AXL_MEM_NEW (Compound);
-
-	Module* module = m_parser->getModule ();
+	m_compound->m_index = module->m_indexedItemCount++;
 	module->m_compoundList.insertTail (m_compound);
 
 	while (*attributes)
@@ -387,8 +388,11 @@ MemberDefType::create (
 	const char** attributes
 	)
 {
+	Module* module = parser->getModule ();
+
 	m_parser = parser;
 	m_member = AXL_MEM_NEW (Member);
+	m_member->m_index = module->m_indexedItemCount++;
 	parent->m_memberList.insertTail (m_member);
 
 	while (*attributes)
@@ -780,9 +784,11 @@ EnumValueType::create (
 		switch (attrKind)
 		{
 		case AttrKind_Id:
+			m_enumValue->m_id = attributes [1];
 			break;
 
 		case AttrKind_Prot:
+			m_enumValue->m_protectionKind = ProtectionKindMap::find (attributes [1], ProtectionKind_Undefined);
 			break;
 		}
 
@@ -888,7 +894,7 @@ ParamType::onStartElement (
 		break;
 
 	case ElemKind_DefName:
-		m_parser->pushType <LinkedTextType> (&m_param->m_definitionName, name, attributes);
+		m_parser->pushType <StringType> (&m_param->m_definitionName, name, attributes);
 		break;
 
 	case ElemKind_Array:
@@ -916,13 +922,16 @@ ParamType::onStartElement (
 bool
 LinkedTextType::create (
 	DoxyXmlParser* parser,
-	sl::String* string,
+	LinkedText* linkedText,
 	const char* name,
 	const char** attributes
 	)
 {
 	m_parser = parser;
-	m_string = string;
+	m_linkedText = linkedText;
+	m_refText = AXL_MEM_NEW (RefText);
+	m_linkedText->m_refTextList.insertTail (m_refText);
+	
 	return true;
 }
 
@@ -936,8 +945,10 @@ LinkedTextType::onStartElement (
 	switch (elemKind)
 	{
 	case ElemKind_Ref:
-		m_string->append ('@'); // link
-		m_parser->pushType <RefTextType> (m_string, name, attributes);
+		m_parser->pushType <RefTextType> (m_linkedText, name, attributes);
+		
+		m_refText = AXL_MEM_NEW (RefText);
+		m_linkedText->m_refTextList.insertTail (m_refText);
 		break;
 	}
 
@@ -949,12 +960,40 @@ LinkedTextType::onStartElement (
 bool
 RefTextType::create (
 	DoxyXmlParser* parser,
-	sl::String* string,
+	LinkedText* linkedText,
 	const char* name,
 	const char** attributes
 	)
 {
-	m_string = string;
+	m_parser = parser;
+	m_refText = AXL_MEM_NEW (RefText);
+	linkedText->m_refTextList.insertTail (m_refText);
+
+	while (*attributes)
+	{
+		AttrKind attrKind = AttrKindMap::find (attributes [0], AttrKind_Undefined);
+		switch (attrKind)
+		{
+		case AttrKind_RefId:
+			m_refText->m_id = attributes [1];
+			break;
+
+		case AttrKind_KindRef:
+			m_refText->m_refKind = RefKindMap::find (attributes [1], RefKind_Undefined);
+			break;
+
+		case AttrKind_External:
+			m_refText->m_external = attributes [1];
+			break;
+
+		case AttrKind_Tooltip:
+			m_refText->m_tooltip = attributes [1];
+			break;
+		}
+
+		attributes += 2;
+	}
+
 	return true;
 }
 

@@ -6,11 +6,24 @@ local enum = argArray [1]
 
 $(getTitle ("enum " .. enum.m_name, "="))
 
+$(getMemberLabels (enum.m_enumValueArray))
+Enum Values
+-----------
+
 %{
 	for i = 1, #enum.m_enumValueArray do
 		local item = enum.m_enumValueArray [i]
+
+		if not item.m_initializer.m_isEmpty then
 }
-| $(item.m_name) = $(item.m_initializer)
+| $(item.m_name) = $(getLinkedTextString (item.m_initializer))
+%{
+		else
+}
+| $(item.m_name)
+%{
+		end -- if
+}
 %{
 	end -- for
 }

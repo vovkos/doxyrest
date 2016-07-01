@@ -421,7 +421,13 @@ run (CmdLine* cmdLine)
 
 	printf ("generating...\n");
 
-	result = generator.generate (&globalNamespace, cmdLine->m_outputFileName, cmdLine->m_frameFileName);
+	result = generator.generate (
+		&module, 
+		&globalNamespace, 
+		cmdLine->m_outputFileName, 
+		cmdLine->m_frameFileName
+		);
+
 	if (!result)
 	{
 		printf ("error: %s\n", err::getLastErrorDescription ().cc ());

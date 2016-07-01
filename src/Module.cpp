@@ -4,6 +4,58 @@
 //.............................................................................
 
 void
+RefText::luaExport (lua::LuaState* luaState)
+{
+	luaState->createTable ();
+
+	luaState->setMemberString ("m_refKind", getRefKindString (m_refKind));
+	luaState->setMemberString ("m_text", m_text);
+	luaState->setMemberString ("m_id", m_id);
+	luaState->setMemberString ("m_external", m_external);
+	luaState->setMemberString ("m_tooltip", m_tooltip);
+}
+
+//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+void
+LinkedText::luaExport (lua::LuaState* luaState)
+{
+	normalize ();
+
+	luaState->createTable ();
+	
+	luaState->setMemberBoolean ("m_isEmpty", m_plainText.isEmpty ());
+	luaState->setMemberString ("m_plainText", m_plainText);
+	
+	luaExportList (luaState, m_refTextList);
+	luaState->setMember ("m_refTextArray");
+}
+
+void
+LinkedText::normalize ()
+{
+	m_plainText.clear ();
+
+	sl::Iterator <RefText> it = m_refTextList.getHead ();
+	while (it)
+	{
+		if (!it->m_text.isEmpty ())
+		{
+			m_plainText += it->m_text;
+			it++;
+		}
+		else
+		{
+			sl::Iterator <RefText> next = it.getNext ();
+			m_refTextList.erase (it);
+			it = next;
+		}
+	}
+}
+
+//.............................................................................
+
+void
 DocBlock::luaExportMembers (lua::LuaState* luaState)
 {
 	luaState->setMemberInteger ("m_docBlockKind", m_docBlockKind);
@@ -14,16 +66,21 @@ void
 DocParagraphBlock::luaExport (lua::LuaState* luaState)
 {
 	luaState->createTable ();
+	
 	DocBlock::luaExportMembers (luaState);
-	luaState->setMemberString ("m_contents", m_contents);
+
+	m_contents.luaExport (luaState);
+	luaState->setMember ("m_contents");
 }
 
 void
 DocSectionBlock::luaExport (lua::LuaState* luaState)
 {
 	luaState->createTable ();
+	
 	DocBlock::luaExportMembers (luaState);
 	luaState->setMemberString ("m_id", m_id);
+	
 	luaExportList (luaState, m_childBlockList);
 	luaState->setMember ("m_childBlockList");
 }
@@ -34,6 +91,7 @@ Description::luaExport (lua::LuaState* luaState)
 	luaState->createTable ();
 
 	luaState->setMemberBoolean ("m_isEmpty", isEmpty ());
+	
 	luaExportList (luaState, m_docBlockList);
 	luaState->setMember ("m_docBlockList");
 }
@@ -47,10 +105,16 @@ Param::luaExport (lua::LuaState* luaState)
 
 	luaState->setMemberString ("m_declarationName", m_declarationName);
 	luaState->setMemberString ("m_definitionName", m_definitionName);
-	luaState->setMemberString ("m_type", m_type);
 	luaState->setMemberString ("m_array", m_array);
-	luaState->setMemberString ("m_defaultValue", m_defaultValue);
-	luaState->setMemberString ("m_typeConstraint", m_typeConstraint);
+
+	m_type.luaExport (luaState);
+	luaState->setMember ("m_type");
+
+	m_defaultValue.luaExport (luaState);
+	luaState->setMember ("m_defaultValue");
+
+	m_typeConstraint.luaExport (luaState);
+	luaState->setMember ("m_typeConstraint");
 
 	m_briefDescription.luaExport (luaState);
 	luaState->setMember ("m_briefDescription");
@@ -63,8 +127,12 @@ EnumValue::luaExport (lua::LuaState* luaState)
 {
 	luaState->createTable ();
 
+	luaState->setMemberString ("m_protectionKind", getProtectionKindString (m_protectionKind));
+	luaState->setMemberString ("m_id", m_id);
 	luaState->setMemberString ("m_name", m_name);
-	luaState->setMemberString ("m_initializer", m_initializer);
+
+	m_initializer.luaExport (luaState);
+	luaState->setMember ("m_initializer");
 
 	m_briefDescription.luaExport (luaState);
 	luaState->setMember ("m_briefDescription");
@@ -149,6 +217,7 @@ getMemberFlagString (uint_t flags)
 
 Member::Member ()
 {
+	m_index = 0;
 	m_memberKind = MemberKind_Undefined;
 	m_protectionKind = ProtectionKind_Undefined;
 	m_virtualKind = VirtualKind_Undefined;
@@ -160,6 +229,7 @@ Member::luaExport (lua::LuaState* luaState)
 {
 	luaState->createTable ();
 
+	luaState->setMemberInteger ("m_index", m_index);
 	luaState->setMemberString ("m_memberKind", getMemberKindString (m_memberKind));
 	luaState->setMemberString ("m_protectionKind", getProtectionKindString (m_protectionKind));
 	luaState->setMemberString ("m_virtualKind", getVirtualKindString (m_virtualKind));
@@ -169,24 +239,42 @@ Member::luaExport (lua::LuaState* luaState)
 
 	switch (m_memberKind)
 	{
-	case MemberKind_Function:
-		luaState->setMemberString ("m_returnType", m_type);
-		luaState->setMemberString ("m_exceptions", m_exceptions);
-		luaExportList (luaState, m_templateParamList);
-		luaState->setMember ("m_templateParamArray");
-		luaExportList (luaState, m_paramList);
-		luaState->setMember ("m_paramArray");
-		break;
-
-	case MemberKind_Variable:
-		luaState->setMemberString ("m_type", m_type);
-		luaState->setMemberString ("m_bitField", m_bitField);
-		luaState->setMemberString ("m_initializer", m_initializer);
+	case MemberKind_Typedef:
+		m_type.luaExport (luaState);
+		luaState->setMember ("m_type");
 		break;
 
 	case MemberKind_Enum:
 		luaExportList (luaState, m_enumValueList);
 		luaState->setMember ("m_enumValueArray");
+		break;
+
+	case MemberKind_Variable:
+		m_type.luaExport (luaState);
+		luaState->setMember ("m_type");
+
+		luaState->setMemberString ("m_bitField", m_bitField);
+
+		m_initializer.luaExport (luaState);
+		luaState->setMember ("m_initializer");
+		break;
+
+	case MemberKind_Function:
+		m_type.luaExport (luaState);
+		luaState->setMember ("m_returnType");
+
+		m_exceptions.luaExport (luaState);
+		luaState->setMember ("m_exceptions");
+
+		luaExportList (luaState, m_templateParamList);
+		luaState->setMember ("m_templateParamArray");
+
+		luaExportList (luaState, m_templateSpecParamList);
+		luaState->setMember ("m_templateSpecParamArray");
+
+		luaExportList (luaState, m_paramList);
+		luaState->setMember ("m_paramArray");
+		break;
 	}
 
 	m_briefDescription.luaExport (luaState);
@@ -203,12 +291,12 @@ Member::luaExport (lua::LuaState* luaState)
 
 Compound::Compound ()
 {
+	m_index = 0;
 	m_compoundKind = CompoundKind_Undefined;
 	m_languageKind = LanguageKind_Undefined;
 	m_protectionKind = ProtectionKind_Undefined;
 	m_selfNamespace = NULL;
 	m_parentNamespace = NULL;
-
 	m_isFinal = false;
 	m_isSealed = false;
 	m_isAbstract = false;
@@ -217,25 +305,14 @@ Compound::Compound ()
 void
 Compound::luaExport (lua::LuaState* luaState)
 {
+	unqualifyName ();
+	unspecializeName ();
+
 	luaState->createTable ();
-
-	const char* unqualifiedName = m_name;
-	const char* p = m_name;
-	const char* end = p + m_name.getLength ();
-	for (; p < end; p++)
-	{
-		switch (*p)
-		{
-		case ':':
-		case '.':
-			unqualifiedName = p + 1;
-			break;
-		}
-	}
-
+	luaState->setMemberInteger ("m_index", m_index);
 	luaState->setMemberString ("m_compoundKind", getCompoundKindString (m_compoundKind));	
-	luaState->setMemberString ("m_name", unqualifiedName);
 	luaState->setMemberString ("m_id", m_id);
+	luaState->setMemberString ("m_name", m_name);
 	
 	switch (m_compoundKind)
 	{
@@ -249,8 +326,9 @@ Compound::luaExport (lua::LuaState* luaState)
 	case CompoundKind_Class:
 	case CompoundKind_Interface:
 		luaExportList (luaState, m_templateParamList);
-		luaState->setMember ("m_templateParamList");
-
+		luaState->setMember ("m_templateParamArray");
+		luaExportList (luaState, m_templateSpecParamList);
+		luaState->setMember ("m_templateSpecParamArray");
 		preparePath ();
 		luaState->setMemberString ("m_path", m_path);
 		break;
@@ -263,6 +341,95 @@ Compound::luaExport (lua::LuaState* luaState)
 
 	m_detailedDescription.luaExport (luaState);
 	luaState->setMember ("m_detailedDescription");
+}
+
+void
+Compound::unqualifyName ()
+{
+	const char* unqualifiedName = m_name; 
+	const char* p = m_name;
+	const char* end = p + m_name.getLength ();
+
+	for (; p < end; p++)
+	{
+		switch (*p)
+		{
+		case '<':
+			p = end;
+			break;
+
+		case ':':
+		case '.':
+			unqualifiedName = p + 1;
+			break;
+		}
+	}
+
+	if (unqualifiedName != m_name)
+		m_name = unqualifiedName;
+}
+
+void
+Compound::unspecializeName ()
+{
+	size_t i = m_name.find ('<');
+	if (i == -1)
+		return;
+
+	size_t unspecializedNameLength = i;
+
+	const char* p = m_name.cc () + unspecializedNameLength + 1;
+	const char* end = m_name.cc () + m_name.getLength ();
+
+	const char* p0 = p;
+	size_t level = 0;
+
+	for (; p < end; p++)
+	{
+		switch (*p)
+		{
+		case '<':
+			level++;
+			break;
+
+		case '>':
+			level--;
+			if (level == -1)
+			{
+				createTemplateSpecParam (sl::StringRef (p0, p - p0));
+				p = end; // outta here
+			}
+
+			break;
+
+		case ',':
+			if (!level)
+			{
+				createTemplateSpecParam (sl::StringRef (p0, p - p0));
+				p0 = p + 1;
+			}
+
+			break;
+		}
+	
+	}
+
+	m_name.setReducedLength (unspecializedNameLength);
+	m_name.trimWhitespaceRight ();
+
+	const char* x = strchr (m_name, '>');
+	ASSERT (!x);
+}
+
+Param*
+Compound::createTemplateSpecParam (const sl::StringRef& name)
+{
+	Param* param = AXL_MEM_NEW (Param);
+	param->m_declarationName = name;
+	param->m_declarationName.trimWhitespace ();
+
+	m_templateSpecParamList.insertTail (param);
+	return param;
 }
 
 void

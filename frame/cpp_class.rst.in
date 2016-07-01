@@ -4,7 +4,7 @@ local class = argArray [1]
 }
 .. _doxid-$(class.m_id):
 
-$(getTitle (class.m_compoundKind .. " " .. class.m_name, "="))
+$(getTitle (class.m_compoundKind .. " " .. getItemName (class), "="))
 
 .. toctree::
 	:titlesonly:
@@ -12,6 +12,25 @@ $(getTitle (class.m_compoundKind .. " " .. class.m_name, "="))
 $(getCompoundTocTree (class, "\t"))
 
 %{
+if #class.m_typedefArray > 0 then
+}
+Member Typedefs
+---------------
+
+%{
+	for i = 1, #class.m_typedefArray do
+		local item = class.m_typedefArray [i]
+}
+| typedef $(getLinkedTextString (item.m_type)) $(item.m_name)
+%{
+	end -- for
+}
+
+$(#class.m_typedefArray) total typedefs
+
+%{
+end -- if
+
 if #class.m_enumArray > 0 then
 }
 Member Enums
@@ -20,6 +39,9 @@ Member Enums
 %{
 	for i = 1, #class.m_enumArray do
 		local item = class.m_enumArray [i]
+		local targetFileName = getItemFileName (item, class)
+
+		generateFile (targetFileName, "cpp_enum.rst.in", item)
 }
 | :ref:`enum $(item.m_name) <doxid-$(item.m_id)>`
 %{
@@ -39,8 +61,11 @@ Member Structs
 %{
 	for i = 1, #class.m_structArray do
 		local item = class.m_structArray [i]
+		local targetFileName = getItemFileName (item, class)
+
+		generateFile (targetFileName, "cpp_class.rst.in", item)
 }
-| :ref:`struct $(item.m_name) <doxid-$(item.m_id)>`
+| :ref:`struct $(getItemName (item)) <doxid-$(item.m_id)>`
 %{
 	end -- for
 }
@@ -58,8 +83,11 @@ Member Unions
 %{
 	for i = 1, #class.m_unionArray do
 		local item = class.m_unionArray [i]
+		local targetFileName = getItemFileName (item, class)
+
+		generateFile (targetFileName, "cpp_class.rst.in", item)
 }
-| :ref:`union $(item.m_name) <doxid-$(item.m_id)>`
+| :ref:`union $(getItemName (item)) <doxid-$(item.m_id)>`
 %{
 	end -- for
 }
@@ -77,32 +105,16 @@ Member Classes
 %{
 	for i = 1, #class.m_classArray do
 		local item = class.m_classArray [i]
+		local targetFileName = getItemFileName (item, class)
+
+		generateFile (targetFileName, "cpp_class.rst.in", item)
 }
-| :ref:`class $(item.m_name) <doxid-$(item.m_id)>`
+| :ref:`class $(getItemName (item)) <doxid-$(item.m_id)>`
 %{
 	end -- for
 }
 
 $(#class.m_classArray) total classes
-
-%{
-end -- if
-
-if #class.m_typedefArray > 0 then
-}
-Member Typedefs
----------------
-
-%{
-	for i = 1, #class.m_typedefArray do
-		local item = class.m_typedefArray [i]
-}
-| typedef $(item.m_type) $(item.m_name)
-%{
-	end -- for
-}
-
-$(#class.m_typedefArray) total typedefs
 
 %{
 end -- if
@@ -116,7 +128,7 @@ Member Fields
 	for i = 1, #class.m_variableArray do
 		local item = class.m_variableArray [i]
 }
-| $(item.m_type) $(item.m_name)
+| $(getLinkedTextString (item.m_type)) $(item.m_name)
 %{
 	end -- for
 }
@@ -135,12 +147,18 @@ Member Methods
 	for i = 1, #class.m_functionArray do
 		local item = class.m_functionArray [i]
 }
-| $(item.m_returnType) 
-| $(item.m_name) $(getFunctionArgString (item.m_paramArray))
+%{
+		if not item.m_returnType.m_isEmpty then
+}
+| $(getLinkedTextString (item.m_returnType))
+%{	
+		end -- if
+}
+| $(getItemName (item)) $(getFunctionParamArrayString (item.m_paramArray));
+
 %{
 	end -- for
 }
-
 $(#class.m_functionArray) total methods
 %{
 end -- if

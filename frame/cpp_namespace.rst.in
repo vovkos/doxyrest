@@ -13,6 +13,7 @@ end -- if
 }
 .. toctree::
 	:titlesonly:
+	:maxdepth: 1
 	
 $(getCompoundTocTree (namespace, "\t"))
 
@@ -35,6 +36,25 @@ Sub-Namespaces
 }
 
 $(#namespace.m_namespaceArray) total namespaces
+
+%{
+end -- if
+
+if #namespace.m_typedefArray > 0 then
+}
+Typedefs
+--------
+
+%{
+	for i = 1, #namespace.m_typedefArray do
+		local item = namespace.m_typedefArray [i]
+}
+| typedef $(getLinkedTextString (item.m_type)) $(item.m_name)
+%{
+	end -- for
+}
+
+$(#namespace.m_typedefArray) total typedefs
 
 %{
 end -- if
@@ -73,7 +93,7 @@ Structs
 
 		generateFile (targetFileName, "cpp_class.rst.in", item)
 }
-| :ref:`struct $(item.m_name) <doxid-$(item.m_id)>`
+| :ref:`struct $(getItemName (item)) <doxid-$(item.m_id)>`
 %{
 	end -- for
 }
@@ -95,7 +115,7 @@ Unions
 
 		generateFile (targetFileName, "cpp_class.rst.in", item)
 }
-| :ref:`union $(item.m_name) <doxid-$(item.m_id)>`
+| :ref:`union $(getItemName (item)) <doxid-$(item.m_id)>`
 %{
 	end -- for
 }
@@ -117,31 +137,12 @@ Classes
 
 		generateFile (targetFileName, "cpp_class.rst.in", item)
 }
-| :ref:`class $(item.m_name) <doxid-$(item.m_id)>`
+| :ref:`class $(getItemName (item)) <doxid-$(item.m_id)>`
 %{
 	end -- for
 }
 
 $(#namespace.m_classArray) total classes
-
-%{
-end -- if
-
-if #namespace.m_typedefArray > 0 then
-}
-Typedefs
---------
-
-%{
-	for i = 1, #namespace.m_typedefArray do
-		local item = namespace.m_typedefArray [i]
-}
-| typedef $(item.m_type) $(item.m_name)
-%{
-	end -- for
-}
-
-$(#namespace.m_typedefArray) total typedefs
 
 %{
 end -- if
@@ -155,7 +156,7 @@ Variables
 	for i = 1, #namespace.m_variableArray do
 		local item = namespace.m_variableArray [i]
 }
-| $(item.m_type) $(item.m_name)
+| $(getLinkedTextString (item.m_type)) $(item.m_name)
 %{
 	end -- for
 }
@@ -174,13 +175,12 @@ Functions
 	for i = 1, #namespace.m_functionArray do
 		local item = namespace.m_functionArray [i]
 }
-| $(item.m_returnType)
-| $(item.m_name) $(getFunctionArgString (item.m_paramArray))
-|
+| $(getLinkedTextString (item.m_returnType))
+| $(getItemName (item)) $(getFunctionParamArrayString (item.m_paramArray));
+
 %{
 	end -- for
 }
-
 $(#namespace.m_functionArray) total functions
 %{
 end -- if

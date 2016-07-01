@@ -5,6 +5,8 @@
 #pragma once
 
 struct CmdLine;
+struct Module;
+class GlobalNamespace;
 
 //.............................................................................
 
@@ -26,7 +28,10 @@ public:
 	}
 
 	void
-	prepare (class GlobalNamespace* globalNamespace);
+	prepare (
+		Module* module,
+		GlobalNamespace* globalNamespace
+		);
 	
 	bool
 	generate (
@@ -36,12 +41,13 @@ public:
 
 	bool
 	generate (
-		class GlobalNamespace* globalNamespace,
+		Module* module,
+		GlobalNamespace* globalNamespace,
 		const char* targetFileName,
 		const char* frameFileName
 		)
 	{
-		prepare (globalNamespace);
+		prepare (module, globalNamespace);
 		return generate (targetFileName, frameFileName);
 	}
 

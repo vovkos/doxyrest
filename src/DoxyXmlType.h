@@ -942,18 +942,20 @@ protected:
 	AXL_SL_END_HASH_TABLE_MAP ()
 
 protected:
-	sl::String* m_string;
+	LinkedText* m_linkedText;
+	RefText* m_refText;
 
 public:
 	LinkedTextType ()
 	{
-		m_string = NULL;
+		m_linkedText = NULL;
+		m_refText = NULL;
 	}
 
 	bool
 	create (
 		DoxyXmlParser* parser,
-		sl::String* string,
+		LinkedText* linkedText,
 		const char* name,
 		const char** attributes
 		);
@@ -972,7 +974,7 @@ public:
 		size_t length
 		)
 	{
-		m_string->append (string, length);
+		m_refText->m_text.append (string, length);
 		return true;
 	}
 };
@@ -984,6 +986,7 @@ class RefTextType: public DoxyXmlType
 protected:
 	enum AttrKind
 	{
+		AttrKind_Undefined,
 		AttrKind_RefId,
 		AttrKind_KindRef,
 		AttrKind_External,
@@ -998,18 +1001,18 @@ protected:
 	AXL_SL_END_HASH_TABLE_MAP ()
 
 protected:
-	sl::String* m_string;
+	RefText* m_refText;
 
 public:
 	RefTextType ()
 	{
-		m_string = NULL;
+		m_refText = NULL;
 	}
 
 	bool
 	create (
 		DoxyXmlParser* parser,
-		sl::String* string,
+		LinkedText* linkedText,
 		const char* name,
 		const char** attributes
 		);
@@ -1021,7 +1024,7 @@ public:
 		size_t length
 		)
 	{
-		m_string->append (string, length);
+		m_refText->m_text.append (string, length);
 		return true;
 	}
 };

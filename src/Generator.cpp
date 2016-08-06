@@ -14,6 +14,7 @@ Generator::prepare (
 	m_stringTemplate.create ();
 	globalNamespace->luaExport (&m_stringTemplate.m_luaState);
 	m_stringTemplate.m_luaState.setGlobalInteger ("g_indexedItemCount", module->m_indexedItemCount);
+	m_stringTemplate.m_luaState.setGlobalString ("g_namespaceSep", m_cmdLine->m_namespaceSep);
 
 	m_stringTemplate.m_luaState.registerFunction ("includeFile", includeFile_lua, (intptr_t) this);
 	m_stringTemplate.m_luaState.registerFunction ("generateFile", generateFile_lua, (intptr_t) this);
@@ -29,6 +30,12 @@ Generator::generate (
 	bool result;
 
 	sl::String targetFilePath = io::getFullFilePath (targetFileName);
+	sl::String targetDir = io::getDir (targetFilePath);
+	
+	result = io::ensureDirExists (targetDir);
+	if (!result)
+		return false;
+
 	sl::String frameFilePath = io::findFilePath (frameFileName, NULL, &m_cmdLine->m_frameDirList);
 	if (frameFilePath.isEmpty ())
 	{
@@ -46,6 +53,14 @@ Generator::generate (
 	result = m_stringTemplate.processFile (&m_stringBuffer, frameFilePath);
 	if (!result)
 		return false;
+
+	sl::String dir = io::getDir (targetFileName);
+	if (!dir.isEmpty ())
+	{
+		result = io::ensureDirExists (dir);
+		if (!result)
+			return false;
+	}
 
 	io::File targetFile;
 	result = targetFile.open (targetFileName);

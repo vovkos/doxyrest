@@ -17,6 +17,7 @@ struct CmdLine
 	sl::String m_inputFileName;
 	sl::String m_outputFileName;
 	sl::String m_frameFileName;
+	sl::String m_namespaceSep;
 	sl::BoxList <sl::String> m_frameDirList;
 
 	CmdLine ();

@@ -29,7 +29,7 @@ printUsage ()
 	printVersion ();
 
 	sl::String helpString = CmdLineSwitchTable::getHelpString ();
-	printf ("Usage: doxyrest <options>...\n%s", helpString.cc ());
+	printf ("Usage: doxyrest <doxygen-index.xml> <options>...\n%s", helpString.cc ());
 }
 
 #if _PRINT_MODULE

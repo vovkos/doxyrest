@@ -122,15 +122,15 @@ function getItemFileName (item, parentCompound)
 	local s
 	
 	if item.m_compoundKind then
-		s = item.m_compoundKind .. "_"
+		s = item.m_compoundKind .. g_namespaceSep
 	elseif item.m_memberKind then
-		s = item.m_memberKind .. "_"
+		s = item.m_memberKind .. g_namespaceSep
 	else
 		s = "undef_"
 	end
 
 	if parentCompound.m_name then
-		s = s .. string.gsub (parentCompound.m_path, "/", "_") .. "_"
+		s = s .. string.gsub (parentCompound.m_path, "/", g_namespaceSep) .. g_namespaceSep
 	end
 	
 	s = s .. item.m_name 

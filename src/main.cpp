@@ -5,7 +5,7 @@
 #include "Generator.h"
 #include "version.h"
 
-#define _PRINT_USAGE_IF_NO_ARGUMENTS
+#define _PRINT_USAGE_IF_NO_ARGUMENTS 1
 #define _PRINT_MODULE 0
 
 //.............................................................................
@@ -66,7 +66,7 @@ printDocBlock (
 			printIndent (indent);
 		}
 
-		printf ("%s\n", ((DocParagraphBlock*) block)->m_contents.cc ());
+		printf ("%s\n", ((DocParagraphBlock*) block)->m_contents.m_plainText.cc ());
 		break;
 		
 	case DocBlockKind_Section:
@@ -119,7 +119,7 @@ printEnumValue (EnumValue* enumValue)
 		"    initializer:  %s\n",
 
 		enumValue->m_name.cc (),
-		enumValue->m_initializer.cc ()
+		enumValue->m_initializer.m_plainText.cc ()
 		);
 
 	if (!enumValue->m_briefDescription.isEmpty ())
@@ -157,10 +157,10 @@ printParam (Param* param)
 
 		param->m_declarationName.cc (),
 		param->m_definitionName.cc (),
-		param->m_type.cc (),
+		param->m_type.m_plainText.cc (),
 		param->m_array.cc (),
-		param->m_defaultValue.cc (),
-		param->m_typeConstraint.cc ()
+		param->m_defaultValue.m_plainText.cc (),
+		param->m_typeConstraint.m_plainText.cc ()
 		);
 
 	if (!param->m_briefDescription.isEmpty ())
@@ -195,12 +195,12 @@ printMember(Member* member)
 		getMemberKindString (member->m_memberKind),
 		member->m_name.cc (),
 		member->m_id.cc (),
-		member->m_type.cc (),
+		member->m_type.m_plainText.cc (),
 		member->m_definition.cc (),
 		member->m_argString.cc (),
 		member->m_bitField.cc (),
-		member->m_initializer.cc (),
-		member->m_exceptions.cc (),
+		member->m_initializer.m_plainText.cc (),
+		member->m_exceptions.m_plainText.cc (),
 		getProtectionKindString (member->m_protectionKind),
 		getVirtualKindString (member->m_virtualKind),
 		getMemberFlagString (member->m_flags).cc ()
@@ -413,12 +413,6 @@ run (CmdLine* cmdLine)
 		return -1;
 	}
 
-#if _PRINT_MODULE
-	printf ("namespace :: {\n");	
-	printNamespaceContents (&globalNamespace);
-	printf ("} // namespace :: {\n");
-#endif
-
 	printf ("generating...\n");
 
 	result = generator.generate (
@@ -433,6 +427,12 @@ run (CmdLine* cmdLine)
 		printf ("error: %s\n", err::getLastErrorDescription ().cc ());
 		return -1;
 	}
+
+#if _PRINT_MODULE
+	printf ("namespace :: {\n");	
+	printNamespaceContents (&globalNamespace);
+	printf ("} // namespace :: {\n");
+#endif
 
 	return 0;
 }
@@ -461,7 +461,7 @@ main (
 	CmdLine cmdLine;
 	CmdLineParser parser (&cmdLine);
 
-#ifdef _PRINT_USAGE_IF_NO_ARGUMENTS
+#if _PRINT_USAGE_IF_NO_ARGUMENTS
 	if (argc < 2)
 	{
 		printUsage ();

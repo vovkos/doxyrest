@@ -1,0 +1,226 @@
+%{
+local argArray = table.pack (...)
+local compound = argArray [1]
+
+if #compound.m_namespaceArray > 0 then
+}
+Sub-Namespaces
+--------------
+
+%{
+	for i = 1, #compound.m_namespaceArray do
+		local item = compound.m_namespaceArray [i]
+		local targetFileName = getItemFileName (item, compound)
+
+		generateFile (targetFileName, "c_namespace.rst.in", item)
+}
+| :ref:`namespace $(item.m_name) <doxid-$(item.m_id)>`
+%{
+	end -- for
+}
+
+$(#compound.m_namespaceArray) total namespaces
+
+%{
+end -- if
+
+if #compound.m_typedefArray > 0 then
+}
+Typedefs
+--------
+
+%{
+	for i = 1, #compound.m_typedefArray do
+		local item = compound.m_typedefArray [i]
+}
+| typedef $(getLinkedTextString (item.m_type)) $(item.m_name)
+%{
+	end -- for
+}
+
+$(#compound.m_typedefArray) total typedefs
+
+%{
+end -- if
+
+if #compound.m_enumArray > 0 then
+}
+Enums
+-----
+
+%{
+	for i = 1, #compound.m_enumArray do
+		local item = compound.m_enumArray [i]
+		local targetFileName = getItemFileName (item, compound)
+
+		generateFile (targetFileName, "c_enum.rst.in", item)
+}
+| :ref:`enum $(item.m_name) <doxid-$(item.m_id)>`
+%{
+	end -- for
+}
+
+$(#compound.m_enumArray) total enums
+
+%{
+end -- if
+
+if #compound.m_structArray > 0 then
+}
+Structs
+-------
+
+%{
+	for i = 1, #compound.m_structArray do
+		local item = compound.m_structArray [i]
+		local targetFileName = getItemFileName (item, compound)
+
+		generateFile (targetFileName, "c_class.rst.in", item)
+}
+| :ref:`struct $(getItemName (item)) <doxid-$(item.m_id)>`
+%{
+	end -- for
+}
+
+$(#compound.m_structArray) total structs
+
+%{
+end -- if
+
+if #compound.m_unionArray > 0 then
+}
+Unions
+------
+
+%{
+	for i = 1, #compound.m_unionArray do
+		local item = compound.m_unionArray [i]
+		local targetFileName = getItemFileName (item, compound)
+
+		generateFile (targetFileName, "c_class.rst.in", item)
+}
+| :ref:`union $(getItemName (item)) <doxid-$(item.m_id)>`
+%{
+	end -- for
+}
+
+$(#compound.m_structArray) total unions
+
+%{
+end -- if
+
+if #compound.m_classArray > 0 then
+}
+Classes
+-------
+
+%{
+	for i = 1, #compound.m_classArray do
+		local item = compound.m_classArray [i]
+		local targetFileName = getItemFileName (item, compound)
+
+		generateFile (targetFileName, "c_class.rst.in", item)
+}
+| :ref:`class $(getItemName (item)) <doxid-$(item.m_id)>`
+%{
+	end -- for
+}
+
+$(#compound.m_classArray) total classes
+
+%{
+end -- if
+
+if #compound.m_variableArray > 0 then
+}
+Variables
+---------
+
+%{
+	for i = 1, #compound.m_variableArray do
+		local item = compound.m_variableArray [i]
+}
+
+.. code-block:: c++
+
+	$(getLinkedTextString (item.m_type, true)) $(item.m_name)
+
+%{
+	end -- for
+}
+
+$(#compound.m_variableArray) total variables
+
+%{
+end -- if
+
+if #compound.m_propertyArray > 0 then
+}
+Properties
+----------
+
+%{
+	for i = 1, #compound.m_propertyArray do
+		local item = compound.m_propertyArray [i]
+}
+
+.. code-block:: c++
+
+	$(getLinkedTextString (item.m_returnType, true)) property $(getItemName (item))
+
+%{
+	end -- for
+}
+
+$(#compound.m_propertyArray) total properties
+
+%{
+end -- if
+
+if #compound.m_eventArray > 0 then
+}
+Events
+------
+
+%{
+	for i = 1, #compound.m_eventArray do
+		local item = compound.m_eventArray [i]
+}
+
+.. code-block:: c++
+
+	event $(getItemName (item)) $(getFunctionParamArrayString (item.m_paramArray, true))
+
+%{
+	end -- for
+}
+
+$(#compound.m_eventArray) total events
+
+%{
+end -- if
+
+if #compound.m_functionArray > 0 then
+}
+Functions
+---------
+
+%{
+	for i = 1, #compound.m_functionArray do
+		local item = compound.m_functionArray [i]
+}
+
+.. code-block:: c++
+
+	$(getLinkedTextString (item.m_returnType, true))
+	$(getItemName (item)) $(getFunctionParamArrayString (item.m_paramArray, true))
+
+%{
+	end -- for
+}
+
+$(#compound.m_functionArray) total functions
+
+%{
+end -- if
+}

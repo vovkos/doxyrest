@@ -87,7 +87,7 @@ function getFunctionParamArrayString (paramArray, isCodeSnippet)
 	elseif count == 1 then
 		s = "(" .. getParamString (paramArray [1], isCodeSnippet) .. ")"
 	else
-		s = "(\n\t\t"
+		s = "(\n\t    "
 
 		for i = 1, count do
 			s = s .. getParamString (paramArray [i], isCodeSnippet)
@@ -96,7 +96,7 @@ function getFunctionParamArrayString (paramArray, isCodeSnippet)
 				s = s .. ","
 			end
 
-			s = s .. "\n\t\t"
+			s = s .. "\n\t    "
 		end
 		s = s .. ")"
 	end

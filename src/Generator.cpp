@@ -48,9 +48,11 @@ Generator::generate (
 
 	m_stringTemplate.m_luaState.setGlobalString ("g_frameDir", m_frameDir);
 	m_stringTemplate.m_luaState.setGlobalString ("g_targetDir", m_targetDir);
-	m_stringBuffer.clear ();
+	
+	
+	sl::String stringBuffer;
 
-	result = m_stringTemplate.processFile (&m_stringBuffer, frameFilePath);
+	result = m_stringTemplate.processFile (&stringBuffer, frameFilePath);
 	if (!result)
 		return false;
 
@@ -67,9 +69,9 @@ Generator::generate (
 	if (!result)
 		return false;
 
-	size_t size = m_stringBuffer.getLength ();
+	size_t size = stringBuffer.getLength ();
 
-	result = targetFile.write (m_stringBuffer, size) != -1;
+	result = targetFile.write (stringBuffer, size) != -1;
 	if (!result)
 		return false;
 
@@ -104,12 +106,9 @@ Generator::processFile (
 
 	if (!targetFileName)
 	{
-		sl::String stringBuffer;
-		result = m_stringTemplate.processFile (&stringBuffer, frameFilePath);
+		result = m_stringTemplate.processFile (NULL, frameFilePath);
 		if (!result)
 			return false;
-
-		m_stringBuffer.append (stringBuffer);
 	}
 	else
 	{

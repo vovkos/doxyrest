@@ -275,6 +275,22 @@ Member::luaExport (lua::LuaState* luaState)
 		luaExportList (luaState, m_paramList);
 		luaState->setMember ("m_paramArray");
 		break;
+
+	case MemberKind_Property:
+		m_type.luaExport (luaState);
+		luaState->setMember ("m_returnType");
+
+		luaExportList (luaState, m_paramList);
+		luaState->setMember ("m_paramArray");
+		break;
+
+	case MemberKind_Event:
+		m_type.luaExport (luaState);
+		luaState->setMember ("m_type");
+
+		luaExportList (luaState, m_paramList);
+		luaState->setMember ("m_paramArray");
+		break;
 	}
 
 	m_briefDescription.luaExport (luaState);

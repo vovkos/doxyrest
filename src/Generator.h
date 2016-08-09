@@ -19,7 +19,6 @@ protected:
 	sl::String m_frameFilePath;
 	sl::String m_frameDir;
 	sl::String m_targetDir;
-	sl::String m_stringBuffer;
 
 public:
 	Generator (const CmdLine* cmdLine)

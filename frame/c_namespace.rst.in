@@ -5,18 +5,29 @@ local namespace = argArray [1]
 if namespace.m_name then
 }
 .. _doxid-$(namespace.m_id):
+.. index:: pair: namespace; $(getItemName (namespace))
 
-$(getTitle ("namespace " .. namespace.m_name, "="))
+$(getTitle ("namespace " .. getItemName (namespace), "="))
+
+%{
+else
+}
+.. index:: pair: namespace; global
 
 %{
 end -- if
 }
 .. toctree::
-	:titlesonly:
-	:maxdepth: 1
+	:hidden:
 
 $(getCompoundTocTree (namespace, "\t"))
 
 %{
-includeFile ("c_compound.rst.in", namespace)
+includeFile (
+	"c_compound.rst.in", 
+	namespace,
+	"Sub-Namespaces",
+	"Variables",
+	"Functions"
+	)
 }

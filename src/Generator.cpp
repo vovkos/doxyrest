@@ -47,8 +47,8 @@ Generator::generate (
 	m_targetDir = io::getDir (targetFilePath);
 
 	m_stringTemplate.m_luaState.setGlobalString ("g_frameDir", m_frameDir);
-	m_stringTemplate.m_luaState.setGlobalString ("g_targetDir", m_targetDir);
-	
+	m_stringTemplate.m_luaState.setGlobalString ("g_targetDir", m_targetDir);	
+	m_stringTemplate.m_luaState.setGlobalString ("g_targetFileName", targetFileName);	
 	
 	sl::String stringBuffer;
 
@@ -95,7 +95,7 @@ Generator::processFile (
 		return false;
 	}
 
-	sl::String prevFrameDir = m_frameDir;
+	sl::String prevFrameDir = m_stringTemplate.m_luaState.getGlobalString ("g_frameDir");
 
 	m_frameDir = io::getDir (frameFilePath);
 	m_stringTemplate.m_luaState.setGlobalString ("g_frameDir", m_frameDir);
@@ -112,10 +112,15 @@ Generator::processFile (
 	}
 	else
 	{
+		sl::String prevTargetFileName = m_stringTemplate.m_luaState.getGlobalString ("g_targetFileName");
+		m_stringTemplate.m_luaState.setGlobalString ("g_targetFileName", targetFileName);
+
 		sl::String targetFilePath = m_targetDir + "/" + targetFileName;
 		result = m_stringTemplate.processFileToFile (targetFilePath, frameFilePath);
 		if (!result)
 			return false;
+
+		m_stringTemplate.m_luaState.setGlobalString ("g_targetFileName", prevTargetFileName);
 	}
 
 	m_frameDir = prevFrameDir;

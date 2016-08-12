@@ -1,11 +1,13 @@
 %{
 local argArray = table.pack (...)
 local compound = argArray [1]
+local namespaceSectionName = argArray [2]
+local variableSectionName = argArray [3]
+local functionSectionName = argArray [4]
 
 if #compound.m_namespaceArray > 0 then
 }
-Sub-Namespaces
---------------
+$(getTitle (namespaceSectionName, "-"))
 
 %{
 	for i = 1, #compound.m_namespaceArray do
@@ -19,7 +21,7 @@ Sub-Namespaces
 	end -- for
 }
 
-$(#compound.m_namespaceArray) total namespaces
+$(#compound.m_namespaceArray) total $(string.lower (namespaceSectionName))
 
 %{
 end -- if
@@ -133,8 +135,7 @@ end -- if
 
 if #compound.m_variableArray > 0 then
 }
-Variables
----------
+$(getTitle (variableSectionName, "-"))
 
 %{
 	for i = 1, #compound.m_variableArray do
@@ -149,7 +150,7 @@ Variables
 	end -- for
 }
 
-$(#compound.m_variableArray) total variables
+$(#compound.m_variableArray) total $(string.lower (variableSectionName))
 
 %{
 end -- if
@@ -202,8 +203,7 @@ end -- if
 
 if #compound.m_functionArray > 0 then
 }
-Functions
----------
+$(getTitle (functionSectionName, "-"))
 
 %{
 	for i = 1, #compound.m_functionArray do
@@ -216,10 +216,25 @@ Functions
 	$(getItemName (item)) $(getFunctionParamArrayString (item.m_paramArray, true))
 
 %{
+		if not item.m_detailedDescription.m_isEmpty then
+			for i = 1, #item.m_detailedDescription.m_docBlockList do
+				block = item.m_detailedDescription.m_docBlockList [1]
+
+	-- block.m_docBlockKind = $(block.m_docBlockKind)
+	-- block.m_title        = $(block.m_title)
+	--- block.m_contents     = $(block.m_contents.m_plainText)
+}
+	$(block.m_contents.m_plainText)
+%{				
+			end -- for		
+		end -- if
+}
+
+%{
 	end -- for
 }
 
-$(#compound.m_functionArray) total functions
+$(#compound.m_functionArray) total $(string.lower (functionSectionName))
 
 %{
 end -- if

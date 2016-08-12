@@ -431,7 +431,7 @@ Compound::unspecializeName ()
 	}
 
 	m_name.setReducedLength (unspecializedNameLength);
-	m_name.trimWhitespaceRight ();
+	m_name.trimRight ();
 
 	const char* x = strchr (m_name, '>');
 	ASSERT (!x);
@@ -442,7 +442,7 @@ Compound::createTemplateSpecParam (const sl::StringRef& name)
 {
 	Param* param = AXL_MEM_NEW (Param);
 	param->m_declarationName = name;
-	param->m_declarationName.trimWhitespace ();
+	param->m_declarationName.trim ();
 
 	m_templateSpecParamList.insertTail (param);
 	return param;

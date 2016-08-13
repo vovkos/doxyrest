@@ -10,6 +10,12 @@ enum CmdLineFlag
 
 //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
+struct Define: sl::ListLink
+{
+	sl::String m_name;
+	sl::String m_value;
+};
+
 struct CmdLine
 {
 	uint_t m_flags;
@@ -19,6 +25,7 @@ struct CmdLine
 	sl::String m_frameFileName;
 	sl::String m_namespaceSep;
 	sl::BoxList <sl::String> m_frameDirList;
+	sl::StdList <Define> m_defineList;
 
 	CmdLine ();
 };
@@ -35,6 +42,7 @@ enum CmdLineSwitchKind
 	CmdLineSwitchKind_FrameFileName,
 	CmdLineSwitchKind_FrameDir,
 	CmdLineSwitchKind_NamespaceSep,
+	CmdLineSwitchKind_Define,
 };
 
 //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -72,7 +80,13 @@ AXL_SL_BEGIN_CMD_LINE_SWITCH_TABLE (CmdLineSwitchTable, CmdLineSwitchKind)
 	AXL_SL_CMD_LINE_SWITCH_2 (
 		CmdLineSwitchKind_NamespaceSep,
 		"s", "namespace-sep", "<sep>",
-		"Specify namespace separator "
+		"Specify namespace separator (defaults to '_')"
+		)
+
+	AXL_SL_CMD_LINE_SWITCH_2 (
+		CmdLineSwitchKind_Define,
+		"D", "define", "<name>[=<value>]",
+		"Define a Lua variable"
 		)
 
 AXL_SL_END_CMD_LINE_SWITCH_TABLE ()

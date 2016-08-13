@@ -42,6 +42,23 @@ CmdLineParser::onSwitch (
 	case CmdLineSwitchKind_NamespaceSep:
 		m_cmdLine->m_namespaceSep = value;
 		break;
+
+	case CmdLineSwitchKind_Define:
+		Define* define = AXL_MEM_NEW (Define);
+		const char* p = strchr (value, '=');
+
+		if (!p)
+		{
+			define->m_name = sl::String (value);
+		}
+		else
+		{
+			define->m_name = sl::String (value, p - value);
+			define->m_value = p + 1;
+		}
+
+		m_cmdLine->m_defineList.insertTail (define);
+		break;
 	}
 
 	return true;

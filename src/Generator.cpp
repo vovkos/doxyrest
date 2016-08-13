@@ -12,13 +12,24 @@ Generator::prepare (
 	)
 {
 	m_stringTemplate.create ();
-	globalNamespace->luaExport (&m_stringTemplate.m_luaState);
-	m_stringTemplate.m_luaState.setGlobalInteger ("g_indexedItemCount", module->m_indexedItemCount);
-	m_stringTemplate.m_luaState.setGlobalString ("g_namespaceSep", m_cmdLine->m_namespaceSep);
-
 	m_stringTemplate.m_luaState.registerFunction ("includeFile", includeFile_lua, (intptr_t) this);
 	m_stringTemplate.m_luaState.registerFunction ("generateFile", generateFile_lua, (intptr_t) this);
 	m_stringTemplate.m_luaState.registerFunction ("getItem", generateFile_lua, (intptr_t) this);
+
+	globalNamespace->luaExport (&m_stringTemplate.m_luaState);
+
+	m_stringTemplate.m_luaState.setGlobalInteger ("g_indexedItemCount", module->m_indexedItemCount);
+	m_stringTemplate.m_luaState.setGlobalString ("g_namespaceSep", m_cmdLine->m_namespaceSep);
+
+	sl::Iterator <Define> it = m_cmdLine->m_defineList.getHead ();
+	for (; it; it++)
+	{
+		Define* define = *it;
+		if (define->m_value.isEmpty ())
+			m_stringTemplate.m_luaState.setGlobalBoolean (define->m_name, true);
+		else
+			m_stringTemplate.m_luaState.setGlobalString (define->m_name, define->m_value);
+	}
 }
 
 bool

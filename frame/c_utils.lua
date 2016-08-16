@@ -1,40 +1,19 @@
 -------------------------------------------------------------------------------
 
-function getNormalizedCppString (string, isCodeSnippet)
+function getNormalizedCppString (string)
 	local s = string
 
-	if isCodeSnippet then
-		s = string.gsub (s, "%s*%*", "*")
-	else
-		s = string.gsub (s, "%s*%*", "\\*")
-	end
-
-	if isCodeSnippet then
-		s = string.gsub (s, "%s*&", "&")
-	else
-		s = string.gsub (s, "%s*&", "\\&")
-	end
-
-	if isCodeSnippet then
-		s = string.gsub (s, "<%s*", " <")
-	else
-		s = string.gsub (s, "<%s*", " \\<")
-	end
-
+	s = string.gsub (s, "%s*%*", "*")
+	s = string.gsub (s, "%s*&", "&")
+	s = string.gsub (s, "<%s*", " <")
 	s = string.gsub (s, "%s+>", ">")
-
-	if isCodeSnippet then
-		s = string.gsub (s, "%(%s*", " (")
-	else
-		s = string.gsub (s, "%(%s*", " \\(")
-	end
-
+	s = string.gsub (s, "%(%s*", " (")
 	s = string.gsub (s, "%s+%)", ")")
 
 	return s
 end
 
-function getLinkedTextString (text, isCodeSnippet)
+function getLinkedTextString (text)
 	if not text then
 		return nil
 	end
@@ -43,7 +22,7 @@ function getLinkedTextString (text, isCodeSnippet)
 
 	for i = 1, #text.m_refTextArray do
 		local refText = text.m_refTextArray [i]
-		local text = getNormalizedCppString (refText.m_text, isCodeSnippet)
+		local text = getNormalizedCppString (refText.m_text)
 
 		if refText.m_id ~= "" then
 			s = s .. ":ref:`" .. text .. "<doxid-" .. refText.m_id .. ">`"
@@ -55,11 +34,11 @@ function getLinkedTextString (text, isCodeSnippet)
 	return s
 end
 
-function getParamString (param, isCodeSnippet)
+function getParamString (param)
 	local s = ""
 
 	if not param.m_type.m_isEmpty then
-		s = s .. getLinkedTextString (param.m_type, isCodeSnippet)
+		s = s .. getLinkedTextString (param.m_type)
 	end
 
 	if param.m_declarationName ~= "" then
@@ -67,7 +46,7 @@ function getParamString (param, isCodeSnippet)
 			s = s .. " "
 		end
 
-		s = s .. getNormalizedCppString (param.m_declarationName, isCodeSnippet)
+		s = s .. getNormalizedCppString (param.m_declarationName)
 	end
 
 	if not param.m_defaultValue.m_isEmpty then
@@ -78,25 +57,25 @@ function getParamString (param, isCodeSnippet)
 	return s
 end
 
-function getFunctionParamArrayString (paramArray, isCodeSnippet)
+function getFunctionParamArrayString (paramArray, indent)
 	local s
 	local count = #paramArray
 
 	if count == 0 then
 		s = "()"
-	elseif count == 1 then
-		s = "(" .. getParamString (paramArray [1], isCodeSnippet) .. ")"
+	elseif count == 1  then
+		s = "(" .. getParamString (paramArray [1]) .. ")"
 	else
-		s = "(\n\t    "
+		s = "(\n" .. indent .. "    "
 
 		for i = 1, count do
-			s = s .. getParamString (paramArray [i], isCodeSnippet)
+			s = s .. getParamString (paramArray [i])
 
 			if i ~= count then
 				s = s .. ","
 			end
 
-			s = s .. "\n\t    "
+			s = s .. "\n" .. indent .. "    "
 		end
 		s = s .. ")"
 	end
@@ -104,17 +83,17 @@ function getFunctionParamArrayString (paramArray, isCodeSnippet)
 	return s
 end
 
-function getTemplateParamArrayString (paramArray, isCodeSnippet)
+function getTemplateParamArrayString (paramArray)
 	local s
 	local count = #paramArray
 
 	if count == 0 then
 		s = "\\<>"
 	else
-		s = "\\<" .. getParamString (paramArray [1], isCodeSnippet)
+		s = "\\<" .. getParamString (paramArray [1])
 
 		for i = 2, count do
-			s = s .. ", " .. getParamString (paramArray [i], isCodeSnippet)
+			s = s .. ", " .. getParamString (paramArray [i])
 		end
 
 		s = s .. ">"
@@ -211,6 +190,47 @@ function getMemberLabels (array)
 	end
 
 	return s
+end
+
+function getFunctionDeclStringImpl (item, returnType, isRef, indent)
+	local s = returnType
+
+	if g_isNewLineAfterReturnType then
+		s = s .. "\n" .. indent
+	else
+		s = s .. " "
+	end
+
+	if isRef then
+		s = s .. ":ref:`" .. getItemName (item)  .. "<doxid-" .. item.m_id .. ">` "
+	else
+		s = s .. getItemName (item) ..  " "
+	end
+
+	s = s .. getFunctionParamArrayString (
+		item.m_paramArray,
+		indent
+		)
+
+	return s
+end
+
+function getFunctionDeclString (func, isRef, indent)
+	return getFunctionDeclStringImpl (
+		func,
+		getLinkedTextString (func.m_returnType),
+		isRef,
+		indent
+		)
+end
+
+function getEventDeclString (event, isRef, indent)
+	return getFunctionDeclStringImpl (
+		event,
+		"event",
+		isRef,
+		indent
+		)
 end
 
 -------------------------------------------------------------------------------

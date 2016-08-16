@@ -4,10 +4,23 @@ local compound = argArray [1]
 local namespaceSectionName = argArray [2]
 local variableSectionName = argArray [3]
 local functionSectionName = argArray [4]
-
+}
+%{
 if #compound.m_namespaceArray > 0 then
 }
 $(getTitle (namespaceSectionName, "-"))
+
+%{
+	if g_isTotalCountVisible then
+}
+.. epigraph::
+
+	$(#compound.m_namespaceArray) total $(string.lower (namespaceSectionName))
+
+%{
+	end -- if
+}
+.. ref-code-block:: none
 
 %{
 	for i = 1, #compound.m_namespaceArray do
@@ -16,12 +29,10 @@ $(getTitle (namespaceSectionName, "-"))
 
 		generateFile (targetFileName, "c_namespace.rst.in", item)
 }
-| :ref:`namespace $(item.m_name) <doxid-$(item.m_id)>`
+	namespace :ref:`$(item.m_name)<doxid-$(item.m_id)>`
 %{
 	end -- for
 }
-
-$(#compound.m_namespaceArray) total $(string.lower (namespaceSectionName))
 
 %{
 end -- if
@@ -32,15 +43,25 @@ Typedefs
 --------
 
 %{
+	if g_isTotalCountVisible then
+}
+.. epigraph::
+
+	$(#compound.m_typedefArray) total typedefs
+
+%{
+	end -- if
+}
+.. ref-code-block:: none
+
+%{
 	for i = 1, #compound.m_typedefArray do
 		local item = compound.m_typedefArray [i]
 }
-| typedef $(getLinkedTextString (item.m_type)) $(item.m_name)
+	typedef $(getLinkedTextString (item.m_type)) $(item.m_name)
 %{
 	end -- for
 }
-
-$(#compound.m_typedefArray) total typedefs
 
 %{
 end -- if
@@ -51,18 +72,28 @@ Enums
 -----
 
 %{
+	if g_isTotalCountVisible then
+}
+.. epigraph::
+
+	$(#compound.m_enumArray) total enums
+
+%{
+	end -- if
+}
+.. ref-code-block:: none
+
+%{
 	for i = 1, #compound.m_enumArray do
 		local item = compound.m_enumArray [i]
 		local targetFileName = getItemFileName (item, compound)
 
 		generateFile (targetFileName, "c_enum.rst.in", item)
 }
-| :ref:`enum $(item.m_name) <doxid-$(item.m_id)>`
+	enum :ref:`$(item.m_name)<doxid-$(item.m_id)>`
 %{
 	end -- for
 }
-
-$(#compound.m_enumArray) total enums
 
 %{
 end -- if
@@ -73,18 +104,28 @@ Structs
 -------
 
 %{
+	if g_isTotalCountVisible then
+}
+.. epigraph::
+
+	$(#compound.m_structArray) total structs
+
+%{
+	end -- if
+}
+.. ref-code-block:: none
+
+%{
 	for i = 1, #compound.m_structArray do
 		local item = compound.m_structArray [i]
 		local targetFileName = getItemFileName (item, compound)
 
 		generateFile (targetFileName, "c_class.rst.in", item)
 }
-| :ref:`struct $(getItemName (item)) <doxid-$(item.m_id)>`
+	struct :ref:`$(getItemName (item))<doxid-$(item.m_id)>`
 %{
 	end -- for
 }
-
-$(#compound.m_structArray) total structs
 
 %{
 end -- if
@@ -95,18 +136,28 @@ Unions
 ------
 
 %{
+	if g_isTotalCountVisible then
+}
+.. epigraph::
+
+	$(#compound.m_structArray) total unions
+
+%{
+	end -- if
+}
+.. ref-code-block:: none
+
+%{
 	for i = 1, #compound.m_unionArray do
 		local item = compound.m_unionArray [i]
 		local targetFileName = getItemFileName (item, compound)
 
 		generateFile (targetFileName, "c_class.rst.in", item)
 }
-| :ref:`union $(getItemName (item)) <doxid-$(item.m_id)>`
+	union :ref:`$(getItemName (item))<doxid-$(item.m_id)>`
 %{
 	end -- for
 }
-
-$(#compound.m_structArray) total unions
 
 %{
 end -- if
@@ -117,18 +168,28 @@ Classes
 -------
 
 %{
+	if g_isTotalCountVisible then
+}
+.. epigraph::
+
+	$(#compound.m_classArray) total classes
+
+%{
+	end -- if
+}
+.. ref-code-block:: none
+
+%{
 	for i = 1, #compound.m_classArray do
 		local item = compound.m_classArray [i]
 		local targetFileName = getItemFileName (item, compound)
 
 		generateFile (targetFileName, "c_class.rst.in", item)
 }
-| :ref:`class $(getItemName (item)) <doxid-$(item.m_id)>`
+	class :ref:`$(getItemName (item))<doxid-$(item.m_id)>`
 %{
 	end -- for
 }
-
-$(#compound.m_classArray) total classes
 
 %{
 end -- if
@@ -138,19 +199,25 @@ if #compound.m_variableArray > 0 then
 $(getTitle (variableSectionName, "-"))
 
 %{
+	if g_isTotalCountVisible then
+}
+.. epigraph::
+
+	$(#compound.m_variableArray) total $(string.lower (variableSectionName))
+
+%{
+	end -- if
+}
+.. ref-code-block:: none
+
+%{
 	for i = 1, #compound.m_variableArray do
 		local item = compound.m_variableArray [i]
 }
-
-.. code-block:: c++
-
-	$(getLinkedTextString (item.m_type, true)) $(item.m_name)
-
+	$(getLinkedTextString (item.m_type)) :ref:`$(item.m_name)<doxid-$(item.m_id)>`
 %{
 	end -- for
 }
-
-$(#compound.m_variableArray) total $(string.lower (variableSectionName))
 
 %{
 end -- if
@@ -161,19 +228,25 @@ Properties
 ----------
 
 %{
+	if g_isTotalCountVisible then
+}
+.. epigraph::
+
+	$(#compound.m_propertyArray) total properties
+
+%{
+	end -- if
+}
+.. ref-code-block:: none
+
+%{
 	for i = 1, #compound.m_propertyArray do
 		local item = compound.m_propertyArray [i]
 }
-
-.. code-block:: c++
-
-	$(getLinkedTextString (item.m_returnType, true)) property $(getItemName (item))
-
+	$(getLinkedTextString (item.m_returnType)) property :ref:`$(item.m_name)<doxid-$(item.m_id)>`
 %{
 	end -- for
 }
-
-$(#compound.m_propertyArray) total properties
 
 %{
 end -- if
@@ -184,19 +257,37 @@ Events
 ------
 
 %{
+	if g_isTotalCountVisible then
+}
+.. epigraph::
+
+	$(#compound.m_eventArray) total events
+
+%{
+	end -- if
+}
+.. ref-code-block:: none
+
+%{
+	local prevParamCount = 0
+
 	for i = 1, #compound.m_eventArray do
 		local item = compound.m_eventArray [i]
+		local paramCount = #item.m_paramArray
+		local extraSep
+
+		if paramCount > 1 or prevParamCount > 1 then
+			extraSep = "\n"
+		else
+			extraSep = ""
+		end
+
+		prevParamCount = paramCount
 }
-
-.. code-block:: c++
-
-	event $(getItemName (item)) $(getFunctionParamArrayString (item.m_paramArray, true))
-
+$extraSep	$(getEventDeclString (item, true, "\t"))
 %{
 	end -- for
 }
-
-$(#compound.m_eventArray) total events
 
 %{
 end -- if
@@ -206,14 +297,120 @@ if #compound.m_functionArray > 0 then
 $(getTitle (functionSectionName, "-"))
 
 %{
+	if g_isTotalCountVisible then
+}
+.. epigraph::
+
+	$(#compound.m_functionArray) total $(string.lower (functionSectionName))
+
+%{
+	end -- if
+}
+.. ref-code-block:: none
+
+%{
+	local prevParamCount = 0
+
+	for i = 1, #compound.m_functionArray do
+		local item = compound.m_functionArray [i]
+		local paramCount = #item.m_paramArray
+		local extraSep
+
+		if paramCount > 1 or prevParamCount > 1 then
+			extraSep = "\n"
+		else
+			extraSep = ""
+		end
+
+		prevParamCount = paramCount
+}
+$extraSep	$(getFunctionDeclString (item, true, "\t"))
+%{
+	end -- for
+}
+
+%{
+end -- if
+}
+
+Detailed Documentation
+----------------------
+
+%{
+if #compound.m_variableArray > 0 then
+}
+$(getTitle (variableSectionName, "~"))
+
+%{
+	for i = 1, #compound.m_variableArray do
+		local item = compound.m_variableArray [i]
+}
+.. _doxid-$(item.m_id):
+.. ref-code-block:: none
+
+	$(getLinkedTextString (item.m_type)) $(item.m_name)
+
+%{
+	end -- for
+}
+
+%{
+end -- if
+
+if #compound.m_propertyArray > 0 then
+}
+Properties
+~~~~~~~~~~
+
+%{
+	for i = 1, #compound.m_propertyArray do
+		local item = compound.m_propertyArray [i]
+}
+.. _doxid-$(item.m_id):
+.. ref-code-block:: none
+
+	$(getLinkedTextString (item.m_returnType)) property $(getItemName (item))
+
+%{
+	end -- for
+}
+
+%{
+end -- if
+
+if #compound.m_eventArray > 0 then
+}
+Events
+~~~~~~
+
+%{
+	for i = 1, #compound.m_eventArray do
+		local item = compound.m_eventArray [i]
+}
+.. _doxid-$(item.m_id):
+.. ref-code-block:: none
+
+	$(getEventDeclString (item, false, "\t"))
+
+%{
+	end -- for
+}
+
+%{
+end -- if
+
+if #compound.m_functionArray > 0 then
+}
+$(getTitle (functionSectionName, "~"))
+
+%{
 	for i = 1, #compound.m_functionArray do
 		local item = compound.m_functionArray [i]
 }
+.. _doxid-$(item.m_id):
+.. ref-code-block:: none
 
-.. code-block:: c++
-
-	$(getLinkedTextString (item.m_returnType, true))
-	$(getItemName (item)) $(getFunctionParamArrayString (item.m_paramArray, true))
+	$(getFunctionDeclString (item, false, "\t"))
 
 %{
 		if not item.m_detailedDescription.m_isEmpty then
@@ -222,19 +419,14 @@ $(getTitle (functionSectionName, "-"))
 
 	-- block.m_docBlockKind = $(block.m_docBlockKind)
 	-- block.m_title        = $(block.m_title)
-	--- block.m_contents     = $(block.m_contents.m_plainText)
-}
-	$(block.m_contents.m_plainText)
-%{				
-			end -- for		
+	-- block.m_contents     = $(block.m_contents.m_plainText)
+	-- $(block.m_contents.m_plainText)
+			end -- for
 		end -- if
 }
-
 %{
 	end -- for
 }
-
-$(#compound.m_functionArray) total $(string.lower (functionSectionName))
 
 %{
 end -- if

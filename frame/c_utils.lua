@@ -181,17 +181,6 @@ function getTitle (title, underline)
 	return title .. "\n" .. string.rep (underline, #title)
 end
 
-function getMemberLabels (array)
-	local s = ""
-
-	for i = 1, #array do
-		local item = array [i]
-		s = s .. ".. _doxid-" .. item.m_id .. ":\n"
-	end
-
-	return s
-end
-
 function getFunctionDeclStringImpl (item, returnType, isRef, indent)
 	local s = returnType
 
@@ -231,6 +220,47 @@ function getEventDeclString (event, isRef, indent)
 		isRef,
 		indent
 		)
+end
+
+function getItemBriefDocumentation (item, refPrefix)
+	if item.m_briefDescription.m_isEmpty then
+		return ""
+	end
+
+	local s = ""
+
+	for i = 1, #item.m_briefDescription.m_docBlockList do
+		block = item.m_briefDescription.m_docBlockList [i]
+		s = s .. block.m_contents.m_plainText
+
+		if i ~= #item.m_briefDescription.m_docBlockList then
+			s = s .. "\n"
+		end
+	end
+
+	s = s .. " :ref:`More...<" .. refPrefix .. "doxid-" .. item.m_id .. ">`"
+
+	return s
+end
+
+function getItemDetailedDocumentation (item)
+	local s = ""
+
+	for i = 1, #item.m_briefDescription.m_docBlockList do
+		block = item.m_briefDescription.m_docBlockList [i]
+		s = s .. block.m_contents.m_plainText .. "\n"
+	end
+
+	if not item.m_briefDescription.m_isEmpty and not item.m_detailedDescription.m_isEmpty then
+		s = s .. "\n"
+	end
+
+	for i = 1, #item.m_detailedDescription.m_docBlockList do
+		block = item.m_detailedDescription.m_docBlockList [i]
+		s = s .. block.m_contents.m_plainText .. "\n"
+	end
+
+	return s
 end
 
 -------------------------------------------------------------------------------

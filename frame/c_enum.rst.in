@@ -7,27 +7,63 @@ local enum = argArray [1]
 
 $(getTitle ("enum " .. getItemName (enum), "="))
 
-$(getMemberLabels (enum.m_enumValueArray))
+.. toctree::
+    :hidden:
+
+Overview
+~~~~~~~~
+
+$(getItemBriefDocumentation (enum, "details-"))
+
 Enum Values
 -----------
 
 %{
-	for i = 1, #enum.m_enumValueArray do
-		local item = enum.m_enumValueArray [i]
+    if g_isTotalCountVisible then
 }
-.. code-block:: c++
+.. epigraph::
+
+    $(#enum.m_enumValueArray) total enum values
 
 %{
+    end -- if
+}
+.. ref-code-block:: c++
+
+%{
+	for i = 1, #enum.m_enumValueArray do
+		local item = enum.m_enumValueArray [i]
+
 		if not item.m_initializer.m_isEmpty then
 }
-	$(item.m_name) $(getLinkedTextString (item.m_initializer))
+	:ref:`$(item.m_name)<doxid-$(item.m_id)>` $(getLinkedTextString (item.m_initializer))
 %{
 		else
 }
-	$(item.m_name)
+	:ref:`$(item.m_name)<doxid-$(item.m_id)>`
 %{
 		end -- if
-}
-%{
 	end -- for
+}
+
+.. _details-doxid-$(enum.m_id):
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+$(getItemDetailedDocumentation (enum))
+
+%{
+    for i = 1, #enum.m_enumValueArray do
+        local item = enum.m_enumValueArray [i]
+}
+.. _doxid-$(item.m_id):
+.. code-block:: c++
+
+    $(item.m_name)
+
+$(getItemDetailedDocumentation (item))
+
+%{
+    end -- for
 }

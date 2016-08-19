@@ -684,9 +684,20 @@ GlobalNamespace::luaExport (lua::LuaState* luaState)
 {
 	luaState->createTable ();
 	luaExportMembers (luaState);
+
 	luaState->setMemberString ("m_path", "");
+
+	// global namespace has no description, but we still want valid m_briefDescription/m_detailedDescription
+
+	Description emptyDescription;
+
+	emptyDescription.luaExport (luaState);
+	luaState->setMember ("m_briefDescription");
+
+	emptyDescription.luaExport (luaState);
+	luaState->setMember ("m_detailedDescription");
+
 	luaState->setGlobal ("g_globalNamespace");
 }
 
 //.............................................................................
-

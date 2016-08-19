@@ -5,6 +5,11 @@ local namespaceSectionName = argArray [2]
 local variableSectionName = argArray [3]
 local functionSectionName = argArray [4]
 }
+Overview
+~~~~~~~~
+
+$(getItemBriefDocumentation (compound, "details-"))
+
 %{
 if #compound.m_namespaceArray > 0 then
 }
@@ -333,13 +338,17 @@ $extraSep	$(getFunctionDeclString (item, true, "\t"))
 end -- if
 }
 
+.. _details-doxid-$(compound.m_id):
+
 Detailed Documentation
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~
+
+$(getItemDetailedDocumentation (compound))
 
 %{
 if #compound.m_variableArray > 0 then
 }
-$(getTitle (variableSectionName, "~"))
+$(getTitle (variableSectionName, "-"))
 
 %{
 	for i = 1, #compound.m_variableArray do
@@ -350,6 +359,7 @@ $(getTitle (variableSectionName, "~"))
 
 	$(getLinkedTextString (item.m_type)) $(item.m_name)
 
+$(getItemDetailedDocumentation (item))
 %{
 	end -- for
 }
@@ -360,7 +370,7 @@ end -- if
 if #compound.m_propertyArray > 0 then
 }
 Properties
-~~~~~~~~~~
+----------
 
 %{
 	for i = 1, #compound.m_propertyArray do
@@ -371,6 +381,7 @@ Properties
 
 	$(getLinkedTextString (item.m_returnType)) property $(getItemName (item))
 
+$(getItemDetailedDocumentation (item))
 %{
 	end -- for
 }
@@ -381,7 +392,7 @@ end -- if
 if #compound.m_eventArray > 0 then
 }
 Events
-~~~~~~
+------
 
 %{
 	for i = 1, #compound.m_eventArray do
@@ -392,6 +403,7 @@ Events
 
 	$(getEventDeclString (item, false, "\t"))
 
+$(getItemDetailedDocumentation (item))
 %{
 	end -- for
 }
@@ -401,7 +413,7 @@ end -- if
 
 if #compound.m_functionArray > 0 then
 }
-$(getTitle (functionSectionName, "~"))
+$(getTitle (functionSectionName, "-"))
 
 %{
 	for i = 1, #compound.m_functionArray do
@@ -412,18 +424,7 @@ $(getTitle (functionSectionName, "~"))
 
 	$(getFunctionDeclString (item, false, "\t"))
 
-%{
-		if not item.m_detailedDescription.m_isEmpty then
-			for i = 1, #item.m_detailedDescription.m_docBlockList do
-				block = item.m_detailedDescription.m_docBlockList [1]
-
-	-- block.m_docBlockKind = $(block.m_docBlockKind)
-	-- block.m_title        = $(block.m_title)
-	-- block.m_contents     = $(block.m_contents.m_plainText)
-	-- $(block.m_contents.m_plainText)
-			end -- for
-		end -- if
-}
+$(getItemDetailedDocumentation (item))
 %{
 	end -- for
 }

@@ -3,6 +3,7 @@
 #include "DoxyXmlEnum.h"
 
 struct Namespace;
+struct Compound;
 
 //.............................................................................
 
@@ -197,6 +198,8 @@ getMemberFlagString (uint_t flags);
 struct Member: sl::ListLink
 {
 	size_t m_index;
+	Compound* m_parentCompound;
+	Compound* m_groupCompound;
 
 	MemberKind m_memberKind;
 	ProtectionKind m_protectionKind;
@@ -249,6 +252,9 @@ struct Ref: sl::ListLink
 struct Compound: sl::ListLink
 {
 	size_t m_index;
+	Namespace* m_selfNamespace;
+	Namespace* m_parentNamespace;
+	Compound* m_groupCompound;
 
 	CompoundKind m_compoundKind;
 	LanguageKind m_languageKind;
@@ -266,9 +272,6 @@ struct Compound: sl::ListLink
 	sl::StdList <Ref> m_innerRefList;
 
 	sl::String m_path;
-
-	Namespace* m_selfNamespace;
-	Namespace* m_parentNamespace;
 
 	bool m_isFinal    : 1;
 	bool m_isSealed   : 1;
@@ -304,11 +307,27 @@ struct Module
 	sl::String m_version;
 	sl::StdList <Compound> m_compoundList;
 	sl::Array <Compound*> m_namespaceArray;
+	sl::Array <Compound*> m_groupArray;
 	sl::StringHashTableMap <Compound*> m_compoundMap;
+	sl::StringHashTableMap <Member*> m_memberMap;
 
 	Module ()
 	{
 		m_indexedItemCount = 0;
+	}
+
+	Compound* 
+	findCompound (const char* id)
+	{
+		sl::StringHashTableMapIterator <Compound*> mapIt = m_compoundMap.find (id);
+		return mapIt ? mapIt->m_value : NULL;
+	}
+	
+	Member* 
+	findMember (const char* id)
+	{
+		sl::StringHashTableMapIterator <Member*> mapIt = m_memberMap.find (id);
+		return mapIt ? mapIt->m_value : NULL;
 	}
 };
 
@@ -316,6 +335,7 @@ struct Module
 
 struct NamespaceContents
 {
+	sl::Array <Namespace*> m_groupArray;
 	sl::Array <Namespace*> m_namespaceArray;
 	sl::Array <Member*> m_enumArray;
 	sl::Array <Namespace*> m_structArray;
@@ -326,6 +346,8 @@ struct NamespaceContents
 	sl::Array <Member*> m_functionArray;
 	sl::Array <Member*> m_propertyArray;
 	sl::Array <Member*> m_eventArray;
+
+	sl::StringHashTableMap <Namespace*> m_groupMap;
 
 	bool
 	add (Compound* compound);
@@ -374,6 +396,14 @@ public:
 
 	void
 	luaExport (lua::LuaState* luaState);
+
+protected:
+	Namespace* 
+	getSubGroupNamespace (
+		Module* module,
+		NamespaceContents* parent,
+		Compound* group
+		);
 };
 
 //.............................................................................

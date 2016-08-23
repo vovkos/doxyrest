@@ -85,6 +85,8 @@ DocSectionBlock::luaExport (lua::LuaState* luaState)
 	luaState->setMember ("m_childBlockList");
 }
 
+//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
 void
 Description::luaExport (lua::LuaState* luaState)
 {
@@ -218,6 +220,8 @@ getMemberFlagString (uint_t flags)
 Member::Member ()
 {
 	m_index = 0;
+	m_parentCompound = NULL;
+	m_groupCompound = NULL;
 	m_memberKind = MemberKind_Undefined;
 	m_protectionKind = ProtectionKind_Undefined;
 	m_virtualKind = VirtualKind_Undefined;
@@ -242,6 +246,9 @@ Member::luaExport (lua::LuaState* luaState)
 	case MemberKind_Typedef:
 		m_type.luaExport (luaState);
 		luaState->setMember ("m_type");
+		luaState->setMemberString ("m_argString", m_argString);
+		luaExportList (luaState, m_paramList);
+		luaState->setMember ("m_paramArray");
 		break;
 
 	case MemberKind_Enum:
@@ -308,11 +315,12 @@ Member::luaExport (lua::LuaState* luaState)
 Compound::Compound ()
 {
 	m_index = 0;
+	m_selfNamespace = NULL;
+	m_parentNamespace = NULL;
+	m_groupCompound = NULL;
 	m_compoundKind = CompoundKind_Undefined;
 	m_languageKind = LanguageKind_Undefined;
 	m_protectionKind = ProtectionKind_Undefined;
-	m_selfNamespace = NULL;
-	m_parentNamespace = NULL;
 	m_isFinal = false;
 	m_isSealed = false;
 	m_isAbstract = false;
@@ -329,12 +337,23 @@ Compound::luaExport (lua::LuaState* luaState)
 	luaState->setMemberString ("m_compoundKind", getCompoundKindString (m_compoundKind));	
 	luaState->setMemberString ("m_id", m_id);
 	luaState->setMemberString ("m_name", m_name);
+	luaState->setMemberString ("m_title", m_title);
 	
 	switch (m_compoundKind)
 	{
+	case CompoundKind_SubGroup:
+		ASSERT (m_groupCompound);
+		m_groupCompound->m_briefDescription.luaExport (luaState);
+		luaState->setMember ("m_briefDescription");
+		m_groupCompound->m_detailedDescription.luaExport (luaState);
+		luaState->setMember ("m_detailedDescription");
+		break;
+
 	case CompoundKind_Namespace:
-		preparePath ();
-		luaState->setMemberString ("m_path", m_path);
+		m_briefDescription.luaExport (luaState);
+		luaState->setMember ("m_briefDescription");
+		m_detailedDescription.luaExport (luaState);
+		luaState->setMember ("m_detailedDescription");
 		break;
 
 	case CompoundKind_Struct:
@@ -345,18 +364,17 @@ Compound::luaExport (lua::LuaState* luaState)
 		luaState->setMember ("m_templateParamArray");
 		luaExportList (luaState, m_templateSpecParamList);
 		luaState->setMember ("m_templateSpecParamArray");
-		preparePath ();
-		luaState->setMemberString ("m_path", m_path);
+		m_briefDescription.luaExport (luaState);
+		luaState->setMember ("m_briefDescription");
+		m_detailedDescription.luaExport (luaState);
+		luaState->setMember ("m_detailedDescription");
 		break;
 	}
 
+	preparePath ();
+	luaState->setMemberString ("m_path", m_path);
+
 	m_selfNamespace->luaExportMembers (luaState);
-
-	m_briefDescription.luaExport (luaState);
-	luaState->setMember ("m_briefDescription");
-
-	m_detailedDescription.luaExport (luaState);
-	luaState->setMember ("m_detailedDescription");
 }
 
 void
@@ -499,11 +517,11 @@ NamespaceContents::add (Compound* compound)
 		m_classArray.append (compound->m_selfNamespace);
 		break;
 
+	case CompoundKind_Group:
 	case CompoundKind_Protocol:
 	case CompoundKind_Category:
 	case CompoundKind_Exception:
 	case CompoundKind_File:
-	case CompoundKind_Group:
 	case CompoundKind_Page:
 	case CompoundKind_Example:
 	case CompoundKind_Dir:
@@ -564,6 +582,9 @@ NamespaceContents::add (Member* member)
 void
 NamespaceContents::luaExportMembers (lua::LuaState* luaState)
 {
+	luaExportArray (luaState, m_groupArray);
+	luaState->setMember ("m_groupArray");
+
 	luaExportArray (luaState, m_namespaceArray);
 	luaState->setMember ("m_namespaceArray");
 	
@@ -600,6 +621,7 @@ NamespaceContents::luaExportMembers (lua::LuaState* luaState)
 void
 GlobalNamespace::clear ()
 {
+	m_groupArray.clear ();
 	m_namespaceArray.clear ();
 	m_enumArray.clear ();
 	m_structArray.clear ();
@@ -618,10 +640,33 @@ GlobalNamespace::build (Module* module)
 {
 	clear ();
 
-	size_t namespaceCount = module->m_namespaceArray.getCount ();
-
-	// loop #1 initializes namespaces
+	// loop #1 assign groups
 	
+	size_t groupCount = module->m_groupArray.getCount ();
+	for (size_t i = 0; i < groupCount; i++)
+	{
+		Compound* compound = module->m_groupArray [i];
+
+		sl::Iterator <Member> memberIt = compound->m_memberList.getHead ();
+		for (; memberIt; memberIt++)
+		{
+			Member* member = module->findMember (memberIt->m_id);
+			if (member)
+				member->m_groupCompound = compound;
+		}
+
+		sl::Iterator <Ref> refIt = compound->m_innerRefList.getHead ();
+		for (; refIt; refIt++)
+		{
+			Compound* innerCompound =  module->findCompound (refIt->m_id);
+			if (innerCompound)
+				innerCompound->m_groupCompound = compound;
+		}
+	}
+
+	// loop #2 initializes namespaces
+	
+	size_t namespaceCount = module->m_namespaceArray.getCount ();
 	for (size_t i = 0; i < namespaceCount; i++)
 	{
 		Compound* compound = module->m_namespaceArray [i];
@@ -630,13 +675,9 @@ GlobalNamespace::build (Module* module)
 		m_namespaceList.insertTail (nspace);
 		nspace->m_compound = compound;
 		compound->m_selfNamespace = nspace;
-
-		sl::Iterator <Member> memberIt = compound->m_memberList.getHead ();
-		for (; memberIt; memberIt++)
-			nspace->add (*memberIt);
 	}
 
-	// loop #2 resolves inner references
+	// loop #3 resolves inner references and add members
 
 	for (size_t i = 0; i < namespaceCount; i++)
 	{
@@ -644,18 +685,26 @@ GlobalNamespace::build (Module* module)
 		Namespace* nspace = compound->m_selfNamespace;
 		ASSERT (nspace);
 
+		sl::Iterator <Member> memberIt = compound->m_memberList.getHead ();
+		for (; memberIt; memberIt++)
+		{
+			Namespace* targetNspace = memberIt->m_groupCompound ? getSubGroupNamespace (module, nspace, memberIt->m_groupCompound) : nspace;
+			targetNspace->add (*memberIt);
+		}
+
 		sl::Iterator <Ref> refIt = compound->m_innerRefList.getHead ();
 		for (; refIt; refIt++)
 		{
-			sl::StringHashTableMapIterator <Compound*> mapIt = module->m_compoundMap.find (refIt->m_id);
-			if (!mapIt)
+			Compound* innerCompound = module->findCompound (refIt->m_id);
+			if (!innerCompound)
 			{
-				err::setFormatStringError ("can't find refid: %s\n", refIt->m_id.cc ());
+				err::setFormatStringError ("can't find compound refid: %s\n", refIt->m_id.cc ());
 				return false;
 			}
 
-			nspace->add (mapIt->m_value);
-			mapIt->m_value->m_parentNamespace = nspace;
+			Namespace* targetNspace = innerCompound->m_groupCompound ? getSubGroupNamespace (module, nspace, innerCompound->m_groupCompound) : nspace;
+			targetNspace->add (innerCompound);
+			innerCompound->m_parentNamespace = nspace; // not group!
 		}
 	}
 
@@ -664,15 +713,30 @@ GlobalNamespace::build (Module* module)
 	sl::Iterator <Compound> compoundIt = module->m_compoundList.getHead ();
 	for (; compoundIt; compoundIt++)
 	{
-		if (compoundIt->m_compoundKind == CompoundKind_File)
+		sl::Iterator <Member> memberIt;
+
+		switch (compoundIt->m_compoundKind)
 		{
-			sl::Iterator <Member> memberIt = compoundIt->m_memberList.getHead ();
+		case CompoundKind_Group:
+		case CompoundKind_SubGroup:
+			// groups are added implicitly, via group members
+			break;
+
+		case CompoundKind_File:
+			memberIt = compoundIt->m_memberList.getHead ();
 			for (; memberIt; memberIt++)
-				add (*memberIt);
-		}
-		else if (!compoundIt->m_parentNamespace)
-		{
-			add (*compoundIt);
+			{
+				NamespaceContents* targetNspace = memberIt->m_groupCompound ? (NamespaceContents*) getSubGroupNamespace (module, this, memberIt->m_groupCompound) : this;
+				targetNspace->add (*memberIt);
+			}
+			break;
+
+		default:
+			if (!compoundIt->m_parentNamespace)
+			{
+				NamespaceContents* targetNspace = compoundIt->m_groupCompound ? (NamespaceContents*) getSubGroupNamespace (module, this , compoundIt->m_groupCompound) : this;
+				targetNspace->add (*compoundIt);
+			}
 		}
 	}
 
@@ -698,6 +762,39 @@ GlobalNamespace::luaExport (lua::LuaState* luaState)
 	luaState->setMember ("m_detailedDescription");
 
 	luaState->setGlobal ("g_globalNamespace");
+}
+
+Namespace* 
+GlobalNamespace::getSubGroupNamespace (
+	Module* module,
+	NamespaceContents* parent,
+	Compound* group
+	)
+{	
+	if (group->m_groupCompound) // re-parent to super-group
+		parent = getSubGroupNamespace (module, parent, group->m_groupCompound);
+
+	sl::StringHashTableMapIterator <Namespace*> mapIt = parent->m_groupMap.visit (group->m_id);
+	if (mapIt->m_value)
+		return mapIt->m_value;
+
+	Compound* compound = AXL_MEM_NEW (Compound);
+	compound->m_index = module->m_indexedItemCount++;
+	compound->m_compoundKind = CompoundKind_SubGroup;
+	compound->m_groupCompound = group;
+	compound->m_id.format ("%s-%d", group->m_id.cc (), compound->m_index);
+	compound->m_name = group->m_name;
+	compound->m_title = group->m_title;
+	module->m_compoundList.insertTail (compound);
+
+	Namespace* nspace = AXL_MEM_NEW (Namespace);
+	m_namespaceList.insertTail (nspace);
+	nspace->m_compound = compound;
+	compound->m_selfNamespace = nspace;
+	
+	mapIt->m_value = nspace;
+	parent->m_groupArray.append (nspace);
+	return nspace;
 }
 
 //.............................................................................

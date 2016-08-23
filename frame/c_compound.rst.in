@@ -11,6 +11,17 @@ Overview
 $(getItemBriefDocumentation (compound, "details-"))
 
 %{
+for i = 1, #compound.m_groupArray do
+	local item = compound.m_groupArray [i]
+	local targetFileName = getItemFileName (item, compound)
+
+	generateFile (targetFileName, "c_group.rst.in", item)
+}
+:ref:`$(item.m_title)<doxid-$(item.m_id)>`
+
+%{
+end -- for
+
 if #compound.m_namespaceArray > 0 then
 }
 $(getTitle (namespaceSectionName, "-"))
@@ -42,6 +53,10 @@ $(getTitle (namespaceSectionName, "-"))
 %{
 end -- if
 
+if not g_isPrimitiveTypedefVisible then
+	removePrimitiveTypedefs (compound.m_typedefArray)
+end
+
 if #compound.m_typedefArray > 0 then
 }
 Typedefs
@@ -60,10 +75,28 @@ Typedefs
 .. ref-code-block:: none
 
 %{
+	local prevParamCount = 0
+
 	for i = 1, #compound.m_typedefArray do
 		local item = compound.m_typedefArray [i]
+		local paramCount = 0
+		local extraSep = ""
+
+		if item.m_argString ~= "" then
+			if string.find (item.m_argString, ",") then
+				paramCount = 2
+			else
+				paramCount = 0
+			end
+
+			if g_hasNewLineAfterReturnType or paramCount > 1 or prevParamCount > 1 then
+				extraSep = "\n"
+			end
+		end
+
+		prevParamCount = paramCount
 }
-	typedef $(getLinkedTextString (item.m_type)) $(item.m_name)
+$extraSep	$(getTypedefDeclString (item, true, "\t"))
 %{
 	end -- for
 }
@@ -279,12 +312,10 @@ Events
 	for i = 1, #compound.m_eventArray do
 		local item = compound.m_eventArray [i]
 		local paramCount = #item.m_paramArray
-		local extraSep
+		local extraSep = ""
 
-		if paramCount > 1 or prevParamCount > 1 then
+		if g_hasNewLineAfterReturnType or paramCount > 1 or prevParamCount > 1 then
 			extraSep = "\n"
-		else
-			extraSep = ""
 		end
 
 		prevParamCount = paramCount
@@ -319,12 +350,10 @@ $(getTitle (functionSectionName, "-"))
 	for i = 1, #compound.m_functionArray do
 		local item = compound.m_functionArray [i]
 		local paramCount = #item.m_paramArray
-		local extraSep
+		local extraSep = ""
 
-		if paramCount > 1 or prevParamCount > 1 then
+		if g_hasNewLineAfterReturnType or paramCount > 1 or prevParamCount > 1 then
 			extraSep = "\n"
-		else
-			extraSep = ""
 		end
 
 		prevParamCount = paramCount
@@ -346,6 +375,28 @@ Detailed Documentation
 $(getItemDetailedDocumentation (compound))
 
 %{
+if #compound.m_typedefArray > 0 then
+}
+Typedefs
+--------
+
+%{
+	for i = 1, #compound.m_typedefArray do
+		local item = compound.m_typedefArray [i]
+}
+.. _doxid-$(item.m_id):
+.. ref-code-block:: none
+
+	$(getTypedefDeclString (item, false, "\t"))
+
+$(getItemDetailedDocumentation (item))
+%{
+	end -- for
+}
+
+%{
+end -- if
+
 if #compound.m_variableArray > 0 then
 }
 $(getTitle (variableSectionName, "-"))

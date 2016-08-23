@@ -162,6 +162,7 @@ getCompoundKindString (CompoundKind compoundKind)
 		"page",        // CompoundKind_Page
 		"example",     // CompoundKind_Example
 		"dir",         // CompoundKind_Dir
+		"subgroup",    // CompoundKind_SubGroup
 	};
 
 	return (size_t) compoundKind < countof (stringTable) ? 

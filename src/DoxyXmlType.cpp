@@ -144,8 +144,7 @@ DoxygenCompoundType::onStartElement (
 	switch (elemKind)
 	{
 	case ElemKind_CompoundDef:
-		m_parser->pushType <CompoundDefType> (name, attributes);
-		break;
+		return m_parser->pushType <CompoundDefType> (name, attributes);
 	}
 
 	return true;
@@ -167,6 +166,8 @@ CompoundDefType::create (
 	m_compound->m_index = module->m_indexedItemCount++;
 	module->m_compoundList.insertTail (m_compound);
 
+	sl::StringHashTableMapIterator <Compound*> mapIt;
+
 	while (*attributes)
 	{
 		AttrKind attrKind = AttrKindMap::find (attributes [0], AttrKind_Undefined);
@@ -174,7 +175,15 @@ CompoundDefType::create (
 		{
 		case AttrKind_Id:
 			m_compound->m_id = attributes [1];
-			module->m_compoundMap [m_compound->m_id] = m_compound;
+			mapIt = module->m_compoundMap.visit (m_compound->m_id);
+			if (mapIt->m_value)
+			{
+				err::setFormatStringError ("duplicate compound id: %s", m_compound->m_id.cc ());
+				printf ("duplicate compound id: %s\n", m_compound->m_id.cc ());
+				return false;
+			}
+
+			mapIt->m_value = m_compound;
 			break;
 		
 		case AttrKind_Kind:
@@ -207,12 +216,17 @@ CompoundDefType::create (
 
 	switch (m_compound->m_compoundKind)
 	{
+	case CompoundKind_Group:
+		module->m_groupArray.append (m_compound);
+		break;
+
 	case CompoundKind_Namespace:
 	case CompoundKind_Struct:
 	case CompoundKind_Union:
 	case CompoundKind_Class:
 	case CompoundKind_Interface:
 		module->m_namespaceArray.append (m_compound);
+		break;
 	}
 
 	return true;
@@ -371,8 +385,7 @@ SectionDefType::onStartElement (
 		break;
 
 	case ElemKind_MemberDef:
-		m_parser->pushType <MemberDefType> (m_parent, name, attributes);
-		break;
+		return m_parser->pushType <MemberDefType> (m_parent, name, attributes);
 	}
 
 	return true;
@@ -393,8 +406,10 @@ MemberDefType::create (
 	m_parser = parser;
 	m_member = AXL_MEM_NEW (Member);
 	m_member->m_index = module->m_indexedItemCount++;
+	m_member->m_parentCompound = parent;
 	parent->m_memberList.insertTail (m_member);
 
+	sl::StringHashTableMapIterator <Member*> mapIt;
 	while (*attributes)
 	{
 		AttrKind attrKind = AttrKindMap::find (attributes [0], AttrKind_Undefined);
@@ -406,6 +421,18 @@ MemberDefType::create (
 
 		case AttrKind_Id:
 			m_member->m_id = attributes [1];
+			if (parent->m_compoundKind == CompoundKind_Group) // groups contain duplicated definitions of members
+				break;
+
+			mapIt = module->m_memberMap.visit (m_member->m_id);
+			if (mapIt->m_value)
+			{
+				err::setFormatStringError ("duplicate member id: %s", m_member->m_id.cc ());
+				printf ("duplicate member id: %s\n", m_member->m_id.cc ());				
+				return false;
+			}
+
+			mapIt->m_value = m_member;
 			break;
 
 		case AttrKind_Prot:

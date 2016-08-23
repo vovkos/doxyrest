@@ -207,6 +207,8 @@ enum CompoundKind
 	CompoundKind_Page,
 	CompoundKind_Example,
 	CompoundKind_Dir,
+	
+	CompoundKind_SubGroup, // this is an artificial compound -- subgroup is intersection of a group and a namespace
 };
 
 AXL_SL_BEGIN_STRING_HASH_TABLE_MAP (CompoundKindMap, CompoundKind)

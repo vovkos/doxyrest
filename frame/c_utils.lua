@@ -88,9 +88,9 @@ function getTemplateParamArrayString (paramArray)
 	local count = #paramArray
 
 	if count == 0 then
-		s = "\\<>"
+		s = "<>"
 	else
-		s = "\\<" .. getParamString (paramArray [1])
+		s = "<" .. getParamString (paramArray [1])
 
 		for i = 2, count do
 			s = s .. ", " .. getParamString (paramArray [i])
@@ -149,6 +149,11 @@ end
 function getCompoundTocTree (compound, indent)
 	local s = ""
 
+	for i = 1, #compound.m_groupArray do
+		local fileName = getItemFileName (compound.m_groupArray [i], compound)
+		s = s .. indent .. fileName .. "\n"
+	end
+
 	for i = 1, #compound.m_namespaceArray do
 		local fileName = getItemFileName (compound.m_namespaceArray [i], compound)
 		s = s .. indent .. fileName .. "\n"
@@ -184,7 +189,7 @@ end
 function getFunctionDeclStringImpl (item, returnType, isRef, indent)
 	local s = returnType
 
-	if g_isNewLineAfterReturnType then
+	if g_hasNewLineAfterReturnType then
 		s = s .. "\n" .. indent
 	else
 		s = s .. " "
@@ -220,6 +225,60 @@ function getEventDeclString (event, isRef, indent)
 		isRef,
 		indent
 		)
+end
+
+function getTypedefDeclString (typedef, isRef, indent)
+	local s = "typedef"
+
+	if typedef.m_argString == "" then
+		s = s .. " " .. getLinkedTextString (typedef.m_type) .. " "
+
+		if isRef then
+			s = s .. ":ref:`" .. getItemName (typedef)  .. "<doxid-" .. typedef.m_id .. ">` "
+		else
+			s = s .. getItemName (typedef) ..  " "
+		end
+
+		return s
+	end
+
+	if g_hasNewLineAfterReturnType then
+		s = s .. "\n" .. indent
+	else
+		s = s .. " "
+	end
+
+	s = s .. getLinkedTextString (typedef.m_type) .. "\n"
+
+	if isRef then
+		s = s .. indent .. ":ref:`" .. getItemName (typedef)  .. "<doxid-" .. typedef.m_id .. ">` ("
+	else
+		s = s .. indent .. getItemName (typedef) ..  " ("
+	end
+
+	if not string.find (typedef.m_argString, ",") then
+		local arg = string.match (typedef.m_argString, "%(([^()]+)%)")
+		if arg then
+			s = s .. arg .. ")"
+		else
+			s = s .. ")"
+		end
+	else
+		s = s .. "\n"
+
+		for arg, term in string.gmatch (typedef.m_argString, "%s*([^,()]+)([,)])") do
+			s = s .. indent .. "    " .. arg
+			if term == "," then
+				s = s .. ",\n"
+			else
+				s = s .. "\n"
+			end
+		end
+
+		s = s .. indent .. "    )"
+	end
+
+	return s
 end
 
 function getItemBriefDocumentation (item, refPrefix)
@@ -261,6 +320,25 @@ function getItemDetailedDocumentation (item)
 	end
 
 	return s
+end
+
+function removePrimitiveTypedefs (typedefArray)
+	if next (typedefArray) == nil then
+		return
+	end
+
+	for i = #typedefArray, 1, -1 do
+		typedef = typedefArray [i]
+
+		local typeKind, name = string.match (
+			typedef.m_type.m_plainText,
+			"(%a+)%s+(%w[%w_]*)"
+			)
+
+		if name == typedef.m_name then
+			table.remove (typedefArray, i)
+		end
+	end
 end
 
 -------------------------------------------------------------------------------

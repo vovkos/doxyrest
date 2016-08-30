@@ -163,7 +163,6 @@ CompoundDefType::create (
 
 	m_parser = parser;
 	m_compound = AXL_MEM_NEW (Compound);
-	m_compound->m_index = module->m_indexedItemCount++;
 	module->m_compoundList.insertTail (m_compound);
 
 	sl::StringHashTableMapIterator <Compound*> mapIt;
@@ -216,8 +215,8 @@ CompoundDefType::create (
 
 	switch (m_compound->m_compoundKind)
 	{
-	case CompoundKind_Group:
-		module->m_groupArray.append (m_compound);
+	case CompoundKind_DoxyGroup:
+		module->m_doxyGroupArray.append (m_compound);
 		break;
 
 	case CompoundKind_Namespace:
@@ -405,7 +404,6 @@ MemberDefType::create (
 
 	m_parser = parser;
 	m_member = AXL_MEM_NEW (Member);
-	m_member->m_index = module->m_indexedItemCount++;
 	m_member->m_parentCompound = parent;
 	parent->m_memberList.insertTail (m_member);
 
@@ -421,8 +419,8 @@ MemberDefType::create (
 
 		case AttrKind_Id:
 			m_member->m_id = attributes [1];
-			if (parent->m_compoundKind == CompoundKind_Group) // groups contain duplicated definitions of members
-				break;
+			if (parent->m_compoundKind == CompoundKind_DoxyGroup) 
+				break; // doxy groups contain duplicated definitions of members
 
 			mapIt = module->m_memberMap.visit (m_member->m_id);
 			if (mapIt->m_value)

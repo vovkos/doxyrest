@@ -116,6 +116,8 @@ function getItemName (item)
 	return s
 end
 
+g_itemFileNameMap = {}
+
 function getItemFileName (item, parentCompound)
 	local s
 
@@ -133,12 +135,30 @@ function getItemFileName (item, parentCompound)
 
 	s = s .. item.m_name
 
+	if g_namespaceSep ~= "-" then
+		s = string.gsub (s, '-', g_namespaceSep) -- groups can contain dashes
+	end
+
 	if item.m_templateSpecParamArray and #item.m_templateSpecParamArray > 0 then
 		if not s_indexFormat then
 			s_indexFormat = "%0" .. #tostring (g_indexedItemCount) + 1 .. "d"
 		end
 
 		s = s .. "_spec_" .. string.format (s_indexFormat, item.m_index)
+	end
+
+	-- now, take care of name collisions (e.g. due to template specialization classes)
+
+	local mapValue = g_itemFileNameMap [s]
+
+	if mapValue == nil then
+		mapValue = {}
+		mapValue.m_item = item
+		mapValue.m_index = 2
+		g_itemFileNameMap [s] = mapValue
+	elseif mapValue.m_item ~= item then
+		s = s .. "_" .. prevMapValue.m_index
+		mapValue.m_index = mapValue.m_index + 1
 	end
 
 	s = s .. ".rst"
@@ -183,6 +203,10 @@ function getCompoundTocTree (compound, indent)
 end
 
 function getTitle (title, underline)
+	if not title or  title == "" then
+		title = "<Untitled>"
+	end
+
 	return title .. "\n" .. string.rep (underline, #title)
 end
 

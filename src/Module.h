@@ -199,7 +199,7 @@ struct Member: sl::ListLink
 {
 	size_t m_index;
 	Compound* m_parentCompound;
-	Compound* m_groupCompound;
+	Compound* m_doxyGroupCompound;
 
 	MemberKind m_memberKind;
 	ProtectionKind m_protectionKind;
@@ -254,7 +254,7 @@ struct Compound: sl::ListLink
 	size_t m_index;
 	Namespace* m_selfNamespace;
 	Namespace* m_parentNamespace;
-	Compound* m_groupCompound;
+	Compound* m_doxyGroupCompound;
 
 	CompoundKind m_compoundKind;
 	LanguageKind m_languageKind;
@@ -302,19 +302,13 @@ struct Compound: sl::ListLink
 
 struct Module
 {
-	size_t m_indexedItemCount;
-
 	sl::String m_version;
 	sl::StdList <Compound> m_compoundList;
 	sl::Array <Compound*> m_namespaceArray;
-	sl::Array <Compound*> m_groupArray;
+	sl::Array <Compound*> m_doxyGroupArray;
 	sl::StringHashTableMap <Compound*> m_compoundMap;
 	sl::StringHashTableMap <Member*> m_memberMap;
-
-	Module ()
-	{
-		m_indexedItemCount = 0;
-	}
+	sl::StringHashTableMap <size_t> m_groupMap;
 
 	Compound* 
 	findCompound (const char* id)
@@ -402,7 +396,7 @@ protected:
 	getSubGroupNamespace (
 		Module* module,
 		NamespaceContents* parent,
-		Compound* group
+		Compound* doxyGroupCompound
 		);
 };
 

@@ -396,6 +396,7 @@ protected:
 	getSubGroupNamespace (
 		Module* module,
 		NamespaceContents* parent,
+		Namespace* parentNamespace,
 		Compound* doxyGroupCompound
 		);
 };

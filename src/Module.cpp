@@ -470,14 +470,19 @@ Compound::preparePath ()
 
 	if (!m_parentNamespace)
 	{
-		m_path = m_name;
+		if (m_compoundKind != CompoundKind_Group) // groups don't contribute to path
+			m_path = m_name;
 	}
 	else
 	{
 		m_parentNamespace->m_compound->preparePath ();
 		m_path = m_parentNamespace->m_compound->m_path;
-		m_path += '/';
-		m_path += m_name;
+
+		if (m_compoundKind != CompoundKind_Group) // groups don't contribute to path
+		{
+			m_path += '/';
+			m_path += m_name;
+		}
 	}
 }
 
@@ -689,7 +694,7 @@ GlobalNamespace::build (Module* module)
 		for (; memberIt; memberIt++)
 		{
 			Namespace* targetNspace = memberIt->m_doxyGroupCompound ? 
-				getSubGroupNamespace (module, nspace, memberIt->m_doxyGroupCompound) : 
+				getSubGroupNamespace (module, nspace, nspace, memberIt->m_doxyGroupCompound) : 
 				nspace;
 
 			targetNspace->add (*memberIt);
@@ -706,11 +711,11 @@ GlobalNamespace::build (Module* module)
 			}
 
 			Namespace* targetNspace = innerCompound->m_doxyGroupCompound ? 
-				getSubGroupNamespace (module, nspace, innerCompound->m_doxyGroupCompound) : 
+				getSubGroupNamespace (module, nspace, nspace, innerCompound->m_doxyGroupCompound) : 
 				nspace;
 
 			targetNspace->add (innerCompound);
-			innerCompound->m_parentNamespace = nspace; // not group!
+			innerCompound->m_parentNamespace = nspace; // namespace, not group!
 		}
 	}
 
@@ -733,7 +738,7 @@ GlobalNamespace::build (Module* module)
 			for (; memberIt; memberIt++)
 			{
 				NamespaceContents* targetNspace = memberIt->m_doxyGroupCompound ? 
-					(NamespaceContents*) getSubGroupNamespace (module, this, memberIt->m_doxyGroupCompound) : 
+					(NamespaceContents*) getSubGroupNamespace (module, this, NULL, memberIt->m_doxyGroupCompound) : 
 					this;
 
 				targetNspace->add (*memberIt);
@@ -744,7 +749,7 @@ GlobalNamespace::build (Module* module)
 			if (!compoundIt->m_parentNamespace)
 			{
 				NamespaceContents* targetNspace = compoundIt->m_doxyGroupCompound ? 
-					(NamespaceContents*) getSubGroupNamespace (module, this , compoundIt->m_doxyGroupCompound) : 
+					(NamespaceContents*) getSubGroupNamespace (module, this, NULL, compoundIt->m_doxyGroupCompound) : 
 					this;
 
 				targetNspace->add (*compoundIt);
@@ -781,11 +786,12 @@ Namespace*
 GlobalNamespace::getSubGroupNamespace (
 	Module* module,
 	NamespaceContents* parent,
+	Namespace* parentNamespace,
 	Compound* doxyGroupCompound
 	)
 {	
 	if (doxyGroupCompound->m_doxyGroupCompound) // re-parent to super-group
-		parent = getSubGroupNamespace (module, parent, doxyGroupCompound->m_doxyGroupCompound);
+		parent = getSubGroupNamespace (module, parent, parentNamespace, doxyGroupCompound->m_doxyGroupCompound);
 
 	sl::StringHashTableMapIterator <Namespace*> localMapIt = parent->m_groupMap.visit (doxyGroupCompound->m_id);
 	if (localMapIt->m_value)
@@ -796,6 +802,7 @@ GlobalNamespace::getSubGroupNamespace (
 	compound->m_doxyGroupCompound = doxyGroupCompound;
 	compound->m_name = doxyGroupCompound->m_name;
 	compound->m_title = doxyGroupCompound->m_title;
+	compound->m_parentNamespace = parentNamespace;
 	module->m_compoundList.insertTail (compound);
 
 	sl::StringHashTableMapIterator <size_t> globalMapIt = module->m_groupMap.visit (doxyGroupCompound->m_id);

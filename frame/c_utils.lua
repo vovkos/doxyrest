@@ -129,7 +129,7 @@ function getItemFileName (item, parentCompound)
 		s = "undef_"
 	end
 
-	if parentCompound.m_name then
+	if parentCompound.m_path ~= "" then
 		s = s .. string.gsub (parentCompound.m_path, "/", g_namespaceSep) .. g_namespaceSep
 	end
 
@@ -321,7 +321,11 @@ function getItemBriefDocumentation (item, refPrefix)
 		end
 	end
 
-	s = s .. " :ref:`More...<" .. refPrefix .. "doxid-" .. item.m_id .. ">`"
+	if string.sub (s, -1, -1) ~= "\n" then
+		s = s .. " "
+	end
+
+	s = s .. ":ref:`More...<" .. refPrefix .. "doxid-" .. item.m_id .. ">`"
 
 	return s
 end

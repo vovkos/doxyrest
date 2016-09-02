@@ -476,10 +476,6 @@ main (
 		return -1;
 	}
 
-#if (_AXL_ENV == AXL_ENV_WIN)
-	SetConsoleOutputCP (CP_UTF8);
-#endif
-
 	result = 0;
 
 	if (cmdLine.m_flags & CmdLineFlag_Help)

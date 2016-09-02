@@ -197,7 +197,6 @@ getMemberFlagString (uint_t flags);
 
 struct Member: sl::ListLink
 {
-	size_t m_index;
 	Compound* m_parentCompound;
 	Compound* m_doxyGroupCompound;
 
@@ -251,7 +250,6 @@ struct Ref: sl::ListLink
 
 struct Compound: sl::ListLink
 {
-	size_t m_index;
 	Namespace* m_selfNamespace;
 	Namespace* m_parentNamespace;
 	Compound* m_doxyGroupCompound;
@@ -428,6 +426,39 @@ luaExportArray (
 	)
 {
 	luaExportArray (luaState, array.ca (), array.getCount ());
+}
+
+template <typename T>
+void
+luaExportArraySetParent (
+	lua::LuaState* luaState,
+	T* const* a,
+	size_t count,
+	const char* parentFieldName,
+	int parentIndex = -1
+	)
+{
+	luaState->createTable (count);
+
+	for (size_t i = 0; i < count; i++)
+	{
+		a [i]->luaExport (luaState);
+		luaState->pushValue (parentIndex - 2); // [-1] element, [-2] table
+		luaState->setMember (parentFieldName);
+		luaState->setArrayElement (i + 1); // lua arrays are 1-based
+	}
+}
+
+template <typename T>
+void
+luaExportArraySetParent (
+	lua::LuaState* luaState,
+	const sl::Array <T*>& array,
+	const char* parentFieldName,
+	int parentIndex = -1
+	)
+{
+	luaExportArraySetParent (luaState, array.ca (), array.getCount (), parentFieldName, parentIndex);
 }
 
 template <typename T>

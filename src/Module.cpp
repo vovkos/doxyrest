@@ -334,7 +334,7 @@ Compound::luaExport (lua::LuaState* luaState)
 	luaState->setMemberString ("m_id", m_id);
 	luaState->setMemberString ("m_name", m_name);
 	luaState->setMemberString ("m_title", m_title);
-	
+		
 	switch (m_compoundKind)
 	{
 	case CompoundKind_Group:
@@ -587,37 +587,37 @@ NamespaceContents::add (Member* member)
 void
 NamespaceContents::luaExportMembers (lua::LuaState* luaState)
 {
-	luaExportArray (luaState, m_groupArray);
+	luaExportArraySetParent (luaState, m_groupArray, "m_parent");
 	luaState->setMember ("m_groupArray");
 
-	luaExportArray (luaState, m_namespaceArray);
+	luaExportArraySetParent (luaState, m_namespaceArray, "m_parent");
 	luaState->setMember ("m_namespaceArray");
 	
-	luaExportArray (luaState, m_enumArray);
+	luaExportArraySetParent (luaState, m_enumArray, "m_parent");
 	luaState->setMember ("m_enumArray");
 	
-	luaExportArray (luaState, m_structArray);
+	luaExportArraySetParent (luaState, m_structArray, "m_parent");
 	luaState->setMember ("m_structArray");
 	
-	luaExportArray (luaState, m_unionArray);
+	luaExportArraySetParent (luaState, m_unionArray, "m_parent");
 	luaState->setMember ("m_unionArray");
 	
-	luaExportArray (luaState, m_classArray);
+	luaExportArraySetParent (luaState, m_classArray, "m_parent");
 	luaState->setMember ("m_classArray");
 	
-	luaExportArray (luaState, m_typedefArray);
+	luaExportArraySetParent (luaState, m_typedefArray, "m_parent");
 	luaState->setMember ("m_typedefArray");
 	
-	luaExportArray (luaState, m_variableArray);
+	luaExportArraySetParent (luaState, m_variableArray, "m_parent");
 	luaState->setMember ("m_variableArray");
 	
-	luaExportArray (luaState, m_functionArray);
+	luaExportArraySetParent (luaState, m_functionArray, "m_parent");
 	luaState->setMember ("m_functionArray");
 	
-	luaExportArray (luaState, m_propertyArray);
+	luaExportArraySetParent (luaState, m_propertyArray, "m_parent");
 	luaState->setMember ("m_propertyArray");
 	
-	luaExportArray (luaState, m_eventArray);
+	luaExportArraySetParent (luaState, m_eventArray, "m_parent");
 	luaState->setMember ("m_eventArray");
 }
 
@@ -767,7 +767,8 @@ GlobalNamespace::luaExport (lua::LuaState* luaState)
 	luaExportMembers (luaState);
 
 	luaState->setMemberString ("m_path", "");
-	luaState->setMemberString ("m_id", "global_namespace");
+	luaState->setMemberString ("m_id", "global");
+	luaState->setMemberString ("m_compoundKind", "namespace");
 
 	// global namespace has no description, but we still want valid m_briefDescription/m_detailedDescription
 

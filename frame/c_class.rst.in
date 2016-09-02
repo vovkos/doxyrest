@@ -1,11 +1,12 @@
 %{
 local argArray = table.pack (...)
 local class = argArray [1]
+local parentCompound = argArray [2]
 }
 .. _doxid-$(class.m_id):
-.. index:: pair: $(class.m_compoundKind); $(getItemName (class))
+.. index:: pair: $(class.m_compoundKind); $(getItemName (class, parentCompound))
 
-$(getTitle (class.m_compoundKind .. " " .. getItemName (class), "="))
+$(getTitle (class.m_compoundKind .. " " .. getItemName (class, parentCompound), "="))
 
 .. toctree::
 	:hidden:
@@ -13,11 +14,5 @@ $(getTitle (class.m_compoundKind .. " " .. getItemName (class), "="))
 $(getCompoundTocTree (class, "\t"))
 
 %{
-includeFile (
-	"c_compound.rst.in",
-	class,
-	nil,
-	"Fields",
-	"Methods"
-	)
+includeFile ("c_compound.rst.in", class)
 }

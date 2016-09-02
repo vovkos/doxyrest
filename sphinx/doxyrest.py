@@ -14,7 +14,7 @@ class RefCodeBlock(Directive):
 
     def __init__(self, *args, **kwargs):
         Directive.__init__(self, *args, **kwargs)
-        self.re_prog = re.compile(':ref:`(.+?)\s*<([^>]*)>`')
+        self.re_prog = re.compile(':ref:`(.+?)\s*<([^<>]*)>`')
 
     def run(self):
         code = u'\n'.join(self.content)

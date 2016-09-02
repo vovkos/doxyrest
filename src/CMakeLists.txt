@@ -46,8 +46,6 @@ file (
 	${DOXYREST_ROOT_DIR}/frame/*.*
 	)
 
-message ("FRAME_LIST = ${FRAME_LIST}")
-
 source_group (
 	frame
 	FILES

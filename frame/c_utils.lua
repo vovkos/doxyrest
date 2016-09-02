@@ -13,9 +13,13 @@ function getNormalizedCppString (string)
 	return s
 end
 
-function getLinkedTextString (text)
+function getLinkedTextString (text, isRef)
 	if not text then
-		return nil
+		return ""
+	end
+
+	if not isRef then
+		return text.m_plainText
 	end
 
 	local s = ""
@@ -34,11 +38,11 @@ function getLinkedTextString (text)
 	return s
 end
 
-function getParamString (param)
+function getParamString (param, isRef)
 	local s = ""
 
 	if not param.m_type.m_isEmpty then
-		s = s .. getLinkedTextString (param.m_type)
+		s = s .. getLinkedTextString (param.m_type, isRef)
 	end
 
 	if param.m_declarationName ~= "" then
@@ -51,25 +55,25 @@ function getParamString (param)
 
 	if not param.m_defaultValue.m_isEmpty then
 		s = s .. " = "
-		s = s .. getLinkedTextString (param.m_defaultValue)
+		s = s .. getLinkedTextString (param.m_defaultValue, isRef)
 	end
 
 	return s
 end
 
-function getFunctionParamArrayString (paramArray, indent)
+function getFunctionParamArrayString (paramArray, isRef, indent)
 	local s
 	local count = #paramArray
 
 	if count == 0 then
 		s = "()"
 	elseif count == 1  then
-		s = "(" .. getParamString (paramArray [1]) .. ")"
+		s = "(" .. getParamString (paramArray [1], isRef) .. ")"
 	else
 		s = "(\n" .. indent .. "    "
 
 		for i = 1, count do
-			s = s .. getParamString (paramArray [i])
+			s = s .. getParamString (paramArray [i], isRef)
 
 			if i ~= count then
 				s = s .. ","
@@ -83,17 +87,17 @@ function getFunctionParamArrayString (paramArray, indent)
 	return s
 end
 
-function getTemplateParamArrayString (paramArray)
+function getTemplateParamArrayString (paramArray, isRef)
 	local s
 	local count = #paramArray
 
 	if count == 0 then
 		s = "<>"
 	else
-		s = "<" .. getParamString (paramArray [1])
+		s = "<" .. getParamString (paramArray [1], isRef)
 
 		for i = 2, count do
-			s = s .. ", " .. getParamString (paramArray [i])
+			s = s .. ", " .. getParamString (paramArray [i], isRef)
 		end
 
 		s = s .. ">"
@@ -103,7 +107,14 @@ function getTemplateParamArrayString (paramArray)
 end
 
 function getItemName (item)
-	local s = item.m_name
+	local s = ""
+	local parentCompound = item.m_parent
+
+	if parentCompound and parentCompound.m_path ~= "" then
+		s = s .. string.gsub (parentCompound.m_path, "/", ".") .. "."
+	end
+
+	s = s .. item.m_name
 
 	if item.m_templateParamArray and #item.m_templateParamArray > 0 then
 		s = s .. " " .. getTemplateParamArrayString (item.m_templateParamArray)
@@ -118,8 +129,9 @@ end
 
 g_itemFileNameMap = {}
 
-function getItemFileName (item, parentCompound)
+function getItemFileName (item)
 	local s
+	local parentCompound = item.m_parent
 
 	if item.m_compoundKind then
 		s = item.m_compoundKind .. g_namespaceSep
@@ -129,7 +141,7 @@ function getItemFileName (item, parentCompound)
 		s = "undef_"
 	end
 
-	if parentCompound.m_path ~= "" then
+	if parentCompound and parentCompound.m_path ~= "" then
 		s = s .. string.gsub (parentCompound.m_path, "/", g_namespaceSep) .. g_namespaceSep
 	end
 
@@ -139,26 +151,28 @@ function getItemFileName (item, parentCompound)
 		s = string.gsub (s, '-', g_namespaceSep) -- groups can contain dashes
 	end
 
-	if item.m_templateSpecParamArray and #item.m_templateSpecParamArray > 0 then
-		if not s_indexFormat then
-			s_indexFormat = "%0" .. #tostring (g_indexedItemCount) + 1 .. "d"
-		end
-
-		s = s .. "_spec_" .. string.format (s_indexFormat, item.m_index)
-	end
-
 	-- now, take care of name collisions (e.g. due to template specialization classes)
 
 	local mapValue = g_itemFileNameMap [s]
 
 	if mapValue == nil then
 		mapValue = {}
-		mapValue.m_item = item
-		mapValue.m_index = 2
+		mapValue.m_itemMap = {}
+		mapValue.m_itemMap [item] = 1
+		mapValue.m_count = 1
 		g_itemFileNameMap [s] = mapValue
-	elseif mapValue.m_item ~= item then
-		s = s .. "_" .. prevMapValue.m_index
-		mapValue.m_index = mapValue.m_index + 1
+	else
+		local index = mapValue.m_itemMap [item]
+
+		if index == nil then
+			index = mapValue.m_count + 1
+			mapValue.m_itemMap [item] = index
+			mapValue.m_count = mapValue.m_count + 1
+		end
+
+		if index ~= 1 then
+			s = s .. "_" .. index
+		end
 	end
 
 	s = s .. ".rst"
@@ -170,32 +184,32 @@ function getCompoundTocTree (compound, indent)
 	local s = ""
 
 	for i = 1, #compound.m_groupArray do
-		local fileName = getItemFileName (compound.m_groupArray [i], compound)
+		local fileName = getItemFileName (compound.m_groupArray [i])
 		s = s .. indent .. fileName .. "\n"
 	end
 
 	for i = 1, #compound.m_namespaceArray do
-		local fileName = getItemFileName (compound.m_namespaceArray [i], compound)
+		local fileName = getItemFileName (compound.m_namespaceArray [i])
 		s = s .. indent .. fileName .. "\n"
 	end
 
 	for i = 1, #compound.m_enumArray do
-		local fileName = getItemFileName (compound.m_enumArray [i], compound)
+		local fileName = getItemFileName (compound.m_enumArray [i])
 		s = s .. indent .. fileName .. "\n"
 	end
 
 	for i = 1, #compound.m_structArray do
-		local fileName = getItemFileName (compound.m_structArray [i], compound)
+		local fileName = getItemFileName (compound.m_structArray [i])
 		s = s .. indent .. fileName .. "\n"
 	end
 
 	for i = 1, #compound.m_unionArray do
-		local fileName = getItemFileName (compound.m_unionArray [i], compound)
+		local fileName = getItemFileName (compound.m_unionArray [i])
 		s = s .. indent .. fileName .. "\n"
 	end
 
 	for i = 1, #compound.m_classArray do
-		local fileName = getItemFileName (compound.m_classArray [i], compound)
+		local fileName = getItemFileName (compound.m_classArray [i])
 		s = s .. indent .. fileName .. "\n"
 	end
 
@@ -227,6 +241,7 @@ function getFunctionDeclStringImpl (item, returnType, isRef, indent)
 
 	s = s .. getFunctionParamArrayString (
 		item.m_paramArray,
+		isRef,
 		indent
 		)
 
@@ -236,7 +251,7 @@ end
 function getFunctionDeclString (func, isRef, indent)
 	return getFunctionDeclStringImpl (
 		func,
-		getLinkedTextString (func.m_returnType),
+		getLinkedTextString (func.m_returnType, isRef),
 		isRef,
 		indent
 		)
@@ -255,7 +270,7 @@ function getTypedefDeclString (typedef, isRef, indent)
 	local s = "typedef"
 
 	if typedef.m_argString == "" then
-		s = s .. " " .. getLinkedTextString (typedef.m_type) .. " "
+		s = s .. " " .. getLinkedTextString (typedef.m_type, isRef) .. " "
 
 		if isRef then
 			s = s .. ":ref:`" .. getItemName (typedef)  .. "<doxid-" .. typedef.m_id .. ">` "
@@ -272,7 +287,7 @@ function getTypedefDeclString (typedef, isRef, indent)
 		s = s .. " "
 	end
 
-	s = s .. getLinkedTextString (typedef.m_type) .. "\n"
+	s = s .. getLinkedTextString (typedef.m_type, isRef) .. "\n"
 
 	if isRef then
 		s = s .. indent .. ":ref:`" .. getItemName (typedef)  .. "<doxid-" .. typedef.m_id .. ">` ("

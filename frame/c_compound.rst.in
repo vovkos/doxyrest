@@ -1,9 +1,20 @@
 %{
 local argArray = table.pack (...)
 local compound = argArray [1]
-local namespaceSectionName = argArray [2]
-local variableSectionName = argArray [3]
-local functionSectionName = argArray [4]
+
+local namespaceSectionName
+local variableSectionName
+local functionSectionName
+
+if compound.m_compoundKind == "namespace" then
+	namespaceSectionName = "Sub-Namespaces"
+	variableSectionName = "Global Variables"
+	functionSectionName = "Global Functions"
+else
+	namespaceSectionName = "<compound-should-have-no-namespaces>"
+	variableSectionName = "Fields"
+	functionSectionName = "Methods"
+end
 }
 Overview
 ~~~~~~~~
@@ -13,7 +24,7 @@ $(getItemBriefDocumentation (compound, "details-"))
 %{
 for i = 1, #compound.m_groupArray do
 	local item = compound.m_groupArray [i]
-	local targetFileName = getItemFileName (item, compound)
+	local targetFileName = getItemFileName (item)
 
 	generateFile (targetFileName, "c_group.rst.in", item)
 }
@@ -41,7 +52,7 @@ $(getTitle (namespaceSectionName, "-"))
 %{
 	for i = 1, #compound.m_namespaceArray do
 		local item = compound.m_namespaceArray [i]
-		local targetFileName = getItemFileName (item, compound)
+		local targetFileName = getItemFileName (item)
 
 		generateFile (targetFileName, "c_namespace.rst.in", item)
 }
@@ -124,11 +135,11 @@ Enums
 %{
 	for i = 1, #compound.m_enumArray do
 		local item = compound.m_enumArray [i]
-		local targetFileName = getItemFileName (item, compound)
+		local targetFileName = getItemFileName (item)
 
 		generateFile (targetFileName, "c_enum.rst.in", item)
 }
-	enum :ref:`$(item.m_name)<doxid-$(item.m_id)>`
+	enum :ref:`$(getItemName (item))<doxid-$(item.m_id)>`
 %{
 	end -- for
 }
@@ -156,7 +167,7 @@ Structs
 %{
 	for i = 1, #compound.m_structArray do
 		local item = compound.m_structArray [i]
-		local targetFileName = getItemFileName (item, compound)
+		local targetFileName = getItemFileName (item)
 
 		generateFile (targetFileName, "c_class.rst.in", item)
 }
@@ -188,7 +199,7 @@ Unions
 %{
 	for i = 1, #compound.m_unionArray do
 		local item = compound.m_unionArray [i]
-		local targetFileName = getItemFileName (item, compound)
+		local targetFileName = getItemFileName (item)
 
 		generateFile (targetFileName, "c_class.rst.in", item)
 }
@@ -220,7 +231,7 @@ Classes
 %{
 	for i = 1, #compound.m_classArray do
 		local item = compound.m_classArray [i]
-		local targetFileName = getItemFileName (item, compound)
+		local targetFileName = getItemFileName (item)
 
 		generateFile (targetFileName, "c_class.rst.in", item)
 }
@@ -252,7 +263,7 @@ $(getTitle (variableSectionName, "-"))
 	for i = 1, #compound.m_variableArray do
 		local item = compound.m_variableArray [i]
 }
-	$(getLinkedTextString (item.m_type)) :ref:`$(item.m_name)<doxid-$(item.m_id)>`
+	$(getLinkedTextString (item.m_type, true)) :ref:`$(item.m_name)<doxid-$(item.m_id)>`
 %{
 	end -- for
 }
@@ -281,7 +292,7 @@ Properties
 	for i = 1, #compound.m_propertyArray do
 		local item = compound.m_propertyArray [i]
 }
-	$(getLinkedTextString (item.m_returnType)) property :ref:`$(item.m_name)<doxid-$(item.m_id)>`
+	$(getLinkedTextString (item.m_returnType, true)) property :ref:`$(item.m_name)<doxid-$(item.m_id)>`
 %{
 	end -- for
 }
@@ -408,7 +419,7 @@ $(getTitle (variableSectionName, "-"))
 .. _doxid-$(item.m_id):
 .. ref-code-block:: none
 
-	$(getLinkedTextString (item.m_type)) $(item.m_name)
+	$(getLinkedTextString (item.m_type, true)) $(item.m_name)
 
 $(getItemDetailedDocumentation (item))
 %{
@@ -430,7 +441,7 @@ Properties
 .. _doxid-$(item.m_id):
 .. ref-code-block:: none
 
-	$(getLinkedTextString (item.m_returnType)) property $(getItemName (item))
+	$(getLinkedTextString (item.m_returnType, true)) property $(getItemName (item))
 
 $(getItemDetailedDocumentation (item))
 %{

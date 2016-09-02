@@ -1,4 +1,4 @@
-# This file is part of DoxyRest project
+# This file is part of Doxyrest project
 # Tibbo Technology Inc (C) 2004-2016. All rights reserved
 # Author: Vladimir Gladkov
 
@@ -8,7 +8,7 @@ project (doxyrest)
 
 cmake_minimum_required (VERSION 2.8)
 
-include (axl_cmake.cmake NO_POLICY_SCOPE)
+include (cmake/axl_cmake.cmake NO_POLICY_SCOPE)
 
 # . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
@@ -19,7 +19,9 @@ set (DOXYREST_PACKAGE_DIR  ${CMAKE_CURRENT_BINARY_DIR}/package)
 
 # . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-include (version.cmake)
+add_subdirectory (cmake)
+
+include (${CMAKE_CURRENT_BINARY_DIR}/cmake/doxyrest_config.cmake)
 
 add_subdirectory (src)
 

@@ -87,7 +87,7 @@ DoxygenIndexType::onCompound (
 bool 
 DoxygenIndexType::parseCompound (const char* refId)
 {
-	sl::String filePath = m_parser->getBaseDir () + refId + ".xml";
+	sl::String filePath = m_parser->getBaseDir () + "/" + refId + ".xml";
 
 	DoxyXmlParser parser;
 	return parser.parseFile (

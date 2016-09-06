@@ -814,7 +814,7 @@ GlobalNamespace::getSubGroupNamespace (
 	}
 	else
 	{
-		compound->m_id.format ("%s_%d", doxyGroupCompound->m_id, globalMapIt->m_value);
+		compound->m_id.format ("%s_%d", doxyGroupCompound->m_id.cc (), globalMapIt->m_value);
 		globalMapIt->m_value++;
 	}
 

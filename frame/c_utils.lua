@@ -106,12 +106,21 @@ function getTemplateParamArrayString (paramArray, isRef)
 	return s
 end
 
+
 function getItemName (item)
 	local s = ""
-	local parentCompound = item.m_parent
+	local parent = item.m_parent
 
-	if parentCompound and parentCompound.m_path ~= "" then
-		s = s .. string.gsub (parentCompound.m_path, "/", ".") .. "."
+	while parent do
+		if parent.m_compoundKind == "group" then
+			parent = parent.m_parent
+		else
+			if parent.m_compoundKind == "namespace" and parent.m_path ~= "" then
+				s = string.gsub (parent.m_path, "/", ".") .. "." -- only add prefix to namespaces, not classes/structs
+			end
+
+			break
+		end
 	end
 
 	s = s .. item.m_name
@@ -131,7 +140,7 @@ g_itemFileNameMap = {}
 
 function getItemFileName (item)
 	local s
-	local parentCompound = item.m_parent
+	local parent = item.m_parent
 
 	if item.m_compoundKind then
 		s = item.m_compoundKind .. g_namespaceSep
@@ -141,8 +150,8 @@ function getItemFileName (item)
 		s = "undef_"
 	end
 
-	if parentCompound and parentCompound.m_path ~= "" then
-		s = s .. string.gsub (parentCompound.m_path, "/", g_namespaceSep) .. g_namespaceSep
+	if parent and parent.m_path ~= "" then
+		s = s .. string.gsub (parent.m_path, "/", g_namespaceSep) .. g_namespaceSep
 	end
 
 	s = s .. item.m_name

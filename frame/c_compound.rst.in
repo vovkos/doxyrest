@@ -37,16 +37,6 @@ if #compound.m_namespaceArray > 0 then
 }
 $(getTitle (namespaceSectionName, "-"))
 
-%{
-	if g_isTotalCountVisible then
-}
-.. epigraph::
-
-	$(#compound.m_namespaceArray) total $(string.lower (namespaceSectionName))
-
-%{
-	end -- if
-}
 .. ref-code-block:: none
 
 %{
@@ -73,16 +63,6 @@ if #compound.m_typedefArray > 0 then
 Typedefs
 --------
 
-%{
-	if g_isTotalCountVisible then
-}
-.. epigraph::
-
-	$(#compound.m_typedefArray) total typedefs
-
-%{
-	end -- if
-}
 .. ref-code-block:: none
 
 %{
@@ -120,16 +100,6 @@ if #compound.m_enumArray > 0 then
 Enums
 -----
 
-%{
-	if g_isTotalCountVisible then
-}
-.. epigraph::
-
-	$(#compound.m_enumArray) total enums
-
-%{
-	end -- if
-}
 .. ref-code-block:: none
 
 %{
@@ -147,21 +117,14 @@ Enums
 %{
 end -- if
 
-if #compound.m_structArray > 0 then
+if #compound.m_structArray > 0 or #compound.m_unionArray > 0 then
+	local sectionName = getDoubleSectionName (
+		"Structs", #compound.m_structArray,
+		"Unions", #compound.m_unionArray
+		)
 }
-Structs
--------
+$(getTitle (sectionName, "-"))
 
-%{
-	if g_isTotalCountVisible then
-}
-.. epigraph::
-
-	$(#compound.m_structArray) total structs
-
-%{
-	end -- if
-}
 .. ref-code-block:: none
 
 %{
@@ -174,29 +137,7 @@ Structs
 	struct :ref:`$(getItemName (item))<doxid-$(item.m_id)>`
 %{
 	end -- for
-}
 
-%{
-end -- if
-
-if #compound.m_unionArray > 0 then
-}
-Unions
-------
-
-%{
-	if g_isTotalCountVisible then
-}
-.. epigraph::
-
-	$(#compound.m_structArray) total unions
-
-%{
-	end -- if
-}
-.. ref-code-block:: none
-
-%{
 	for i = 1, #compound.m_unionArray do
 		local item = compound.m_unionArray [i]
 		local targetFileName = getItemFileName (item)
@@ -216,16 +157,6 @@ if #compound.m_classArray > 0 then
 Classes
 -------
 
-%{
-	if g_isTotalCountVisible then
-}
-.. epigraph::
-
-	$(#compound.m_classArray) total classes
-
-%{
-	end -- if
-}
 .. ref-code-block:: none
 
 %{
@@ -243,20 +174,15 @@ Classes
 %{
 end -- if
 
-if #compound.m_variableArray > 0 then
-}
-$(getTitle (variableSectionName, "-"))
+if #compound.m_variableArray > 0 or #compound.m_propertyArray > 0 then
+	local sectionName = getDoubleSectionName (
+		variableSectionName, #compound.m_variableArray,
+		"Properties", #compound.m_propertyArray
+		)
 
-%{
-	if g_isTotalCountVisible then
 }
-.. epigraph::
+$(getTitle (sectionName, "-"))
 
-	$(#compound.m_variableArray) total $(string.lower (variableSectionName))
-
-%{
-	end -- if
-}
 .. ref-code-block:: none
 
 %{
@@ -266,29 +192,7 @@ $(getTitle (variableSectionName, "-"))
 	$(getLinkedTextString (item.m_type, true)) :ref:`$(getItemName (item))<doxid-$(item.m_id)>`
 %{
 	end -- for
-}
 
-%{
-end -- if
-
-if #compound.m_propertyArray > 0 then
-}
-Properties
-----------
-
-%{
-	if g_isTotalCountVisible then
-}
-.. epigraph::
-
-	$(#compound.m_propertyArray) total properties
-
-%{
-	end -- if
-}
-.. ref-code-block:: none
-
-%{
 	for i = 1, #compound.m_propertyArray do
 		local item = compound.m_propertyArray [i]
 }
@@ -305,16 +209,6 @@ if #compound.m_eventArray > 0 then
 Events
 ------
 
-%{
-	if g_isTotalCountVisible then
-}
-.. epigraph::
-
-	$(#compound.m_eventArray) total events
-
-%{
-	end -- if
-}
 .. ref-code-block:: none
 
 %{
@@ -343,16 +237,6 @@ if #compound.m_functionArray > 0 then
 }
 $(getTitle (functionSectionName, "-"))
 
-%{
-	if g_isTotalCountVisible then
-}
-.. epigraph::
-
-	$(#compound.m_functionArray) total $(string.lower (functionSectionName))
-
-%{
-	end -- if
-}
 .. ref-code-block:: none
 
 %{
@@ -401,6 +285,7 @@ Typedefs
 	$(getTypedefDeclString (item, false, "\t"))
 
 $(getItemDetailedDocumentation (item))
+
 %{
 	end -- for
 }
@@ -422,6 +307,7 @@ $(getTitle (variableSectionName, "-"))
 	$(getLinkedTextString (item.m_type, true)) $(item.m_name)
 
 $(getItemDetailedDocumentation (item))
+
 %{
 	end -- for
 }
@@ -444,6 +330,7 @@ Properties
 	$(getLinkedTextString (item.m_returnType, true)) property $(getItemName (item))
 
 $(getItemDetailedDocumentation (item))
+
 %{
 	end -- for
 }
@@ -466,6 +353,7 @@ Events
 	$(getEventDeclString (item, false, "\t"))
 
 $(getItemDetailedDocumentation (item))
+
 %{
 	end -- for
 }
@@ -487,6 +375,7 @@ $(getTitle (functionSectionName, "-"))
 	$(getFunctionDeclString (item, false, "\t"))
 
 $(getItemDetailedDocumentation (item))
+
 %{
 	end -- for
 }

@@ -225,6 +225,28 @@ function getCompoundTocTree (compound, indent)
 	return s
 end
 
+function getDoubleSectionName (title1, count1, title2, count2)
+
+	local s
+
+	if count1 == 0 then
+		if count2 == 0 then
+			s = "<Empty>" -- should not really happen
+		else
+			s = title2
+		end
+	else
+		if count2 == 0 then
+			s = title1
+		else
+			s = title1 .. " & " .. title2
+		end
+	end
+
+	return s
+end
+
+
 function getTitle (title, underline)
 	if not title or  title == "" then
 		title = "<Untitled>"
@@ -329,47 +351,56 @@ function getTypedefDeclString (typedef, isRef, indent)
 	return s
 end
 
-function getItemBriefDocumentation (item, refPrefix)
-	if item.m_briefDescription.m_isEmpty then
-		return ""
-	end
-
+function concatenateDescription (description)
 	local s = ""
 
-	for i = 1, #item.m_briefDescription.m_docBlockList do
-		block = item.m_briefDescription.m_docBlockList [i]
+	for i = 1, #description.m_docBlockList do
+		local block = description.m_docBlockList [i]
 		s = s .. block.m_contents.m_plainText
 
-		if i ~= #item.m_briefDescription.m_docBlockList then
+		if i ~= #description.m_docBlockList then
 			s = s .. "\n"
 		end
 	end
 
-	if string.sub (s, -1, -1) ~= "\n" then
-		s = s .. " "
+	return s
+end
+
+function getItemBriefDocumentation (item, refPrefix)
+	local s
+
+	if not item.m_briefDescription.m_isEmpty then
+		s = concatenateDescription (item.m_briefDescription)
+	elseif item.m_detailedDescription.m_isEmpty then
+		return ""
+	else
+		local block = item.m_detailedDescription.m_docBlockList [1]
+		s = block.m_contents.m_plainText
+
+		local i = string.find (s, ".%s", 1, true)
+		if i then
+			s = string.sub (s, 1, i)
+		end
 	end
 
-	s = s .. ":ref:`More...<" .. refPrefix .. "doxid-" .. item.m_id .. ">`"
+	s = string.match (s, "(.-)%s*$") -- trim trailing whitespace
+	s = s .. " :ref:`More...<" .. refPrefix .. "doxid-" .. item.m_id .. ">`"
 
 	return s
 end
 
 function getItemDetailedDocumentation (item)
-	local s = ""
+	local s = concatenateDescription (item.m_briefDescription)
 
-	for i = 1, #item.m_briefDescription.m_docBlockList do
-		block = item.m_briefDescription.m_docBlockList [i]
-		s = s .. block.m_contents.m_plainText .. "\n"
+	if item.m_detailedDescription.m_isEmpty then
+		return s
 	end
 
-	if not item.m_briefDescription.m_isEmpty and not item.m_detailedDescription.m_isEmpty then
+	if s ~= "" then
 		s = s .. "\n"
 	end
 
-	for i = 1, #item.m_detailedDescription.m_docBlockList do
-		block = item.m_detailedDescription.m_docBlockList [i]
-		s = s .. block.m_contents.m_plainText .. "\n"
-	end
+	s = s .. concatenateDescription (item.m_detailedDescription)
 
 	return s
 end

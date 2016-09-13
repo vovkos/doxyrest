@@ -405,7 +405,7 @@ run (CmdLine* cmdLine)
 
 	result = 
 		parser.parseFile (&module, cmdLine->m_inputFileName) &&
-		globalNamespace.build (&module);
+		globalNamespace.build (&module, cmdLine->m_protectionFilter);
 
 	if (!result)
 	{

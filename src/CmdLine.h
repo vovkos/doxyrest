@@ -1,5 +1,7 @@
 #pragma once
 
+#include "DoxyXmlEnum.h"
+
 //.............................................................................
 
 enum CmdLineFlag
@@ -19,6 +21,7 @@ struct Define: sl::ListLink
 struct CmdLine
 {
 	uint_t m_flags;
+	ProtectionKind m_protectionFilter;
 
 	sl::String m_inputFileName;
 	sl::String m_outputFileName;
@@ -43,6 +46,7 @@ enum CmdLineSwitchKind
 	CmdLineSwitchKind_FrameDir,
 	CmdLineSwitchKind_NamespaceSep,
 	CmdLineSwitchKind_Define,
+	CmdLineSwitchKind_ProtectionFilter,
 };
 
 //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -81,6 +85,12 @@ AXL_SL_BEGIN_CMD_LINE_SWITCH_TABLE (CmdLineSwitchTable, CmdLineSwitchKind)
 		CmdLineSwitchKind_NamespaceSep,
 		"s", "namespace-sep", "<sep>",
 		"Specify namespace separator (defaults to '_')"
+		)
+
+	AXL_SL_CMD_LINE_SWITCH_2 (
+		CmdLineSwitchKind_ProtectionFilter,
+		"p", "protection", "<protection>",
+		"Exclude protected items"
 		)
 
 	AXL_SL_CMD_LINE_SWITCH_2 (

@@ -6,6 +6,7 @@
 CmdLine::CmdLine ()
 {
 	m_flags = 0;
+	m_protectionFilter = ProtectionKind_Public;
 	m_namespaceSep = "_";
 }
 
@@ -41,6 +42,16 @@ CmdLineParser::onSwitch (
 
 	case CmdLineSwitchKind_NamespaceSep:
 		m_cmdLine->m_namespaceSep = value;
+		break;
+
+	case CmdLineSwitchKind_ProtectionFilter:
+		m_cmdLine->m_protectionFilter = ProtectionKindMap::find (value, ProtectionKind_Undefined);
+		if (!m_cmdLine->m_protectionFilter)
+		{
+			err::setFormatStringError ("unknown protection '%s'", value);
+			return false;
+		}
+
 		break;
 
 	case CmdLineSwitchKind_Define:

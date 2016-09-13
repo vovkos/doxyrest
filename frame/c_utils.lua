@@ -106,7 +106,6 @@ function getTemplateParamArrayString (paramArray, isRef)
 	return s
 end
 
-
 function getItemName (item)
 	local s = ""
 	local parent = item.m_parent
@@ -138,7 +137,7 @@ end
 
 g_itemFileNameMap = {}
 
-function getItemFileName (item)
+function getItemFileName (item, extension)
 	local s
 	local parent = item.m_parent
 
@@ -184,7 +183,11 @@ function getItemFileName (item)
 		end
 	end
 
-	s = s .. ".rst"
+	if not extension then
+		extension = ".rst"
+	end
+
+	s = s .. extension
 
 	return s
 end
@@ -226,7 +229,6 @@ function getCompoundTocTree (compound, indent)
 end
 
 function getDoubleSectionName (title1, count1, title2, count2)
-
 	local s
 
 	if count1 == 0 then

@@ -1,0 +1,112 @@
+%{
+local argArray = table.pack (...)
+local compound = argArray [1]
+
+local indent
+local variable
+local getLocalItemName
+
+if compound.m_compoundKind == "namespace" then
+	indent = ""
+	variable = "variable"
+	getLocalItemName = getItemName
+else
+	indent = "\t"
+	variable = "field"
+	getLocalItemName = function (item)
+		return item.m_name
+	end
+end
+
+for i = 1, #compound.m_groupArray do
+	local item = compound.m_groupArray [i]
+	local targetFileName = getItemFileName (item)
+
+	generateFile (targetFileName, "c_group.dox.in", item)
+end
+
+for i = 1, #compound.m_namespaceArray do
+	local item = compound.m_namespaceArray [i]
+	local targetFileName = getItemFileName (item)
+
+	generateFile (targetFileName, "c_namespace.dox.in", item)
+end
+
+for i = 1, #compound.m_enumArray do
+	local item = compound.m_enumArray [i]
+	local targetFileName = getItemFileName (item)
+
+	generateFile (targetFileName, "c_enum.dox.in", item)
+end
+
+for i = 1, #compound.m_structArray do
+	local item = compound.m_structArray [i]
+	local targetFileName = getItemFileName (item)
+
+	generateFile (targetFileName, "c_class.dox.in", item)
+end
+
+for i = 1, #compound.m_unionArray do
+	local item = compound.m_unionArray [i]
+	local targetFileName = getItemFileName (item)
+
+	generateFile (targetFileName, "c_class.dox.in", item)
+end
+
+for i = 1, #compound.m_classArray do
+	local item = compound.m_classArray [i]
+	local targetFileName = getItemFileName (item)
+
+	generateFile (targetFileName, "c_class.dox.in", item)
+end
+
+for i = 1, #compound.m_typedefArray do
+	local item = compound.m_typedefArray [i]
+}
+$(indent)\typedef $(getLocalItemName (item))
+
+$(indent)	Detailed description for $(getLocalItemName (item))
+
+%{
+end -- for
+
+for i = 1, #compound.m_variableArray do
+	local item = compound.m_variableArray [i]
+}
+$(indent)\$(variable) $(getLocalItemName (item))
+
+$(indent)	Detailed description for $(getLocalItemName (item))
+
+%{
+end -- for
+
+for i = 1, #compound.m_propertyArray do
+	local item = compound.m_propertyArray [i]
+}
+$(indent)\property $(getLocalItemName (item))
+
+$(indent)	Detailed description for $(getLocalItemName (item))
+
+%{
+end -- for
+
+for i = 1, #compound.m_eventArray do
+	local item = compound.m_eventArray [i]
+}
+$(indent)\event $(getLocalItemName (item))
+
+$(indent)	Detailed description for $(getLocalItemName (item))
+
+%{
+	end -- for
+
+for i = 1, #compound.m_functionArray do
+	local item = compound.m_functionArray [i]
+}
+$(indent)\fn $(getLocalItemName (item))
+
+$(indent)	Detailed description for $(getLocalItemName (item))
+
+%{
+end -- for
+}

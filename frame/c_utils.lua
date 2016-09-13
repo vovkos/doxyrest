@@ -274,7 +274,7 @@ function getFunctionDeclStringImpl (item, returnType, isRef, indent)
 
 	s = s .. getFunctionParamArrayString (
 		item.m_paramArray,
-		isRef,
+		true,
 		indent
 		)
 
@@ -284,7 +284,7 @@ end
 function getFunctionDeclString (func, isRef, indent)
 	return getFunctionDeclStringImpl (
 		func,
-		getLinkedTextString (func.m_returnType, isRef),
+		getLinkedTextString (func.m_returnType, true),
 		isRef,
 		indent
 		)
@@ -303,7 +303,7 @@ function getTypedefDeclString (typedef, isRef, indent)
 	local s = "typedef"
 
 	if typedef.m_argString == "" then
-		s = s .. " " .. getLinkedTextString (typedef.m_type, isRef) .. " "
+		s = s .. " " .. getLinkedTextString (typedef.m_type, true) .. " "
 
 		if isRef then
 			s = s .. ":ref:`" .. getItemName (typedef)  .. "<doxid-" .. typedef.m_id .. ">` "
@@ -320,7 +320,7 @@ function getTypedefDeclString (typedef, isRef, indent)
 		s = s .. " "
 	end
 
-	s = s .. getLinkedTextString (typedef.m_type, isRef) .. "\n"
+	s = s .. getLinkedTextString (typedef.m_type, true) .. "\n"
 
 	if isRef then
 		s = s .. indent .. ":ref:`" .. getItemName (typedef)  .. "<doxid-" .. typedef.m_id .. ">` ("

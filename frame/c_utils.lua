@@ -399,7 +399,7 @@ function getItemDetailedDocumentation (item)
 	end
 
 	if s ~= "" then
-		s = s .. "\n"
+		s = s .. "\n\n"
 	end
 
 	s = s .. concatenateDescription (item.m_detailedDescription)

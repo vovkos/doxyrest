@@ -137,7 +137,7 @@ end
 
 g_itemFileNameMap = {}
 
-function getItemFileName (item, extension)
+function getItemFileName (item, suffix)
 	local s
 	local parent = item.m_parent
 
@@ -183,11 +183,11 @@ function getItemFileName (item, extension)
 		end
 	end
 
-	if not extension then
-		extension = ".rst"
+	if not suffix then
+		suffix = ".rst"
 	end
 
-	s = s .. extension
+	s = s .. suffix
 
 	return s
 end

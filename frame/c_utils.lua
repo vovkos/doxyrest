@@ -385,7 +385,8 @@ function getItemBriefDocumentation (item, refPrefix)
 		end
 	end
 
-	s = string.match (s, "(.-)%s*$") -- trim trailing whitespace
+	s = string.match (s, "(.-)%s*$")  -- trim trailing whitespace
+	s = string.gsub (s, "\t", "    ") -- replace tabs with spaces
 	s = s .. " :ref:`More...<" .. refPrefix .. "doxid-" .. item.m_id .. ">`"
 
 	return s
@@ -403,6 +404,7 @@ function getItemDetailedDocumentation (item)
 	end
 
 	s = s .. concatenateDescription (item.m_detailedDescription)
+	s = string.gsub (s, "\t", "    ") -- replace tabs with spaces
 
 	return s
 end

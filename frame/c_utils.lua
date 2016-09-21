@@ -266,6 +266,16 @@ function getFunctionDeclStringImpl (item, returnType, isRef, indent)
 		s = s .. " "
 	end
 
+	if item.m_modifiers ~= "" then
+		s = s .. item.m_modifiers
+
+		if g_hasNewLineAfterReturnType then
+			s = s .. "\n" .. indent
+		else
+			s = s .. " "
+		end
+	end
+
 	if isRef then
 		s = s .. ":ref:`" .. getItemName (item)  .. "<doxid-" .. item.m_id .. ">` "
 	else
@@ -429,4 +439,3 @@ function removePrimitiveTypedefs (typedefArray)
 end
 
 -------------------------------------------------------------------------------
-

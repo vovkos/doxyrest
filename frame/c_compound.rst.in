@@ -192,8 +192,13 @@ $(getTitle (sectionName, "-"))
 %{
 	for i = 1, #compound.m_variableArray do
 		local item = compound.m_variableArray [i]
+		local modifiers = item.m_modifiers
+
+		if modifiers ~= "" then
+			modifiers = " " .. modifiers
+		end
 }
-	$(getLinkedTextString (item.m_type, true)) :ref:`$(getItemName (item))<doxid-$(item.m_id)>`
+	$(getLinkedTextString (item.m_type, true))$modifiers :ref:`$(getItemName (item))<doxid-$(item.m_id)>`
 %{
 	end -- for
 
@@ -307,12 +312,17 @@ $(getTitle (variableSectionName, "-"))
 %{
 	for i = 1, #compound.m_variableArray do
 		local item = compound.m_variableArray [i]
+		local modifiers = item.m_modifiers
+
+		if modifiers ~= "" then
+			modifiers = " " .. modifiers
+		end
 }
 .. _doxid-$(item.m_id):
 .. ref-code-block:: $g_language
 	:class: title-code-block
 
-	$(getLinkedTextString (item.m_type, true)) $(item.m_name)
+	$(getLinkedTextString (item.m_type, true))$modifiers $(item.m_name)
 
 $(getItemDetailedDocumentation (item))
 

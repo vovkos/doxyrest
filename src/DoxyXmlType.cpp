@@ -666,6 +666,10 @@ MemberDefType::onStartElement (
 	case ElemKind_References:
 	case ElemKind_ReferencedBy:
 		break;
+
+	case ElemKind_Modifiers:
+		m_parser->pushType <StringType> (&m_member->m_modifiers, name, attributes);
+		break;
 	}
 
 	return true;

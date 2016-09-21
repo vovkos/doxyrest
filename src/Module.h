@@ -213,6 +213,7 @@ struct Member: sl::ListLink
 	sl::String m_bitField;
 	LinkedText m_initializer;
 	LinkedText m_exceptions;
+	sl::String m_modifiers;
 
 	sl::StdList <Param> m_paramList;
 	sl::StdList <Param> m_templateParamList;

@@ -528,6 +528,7 @@ protected:
 		ElemKind_Location,
 		ElemKind_References,
 		ElemKind_ReferencedBy,
+		ElemKind_Modifiers,
 	};
 
 	enum AttrKind
@@ -590,6 +591,7 @@ protected:
 		AXL_SL_HASH_TABLE_MAP_ENTRY ("location",             ElemKind_Location)
 		AXL_SL_HASH_TABLE_MAP_ENTRY ("references",           ElemKind_References)
 		AXL_SL_HASH_TABLE_MAP_ENTRY ("referencedby",         ElemKind_ReferencedBy)
+		AXL_SL_HASH_TABLE_MAP_ENTRY ("modifiers",            ElemKind_Modifiers)
 	AXL_SL_END_HASH_TABLE_MAP ()
 
 	AXL_SL_BEGIN_STRING_HASH_TABLE_MAP (AttrKindMap, AttrKind)

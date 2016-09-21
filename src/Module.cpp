@@ -235,9 +235,10 @@ Member::luaExport (lua::LuaState* luaState)
 	luaState->setMemberString ("m_memberKind", getMemberKindString (m_memberKind));
 	luaState->setMemberString ("m_protectionKind", getProtectionKindString (m_protectionKind));
 	luaState->setMemberString ("m_virtualKind", getVirtualKindString (m_virtualKind));
-	luaState->setMemberInteger ("m_flags", m_flags);
+	luaState->setMemberString ("m_flags", getMemberFlagString (m_flags));
 	luaState->setMemberString ("m_id", m_id);
 	luaState->setMemberString ("m_name", m_name);
+	luaState->setMemberString ("m_modifiers", m_modifiers);
 
 	switch (m_memberKind)
 	{

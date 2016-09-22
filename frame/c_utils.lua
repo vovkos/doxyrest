@@ -277,12 +277,16 @@ function getTitle (title, underline)
 end
 
 function getFunctionDeclStringImpl (item, returnType, isRef, indent)
-	local s = returnType
+	local s = ""
 
-	if g_hasNewLineAfterReturnType then
-		s = s .. "\n" .. indent
-	else
-		s = s .. " "
+	if returnType then
+		s = returnType
+
+		if g_hasNewLineAfterReturnType then
+			s = s .. "\n" .. indent
+		else
+			s = s .. " "
+		end
 	end
 
 	if item.m_modifiers ~= "" then

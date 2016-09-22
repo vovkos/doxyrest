@@ -18,8 +18,6 @@ Generator::prepare (
 
 	globalNamespace->luaExport (&m_stringTemplate.m_luaState);
 
-	m_stringTemplate.m_luaState.setGlobalString ("g_namespaceSep", m_cmdLine->m_namespaceSep);
-
 	sl::Iterator <Define> it = m_cmdLine->m_defineList.getHead ();
 	for (; it; it++)
 	{

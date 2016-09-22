@@ -26,7 +26,6 @@ struct CmdLine
 	sl::String m_inputFileName;
 	sl::String m_outputFileName;
 	sl::String m_frameFileName;
-	sl::String m_namespaceSep;
 	sl::BoxList <sl::String> m_frameDirList;
 	sl::StdList <Define> m_defineList;
 
@@ -44,7 +43,6 @@ enum CmdLineSwitchKind
 	CmdLineSwitchKind_OutputFileName = sl::CmdLineSwitchFlag_HasValue,
 	CmdLineSwitchKind_FrameFileName,
 	CmdLineSwitchKind_FrameDir,
-	CmdLineSwitchKind_NamespaceSep,
 	CmdLineSwitchKind_Define,
 	CmdLineSwitchKind_ProtectionFilter,
 };
@@ -79,12 +77,6 @@ AXL_SL_BEGIN_CMD_LINE_SWITCH_TABLE (CmdLineSwitchTable, CmdLineSwitchKind)
 		CmdLineSwitchKind_FrameDir,
 		"F", "frame-dir", "<dir>",
 		"Add Lua frame directory (multiple allowed)"
-		)
-
-	AXL_SL_CMD_LINE_SWITCH_2 (
-		CmdLineSwitchKind_NamespaceSep,
-		"s", "namespace-sep", "<sep>",
-		"Specify namespace separator (defaults to '_')"
 		)
 
 	AXL_SL_CMD_LINE_SWITCH_2 (

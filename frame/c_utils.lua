@@ -136,39 +136,17 @@ function getItemName (item)
 end
 
 g_itemFileNameMap = {}
+g_itemCidMap = {}
 
-function getItemFileName (item, suffix)
-	local s
-	local parent = item.m_parent
-
-	if item.m_compoundKind then
-		s = item.m_compoundKind .. g_namespaceSep
-	elseif item.m_memberKind then
-		s = item.m_memberKind .. g_namespaceSep
-	else
-		s = "undef_"
-	end
-
-	if parent and parent.m_path ~= "" then
-		s = s .. string.gsub (parent.m_path, "/", g_namespaceSep) .. g_namespaceSep
-	end
-
-	s = s .. item.m_name
-
-	if g_namespaceSep ~= "-" then
-		s = string.gsub (s, '-', g_namespaceSep) -- groups can contain dashes
-	end
-
-	-- now, take care of name collisions (e.g. due to template specialization classes)
-
-	local mapValue = g_itemFileNameMap [s]
+function ensureUniqueItemName (item, name, map, sep)
+	local mapValue = map [name]
 
 	if mapValue == nil then
 		mapValue = {}
 		mapValue.m_itemMap = {}
 		mapValue.m_itemMap [item] = 1
 		mapValue.m_count = 1
-		g_itemFileNameMap [s] = mapValue
+		map [name] = mapValue
 	else
 		local index = mapValue.m_itemMap [item]
 
@@ -179,15 +157,56 @@ function getItemFileName (item, suffix)
 		end
 
 		if index ~= 1 then
-			s = s .. "_" .. index
+			name = name .. sep .. index
+
+			if map [name] then
+				-- solution - try some other separator on collision; but when a proper naming convention is followed, this should never happen.
+				error ("name collision at: " .. name)
+			end
 		end
 	end
+
+	return name
+end
+
+function getItemFileName (item, suffix)
+	local s
+	local parent = item.m_parent
+
+	if item.m_compoundKind then
+		s = item.m_compoundKind .. "_"
+	elseif item.m_memberKind then
+		s = item.m_memberKind .. "_"
+	else
+		s = "undef_"
+	end
+
+	if parent and parent.m_path ~= "" then
+		s = s .. string.gsub (parent.m_path, "/", "_") .. "_"
+	end
+
+	s = s .. string.gsub (item.m_name, '-', "_") -- groups can contain dashes
+	s = ensureUniqueItemName (item, s, g_itemFileNameMap, "_")
 
 	if not suffix then
 		suffix = ".rst"
 	end
 
 	s = s .. suffix
+
+	return s
+end
+
+function getItemCid (item)
+	local s = ""
+	local parent = item.m_parent
+
+	if parent and parent.m_path ~= "" then
+		s = s .. string.gsub (parent.m_path, "/", ".") .. "."
+	end
+
+	s = string.lower (s .. item.m_name)
+	s = ensureUniqueItemName (item, s, g_itemCidMap, "-")
 
 	return s
 end

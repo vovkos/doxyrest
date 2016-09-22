@@ -7,7 +7,6 @@ CmdLine::CmdLine ()
 {
 	m_flags = 0;
 	m_protectionFilter = ProtectionKind_Public;
-	m_namespaceSep = "_";
 }
 
 //.............................................................................
@@ -38,10 +37,6 @@ CmdLineParser::onSwitch (
 
 	case CmdLineSwitchKind_FrameDir:
 		m_cmdLine->m_frameDirList.insertTail (value);
-		break;
-
-	case CmdLineSwitchKind_NamespaceSep:
-		m_cmdLine->m_namespaceSep = value;
 		break;
 
 	case CmdLineSwitchKind_ProtectionFilter:

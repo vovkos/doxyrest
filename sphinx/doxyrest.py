@@ -1,7 +1,7 @@
 import re
 from docutils.parsers.rst import Directive, directives
 from docutils import nodes
-from sphinx import addnodes
+from sphinx import roles, addnodes
 
 
 class HighlightedText(nodes.General, nodes.TextElement):
@@ -63,7 +63,7 @@ class RefCodeBlock(Directive):
     def run(self):
         code = u'\n'.join(self.content)
         pos = 0
-        node = nodes.literal_block('.', '') # we need non-empty raw_text
+        node = nodes.literal_block(code, '') # we need non-empty raw_text
         node['classes'] += ['highlight']    # we are stripping pyments-generated <div>
         node['classes'] += self.options.get('class', [])
 
@@ -100,11 +100,20 @@ def create_xref_node(raw_text, text, target):
     return node
 
 
+def cref_role(typ, raw_text, text, lineno, inliner, options={}, content=[]):
+    node = nodes.literal(raw_text, '') # we need non-empty raw_text
+    node += create_xref_node(raw_text, text, "cid-" + text.lower())
+
+    return [node], []
+
+
 def setup(app):
     app.add_node(
         HighlightedText,
         html=(visit_highlighted_text_node, None),
         latex=(visit_highlighted_text_node, None)
         )
+
+    app.add_role ('cref', cref_role)
 
     directives.register_directive('ref-code-block', RefCodeBlock)

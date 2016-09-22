@@ -63,7 +63,7 @@ class RefCodeBlock(Directive):
     def run(self):
         code = u'\n'.join(self.content)
         pos = 0
-        node = nodes.literal_block(code, '') # we need non-empty raw_text
+        node = nodes.literal_block('.', '') # single char to prevent sphinx from trying to highlight it
         node['classes'] += ['highlight']    # we are stripping pyments-generated <div>
         node['classes'] += self.options.get('class', [])
 
@@ -101,7 +101,8 @@ def create_xref_node(raw_text, text, target):
 
 
 def cref_role(typ, raw_text, text, lineno, inliner, options={}, content=[]):
-    node = nodes.literal(raw_text, '') # we need non-empty raw_text
+    node = nodes.literal(raw_text, '')
+    node['classes'] += ['cref']
     node += create_xref_node(raw_text, text, "cid-" + text.lower())
 
     return [node], []

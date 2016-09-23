@@ -401,7 +401,7 @@ function concatenateDescription (description)
 	return s
 end
 
-function getItemBriefDocumentation (item, refPrefix)
+function getItemBriefDocumentation (item, detailsRefPrefix)
 	local s
 
 	if not item.m_briefDescription.m_isEmpty then
@@ -420,7 +420,10 @@ function getItemBriefDocumentation (item, refPrefix)
 
 	s = string.match (s, "(.-)%s*$")  -- trim trailing whitespace
 	s = string.gsub (s, "\t", "    ") -- replace tabs with spaces
-	s = s .. " :ref:`More...<" .. refPrefix .. "doxid-" .. item.m_id .. ">`"
+
+	if detailsRefPrefix then
+		s = s .. " :ref:`More...<" .. detailsRefPrefix .. "doxid-" .. item.m_id .. ">`"
+	end
 
 	return s
 end

@@ -12,6 +12,19 @@ else
 	variableSectionName = "Fields"
 	functionSectionName = "Methods"
 end
+
+local hasDetails =
+	not compound.m_detailedDescription.m_isEmpty or
+	#compound.m_namespaceArray > 0 or
+	#compound.m_typedefArray > 0 or
+	#compound.m_classArray > 0 or
+	#compound.m_structArray > 0 or
+	#compound.m_unionArray > 0 or
+	#compound.m_variableArray > 0 or
+	#compound.m_eventArray > 0 or
+	#compound.m_functionArray > 0
+
+if hasDetails then
 }
 Overview
 ~~~~~~~~
@@ -19,6 +32,13 @@ Overview
 $(getItemBriefDocumentation (compound, "details-"))
 
 %{
+else
+}
+$(getItemBriefDocumentation (compound))
+
+%{
+end -- if
+
 for i = 1, #compound.m_groupArray do
 	local item = compound.m_groupArray [i]
 	local targetFileName = getItemFileName (item)
@@ -273,6 +293,9 @@ $extraSep	$(getFunctionDeclString (item, true, "\t"))
 end -- if
 }
 
+%{
+if hasDetails then
+}
 .. _details-doxid-$(compound.m_id):
 
 Detailed Documentation
@@ -281,6 +304,8 @@ Detailed Documentation
 $(getItemDetailedDocumentation (compound))
 
 %{
+end -- if
+
 if #compound.m_typedefArray > 0 then
 }
 Typedefs

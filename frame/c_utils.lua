@@ -54,8 +54,7 @@ function getParamString (param, isRef)
 	end
 
 	if not param.m_defaultValue.m_isEmpty then
-		s = s .. " = "
-		s = s .. getLinkedTextString (param.m_defaultValue, isRef)
+		s = s .. " " .. getLinkedTextString (param.m_defaultValue, isRef)
 	end
 
 	return s

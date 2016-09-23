@@ -297,6 +297,11 @@ Member::luaExport (lua::LuaState* luaState)
 		luaExportList (luaState, m_paramList);
 		luaState->setMember ("m_paramArray");
 		break;
+
+	case MemberKind_Alias:
+		m_initializer.luaExport (luaState);
+		luaState->setMember ("m_initializer");
+		break;
 	}
 
 	m_briefDescription.luaExport (luaState);

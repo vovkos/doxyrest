@@ -310,7 +310,7 @@ Member::luaExport (lua::LuaState* luaState)
 	m_detailedDescription.luaExport (luaState);
 	luaState->setMember ("m_detailedDescription");
 
-	m_detailedDescription.luaExport (luaState);
+	m_inBodyDescription.luaExport (luaState);
 	luaState->setMember ("m_inBodyDescription");
 }
 
@@ -632,6 +632,9 @@ NamespaceContents::luaExportMembers (lua::LuaState* luaState)
 
 	luaExportArraySetParent (luaState, m_aliasArray, "m_parent");
 	luaState->setMember ("m_aliasArray");
+
+	luaExportArraySetParent (luaState, m_footnoteArray, "m_parent");
+	luaState->setMember ("m_footnoteArray");
 }
 
 //.............................................................................

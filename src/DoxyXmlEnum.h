@@ -83,6 +83,7 @@ enum MemberKind
 	MemberKind_Interface,
 	MemberKind_Service,
 	MemberKind_Alias,
+	MemberKind_Footnote,
 };
 
 AXL_SL_BEGIN_STRING_HASH_TABLE_MAP (MemberKindMap, MemberKind)
@@ -102,6 +103,7 @@ AXL_SL_BEGIN_STRING_HASH_TABLE_MAP (MemberKindMap, MemberKind)
 	AXL_SL_HASH_TABLE_MAP_ENTRY ("interface", MemberKind_Interface)
 	AXL_SL_HASH_TABLE_MAP_ENTRY ("service",   MemberKind_Service)
 	AXL_SL_HASH_TABLE_MAP_ENTRY ("alias",     MemberKind_Alias)
+	AXL_SL_HASH_TABLE_MAP_ENTRY ("footnote",  MemberKind_Footnote)
 AXL_SL_END_HASH_TABLE_MAP ()
 
 const char*

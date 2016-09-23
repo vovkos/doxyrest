@@ -58,7 +58,7 @@ class RefCodeBlock(Directive):
 
     def __init__(self, *args, **kwargs):
         Directive.__init__(self, *args, **kwargs)
-        self.re_prog = re.compile(':ref:`(.+?)\s*<([^<>]*)>`')
+        self.re_prog = re.compile('(:c?ref:)?`(.+?)(\s*<([^<>]*)>)?`')
 
     def run(self):
         code = u'\n'.join(self.content)
@@ -79,7 +79,15 @@ class RefCodeBlock(Directive):
             if plain_text != "":
                 node += HighlightedText(plain_text, plain_text, language=self.arguments[0])
 
-            node += create_xref_node(match.group(0), match.group(1), match.group(2))
+            raw_text = match.group(0)
+            role = match.group(1)
+            text = match.group(2)
+            target = match.group(4)
+
+            if not role or role == ':cref:':
+                target = 'cid-' + text.lower ()
+
+            node += create_xref_node(raw_text, text, target)
             pos = match.end()
 
         self.add_name(node)
@@ -103,7 +111,7 @@ def create_xref_node(raw_text, text, target):
 def cref_role(typ, raw_text, text, lineno, inliner, options={}, content=[]):
     node = nodes.literal(raw_text, '')
     node['classes'] += ['cref']
-    node += create_xref_node(raw_text, text, "cid-" + text.lower())
+    node += create_xref_node(raw_text, text, 'cid-' + text.lower())
 
     return [node], []
 

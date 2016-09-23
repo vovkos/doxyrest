@@ -388,6 +388,12 @@ printNamespaceContents (NamespaceContents* nspace)
 		printf ("EVENTS\n");
 		printMemberArray (nspace->m_eventArray);
 	}
+
+	if (!nspace->m_aliasArray.isEmpty ())
+	{
+		printf ("ALIASES\n");
+		printMemberArray (nspace->m_aliasArray);
+	}
 }
 #endif
 

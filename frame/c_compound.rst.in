@@ -22,7 +22,8 @@ local hasDetails =
 	#compound.m_unionArray > 0 or
 	#compound.m_variableArray > 0 or
 	#compound.m_eventArray > 0 or
-	#compound.m_functionArray > 0
+	#compound.m_functionArray > 0 or
+	#compound.m_aliasArray > 0
 
 if hasDetails then
 }
@@ -68,9 +69,8 @@ Namespaces
 	namespace :ref:`$(item.m_name)<doxid-$(item.m_id)>`
 %{
 	end -- for
-}
 
-%{
+	emit ("\n")
 end -- if
 
 if not g_isPrimitiveTypedefVisible then
@@ -110,9 +110,8 @@ Typedefs
 $extraSep	$(getTypedefDeclString (item, true, "\t"))
 %{
 	end -- for
-}
 
-%{
+	emit ("\n")
 end -- if
 
 if #compound.m_enumArray > 0 then
@@ -133,9 +132,8 @@ Enums
 	enum :ref:`$(getItemName (item))<doxid-$(item.m_id)>`
 %{
 	end -- for
-}
 
-%{
+	emit ("\n")
 end -- if
 
 if #compound.m_structArray > 0 or #compound.m_unionArray > 0 then
@@ -169,9 +167,8 @@ $(getTitle (sectionName, "-"))
 	union :ref:`$(getItemName (item))<doxid-$(item.m_id)>`
 %{
 	end -- for
-}
 
-%{
+	emit ("\n")
 end -- if
 
 if #compound.m_classArray > 0 then
@@ -192,9 +189,8 @@ Classes
 	class :ref:`$(getItemName (item))<doxid-$(item.m_id)>`
 %{
 	end -- for
-}
 
-%{
+	emit ("\n")
 end -- if
 
 if #compound.m_variableArray > 0 or #compound.m_propertyArray > 0 then
@@ -228,9 +224,8 @@ $(getTitle (sectionName, "-"))
 	$(getLinkedTextString (item.m_returnType, true)) property :ref:`$(getItemName (item))<doxid-$(item.m_id)>`
 %{
 	end -- for
-}
 
-%{
+	emit ("\n")
 end -- if
 
 if #compound.m_eventArray > 0 then
@@ -258,9 +253,8 @@ Events
 $extraSep	$(getEventDeclString (item, true, "\t"))
 %{
 	end -- for
-}
 
-%{
+	emit ("\n")
 end -- if
 
 if #compound.m_functionArray > 0 then
@@ -287,13 +281,29 @@ $(getTitle (functionSectionName, "-"))
 $extraSep	$(getFunctionDeclString (item, true, "\t"))
 %{
 	end -- for
-}
 
-%{
+	emit ("\n")
 end -- if
+
+if #compound.m_aliasArray > 0 then
 }
+Aliases
+-------
+
+.. ref-code-block:: $g_language
+	:class: overview-code-block
 
 %{
+	for i = 1, #compound.m_classArray do
+		local item = compound.m_classArray [i]
+}
+	alias :ref:`$(getItemName (item))<doxid-$(item.m_id)>` = $(getLinkedTextString (item.m_initializer, true))
+%{
+	end -- for
+
+	emit ("\n")
+end -- if
+
 if hasDetails then
 }
 .. _details-doxid-$(compound.m_id):
@@ -325,9 +335,6 @@ $(getItemDetailedDocumentation (item))
 
 %{
 	end -- for
-}
-
-%{
 end -- if
 
 if #compound.m_variableArray > 0 then
@@ -353,9 +360,6 @@ $(getItemDetailedDocumentation (item))
 
 %{
 	end -- for
-}
-
-%{
 end -- if
 
 if #compound.m_propertyArray > 0 then
@@ -377,9 +381,6 @@ $(getItemDetailedDocumentation (item))
 
 %{
 	end -- for
-}
-
-%{
 end -- if
 
 if #compound.m_eventArray > 0 then
@@ -401,9 +402,6 @@ $(getItemDetailedDocumentation (item))
 
 %{
 	end -- for
-}
-
-%{
 end -- if
 
 if #compound.m_functionArray > 0 then
@@ -424,8 +422,26 @@ $(getItemDetailedDocumentation (item))
 
 %{
 	end -- for
+end -- if
+
+if #compound.m_aliasArray > 0 then
 }
+Aliases
+-------
 
 %{
+	for i = 1, #compound.m_aliasArray do
+		local item = compound.m_aliasArray [i]
+}
+.. _doxid-$(item.m_id):
+.. ref-code-block:: $g_language
+	:class: title-code-block
+
+	alias $(getItemName (item)) = 
+
+$(getItemDetailedDocumentation (item))
+
+%{
+	end -- for
 end -- if
 }

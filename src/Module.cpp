@@ -568,6 +568,10 @@ NamespaceContents::add (Member* member)
 		m_functionArray.append (member);
 		break;
 
+	case MemberKind_Alias:
+		m_aliasArray.append (member);
+		break;
+
 	case MemberKind_Define:
 	case MemberKind_Signal:
 	case MemberKind_Prototype:
@@ -611,7 +615,7 @@ NamespaceContents::luaExportMembers (lua::LuaState* luaState)
 	
 	luaExportArraySetParent (luaState, m_variableArray, "m_parent");
 	luaState->setMember ("m_variableArray");
-	
+
 	luaExportArraySetParent (luaState, m_functionArray, "m_parent");
 	luaState->setMember ("m_functionArray");
 	
@@ -620,6 +624,9 @@ NamespaceContents::luaExportMembers (lua::LuaState* luaState)
 	
 	luaExportArraySetParent (luaState, m_eventArray, "m_parent");
 	luaState->setMember ("m_eventArray");
+
+	luaExportArraySetParent (luaState, m_aliasArray, "m_parent");
+	luaState->setMember ("m_aliasArray");
 }
 
 //.............................................................................
@@ -638,6 +645,7 @@ GlobalNamespace::clear ()
 	m_functionArray.clear ();
 	m_propertyArray.clear ();
 	m_eventArray.clear ();
+	m_aliasArray.clear ();
 	m_namespaceList.clear ();
 }
 

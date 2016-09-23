@@ -115,6 +115,6 @@ def setup(app):
         latex=(visit_highlighted_text_node, None)
         )
 
-    app.add_role ('cref', cref_role)
+    app.add_role('cref', cref_role)
 
     directives.register_directive('ref-code-block', RefCodeBlock)

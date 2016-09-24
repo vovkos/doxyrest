@@ -577,6 +577,10 @@ NamespaceContents::add (Member* member)
 		m_aliasArray.append (member);
 		break;
 
+	case MemberKind_Footnote:
+		m_footnoteArray.append (member);
+		break;
+
 	case MemberKind_Define:
 	case MemberKind_Signal:
 	case MemberKind_Prototype:

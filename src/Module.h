@@ -50,14 +50,19 @@ enum DocBlockKind
 
 //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
+const char*
+getDocBlockKindString (DocBlockKind flag);
+
+//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
 struct DocBlock: sl::ListLink
 {
-	DocBlockKind m_docBlockKind;
+	DocBlockKind m_blockKind;
 	sl::String m_title;
 
 	DocBlock ()
 	{
-		m_docBlockKind = DocBlockKind_Undefined;
+		m_blockKind = DocBlockKind_Undefined;
 	}
 
 	virtual ~DocBlock ()

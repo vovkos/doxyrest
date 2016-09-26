@@ -55,10 +55,28 @@ LinkedText::normalize ()
 
 //.............................................................................
 
+const char*
+getDocBlockKindString (DocBlockKind blockKind)
+{
+	const char* stringTable [] = 
+	{
+		"<undefined>", // DocBlockKind_Undefined,
+		"paragraph",   // DocBlockKind_Paragraph,	
+		"section",     // DocBlockKind_Section,
+		"internal",    // DocBlockKind_Internal,
+	};
+
+	return (size_t) blockKind < countof (stringTable) ? 
+		stringTable [blockKind] :
+		stringTable [DocBlockKind_Undefined];
+}
+
+//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
 void
 DocBlock::luaExportMembers (lua::LuaState* luaState)
 {
-	luaState->setMemberInteger ("m_docBlockKind", m_docBlockKind);
+	luaState->setMemberString ("m_blockKind", getDocBlockKindString (m_blockKind));
 	luaState->setMemberString ("m_title", m_title);
 }
 

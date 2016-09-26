@@ -52,7 +52,7 @@ printDocBlock (
 
 	sl::Iterator <DocBlock> it;
 
-	switch (block->m_docBlockKind)
+	switch (block->m_blockKind)
 	{
 	case DocBlockKind_Paragraph:
 		if (!block->m_title.isEmpty ())

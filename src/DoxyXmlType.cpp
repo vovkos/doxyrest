@@ -707,7 +707,7 @@ DescriptionType::onStartElement (
 
 	case ElemKind_Para:
 		paragraphBlock = AXL_MEM_NEW (DocParagraphBlock);
-		paragraphBlock->m_docBlockKind = DocBlockKind_Paragraph;
+		paragraphBlock->m_blockKind = DocBlockKind_Paragraph;
 		m_description->m_docBlockList.insertTail (paragraphBlock);
 		m_parser->pushType <LinkedTextType> (&paragraphBlock->m_contents, name, attributes);
 		break;
@@ -736,7 +736,7 @@ DocSectionBlockType::create (
 {
 	m_parser = parser;
 	m_sectionBlock = AXL_MEM_NEW (DocSectionBlock);
-	m_sectionBlock->m_docBlockKind = m_docBlockKind;
+	m_sectionBlock->m_blockKind = m_blockKind;
 	list->insertTail (m_sectionBlock);
 
 	while (*attributes)
@@ -772,7 +772,7 @@ DocSectionBlockType::onStartElement (
 
 	case ElemKind_Para:
 		paragraphBlock = AXL_MEM_NEW (DocParagraphBlock);
-		paragraphBlock->m_docBlockKind = DocBlockKind_Paragraph;
+		paragraphBlock->m_blockKind = DocBlockKind_Paragraph;
 		m_sectionBlock->m_childBlockList.insertTail (paragraphBlock);
 		m_parser->pushType <LinkedTextType> (&paragraphBlock->m_contents, name, attributes);
 		break;

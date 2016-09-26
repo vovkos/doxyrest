@@ -735,13 +735,13 @@ protected:
 	AXL_SL_END_HASH_TABLE_MAP ()
 
 protected:
-	DocBlockKind m_docBlockKind;
+	DocBlockKind m_blockKind;
 	DocSectionBlock* m_sectionBlock;
 
 public:
 	DocSectionBlockType ()
 	{
-		m_docBlockKind = DocBlockKind_Section;
+		m_blockKind = DocBlockKind_Section;
 	}
 
 	bool
@@ -767,7 +767,7 @@ class DocInternalBlockType: public DocSectionBlockType
 public:
 	DocInternalBlockType ()
 	{
-		m_docBlockKind = DocBlockKind_Internal;
+		m_blockKind = DocBlockKind_Internal;
 	}
 };
 

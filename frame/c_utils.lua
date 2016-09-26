@@ -214,32 +214,40 @@ function getCompoundTocTree (compound, indent)
 	local s = ""
 
 	for i = 1, #compound.m_groupArray do
-		local fileName = getItemFileName (compound.m_groupArray [i])
+		local item = compound.m_groupArray [i]
+		local fileName = getItemFileName (item)
 		s = s .. indent .. fileName .. "\n"
 	end
 
 	for i = 1, #compound.m_namespaceArray do
-		local fileName = getItemFileName (compound.m_namespaceArray [i])
+		local item = compound.m_namespaceArray [i]
+		local fileName = getItemFileName (item)
 		s = s .. indent .. fileName .. "\n"
 	end
 
 	for i = 1, #compound.m_enumArray do
-		local fileName = getItemFileName (compound.m_enumArray [i])
-		s = s .. indent .. fileName .. "\n"
+		local item = compound.m_enumArray [i]
+		if not isUnnamedItem (item) then
+			local fileName = getItemFileName (item)
+			s = s .. indent .. fileName .. "\n"
+		end
 	end
 
 	for i = 1, #compound.m_structArray do
-		local fileName = getItemFileName (compound.m_structArray [i])
+		local item = compound.m_structArray [i]
+		local fileName = getItemFileName (item)
 		s = s .. indent .. fileName .. "\n"
 	end
 
 	for i = 1, #compound.m_unionArray do
-		local fileName = getItemFileName (compound.m_unionArray [i])
+		local item = compound.m_unionArray [i]
+		local fileName = getItemFileName (item)
 		s = s .. indent .. fileName .. "\n"
 	end
 
 	for i = 1, #compound.m_classArray do
-		local fileName = getItemFileName (compound.m_classArray [i])
+		local item = compound.m_classArray [i]
+		local fileName = getItemFileName (item)
 		s = s .. indent .. fileName .. "\n"
 	end
 
@@ -385,14 +393,39 @@ function getTypedefDeclString (typedef, isRef, indent)
 	return s
 end
 
-function concatenateDescription (description)
+function isMemberOfUnnamedType (item)
+	if item.m_detailedDescription.m_isEmpty then
+		return nil
+	end
+
+	local block = item.m_detailedDescription.m_docBlockList [1]
+	if block.m_blockKind ~= "internal" or
+		#block.m_childBlockList < 1 or
+		block.m_childBlockList [1].m_blockKind ~= "paragraph" then
+		return nil
+	end
+
+	local s = block.m_childBlockList [1].m_contents.m_plainText
+	return string.match (s, ":unnamed:([%w/]+)")
+end
+
+function isUnnamedItem (item)
+	return item.m_name == "" or string.sub (item.m_name, 1, 1) == "@"
+end
+
+function getDocBlockListContents (blockList)
 	local s = ""
 
-	for i = 1, #description.m_docBlockList do
-		local block = description.m_docBlockList [i]
-		s = s .. block.m_contents.m_plainText
+	for i = 1, #blockList do
+		local block = blockList [i]
 
-		if i ~= #description.m_docBlockList then
+		if block.m_blockKind == "paragraph" then
+			s = s .. block.m_contents.m_plainText
+		elseif block.m_blockKind ~= "internal" then
+			s = s .. getDocBlockListContents (block.m_childBlockList)
+		end
+
+		if i ~= #blockList then
 			s = s .. "\n"
 		end
 	end
@@ -404,7 +437,7 @@ function getItemBriefDocumentation (item, detailsRefPrefix)
 	local s
 
 	if not item.m_briefDescription.m_isEmpty then
-		s = concatenateDescription (item.m_briefDescription)
+		s = getDocBlockListContents (item.m_briefDescription.m_docBlockList)
 	elseif item.m_detailedDescription.m_isEmpty then
 		return ""
 	else
@@ -428,7 +461,7 @@ function getItemBriefDocumentation (item, detailsRefPrefix)
 end
 
 function getItemDetailedDocumentation (item)
-	local s = concatenateDescription (item.m_briefDescription)
+	local s = getDocBlockListContents (item.m_briefDescription.m_docBlockList)
 
 	if item.m_detailedDescription.m_isEmpty then
 		return s
@@ -438,7 +471,7 @@ function getItemDetailedDocumentation (item)
 		s = s .. "\n\n"
 	end
 
-	s = s .. concatenateDescription (item.m_detailedDescription)
+	s = s .. getDocBlockListContents (item.m_detailedDescription.m_docBlockList)
 	s = string.gsub (s, "\t", "    ") -- replace tabs with spaces
 
 	return s

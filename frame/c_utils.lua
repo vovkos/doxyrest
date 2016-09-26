@@ -406,7 +406,7 @@ function isMemberOfUnnamedType (item)
 	end
 
 	local s = block.m_childBlockList [1].m_contents.m_plainText
-	return string.match (s, ":unnamed:([%w/]+)")
+	return string.match (s, ":unnamed:([%w/:]+)")
 end
 
 function isUnnamedItem (item)

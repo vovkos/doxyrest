@@ -133,8 +133,15 @@ Enums
 	:class: overview-code-block
 
 %{
+	local isLastUnnamed = false
+
 	for i = 1, #compound.m_enumArray do
 		local item = compound.m_enumArray [i]
+
+		if isLastUnnamed then
+			emit ("\n")
+			isLastUnnamed = false
+		end
 
 		if isUnnamedItem (item) then
 }
@@ -147,6 +154,8 @@ Enums
 	    :ref:`$(subItem.m_name)<doxid-$(subItem.m_id)>` $(getLinkedTextString (subItem.m_initializer, true))
 %{
 			end -- for
+
+			isLastUnnamed = true
 }
 	}
 %{
@@ -235,9 +244,15 @@ $(getTitle (sectionName, "-"))
 	local indent = ""
 	local unnamedStack = {}
 	local unnamedStackSize = 0
+	local isLastUnnamed = false
 
 	for i = 1, #compound.m_variableArray do
 		local item = compound.m_variableArray [i]
+
+		if isLastUnnamed then
+			emit ("\n")
+			isLastUnnamed = false
+		end
 
 		if not isUnnamedItem (item) then
 			local modifiers = item.m_modifiers
@@ -263,6 +278,7 @@ $(getTitle (sectionName, "-"))
 					indent = indent .. "    "
 				end -- while
 			end -- if
+
 }
 	$indent$(getLinkedTextString (item.m_type, true))$modifiers :ref:`$(getItemName (item))<doxid-$(item.m_id)>`
 %{
@@ -274,6 +290,7 @@ $(getTitle (sectionName, "-"))
 
 				indent = string.sub (indent, 5) -- remove 4 spaces
 				unnamedStackSize = unnamedStackSize - 1
+				isLastUnnamed = true
 }
 	$indent}
 %{

@@ -138,18 +138,16 @@ Enums
 	for i = 1, #compound.m_enumArray do
 		local item = compound.m_enumArray [i]
 
-		if isLastUnnamed then
-			emit ("\n")
-			isLastUnnamed = false
-		end
-
 		if isUnnamedItem (item) then
+			if i > 1 then
+				emit ("\n")
+			end
 }
 	enum
 	{
 %{
-			for i = 1, #item.m_enumValueArray do
-				local subItem = item.m_enumValueArray [i]
+			for j = 1, #item.m_enumValueArray do
+				local subItem = item.m_enumValueArray [j]
 }
 	    :ref:`$(subItem.m_name)<doxid-$(subItem.m_id)>` $(getLinkedTextString (subItem.m_initializer, true))
 %{
@@ -162,6 +160,11 @@ Enums
 		else
 			local targetFileName = getItemFileName (item)
 			generateFile (targetFileName, "c_enum.rst.in", item)
+
+			if isLastUnnamed then
+				emit ("\n")
+				isLastUnnamed = false
+			end
 }
 	enum :ref:`$(getItemName (item))<doxid-$(item.m_id)>`
 %{
@@ -249,11 +252,6 @@ $(getTitle (sectionName, "-"))
 	for i = 1, #compound.m_variableArray do
 		local item = compound.m_variableArray [i]
 
-		if isLastUnnamed then
-			emit ("\n")
-			isLastUnnamed = false
-		end
-
 		if not isUnnamedItem (item) then
 			local modifiers = item.m_modifiers
 
@@ -263,39 +261,57 @@ $(getTitle (sectionName, "-"))
 
 			local unnamed = isMemberOfUnnamedType (item)
 			if unnamed then
+				if i > 1 then
+					emit ("\n")
+				end
+
 				while unnamed ~= "" do
-					local m, t, n = string.match (unnamed, "((%a+)[/:](%d+)/*)")
+					local m, t, n = string.match (unnamed, "^((%a+)[/:](%d+)/*)")
 					if not m then
-						break
+						m, t = string.match (unnamed, "^((%a+)/*)")
+						if not m then
+							break
+						end
 					end
 }
 	$indent$t
 	$indent{
 %{
-					unnamed = string.sub (unnamed, string.len (m))
+					unnamed = string.sub (unnamed, string.len (m) + 1)
 					unnamedStackSize = unnamedStackSize + 1
 					unnamedStack [unnamedStackSize] = n
 					indent = indent .. "    "
 				end -- while
 			end -- if
 
+			if isLastUnnamed then
+				emit ("\n")
+				isLastUnnamed = false
+			end
 }
 	$indent$(getLinkedTextString (item.m_type, true))$modifiers :ref:`$(getItemName (item))<doxid-$(item.m_id)>`
 %{
-			while unnamedStackSize > 0 do
-				unnamedStack [unnamedStackSize] = unnamedStack [unnamedStackSize] - 1
-				if unnamedStack [unnamedStackSize] > 0 then
-					break;
-				end
+		elseif unnamedStackSize > 0 and not unnamedStack [unnamedStackSize] then
+			unnamedStack [unnamedStackSize] = 0 -- terminate this stack entry
+		end -- if
 
-				indent = string.sub (indent, 5) -- remove 4 spaces
-				unnamedStackSize = unnamedStackSize - 1
-				isLastUnnamed = true
+		while unnamedStackSize > 0 do
+			if not unnamedStack [unnamedStackSize] then
+				break -- wait for unnamed variable @n to terminate this stack entry
+			end
+
+			unnamedStack [unnamedStackSize] = unnamedStack [unnamedStackSize] - 1
+			if unnamedStack [unnamedStackSize] > 0 then
+				break
+			end
+
+			indent = string.sub (indent, 5) -- remove 4 spaces
+			unnamedStackSize = unnamedStackSize - 1
+			isLastUnnamed = true
 }
 	$indent}
 %{
-			end -- while
-		end -- if
+		end -- while
 	end -- for
 
 	for i = 1, #compound.m_propertyArray do
@@ -401,16 +417,13 @@ if hasUnnamedEnums then
 Enum Members
 ------------
 
-.. ref-code-block:: $g_language
-	:class: overview-code-block
-
 %{
 	for i = 1, #compound.m_enumArray do
 		local item = compound.m_enumArray [i]
 
 		if isUnnamedItem (item) then
-			for i = 1, #item.m_enumValueArray do
-				local subItem = item.m_enumValueArray [i]
+			for j = 1, #item.m_enumValueArray do
+				local subItem = item.m_enumValueArray [j]
 }
 .. _doxid-$(subItem.m_id):
 .. ref-code-block:: $g_language

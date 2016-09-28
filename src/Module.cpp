@@ -264,6 +264,7 @@ Member::luaExport (lua::LuaState* luaState)
 		m_type.luaExport (luaState);
 		luaState->setMember ("m_type");
 		luaState->setMemberString ("m_argString", m_argString);
+
 		luaExportList (luaState, m_paramList);
 		luaState->setMember ("m_paramArray");
 		break;
@@ -277,7 +278,11 @@ Member::luaExport (lua::LuaState* luaState)
 		m_type.luaExport (luaState);
 		luaState->setMember ("m_type");
 
+		luaState->setMemberString ("m_argString", m_argString);
 		luaState->setMemberString ("m_bitField", m_bitField);
+
+		luaExportList (luaState, m_paramList);
+		luaState->setMember ("m_paramArray");
 
 		m_initializer.luaExport (luaState);
 		luaState->setMember ("m_initializer");
@@ -286,6 +291,8 @@ Member::luaExport (lua::LuaState* luaState)
 	case MemberKind_Function:
 		m_type.luaExport (luaState);
 		luaState->setMember ("m_returnType");
+		
+		luaState->setMemberString ("m_argString", m_argString);
 
 		m_exceptions.luaExport (luaState);
 		luaState->setMember ("m_exceptions");
@@ -304,6 +311,8 @@ Member::luaExport (lua::LuaState* luaState)
 		m_type.luaExport (luaState);
 		luaState->setMember ("m_returnType");
 
+		luaState->setMemberString ("m_argString", m_argString);
+
 		luaExportList (luaState, m_paramList);
 		luaState->setMember ("m_paramArray");
 		break;
@@ -311,6 +320,8 @@ Member::luaExport (lua::LuaState* luaState)
 	case MemberKind_Event:
 		m_type.luaExport (luaState);
 		luaState->setMember ("m_type");
+
+		luaState->setMemberString ("m_argString", m_argString);
 
 		luaExportList (luaState, m_paramList);
 		luaState->setMember ("m_paramArray");

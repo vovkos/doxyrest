@@ -53,8 +53,12 @@ function getParamString (param, isRef)
 		s = s .. getNormalizedCppString (param.m_declarationName)
 	end
 
+	if param.m_array ~= "" then
+		s = s .. " " .. param.m_array
+	end
+
 	if not param.m_defaultValue.m_isEmpty then
-		s = s .. " " .. getLinkedTextString (param.m_defaultValue, isRef)
+		s = s .. " = " .. getLinkedTextString (param.m_defaultValue, isRef)
 	end
 
 	return s
@@ -360,12 +364,23 @@ function getTypedefDeclString (typedef, isRef, indent)
 		s = s .. " "
 	end
 
-	s = s .. getLinkedTextString (typedef.m_type, true) .. "\n"
+	s = s .. getLinkedTextString (typedef.m_type, true)
+
+	if g_hasNewLineAfterReturnType then
+		s = s .. "\n" .. indent
+	else
+		s = s .. " "
+	end
 
 	if isRef then
-		s = s .. indent .. ":ref:`" .. getItemName (typedef)  .. "<doxid-" .. typedef.m_id .. ">` ("
+		s = s .. ":ref:`" .. getItemName (typedef)  .. "<doxid-" .. typedef.m_id .. ">` "
 	else
-		s = s .. indent .. getItemName (typedef) ..  " ("
+		s = s .. getItemName (typedef) ..  " "
+	end
+
+	if #typedef.m_paramArray > 0 then
+		s = s .. getFunctionParamArrayString (typedef.m_paramArray, true, indent)
+		return s
 	end
 
 	if not string.find (typedef.m_argString, ",") then

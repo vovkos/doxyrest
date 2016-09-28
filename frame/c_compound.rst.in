@@ -25,7 +25,6 @@ end
 local hasDetails =
 	not compound.m_detailedDescription.m_isEmpty or
 	hasUnnamedEnums or
-	#compound.m_namespaceArray > 0 or
 	#compound.m_typedefArray > 0 or
 	#compound.m_classArray > 0 or
 	#compound.m_structArray > 0 or
@@ -253,10 +252,17 @@ $(getTitle (sectionName, "-"))
 		local item = compound.m_variableArray [i]
 
 		if not isUnnamedItem (item) then
-			local modifiers = item.m_modifiers
+			local modifiers = ""
+			local suffix = ""
 
-			if modifiers ~= "" then
-				modifiers = " " .. modifiers
+			if item.m_modifiers ~= "" then
+				modifiers = " " .. item.m_modifiers
+			end
+
+			if item.m_argString ~= "" then
+				suffix = " " .. item.m_argString
+			elseif item.m_bitField  ~= "" then
+				suffix = " :" .. item.m_bitField
 			end
 
 			local unnamed = isMemberOfUnnamedType (item)
@@ -289,7 +295,7 @@ $(getTitle (sectionName, "-"))
 				isLastUnnamed = false
 			end
 }
-	$indent$(getLinkedTextString (item.m_type, true))$modifiers :ref:`$(getItemName (item))<doxid-$(item.m_id)>`
+	$indent$(getLinkedTextString (item.m_type, true))$modifiers :ref:`$(getItemName (item))<doxid-$(item.m_id)>`$suffix
 %{
 		elseif unnamedStackSize > 0 and not unnamedStack [unnamedStackSize] then
 			unnamedStack [unnamedStackSize] = 0 -- terminate this stack entry
@@ -426,6 +432,7 @@ Enum Members
 				local subItem = item.m_enumValueArray [j]
 }
 .. _doxid-$(subItem.m_id):
+.. _cid-$(getItemCid (subItem)):
 .. ref-code-block:: $g_language
 	:class: title-code-block
 
@@ -449,6 +456,7 @@ Typedefs
 		local item = compound.m_typedefArray [i]
 }
 .. _doxid-$(item.m_id):
+.. _cid-$(getItemCid (item)):
 .. ref-code-block:: $g_language
 	:class: title-code-block
 
@@ -467,19 +475,27 @@ $(getTitle (variableSectionName, "-"))
 %{
 	for i = 1, #compound.m_variableArray do
 		local item = compound.m_variableArray [i]
-		local modifiers = item.m_modifiers
+		local modifiers = ""
+		local suffix = ""
 
-		if modifiers ~= "" then
-			modifiers = " " .. modifiers
+		if item.m_modifiers ~= "" then
+			modifiers = " " .. item.m_modifiers
+		end
+
+		if item.m_argString ~= "" then
+			suffix = " " .. item.m_argString
+		elseif item.m_bitField  ~= "" then
+			suffix = " :" .. item.m_bitField
 		end
 
 		if not isUnnamedItem (item) then
 }
 .. _doxid-$(item.m_id):
+.. _cid-$(getItemCid (item)):
 .. ref-code-block:: $g_language
 	:class: title-code-block
 
-	$(getLinkedTextString (item.m_type, true))$modifiers $(item.m_name)
+	$(getLinkedTextString (item.m_type, true))$modifiers $(item.m_name)$suffix
 
 $(getItemDetailedDocumentation (item))
 
@@ -498,6 +514,7 @@ Properties
 		local item = compound.m_propertyArray [i]
 }
 .. _doxid-$(item.m_id):
+.. _cid-$(getItemCid (item)):
 .. ref-code-block:: $g_language
 	:class: title-code-block
 
@@ -519,6 +536,7 @@ Events
 		local item = compound.m_eventArray [i]
 }
 .. _doxid-$(item.m_id):
+.. _cid-$(getItemCid (item)):
 .. ref-code-block:: $g_language
 	:class: title-code-block
 
@@ -539,6 +557,7 @@ $(getTitle (functionSectionName, "-"))
 		local item = compound.m_functionArray [i]
 }
 .. _doxid-$(item.m_id):
+.. _cid-$(getItemCid (item)):
 .. ref-code-block:: $g_language
 	:class: title-code-block
 
@@ -560,6 +579,7 @@ Aliases
 		local item = compound.m_aliasArray [i]
 }
 .. _doxid-$(item.m_id):
+.. _cid-$(getItemCid (item)):
 .. ref-code-block:: $g_language
 	:class: title-code-block
 

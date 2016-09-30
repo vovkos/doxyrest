@@ -48,7 +48,7 @@ public:
 		return true;
 	}
 
-	virtual 
+	virtual
 	bool
 	onCharacterData (
 		const char* string,
@@ -84,7 +84,7 @@ public:
 		return true;
 	}
 
-	virtual 
+	virtual
 	bool
 	onCharacterData (
 		const char* string,
@@ -155,7 +155,7 @@ protected:
 		const char** attributes
 		);
 
-	bool 
+	bool
 	parseCompound (const char* refId);
 };
 
@@ -434,7 +434,7 @@ public:
 		const char** attributes
 		);
 
-	virtual 
+	virtual
 	bool
 	onCharacterData (
 		const char* string,
@@ -810,7 +810,7 @@ protected:
 public:
 	EnumValueType ()
 	{
-		m_enumValue = m_enumValue;
+		m_enumValue = NULL;
 	}
 
 	bool
@@ -969,7 +969,7 @@ public:
 		const char** attributes
 		);
 
-	virtual 
+	virtual
 	bool
 	onCharacterData (
 		const char* string,
@@ -1019,7 +1019,7 @@ public:
 		const char** attributes
 		);
 
-	virtual 
+	virtual
 	bool
 	onCharacterData (
 		const char* string,

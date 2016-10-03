@@ -85,7 +85,7 @@ CmdLineParser::finalize ()
 
 		if (m_cmdLine->m_frameFileName.isEmpty ())
 		{
-			err::setStringError ("master frame file name missing\n");
+			err::setError ("master frame file name missing\n");
 			return false;
 		}
 	}

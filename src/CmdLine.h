@@ -39,8 +39,7 @@ enum CmdLineSwitchKind
 	CmdLineSwitchKind_Undefined = 0,
 	CmdLineSwitchKind_Help,
 	CmdLineSwitchKind_Version,
-
-	CmdLineSwitchKind_OutputFileName = sl::CmdLineSwitchFlag_HasValue,
+	CmdLineSwitchKind_OutputFileName,
 	CmdLineSwitchKind_FrameFileName,
 	CmdLineSwitchKind_FrameDir,
 	CmdLineSwitchKind_Define,

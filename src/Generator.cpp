@@ -31,8 +31,8 @@ Generator::prepare (
 
 bool
 Generator::generate (
-	const char* targetFileName,
-	const char* frameFileName
+	const sl::StringRef& targetFileName,
+	const sl::StringRef& frameFileName
 	)
 {
 	bool result;
@@ -89,8 +89,8 @@ Generator::generate (
 
 bool
 Generator::processFile (
-	const char* targetFileName,
-	const char* frameFileName,
+	const sl::StringRef& targetFileName,
+	const sl::StringRef& frameFileName,
 	size_t baseArgCount
 	)
 {
@@ -112,7 +112,7 @@ Generator::processFile (
 	ASSERT ((size_t) top >= baseArgCount);
 	m_stringTemplate.setArgCount (top - baseArgCount);
 
-	if (!targetFileName)
+	if (targetFileName.isEmpty ())
 	{
 		result = m_stringTemplate.processFile (NULL, frameFilePath);
 		if (!result)
@@ -144,7 +144,7 @@ Generator::includeFile_lua (lua_State* h)
 	Generator* self = (Generator*) luaState.getContext ();
 	ASSERT (self->m_stringTemplate.m_luaState == h);
 
-	const char* fileName = luaState.getString (1);
+	sl::StringRef fileName = luaState.getString (1);
 
 	bool result = self->processFile (NULL, fileName, 1);
 	if (!result)
@@ -164,8 +164,8 @@ Generator::generateFile_lua (lua_State* h)
 	Generator* self = (Generator*) luaState.getContext ();
 	ASSERT (self->m_stringTemplate.m_luaState == h);
 
-	const char* targetFileName = luaState.getString (1);
-	const char* frameFileName = luaState.getString (2);
+	sl::StringRef targetFileName = luaState.getString (1);
+	sl::StringRef frameFileName = luaState.getString (2);
 
 	bool result = self->processFile (targetFileName, frameFileName, 2);
 	if (!result)

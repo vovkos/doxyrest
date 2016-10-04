@@ -315,14 +315,14 @@ struct Module
 	sl::StringHashTableMap <size_t> m_groupMap;
 
 	Compound* 
-	findCompound (const char* id)
+	findCompound (const sl::StringRef& id)
 	{
 		sl::StringHashTableMapIterator <Compound*> mapIt = m_compoundMap.find (id);
 		return mapIt ? mapIt->m_value : NULL;
 	}
 	
 	Member* 
-	findMember (const char* id)
+	findMember (const sl::StringRef& id)
 	{
 		sl::StringHashTableMapIterator <Member*> mapIt = m_memberMap.find (id);
 		return mapIt ? mapIt->m_value : NULL;
@@ -436,7 +436,7 @@ luaExportArray (
 	const sl::Array <T*>& array
 	)
 {
-	luaExportArray (luaState, array.ca (), array.getCount ());
+	luaExportArray (luaState, array.cp (), array.getCount ());
 }
 
 template <typename T>
@@ -445,7 +445,7 @@ luaExportArraySetParent (
 	lua::LuaState* luaState,
 	T* const* a,
 	size_t count,
-	const char* parentFieldName,
+	const sl::StringRef& parentFieldName,
 	int parentIndex = -1
 	)
 {
@@ -465,11 +465,11 @@ void
 luaExportArraySetParent (
 	lua::LuaState* luaState,
 	const sl::Array <T*>& array,
-	const char* parentFieldName,
+	const sl::StringRef& parentFieldName,
 	int parentIndex = -1
 	)
 {
-	luaExportArraySetParent (luaState, array.ca (), array.getCount (), parentFieldName, parentIndex);
+	luaExportArraySetParent (luaState, array.cp (), array.getCount (), parentFieldName, parentIndex);
 }
 
 template <typename T>

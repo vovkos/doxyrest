@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "DoxyXmlType.h"
 #include "DoxyXmlParser.h"
-#include "Module.h"
 
 //.............................................................................
 
@@ -18,7 +17,7 @@ DoxygenIndexType::create (
 
 	while (*attributes)
 	{
-		IndexAttrKind attrKind = IndexAttrKindMap::find (attributes [0], IndexAttrKind_Undefined);
+		IndexAttrKind attrKind = IndexAttrKindMap::findValue (attributes [0], IndexAttrKind_Undefined);
 		switch (attrKind)
 		{
 		case IndexAttrKind_Version:
@@ -38,7 +37,7 @@ DoxygenIndexType::onStartElement (
 	const char** attributes
 	)
 {
-	IndexElemKind elemKind = IndexElemKindMap::find (name, IndexElemKind_Undefined);
+	IndexElemKind elemKind = IndexElemKindMap::findValue (name, IndexElemKind_Undefined);
 	switch (elemKind)
 	{
 	case IndexElemKind_Compound:
@@ -60,7 +59,7 @@ DoxygenIndexType::onCompound (
 
 	while (*attributes)
 	{
-		CompoundAttrKind attrKind = CompoundAttrKindMap::find (attributes [0], CompoundAttrKind_Undefined);
+		CompoundAttrKind attrKind = CompoundAttrKindMap::findValue (attributes [0], CompoundAttrKind_Undefined);
 		switch (attrKind)
 		{
 		case CompoundAttrKind_RefId:
@@ -68,7 +67,7 @@ DoxygenIndexType::onCompound (
 			break;
 
 		case CompoundAttrKind_Kind:
-			compoundKind = CompoundKindMap::find (attributes [1], CompoundKind_Undefined);
+			compoundKind = CompoundKindMap::findValue (attributes [1], CompoundKind_Undefined);
 			break;
 		}
 
@@ -112,7 +111,7 @@ DoxygenCompoundType::create (
 
 	while (*attributes)
 	{
-		AttrKind attrKind = AttrKindMap::find (attributes [0], AttrKind_Undefined);
+		AttrKind attrKind = AttrKindMap::findValue (attributes [0], AttrKind_Undefined);
 		switch (attrKind)
 		{
 		case AttrKind_Version:
@@ -140,7 +139,7 @@ DoxygenCompoundType::onStartElement (
 	const char** attributes
 	)
 {
-	ElemKind elemKind = ElemKindMap::find (name, ElemKind_Undefined);
+	ElemKind elemKind = ElemKindMap::findValue (name, ElemKind_Undefined);
 	switch (elemKind)
 	{
 	case ElemKind_CompoundDef:
@@ -169,7 +168,7 @@ CompoundDefType::create (
 
 	while (*attributes)
 	{
-		AttrKind attrKind = AttrKindMap::find (attributes [0], AttrKind_Undefined);
+		AttrKind attrKind = AttrKindMap::findValue (attributes [0], AttrKind_Undefined);
 		switch (attrKind)
 		{
 		case AttrKind_Id:
@@ -177,8 +176,8 @@ CompoundDefType::create (
 			mapIt = module->m_compoundMap.visit (m_compound->m_id);
 			if (mapIt->m_value)
 			{
-				err::setFormatStringError ("duplicate compound id: %s", m_compound->m_id.cc ());
-				printf ("duplicate compound id: %s\n", m_compound->m_id.cc ());
+				err::setFormatStringError ("duplicate compound id: %s", m_compound->m_id.sz ());
+				printf ("duplicate compound id: %s\n", m_compound->m_id.sz ());
 				return false;
 			}
 
@@ -186,27 +185,27 @@ CompoundDefType::create (
 			break;
 		
 		case AttrKind_Kind:
-			m_compound->m_compoundKind = CompoundKindMap::find (attributes [1], CompoundKind_Undefined);
+			m_compound->m_compoundKind = CompoundKindMap::findValue (attributes [1], CompoundKind_Undefined);
 			break;
 		
 		case AttrKind_Language:
-			m_compound->m_languageKind = LanguageKindMap::find (attributes [1], LanguageKind_Undefined);
+			m_compound->m_languageKind = LanguageKindMap::findValue (attributes [1], LanguageKind_Undefined);
 			break;
 		
 		case AttrKind_Prot:
-			m_compound->m_protectionKind = ProtectionKindMap::find (attributes [1], ProtectionKind_Undefined);
+			m_compound->m_protectionKind = ProtectionKindMap::findValue (attributes [1], ProtectionKind_Undefined);
 			break;
 
 		case AttrKind_Final:
-			m_compound->m_isFinal = BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes;
+			m_compound->m_isFinal = BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes;
 			break;
 
 		case AttrKind_Sealed:
-			m_compound->m_isSealed = BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes;
+			m_compound->m_isSealed = BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes;
 			break;
 
 		case AttrKind_Abstract:
-			m_compound->m_isAbstract = BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes;
+			m_compound->m_isAbstract = BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes;
 			break;
 		}
 
@@ -237,7 +236,7 @@ CompoundDefType::onStartElement (
 	const char** attributes
 	)
 {
-	ElemKind elemKind = ElemKindMap::find (name, ElemKind_Undefined);
+	ElemKind elemKind = ElemKindMap::findValue (name, ElemKind_Undefined);
 	switch (elemKind)
 	{
 	case ElemKind_CompoundName:
@@ -314,7 +313,7 @@ RefType::create (
 
 	while (*attributes)
 	{
-		AttrKind attrKind = AttrKindMap::find (attributes [0], AttrKind_Undefined);
+		AttrKind attrKind = AttrKindMap::findValue (attributes [0], AttrKind_Undefined);
 		switch (attrKind)
 		{
 		case AttrKind_RefId:
@@ -322,11 +321,11 @@ RefType::create (
 			break;
 		
 		case AttrKind_Prot:
-			m_ref->m_protectionKind = ProtectionKindMap::find (attributes [1], ProtectionKind_Undefined);
+			m_ref->m_protectionKind = ProtectionKindMap::findValue (attributes [1], ProtectionKind_Undefined);
 			break;
 
 		case AttrKind_Virt:
-			m_ref->m_virtualKind = VirtualKindMap::find (attributes [1], VirtualKind_Undefined);
+			m_ref->m_virtualKind = VirtualKindMap::findValue (attributes [1], VirtualKind_Undefined);
 			break;
 		}
 
@@ -353,11 +352,11 @@ SectionDefType::create (
 
 	while (*attributes)
 	{
-		AttrKind attrKind = AttrKindMap::find (attributes [0], AttrKind_Undefined);
+		AttrKind attrKind = AttrKindMap::findValue (attributes [0], AttrKind_Undefined);
 		switch (attrKind)
 		{	
 		case AttrKind_Kind:
-			sectionKind = SectionKindMap::find (attributes [1], SectionKind_Undefined);
+			sectionKind = SectionKindMap::findValue (attributes [1], SectionKind_Undefined);
 			break;	
 		}
 
@@ -373,7 +372,7 @@ SectionDefType::onStartElement (
 	const char** attributes
 	)
 {
-	ElemKind elemKind = ElemKindMap::find (name, ElemKind_Undefined);
+	ElemKind elemKind = ElemKindMap::findValue (name, ElemKind_Undefined);
 	switch (elemKind)
 	{
 	case ElemKind_Header:
@@ -410,11 +409,11 @@ MemberDefType::create (
 	sl::StringHashTableMapIterator <Member*> mapIt;
 	while (*attributes)
 	{
-		AttrKind attrKind = AttrKindMap::find (attributes [0], AttrKind_Undefined);
+		AttrKind attrKind = AttrKindMap::findValue (attributes [0], AttrKind_Undefined);
 		switch (attrKind)
 		{
 		case AttrKind_Kind:
-			m_member->m_memberKind = MemberKindMap::find (attributes [1], MemberKind_Undefined);
+			m_member->m_memberKind = MemberKindMap::findValue (attributes [1], MemberKind_Undefined);
 			break;
 
 		case AttrKind_Id:
@@ -425,8 +424,8 @@ MemberDefType::create (
 			mapIt = module->m_memberMap.visit (m_member->m_id);
 			if (mapIt->m_value)
 			{
-				err::setFormatStringError ("duplicate member id: %s", m_member->m_id.cc ());
-				printf ("duplicate member id: %s\n", m_member->m_id.cc ());				
+				err::setFormatStringError ("duplicate member id: %s", m_member->m_id.sz ());
+				printf ("duplicate member id: %s\n", m_member->m_id.sz ());				
 				return false;
 			}
 
@@ -434,155 +433,155 @@ MemberDefType::create (
 			break;
 
 		case AttrKind_Prot:
-			m_member->m_protectionKind = ProtectionKindMap::find (attributes [1], ProtectionKind_Undefined);
+			m_member->m_protectionKind = ProtectionKindMap::findValue (attributes [1], ProtectionKind_Undefined);
 			break;
 
 		case AttrKind_Static:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_Static;
 			break;
 
 		case AttrKind_Const:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_Const;
 			break;
 
 		case AttrKind_Explicit:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_Explicit;
 			break;
 
 		case AttrKind_Inline:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_Inline;
 			break;
 
 		case AttrKind_Virtual:
-			m_member->m_virtualKind = VirtualKindMap::find (attributes [1], VirtualKind_Undefined);
+			m_member->m_virtualKind = VirtualKindMap::findValue (attributes [1], VirtualKind_Undefined);
 			break;
 
 		case AttrKind_Volatile:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_Volatile;
 			break;
 
 		case AttrKind_Mutable:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_Mutable;
 			break;
 
 		case AttrKind_Readable:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_Readable;
 			break;
 
 		case AttrKind_Writeable:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_Writeable;
 			break;
 
 		case AttrKind_InitOnly:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_InitOnly;
 			break;
 
 		case AttrKind_Settable:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_Settable;
 			break;
 
 		case AttrKind_Gettable:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_Gettable;
 			break;
 
 		case AttrKind_Final:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_Final;
 			break;
 
 		case AttrKind_Sealed:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_Sealed;
 			break;
 
 		case AttrKind_New:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_New;
 			break;
 
 		case AttrKind_Add:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_Add;
 			break;
 
 		case AttrKind_Remove:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_Remove;
 			break;
 
 		case AttrKind_Raise:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_Raise;
 			break;
 
 		case AttrKind_Optional:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_Optional;
 			break;
 
 		case AttrKind_Required:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_Required;
 			break;
 
 		case AttrKind_Accessor:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_Accessor;
 			break;
 
 		case AttrKind_Attribute:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_Attribute;
 			break;
 
 		case AttrKind_Property:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_Property;
 			break;
 
 		case AttrKind_ReadOnly:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_ReadOnly;
 			break;
 
 		case AttrKind_Bound:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_Bound;
 			break;
 
 		case AttrKind_Removable:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_Removable;
 			break;
 
 		case AttrKind_Contrained:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_Contrained;
 			break;
 
 		case AttrKind_Transient:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_Transient;
 			break;
 
 		case AttrKind_MaybeVoid:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_MaybeVoid;
 			break;
 
 		case AttrKind_MaybeDefault:
-			if (BoolKindMap::find (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
+			if (BoolKindMap::findValue (attributes [1], BoolKind_Undefined) == BoolKind_Yes)
 				m_member->m_flags |= MemberFlag_MaybeDefault;
 			break;
 		}
@@ -599,7 +598,7 @@ MemberDefType::onStartElement (
 	const char** attributes
 	)
 {
-	ElemKind elemKind = ElemKindMap::find (name, ElemKind_Undefined);
+	ElemKind elemKind = ElemKindMap::findValue (name, ElemKind_Undefined);
 	switch (elemKind)
 	{
 	case ElemKind_TemplateParamList:
@@ -696,7 +695,7 @@ DescriptionType::onStartElement (
 	const char** attributes
 	)
 {
-	ElemKind elemKind = ElemKindMap::find (name, ElemKind_Undefined);
+	ElemKind elemKind = ElemKindMap::findValue (name, ElemKind_Undefined);
 	switch (elemKind)
 	{
 		DocParagraphBlock* paragraphBlock;
@@ -741,7 +740,7 @@ DocSectionBlockType::create (
 
 	while (*attributes)
 	{
-		AttrKind attrKind = AttrKindMap::find (attributes [0], AttrKind_Undefined);
+		AttrKind attrKind = AttrKindMap::findValue (attributes [0], AttrKind_Undefined);
 		switch (attrKind)
 		{
 		case AttrKind_Id:
@@ -761,7 +760,7 @@ DocSectionBlockType::onStartElement (
 	const char** attributes
 	)
 {
-	ElemKind elemKind = ElemKindMap::find (name, ElemKind_Undefined);
+	ElemKind elemKind = ElemKindMap::findValue (name, ElemKind_Undefined);
 	switch (elemKind)
 	{
 		DocParagraphBlock* paragraphBlock;
@@ -809,7 +808,7 @@ EnumValueType::create (
 
 	while (*attributes)
 	{
-		AttrKind attrKind = AttrKindMap::find (attributes [0], AttrKind_Undefined);
+		AttrKind attrKind = AttrKindMap::findValue (attributes [0], AttrKind_Undefined);
 		switch (attrKind)
 		{
 		case AttrKind_Id:
@@ -817,7 +816,7 @@ EnumValueType::create (
 			break;
 
 		case AttrKind_Prot:
-			m_enumValue->m_protectionKind = ProtectionKindMap::find (attributes [1], ProtectionKind_Undefined);
+			m_enumValue->m_protectionKind = ProtectionKindMap::findValue (attributes [1], ProtectionKind_Undefined);
 			break;
 		}
 
@@ -833,7 +832,7 @@ EnumValueType::onStartElement (
 	const char** attributes
 	)
 {
-	ElemKind elemKind = ElemKindMap::find (name, ElemKind_Undefined);
+	ElemKind elemKind = ElemKindMap::findValue (name, ElemKind_Undefined);
 	switch (elemKind)
 	{
 	case ElemKind_Name:
@@ -877,7 +876,7 @@ TemplateParamListType::onStartElement (
 	const char** attributes
 	)
 {
-	ElemKind elemKind = ElemKindMap::find (name, ElemKind_Undefined);
+	ElemKind elemKind = ElemKindMap::findValue (name, ElemKind_Undefined);
 	switch (elemKind)
 	{
 	case ElemKind_Param:
@@ -911,7 +910,7 @@ ParamType::onStartElement (
 	const char** attributes
 	)
 {
-	ElemKind elemKind = ElemKindMap::find (name, ElemKind_Undefined);
+	ElemKind elemKind = ElemKindMap::findValue (name, ElemKind_Undefined);
 	switch (elemKind)
 	{
 	case ElemKind_Type:
@@ -970,7 +969,7 @@ LinkedTextType::onStartElement (
 	const char** attributes
 	)
 {
-	ElemKind elemKind = ElemKindMap::find (name, ElemKind_Undefined);
+	ElemKind elemKind = ElemKindMap::findValue (name, ElemKind_Undefined);
 	switch (elemKind)
 	{
 	case ElemKind_Ref:
@@ -1000,7 +999,7 @@ RefTextType::create (
 
 	while (*attributes)
 	{
-		AttrKind attrKind = AttrKindMap::find (attributes [0], AttrKind_Undefined);
+		AttrKind attrKind = AttrKindMap::findValue (attributes [0], AttrKind_Undefined);
 		switch (attrKind)
 		{
 		case AttrKind_RefId:
@@ -1008,7 +1007,7 @@ RefTextType::create (
 			break;
 
 		case AttrKind_KindRef:
-			m_refText->m_refKind = RefKindMap::find (attributes [1], RefKind_Undefined);
+			m_refText->m_refKind = RefKindMap::findValue (attributes [1], RefKind_Undefined);
 			break;
 
 		case AttrKind_External:

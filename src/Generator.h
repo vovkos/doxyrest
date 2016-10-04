@@ -34,16 +34,16 @@ public:
 	
 	bool
 	generate (
-		const char* targetFileName,
-		const char* frameFileName
+		const sl::StringRef& targetFileName,
+		const sl::StringRef& frameFileName
 		);
 
 	bool
 	generate (
 		Module* module,
 		GlobalNamespace* globalNamespace,
-		const char* targetFileName,
-		const char* frameFileName
+		const sl::StringRef& targetFileName,
+		const sl::StringRef& frameFileName
 		)
 	{
 		prepare (module, globalNamespace);
@@ -61,8 +61,8 @@ protected:
 
 	bool
 	processFile (
-		const char* targetFileName,
-		const char* frameFileName,
+		const sl::StringRef& targetFileName,
+		const sl::StringRef& frameFileName,
 		size_t baseArgCount
 		);
 };

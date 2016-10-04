@@ -14,7 +14,7 @@ CmdLine::CmdLine ()
 bool
 CmdLineParser::onSwitch (
 	SwitchKind switchKind,
-	const char* value
+	const sl::StringRef& value
 	)
 {
 	switch (switchKind)
@@ -40,7 +40,7 @@ CmdLineParser::onSwitch (
 		break;
 
 	case CmdLineSwitchKind_ProtectionFilter:
-		m_cmdLine->m_protectionFilter = ProtectionKindMap::find (value, ProtectionKind_Undefined);
+		m_cmdLine->m_protectionFilter = ProtectionKindMap::findValue (value, ProtectionKind_Undefined);
 		if (!m_cmdLine->m_protectionFilter)
 		{
 			err::setFormatStringError ("unknown protection '%s'", value);
@@ -51,16 +51,16 @@ CmdLineParser::onSwitch (
 
 	case CmdLineSwitchKind_Define:
 		Define* define = AXL_MEM_NEW (Define);
-		const char* p = strchr (value, '=');
+		size_t i = value.find ('=');
 
-		if (!p)
+		if (i == -1)
 		{
-			define->m_name = sl::String (value);
+			define->m_name = value;
 		}
 		else
 		{
-			define->m_name = sl::String (value, p - value);
-			define->m_value = p + 1;
+			define->m_name = value.getSubString (0, i);
+			define->m_value = value.getSubString (i + 1);
 		}
 
 		m_cmdLine->m_defineList.insertTail (define);

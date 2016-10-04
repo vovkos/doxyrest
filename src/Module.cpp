@@ -443,8 +443,8 @@ Compound::unspecializeName ()
 
 	size_t unspecializedNameLength = i;
 
-	const char* p = m_name.cc () + unspecializedNameLength + 1;
-	const char* end = m_name.cc () + m_name.getLength ();
+	const char* p = m_name.sz () + unspecializedNameLength + 1;
+	const char* end = m_name.sz () + m_name.getLength ();
 
 	const char* p0 = p;
 	size_t level = 0;
@@ -762,7 +762,7 @@ GlobalNamespace::build (
 			Compound* innerCompound = module->findCompound (refIt->m_id);
 			if (!innerCompound)
 			{
-				err::setFormatStringError ("can't find compound refid: %s\n", refIt->m_id.cc ());
+				err::setFormatStringError ("can't find compound refid: %s\n", refIt->m_id.sz ());
 				return false;
 			}
 
@@ -876,7 +876,7 @@ GlobalNamespace::getSubGroupNamespace (
 	}
 	else
 	{
-		compound->m_id.format ("%s_%d", doxyGroupCompound->m_id.cc (), globalMapIt->m_value);
+		compound->m_id.format ("%s_%d", doxyGroupCompound->m_id.sz (), globalMapIt->m_value);
 		globalMapIt->m_value++;
 	}
 

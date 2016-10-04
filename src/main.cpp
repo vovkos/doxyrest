@@ -29,7 +29,7 @@ printUsage ()
 	printVersion ();
 
 	sl::String helpString = CmdLineSwitchTable::getHelpString ();
-	printf ("Usage: doxyrest <doxygen-index.xml> <options>...\n%s", helpString.cc ());
+	printf ("Usage: doxyrest <doxygen-index.xml> <options>...\n%s", helpString.sz ());
 }
 
 #if _PRINT_MODULE
@@ -57,7 +57,7 @@ printDocBlock (
 	case DocBlockKind_Paragraph:
 		if (!block->m_title.isEmpty ())
 		{
-			printf ("\\paragraph %s\n", block->m_title.cc ());
+			printf ("\\paragraph %s\n", block->m_title.sz ());
 			printIndent (indent);
 		}
 		else
@@ -66,12 +66,12 @@ printDocBlock (
 			printIndent (indent);
 		}
 
-		printf ("%s\n", ((DocParagraphBlock*) block)->m_contents.m_plainText.cc ());
+		printf ("%s\n", ((DocParagraphBlock*) block)->m_contents.m_plainText.sz ());
 		break;
 		
 	case DocBlockKind_Section:
 		if (!block->m_title.isEmpty ())
-			printf ("\\sect%d %s\n", level, block->m_title.cc ());
+			printf ("\\sect%d %s\n", level, block->m_title.sz ());
 		else
 			printf ("\\sect%d\n", level);
 
@@ -102,7 +102,7 @@ printDescription (
 	if (!description->m_title.isEmpty ())
 	{
 		printIndent (indent);
-		printf ("\\title %s\n", description->m_title.cc ());
+		printf ("\\title %s\n", description->m_title.sz ());
 	}
 
 	sl::Iterator <DocBlock> it = description->m_docBlockList.getHead ();
@@ -118,8 +118,8 @@ printEnumValue (EnumValue* enumValue)
 		"    name:         %s\n"
 		"    initializer:  %s\n",
 
-		enumValue->m_name.cc (),
-		enumValue->m_initializer.m_plainText.cc ()
+		enumValue->m_name.sz (),
+		enumValue->m_initializer.m_plainText.sz ()
 		);
 
 	if (!enumValue->m_briefDescription.isEmpty ())
@@ -155,12 +155,12 @@ printParam (Param* param)
 		"    defaultValue:    %s\n"
 		"    typeConstraint:  %s\n",
 
-		param->m_declarationName.cc (),
-		param->m_definitionName.cc (),
-		param->m_type.m_plainText.cc (),
-		param->m_array.cc (),
-		param->m_defaultValue.m_plainText.cc (),
-		param->m_typeConstraint.m_plainText.cc ()
+		param->m_declarationName.sz (),
+		param->m_definitionName.sz (),
+		param->m_type.m_plainText.sz (),
+		param->m_array.sz (),
+		param->m_defaultValue.m_plainText.sz (),
+		param->m_typeConstraint.m_plainText.sz ()
 		);
 
 	if (!param->m_briefDescription.isEmpty ())
@@ -193,17 +193,17 @@ printMember(Member* member)
 		"  flags:        %s\n",
 
 		getMemberKindString (member->m_memberKind),
-		member->m_name.cc (),
-		member->m_id.cc (),
-		member->m_type.m_plainText.cc (),
-		member->m_definition.cc (),
-		member->m_argString.cc (),
-		member->m_bitField.cc (),
-		member->m_initializer.m_plainText.cc (),
-		member->m_exceptions.m_plainText.cc (),
+		member->m_name.sz (),
+		member->m_id.sz (),
+		member->m_type.m_plainText.sz (),
+		member->m_definition.sz (),
+		member->m_argString.sz (),
+		member->m_bitField.sz (),
+		member->m_initializer.m_plainText.sz (),
+		member->m_exceptions.m_plainText.sz (),
 		getProtectionKindString (member->m_protectionKind),
 		getVirtualKindString (member->m_virtualKind),
-		getMemberFlagString (member->m_flags).cc ()
+		getMemberFlagString (member->m_flags).sz ()
 		);
 
 	if (!member->m_briefDescription.isEmpty ())
@@ -280,9 +280,9 @@ printCompound (Compound* compound)
 		"  isAbstract: %s\n",
 
 		getCompoundKindString (compound->m_compoundKind),
-		compound->m_name.cc (),
-		compound->m_id.cc (),
-		compound->m_title.cc (),
+		compound->m_name.sz (),
+		compound->m_id.sz (),
+		compound->m_title.sz (),
 		getLanguageKindString (compound->m_languageKind),
 		getProtectionKindString (compound->m_protectionKind),
 		compound->m_isFinal ? "yes" : "no",
@@ -320,9 +320,9 @@ printNamespaceArray (const sl::Array <Namespace*>& array)
 	{
 		Namespace* nspace = array [i];
 
-		printf ("namespace %s {\n", nspace->m_compound->m_name.cc ());
+		printf ("namespace %s {\n", nspace->m_compound->m_name.sz ());
 		printNamespaceContents (nspace);
-		printf ("} // namespace %s {\n", nspace->m_compound->m_name.cc ());
+		printf ("} // namespace %s {\n", nspace->m_compound->m_name.sz ());
 	}
 }
 
@@ -415,7 +415,7 @@ run (CmdLine* cmdLine)
 
 	if (!result)
 	{
-		printf ("error: %s\n", err::getLastErrorDescription ().cc ());
+		printf ("error: %s\n", err::getLastErrorDescription ().sz ());
 		return -1;
 	}
 
@@ -430,7 +430,7 @@ run (CmdLine* cmdLine)
 
 	if (!result)
 	{
-		printf ("error: %s\n", err::getLastErrorDescription ().cc ());
+		printf ("error: %s\n", err::getLastErrorDescription ().sz ());
 		return -1;
 	}
 
@@ -478,7 +478,7 @@ main (
 	result = parser.parse (argc, argv);
 	if (!result)
 	{
-		printf ("error parsing command line: %s\n", err::getLastErrorDescription ().cc ());
+		printf ("error parsing command line: %s\n", err::getLastErrorDescription ().sz ());
 		return -1;
 	}
 

@@ -18,7 +18,7 @@ bool
 DoxyXmlParser::parseFile (
 	Module* module,
 	DoxyXmlFileKind fileKind, 
-	const char* fileName,
+	const sl::StringRef& fileName,
 	size_t blockSize
 	)
 {
@@ -82,7 +82,7 @@ DoxyXmlParser::onStartElement (
 	}
 	else
 	{
-		ElemKind elemKind = ElemKindMap::find (name, ElemKind_Undefined);
+		ElemKind elemKind = ElemKindMap::findValue (name, ElemKind_Undefined);
 		switch (elemKind)
 		{
 		case ElemKind_DoxygenIndex:
@@ -129,7 +129,7 @@ DoxyXmlParser::onCharacterData (
 {		
 #if _PRINT_XML
 	printIndent ();
-	printf ("%s\n", sl::String (string, length).cc ());
+	printf ("%s\n", sl::String (string, length).sz ());
 #endif
 
 	if (!m_typeStack.isEmpty ())

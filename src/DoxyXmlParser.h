@@ -79,14 +79,14 @@ public:
 	parseFile (
 		Module* module,
 		DoxyXmlFileKind fileKind, 
-		const char* fileName,
+		const sl::StringRef& fileName,
 		size_t blockSize = -1
 		);
 
 	bool
 	parseFile (
 		Module* module,
-		const char* fileName,
+		const sl::StringRef& fileName,
 		size_t blockSize = -1
 		)
 	{

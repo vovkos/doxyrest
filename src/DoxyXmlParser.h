@@ -63,13 +63,13 @@ public:
 		return m_module;
 	}
 
-	sl::String 
+	const sl::String&
 	getFilePath ()
 	{
 		return m_filePath;
 	}
 
-	sl::String 
+	const sl::String&
 	getBaseDir ()
 	{
 		return m_baseDir;

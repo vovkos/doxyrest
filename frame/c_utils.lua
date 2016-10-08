@@ -383,6 +383,8 @@ function getTypedefDeclString (typedef, isRef, indent)
 		return s
 	end
 
+	s = s .. "("
+
 	if not string.find (typedef.m_argString, ",") then
 		local arg = string.match (typedef.m_argString, "%(([^()]+)%)")
 		if arg then

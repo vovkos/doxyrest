@@ -43,7 +43,7 @@ CmdLineParser::onSwitch (
 		m_cmdLine->m_protectionFilter = ProtectionKindMap::findValue (value, ProtectionKind_Undefined);
 		if (!m_cmdLine->m_protectionFilter)
 		{
-			err::setFormatStringError ("unknown protection '%s'", value);
+			err::setFormatStringError ("unknown protection '%s'", value.sz ());
 			return false;
 		}
 

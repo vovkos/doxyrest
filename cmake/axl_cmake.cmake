@@ -1,4 +1,4 @@
-# to make use of AXL cmake build infrastructure, copy this file into 
+# to make use of AXL cmake build infrastructure, copy this file into
 # your project directory and include it in master CMakeLists.txt like this:
 
 # include (axl_cmake.cmake NO_POLICY_SCOPE)
@@ -8,7 +8,7 @@
 # excerpt from axl_utils.cmake
 
 macro (
-axl_calc_max_string_length 
+axl_calc_max_string_length
 	_RESULT
 	# ...
 	)
@@ -22,8 +22,8 @@ axl_calc_max_string_length
 			set (_MAX_LENGTH ${_LENGTH})
 		endif ()
 	endforeach ()
-	
-	set (${_RESULT} ${_MAX_LENGTH})	
+
+	set (${_RESULT} ${_MAX_LENGTH})
 endmacro ()
 
 macro (
@@ -67,7 +67,7 @@ axl_find_file
 	_FILE_NAME
 	# ...
 	)
-	
+
 	set (_DIR_LIST ${ARGN})
 
 	set (_FILE_PATH ${_FILE_NAME}-NOTFOUND)
@@ -76,7 +76,7 @@ axl_find_file
 		if (EXISTS ${_DIR}/${_FILE_NAME})
 			set (_FILE_PATH ${_DIR}/${_FILE_NAME})
 			break ()
-		endif ()	
+		endif ()
 	endforeach ()
 
 	set (${_RESULT} ${_FILE_PATH})
@@ -96,14 +96,14 @@ axl_find_file_recurse_parent_dirs
 			set (_FILE_PATH ${_DIR}/${_FILE_NAME})
 			break ()
 		endif ()
-	
+
 		get_filename_component (_PARENT_DIR "${_DIR}/.." ABSOLUTE)
 
 		if (${_DIR} STREQUAL ${_PARENT_DIR})
 			set (_FILE_PATH ${_FILE_NAME}-NOTFOUND)
 			break ()
-		endif ()	
-	
+		endif ()
+
 		set (_DIR ${_PARENT_DIR})
 	endwhile ()
 
@@ -153,6 +153,14 @@ endif ()
 include (${_AXL_INIT_CMAKE} NO_POLICY_SCOPE)
 include (${_PATHS_CMAKE})
 include (${CMAKE_SOURCE_DIR}/dependencies.cmake)
+
+# find and include settings.cmake
+
+axl_find_file_recurse_parent_dirs (_SETTINGS_CMAKE settings.cmake ${CMAKE_CURRENT_LIST_DIR})
+
+if (_SETTINGS_CMAKE)
+	include (${_SETTINGS_CMAKE})
+endif ()
 
 # diagnostic printing
 

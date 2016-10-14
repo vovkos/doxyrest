@@ -1,19 +1,19 @@
-# to make use of AXL cmake build infrastructure, copy this file into
+# to make use of AXL cmake build infrastructure, copy this dropper file into
 # your project directory and include it in master CMakeLists.txt like this:
 
 # include (axl_cmake.cmake NO_POLICY_SCOPE)
 
 #..............................................................................
 
-# excerpt from axl_utils.cmake
+# required excerpt from axl_utils.cmake
 
 macro (
 axl_calc_max_string_length
-	_RESULT
+    _RESULT
 	# ...
 	)
 
-	set (_STRING_LIST ${ARGN})
+    set (_STRING_LIST ${ARGN})
 
 	set (_MAX_LENGTH 0)
 	foreach (_STRING ${_STRING_LIST})
@@ -28,23 +28,23 @@ endmacro ()
 
 macro (
 axl_create_space_padding
-	_RESULT
+    _RESULT
 	_STRING
 	_MAX_LENGTH
 	)
 
-	string (LENGTH ${_STRING} _LENGTH)
+    string (LENGTH ${_STRING} _LENGTH)
 	math (EXPR _PADDING_LENGTH "${_MAX_LENGTH} - ${_LENGTH} + 1")
 	string (RANDOM LENGTH ${_PADDING_LENGTH} ALPHABET " " ${_RESULT})
 endmacro ()
 
 macro (
-	axl_create_empty_setting_file
-	_FILE_NAME
+axl_create_empty_setting_file
+    _FILE_NAME
 	# ...
 	)
 
-	set (_SETTING_LIST ${ARGN})
+    set (_SETTING_LIST ${ARGN})
 
 	axl_calc_max_string_length (_MAX_LENGTH ${_SETTING_LIST})
 
@@ -63,12 +63,12 @@ endmacro ()
 
 macro (
 axl_find_file
-	_RESULT
+    _RESULT
 	_FILE_NAME
 	# ...
 	)
 
-	set (_DIR_LIST ${ARGN})
+    set (_DIR_LIST ${ARGN})
 
 	set (_FILE_PATH ${_FILE_NAME}-NOTFOUND)
 
@@ -84,12 +84,12 @@ endmacro ()
 
 macro (
 axl_find_file_recurse_parent_dirs
-	_RESULT
+    _RESULT
 	_FILE_NAME
 	_START_DIR
 	)
 
-	set (_DIR ${_START_DIR})
+    set (_DIR ${_START_DIR})
 
 	while (TRUE)
 		if (EXISTS ${_DIR}/${_FILE_NAME})
@@ -133,52 +133,33 @@ if (NOT _PATHS_CMAKE)
 	message (FATAL_ERROR "please fill the newly generated ${CMAKE_SOURCE_DIR}/paths.cmake")
 endif ()
 
-# include paths.cmake to get AXL_CMAKE_DIR; then find and include axl_init.cmake
+# if we are compiling axl, axl_init.cmake is right next to the dropper
 
-include (${_PATHS_CMAKE})
+if (EXISTS "${CMAKE_CURRENT_LIST_DIR}/axl_init.cmake")
+	set (_AXL_INIT_CMAKE "${CMAKE_CURRENT_LIST_DIR}/axl_init.cmake")
+else ()
+	# include paths.cmake to get AXL_CMAKE_DIR
 
-if (NOT AXL_CMAKE_DIR)
-	message (FATAL_ERROR "AXL_CMAKE_DIR not found (check your paths.cmake)")
+	include (${_PATHS_CMAKE})
+
+	if (NOT AXL_CMAKE_DIR)
+		message (FATAL_ERROR "AXL_CMAKE_DIR not found (check your paths.cmake)")
+	endif ()
+
+	# now make sure axl_init.cmake is where it's supposed to be
+
+	axl_find_file (_AXL_INIT_CMAKE axl_init.cmake ${AXL_CMAKE_DIR})
+
+	if (NOT _AXL_INIT_CMAKE)
+		message (FATAL_ERROR "axl_init.cmake not found (check AXL_CMAKE_DIR in your paths.cmake)")
+	endif ()
 endif ()
 
-axl_find_file (_AXL_INIT_CMAKE axl_init.cmake ${AXL_CMAKE_DIR})
+# include axl_init.cmake -- it will do the rest
 
-if (NOT _AXL_INIT_CMAKE)
-	message (FATAL_ERROR "axl_init.cmake not found (check AXL_CMAKE_DIR in your paths.cmake)")
-endif ()
-
-# include axl_init.cmake, paths.cmake, and dependencies.cmake
-# this time ${CONFIGURATION_SUFFIX} and all the other settings are defined
+set (AXL_PATHS_CMAKE ${_PATHS_CMAKE})
+set (AXL_DROPPER_DIR ${CMAKE_CURRENT_LIST_DIR})
 
 include (${_AXL_INIT_CMAKE} NO_POLICY_SCOPE)
-include (${_PATHS_CMAKE})
-include (${CMAKE_SOURCE_DIR}/dependencies.cmake)
-
-# find and include settings.cmake
-
-axl_find_file_recurse_parent_dirs (_SETTINGS_CMAKE settings.cmake ${CMAKE_CURRENT_LIST_DIR})
-
-if (_SETTINGS_CMAKE)
-	include (${_SETTINGS_CMAKE})
-endif ()
-
-# diagnostic printing
-
-axl_print_std_settings ()
-
-get_cmake_property (_VARIABLE_LIST VARIABLES)
-
-string (REPLACE ";" "\$|^" _FILTER "^${AXL_PATH_LIST}\$")
-axl_filter_list (_FILTERED_VARIABLE_LIST ${_FILTER} ${_VARIABLE_LIST})
-
-message(STATUS "Path defintions in ${_PATHS_CMAKE}:")
-
-axl_print_variable_list ("    " ${_FILTERED_VARIABLE_LIST})
-
-# import modules (if dependencies.cmake defines any imports)
-
-if (AXL_IMPORT_LIST)
-	axl_import (${AXL_IMPORT_LIST})
-endif ()
 
 #..............................................................................

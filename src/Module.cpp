@@ -431,7 +431,7 @@ Compound::unqualifyName ()
 	}
 
 	if (unqualifiedName != m_name)
-		m_name = unqualifiedName;
+		m_name.offset (unqualifiedName - m_name);
 }
 
 void

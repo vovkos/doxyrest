@@ -2,7 +2,7 @@
 
 #include "DoxyXmlEnum.h"
 
-//.............................................................................
+//..............................................................................
 
 enum CmdLineFlag
 {
@@ -10,7 +10,7 @@ enum CmdLineFlag
 	CmdLineFlag_Version = 0x0002,
 };
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 struct Define: sl::ListLink
 {
@@ -32,7 +32,7 @@ struct CmdLine
 	CmdLine ();
 };
 
-//.............................................................................
+//..............................................................................
 
 enum CmdLineSwitchKind
 {
@@ -46,7 +46,7 @@ enum CmdLineSwitchKind
 	CmdLineSwitchKind_ProtectionFilter,
 };
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 AXL_SL_BEGIN_CMD_LINE_SWITCH_TABLE (CmdLineSwitchTable, CmdLineSwitchKind)
 	AXL_SL_CMD_LINE_SWITCH_2 (
@@ -71,7 +71,7 @@ AXL_SL_BEGIN_CMD_LINE_SWITCH_TABLE (CmdLineSwitchTable, CmdLineSwitchKind)
 		"f", "frame", "<file>",
 		"Specify Lua master (index) frame file"
 		)
-			
+
 	AXL_SL_CMD_LINE_SWITCH_2 (
 		CmdLineSwitchKind_FrameDir,
 		"F", "frame-dir", "<dir>",
@@ -92,7 +92,7 @@ AXL_SL_BEGIN_CMD_LINE_SWITCH_TABLE (CmdLineSwitchTable, CmdLineSwitchKind)
 
 AXL_SL_END_CMD_LINE_SWITCH_TABLE ()
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 class CmdLineParser: public sl::CmdLineParser <CmdLineParser, CmdLineSwitchTable>
 {
@@ -125,4 +125,4 @@ protected:
 	finalize ();
 };
 
-//.............................................................................
+//..............................................................................

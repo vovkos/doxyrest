@@ -3,11 +3,11 @@
 #include "Module.h"
 #include "CmdLine.h"
 
-//.............................................................................
+//..............................................................................
 
 void
 Generator::prepare (
-	Module* module,	
+	Module* module,
 	GlobalNamespace* globalNamespace
 	)
 {
@@ -39,7 +39,7 @@ Generator::generate (
 
 	sl::String targetFilePath = io::getFullFilePath (targetFileName);
 	sl::String targetDir = io::getDir (targetFilePath);
-	
+
 	result = io::ensureDirExists (targetDir);
 	if (!result)
 		return false;
@@ -55,9 +55,9 @@ Generator::generate (
 	m_targetDir = io::getDir (targetFilePath);
 
 	m_stringTemplate.m_luaState.setGlobalString ("g_frameDir", m_frameDir);
-	m_stringTemplate.m_luaState.setGlobalString ("g_targetDir", m_targetDir);	
-	m_stringTemplate.m_luaState.setGlobalString ("g_targetFileName", targetFileName);	
-	
+	m_stringTemplate.m_luaState.setGlobalString ("g_targetDir", m_targetDir);
+	m_stringTemplate.m_luaState.setGlobalString ("g_targetFileName", targetFileName);
+
 	sl::String stringBuffer;
 
 	result = m_stringTemplate.processFile (&stringBuffer, frameFilePath);
@@ -137,7 +137,7 @@ Generator::processFile (
 	return true;
 }
 
-int 
+int
 Generator::includeFile_lua (lua_State* h)
 {
 	lua::LuaNonOwnerState luaState (h);
@@ -157,7 +157,7 @@ Generator::includeFile_lua (lua_State* h)
 	return 0;
 }
 
-int 
+int
 Generator::generateFile_lua (lua_State* h)
 {
 	lua::LuaNonOwnerState luaState (h);
@@ -178,4 +178,4 @@ Generator::generateFile_lua (lua_State* h)
 	return 0;
 }
 
-//.............................................................................
+//..............................................................................

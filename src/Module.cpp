@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Module.h"
 
-//.............................................................................
+//..............................................................................
 
 void
 RefText::luaExport (lua::LuaState* luaState)
@@ -15,7 +15,7 @@ RefText::luaExport (lua::LuaState* luaState)
 	luaState->setMemberString ("m_tooltip", m_tooltip);
 }
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 void
 LinkedText::luaExport (lua::LuaState* luaState)
@@ -23,10 +23,10 @@ LinkedText::luaExport (lua::LuaState* luaState)
 	normalize ();
 
 	luaState->createTable ();
-	
+
 	luaState->setMemberBoolean ("m_isEmpty", m_plainText.isEmpty ());
 	luaState->setMemberString ("m_plainText", m_plainText);
-	
+
 	luaExportList (luaState, m_refTextList);
 	luaState->setMember ("m_refTextArray");
 }
@@ -53,25 +53,25 @@ LinkedText::normalize ()
 	}
 }
 
-//.............................................................................
+//..............................................................................
 
 const char*
 getDocBlockKindString (DocBlockKind blockKind)
 {
-	const char* stringTable [] = 
+	const char* stringTable [] =
 	{
 		"<undefined>", // DocBlockKind_Undefined,
-		"paragraph",   // DocBlockKind_Paragraph,	
+		"paragraph",   // DocBlockKind_Paragraph,
 		"section",     // DocBlockKind_Section,
 		"internal",    // DocBlockKind_Internal,
 	};
 
-	return (size_t) blockKind < countof (stringTable) ? 
+	return (size_t) blockKind < countof (stringTable) ?
 		stringTable [blockKind] :
 		stringTable [DocBlockKind_Undefined];
 }
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 void
 DocBlock::luaExportMembers (lua::LuaState* luaState)
@@ -84,7 +84,7 @@ void
 DocParagraphBlock::luaExport (lua::LuaState* luaState)
 {
 	luaState->createTable ();
-	
+
 	DocBlock::luaExportMembers (luaState);
 
 	m_contents.luaExport (luaState);
@@ -95,15 +95,15 @@ void
 DocSectionBlock::luaExport (lua::LuaState* luaState)
 {
 	luaState->createTable ();
-	
+
 	DocBlock::luaExportMembers (luaState);
 	luaState->setMemberString ("m_id", m_id);
-	
+
 	luaExportList (luaState, m_childBlockList);
 	luaState->setMember ("m_childBlockList");
 }
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 void
 Description::luaExport (lua::LuaState* luaState)
@@ -111,12 +111,12 @@ Description::luaExport (lua::LuaState* luaState)
 	luaState->createTable ();
 
 	luaState->setMemberBoolean ("m_isEmpty", isEmpty ());
-	
+
 	luaExportList (luaState, m_docBlockList);
 	luaState->setMember ("m_docBlockList");
 }
 
-//.............................................................................
+//..............................................................................
 
 void
 Param::luaExport (lua::LuaState* luaState)
@@ -140,7 +140,7 @@ Param::luaExport (lua::LuaState* luaState)
 	luaState->setMember ("m_briefDescription");
 }
 
-//.............................................................................
+//..............................................................................
 
 void
 EnumValue::luaExport (lua::LuaState* luaState)
@@ -161,12 +161,12 @@ EnumValue::luaExport (lua::LuaState* luaState)
 	luaState->setMember ("m_detailedDescription");
 }
 
-//.............................................................................
+//..............................................................................
 
 const char*
 getMemberFlagString (MemberFlag flag)
 {
-	const char* stringTable [] = 
+	const char* stringTable [] =
 	{
 		"static",          // MemberFlag_Static        = 0x00000001,
 		"const",           // MemberFlag_Const         = 0x00000002,
@@ -200,7 +200,7 @@ getMemberFlagString (MemberFlag flag)
 		"maybeambiguous",  // MemberFlag_MaybeAmbiguos = 0x20000000,
 	};
 
-	return (size_t) flag < countof (stringTable) ? 
+	return (size_t) flag < countof (stringTable) ?
 		stringTable [flag] :
 		"<undefined>";
 }
@@ -233,7 +233,7 @@ getMemberFlagString (uint_t flags)
 	return string;
 }
 
-//.............................................................................
+//..............................................................................
 
 Member::Member ()
 {
@@ -291,7 +291,7 @@ Member::luaExport (lua::LuaState* luaState)
 	case MemberKind_Function:
 		m_type.luaExport (luaState);
 		luaState->setMember ("m_returnType");
-		
+
 		luaState->setMemberString ("m_argString", m_argString);
 
 		m_exceptions.luaExport (luaState);
@@ -343,7 +343,7 @@ Member::luaExport (lua::LuaState* luaState)
 	luaState->setMember ("m_inBodyDescription");
 }
 
-//.............................................................................
+//..............................................................................
 
 Compound::Compound ()
 {
@@ -365,11 +365,11 @@ Compound::luaExport (lua::LuaState* luaState)
 	unspecializeName ();
 
 	luaState->createTable ();
-	luaState->setMemberString ("m_compoundKind", getCompoundKindString (m_compoundKind));	
+	luaState->setMemberString ("m_compoundKind", getCompoundKindString (m_compoundKind));
 	luaState->setMemberString ("m_id", m_id);
 	luaState->setMemberString ("m_name", m_name);
 	luaState->setMemberString ("m_title", m_title);
-		
+
 	switch (m_compoundKind)
 	{
 	case CompoundKind_Group:
@@ -411,7 +411,7 @@ Compound::luaExport (lua::LuaState* luaState)
 void
 Compound::unqualifyName ()
 {
-	const char* unqualifiedName = m_name; 
+	const char* unqualifiedName = m_name;
 	const char* p = m_name;
 	const char* end = p + m_name.getLength ();
 
@@ -476,7 +476,7 @@ Compound::unspecializeName ()
 
 			break;
 		}
-	
+
 	}
 
 	m_name.setReducedLength (unspecializedNameLength);
@@ -521,7 +521,7 @@ Compound::preparePath ()
 	}
 }
 
-//.............................................................................
+//..............................................................................
 
 bool
 NamespaceContents::add (Compound* compound)
@@ -565,7 +565,7 @@ NamespaceContents::add (Compound* compound)
 	case CompoundKind_Example:
 	case CompoundKind_Dir:
 		// not used in doxyrest
-	
+
 	default:
 		return false;
 	}
@@ -619,7 +619,7 @@ NamespaceContents::add (Member* member)
 	case MemberKind_Interface:
 	case MemberKind_Service:
 	case MemberKind_EnumValue:
-		
+
 	default:
 		return false;
 	}
@@ -635,31 +635,31 @@ NamespaceContents::luaExportMembers (lua::LuaState* luaState)
 
 	luaExportArraySetParent (luaState, m_namespaceArray, "m_parent");
 	luaState->setMember ("m_namespaceArray");
-	
+
 	luaExportArraySetParent (luaState, m_enumArray, "m_parent");
 	luaState->setMember ("m_enumArray");
-	
+
 	luaExportArraySetParent (luaState, m_structArray, "m_parent");
 	luaState->setMember ("m_structArray");
-	
+
 	luaExportArraySetParent (luaState, m_unionArray, "m_parent");
 	luaState->setMember ("m_unionArray");
-	
+
 	luaExportArraySetParent (luaState, m_classArray, "m_parent");
 	luaState->setMember ("m_classArray");
-	
+
 	luaExportArraySetParent (luaState, m_typedefArray, "m_parent");
 	luaState->setMember ("m_typedefArray");
-	
+
 	luaExportArraySetParent (luaState, m_variableArray, "m_parent");
 	luaState->setMember ("m_variableArray");
 
 	luaExportArraySetParent (luaState, m_functionArray, "m_parent");
 	luaState->setMember ("m_functionArray");
-	
+
 	luaExportArraySetParent (luaState, m_propertyArray, "m_parent");
 	luaState->setMember ("m_propertyArray");
-	
+
 	luaExportArraySetParent (luaState, m_eventArray, "m_parent");
 	luaState->setMember ("m_eventArray");
 
@@ -670,7 +670,7 @@ NamespaceContents::luaExportMembers (lua::LuaState* luaState)
 	luaState->setMember ("m_footnoteArray");
 }
 
-//.............................................................................
+//..............................................................................
 
 void
 GlobalNamespace::clear ()
@@ -699,7 +699,7 @@ GlobalNamespace::build (
 	clear ();
 
 	// loop #1 assign groups
-	
+
 	size_t count = module->m_doxyGroupArray.getCount ();
 	for (size_t i = 0; i < count; i++)
 	{
@@ -723,7 +723,7 @@ GlobalNamespace::build (
 	}
 
 	// loop #2 initializes namespaces
-	
+
 	count = module->m_namespaceArray.getCount ();
 	for (size_t i = 0; i < count; i++)
 	{
@@ -749,8 +749,8 @@ GlobalNamespace::build (
 			if (memberIt->m_protectionKind > protectionFilter)
 				continue;
 
-			Namespace* targetNspace = memberIt->m_doxyGroupCompound ? 
-				getSubGroupNamespace (module, nspace, nspace, memberIt->m_doxyGroupCompound) : 
+			Namespace* targetNspace = memberIt->m_doxyGroupCompound ?
+				getSubGroupNamespace (module, nspace, nspace, memberIt->m_doxyGroupCompound) :
 				nspace;
 
 			targetNspace->add (*memberIt);
@@ -769,8 +769,8 @@ GlobalNamespace::build (
 			if (innerCompound->m_protectionKind > protectionFilter)
 				continue;
 
-			Namespace* targetNspace = innerCompound->m_doxyGroupCompound ? 
-				getSubGroupNamespace (module, nspace, nspace, innerCompound->m_doxyGroupCompound) : 
+			Namespace* targetNspace = innerCompound->m_doxyGroupCompound ?
+				getSubGroupNamespace (module, nspace, nspace, innerCompound->m_doxyGroupCompound) :
 				nspace;
 
 			targetNspace->add (innerCompound);
@@ -799,8 +799,8 @@ GlobalNamespace::build (
 				if (memberIt->m_protectionKind > protectionFilter)
 					continue;
 
-				NamespaceContents* targetNspace = memberIt->m_doxyGroupCompound ? 
-					(NamespaceContents*) getSubGroupNamespace (module, this, NULL, memberIt->m_doxyGroupCompound) : 
+				NamespaceContents* targetNspace = memberIt->m_doxyGroupCompound ?
+					(NamespaceContents*) getSubGroupNamespace (module, this, NULL, memberIt->m_doxyGroupCompound) :
 					this;
 
 				targetNspace->add (*memberIt);
@@ -810,8 +810,8 @@ GlobalNamespace::build (
 		default:
 			if (!compoundIt->m_parentNamespace && compoundIt->m_protectionKind <= protectionFilter)
 			{
-				NamespaceContents* targetNspace = compoundIt->m_doxyGroupCompound ? 
-					(NamespaceContents*) getSubGroupNamespace (module, this, NULL, compoundIt->m_doxyGroupCompound) : 
+				NamespaceContents* targetNspace = compoundIt->m_doxyGroupCompound ?
+					(NamespaceContents*) getSubGroupNamespace (module, this, NULL, compoundIt->m_doxyGroupCompound) :
 					this;
 
 				targetNspace->add (*compoundIt);
@@ -845,14 +845,14 @@ GlobalNamespace::luaExport (lua::LuaState* luaState)
 	luaState->setGlobal ("g_globalNamespace");
 }
 
-Namespace* 
+Namespace*
 GlobalNamespace::getSubGroupNamespace (
 	Module* module,
 	NamespaceContents* parent,
 	Namespace* parentNamespace,
 	Compound* doxyGroupCompound
 	)
-{	
+{
 	if (doxyGroupCompound->m_doxyGroupCompound) // re-parent to super-group
 		parent = getSubGroupNamespace (module, parent, parentNamespace, doxyGroupCompound->m_doxyGroupCompound);
 
@@ -884,10 +884,10 @@ GlobalNamespace::getSubGroupNamespace (
 	m_namespaceList.insertTail (nspace);
 	nspace->m_compound = compound;
 	compound->m_selfNamespace = nspace;
-	
+
 	localMapIt->m_value = nspace;
 	parent->m_groupArray.append (nspace);
 	return nspace;
 }
 
-//.............................................................................
+//..............................................................................

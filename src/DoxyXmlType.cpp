@@ -2,7 +2,7 @@
 #include "DoxyXmlType.h"
 #include "DoxyXmlParser.h"
 
-//.............................................................................
+//..............................................................................
 
 bool
 DoxygenIndexType::create (
@@ -83,7 +83,7 @@ DoxygenIndexType::onCompound (
 	return parseCompound (refId);
 }
 
-bool 
+bool
 DoxygenIndexType::parseCompound (const char* refId)
 {
 	sl::String filePath = m_parser->getBaseDir () + "/" + refId + ".xml";
@@ -96,7 +96,7 @@ DoxygenIndexType::parseCompound (const char* refId)
 		);
 }
 
-//.............................................................................
+//..............................................................................
 
 bool
 DoxygenCompoundType::create (
@@ -149,7 +149,7 @@ DoxygenCompoundType::onStartElement (
 	return true;
 }
 
-//.............................................................................
+//..............................................................................
 
 bool
 CompoundDefType::create (
@@ -183,15 +183,15 @@ CompoundDefType::create (
 
 			mapIt->m_value = m_compound;
 			break;
-		
+
 		case AttrKind_Kind:
 			m_compound->m_compoundKind = CompoundKindMap::findValue (attributes [1], CompoundKind_Undefined);
 			break;
-		
+
 		case AttrKind_Language:
 			m_compound->m_languageKind = LanguageKindMap::findValue (attributes [1], LanguageKind_Undefined);
 			break;
-		
+
 		case AttrKind_Prot:
 			m_compound->m_protectionKind = ProtectionKindMap::findValue (attributes [1], ProtectionKind_Undefined);
 			break;
@@ -297,7 +297,7 @@ CompoundDefType::onStartElement (
 	return true;
 }
 
-//.............................................................................
+//..............................................................................
 
 bool
 RefType::create (
@@ -319,7 +319,7 @@ RefType::create (
 		case AttrKind_RefId:
 			m_ref->m_id = attributes [1];
 			break;
-		
+
 		case AttrKind_Prot:
 			m_ref->m_protectionKind = ProtectionKindMap::findValue (attributes [1], ProtectionKind_Undefined);
 			break;
@@ -335,7 +335,7 @@ RefType::create (
 	return true;
 }
 
-//.............................................................................
+//..............................................................................
 
 bool
 SectionDefType::create (
@@ -354,10 +354,10 @@ SectionDefType::create (
 	{
 		AttrKind attrKind = AttrKindMap::findValue (attributes [0], AttrKind_Undefined);
 		switch (attrKind)
-		{	
+		{
 		case AttrKind_Kind:
 			sectionKind = SectionKindMap::findValue (attributes [1], SectionKind_Undefined);
-			break;	
+			break;
 		}
 
 		attributes += 2;
@@ -378,7 +378,7 @@ SectionDefType::onStartElement (
 	case ElemKind_Header:
 		break;
 
-	case ElemKind_Description: 
+	case ElemKind_Description:
 		// ignore description for SectionDefs
 		break;
 
@@ -389,7 +389,7 @@ SectionDefType::onStartElement (
 	return true;
 }
 
-//.............................................................................
+//..............................................................................
 
 bool
 MemberDefType::create (
@@ -418,14 +418,14 @@ MemberDefType::create (
 
 		case AttrKind_Id:
 			m_member->m_id = attributes [1];
-			if (parent->m_compoundKind == CompoundKind_DoxyGroup) 
+			if (parent->m_compoundKind == CompoundKind_DoxyGroup)
 				break; // doxy groups contain duplicated definitions of members
 
 			mapIt = module->m_memberMap.visit (m_member->m_id);
 			if (mapIt->m_value)
 			{
 				err::setFormatStringError ("duplicate member id: %s", m_member->m_id.sz ());
-				printf ("duplicate member id: %s\n", m_member->m_id.sz ());				
+				printf ("duplicate member id: %s\n", m_member->m_id.sz ());
 				return false;
 			}
 
@@ -640,11 +640,11 @@ MemberDefType::onStartElement (
 	case ElemKind_Reimplements:
 	case ElemKind_ReimplementedBy:
 		break;
-	
+
 	case ElemKind_Param:
 		m_parser->pushType <ParamType> (&m_member->m_paramList, name, attributes);
 		break;
-		
+
 	case ElemKind_EnumValue:
 		m_parser->pushType <EnumValueType> (m_member, name, attributes);
 		break;
@@ -674,7 +674,7 @@ MemberDefType::onStartElement (
 	return true;
 }
 
-//.............................................................................
+//..............................................................................
 
 bool
 DescriptionType::create (
@@ -723,7 +723,7 @@ DescriptionType::onStartElement (
 	return true;
 }
 
-//.............................................................................
+//..............................................................................
 
 bool
 DocSectionBlockType::create (
@@ -792,7 +792,7 @@ DocSectionBlockType::onStartElement (
 	return true;
 }
 
-//.............................................................................
+//..............................................................................
 
 bool
 EnumValueType::create (
@@ -855,7 +855,7 @@ EnumValueType::onStartElement (
 	return true;
 }
 
-//.............................................................................
+//..............................................................................
 
 bool
 TemplateParamListType::create (
@@ -887,7 +887,7 @@ TemplateParamListType::onStartElement (
 	return true;
 }
 
-//.............................................................................
+//..............................................................................
 
 bool
 ParamType::create (
@@ -916,7 +916,7 @@ ParamType::onStartElement (
 	case ElemKind_Type:
 		m_parser->pushType <LinkedTextType> (&m_param->m_type, name, attributes);
 		break;
-	
+
 	case ElemKind_DeclName:
 		m_parser->pushType <StringType> (&m_param->m_declarationName, name, attributes);
 		break;
@@ -945,7 +945,7 @@ ParamType::onStartElement (
 	return true;
 }
 
-//.............................................................................
+//..............................................................................
 
 bool
 LinkedTextType::create (
@@ -959,7 +959,7 @@ LinkedTextType::create (
 	m_linkedText = linkedText;
 	m_refText = AXL_MEM_NEW (RefText);
 	m_linkedText->m_refTextList.insertTail (m_refText);
-	
+
 	return true;
 }
 
@@ -974,7 +974,7 @@ LinkedTextType::onStartElement (
 	{
 	case ElemKind_Ref:
 		m_parser->pushType <RefTextType> (m_linkedText, name, attributes);
-		
+
 		m_refText = AXL_MEM_NEW (RefText);
 		m_linkedText->m_refTextList.insertTail (m_refText);
 		break;
@@ -983,7 +983,7 @@ LinkedTextType::onStartElement (
 	return true;
 }
 
-//.............................................................................
+//..............................................................................
 
 bool
 RefTextType::create (
@@ -1025,4 +1025,4 @@ RefTextType::create (
 	return true;
 }
 
-//.............................................................................
+//..............................................................................

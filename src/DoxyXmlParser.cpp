@@ -2,7 +2,7 @@
 #include "DoxyXmlParser.h"
 #include "DoxyXmlType.h"
 
-//.............................................................................
+//..............................................................................
 
 DoxyXmlParser::DoxyXmlParser ()
 {
@@ -17,7 +17,7 @@ DoxyXmlParser::DoxyXmlParser ()
 bool
 DoxyXmlParser::parseFile (
 	Module* module,
-	DoxyXmlFileKind fileKind, 
+	DoxyXmlFileKind fileKind,
 	const sl::StringRef& fileName,
 	size_t blockSize
 	)
@@ -25,7 +25,7 @@ DoxyXmlParser::parseFile (
 	m_module = module;
 	m_fileKind = fileKind;
 	m_filePath = io::getFullFilePath (fileName);
-	m_baseDir = io::getDir (m_filePath);	
+	m_baseDir = io::getDir (m_filePath);
 
 	return xml::ExpatParser <DoxyXmlParser>::parseFile (fileName);
 }
@@ -54,7 +54,7 @@ DoxyXmlParser::popType ()
 	m_typeStack.pop ();
 }
 
-void 
+void
 DoxyXmlParser::onStartElement (
 	const char* name,
 	const char** attributes
@@ -68,7 +68,7 @@ DoxyXmlParser::onStartElement (
 	if (!m_typeStack.isEmpty ())
 	{
 		TypeStackEntry* entry = &m_typeStack.getBack ();
-		
+
 		if (entry->m_depth != 0)
 		{
 			entry->m_depth++;
@@ -96,7 +96,7 @@ DoxyXmlParser::onStartElement (
 	}
 }
 
-void 
+void
 DoxyXmlParser::onEndElement (const char* name)
 {
 #if _PRINT_XML
@@ -108,7 +108,7 @@ DoxyXmlParser::onEndElement (const char* name)
 	if (!m_typeStack.isEmpty ())
 	{
 		TypeStackEntry* entry = &m_typeStack.getBack ();
-		
+
 		if (entry->m_depth != 0)
 		{
 			entry->m_depth--;
@@ -121,12 +121,12 @@ DoxyXmlParser::onEndElement (const char* name)
 	}
 }
 
-void 
+void
 DoxyXmlParser::onCharacterData (
 	const char* string,
 	size_t length
 	)
-{		
+{
 #if _PRINT_XML
 	printIndent ();
 	printf ("%s\n", sl::String (string, length).sz ());
@@ -135,14 +135,14 @@ DoxyXmlParser::onCharacterData (
 	if (!m_typeStack.isEmpty ())
 	{
 		TypeStackEntry* entry = &m_typeStack.getBack ();
-		
+
 		if (entry->m_depth == 0)
 			entry->m_type->onCharacterData (string, length);
 	}
 }
 
 #if _PRINT_XML
-void 
+void
 DoxyXmlParser::printIndent ()
 {
 	for (size_t i = 0; i < m_indent; i++)
@@ -162,7 +162,7 @@ DoxyXmlParser::printElement (
 	{
 		printf ("\n");
 		m_indent++;
-			
+
 		while (*attributes)
 		{
 			printIndent ();
@@ -178,4 +178,4 @@ DoxyXmlParser::printElement (
 }
 #endif
 
-//.............................................................................
+//..............................................................................

@@ -8,7 +8,7 @@
 #define _PRINT_USAGE_IF_NO_ARGUMENTS 1
 #define _PRINT_MODULE 0
 
-//.............................................................................
+//..............................................................................
 
 void
 printVersion ()
@@ -33,7 +33,7 @@ printUsage ()
 }
 
 #if _PRINT_MODULE
-inline 
+inline
 void
 printIndent (size_t indent)
 {
@@ -68,7 +68,7 @@ printDocBlock (
 
 		printf ("%s\n", ((DocParagraphBlock*) block)->m_contents.m_plainText.sz ());
 		break;
-		
+
 	case DocBlockKind_Section:
 		if (!block->m_title.isEmpty ())
 			printf ("\\sect%d %s\n", level, block->m_title.sz ());
@@ -110,7 +110,7 @@ printDescription (
 		printDocBlock (*it, indent, 1);
 }
 
-void 
+void
 printEnumValue (EnumValue* enumValue)
 {
 	printf (
@@ -135,7 +135,7 @@ printEnumValue (EnumValue* enumValue)
 	}
 }
 
-void 
+void
 printEnumValueList (const sl::ConstList <EnumValue>& list)
 {
 	sl::Iterator <EnumValue> it = list.getHead ();
@@ -170,7 +170,7 @@ printParam (Param* param)
 	}
 }
 
-void 
+void
 printParamList (const sl::ConstList <Param>& list)
 {
 	sl::Iterator <Param> it = list.getHead ();
@@ -178,7 +178,7 @@ printParamList (const sl::ConstList <Param>& list)
 		printParam (*it);
 }
 
-void 
+void
 printMember(Member* member)
 {
 	printf (
@@ -234,14 +234,14 @@ printMember(Member* member)
 
 		printf ("  }\n");
 	}
-	
+
 	if (!member->m_templateParamList.isEmpty ())
 	{
 		printf ("  templateParamList <\n");
 		printParamList (member->m_templateParamList);
 		printf ("  >\n");
 	}
-	
+
 	if (!member->m_paramList.isEmpty ())
 	{
 		printf ("  paramList (\n");
@@ -250,7 +250,7 @@ printMember(Member* member)
 	}
 }
 
-void 
+void
 printMemberList (const sl::ConstList <Member>& list)
 {
 	sl::Iterator <Member> it = list.getHead ();
@@ -258,7 +258,7 @@ printMemberList (const sl::ConstList <Member>& list)
 		printMember (*it);
 }
 
-void 
+void
 printMemberArray (const sl::Array <Member*>& array)
 {
 	size_t count = array.getCount ();
@@ -266,7 +266,7 @@ printMemberArray (const sl::Array <Member*>& array)
 		printMember (array [i]);
 }
 
-void 
+void
 printCompound (Compound* compound)
 {
 	printf (
@@ -409,7 +409,7 @@ run (CmdLine* cmdLine)
 
 	printf ("parsing...\n");
 
-	result = 
+	result =
 		parser.parseFile (&module, cmdLine->m_inputFileName) &&
 		globalNamespace.build (&module, cmdLine->m_protectionFilter);
 
@@ -422,9 +422,9 @@ run (CmdLine* cmdLine)
 	printf ("generating...\n");
 
 	result = generator.generate (
-		&module, 
-		&globalNamespace, 
-		cmdLine->m_outputFileName, 
+		&module,
+		&globalNamespace,
+		cmdLine->m_outputFileName,
 		cmdLine->m_frameFileName
 		);
 
@@ -435,7 +435,7 @@ run (CmdLine* cmdLine)
 	}
 
 #if _PRINT_MODULE
-	printf ("namespace :: {\n");	
+	printf ("namespace :: {\n");
 	printNamespaceContents (&globalNamespace);
 	printf ("} // namespace :: {\n");
 #endif
@@ -443,7 +443,7 @@ run (CmdLine* cmdLine)
 	return 0;
 }
 
-//.............................................................................
+//..............................................................................
 
 #if (_AXL_OS_WIN)
 int
@@ -488,10 +488,10 @@ main (
 		printUsage ();
 	else if (cmdLine.m_flags & CmdLineFlag_Version)
 		printVersion ();
-	else 
+	else
 		result = run (&cmdLine);
 
 	return result;
 }
 
-//.............................................................................
+//..............................................................................

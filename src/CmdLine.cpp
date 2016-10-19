@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "CmdLine.h"
 
-//.............................................................................
+//..............................................................................
 
 CmdLine::CmdLine ()
 {
@@ -9,7 +9,7 @@ CmdLine::CmdLine ()
 	m_protectionFilter = ProtectionKind_Public;
 }
 
-//.............................................................................
+//..............................................................................
 
 bool
 CmdLineParser::onSwitch (
@@ -78,7 +78,7 @@ CmdLineParser::finalize ()
 		if (!m_cmdLine->m_flags)
 			m_cmdLine->m_flags = CmdLineFlag_Help;
 	}
-	else 
+	else
 	{
 		if (m_cmdLine->m_outputFileName.isEmpty ())
 			m_cmdLine->m_outputFileName = io::getFileName (m_cmdLine->m_inputFileName) + ".rst";
@@ -93,4 +93,4 @@ CmdLineParser::finalize ()
 	return true;
 }
 
-//.............................................................................
+//..............................................................................

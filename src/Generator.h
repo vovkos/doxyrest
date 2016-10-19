@@ -8,7 +8,7 @@ struct CmdLine;
 struct Module;
 class GlobalNamespace;
 
-//.............................................................................
+//..............................................................................
 
 class Generator
 {
@@ -31,7 +31,7 @@ public:
 		Module* module,
 		GlobalNamespace* globalNamespace
 		);
-	
+
 	bool
 	generate (
 		const sl::StringRef& targetFileName,
@@ -52,11 +52,11 @@ public:
 
 protected:
 	static
-	int 
+	int
 	includeFile_lua (lua_State* h);
 
 	static
-	int 
+	int
 	generateFile_lua (lua_State* h);
 
 	bool
@@ -67,4 +67,4 @@ protected:
 		);
 };
 
-//.............................................................................
+//..............................................................................

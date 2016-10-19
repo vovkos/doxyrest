@@ -5,7 +5,7 @@
 
 #define _PRINT_XML 0
 
-//.............................................................................
+//..............................................................................
 
 enum DoxyXmlFileKind
 {
@@ -13,7 +13,7 @@ enum DoxyXmlFileKind
 	DoxyXmlFileKind_Compound,
 };
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 class DoxyXmlParser: public xml::ExpatParser <DoxyXmlParser>
 {
@@ -57,7 +57,7 @@ public:
 		clear ();
 	}
 
-	Module* 
+	Module*
 	getModule ()
 	{
 		return m_module;
@@ -78,7 +78,7 @@ public:
 	bool
 	parseFile (
 		Module* module,
-		DoxyXmlFileKind fileKind, 
+		DoxyXmlFileKind fileKind,
 		const sl::StringRef& fileName,
 		size_t blockSize = -1
 		);
@@ -106,7 +106,7 @@ public:
 		T* type = AXL_MEM_NEW (T);
 		TypeStackEntry entry = { type, 0 };
 		m_typeStack.append (entry);
-		return type->create (this, name, attributes);		
+		return type->create (this, name, attributes);
 	}
 
 	template <
@@ -114,7 +114,7 @@ public:
 		typename Context
 		>
 	bool
-	pushType (		
+	pushType (
 		Context* context,
 		const char* name,
 		const char** attributes
@@ -127,16 +127,16 @@ public:
 	}
 
 protected:
-	void 
+	void
 	onStartElement (
 		const char* name,
 		const char** attributes
 		);
 
-	void 
+	void
 	onEndElement (const char* name);
 
-	void 
+	void
 	onCharacterData (
 		const char* string,
 		size_t length
@@ -147,7 +147,7 @@ protected:
 
 private:
 #if _PRINT_XML
-	void 
+	void
 	printIndent ();
 
 	void
@@ -158,5 +158,5 @@ private:
 #endif
 };
 
-//.............................................................................
+//..............................................................................
 

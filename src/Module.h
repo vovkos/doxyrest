@@ -5,7 +5,7 @@
 struct Namespace;
 struct Compound;
 
-//.............................................................................
+//..............................................................................
 
 struct RefText: sl::ListLink
 {
@@ -24,7 +24,7 @@ struct RefText: sl::ListLink
 	luaExport (lua::LuaState* luaState);
 };
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 struct LinkedText
 {
@@ -38,22 +38,22 @@ struct LinkedText
 	normalize ();
 };
 
-//.............................................................................
+//..............................................................................
 
 enum DocBlockKind
 {
 	DocBlockKind_Undefined,
-	DocBlockKind_Paragraph,	
+	DocBlockKind_Paragraph,
 	DocBlockKind_Section,
 	DocBlockKind_Internal,
 };
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 const char*
 getDocBlockKindString (DocBlockKind flag);
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 struct DocBlock: sl::ListLink
 {
@@ -69,7 +69,7 @@ struct DocBlock: sl::ListLink
 	{
 	}
 
-	virtual 
+	virtual
 	void
 	luaExport (lua::LuaState* luaState) = 0;
 
@@ -77,13 +77,13 @@ struct DocBlock: sl::ListLink
 	luaExportMembers (lua::LuaState* luaState);
 };
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 struct DocParagraphBlock: DocBlock
 {
 	LinkedText m_contents;
 
-	virtual 
+	virtual
 	void
 	luaExport (lua::LuaState* luaState);
 };
@@ -93,16 +93,16 @@ struct DocSectionBlock: DocBlock
 	sl::String m_id;
 	sl::StdList <DocBlock> m_childBlockList;
 
-	virtual 
+	virtual
 	void
 	luaExport (lua::LuaState* luaState);
 };
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 struct Description
 {
-	sl::String m_title;	
+	sl::String m_title;
 	sl::StdList <DocBlock> m_docBlockList;
 
 	bool isEmpty ()
@@ -114,7 +114,7 @@ struct Description
 	luaExport (lua::LuaState* luaState);
 };
 
-//.............................................................................
+//..............................................................................
 
 struct Param: sl::ListLink
 {
@@ -131,7 +131,7 @@ struct Param: sl::ListLink
 	luaExport (lua::LuaState* luaState);
 };
 
-//.............................................................................
+//..............................................................................
 
 struct EnumValue: sl::ListLink
 {
@@ -154,7 +154,7 @@ struct EnumValue: sl::ListLink
 };
 
 
-//.............................................................................
+//..............................................................................
 
 enum MemberFlag
 {
@@ -190,7 +190,7 @@ enum MemberFlag
 	MemberFlag_MaybeAmbiguos = 0x20000000,
 };
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 const char*
 getMemberFlagString (MemberFlag flag);
@@ -198,7 +198,7 @@ getMemberFlagString (MemberFlag flag);
 sl::String
 getMemberFlagString (uint_t flags);
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 struct Member: sl::ListLink
 {
@@ -235,7 +235,7 @@ struct Member: sl::ListLink
 	luaExport (lua::LuaState* luaState);
 };
 
-//.............................................................................
+//..............................................................................
 
 struct Ref: sl::ListLink
 {
@@ -252,7 +252,7 @@ struct Ref: sl::ListLink
 	}
 };
 
-//.............................................................................
+//..............................................................................
 
 struct Compound: sl::ListLink
 {
@@ -263,7 +263,7 @@ struct Compound: sl::ListLink
 	CompoundKind m_compoundKind;
 	LanguageKind m_languageKind;
 	ProtectionKind m_protectionKind;
-		
+
 	sl::String m_id;
 	sl::String m_name;
 	sl::String m_title;
@@ -288,7 +288,7 @@ struct Compound: sl::ListLink
 
 	void
 	luaExport (lua::LuaState* luaState);
-	
+
 	void
 	unqualifyName ();
 
@@ -302,7 +302,7 @@ struct Compound: sl::ListLink
 	preparePath ();
 };
 
-//.............................................................................
+//..............................................................................
 
 struct Module
 {
@@ -314,14 +314,14 @@ struct Module
 	sl::StringHashTableMap <Member*> m_memberMap;
 	sl::StringHashTableMap <size_t> m_groupMap;
 
-	Compound* 
+	Compound*
 	findCompound (const sl::StringRef& id)
 	{
 		sl::StringHashTableMapIterator <Compound*> mapIt = m_compoundMap.find (id);
 		return mapIt ? mapIt->m_value : NULL;
 	}
-	
-	Member* 
+
+	Member*
 	findMember (const sl::StringRef& id)
 	{
 		sl::StringHashTableMapIterator <Member*> mapIt = m_memberMap.find (id);
@@ -329,7 +329,7 @@ struct Module
 	}
 };
 
-//.............................................................................
+//..............................................................................
 
 struct NamespaceContents
 {
@@ -359,11 +359,11 @@ struct NamespaceContents
 	luaExportMembers (lua::LuaState* luaState);
 };
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-struct Namespace: 
+struct Namespace:
 	sl::ListLink,
-	NamespaceContents 
+	NamespaceContents
 {
 	Compound* m_compound;
 
@@ -380,7 +380,7 @@ struct Namespace:
 	}
 };
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 class GlobalNamespace: public NamespaceContents
 {
@@ -401,7 +401,7 @@ public:
 	luaExport (lua::LuaState* luaState);
 
 protected:
-	Namespace* 
+	Namespace*
 	getSubGroupNamespace (
 		Module* module,
 		NamespaceContents* parent,
@@ -410,7 +410,7 @@ protected:
 		);
 };
 
-//.............................................................................
+//..............................................................................
 
 template <typename T>
 void
@@ -489,5 +489,5 @@ luaExportList (
 	}
 }
 
-//.............................................................................
+//..............................................................................
 

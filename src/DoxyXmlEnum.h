@@ -1,6 +1,6 @@
 #pragma once
 
-//.............................................................................
+//..............................................................................
 
 enum BoolKind
 {
@@ -17,7 +17,7 @@ AXL_SL_END_HASH_TABLE_MAP ()
 const char*
 getBoolKindString (BoolKind boolKind);
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 enum LanguageKind
 {
@@ -62,7 +62,7 @@ AXL_SL_END_HASH_TABLE_MAP ()
 const char*
 getLanguageKindString (LanguageKind languageKind);
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 enum MemberKind
 {
@@ -109,7 +109,7 @@ AXL_SL_END_HASH_TABLE_MAP ()
 const char*
 getMemberKindString (MemberKind memberKind);
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 enum ProtectionKind
 {
@@ -130,7 +130,7 @@ AXL_SL_END_HASH_TABLE_MAP ()
 const char*
 getProtectionKindString (ProtectionKind protectionKind);
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 enum VirtualKind
 {
@@ -149,7 +149,7 @@ AXL_SL_END_HASH_TABLE_MAP ()
 const char*
 getVirtualKindString (VirtualKind virtualKind);
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 enum RefKind
 {
@@ -166,7 +166,7 @@ AXL_SL_END_HASH_TABLE_MAP ()
 const char*
 getRefKindString (RefKind refKind);
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 enum GraphRelationKind
 {
@@ -193,7 +193,7 @@ AXL_SL_END_HASH_TABLE_MAP ()
 const char*
 getGraphRelationKindString (GraphRelationKind graphRelationKind);
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 enum CompoundKind
 {
@@ -211,7 +211,7 @@ enum CompoundKind
 	CompoundKind_Group, // this is actual group -- intersection of a doxy group and a namespace
 	CompoundKind_Page,
 	CompoundKind_Example,
-	CompoundKind_Dir,	
+	CompoundKind_Dir,
 };
 
 AXL_SL_BEGIN_STRING_HASH_TABLE_MAP (CompoundKindMap, CompoundKind)
@@ -233,7 +233,7 @@ AXL_SL_END_HASH_TABLE_MAP ()
 const char*
 getCompoundKindString (CompoundKind compoundKind);
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 enum SectionKind
 {
@@ -318,7 +318,7 @@ AXL_SL_END_HASH_TABLE_MAP ()
 const char*
 getSectionKindString (SectionKind sectionKind);
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 enum ImageKind
 {
@@ -337,7 +337,7 @@ AXL_SL_END_HASH_TABLE_MAP ()
 const char*
 getImageKindString (ImageKind imageKind);
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 enum ParamListKind
 {
@@ -358,7 +358,7 @@ AXL_SL_END_HASH_TABLE_MAP ()
 const char*
 getParamListKindString (ParamListKind paramListKind);
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 enum ParamDirKind
 {
@@ -377,7 +377,7 @@ AXL_SL_END_HASH_TABLE_MAP ()
 const char*
 getParamDirKindString (ParamDirKind paramDirKind);
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 enum AccessorKind
 {
@@ -402,4 +402,4 @@ AXL_SL_END_HASH_TABLE_MAP ()
 const char*
 getAccessorKindString (AccessorKind accessorKind);
 
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .

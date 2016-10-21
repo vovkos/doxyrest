@@ -1,11 +1,11 @@
 #...............................................................................
 #
-#  This file is part of the Doxyrest toolkit.
+#  This file is part of the AXL library.
 #
-#  Doxyrest is distributed under the MIT license.
+#  AXL is distributed under the MIT license.
 #  For details see accompanying license.txt file,
 #  the public copy of which is also available at:
-#  http://tibbo.com/downloads/archive/doxyrest/license.txt
+#  http://tibbo.com/downloads/archive/axl/license.txt
 #
 #...............................................................................
 
@@ -20,11 +20,11 @@
 
 macro (
 axl_calc_max_string_length
-    _RESULT
+	_RESULT
 	# ...
 	)
 
-    set (_STRING_LIST ${ARGN})
+	set (_STRING_LIST ${ARGN})
 
 	set (_MAX_LENGTH 0)
 	foreach (_STRING ${_STRING_LIST})
@@ -39,23 +39,23 @@ endmacro ()
 
 macro (
 axl_create_space_padding
-    _RESULT
+	_RESULT
 	_STRING
 	_MAX_LENGTH
 	)
 
-    string (LENGTH ${_STRING} _LENGTH)
+	string (LENGTH ${_STRING} _LENGTH)
 	math (EXPR _PADDING_LENGTH "${_MAX_LENGTH} - ${_LENGTH} + 1")
 	string (RANDOM LENGTH ${_PADDING_LENGTH} ALPHABET " " ${_RESULT})
 endmacro ()
 
 macro (
 axl_create_empty_setting_file
-    _FILE_NAME
+	_FILE_NAME
 	# ...
 	)
 
-    set (_SETTING_LIST ${ARGN})
+	set (_SETTING_LIST ${ARGN})
 
 	axl_calc_max_string_length (_MAX_LENGTH ${_SETTING_LIST})
 
@@ -74,12 +74,12 @@ endmacro ()
 
 macro (
 axl_find_file
-    _RESULT
+	_RESULT
 	_FILE_NAME
 	# ...
 	)
 
-    set (_DIR_LIST ${ARGN})
+	set (_DIR_LIST ${ARGN})
 
 	set (_FILE_PATH ${_FILE_NAME}-NOTFOUND)
 
@@ -95,12 +95,12 @@ endmacro ()
 
 macro (
 axl_find_file_recurse_parent_dirs
-    _RESULT
+	_RESULT
 	_FILE_NAME
 	_START_DIR
 	)
 
-    set (_DIR ${_START_DIR})
+	set (_DIR ${_START_DIR})
 
 	while (TRUE)
 		if (EXISTS ${_DIR}/${_FILE_NAME})

@@ -1,8 +1,14 @@
-# This file is part of DoxyReST (R) Project
-# Tibbo Technology Inc (C) 2016-2016. All rights reserved
-# Author: Vladimir Gladkov
-
 #...............................................................................
+#
+#  This file is part of the Doxyrest toolkit.
+#
+#  Doxyrest is distributed under the MIT license.
+#  For details see accompanying license.txt file,
+#  the public copy of which is also available at:
+#  http://tibbo.com/downloads/archive/doxyrest/license.txt
+#
+#...............................................................................
+
 #
 # app folder
 #

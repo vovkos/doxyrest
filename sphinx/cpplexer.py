@@ -27,8 +27,9 @@ from pygments.lexer import RegexLexer, include, bygroups, using, \
 from pygments.util import get_bool_opt
 from pygments.token import Text, Comment, Operator, Keyword, Name, String, \
     Number, Punctuation, Error
+from sphinx.highlighting import lexers
 
-    
+
 class CFamilyLexer(RegexLexer):
     """
     For C family source code.  This is used as a base class to avoid repetitious
@@ -201,6 +202,9 @@ class CLexer(CFamilyLexer):
     mimetypes = ['text/x-chdr', 'text/x-csrc']
     priority = 0.1
 
+    def __init__(self, **options):
+        CFamilyLexer.__init__(self, **options)
+
     def analyse_text(text):
         if re.search('^\s*#include [<"]', text, re.MULTILINE):
             return 0.1
@@ -258,6 +262,9 @@ class CppLexer(CFamilyLexer):
         ],
     }
 
+    def __init__(self, **options):
+        CFamilyLexer.__init__(self, **options)
+
     def analyse_text(text):
         if re.search('#include <[a-z_]+>', text):
             return 0.2
@@ -269,9 +276,9 @@ def setup(app):
     options = {}
     options['stripnl'] = False
     options['ensurenl'] = False
-    
-   	clexer = CLexer(**options)
-   	cpplexer = CppLexer(**options)
+
+    clexer = CLexer(**options)
+    cpplexer = CppLexer(**options)
     lexers['c'] = clexer
     lexers['cpp'] = cpplexer
     lexers['cxx'] = cpplexer

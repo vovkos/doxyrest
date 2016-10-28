@@ -18,6 +18,7 @@ set (
 	EXPAT_LIB_DIR
 	AXL_CMAKE_DIR
 	7Z_EXE
+	RAGEL_EXE
 	)
 
 set (
@@ -29,6 +30,7 @@ set (
 		lua
 	OPTIONAL
 		7z
+		ragel
 	)
 
 #...............................................................................

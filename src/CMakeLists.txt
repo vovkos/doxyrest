@@ -161,7 +161,7 @@ target_link_libraries (
 	axl_io
 	axl_core
 	expat
-	lua
+	${LUA_LIB_NAME}
 	)
 
 if (UNIX)

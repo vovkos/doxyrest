@@ -11,7 +11,7 @@
 
 project (doxyrest)
 
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.3)
 
 include (cmake/axl_cmake.cmake NO_POLICY_SCOPE)
 

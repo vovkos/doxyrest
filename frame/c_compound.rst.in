@@ -43,7 +43,8 @@ local hasDetails =
 	#compound.m_variableArray > 0 or
 	#compound.m_eventArray > 0 or
 	#compound.m_functionArray > 0 or
-	#compound.m_aliasArray > 0
+	#compound.m_aliasArray > 0 or
+	#compound.m_defineArray > 0
 
 if hasDetails then
 }
@@ -417,6 +418,25 @@ Aliases
 	emit ("\n")
 end -- if
 
+if #compound.m_defineArray > 0 then
+}
+Macros
+------
+
+.. ref-code-block:: $g_language
+	:class: overview-code-block
+
+%{
+	for i = 1, #compound.m_defineArray do
+		local item = compound.m_defineArray [i]
+}
+	$(getDefineDeclString (item, true))
+%{
+	end -- for
+
+	emit ("\n")
+end -- if
+
 if hasDetails then
 }
 .. _details-doxid-$(compound.m_id):
@@ -595,6 +615,28 @@ Aliases
 	:class: title-code-block
 
 	alias $(getItemName (item)) $(getLinkedTextString (item.m_initializer, true))
+
+$(getItemDetailedDocumentation (item))
+
+%{
+	end -- for
+end -- if
+
+if #compound.m_defineArray > 0 then
+}
+Macros
+------
+
+%{
+	for i = 1, #compound.m_defineArray do
+		local item = compound.m_defineArray [i]
+}
+.. _doxid-$(item.m_id):
+.. _cid-$(getItemCid (item)):
+.. ref-code-block:: $g_language
+	:class: title-code-block
+
+	$(getDefineDeclString (item, false))
 
 $(getItemDetailedDocumentation (item))
 

@@ -342,6 +342,11 @@ Member::luaExport (lua::LuaState* luaState)
 		m_initializer.luaExport (luaState);
 		luaState->setMember ("m_initializer");
 		break;
+
+	case MemberKind_Define:
+		luaExportList (luaState, m_paramList);
+		luaState->setMember ("m_paramArray");
+		break;
 	}
 
 	m_briefDescription.luaExport (luaState);
@@ -617,11 +622,14 @@ NamespaceContents::add (Member* member)
 		m_aliasArray.append (member);
 		break;
 
+	case MemberKind_Define:
+		m_defineArray.append (member);
+		break;
+
 	case MemberKind_Footnote:
 		m_footnoteArray.append (member);
 		break;
 
-	case MemberKind_Define:
 	case MemberKind_Signal:
 	case MemberKind_Prototype:
 	case MemberKind_Friend:
@@ -676,6 +684,9 @@ NamespaceContents::luaExportMembers (lua::LuaState* luaState)
 
 	luaExportArraySetParent (luaState, m_aliasArray, "m_parent");
 	luaState->setMember ("m_aliasArray");
+
+	luaExportArraySetParent (luaState, m_defineArray, "m_parent");
+	luaState->setMember ("m_defineArray");
 
 	luaExportArraySetParent (luaState, m_footnoteArray, "m_parent");
 	luaState->setMember ("m_footnoteArray");

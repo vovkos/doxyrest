@@ -356,6 +356,7 @@ struct NamespaceContents
 	sl::Array <Member*> m_propertyArray;
 	sl::Array <Member*> m_eventArray;
 	sl::Array <Member*> m_aliasArray;
+	sl::Array <Member*> m_defineArray;
 	sl::Array <Member*> m_footnoteArray;
 
 	sl::StringHashTableMap <Namespace*> m_groupMap;

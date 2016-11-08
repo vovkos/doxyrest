@@ -49,17 +49,24 @@ end
 
 function getParamString (param, isRef)
 	local s = ""
+	local name
 
 	if not param.m_type.m_isEmpty then
 		s = s .. getLinkedTextString (param.m_type, isRef)
 	end
 
 	if param.m_declarationName ~= "" then
+		name = param.m_declarationName
+	else
+		name = param.m_definitionName
+	end
+
+	if name ~= "" then
 		if s ~= "" then
 			s = s .. " "
 		end
 
-		s = s .. getNormalizedCppString (param.m_declarationName)
+		s = s .. getNormalizedCppString (name)
 	end
 
 	if param.m_array ~= "" then
@@ -73,16 +80,35 @@ function getParamString (param, isRef)
 	return s
 end
 
-function getFunctionParamArrayString (paramArray, isRef, indent)
+function getParamArrayString_sl (paramArray, isRef, lbrace, rbrace)
 	local s
 	local count = #paramArray
 
 	if count == 0 then
-		s = "()"
-	elseif count == 1  then
-		s = "(" .. getParamString (paramArray [1], isRef) .. ")"
+		s = lbrace .. rbrace
 	else
-		s = "(\n" .. indent .. "    "
+		s = lbrace .. getParamString (paramArray [1], isRef)
+
+		for i = 2, count do
+			s = s .. ", " .. getParamString (paramArray [i], isRef)
+		end
+
+		s = s .. rbrace
+	end
+
+	return s
+end
+
+function getParamArrayString_ml (paramArray, isRef, lbrace, rbrace, indent)
+	local s
+	local count = #paramArray
+
+	if count == 0 then
+		s = lbrace .. rbrace
+	elseif count == 1  then
+		s = lbrace .. getParamString (paramArray [1], isRef) .. rbrace
+	else
+		s = lbrace .. "\n" .. indent .. "    "
 
 		for i = 1, count do
 			s = s .. getParamString (paramArray [i], isRef)
@@ -93,29 +119,22 @@ function getFunctionParamArrayString (paramArray, isRef, indent)
 
 			s = s .. "\n" .. indent .. "    "
 		end
-		s = s .. ")"
+		s = s .. rbrace
 	end
 
 	return s
 end
 
+function getFunctionParamArrayString (paramArray, isRef, indent)
+	return getParamArrayString_ml (paramArray, isRef, "(", ")", indent)
+end
+
 function getTemplateParamArrayString (paramArray, isRef)
-	local s
-	local count = #paramArray
+	return getParamArrayString_sl (paramArray, isRef, "<", ">")
+end
 
-	if count == 0 then
-		s = "<>"
-	else
-		s = "<" .. getParamString (paramArray [1], isRef)
-
-		for i = 2, count do
-			s = s .. ", " .. getParamString (paramArray [i], isRef)
-		end
-
-		s = s .. ">"
-	end
-
-	return s
+function getDefineParamArrayString (paramArray, isRef)
+	return getParamArrayString_sl (paramArray, isRef, "(", ")")
 end
 
 function getItemName (item)
@@ -325,11 +344,7 @@ function getFunctionDeclStringImpl (item, returnType, isRef, indent)
 		s = s .. getItemName (item) ..  " "
 	end
 
-	s = s .. getFunctionParamArrayString (
-		item.m_paramArray,
-		true,
-		indent
-		)
+	s = s .. getFunctionParamArrayString (item.m_paramArray, true, indent)
 
 	return s
 end
@@ -350,6 +365,24 @@ function getEventDeclString (event, isRef, indent)
 		isRef,
 		indent
 		)
+end
+
+function getDefineDeclString (define, isRef)
+	local s = "#define "
+
+	if isRef then
+		s = s .. ":ref:`" .. define.m_name  .. "<doxid-" .. define.m_id .. ">`"
+	else
+		s = s .. define.m_name
+	end
+
+	if #define.m_paramArray > 0 then
+		-- no space between name and params!
+
+		s = s .. getDefineParamArrayString (define.m_paramArray, true)
+	end
+
+	return s
 end
 
 function getTypedefDeclString (typedef, isRef, indent)

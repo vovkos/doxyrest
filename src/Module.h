@@ -57,6 +57,8 @@ enum DocBlockKind
 	DocBlockKind_Paragraph,
 	DocBlockKind_Section,
 	DocBlockKind_Internal,
+	DocBlockKind_SimpleSection,
+	DocBlockKind_Ref,
 };
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -70,6 +72,8 @@ struct DocBlock: sl::ListLink
 {
 	DocBlockKind m_blockKind;
 	sl::String m_title;
+	sl::String m_plainText;
+	sl::StdList <DocBlock> m_childBlockList;
 
 	DocBlock ()
 	{
@@ -82,34 +86,78 @@ struct DocBlock: sl::ListLink
 
 	virtual
 	void
-	luaExport (lua::LuaState* luaState) = 0;
+	luaExport (lua::LuaState* luaState);
 
 	void
 	luaExportMembers (lua::LuaState* luaState);
 };
 
-// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+//.............................................................................
 
-struct DocParagraphBlock: DocBlock
+struct DocRefBlock: DocBlock
 {
-	LinkedText m_contents;
+	RefKind m_refKind;
+	sl::String m_id;
+	sl::String m_external;
+
+	DocRefBlock ()
+	{
+		m_blockKind = DocBlockKind_Ref;
+		m_refKind = RefKind_Undefined;
+	}
 
 	virtual
 	void
 	luaExport (lua::LuaState* luaState);
 };
+
+//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+struct DocParagraphBlock: DocBlock
+{
+	DocParagraphBlock ()
+	{
+		m_blockKind = DocBlockKind_Paragraph;
+	}
+
+	virtual
+	void
+	luaExport (lua::LuaState* luaState);
+
+	void
+	normalize ();
+};
+
+//.............................................................................
 
 struct DocSectionBlock: DocBlock
 {
 	sl::String m_id;
-	sl::StdList <DocBlock> m_childBlockList;
+
+	DocSectionBlock ()
+	{
+		m_blockKind = DocBlockKind_Section;
+	}
 
 	virtual
 	void
 	luaExport (lua::LuaState* luaState);
 };
 
-// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+//.............................................................................
+
+struct DocSimpleSectionBlock: DocBlock
+{
+	DocSimpleSectionKind m_simpleSectionKind;
+
+	DocSimpleSectionBlock ();
+
+	virtual
+	void
+	luaExport (lua::LuaState* luaState);
+};
+
+//.............................................................................
 
 struct Description
 {

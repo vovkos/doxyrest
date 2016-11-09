@@ -1044,6 +1044,156 @@ public:
 
 //..............................................................................
 
+class DocParaType: public DoxyXmlType
+{
+protected:
+	enum ElemKind
+	{
+		ElemKind_Undefined,
+		ElemKind_Ref,
+		ElemKind_SimpleSect,
+
+		// ...add as needed
+	};
+
+	AXL_SL_BEGIN_STRING_HASH_TABLE_MAP (ElemKindMap, ElemKind)
+		AXL_SL_HASH_TABLE_MAP_ENTRY ("ref", ElemKind_Ref)
+		AXL_SL_HASH_TABLE_MAP_ENTRY ("simplesect", ElemKind_SimpleSect)
+	AXL_SL_END_HASH_TABLE_MAP ()
+
+protected:
+	DocParagraphBlock* m_paragraphBlock;
+	DocBlock* m_childBlock;
+
+public:
+	DocParaType ()
+	{
+		m_paragraphBlock = NULL;
+		m_childBlock = NULL;
+	}
+
+	bool
+	create (
+		DoxyXmlParser* parser,
+		DocParagraphBlock* paragraphBlock,
+		const char* name,
+		const char** attributes
+		);
+
+	virtual
+	bool
+	onStartElement (
+		const char* name,
+		const char** attributes
+		);
+
+	virtual
+	bool
+	onCharacterData (
+		const char* string,
+		size_t length
+		)
+	{
+		m_childBlock->m_plainText.append (string, length);
+		return true;
+	}
+};
+
+//..............................................................................
+
+class DocRefTextType: public DoxyXmlType
+{
+protected:
+	enum AttrKind
+	{
+		AttrKind_Undefined,
+		AttrKind_RefId,
+		AttrKind_KindRef,
+		AttrKind_External,
+	};
+
+	AXL_SL_BEGIN_STRING_HASH_TABLE_MAP (AttrKindMap, AttrKind)
+		AXL_SL_HASH_TABLE_MAP_ENTRY ("refid",    AttrKind_RefId)
+		AXL_SL_HASH_TABLE_MAP_ENTRY ("kindref",  AttrKind_KindRef)
+		AXL_SL_HASH_TABLE_MAP_ENTRY ("external", AttrKind_External)
+	AXL_SL_END_HASH_TABLE_MAP ()
+
+protected:
+	DocRefBlock* m_refBlock;
+
+public:
+	DocRefTextType ()
+	{
+		m_refBlock = NULL;
+	}
+
+	bool
+	create (
+		DoxyXmlParser* parser,
+		DocParagraphBlock* paragraphBlock,
+		const char* name,
+		const char** attributes
+		);
+
+	virtual
+	bool
+	onCharacterData (
+		const char* string,
+		size_t length
+		)
+	{
+		m_refBlock->m_plainText.append (string, length);
+		return true;
+	}
+};
+
+//..............................................................................
+
+class DocSimpleSectionType: public DoxyXmlType
+{
+protected:
+	enum ElemKind
+	{
+		ElemKind_Undefined,
+		ElemKind_Para,
+	};
+
+	enum AttrKind
+	{
+		AttrKind_Undefined,
+		AttrKind_Kind,
+	};
+
+	AXL_SL_BEGIN_STRING_HASH_TABLE_MAP (ElemKindMap, ElemKind)
+		AXL_SL_HASH_TABLE_MAP_ENTRY ("para", ElemKind_Para)
+	AXL_SL_END_HASH_TABLE_MAP ()
+
+	AXL_SL_BEGIN_STRING_HASH_TABLE_MAP (AttrKindMap, AttrKind)
+		AXL_SL_HASH_TABLE_MAP_ENTRY ("kind", AttrKind_Kind)
+	AXL_SL_END_HASH_TABLE_MAP ()
+
+protected:
+	DocSimpleSectionBlock* m_sectionBlock;
+
+public:
+	bool
+	create (
+		DoxyXmlParser* parser,
+		sl::StdList <DocBlock>* list,
+		const char* name,
+		const char** attributes
+		);
+
+	virtual
+	bool
+	onStartElement (
+		const char* name,
+		const char** attributes
+		);
+};
+
+//..............................................................................
+
 // GraphType
 
 enum GraphElem

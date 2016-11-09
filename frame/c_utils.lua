@@ -464,7 +464,7 @@ function isMemberOfUnnamedType (item)
 		return nil
 	end
 
-	local s = block.m_childBlockList [1].m_contents.m_plainText
+	local s = block.m_childBlockList [1].m_plainText
 	return string.match (s, ":unnamed:([%w/:]+)")
 end
 
@@ -479,7 +479,7 @@ function getDocBlockListContents (blockList)
 		local block = blockList [i]
 
 		if block.m_blockKind == "paragraph" then
-			s = s .. block.m_contents.m_plainText
+			s = s .. block.m_plainText
 		elseif block.m_blockKind ~= "internal" then
 			s = s .. getDocBlockListContents (block.m_childBlockList)
 		end
@@ -501,7 +501,7 @@ function getItemBriefDocumentation (item, detailsRefPrefix)
 		return ""
 	else
 		local block = item.m_detailedDescription.m_docBlockList [1]
-		s = block.m_contents.m_plainText
+		s = block.m_plainText
 
 		local i = string.find (s, ".%s", 1, true)
 		if i then

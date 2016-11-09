@@ -77,7 +77,7 @@ printDocBlock (
 			printIndent (indent);
 		}
 
-		printf ("%s\n", ((DocParagraphBlock*) block)->m_contents.m_plainText.sz ());
+		printf ("%s\n", ((DocParagraphBlock*) block)->m_plainText.sz ());
 		break;
 
 	case DocBlockKind_Section:

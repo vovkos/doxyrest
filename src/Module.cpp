@@ -346,6 +346,9 @@ Member::luaExport (lua::LuaState* luaState)
 	case MemberKind_Define:
 		luaExportList (luaState, m_paramList);
 		luaState->setMember ("m_paramArray");
+
+		m_initializer.luaExport (luaState);
+		luaState->setMember ("m_initializer");
 		break;
 	}
 

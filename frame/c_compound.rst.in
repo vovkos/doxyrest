@@ -33,6 +33,27 @@ for i = 1, #compound.m_enumArray do
 	end
 end
 
+local hasDefines = false
+
+for i = 1, #compound.m_defineArray do
+	local item = compound.m_defineArray [i]
+	local isShown = true
+
+	if not g_includeEmptyDefines and item.m_initializer.m_isEmpty then
+		isShown = false
+	elseif g_excludeDefinePattern then
+		local m = string.match (item.m_name, g_excludeDefinePattern)
+		if m then
+			isShown = false
+		end
+	end
+
+	if isShown then
+		hasDefines = true
+		break
+	end
+end
+
 local hasDetails =
 	not compound.m_detailedDescription.m_isEmpty or
 	hasUnnamedEnums or
@@ -44,7 +65,7 @@ local hasDetails =
 	#compound.m_eventArray > 0 or
 	#compound.m_functionArray > 0 or
 	#compound.m_aliasArray > 0 or
-	#compound.m_defineArray > 0
+	hasDefines
 
 if hasDetails then
 }
@@ -418,7 +439,7 @@ Aliases
 	emit ("\n")
 end -- if
 
-if #compound.m_defineArray > 0 then
+if hasDefines then
 }
 Macros
 ------
@@ -429,9 +450,22 @@ Macros
 %{
 	for i = 1, #compound.m_defineArray do
 		local item = compound.m_defineArray [i]
+		local isShown = true
+
+		if not g_includeEmptyDefines and item.m_initializer.m_isEmpty then
+			isShown = false
+		elseif g_excludeDefinePattern then
+			local m = string.match (item.m_name, g_excludeDefinePattern)
+			if m then
+				isShown = false
+			end
+		end
+
+		if isShown then
 }
 	$(getDefineDeclString (item, true))
 %{
+		end -- if
 	end -- for
 
 	emit ("\n")
@@ -622,7 +656,7 @@ $(getItemDetailedDocumentation (item))
 	end -- for
 end -- if
 
-if #compound.m_defineArray > 0 then
+if hasDefines then
 }
 Macros
 ------
@@ -630,6 +664,18 @@ Macros
 %{
 	for i = 1, #compound.m_defineArray do
 		local item = compound.m_defineArray [i]
+		local isShown = true
+
+		if not g_includeEmptyDefines and item.m_initializer.m_isEmpty then
+			isShown = false
+		elseif g_excludeDefinePattern then
+			local m = string.match (item.m_name, g_excludeDefinePattern)
+			if m then
+				isShown = false
+			end
+		end
+
+		if isShown then
 }
 .. _doxid-$(item.m_id):
 .. _cid-$(getItemCid (item)):
@@ -641,6 +687,7 @@ Macros
 $(getItemDetailedDocumentation (item))
 
 %{
+		end -- if
 	end -- for
 end -- if
 

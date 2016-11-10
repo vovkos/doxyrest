@@ -464,12 +464,23 @@ function isMemberOfUnnamedType (item)
 		return nil
 	end
 
-	local s = block.m_childBlockList [1].m_plainText
+	local s = block.m_childBlockList [1].m_text
 	return string.match (s, ":unnamed:([%w/:]+)")
 end
 
 function isUnnamedItem (item)
 	return item.m_name == "" or string.sub (item.m_name, 1, 1) == "@"
+end
+
+function ensureExtraNewLine (s)
+	local length = string.len (s)
+	if s [length] ~= "\n" then
+		return s .. "\n\n"
+	elseif length < 2 or s [length - 1] ~= "\n" then
+		return s .. "\n"
+	else
+		return s
+	end
 end
 
 function getDocBlockListContents (blockList)
@@ -478,16 +489,25 @@ function getDocBlockListContents (blockList)
 	for i = 1, #blockList do
 		local block = blockList [i]
 
-		if block.m_blockKind == "paragraph" then
-			s = s .. block.m_plainText
-		elseif block.m_blockKind ~= "internal" then
-			s = s .. getDocBlockListContents (block.m_childBlockList)
-		end
+		if block.m_blockKind ~= "internal" then
+			if block.m_blockKind == "simplesect" and block.m_simpleSectionKind == "see" then
+				s = s .. ".. rubric:: See also:\n\n"
+				s = s .. block.m_text .. getDocBlockListContents (block.m_childBlockList)
+				s = ensureExtraNewLine (s)
+			elseif block.m_blockKind == "computeroutput" then
+				s = s .. "`" .. block.m_text .. "`"
+			else
+				s = s .. block.m_text .. getDocBlockListContents (block.m_childBlockList)
 
-		if i ~= #blockList then
-			s = s .. "\n"
+				if block.m_blockKind == "paragraph" then
+					s = ensureExtraNewLine (s)
+				end
+			end
 		end
 	end
+
+	s = string.gsub (s, "%s+$", "")   -- trim trailing whitespace
+	s = string.gsub (s, "\t", "    ") -- replace tabs with spaces
 
 	return s
 end
@@ -501,16 +521,16 @@ function getItemBriefDocumentation (item, detailsRefPrefix)
 		return ""
 	else
 		local block = item.m_detailedDescription.m_docBlockList [1]
-		s = block.m_plainText
+		s = block.m_text
 
-		local i = string.find (s, ".%s", 1, true)
+		local i = string.find (s, ".", 1, true) -- first sentence only
 		if i then
 			s = string.sub (s, 1, i)
 		end
-	end
 
-	s = string.match (s, "(.-)%s*$")  -- trim trailing whitespace
-	s = string.gsub (s, "\t", "    ") -- replace tabs with spaces
+		s = string.gsub (s, "%s+$", "")   -- trim trailing whitespace
+		s = string.gsub (s, "\t", "    ") -- replace tabs with spaces
+	end
 
 	if detailsRefPrefix then
 		s = s .. " :ref:`More...<" .. detailsRefPrefix .. "doxid-" .. item.m_id .. ">`"
@@ -530,10 +550,7 @@ function getItemDetailedDocumentation (item)
 		s = s .. "\n\n"
 	end
 
-	s = s .. getDocBlockListContents (item.m_detailedDescription.m_docBlockList)
-	s = string.gsub (s, "\t", "    ") -- replace tabs with spaces
-
-	return s
+	return s .. getDocBlockListContents (item.m_detailedDescription.m_docBlockList)
 end
 
 function removePrimitiveTypedefs (typedefArray)

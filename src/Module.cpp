@@ -71,11 +71,13 @@ getDocBlockKindString (DocBlockKind blockKind)
 {
 	const char* stringTable [] =
 	{
-		"<undefined>", // DocBlockKind_Undefined,
-		"paragraph",   // DocBlockKind_Paragraph,
-		"section",     // DocBlockKind_Section,
-		"internal",    // DocBlockKind_Internal,
-		"simple",      // DocBlockKind_SimpleSection,
+		"<undefined>",    // DocBlockKind_Undefined,
+		"paragraph",      // DocBlockKind_Paragraph,
+		"section",        // DocBlockKind_Section,
+		"internal",       // DocBlockKind_Internal,
+		"simplesect",     // DocBlockKind_SimpleSection,
+		"ref",            // DocBlockKind_Ref,
+		"computeroutput", // DocBlockKind_ComputerOutput
 	};
 
 	return (size_t) blockKind < countof (stringTable) ?
@@ -90,6 +92,7 @@ DocBlock::luaExportMembers (lua::LuaState* luaState)
 {
 	luaState->setMemberString ("m_blockKind", getDocBlockKindString (m_blockKind));
 	luaState->setMemberString ("m_title", m_title);
+	luaState->setMemberString ("m_text", m_text);
 
 	luaExportList (luaState, m_childBlockList);
 	luaState->setMember ("m_childBlockList");
@@ -101,8 +104,6 @@ DocBlock::luaExport (lua::LuaState* luaState)
 	luaState->createTable ();
 
 	DocBlock::luaExportMembers (luaState);
-
-	luaState->setMemberString ("m_plainText", m_plainText);
 }
 
 //.............................................................................
@@ -112,51 +113,11 @@ DocRefBlock::luaExport (lua::LuaState* luaState)
 {
 	luaState->createTable ();
 
-	luaState->setMemberString ("m_refKind", getRefKindString (m_refKind));
-	luaState->setMemberString ("m_text", m_plainText);
-	luaState->setMemberString ("m_id", m_id);
-	luaState->setMemberString ("m_external", m_external);
-}
-
-//.............................................................................
-
-void
-DocParagraphBlock::luaExport (lua::LuaState* luaState)
-{
-	normalize ();
-
-	luaState->createTable ();
-
 	DocBlock::luaExportMembers (luaState);
 
-	luaState->setMemberBoolean ("m_isEmpty", m_plainText.isEmpty ());
-	luaState->setMemberString ("m_plainText", m_plainText);
-}
-
-void
-DocParagraphBlock::normalize ()
-{
-	m_plainText.clear ();
-
-	sl::Iterator <DocBlock> it = m_childBlockList.getHead ();
-	while (it)
-	{
-		if (it->m_blockKind == DocBlockKind_SimpleSection) // keep it intact
-		{
-			it++;
-		}
-		else if (!it->m_plainText.isEmpty ())
-		{
-			m_plainText += it->m_plainText;
-			it++;
-		}
-		else 
-		{
-			sl::Iterator <DocBlock> next = it.getNext ();
-			m_childBlockList.erase (it);
-			it = next;
-		}
-	}
+	luaState->setMemberString ("m_refKind", getRefKindString (m_refKind));
+	luaState->setMemberString ("m_id", m_id);
+	luaState->setMemberString ("m_external", m_external);
 }
 
 //.............................................................................
@@ -175,7 +136,7 @@ DocSectionBlock::luaExport (lua::LuaState* luaState)
 
 DocSimpleSectionBlock::DocSimpleSectionBlock ()
 {
-	m_blockKind = DocBlockKind_Section;
+	m_blockKind = DocBlockKind_SimpleSection;
 	m_simpleSectionKind = DocSimpleSectionKind_Undefined;
 }
 

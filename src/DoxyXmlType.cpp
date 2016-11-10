@@ -984,12 +984,11 @@ LinkedTextType::onStartElement (
 	{
 	case ElemKind_Ref:
 		m_parser->pushType <RefTextType> (m_linkedText, name, attributes);
-
-		m_refText = AXL_MEM_NEW (RefText);
-		m_linkedText->m_refTextList.insertTail (m_refText);
 		break;
 	}
 
+	m_refText = AXL_MEM_NEW (RefText);
+	m_linkedText->m_refTextList.insertTail (m_refText);
 	return true;
 }
 
@@ -1059,24 +1058,34 @@ DocParaType::onStartElement (
 	const char** attributes
 	)
 {
+	DocBlock* block;
+
 	ElemKind elemKind = ElemKindMap::findValue (name, ElemKind_Undefined);
 	switch (elemKind)
 	{
 	case ElemKind_Ref:
-		m_parser->pushType <DocRefTextType> (m_paragraphBlock, name, attributes);
-
-		m_childBlock = AXL_MEM_NEW (DocBlock);
-		m_paragraphBlock->m_childBlockList.insertTail (m_childBlock);
+		m_parser->pushType <DocRefTextType> (&m_paragraphBlock->m_childBlockList, name, attributes);
 		break;
 
 	case ElemKind_SimpleSect:
 		m_parser->pushType <DocSimpleSectionType> (&m_paragraphBlock->m_childBlockList, name, attributes);
-
-		m_childBlock = AXL_MEM_NEW (DocBlock);
-		m_paragraphBlock->m_childBlockList.insertTail (m_childBlock);
 		break;
+		
+	case ElemKind_ComputerOutput:
+		block = AXL_MEM_NEW (DocBlock);
+		block->m_blockKind = DocBlockKind_ComputerOutput;
+		m_paragraphBlock->m_childBlockList.insertTail (block);
+		m_parser->pushType <DocTextType> (block, name, attributes);
+		break;
+
+	default:
+		block = AXL_MEM_NEW (DocBlock);
+		m_paragraphBlock->m_childBlockList.insertTail (block);
+		m_parser->pushType <DocTextType> (block, name, attributes);
 	}
 
+	m_childBlock = AXL_MEM_NEW (DocBlock);
+	m_paragraphBlock->m_childBlockList.insertTail (m_childBlock);
 	return true;
 }
 
@@ -1085,14 +1094,14 @@ DocParaType::onStartElement (
 bool
 DocRefTextType::create (
 	DoxyXmlParser* parser,
-	DocParagraphBlock* paragraphBlock,
+	sl::StdList <DocBlock>* list,
 	const char* name,
 	const char** attributes
 	)
 {
 	m_parser = parser;
 	m_refBlock = AXL_MEM_NEW (DocRefBlock);
-	paragraphBlock->m_childBlockList.insertTail (m_refBlock);
+	list->insertTail (m_refBlock);
 
 	while (*attributes)
 	{
@@ -1121,6 +1130,21 @@ DocRefTextType::create (
 //..............................................................................
 
 bool
+DocTextType::create (
+	DoxyXmlParser* parser,
+	DocBlock* block,
+	const char* name,
+	const char** attributes
+	)
+{
+	m_parser = parser;
+	m_block = block;
+	return true;
+}
+
+//..............................................................................
+
+bool
 DocSimpleSectionType::create (
 	DoxyXmlParser* parser,
 	sl::StdList <DocBlock>* list,
@@ -1138,7 +1162,7 @@ DocSimpleSectionType::create (
 		switch (attrKind)
 		{
 		case AttrKind_Kind:
-			m_sectionBlock->m_simpleSectionKind = DocSimpleSectionKindMap::findValue (attributes [0], DocSimpleSectionKind_Undefined);
+			m_sectionBlock->m_simpleSectionKind = DocSimpleSectionKindMap::findValue (attributes [1], DocSimpleSectionKind_Undefined);
 			break;
 		}
 

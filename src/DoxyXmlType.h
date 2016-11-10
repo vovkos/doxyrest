@@ -1052,13 +1052,15 @@ protected:
 		ElemKind_Undefined,
 		ElemKind_Ref,
 		ElemKind_SimpleSect,
+		ElemKind_ComputerOutput,
 
 		// ...add as needed
 	};
 
 	AXL_SL_BEGIN_STRING_HASH_TABLE_MAP (ElemKindMap, ElemKind)
-		AXL_SL_HASH_TABLE_MAP_ENTRY ("ref", ElemKind_Ref)
-		AXL_SL_HASH_TABLE_MAP_ENTRY ("simplesect", ElemKind_SimpleSect)
+		AXL_SL_HASH_TABLE_MAP_ENTRY ("ref",            ElemKind_Ref)
+		AXL_SL_HASH_TABLE_MAP_ENTRY ("simplesect",     ElemKind_SimpleSect)
+		AXL_SL_HASH_TABLE_MAP_ENTRY ("computeroutput", ElemKind_ComputerOutput)
 	AXL_SL_END_HASH_TABLE_MAP ()
 
 protected:
@@ -1094,7 +1096,7 @@ public:
 		size_t length
 		)
 	{
-		m_childBlock->m_plainText.append (string, length);
+		m_childBlock->m_text.append (string, length);
 		return true;
 	}
 };
@@ -1130,7 +1132,7 @@ public:
 	bool
 	create (
 		DoxyXmlParser* parser,
-		DocParagraphBlock* paragraphBlock,
+		sl::StdList <DocBlock>* list,
 		const char* name,
 		const char** attributes
 		);
@@ -1142,7 +1144,40 @@ public:
 		size_t length
 		)
 	{
-		m_refBlock->m_plainText.append (string, length);
+		m_refBlock->m_text.append (string, length);
+		return true;
+	}
+};
+
+//..............................................................................
+
+class DocTextType: public DoxyXmlType
+{
+protected:
+	DocBlock* m_block;
+
+public:
+	DocTextType ()
+	{
+		m_block = NULL;
+	}
+
+	bool
+	create (
+		DoxyXmlParser* parser,
+		DocBlock* block,
+		const char* name,
+		const char** attributes
+		);
+
+	virtual
+	bool
+	onCharacterData (
+		const char* string,
+		size_t length
+		)
+	{
+		m_block->m_text.append (string, length);
 		return true;
 	}
 };

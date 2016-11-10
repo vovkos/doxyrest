@@ -59,6 +59,7 @@ enum DocBlockKind
 	DocBlockKind_Internal,
 	DocBlockKind_SimpleSection,
 	DocBlockKind_Ref,
+	DocBlockKind_ComputerOutput,
 };
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -72,7 +73,7 @@ struct DocBlock: sl::ListLink
 {
 	DocBlockKind m_blockKind;
 	sl::String m_title;
-	sl::String m_plainText;
+	sl::String m_text;
 	sl::StdList <DocBlock> m_childBlockList;
 
 	DocBlock ()
@@ -92,7 +93,7 @@ struct DocBlock: sl::ListLink
 	luaExportMembers (lua::LuaState* luaState);
 };
 
-//.............................................................................
+//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 struct DocRefBlock: DocBlock
 {
@@ -119,16 +120,9 @@ struct DocParagraphBlock: DocBlock
 	{
 		m_blockKind = DocBlockKind_Paragraph;
 	}
-
-	virtual
-	void
-	luaExport (lua::LuaState* luaState);
-
-	void
-	normalize ();
 };
 
-//.............................................................................
+//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 struct DocSectionBlock: DocBlock
 {

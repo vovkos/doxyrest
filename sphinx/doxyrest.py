@@ -12,7 +12,7 @@
 import re
 from docutils.parsers.rst import Directive, directives
 from docutils import nodes
-from sphinx import roles, addnodes
+from sphinx import roles, addnodes, config
 
 
 class HighlightedText(nodes.General, nodes.TextElement):
@@ -72,23 +72,29 @@ class RefCodeBlock(Directive):
         self.re_prog = re.compile('(:c?ref:)?`(.+?)(\s*<([^<>]*)>)?`')
 
     def run(self):
+        config = self.state.document.settings.env.config
         code = u'\n'.join(self.content)
         pos = 0
         node = nodes.literal_block('.', '') # single char to prevent sphinx from trying to highlight it
         node['classes'] += ['highlight']    # we are stripping pyments-generated <div>
         node['classes'] += self.options.get('class', [])
 
+        if len(self.arguments) >= 1:
+            language = self.arguments[0]
+        else:
+            language = config.highlight_language
+
         while True:
             match = self.re_prog.search(code, pos)
             if match is None:
                 plain_text = code[pos:]
                 if plain_text != "":
-                    node += HighlightedText(plain_text, plain_text, language=self.arguments[0])
+                    node += HighlightedText(plain_text, plain_text, language=language)
                 break
 
             plain_text = code[pos:match.start()]
             if plain_text != "":
-                node += HighlightedText(plain_text, plain_text, language=self.arguments[0])
+                node += HighlightedText(plain_text, plain_text, language=language)
 
             raw_text = match.group(0)
             role = match.group(1)
@@ -137,3 +143,4 @@ def setup(app):
     app.add_role('cref', cref_role)
 
     directives.register_directive('ref-code-block', RefCodeBlock)
+    directives.register_directive('code-block', RefCodeBlock) # replace

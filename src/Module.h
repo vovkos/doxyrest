@@ -526,6 +526,8 @@ luaExportArraySetParent (
 	luaExportArraySetParent (luaState, array.cp (), array.getCount (), parentFieldName, parentIndex);
 }
 
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
 template <typename T>
 void
 luaExportList (
@@ -539,6 +541,27 @@ luaExportList (
 	for (size_t i = 1; it; it++, i++) // lua arrays are 1-based
 	{
 		it->luaExport (luaState);
+		luaState->setArrayElement (i);
+	}
+}
+
+template <typename T>
+void
+luaExportListSetParent (
+	lua::LuaState* luaState,
+	const sl::StdList <T>& list,
+	const sl::StringRef& parentFieldName,
+	int parentIndex = -1
+	)
+{
+	luaState->createTable (list.getCount ());
+
+	sl::Iterator <T> it = list.getHead ();
+	for (size_t i = 1; it; it++, i++) // lua arrays are 1-based
+	{
+		it->luaExport (luaState);
+		luaState->pushValue (parentIndex - 2); // [-1] element, [-2] table
+		luaState->setMember (parentFieldName);
 		luaState->setArrayElement (i);
 	}
 }

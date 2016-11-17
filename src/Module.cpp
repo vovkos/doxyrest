@@ -317,7 +317,21 @@ Member::luaExport (lua::LuaState* luaState)
 		break;
 
 	case MemberKind_Enum:
-		luaExportList (luaState, m_enumValueList);
+		if (!m_parentCompound)
+		{
+			luaState->setMemberString ("m_path", m_name);
+		}
+		else
+		{
+			sl::String path =
+				m_name.isEmpty () ? m_parentCompound->m_path :
+				m_parentCompound->m_path.isEmpty () ? m_name :
+				m_parentCompound->m_path + "/" + m_name;
+
+			luaState->setMemberString ("m_path",  path);
+		}
+
+		luaExportListSetParent (luaState, m_enumValueList, "m_parent");
 		luaState->setMember ("m_enumValueArray");
 		break;
 

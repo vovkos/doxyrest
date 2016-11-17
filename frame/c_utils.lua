@@ -146,7 +146,8 @@ function getItemName (item)
 			parent = parent.m_parent
 		else
 			if parent.m_compoundKind == "namespace" and parent.m_path ~= "" then
-				s = string.gsub (parent.m_path, "/", ".") .. "." -- only add prefix to namespaces, not classes/structs
+ 				-- only add prefix to namespaces, not classes/structs
+				s = string.gsub (parent.m_path, "/", g_nameDelimiter) .. g_nameDelimiter
 			end
 
 			break
@@ -233,7 +234,7 @@ function getItemCid (item)
 	local parent = item.m_parent
 
 	if parent and parent.m_path ~= "" then
-		s = s .. string.gsub (parent.m_path, "/", ".") .. "."
+		s = s .. string.gsub (parent.m_path, "/", g_nameDelimiter) .. g_nameDelimiter
 	end
 
 	s = string.lower (s .. item.m_name)
@@ -242,47 +243,48 @@ function getItemCid (item)
 	return s
 end
 
-function getCompoundTocTree (compound, indent)
-	local s = ""
+function getCompoundTocTree (compound)
+	local s = ".. toctree::\n\t:hidden:\n\n"
 
 	for i = 1, #compound.m_groupArray do
 		local item = compound.m_groupArray [i]
 		local fileName = getItemFileName (item)
-		s = s .. indent .. fileName .. "\n"
+		s = s .. "\t" .. fileName .. "\n"
 	end
 
 	for i = 1, #compound.m_namespaceArray do
 		local item = compound.m_namespaceArray [i]
 		local fileName = getItemFileName (item)
-		s = s .. indent .. fileName .. "\n"
+		s = s .. "\t" .. fileName .. "\n"
 	end
 
 	for i = 1, #compound.m_enumArray do
 		local item = compound.m_enumArray [i]
 		if not isUnnamedItem (item) then
 			local fileName = getItemFileName (item)
-			s = s .. indent .. fileName .. "\n"
+			s = s .. "\t" .. fileName .. "\n"
 		end
 	end
 
 	for i = 1, #compound.m_structArray do
 		local item = compound.m_structArray [i]
 		local fileName = getItemFileName (item)
-		s = s .. indent .. fileName .. "\n"
+		s = s .. "\t" .. fileName .. "\n"
 	end
 
 	for i = 1, #compound.m_unionArray do
 		local item = compound.m_unionArray [i]
 		local fileName = getItemFileName (item)
-		s = s .. indent .. fileName .. "\n"
+		s = s .. "\t" .. fileName .. "\n"
 	end
 
 	for i = 1, #compound.m_classArray do
 		local item = compound.m_classArray [i]
 		local fileName = getItemFileName (item)
-		s = s .. indent .. fileName .. "\n"
+		s = s .. "\t" .. fileName .. "\n"
 	end
 
+	s = string.gsub (s, "%s+$", "")   -- trim trailing whitespace
 	return s
 end
 

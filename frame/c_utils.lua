@@ -533,8 +533,7 @@ function getItemBriefDocumentation (item, detailsRefPrefix)
 	elseif item.m_detailedDescription.m_isEmpty then
 		return ""
 	else
-		local block = item.m_detailedDescription.m_docBlockList [1]
-		s = block.m_text
+		s = getDocBlockListContents (item.m_detailedDescription.m_docBlockList)
 
 		local i = string.find (s, ".", 1, true) -- first sentence only
 		if i then

@@ -137,6 +137,17 @@ function getDefineParamArrayString (paramArray, isRef)
 	return getParamArrayString_sl (paramArray, isRef, "(", ")")
 end
 
+function getItemKindString (item, itemKindString)
+	local s = ""
+
+	if item.m_modifiers ~= "" then
+		s = item.m_modifiers .. " "
+	end
+
+	s = s .. itemKindString
+	return s
+end
+
 function getItemName (item)
 	local s = ""
 	local parent = item.m_parent

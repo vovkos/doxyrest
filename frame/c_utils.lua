@@ -371,6 +371,15 @@ function getFunctionDeclString (func, isRef, indent)
 		)
 end
 
+function getVoidFunctionDeclString (func, isRef, indent)
+	return getFunctionDeclStringImpl (
+		func,
+		nil,
+		isRef,
+		indent
+		)
+end
+
 function getEventDeclString (event, isRef, indent)
 	return getFunctionDeclStringImpl (
 		event,

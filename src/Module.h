@@ -400,14 +400,24 @@ struct NamespaceContents
 	sl::Array <Member*> m_aliasArray;
 	sl::Array <Member*> m_defineArray;
 	sl::Array <Member*> m_footnoteArray;
+	sl::Array <Member*> m_constructorArray;
+	Member* m_destructor;
 
 	sl::StringHashTableMap <Namespace*> m_groupMap;
+
+	NamespaceContents ()
+	{
+		m_destructor = NULL;
+	}
 
 	bool
 	add (Compound* compound);
 
 	bool
-	add (Member* member);
+	add (
+		Member* member,
+		Compound* thisCompound
+		);
 
 	void
 	luaExportMembers (lua::LuaState* luaState);

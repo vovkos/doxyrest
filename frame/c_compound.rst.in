@@ -33,6 +33,24 @@ for i = 1, #compound.m_enumArray do
 	end
 end
 
+local hasConstructors = false
+local hasConstructionSection = false
+
+for i = 1, #compound.m_constructorArray do
+	local item = compound.m_constructorArray [i]
+	local isShown = g_includeDefaultContructors or #item.m_paramArray > 0
+
+	if isShown then
+		hasConstructors = true
+		hasConstructionSection = true
+		break
+	end
+end
+
+if not hasConstuctors and g_includeDestructors and compound.m_destructor then
+	hasConstructionSection = true
+end
+
 local hasDefines = false
 
 for i = 1, #compound.m_defineArray do
@@ -181,7 +199,7 @@ Enums
 			for j = 1, #item.m_enumValueArray do
 				local subItem = item.m_enumValueArray [j]
 }
-	    :ref:`$(subItem.m_name)<doxid-$(subItem.m_id)>` $(getLinkedTextString (subItem.m_initializer, true))
+		:ref:`$(subItem.m_name)<doxid-$(subItem.m_id)>` $(getLinkedTextString (subItem.m_initializer, true))
 %{
 			end -- for
 
@@ -390,6 +408,47 @@ Events
 $extraSep	$(getEventDeclString (item, true, "\t"))
 %{
 	end -- for
+
+	emit ("\n")
+end -- if
+
+if hasConstructionSection then
+}
+Construction
+------------
+
+.. ref-code-block:: $g_language
+	:class: overview-code-block
+
+%{
+	local prevParamCount = 0
+
+	if hasConstructors then
+		for i = 1, #compound.m_constructorArray do
+			local item = compound.m_constructorArray [i]
+			local paramCount = #item.m_paramArray
+			local extraSep = ""
+
+			if paramCount > 1 or prevParamCount > 1 then
+				extraSep = "\n"
+			end
+
+			prevParamCount = paramCount
+}
+$extraSep	$(getVoidFunctionDeclString (item, true, "\t"))
+%{
+		end -- for
+	end -- if
+
+if g_includeDestructors and compound.m_destructor then
+	local extraSep = ""
+	if prevParamCount > 1 then
+		extraSep = "\n"
+	end
+}
+$extraSep	$(getVoidFunctionDeclString (compound.m_destructor, true, "\t"))
+%{
+end -- if
 
 	emit ("\n")
 end -- if
@@ -614,6 +673,46 @@ $(getItemDetailedDocumentation (item))
 
 %{
 	end -- for
+end -- if
+
+if hasConstructionSection then
+}
+Construction
+------------
+
+%{
+	if hasConstructors then
+		for i = 1, #compound.m_constructorArray do
+			local item = compound.m_constructorArray [i]
+}
+.. _doxid-$(item.m_id):
+.. _cid-$(getItemCid (item)):
+.. ref-code-block:: $g_language
+	:class: title-code-block
+
+	$(getVoidFunctionDeclString (item, false, "\t"))
+
+$(getItemDetailedDocumentation (item))
+
+%{
+		end -- for
+	end -- if
+
+if g_includeDestructors and compound.m_destructor then
+}
+.. _doxid-$(item.m_id):
+.. _cid-$(getItemCid (item)):
+.. ref-code-block:: $g_language
+	:class: title-code-block
+
+	$(getVoidFunctionDeclString (item, false, "\t"))
+
+$(getItemDetailedDocumentation (item))
+
+%{
+end -- if
+
+	emit ("\n")
 end -- if
 
 if #compound.m_functionArray > 0 then

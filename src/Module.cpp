@@ -642,9 +642,34 @@ NamespaceContents::add (Compound* compound)
 	return true;
 }
 
+inline
 bool
-NamespaceContents::add (Member* member)
+isCppDestructorName (
+	const sl::StringRef& memberName,
+	const sl::StringRef& compoundName
+	)
 {
+	return
+		!memberName.isEmpty () &&
+		memberName [0] == '~' &&
+		memberName.getSubString (1) == compoundName;
+}
+
+bool
+NamespaceContents::add (
+	Member* member,
+	Compound* thisCompound
+	)
+{
+	enum FunctionKind
+	{
+		FunctionKind_Normal = 0,
+		FunctionKind_Constructor,
+		FunctionKind_Destructor,
+	};
+
+	FunctionKind functionKind;
+
 	switch (member->m_memberKind)
 	{
 	case MemberKind_Property:
@@ -668,7 +693,34 @@ NamespaceContents::add (Member* member)
 		break;
 
 	case MemberKind_Function:
-		m_functionArray.append (member);
+		functionKind = FunctionKind_Normal;
+
+		if (thisCompound)
+			switch (thisCompound->m_languageKind)
+			{
+			case LanguageKind_Cpp:
+			case LanguageKind_Java:
+				if (member->m_name == thisCompound->m_name)
+					functionKind = FunctionKind_Constructor;
+				else if (isCppDestructorName (member->m_name, thisCompound->m_name))
+					functionKind = FunctionKind_Destructor;
+				break;
+
+			case LanguageKind_Jancy:
+				if (member->m_name == "construct")
+					functionKind = FunctionKind_Constructor;
+				else if (member->m_name == "destruct")
+					functionKind = FunctionKind_Destructor;
+				break;
+			}
+
+		if (functionKind == FunctionKind_Constructor)
+			m_constructorArray.append (member);
+		else if (functionKind == FunctionKind_Destructor)
+			m_destructor = member;
+		else
+			m_functionArray.append (member);
+
 		break;
 
 	case MemberKind_Alias:
@@ -725,6 +777,17 @@ NamespaceContents::luaExportMembers (lua::LuaState* luaState)
 
 	luaExportArraySetParent (luaState, m_variableArray, "m_parent");
 	luaState->setMember ("m_variableArray");
+
+	luaExportArraySetParent (luaState, m_constructorArray, "m_parent");
+	luaState->setMember ("m_constructorArray");
+
+	if (m_destructor)
+	{
+		m_destructor->luaExport (luaState);
+		luaState->pushValue (-2);
+		luaState->setMember ("m_parent");
+		luaState->setMember ("m_destructor");
+	}
 
 	luaExportArraySetParent (luaState, m_functionArray, "m_parent");
 	luaState->setMember ("m_functionArray");
@@ -828,7 +891,7 @@ GlobalNamespace::build (
 				getSubGroupNamespace (module, nspace, nspace, memberIt->m_doxyGroupCompound) :
 				nspace;
 
-			targetNspace->add (*memberIt);
+			targetNspace->add (*memberIt, compound);
 		}
 
 		sl::Iterator <Ref> refIt = compound->m_innerRefList.getHead ();
@@ -878,7 +941,7 @@ GlobalNamespace::build (
 					(NamespaceContents*) getSubGroupNamespace (module, this, NULL, memberIt->m_doxyGroupCompound) :
 					this;
 
-				targetNspace->add (*memberIt);
+				targetNspace->add (*memberIt, NULL);
 			}
 			break;
 

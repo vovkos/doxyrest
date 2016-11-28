@@ -846,9 +846,16 @@ GlobalNamespace::build (
 		sl::Iterator <Member> memberIt = compound->m_memberList.getHead ();
 		for (; memberIt; memberIt++)
 		{
-			Member* member = module->findMember (memberIt->m_id);
-			if (member)
-				member->m_doxyGroupCompound = compound;
+			if (memberIt->m_memberKind == MemberKind_Footnote)
+			{
+				compound->m_doxyGroupFootnoteArray.append (*memberIt);
+			}
+			else
+			{
+				Member* member = module->findMember (memberIt->m_id);
+				if (member)
+					member->m_doxyGroupCompound = compound;
+			}
 		}
 
 		sl::Iterator <Ref> refIt = compound->m_innerRefList.getHead ();
@@ -1022,6 +1029,10 @@ GlobalNamespace::getSubGroupNamespace (
 	m_namespaceList.insertTail (nspace);
 	nspace->m_compound = compound;
 	compound->m_selfNamespace = nspace;
+
+	size_t count = doxyGroupCompound->m_doxyGroupFootnoteArray.getCount ();
+	for (size_t i = 0; i < count; i++)
+		nspace->add (doxyGroupCompound->m_doxyGroupFootnoteArray [i], NULL); // thisCompound is irrelevant for footnotes
 
 	localMapIt->m_value = nspace;
 	parent->m_groupArray.append (nspace);

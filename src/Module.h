@@ -323,6 +323,7 @@ struct Compound: sl::ListLink
 	sl::StdList <Param> m_templateParamList;
 	sl::StdList <Param> m_templateSpecParamList;
 	sl::StdList <Member> m_memberList;
+	sl::Array <Member*> m_doxyGroupFootnoteArray;
 
 	sl::StdList <Ref> m_baseRefList;
 	sl::StdList <Ref> m_derivedRefList;

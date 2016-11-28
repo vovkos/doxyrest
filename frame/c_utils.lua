@@ -319,13 +319,38 @@ function getDoubleSectionName (title1, count1, title2, count2)
 	return s
 end
 
-
 function getTitle (title, underline)
 	if not title or  title == "" then
 		title = "<Untitled>"
 	end
 
 	return title .. "\n" .. string.rep (underline, #title)
+end
+
+function getPropertyDeclString (item, isRef, indent)
+	local s = getLinkedTextString (item.m_returnType, true)
+
+	if item.m_modifiers ~= "" then
+		s = string.gsub (s, "property", item.m_modifiers .. " property")
+	end
+
+	if g_hasNewLineAfterReturnType then
+		s = s .. "\n" .. indent
+	else
+		s = s .. " "
+	end
+
+	if isRef then
+		s = s .. ":ref:`" .. getItemName (item)  .. "<doxid-" .. item.m_id .. ">` "
+	else
+		s = s .. getItemName (item) ..  " "
+	end
+
+	if #item.m_paramArray > 0 then
+		s = s .. getFunctionParamArrayString (item.m_paramArray, true, indent)
+	end
+
+	return s
 end
 
 function getFunctionDeclStringImpl (item, returnType, isRef, indent)

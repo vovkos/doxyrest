@@ -80,6 +80,7 @@ local hasDetails =
 	hasDefines or
 	#compound.m_typedefArray > 0 or
 	#compound.m_variableArray > 0 or
+	#compound.m_propertyArray > 0 or
 	#compound.m_eventArray > 0 or
 	#compound.m_functionArray > 0 or
 	#compound.m_aliasArray > 0
@@ -371,12 +372,21 @@ $(getTitle (sectionName, "-"))
 		end -- while
 	end -- for
 
+	local prevParamCount = 0
+
 	for i = 1, #compound.m_propertyArray do
 		local item = compound.m_propertyArray [i]
-		local propertyKind = getItemKindString (item, "property")
 
+		local paramCount = #item.m_paramArray
+		local extraSep = ""
+
+		if g_hasNewLineAfterReturnType or paramCount > 1 or prevParamCount > 1 then
+			extraSep = "\n"
+		end
+
+		prevParamCount = paramCount
 }
-	$(getLinkedTextString (item.m_returnType, true)) $propertyKind :ref:`$(getItemName (item))<doxid-$(item.m_id)>`
+$extraSep	$(getPropertyDeclString (item, true, "\t"))
 %{
 	end -- for
 
@@ -638,14 +648,13 @@ Properties
 %{
 	for i = 1, #compound.m_propertyArray do
 		local item = compound.m_propertyArray [i]
-		local propertyKind = getItemKindString (item, "property")
 }
 .. _doxid-$(item.m_id):
 .. _cid-$(getItemCid (item)):
 .. ref-code-block:: $g_language
 	:class: title-code-block
 
-	$(getLinkedTextString (item.m_returnType, true)) $propertyKind $(getItemName (item))
+	$(getPropertyDeclString (item, false, "\t"))
 
 $(getItemDetailedDocumentation (item))
 

@@ -9,29 +9,8 @@
 #
 #...............................................................................
 
-set (
-	AXL_PATH_LIST
-
-	LUA_INC_DIR
-	LUA_LIB_DIR
-	LUA_LIB_NAME
-	EXPAT_INC_DIR
-	EXPAT_LIB_DIR
-	AXL_CMAKE_DIR
-	SPHINX_BUILD_EXE
-	PDFLATEX_EXE
-	)
-
-set (
-	AXL_IMPORT_LIST
-
-	REQUIRED
-		axl
-		expat
-		lua
-	OPTIONAL
-		sphinx
-		latex
-	)
+if (SPHINX_FOUND)
+	add_subdirectory (build-guide)
+endif ()
 
 #...............................................................................

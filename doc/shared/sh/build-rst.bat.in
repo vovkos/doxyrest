@@ -1,0 +1,29 @@
+@rem ...........................................................................
+@rem
+@rem  This file is part of the Doxyrest toolkit.
+@rem
+@rem  Doxyrest is distributed under the MIT license.
+@rem  For details see accompanying license.txt file,
+@rem  the public copy of which is also available at:
+@rem  http://tibbo.com/downloads/archive/doxyrest/license.txt
+@rem
+@rem ...........................................................................
+
+@echo off
+
+set RST_DIR="${RST_DIR}"
+set STATIC_RST_DIR="${STATIC_RST_DIR}"
+
+set RST_DIR=%RST_DIR:/=\%
+set STATIC_RST_DIR=%STATIC_RST_DIR:/=\%
+
+if exist %RST_DIR% (rd /S /Q %RST_DIR% || exit)
+mkdir %RST_DIR% || exit
+
+echo Copying ${DOC_NAME} RST files to ${RST_DIR}...
+
+xcopy /Y /Q /E %STATIC_RST_DIR%\*.* %RST_DIR% || exit
+
+echo Building ${DOC_NAME} RST files at ${RST_DIR}...
+
+"${DOXYREST_EXE}" ${DOXYREST_CMD_LINE} || exit

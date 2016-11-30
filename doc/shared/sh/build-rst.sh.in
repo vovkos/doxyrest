@@ -1,3 +1,4 @@
+#!/bin/bash
 #...............................................................................
 #
 #  This file is part of the Doxyrest toolkit.
@@ -9,29 +10,15 @@
 #
 #...............................................................................
 
-set (
-	AXL_PATH_LIST
+set -e
 
-	LUA_INC_DIR
-	LUA_LIB_DIR
-	LUA_LIB_NAME
-	EXPAT_INC_DIR
-	EXPAT_LIB_DIR
-	AXL_CMAKE_DIR
-	SPHINX_BUILD_EXE
-	PDFLATEX_EXE
-	)
+rm -rf ${RST_DIR}
+mkdir -p ${RST_DIR}
 
-set (
-	AXL_IMPORT_LIST
+echo Copying ${DOC_NAME} RST files to ${RST_DIR}...
 
-	REQUIRED
-		axl
-		expat
-		lua
-	OPTIONAL
-		sphinx
-		latex
-	)
+cp ${STATIC_RST_DIR}/*.* ${RST_DIR}
 
-#...............................................................................
+echo Building ${DOC_NAME} RST files at ${RST_DIR}...
+
+"${DOXYREST_EXE}" ${DOXYREST_CMD_LINE}

@@ -31,5 +31,6 @@ add_subdirectory (cmake)
 include (${CMAKE_CURRENT_BINARY_DIR}/cmake/doxyrest_config.cmake)
 
 add_subdirectory (src)
+add_subdirectory (doc)
 
 #...............................................................................

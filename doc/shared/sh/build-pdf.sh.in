@@ -1,3 +1,4 @@
+#!/bin/bash
 #...............................................................................
 #
 #  This file is part of the Doxyrest toolkit.
@@ -9,29 +10,24 @@
 #
 #...............................................................................
 
-set (
-	AXL_PATH_LIST
+set -e
 
-	LUA_INC_DIR
-	LUA_LIB_DIR
-	LUA_LIB_NAME
-	EXPAT_INC_DIR
-	EXPAT_LIB_DIR
-	AXL_CMAKE_DIR
-	SPHINX_BUILD_EXE
-	PDFLATEX_EXE
-	)
+mkdir -p ${PDF_DIR}
 
-set (
-	AXL_IMPORT_LIST
+echo Building ${DOC_NAME} Latex files at ${TEX_DIR}...
 
-	REQUIRED
-		axl
-		expat
-		lua
-	OPTIONAL
-		sphinx
-		latex
-	)
+"${SPHINX_BUILD_EXE}" ${SPHINX_TEX_CMD_LINE}
 
-#...............................................................................
+echo Building ${DOC_NAME} PDF at ${PDF_DIR}...
+
+PREV_DIR=`pwd`
+cd ${TEX_DIR}
+
+cp ${DOXYREST_SPHINX_DIR}/doxyrest.sty .
+
+"${PDFLATEX_EXE}" ${PDFLATEX_TEXLIVE_CMD_LINE}
+"${PDFLATEX_EXE}" ${PDFLATEX_TEXLIVE_CMD_LINE}
+
+cp ${TMP_DIR}/${TEX_BASE_NAME}.pdf ${PDF_DIR}
+
+cd $PREV_DIR

@@ -14,7 +14,7 @@ Building on Windows
 
 To build Doxyrest on Windows you can start Visual Studio by double-clicking the newly generated solution file ``doxyrest_b.sln`` and build it from the IDE.
 
-If you prefer building from command line, run in ``./build`` folder::
+If you prefer building from the command line, run in ``./build`` folder::
 
 	cmake --build .
 

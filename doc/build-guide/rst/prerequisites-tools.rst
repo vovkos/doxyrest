@@ -12,7 +12,7 @@
 Tools
 =====
 
-Doxyrest build system relies on its own path configuration so you do not actually need to add any of these tools to ``PATH``. However, it is resommended to make CMake easily available (e.g. via ``PATH`` or a shortcut to ``cmake-gui``) -- because it is used to initiate the whole build process.
+Doxyrest build system relies on its own path configuration so you do not actually need to add any of these tools to ``PATH``. However, it is recommended to make CMake easily available (e.g. via ``PATH`` or a shortcut to ``cmake-gui``) -- because it is used to initiate the whole build process.
 
 Required Tools
 --------------

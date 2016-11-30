@@ -20,7 +20,7 @@ First of all - ``find_package`` simply does not work reliably on Windows. Here y
 
 Another important reason -- ``find_package`` is not convenient to use in situations when you need to **switch** between different **versions** of the same library, between **Debug/Release** builds, between **static/dynamic** libraries, between different **processor architectures** during cross-compilation and so on.
 
-In other words, ``find_package`` is really convenient on **Unix** systems when all you do is a **native** build with the **default** versions of installed tools and libraries. You need more flexibility? Then ``find_package`` alone is not the answer.
+In other words, ``find_package`` is really convenient on **Unix** systems when all you do is a **native** build with the **default** versions of installed tools and libraries. Need more flexibility? Then ``find_package`` alone is not the answer.
 
 .. toctree::
 	:titlesonly:

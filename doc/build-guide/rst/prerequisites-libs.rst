@@ -20,7 +20,7 @@ These libraries are **required** for building the Doxyrest.
 
 	Lua executables, header files and both static and dynamic libraries are available in official repositories of most Linux distributions.
 
-	Lua sources as well as the links to pre-compiled binaries (of both executables and libraries) could be found at the official Lua website: http://www.lua.org
+	Lua sources, as well as the links to pre-compiled binaries (of both executables and libraries), could be found at the official Lua website: http://www.lua.org
 
 	Both 5.2.x and 5.3.x branches should be fine.
 
@@ -45,7 +45,7 @@ These libraries are **required** for building the Doxyrest.
 	- wrappers for many popular libraries;
 	- and more...
 
-	AXL is includede in the recommended ``doxyrest_b`` bundle package. Therefore, if you build Doxyrest from ``doxyrest_b`` package, you don't have to do anything extra -- AXL will be built automatically during the build process.
+	AXL is included in the recommended ``doxyrest_b`` bundle package. Therefore, if you build Doxyrest from ``doxyrest_b`` package, you don't have to do anything extra -- AXL will be built automatically during the build process.
 
 	However, if you use the standalone ``doxyrest`` package, you will need to download and build AXL first.
 

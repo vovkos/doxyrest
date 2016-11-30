@@ -18,7 +18,7 @@ Doxyrest is written in C++ so obviously you will need a C++ compiler and standar
 	- Microsoft Visual Studio 2010 version 10.0.40219.1 SP1Rel
 	- cl version 16.0.40219.1
 
-	Here in Tibbo we still use Visual Studio 2010 for building official Windows packages of our software (due to many issues with Visual Studio 2015: telemetry code injection scandal, noticable slow-down of editor and debugger, largely increased size of generated temporaries etc).
+	Here in Tibbo we still use Visual Studio 2010 for building official Windows packages of our software (due to many issues with Visual Studio 2015: telemetry code injection scandal, noticeable slow-down of editor and debugger, largely increased size of generated temporaries etc).
 
 	This being said, Doxyrest *should* build on newer versions of Visual Studio as well.
 

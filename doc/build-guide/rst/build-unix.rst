@@ -20,6 +20,6 @@ You might also want to add ``-j <n>`` to make use of multiple CPU cores and spee
 
 	make -j 4
 
-After Doxyrest build is complete ``doxyrest`` command line tool can be found in ``./build/bin/${CMAKE_BUILD_TYPE}``.
+After Doxyrest build is complete ``doxyrest`` command line tool can be found in ``./build/doxyrest/bin/${CMAKE_BUILD_TYPE}``.
 
 Note that with ``make``-based build changing configuration from ``Debug`` to ``Release`` should be done at CMake configuration step (Xcode and Visual Studio are multi-configuration build systems).

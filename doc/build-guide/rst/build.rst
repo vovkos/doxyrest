@@ -19,3 +19,4 @@ Once CMake configuration step completes, makefiles/project files are generated. 
 
 	build-windows.rst
 	build-unix.rst
+	build-doc.rst

@@ -24,4 +24,4 @@ You can pass extra command-line arguments to ``msbuild.exe`` using ``--`` switch
 
 Please refer to ``msbuild`` documentation for more details on command-line parameters: https://msdn.microsoft.com/en-us/library/ms164311.aspx
 
-After Doxyrest build is complete ``doxyrest`` command line tool can be found in ``./build/bin/$(Configuration)``.
+After Doxyrest build is complete ``doxyrest`` command line tool can be found in ``./build/doxyrest/bin/$(Configuration)``.

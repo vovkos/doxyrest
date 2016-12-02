@@ -11,6 +11,7 @@
 
 if (SPHINX_FOUND)
 	add_subdirectory (build-guide)
+	add_subdirectory (manual)
 endif ()
 
 #...............................................................................

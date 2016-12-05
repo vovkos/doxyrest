@@ -19,7 +19,7 @@ Doxyrest is a compiler from **Doxygen** XML to **reStructuredText** -- hence, th
 
 The main purpose of Doxyrest is to generate **beautiful** Sphinx-based documentation for **C/C++** APIs. But not just that!
 
-Doxygen can be replaced with your own source-code-analyzing tool capable of producing Doxygen-compatible XML database. Lua frames used for generation of Re-StructuredText can also be replaced with your own ones. It means that both the input and the output of Doxyrest are **100% customizable** -- and without re-compilation!
+Doxygen can be replaced with your own source-code-analyzing tool capable of producing Doxygen-compatible XML database. Lua frames used for generation of reStructuredText can also be replaced with your own ones. It means that both the input and the output of Doxyrest are **100% customizable** -- and without re-compilation!
 
 To rephrase, Doxyrest could be used to produce customizable documentation/stats/reports for APIs written in **any programming language**!
 

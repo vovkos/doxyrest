@@ -472,6 +472,7 @@ main (
 {
 	int result;
 
+	g::getModule ()->setTag ("doxyrest");
 	xml::registerExpatErrorProvider ();
 	lex::registerParseErrorProvider ();
 

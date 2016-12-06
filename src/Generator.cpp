@@ -25,7 +25,6 @@ Generator::prepare (
 	m_stringTemplate.create ();
 	m_stringTemplate.m_luaState.registerFunction ("includeFile", includeFile_lua, (intptr_t) this);
 	m_stringTemplate.m_luaState.registerFunction ("generateFile", generateFile_lua, (intptr_t) this);
-	m_stringTemplate.m_luaState.registerFunction ("getItem", generateFile_lua, (intptr_t) this);
 
 	globalNamespace->luaExport (&m_stringTemplate.m_luaState);
 

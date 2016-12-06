@@ -12,4 +12,70 @@
 Architectural Overview
 ======================
 
-Doxygen produces XML, XML is fed to doxyrest, on the output is RST.
+While desiging Doxyrest I tried to re-use existing documentation generation tools and techniques as much as possible.
+
+Re-used Toolset
+---------------
+
+Developers already know how to document their C/C++/Java code using Doxygen-style comments like:
+
+.. code-block:: cpp
+
+	/*!
+	    \brief This is brief documentation for class Foo.
+
+	    This is detailed documentation for class Foo.
+	    ...
+
+	 */
+
+	class Foo
+	{
+	    // ...
+	}
+
+Why invent and teach people a new way of documenting their code? Let's **keep** using the same **Doxygen-style comments**!
+
+Next. `Doxygen <http://www.stack.nl/~dimitri/doxygen/>`_ itself is quite good at extracting those comments from the C/C++/Java source code and building a XML database of the source structure. Great! For traditional C-family languages we are going to **re-use Doxygen** as the first stage of documentation generation pipeline.
+
+Moving on. `Sphinx <http://www.sphinx-doc.org>`_ is capable of generating **beautiful documentation** in multiple output formats, most important of which are -- at least, for us here in `Tibbo <http://tibbo.com>`_ -- HTML and PDF. Even more importantly, Sphinx is **completely customizable** using themes and Python scripting. So why look any further? Let's use Sphinx as a back-end of our pipeline.
+
+The only missing part of equation is **mid-end** -- we need to build a bridge between Doxygen and Sphinx. That's where **Doxyrest** comes in.
+
+Building a Bridge
+-----------------
+
+The job of Doxyrest is to take a Doxygen-generated XML database and convert it to reStructuredText -- the input format of Sphinx.
+
+The biggest challenge here is to maintain **independence** from the actual **source language**. I personally needed Doxyrest for documenting C, C++ and Jancy APIs. Even though all these languages belong to the C-family of programming languages, quite different syntax should be used when auto-generating declarations for functions, variables, classes etc. And if we move away from the C-family, the problem of customizing the documentation output becomes even more evident.
+
+In Doxyrest this problem is solved using Lua-based string template engine. The templates for the output ``.rst`` files are defined in form of Lua **replacable** frames ``.rst.in``. So you can always create your own Lua frames ``.rst.in``. Lua code inside those frames can iterate over Doxygen-XML-encoded representation of the original user source code and build whatever syntactic output is required for your particular language and your project.
+
+In a Nutshell
+-------------
+
+* Doxygen stage:
+	- Doxygen parses source input (``.c``, ``.cpp``, ``.h``, ``.dox``);
+	- Doxygen generates XML database (``.xml``);
+
+	.. note::
+
+		You can replace Doxygen with your own tool for ``.xml`` database generation.
+
+* Doxyrest stage:
+	- Doxyrest parses Doxygen XML database (``.xml``);
+	- Doxyrest passes to Lua-base string template engine:
+		+ The in-memory representation of Doxygen XML database;
+		+ Lua frames suitable for the project (``.rst.in``).
+	- String template engine generate reStructuredText (``.rst``);
+
+	.. note::
+
+		You can replace Lua ``.rst.in`` frames with your own ones for customization.
+
+* Sphinx stage:
+	- Sphinx parses these reStructuredText (``.rst``);
+	- Sphinx generates final documentation:
+		+ HTML pages (``.html``, ``.js``);
+		+ PDF file (``.pdf``);
+		+ ...

@@ -22,21 +22,21 @@ This chapter provides a reference to Doxyrest command line options.
 
 When specifying options *values*, you can use either of the following ways:
 
-* Separate with space
+* Separate with *space*:
 
 	.. code-block:: bash
 
 		-o index.rst
 		--output index.rst
 
-* Separate with ``=``
+* Separate with ``=``:
 
 	.. code-block:: bash
 
 		-o=index.rst
 		--output=index.rst
 
-* Concatenate (only for single-char options)
+* Concatenate (only for single-char options):
 
 	.. code-block:: bash
 

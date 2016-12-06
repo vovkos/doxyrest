@@ -44,10 +44,14 @@ Jancy is a C-family scripting language, but its keyword set and new syntax const
 
 So, I finally decided to fix the problem **once and for all** -- and **Doxyrest** was born!
 
+Contents
+--------
+
 .. toctree::
 	:titlesonly:
 
 	architecture.rst
 	frames.rst
+	lua_global.rst
 	cmd-line.rst
 	samples.rst

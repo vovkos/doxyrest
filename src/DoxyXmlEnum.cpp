@@ -79,6 +79,8 @@ getMemberKindString (MemberKind memberKind)
 		"slot",        // MemberKind_Slot
 		"interface",   // MemberKind_Interface
 		"service",     // MemberKind_Service
+		"alias",       // MemberKind_Alias
+		"footnote",    // MemberKind_Footnote
 	};
 
 	return (size_t) memberKind < countof (stringTable) ?

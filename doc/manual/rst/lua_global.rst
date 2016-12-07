@@ -9,8 +9,8 @@
 ..
 .. .............................................................................
 
-Lua Exports
-===========
+Lua API Reference
+=================
 
 .. toctree::
 	:hidden:
@@ -19,7 +19,10 @@ Lua Exports
 	lua_Member.rst
 	lua_EnumValue.rst
 	lua_Param.rst
+	lua_LinkedText.rst
+	lua_RefText.rst
 	lua_Description.rst
+	lua_DocBlock.rst
 
 Doxyrest exports all the Doxygen XML database in form of inter-connected Lua variables. It also exports a couple of handy functions useful for ``.rst`` file emission.
 
@@ -45,6 +48,12 @@ Lua Table Types
 
 	`Compound`
 	`Member`
+	`EnumValue`
+	`Param`
+	`Description`
+	`DocBlock`
+	`LinkedText`
+	`RefText`
 
 In addition to the globals above, all the variables passed via command line using :option:`--define` will also be added to the Lua global namespace.
 

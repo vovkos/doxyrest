@@ -14,14 +14,15 @@
 Member
 ======
 
-Overview
-~~~~~~~~
+Table of this type describes a Doxygen *member* such as *variable*, *function*, *typedef* etc.
 
-Table of this type describes a Doxygen *member*.
+Overview of Members
+~~~~~~~~~~~~~~~~~~~
 
 .. ref-code-block:: lua
 	:class: overview-code-block
 
+	:ref:`m_parent <cid-member.m_parent>`
 	:ref:`m_memberKind <cid-member.m_memberkind>`
 	:ref:`m_protectionKind <cid-member.m_protectionkind>`
 	:ref:`m_virtualKind <cid-member.m_virtualkind>`
@@ -33,9 +34,9 @@ Table of this type describes a Doxygen *member*.
 	:ref:`m_type <cid-member.m_type>`
 	:ref:`m_returnType <cid-member.m_returntype>`
 	:ref:`m_argString <cid-member.m_argstring>`
+	:ref:`m_paramArray <cid-member.m_paramarray>`
 	:ref:`m_templateParamArray <cid-member.m_templateparamarray>`
 	:ref:`m_templateSpecParamArray <cid-member.m_templatespecparamarray>`
-	:ref:`m_paramArray <cid-member.m_paramarray>`
 	:ref:`m_exceptions <cid-member.m_exceptions>`
 	:ref:`m_enumValueArray <cid-member.m_enumvaluearray>`
 	:ref:`m_bitField <cid-member.m_bitfield>`
@@ -44,8 +45,16 @@ Table of this type describes a Doxygen *member*.
 	:ref:`m_detailedDescription <cid-member.m_detaileddescription>`
 	:ref:`m_inBodyDescription <cid-member.m_inbodydescription>`
 
-Detailed Documentation
-~~~~~~~~~~~~~~~~~~~~~~
+Detailed Description of Members
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. _cid-member.m_parent:
+.. code-block:: lua
+	:class: title-code-block
+
+	m_parent
+
+Holds a back-pointer to parent ``Compound`` table.
 
 .. _cid-member.m_memberkind:
 .. code-block:: lua
@@ -55,6 +64,7 @@ Detailed Documentation
 
 Holds a string describing member type. Must be one of:
 
+	| ``<undefined>``
 	| ``define``
 	| ``property``
 	| ``event``
@@ -81,6 +91,7 @@ Holds a string describing member type. Must be one of:
 
 Holds a string describing protection of the member. Must be one of:
 
+	| ``<undefined>``
 	| ``public``
 	| ``protected``
 	| ``private``
@@ -94,9 +105,10 @@ Holds a string describing protection of the member. Must be one of:
 
 Holds a string describing whether this member is virtual or not. Must be one of:
 
-	``non-virtual``
-	``virtual``
-	``pure-virtual``
+	| ``<undefined>``
+	| ``non-virtual``
+	| ``virtual``
+	| ``pure-virtual``
 
 .. _cid-member.m_flags:
 .. code-block:: lua
@@ -104,7 +116,7 @@ Holds a string describing whether this member is virtual or not. Must be one of:
 
 	m_flags
 
-An empty string or a space-delimited list of:
+An empty string or a space-delimited combination of:
 
 	| ``static``
 	| ``const``
@@ -153,7 +165,7 @@ This string can be used as a unique identifier for creating labels and reference
 
 	m_name
 
-Detailed documentation for ``m_name``.
+Holds a string with the name of the member.
 
 .. _cid-member.m_path:
 .. code-block:: lua
@@ -161,7 +173,11 @@ Detailed documentation for ``m_name``.
 
 	m_path
 
-Detailed documentation for ``m_path``.
+Holds a string with a forward-slash-separated path to the enum starting from the global namespace. For example, C++ enum ``io::NetworkAdapterType`` will have its path encoded as ``io/NetworkAdapterType``.
+
+This field can be used to reconstruct a fully qualified name of the enum.
+
+This field is only set when ``m_memberKind`` is ``enum``.
 
 .. _cid-member.m_modifiers:
 .. code-block:: lua
@@ -169,7 +185,7 @@ Detailed documentation for ``m_path``.
 
 	m_modifiers
 
-Detailed documentation for ``m_modifiers``.
+Holds a string with space-separated list of language-specific modifiers applied to the member.
 
 .. _cid-member.m_type:
 .. code-block:: lua
@@ -177,7 +193,7 @@ Detailed documentation for ``m_modifiers``.
 
 	m_type
 
-Detailed documentation for ``m_type``.
+Holds a `LinkedText` table describing the type of the member.
 
 .. _cid-member.m_returntype:
 .. code-block:: lua
@@ -185,7 +201,12 @@ Detailed documentation for ``m_type``.
 
 	m_returnType
 
-Detailed documentation for ``m_returnType``.
+Holds a `LinkedText` table describing the return type of the member.
+
+This field is only set when ``m_memberKind`` is one of:
+
+	| ``function``
+	| ``property``
 
 .. _cid-member.m_argstring:
 .. code-block:: lua
@@ -193,23 +214,15 @@ Detailed documentation for ``m_returnType``.
 
 	m_argString
 
-Detailed documentation for ``m_argString``.
+Holds a string describing type suffix (function parameters, array dimensions, etc)
 
-.. _cid-member.m_templateparamarray:
-.. code-block:: lua
-	:class: title-code-block
+This field is only set when ``m_memberKind`` is one of:
 
-	m_templateParamArray
-
-Detailed documentation for ``m_templateParamArray``.
-
-.. _cid-member.m_templatespecparamarray:
-.. code-block:: lua
-	:class: title-code-block
-
-	m_templateSpecParamArray
-
-Detailed documentation for ``m_templateSpecParamArray``.
+	| ``typedef``
+	| ``variable``
+	| ``function``
+	| ``property``
+	| ``event``
 
 .. _cid-member.m_paramarray:
 .. code-block:: lua
@@ -217,7 +230,38 @@ Detailed documentation for ``m_templateSpecParamArray``.
 
 	m_paramArray
 
-Detailed documentation for ``m_paramArray``.
+Holds an array table with detailed description of all parameters of the member.
+
+Type of each element of the array is `Param`.
+
+This field is only set when ``m_memberKind`` is one of:
+
+	| ``typedef``
+	| ``variable``
+	| ``function``
+	| ``property``
+	| ``event``
+	| ``define``
+
+.. _cid-member.m_templateparamarray:
+.. code-block:: lua
+	:class: title-code-block
+
+	m_templateParamArray
+
+Holds a table containing an array of `Param` elements describing template parameters of the function.
+
+This field is only set when ``m_memberKind`` is ``function``.
+
+.. _cid-member.m_templatespecparamarray:
+.. code-block:: lua
+	:class: title-code-block
+
+	m_templateSpecParamArray
+
+Holds a table containing an array of `Param` elements describing template specialization parameters of the function.
+
+This field is only set when ``m_memberKind`` is ``function``.
 
 .. _cid-member.m_exceptions:
 .. code-block:: lua
@@ -225,7 +269,9 @@ Detailed documentation for ``m_paramArray``.
 
 	m_exceptions
 
-Detailed documentation for ``m_exceptions``.
+Holds a `LinkedText` table describing which exception could be thrown by the function.
+
+This field is only set when ``m_memberKind`` is ``function``.
 
 .. _cid-member.m_enumvaluearray:
 .. code-block:: lua
@@ -233,7 +279,11 @@ Detailed documentation for ``m_exceptions``.
 
 	m_enumValueArray
 
-Detailed documentation for ``m_enumValueArray``.
+Holds an array table with detailed description of all enum values of the enum.
+
+Type of each element of the array is `EnumValue`.
+
+This field is only set when ``m_memberKind`` is ``enum``.
 
 .. _cid-member.m_bitfield:
 .. code-block:: lua
@@ -241,7 +291,9 @@ Detailed documentation for ``m_enumValueArray``.
 
 	m_bitField
 
-Detailed documentation for ``m_bitField``.
+Holds a string with bit field suffix of the struct or union field.
+
+This field is only set when ``m_memberKind`` is ``variable``.
 
 .. _cid-member.m_initializer:
 .. code-block:: lua
@@ -249,7 +301,13 @@ Detailed documentation for ``m_bitField``.
 
 	m_initializer
 
-Detailed documentation for ``m_initializer``.
+Holds a `LinkedText` table with the member initializer.
+
+This field is only set when ``m_memberKind`` is one of:
+
+	| ``variable``
+	| ``alias``
+	| ``define``
 
 .. _cid-member.m_briefdescription:
 .. code-block:: lua
@@ -257,7 +315,7 @@ Detailed documentation for ``m_initializer``.
 
 	m_briefDescription
 
-Detailed documentation for ``m_briefDescription``.
+Holds a `Description` table with the brief description of the member.
 
 .. _cid-member.m_detaileddescription:
 .. code-block:: lua
@@ -265,7 +323,7 @@ Detailed documentation for ``m_briefDescription``.
 
 	m_detailedDescription
 
-Detailed documentation for ``m_detailedDescription``.
+Holds a `Description` table with the detailed description of the member.
 
 .. _cid-member.m_inbodydescription:
 .. code-block:: lua
@@ -273,4 +331,4 @@ Detailed documentation for ``m_detailedDescription``.
 
 	m_inBodyDescription
 
-Detailed documentation for ``m_inBodyDescription``.
+Holds a `Description` table with the in-body description of the member.

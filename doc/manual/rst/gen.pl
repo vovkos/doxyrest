@@ -1,15 +1,13 @@
 use strict;
 
-my $parent = "Compound";
+my $parent = "RefText";
 
 my @memberArray = (
-	"m_declarationName",
-	"m_definitionName",
-	"m_array",
-	"m_type",
-	"m_defaultValue",
-	"m_typeConstraint",
-	"m_briefDescription",
+	"m_refKind",
+	"m_text",
+	"m_id",
+	"m_external",
+	"m_tooltip",
 	);
 
 foreach my $m (@memberArray)

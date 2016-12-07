@@ -12,6 +12,38 @@
 Architectural Overview
 ======================
 
+In a Nutshell
+~~~~~~~~~~~~~
+
+* Doxygen stage:
+	- Doxygen parses source input (``.c``, ``.cpp``, ``.h``, ``.dox``);
+	- Doxygen generates XML database (``.xml``) containing the representation of the source tree (including documentation extracted from the comments);
+
+	.. note::
+
+		You can replace Doxygen with your own tool for ``.xml`` database generation.
+
+* Doxyrest stage:
+	- Doxyrest parses Doxygen XML database (``.xml``);
+	- Doxyrest passes to Lua-base string template engine:
+		+ The in-memory representation of Doxygen XML database;
+		+ Lua frames (``.rst.in``) containing Lua-driven templates of reStructuredText.
+	- String template engine generate reStructuredText (``.rst``);
+
+	.. note::
+
+		You can replace Lua ``.rst.in`` frames with your own ones for customization.
+
+* Sphinx stage:
+	- Sphinx parses reStructuredText (``.rst``);
+	- Sphinx generates final documentation:
+		+ HTML pages (``.html``, ``.js``);
+		+ PDF file (``.pdf``);
+		+ ...
+
+Details
+~~~~~~~
+
 While desiging Doxyrest I tried to re-use existing documentation generation tools and techniques as much as possible.
 
 Re-used Toolset
@@ -47,35 +79,12 @@ Building a Bridge
 
 The job of Doxyrest is to take a Doxygen-generated XML database and convert it to reStructuredText -- the input format of Sphinx.
 
-The biggest challenge here is to maintain **independence** from the actual **source language**. I personally needed Doxyrest for documenting C, C++ and Jancy APIs. Even though all these languages belong to the C-family of programming languages, quite different syntax should be used when auto-generating declarations for functions, variables, classes etc. And if we move away from the C-family, the problem of customizing the documentation output becomes even more evident.
+The biggest challenge here is to maintain **independence** from the **programming language** of the original sources. Let me elaborate.
 
-In Doxyrest this problem is solved using Lua-based string template engine. The templates for the output ``.rst`` files are defined in form of Lua **replacable** frames ``.rst.in``. So you can always create your own Lua frames ``.rst.in``. Lua code inside those frames can iterate over Doxygen-XML-encoded representation of the original user source code and build whatever syntactic output is required for your particular language and your project.
+Structure of source files can be described more or less uniformly for most traditional programming languages -- as a tree of hierarchical **namespaces** (or **compounds** in Doxygen terminology) and namespace **members**. All these namespaces and members can have different types, of course: ``struct``, ``class``, ``variable``, ``function`` etc. Doxygen XML could be considered as a standardized way of storing information about the source file structure.
 
-In a Nutshell
--------------
+But what about syntactic difference between the languages? When we generate documentation we have to take a Doxygem XML database (which holds a structure of source files to be documented) and then **re-construct** declarations of all the documentable items -- and do so using the syntax of the target language!
 
-* Doxygen stage:
-	- Doxygen parses source input (``.c``, ``.cpp``, ``.h``, ``.dox``);
-	- Doxygen generates XML database (``.xml``);
+I personally needed Doxyrest for documenting C, C++ and Jancy APIs. Even though all these languages belong to the C-family of programming languages, declarations may look quite different for classes, enums, properties, events etc. And if we move away from the C-family, the problem of customizing the documentation output becomes even more evident.
 
-	.. note::
-
-		You can replace Doxygen with your own tool for ``.xml`` database generation.
-
-* Doxyrest stage:
-	- Doxyrest parses Doxygen XML database (``.xml``);
-	- Doxyrest passes to Lua-base string template engine:
-		+ The in-memory representation of Doxygen XML database;
-		+ Lua frames suitable for the project (``.rst.in``).
-	- String template engine generate reStructuredText (``.rst``);
-
-	.. note::
-
-		You can replace Lua ``.rst.in`` frames with your own ones for customization.
-
-* Sphinx stage:
-	- Sphinx parses these reStructuredText (``.rst``);
-	- Sphinx generates final documentation:
-		+ HTML pages (``.html``, ``.js``);
-		+ PDF file (``.pdf``);
-		+ ...
+In Doxyrest this problem is solved using Lua-based **string template engine**. The templates for the output ``.rst`` files are defined in form of Lua **replacable** frames ``.rst.in``. So you can always create your own Lua frames ``.rst.in``. Lua code inside those frames can iterate over Doxygen-XML-encoded representation of the original user source code and build whatever syntactic output is required for your particular language and your project.

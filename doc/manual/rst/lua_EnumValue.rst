@@ -16,12 +16,13 @@ EnumValue
 
 Table of this type describes Doxygen enum value.
 
-Overview
-~~~~~~~~
+Overview of Members
+~~~~~~~~~~~~~~~~~~~
 
 .. ref-code-block:: lua
 	:class: overview-code-block
 
+	:ref:`m_parent <cid-enumvalue.m_parent>`
 	:ref:`m_protectionKind <cid-enumvalue.m_protectionkind>`
 	:ref:`m_id <cid-enumvalue.m_id>`
 	:ref:`m_name <cid-enumvalue.m_name>`
@@ -29,8 +30,16 @@ Overview
 	:ref:`m_briefDescription <cid-enumvalue.m_briefdescription>`
 	:ref:`m_detailedDescription <cid-enumvalue.m_detaileddescription>`
 
-Detailed Description
-~~~~~~~~~~~~~~~~~~~~
+Detailed Description of Members
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. _cid-enumvalue.m_parent:
+.. code-block:: lua
+	:class: title-code-block
+
+	m_parent
+
+Holds a back-pointer to parent enum `Member`. `Member.m_memberKind` should be ``enum``.
 
 .. _cid-enumvalue.m_protectionkind:
 .. code-block:: lua
@@ -38,7 +47,15 @@ Detailed Description
 
 	m_protectionKind
 
-Detailed documentation for ``m_protectionKind``.
+Holds a string describing protection of the enum value. Must be one of:
+
+	| ``<undefined>``
+	| ``public``
+	| ``protected``
+	| ``private``
+	| ``package``
+
+Usually it's just ``public``.
 
 .. _cid-enumvalue.m_id:
 .. code-block:: lua
@@ -56,7 +73,7 @@ This string can be used as a unique identifier for creating labels and reference
 
 	m_name
 
-Detailed documentation for ``m_name``.
+Holds a string with the name of the enum value.
 
 .. _cid-enumvalue.m_initializer:
 .. code-block:: lua
@@ -64,7 +81,22 @@ Detailed documentation for ``m_name``.
 
 	m_initializer
 
-Detailed documentation for ``m_initializer``.
+Holds a `LinkedText` table with the manually defined value.
+
+.. rubric:: Sample:
+
+.. code-block:: cpp
+
+	enum MyEnum
+	{
+		MyEnum_Value1,
+		MyEnum_Value2 = 100,
+	}
+
+
+``m_initializer`` for ``MyEnum_Value1`` will be empty (`LinkedText.m_isEmpty` will be set to ``false``).
+
+``m_initializer`` for ``MyEnum_Value2`` will contain ``= 100``.
 
 .. _cid-enumvalue.m_briefdescription:
 .. code-block:: lua
@@ -72,7 +104,7 @@ Detailed documentation for ``m_initializer``.
 
 	m_briefDescription
 
-Detailed documentation for ``m_briefDescription``.
+Holds a `Description` table with the brief description of the enum value.
 
 .. _cid-enumvalue.m_detaileddescription:
 .. code-block:: lua
@@ -80,6 +112,4 @@ Detailed documentation for ``m_briefDescription``.
 
 	m_detailedDescription
 
-Detailed documentation for ``m_detailedDescription``.
-
-[Finished in 0.0s]
+Holds a `Description` table with the detailed description of the enum value.

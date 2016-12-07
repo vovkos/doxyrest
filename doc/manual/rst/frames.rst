@@ -12,14 +12,14 @@
 Lua Frames
 ==========
 
-Lua frames are used as customizable templates for reStructuredText generation.
+Lua frames are used as templates for reStructuredText generation.
 
-Default set of frames is located at: ``$DOXYREST_DIR/frame`` and currently includes only frames for C-family languages (``c_*.rst.in`` and ``c_utils.lua``). These frames has been tested with C, C++ and Jancy. Minor tweaks may be necessary for other C-family languages like Java or D.
+Default set of frames is located at: ``$DOXYREST_DIR/frame``. Currently this folder only contains frames for C-family languages (``c_*.rst.in`` and ``c_utils.lua``). These frames has been tested with C, C++ and Jancy. Minor tweaks may be necessary for other C-family languages like Java or D.
 
 Frame Structure
 ---------------
 
-Every frame consists of **reStructuredText** with **injections of Lua** code. Lua code should be placed inside braces: ``%{`` and ``}``. Control flow graph of the injected code can be used to **include**, **exclude** or **loop** pieces of template reStructuredText.
+Each frame consists of **reStructuredText** with **injections of Lua** code. Lua code should be placed inside braces: ``%{`` and ``}``. Control flow graph of the injected code can be used to **include**, **exclude** or **loop** pieces of template reStructuredText.
 
 .. rubric:: Example:
 

@@ -14,10 +14,10 @@
 Compound
 ========
 
-Overview
-~~~~~~~~
+Table of this type describes a Doxygen *compound* such as *class*, *namespace*, *group* etc.
 
-Table of this type describes a Doxygen *compound*.
+Overview of Members
+~~~~~~~~~~~~~~~~~~~
 
 .. ref-code-block:: lua
 	:class: overview-code-block
@@ -49,8 +49,8 @@ Table of this type describes a Doxygen *compound*.
 	:ref:`m_defineArray <cid-compound.m_definearray>`
 	:ref:`m_footnoteArray <cid-compound.m_footnotearray>`
 
-Detailed Documentation
-~~~~~~~~~~~~~~~~~~~~~~
+Detailed Description of Members
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. _cid-compound.m_parent:
 .. code-block:: lua
@@ -68,6 +68,7 @@ Holds a back-pointer to parent ``Compound`` table.
 
 Holds a string describing compound type. Must be one of:
 
+	| ``<undefined>``
 	| ``class``
 	| ``struct``
 	| ``union``
@@ -99,7 +100,7 @@ This string can be used as a unique identifier for creating labels and reference
 
 	m_name
 
-Holds the name of the compound.
+Holds a string with the name of the compound.
 
 .. _cid-compound.m_title:
 .. code-block:: lua
@@ -107,9 +108,9 @@ Holds the name of the compound.
 
 	m_title
 
-Holds the title (if specified) or an empty string.
+Holds a string with the title (if specified) or an empty string.
 
-Usually compound titles are not used unles this is a ``group`` compound.
+Usually compound titles are not used unless this is a ``group`` compound.
 
 .. _cid-compound.m_path:
 .. code-block:: lua
@@ -117,7 +118,7 @@ Usually compound titles are not used unles this is a ``group`` compound.
 
 	m_path
 
-Holds a forward-slash-separated path to the compound starting from the global namespace. For example, C++ class ``sys::win::WaitableTimer`` will have its path encoded as ``sys/win/WaitableTimer``.
+Holds a string with a forward-slash-separated path to the compound starting from the global namespace. For example, C++ class ``sys::win::WaitableTimer`` will have its path encoded as ``sys/win/WaitableTimer``.
 
 This field can be used to reconstruct a fully qualified name of the compound.
 
@@ -127,9 +128,7 @@ This field can be used to reconstruct a fully qualified name of the compound.
 
 	m_briefDescription
 
-Holds a table with the brief description of the compound.
-
-The type of the table is `Description`.
+Holds a `Description` table with the brief description of the compound.
 
 .. _cid-compound.m_detaileddescription:
 .. code-block:: lua
@@ -137,9 +136,7 @@ The type of the table is `Description`.
 
 	m_detailedDescription
 
-Holds a table with the detailed description of the compound.
-
-The type of the table is `Description`.
+Holds a `Description` table with the detailed description of the compound.
 
 .. _cid-compound.m_templateparamarray:
 .. code-block:: lua
@@ -147,9 +144,16 @@ The type of the table is `Description`.
 
 	m_templateParamArray
 
-Holds a table containing an array of `Param` elements describing template parameters of the compound.
+Holds a table containing an array of all template parameters of the compound.
 
-Only applies to templated types.
+Type of each element of the array is `Param`
+
+This field is only set when ``m_compoundKind`` is one of:
+
+	| ``struct``
+	| ``union``
+	| ``class``
+	| ``interface``
 
 .. _cid-compound.m_templatespecparamarray:
 .. code-block:: lua
@@ -157,9 +161,16 @@ Only applies to templated types.
 
 	m_templateSpecParamArray
 
-Holds a table containing an array of `Param` elements describing template specialization parameters of the compound.
+Holds a table containing an array of all template specialization parameters of the compound.
 
-Only applies to template specialization types.
+Type of each element of the array is `Param`
+
+This field is only set when ``m_compoundKind`` is one of:
+
+	| ``struct``
+	| ``union``
+	| ``class``
+	| ``interface``
 
 .. _cid-compound.m_grouparray:
 .. code-block:: lua
@@ -189,7 +200,7 @@ Type of each element of the array is ``Compound``. `Compound.m_compoundKind` sho
 
 Holds a table containing an array of all the enums withing the compound.
 
-Type of each element of the array is `Member`. `Member.m_compoundKind` should be ``enum``.
+Type of each element of the array is `Member`. `Member.m_memberKind` should be ``enum``.
 
 .. _cid-compound.m_structarray:
 .. code-block:: lua
@@ -229,7 +240,7 @@ Type of each element of the array is ``Compound``. `Compound.m_compoundKind` sho
 
 Holds a table containing an array of all the typedefs within the compound.
 
-Type of each element of the array is `Member`. `Member.m_compoundKind` should be ``typedef``.
+Type of each element of the array is `Member`. `Member.m_memberKind` should be ``typedef``.
 
 .. _cid-compound.m_variablearray:
 .. code-block:: lua
@@ -239,7 +250,7 @@ Type of each element of the array is `Member`. `Member.m_compoundKind` should be
 
 Holds a table containing an array of all the variables within the compound.
 
-Type of each element of the array is `Member`. `Member.m_compoundKind` should be ``variable``.
+Type of each element of the array is `Member`. `Member.m_memberKind` should be ``variable``.
 
 .. _cid-compound.m_constructorarray:
 .. code-block:: lua
@@ -249,7 +260,7 @@ Type of each element of the array is `Member`. `Member.m_compoundKind` should be
 
 Holds a table containing an array of all the constructors of the type compound.
 
-Type of each element of the array is `Member`. `Member.m_compoundKind` should be ``function``.
+Type of each element of the array is `Member`. `Member.m_memberKind` should be ``function``.
 
 .. _cid-compound.m_destructor:
 .. code-block:: lua
@@ -257,9 +268,9 @@ Type of each element of the array is `Member`. `Member.m_compoundKind` should be
 
 	m_destructor
 
-Holds a table describing the destructor of the type compound (if there is any) or ``nil``.
+Holds a `Member` table describing the destructor of the type compound (if there is any) or ``nil``.
 
-The type of the table is `Member`. `Member.m_compoundKind` should be ``function``.
+`Member.m_memberKind` should be ``function``.
 
 .. _cid-compound.m_functionarray:
 .. code-block:: lua
@@ -269,7 +280,7 @@ The type of the table is `Member`. `Member.m_compoundKind` should be ``function`
 
 Holds a table containing an array of all the functions/methods within the compound.
 
-Type of each element of the array is `Member`. `Member.m_compoundKind` should be ``function``.
+Type of each element of the array is `Member`. `Member.m_memberKind` should be ``function``.
 
 .. _cid-compound.m_propertyarray:
 .. code-block:: lua
@@ -279,7 +290,7 @@ Type of each element of the array is `Member`. `Member.m_compoundKind` should be
 
 Holds a table containing an array of all the properties within the compound.
 
-Type of each element of the array is `Member`. `Member.m_compoundKind` should be ``property``.
+Type of each element of the array is `Member`. `Member.m_memberKind` should be ``property``.
 
 .. _cid-compound.m_eventarray:
 .. code-block:: lua
@@ -289,7 +300,7 @@ Type of each element of the array is `Member`. `Member.m_compoundKind` should be
 
 Holds a table containing an array of all the events within the compound.
 
-Type of each element of the array is `Member`. `Member.m_compoundKind` should be ``event``.
+Type of each element of the array is `Member`. `Member.m_memberKind` should be ``event``.
 
 .. _cid-compound.m_aliasarray:
 .. code-block:: lua
@@ -299,7 +310,7 @@ Type of each element of the array is `Member`. `Member.m_compoundKind` should be
 
 Holds a table containing an array of all the aliases within the compound.
 
-Type of each element of the array is `Member`. `Member.m_compoundKind` should be ``alias``.
+Type of each element of the array is `Member`. `Member.m_memberKind` should be ``alias``.
 
 .. _cid-compound.m_definearray:
 .. code-block:: lua
@@ -309,7 +320,7 @@ Type of each element of the array is `Member`. `Member.m_compoundKind` should be
 
 Holds a table containing an array of all the macro definitions within the compound.
 
-Type of each element of the array is `Member`. `Member.m_compoundKind` should be ``define``.
+Type of each element of the array is `Member`. `Member.m_memberKind` should be ``define``.
 
 .. _cid-compound.m_footnotearray:
 .. code-block:: lua
@@ -319,4 +330,4 @@ Type of each element of the array is `Member`. `Member.m_compoundKind` should be
 
 Holds a table containing an array of all the footnotes defined within the compound.
 
-Type of each element of the array is `Member`. `Member.m_compoundKind` should be ``footnote``.
+Type of each element of the array is `Member`. `Member.m_memberKind` should be ``footnote``.

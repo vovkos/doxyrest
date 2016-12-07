@@ -14,10 +14,10 @@
 Description
 ===========
 
-Overview
-~~~~~~~~
+Table of this type describes a Doxygen *description* extracted from in-source documentation comments.
 
-Table of this type describes a Doxygen *description*.
+Overview of Members
+~~~~~~~~~~~~~~~~~~~
 
 .. ref-code-block:: lua
 	:class: overview-code-block
@@ -25,8 +25,8 @@ Table of this type describes a Doxygen *description*.
 	:ref:`m_isEmpty <cid-description.m_isempty>`
 	:ref:`m_docBlockList <cid-description.m_docblocklist>`
 
-Detailed Description
-~~~~~~~~~~~~~~~~~~~~
+Detailed Description of Members
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. _cid-description.m_isempty:
 .. code-block:: lua
@@ -42,4 +42,6 @@ Holds ``true`` if description is empty or ``false`` otherwise.
 
 	m_docBlockList
 
-Holds a table of blocks constituting this description. Each block is described by ``DocBlock`` table type.
+Holds an array table of blocks constituting this description.
+
+Type of each element of the array is `DocBlock`.

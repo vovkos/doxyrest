@@ -19,25 +19,25 @@ AXL Reference
 
 This is a reference to AXL C++ library (C++ language).
 
-http://docs.tibbo.com/axl-reference
+http://docs.tibbo.com/axl/manual
 
 Jancy API Reference
 -------------------
 
 This is a reference to Jancy C API (C language).
 
-http://docs.tibbo.com/jancy-api
+http://docs.tibbo.com/jancy/api
 
 Jancy Standard Library Reference
 --------------------------------
 
 This is a reference to Jancy standard library (Jancy language).
 
-http://docs.tibbo.com/jancy-stdlib
+http://docs.tibbo.com/jancy/stdlib
 
 IO Ninja API Reference
 ----------------------
 
 This is a reference to Jancy API for `IO Ninja <http://tibbo.com/ninja>`_ (Jancy language).
 
-http://docs.tibbo.com/ioninja-api
+http://docs.tibbo.com/ioninja/api

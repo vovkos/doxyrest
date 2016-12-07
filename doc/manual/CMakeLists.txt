@@ -15,14 +15,12 @@ set (TEX_FILE_NAME ${TEX_BASE_NAME}.tex)
 set (PDF_FILE_NAME ${TEX_BASE_NAME}.pdf)
 set (SPHINX_HTML_THEME "sphinxdoc")
 
-set (SHARED_DIR     ${CMAKE_CURRENT_LIST_DIR}/../shared)
-set (STATIC_RST_DIR ${CMAKE_CURRENT_LIST_DIR}/rst)
-
-set (RST_DIR  ${CMAKE_CURRENT_LIST_DIR}/rst)
-set (HTML_DIR ${CMAKE_CURRENT_BINARY_DIR}/html)
-set (TEX_DIR  ${CMAKE_CURRENT_BINARY_DIR}/tex)
-set (PDF_DIR  ${CMAKE_CURRENT_BINARY_DIR}/pdf)
-set (TMP_DIR  ${CMAKE_CURRENT_BINARY_DIR}/tmp)
+set (SHARED_DIR ${AXL_DOC_DIR}/share)
+set (RST_DIR    ${CMAKE_CURRENT_LIST_DIR}/rst)
+set (HTML_DIR   ${CMAKE_CURRENT_BINARY_DIR}/html)
+set (TEX_DIR    ${CMAKE_CURRENT_BINARY_DIR}/tex)
+set (PDF_DIR    ${CMAKE_CURRENT_BINARY_DIR}/pdf)
+set (TMP_DIR    ${CMAKE_CURRENT_BINARY_DIR}/tmp)
 
 #. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 

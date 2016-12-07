@@ -39,11 +39,11 @@ These libraries are **required** for building the Doxyrest.
 	AXL is a lightweight C++ library featuring:
 
 	- Java naming convention;
-	- non-zero-terminated UTF-8 string slices as a default string-passing model;
+	- Non-zero-terminated UTF-8 string slices as the default string-passing model;
 	- TLS-based error-handling system;
-	- unified reference-counting model;
-	- wrappers for many popular libraries;
-	- and more...
+	- Unified reference-counting model;
+	- Wrappers for many popular libraries;
+	- And more...
 
 	AXL is included in the recommended ``doxyrest_b`` bundle package. Therefore, if you build Doxyrest from ``doxyrest_b`` package, you don't have to do anything extra -- AXL will be built automatically during the build process.
 

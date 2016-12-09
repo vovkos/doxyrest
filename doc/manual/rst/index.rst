@@ -26,21 +26,37 @@ To rephrase, Doxyrest could be used to produce customizable documentation/stats/
 Motivation
 ----------
 
-In the year 2016 the only option fellow C/C++ programmers have when it comes to documenting C/C++ APIs, is, sadly enough, Doxygen.
+Sadly enough, in the year 2016 fellow C/C++ programmers don't have much choise when it comes to documenting their C/C++ APIs. It basically boils down to the **three options**:
 
-Don't get me wrong. Doxygen was **revolutional** when if first emerged, and it quickly became a **de-facto standard** of documenting C/C++ code. But unfortunately, it has two major problems:
+1) **Doxygen**;
+2) **QDoc**;
+3) Writing everything **manually**.
 
-1. The default Doxygen output is... **not** exactly **good-looking**, to say the least.
+I will dismiss the option #3 immediatly. If the API is evolving -- which is (almost) always the case as long as the product is alive -- it is simply **impossible** to keep **coherence** between the documentation and the C/C++ sources. To rephrase, manually written API documentation is **always out-of-sync**.
 
-	Some people may not be as picky as I am, but I believe no professional web designer would ever use words "Doxygen" and "beautiful" in the same sentence. But you know what, it would be alright -- should Doxygen provide a way to tweak its output! Which leads us to a larger problem...
+Next, Doxygen. Don't get me wrong. Doxygen was **revolutional** when if first emerged, and it quickly became a **de-facto standard** of documenting C/C++ code. But unfortunately, it has two major problems:
 
-2. Doxygen never really developed sufficient **customizability**.
+	1. The default Doxygen output is... **not** exactly **good-looking**, to say the least.
 
-	Too much is **hard-coded** into the **monolithic** C++ core of Doxygen. That applies to both the back-end (generation of HTML and PDF) and to the front end (source code parser).
+		Some people may not be as picky as I am, but I believe no professional web designer would ever use words "Doxygen" and "beautiful" in the same sentence. But you know what, it would be alright -- should Doxygen provide a way to tweak its output! Which leads us to a larger problem...
+
+	2. Doxygen never really developed sufficient **customizability**.
+
+		Too much is **hardcoded** into the **monolithic C++** core of Doxygen. That applies to both the back-end (generation of HTML and PDF) and to the front end (source code parser).
+
+QDoc generates much, **much nicer** default HTML output. But it shares the biggest problem of Doxygen:
+
+	1. Both the parser and the HTML emitter are **hardcoded** into the very same **monolithic C++** core!
+
+		You **can't customize** much in the output other than changing a few QDoc configuration variables in ``.qdocconf`` files and then twiddling CSS. Moreover, unlike Doxygen, which tries to be a multi-language documentation generator, QDoc is strictly **C++ only** [#f1]_!
+
+Besides, and this was also crucial for us,
+
+	2. There is **no PDF** output!
 
 I was contemplating the idea of creating a better alternative for documenting C/C++ for many years already. But the actual decision to finally get down to it came with the need to document `Jancy <http://tibbo.com/jancy>`_ API for `IO Ninja <http://tibbo.com/ninja>`_ (a universal all-in-one low-level IO debugger).
 
-Jancy is a C-family scripting language, but its keyword set and new syntax constructs make it impossible to be used with Doxygen out-of-the-box. Should Doxygen provide front-end modularity, I may have silenced my inner designer-wannabe and accepted whatever default output Doxygen spits out. Alas, with Doxygen you can't add a new parser without the need to merge it into the Doxygen core and re-compile Doxygen.
+Jancy is a C-family scripting language, but its keyword set and new syntax constructs make it impossible to be passed to the out-of-the-box Doxygen (and obviously, not to QDoc). And neither provide front-end modularity -- to add a new parser you need to merge it into the monolithic С++ core and re-compile everything.
 
 So, I finally decided to fix the problem **once and for all** -- and **Doxyrest** was born!
 
@@ -55,3 +71,7 @@ Further Reading
 	lua_global.rst
 	cmd-line.rst
 	samples.rst
+
+.. rubric:: Footnotes:
+
+.. [#f1] And not even just C++, but the QT-dialect of C++ -- with all the ``Q_OBJECT``, ``Q_PROPERTY``, ``foreach`` etc macro language extensions.

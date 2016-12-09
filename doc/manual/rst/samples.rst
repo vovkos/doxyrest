@@ -14,12 +14,12 @@ Samples
 
 A picture is worth a thousand words. Take a look at the results of Doxyrest usage and see for yourself.
 
-AXL Reference
--------------
+Jancy Standard Library Reference
+--------------------------------
 
-This is a reference to AXL C++ library (C++ language).
+This is a reference to Jancy standard library (Jancy language).
 
-http://docs.tibbo.com/axl/manual
+http://docs.tibbo.com/jancy/stdlib
 
 Jancy API Reference
 -------------------
@@ -28,16 +28,16 @@ This is a reference to Jancy C API (C language).
 
 http://docs.tibbo.com/jancy/api
 
-Jancy Standard Library Reference
---------------------------------
-
-This is a reference to Jancy standard library (Jancy language).
-
-http://docs.tibbo.com/jancy/stdlib
-
 IO Ninja API Reference
 ----------------------
 
 This is a reference to Jancy API for `IO Ninja <http://tibbo.com/ninja>`_ (Jancy language).
 
 http://docs.tibbo.com/ioninja/api
+
+AXL Reference
+-------------
+
+This is a reference to AXL C++ library (C++ language).
+
+http://docs.tibbo.com/axl/manual

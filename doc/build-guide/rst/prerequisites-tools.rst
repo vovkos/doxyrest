@@ -17,11 +17,11 @@ Doxyrest build system relies on its own path configuration so you do not actuall
 Required Tools
 --------------
 
-These tools are **required** for building the Doxyrest:
+These tools are **required** for building Doxyrest:
 
 * CMake 3.3 or above
 
-	Doxyrest uses CMake-based build system. CMake is a cross-platform C/C++-centric build system which uses build scripts to generate platform-specific makefiles. CMake is quickly becoming a de-facto standard when it comes to building cross-platform C/C++ applications.
+	Doxyrest uses the CMake-based build system. CMake is a cross-platform C/C++-centric build system which uses build scripts to generate platform-specific makefiles. CMake is quickly becoming a de-facto standard when it comes to building cross-platform C/C++ applications.
 
 	CMake is available in official repositories of most Linux distributions. Source and pre-compiled binaries can also be directly downloaded from the official website: http://cmake.org
 
@@ -32,7 +32,7 @@ These tools are **required** for building the Doxyrest:
 Optional Tools
 --------------
 
-These tools are **optional** and only needed if you plan to build Doxyrest documentation:
+These tools are **optional** and only needed if you plan to build the Doxyrest documentation:
 
 * Python
 

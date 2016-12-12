@@ -12,15 +12,15 @@
 paths.cmake
 ===========
 
-Doxyrest build system uses ``paths.cmake`` file as the main reference when it needs to find a certain tool or library. When a path is not specified, a fallback attempt to find it using ``find_package`` will be made.
+Doxyrest build system uses the ``paths.cmake`` file as the main reference when it needs to find a certain tool or library. When a path is not specified, a fallback attempt to find it using ``find_package`` will be made.
 
-This allows for out-of-the-box *default* build and at the same time provides a *fine-grained* control over locations of dependencies. Here in Tibbo we have multiple versions of tools and libraries installed on the single build machine and at the same time we are always in full control over which tool or library is going to be used when building a particular project.
+This allows for out-of-the-box *default* build and at the same time provides a *fine-grained* control over locations of dependencies. Here at Tibbo we have multiple versions of tools and libraries installed on a single build machine and at the same time we are always in full control over which tool or library is going to be used when building a particular project.
 
 ``paths.cmake`` files are **cascading**. It means, you can place one *anywhere* above the current directory and it will be found and used. From there you can chain-include the next ``paths.cmake`` and so on. This way you can specify some default locations for *all* your projects but still be able to override the paths for sub-projects.
 
-Being machine-specific ``paths.cmake`` files are added to ``.gitignore`` and are never tracked in Git. Therefore, you need to write ``paths.cmake`` file as the very first step of configuration process. So, what should be inside?
+Being machine-specific, ``paths.cmake`` files are added to ``.gitignore`` and are never tracked in Git. Therefore, creatomg  the ``paths.cmake`` file should be the very first step of configuration process. So, what should be inside?
 
-To answer this question, you need to check ``dependencies.cmake`` file. Inside this file, a variable called ``AXL_PATH_LIST`` contains all the paths that will be used during the build. For ``doxyrest_b`` package this list looks like this:
+To answer this question, you need to check the ``dependencies.cmake`` file. Inside this file, a variable called ``AXL_PATH_LIST`` contains all the paths that will be used during the build. For ``doxyrest_b`` package this list looks like this:
 
 .. code-block:: bash
 

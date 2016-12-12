@@ -44,7 +44,7 @@ In a Nutshell
 Details
 ~~~~~~~
 
-While desiging Doxyrest I tried to re-use existing documentation generation tools and techniques as much as possible.
+While designing Doxyrest I tried to re-use existing documentation generation tools and techniques as much as possible.
 
 Re-used Toolset
 ---------------
@@ -54,9 +54,9 @@ Developers already know how to document their C/C++/Java code using Doxygen-styl
 .. code-block:: cpp
 
 	/*!
-	    \brief This is brief documentation for class Foo.
+	    \brief This is a brief documentation for class Foo.
 
-	    This is detailed documentation for class Foo.
+	    This is a detailed documentation for class Foo.
 	    ...
 
 	 */
@@ -70,7 +70,7 @@ Why invent and teach people a new way of documenting their code? Let's **keep** 
 
 Next. `Doxygen <http://www.stack.nl/~dimitri/doxygen/>`_ itself is quite good at extracting those comments from the C/C++/Java source code and building a XML database of the source structure. Great! For traditional C-family languages we are going to **re-use Doxygen** as the first stage of documentation generation pipeline.
 
-Moving on. `Sphinx <http://www.sphinx-doc.org>`_ is capable of generating **beautiful documentation** in multiple output formats, most important of which are -- at least, for us here in `Tibbo <http://tibbo.com>`_ -- HTML and PDF. Even more importantly, Sphinx is **completely customizable** using themes and Python scripting. So why look any further? Let's use Sphinx as a back-end of our pipeline.
+Moving on. `Sphinx <http://www.sphinx-doc.org>`_ is capable of generating **beautiful documentation** in multiple output formats, most important of which are -- at least, for us here at `Tibbo <http://tibbo.com>`_ -- HTML and PDF. Even more importantly, Sphinx is **completely customizable** using themes and Python scripting. So why look any further? Let's use Sphinx as a back-end of our pipeline.
 
 The only missing part of equation is **mid-end** -- we need to build a bridge between Doxygen and Sphinx. That's where **Doxyrest** comes in.
 
@@ -87,4 +87,4 @@ But what about syntactic difference between the languages? When we generate docu
 
 I personally needed Doxyrest for documenting C, C++ and Jancy APIs. Even though all these languages belong to the C-family of programming languages, declarations may look quite different for classes, enums, properties, events etc. And if we move away from the C-family, the problem of customizing the documentation output becomes even more evident.
 
-In Doxyrest this problem is solved using Lua-based **string template engine**. The templates for the output ``.rst`` files are defined in form of Lua **replacable** frames ``.rst.in``. So you can always create your own Lua frames ``.rst.in``. Lua code inside those frames can iterate over Doxygen-XML-encoded representation of the original user source code and build whatever syntactic output is required for your particular language and your project.
+In Doxyrest this problem is solved by using a Lua-based **string template engine**. The templates for the output ``.rst`` files are defined in form of Lua **repleacable** frames ``.rst.in``. So you can always create your own Lua frames ``.rst.in``. Lua code inside those frames can iterate over Doxygen-XML-encoded representation of the original user source code and build whatever syntactic output is required for your particular language and your project.

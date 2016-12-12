@@ -19,20 +19,20 @@ Doxyrest is a compiler from **Doxygen** XML to **reStructuredText** -- hence, th
 
 The main purpose of Doxyrest is to generate **beautiful** Sphinx-based documentation for **C/C++** APIs. But not just that!
 
-Doxygen can be replaced with your own source-code-analyzing tool capable of producing Doxygen-compatible XML database. Lua frames used for generation of reStructuredText can also be replaced with your own ones. It means that both the input and the output of Doxyrest are **100% customizable** -- and without re-compilation!
+Doxygen can be replaced with your own source-code-analyzing tool capable of producing Doxygen-compatible XML databases. Lua frames used for generation of reStructuredText can also be replaced with your own ones. It means that both the input and the output of Doxyrest are **100% customizable** -- and without re-compilation!
 
 To rephrase, Doxyrest could be used to produce customizable documentation/stats/reports for APIs written in **any programming language**!
 
 Motivation
 ----------
 
-Sadly enough, in the year 2016 fellow C/C++ programmers don't have much choise when it comes to documenting their C/C++ APIs. It basically boils down to the **three options**:
+Sadly enough, in the year 2016 fellow C/C++ programmers don't have much choice when it comes to documenting their C/C++ APIs. It basically boils down to these **three options**:
 
 1) **Doxygen**;
 2) **QDoc**;
 3) Writing everything **manually**.
 
-I will dismiss the option #3 immediatly. If the API is evolving -- which is (almost) always the case as long as the product is alive -- it is simply **impossible** to keep **coherence** between the documentation and the C/C++ sources. To rephrase, manually written API documentation is **always out-of-sync**.
+I will dismiss the option #3 right away. If the API is evolving -- which is (almost) always the case as long as the product is alive -- it is simply **impossible** to keep **coherence** between the documentation and the C/C++ sources. To rephrase, manually written API documentation is **always out-of-sync**.
 
 Next, Doxygen. Don't get me wrong. Doxygen was **revolutional** when if first emerged, and it quickly became a **de-facto standard** of documenting C/C++ code. But unfortunately, it has two major problems:
 
@@ -50,7 +50,7 @@ QDoc generates much, **much nicer** default HTML output. But it shares the bigge
 
 		You **can't customize** much in the output other than changing a few QDoc configuration variables in ``.qdocconf`` files and then twiddling CSS. Moreover, unlike Doxygen, which tries to be a multi-language documentation generator, QDoc is strictly **C++ only** [#f1]_!
 
-Besides, and this was also crucial for us,
+Besides, and this was also crucial for us at Tibbo,
 
 	2. There is **no PDF** output!
 

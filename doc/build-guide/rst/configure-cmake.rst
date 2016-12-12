@@ -100,4 +100,4 @@ After that you can optionally run::
 
 This will launch a GUI client for CMake and allow you to **fine-tune** CMake configuration variables. For example, you may want to turn **precompiled headers** ON or OFF, change C++ **RTTI** settings, for *make*-based builds change **configuration** from ``Debug`` to ``Release`` or vice versa and so on.
 
-You can also use ``cmake-gui`` all along for the whole CMake configuration process, without doing command line ``cmake`` step.
+You can also use ``cmake-gui`` for the whole CMake configuration process, without touching the command line at all.

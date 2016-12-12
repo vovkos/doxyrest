@@ -12,7 +12,7 @@
 Building on Unix
 ================
 
-Run in ``./build`` folder::
+Run the following in the ``./build`` folder::
 
 	make
 
@@ -20,6 +20,6 @@ You might also want to add ``-j <n>`` to make use of multiple CPU cores and spee
 
 	make -j 4
 
-After Doxyrest build is complete ``doxyrest`` command line tool can be found in ``./build/doxyrest/bin/${CMAKE_BUILD_TYPE}``.
+After the Doxyrest build is complete, the ``doxyrest`` command line tool can be found in ``./build/doxyrest/bin/${CMAKE_BUILD_TYPE}``.
 
-Note that with ``make``-based build changing configuration from ``Debug`` to ``Release`` should be done at CMake configuration step (Xcode and Visual Studio are multi-configuration build systems).
+Note that you if you want to change the configuration from ``Debug`` to ``Release``, this should be done at CMake configuration stage (Xcode and Visual Studio are multi-configuration build systems).

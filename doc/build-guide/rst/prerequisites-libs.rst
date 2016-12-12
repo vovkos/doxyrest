@@ -12,11 +12,11 @@
 Libraries
 =========
 
-These libraries are **required** for building the Doxyrest.
+These libraries are **required** for building Doxyrest.
 
 * Lua
 
-	Doxyrest uses Lua string templates for generating Re-Structured Text from Doxygen XML database. Therefore, Lua headers and libraries (not executables!) are required for building Doxyrest.
+	Doxyrest uses Lua string templates for generating reStructured Text from Doxygen XML databases. Therefore, Lua headers and libraries (not executables!) are required for building Doxyrest.
 
 	Lua executables, header files and both static and dynamic libraries are available in official repositories of most Linux distributions.
 

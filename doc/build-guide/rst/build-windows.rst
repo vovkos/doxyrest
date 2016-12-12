@@ -14,14 +14,14 @@ Building on Windows
 
 To build Doxyrest on Windows you can start Visual Studio by double-clicking the newly generated solution file ``doxyrest_b.sln`` and build it from the IDE.
 
-If you prefer building from the command line, run in ``./build`` folder::
+If you prefer building from the command line, run the following in the ``./build`` folder::
 
 	cmake --build .
 
-You can pass extra command-line arguments to ``msbuild.exe`` using ``--`` switch. For example, if you want to have a multi-core build of ``Release`` configuration, run::
+You can pass extra command-line arguments to ``msbuild.exe`` using the ``--`` switch. For example, if you want to have a multi-core build using the ``Release`` configuration, run::
 
 	cmake --build . -- /maxcpucount /property:configuration=Release
 
-Please refer to ``msbuild`` documentation for more details on command-line parameters: https://msdn.microsoft.com/en-us/library/ms164311.aspx
+Please refer to the ``msbuild`` documentation for more details on command-line parameters: https://msdn.microsoft.com/en-us/library/ms164311.aspx
 
-After Doxyrest build is complete ``doxyrest`` command line tool can be found in ``./build/doxyrest/bin/$(Configuration)``.
+After the Doxyrest build is complete , the``doxyrest`` command line tool can be found in ``./build/doxyrest/bin/$(Configuration)``.

@@ -1,0 +1,40 @@
+#!/bin/bash
+#...............................................................................
+#
+#  This file is part of the Doxyrest toolkit.
+#
+#  Doxyrest is distributed under the MIT license.
+#  For details see accompanying license.txt file,
+#  the public copy of which is also available at:
+#  http://tibbo.com/downloads/archive/doxyrest/license.txt
+#
+#...............................................................................
+
+set -e
+
+ROOT_DIR=${DOXYREST_ROOT_DIR}
+OUT_DIR=${DOXYREST_PACKAGE_DIR}
+TAR_DIR=${CMAKE_CURRENT_BINARY_DIR}/tar
+TAR_SUB_DIR=doxyrest-${DOXYREST_VERSION_FILE_SUFFIX}
+CONTENTS_DIR=$TAR_DIR/$TAR_SUB_DIR
+OUT_FILE_NAME=doxyrest-src-${DOXYREST_VERSION_FILE_SUFFIX}.tar.xz
+OUT_FILE_PATH=$OUT_DIR/$OUT_FILE_NAME
+
+echo Building archive $OUT_FILE_NAME...
+
+rm -rf $TAR_DIR
+rm -f $OUT_FILE_PATH
+
+mkdir -p $CONTENTS_DIR/cmake
+mkdir -p $CONTENTS_DIR/include
+mkdir -p $CONTENTS_DIR/src
+
+cp -f $ROOT_DIR/cmake/*.* $CONTENTS_DIR/cmake
+cp -rf $ROOT_DIR/include $CONTENTS_DIR
+cp -rf $ROOT_DIR/src $CONTENTS_DIR
+cp -f $ROOT_DIR/CMakeLists.txt $CONTENTS_DIR
+cp -f $ROOT_DIR/version.cmake $CONTENTS_DIR
+
+chown -R root:$(id -gn root) $TAR_DIR
+tar -cJf $OUT_FILE_PATH -C $TAR_DIR $TAR_SUB_DIR
+rm -rf $TAR_DIR

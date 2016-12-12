@@ -33,4 +33,8 @@ include (${CMAKE_CURRENT_BINARY_DIR}/cmake/doxyrest_config.cmake)
 add_subdirectory (src)
 add_subdirectory (doc)
 
+if (EXISTS "${CMAKE_CURRENT_LIST_DIR}/package/CMakeLists.txt")
+	add_subdirectory (package)
+endif ()
+
 #...............................................................................

@@ -1,0 +1,61 @@
+@rem ...........................................................................
+@rem
+@rem  This file is part of the Doxyrest toolkit.
+@rem
+@rem  Doxyrest is distributed under the MIT license.
+@rem  For details see accompanying license.txt file,
+@rem  the public copy of which is also available at:
+@rem  http://tibbo.com/downloads/archive/doxyrest/license.txt
+@rem
+@rem ...........................................................................
+
+@echo off
+
+set ROOT_DIR="${DOXYREST_ROOT_DIR}"
+set OUT_DIR="${DOXYREST_PACKAGE_DIR}"
+set ZIP_DIR="${CMAKE_CURRENT_BINARY_DIR}/zip"
+set ZIP_EXE="${7Z_EXE}"
+
+set ROOT_DIR=%ROOT_DIR:/=\%
+set OUT_DIR=%OUT_DIR:/=\%
+set ZIP_DIR=%ZIP_DIR:/=\%
+set ZIP_EXE=%ZIP_EXE:/=\%
+
+set CONTENTS_DIR="%ZIP_DIR%\doxyrest-${DOXYREST_VERSION_FILE_SUFFIX}"
+set OUT_FILE_NAME=doxyrest-src-${DOXYREST_VERSION_FILE_SUFFIX}.${ZIP_TYPE}
+set OUT_FILE_PATH=%OUT_DIR%\%OUT_FILE_NAME%
+
+echo Building archive %OUT_FILE_NAME%...
+
+if exist %ZIP_DIR% (rd /S /Q %ZIP_DIR% || exit)
+if exist %OUT_FILE_PATH% (del %OUT_FILE_PATH%  || exit)
+
+mkdir %CONTENTS_DIR%\cmake || exit
+mkdir %CONTENTS_DIR%\doc || exit
+mkdir %CONTENTS_DIR%\frame || exit
+mkdir %CONTENTS_DIR%\license || exit
+mkdir %CONTENTS_DIR%\sphinx || exit
+mkdir %CONTENTS_DIR%\src || exit
+mkdir %CONTENTS_DIR%\package || exit
+if not exist "%OUT_DIR%" (mkdir "%OUT_DIR%" || exit)
+
+copy /Y %ROOT_DIR%\cmake\*.* %CONTENTS_DIR%\cmake || exit
+xcopy /Y /E /Q %ROOT_DIR%\doc\*.* %CONTENTS_DIR%\doc || exit
+copy /Y %ROOT_DIR%\frame\*.* %CONTENTS_DIR%\frame || exit
+xcopy /Y /E /Q %ROOT_DIR%\license\*.* %CONTENTS_DIR%\license || exit
+copy /Y %ROOT_DIR%\sphinx\*.py %CONTENTS_DIR%\sphinx || exit
+copy /Y %ROOT_DIR%\sphinx\*.sty %CONTENTS_DIR%\sphinx || exit
+xcopy /Y /E /Q %ROOT_DIR%\src\*.* %CONTENTS_DIR%\src || exit
+xcopy /Y /E /Q %ROOT_DIR%\package\*.* %CONTENTS_DIR%\package || exit
+copy /Y %ROOT_DIR%\CMakeLists.txt %CONTENTS_DIR% || exit
+copy /Y %ROOT_DIR%\version.cmake %CONTENTS_DIR% || exit
+copy /Y %ROOT_DIR%\dependencies.cmake %CONTENTS_DIR% || exit
+
+set PREV_DIR=%CD%
+cd %ZIP_DIR% || exit
+%ZIP_EXE% a -t${ZIP_TYPE} -y %OUT_FILE_PATH% || exit
+cd %PREV_DIR% || exit
+
+rd /S /Q "%ZIP_DIR%"
+
+rem ............................................................................

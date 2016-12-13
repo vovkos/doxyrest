@@ -19,6 +19,23 @@ TAR_DIR=${CMAKE_CURRENT_BINARY_DIR}/tar
 TAR_SUB_DIR=doxyrest-${DOXYREST_VERSION_FILE_SUFFIX}
 CONTENTS_DIR=$TAR_DIR/$TAR_SUB_DIR
 
+# detect OS
+
+_S=$(uname -s)
+case "$_S" in
+"Linux")
+	TARGET_OS=linux
+	;;
+
+"Darwin")
+	TARGET_OS=mac
+	;;
+
+*)
+	echo "Unsupported OS: \"$_S\""
+	exit -1
+esac
+
 if [ "$TARGET_OS" == "mac" ]; then
 	OUT_FILE_NAME=doxyrest-mac-${DOXYREST_VERSION_FILE_SUFFIX}.tar.xz
 else
@@ -34,16 +51,19 @@ rm -f $OUT_FILE_PATH
 
 mkdir -p $CONTENTS_DIR/bin
 mkdir -p $CONTENTS_DIR/cmake
-mkdir -p $CONTENTS_DIR/include
 mkdir -p $CONTENTS_DIR/frame
-mkdir -p $CONTENTS_DIR/samples
+mkdir -p $CONTENTS_DIR/license
+mkdir -p $CONTENTS_DIR/sphinx
 mkdir -p $OUT_DIR
 
 cp -f $BIN_DIR/doxyrest $CONTENTS_DIR/bin
 cp -f $ROOT_DIR/package/cmake/*.* $CONTENTS_DIR/cmake
-cp -f $ROOT_DIR/cmake/doxyrest_step.cmake $CONTENTS_DIR/cmake
-cp -rf $ROOT_DIR/include $CONTENTS_DIR
+cp -f $ROOT_DIR/cmake/import_doxyrest.cmake $CONTENTS_DIR/cmake
+cp -f $ROOT_DIR/version.cmake $CONTENTS_DIR/cmake
 cp -rf $ROOT_DIR/frame $CONTENTS_DIR
+cp -rf $ROOT_DIR/license $CONTENTS_DIR
+cp -f $ROOT_DIR/sphinx/*.py $CONTENTS_DIR/sphinx
+cp -f $ROOT_DIR/sphinx/*.sty $CONTENTS_DIR/sphinx
 
 if [ -d $ROOT_DIR/samples ]; then
 	cp -rf $ROOT_DIR/samples $CONTENTS_DIR

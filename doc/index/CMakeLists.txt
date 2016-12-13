@@ -10,7 +10,7 @@
 #...............................................................................
 
 set (DOC_NAME      "Doxyrest Documentation Index")
-set (SPHINX_HTML_THEME "sphinxdoc")
+set (SPHINX_HTML_THEME ${AXL_SPHINX_HTML_THEME})
 
 set (SHARED_DIR ${AXL_DOC_DIR}/share)
 set (RST_DIR    ${CMAKE_CURRENT_LIST_DIR})

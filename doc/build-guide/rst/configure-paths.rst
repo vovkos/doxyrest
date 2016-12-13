@@ -82,5 +82,3 @@ I personally prefer to always specify all the paths explicitly.
 
 	set (SPHINX_BUILD_EXE c:/Develop/ActivePython/Scripts/sphinx-build.exe)
 	set (PDFLATEX_EXE     "c:/Program Files (x86)/MiKTeX 2.9/miktex/bin/pdflatex.exe")
-
-#..............................................................................

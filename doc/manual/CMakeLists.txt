@@ -13,7 +13,7 @@ set (DOC_NAME      "Doxyrest Manual")
 set (TEX_BASE_NAME doxyrest-manual-${DOXYREST_VERSION_FILE_SUFFIX})
 set (TEX_FILE_NAME ${TEX_BASE_NAME}.tex)
 set (PDF_FILE_NAME ${TEX_BASE_NAME}.pdf)
-set (SPHINX_HTML_THEME "sphinxdoc")
+set (SPHINX_HTML_THEME ${AXL_SPHINX_HTML_THEME})
 
 set (SHARED_DIR ${AXL_DOC_DIR}/share)
 set (RST_DIR    ${CMAKE_CURRENT_LIST_DIR}/rst)

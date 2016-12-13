@@ -1,0 +1,72 @@
+Создавая хтонических чудовищ, документируй!
+===========================================
+
+Под данным изречением-мемом, взятым с замечательной картинки Такого-то Такого-то, думаю, поставит свою подпись каждый имеющий хотя бы минимальное отношение к программированию человек. Весь вопрос, как? Как документировать-то?
+
+Нижележащий текст преследует несколько целей:
+
+1) Во-первых, дать краткий обзор (читай -- немного погундеть на тему) неудовлетворительного состояния инструментария, применимого на ниве документации хтонических чудовищ мира C/C++;
+2) Во-вторых, предожить своё альтернативное решение (бесплатно-без-СМС-и-регистрации -- проект некоммерческий и выложен на GitHub);
+3) В-третьих, призвать сообщество пообщаться на тему и собрать идеи;
+4) В-четвёртых, пригласить присоединиться к разработке проекта на GitHub.
+
+Сразу оговорюсь, что хотя проект создавался в первую очередь как альтернатива Doxygen для документирования сишных и плюсовых API, архитектурно он в равной степени пригоден и для других языков. В идеале это позволит создавать, например, порталы документации корпоративных библиотек; при этом, несмотря на то, что сами библиотеки написаны на разных языках, документация будет объединена единством стиля во внешнем виде и поведении.
+
+Мотивация
+---------
+
+По большому счёту, подходов к документированию API и библиотек -- неважно, плюсовых или нет, -- ровно два.
+
+Первый, это писать всё ручками. Даже неважно в чём -- в Help & Manual, RoboHelp, Word или другом текстовом редакторе -- возможно, с последующим скармливанием Sphinx-у. Несмотря на то, что этот традиционный способ всем понятен и по-прежнему широко используется, я глубоко убеждён что он в корне неверен. Дело в том, что он порождает документацию, которая всё время местами нерелевантна и в целом отстаёт от объекта докмуентации. Поддержка согласованности между созданными раздельно (зачастую ещё и разными людьми!) документацией и постоянно эволюционируюим API библиотеки -- а не эволюционируют только умершие или замороженные продукты! -- это колоссальная задача, лишь немногим более лёгкая написания первичной документации.
+
+Второй, "правильный" подход, состоит в том, чтобы генерировать документацию по исходникам автоматически. Специально обученный парсер пробегает по исходникам, вычленяет особым образом оформленные комментарии с документацией и строит структуру дерева публичных объявлений API. После этого генерируется документация в нужном формате -- меня, как, полагаю, и большинство, в первую очередь интересует HTML и PDF. Основным преимуществом данного подхода является гарантированная когерентность объявлений в исходниках API и в конечной документации. Даже при полном отсутвии в исходниках содержательных комментариев с собственно "документацией", в конце мы будем иметь прекрасный источник информации о текущем снимке состояния API библиотеки, с возможностью "попрыгать" по объявлениям и описаниям типов, и т.д.
+
+Итак, с вашего позволения, я сконцентрируюсь на "правильном" подходе с автогенерацией. Какие варианты у нас имеются тут? Увы, для документации C/C++ на данный момент имеется и реально используется печально мало: Doxygen да QDoc. И с этими двумя тоже далеко не всё гладко.
+
+Doxygen -- это первый по-настоящему успешный проект по вытаскиванию комментариев из кода на плюсах и превращению оных в HTML-документацию с гиперссылками, картинами графов наследования, вызовов и т.д. Сейчас Doxygen -- это де-факто стандарт документирования C/C++. И всё это было бы замечательно, если бы не два "но":
+
+1) Стандартный генерируемый доксигеном HTML, как бы это помягче сказать... не обременён элегантностью.
+
+Конечно, тут есть место субъективизму, и я вполне допускаю, что есть не столь придирчивые люди, которых доксигеновский выхлоп полностью устраивает (рискну предположить, однако, что профессиональных дизайнеров среди них не окажется). Но даже если допустить, что умолчальный доксигеновский HTML-уродец может устраивать с визуальной точки зрения (а серьёзно, есть такие, кому он реально нравится эстетически? напишите в комментариях!), очень часто хочется поменять и настроить что-то выходящее за рамки CSS -- например, изменить форматирование объявлений, чтобы привести его в соответствие с принятым в данной конкретной библиотеке coding-style. Это подводит нас ко второй, более фундаментальной проблеме Doxygen:
+
+2) Doxygen за свою долгую жизнь так и не отрастил настоящую, модульную настраиваемость.
+
+Да, есть Doxyfile с кучей переменных, есть возможность менять HTML шапки, но архитектурно -- всё захардкожено в монолитное C++ ядро! Причём захардкожен как front-end, а именно, парсеры исходников, так и back-end -- генераторы HTML, PDF, RTF и другого (среди которого есть, слава небесам, и XML).
+
+QDoc по умолчанию выдаёт гораздо, гораздо более симпатишный HTML, чем Doxygen. К сожалению, если требуется что-то не по умолчанию, то QDoc страдает всё той же врождённой деревянностью, что и Doxygen (растущей, понятно, из той же самой ж... захардкоженности и парсера, и генератора в монолитное плюсовое ядро). В дополнение к своей деревянности, QDoc, в отличие от Doxygen, имеет всего лишь один входной парсер -- для QT-диалекта C++ (со всеми Q_OBJECT, Q_PROPERTY, foreach, и т.д. жёстко трактуемыми как ключевые слова). И при этом, -- что уж совсем ни в какие ворота, -- не умеет генерировать PDF!
+
+Итак, что же предлагается взамен.
+
+Sadly enough, in the year 2016 fellow C/C++ programmers don't have much choise when it comes to documenting their C/C++ APIs. It basically boils down to the **three options**:
+
+1) **Doxygen**;
+2) **QDoc**;
+3) Писать всё ручками.
+
+I will dismiss the option #3 immediatly. If the API is evolving -- which is (almost) always the case as long as the product is alive -- it is simply **impossible** to keep **coherence** between the documentation and the C/C++ sources. To rephrase, manually written API documentation is **always out-of-sync**.
+
+Next, Doxygen. Don't get me wrong. Doxygen was **revolutional** when if first emerged, and it quickly became a **de-facto standard** of documenting C/C++ code. But unfortunately, it has two major problems:
+
+	1. The default Doxygen output is... **not** exactly **good-looking**, to say the least.
+
+		Some people may not be as picky as I am, but I believe no professional web designer would ever use words "Doxygen" and "beautiful" in the same sentence. But you know what, it would be alright -- should Doxygen provide a way to tweak its output! Which leads us to a larger problem...
+
+	2. Doxygen never really developed sufficient **customizability**.
+
+		Too much is **hardcoded** into the **monolithic C++** core of Doxygen. That applies to both the back-end (generation of HTML and PDF) and to the front end (source code parser).
+
+QDoc generates much, **much nicer** default HTML output. But it shares the biggest problem of Doxygen:
+
+	1. Both the parser and the HTML emitter are **hardcoded** into the very same **monolithic C++** core!
+
+		You **can't customize** much in the output other than changing a few QDoc configuration variables in ``.qdocconf`` files and then twiddling CSS. Moreover, unlike Doxygen, which tries to be a multi-language documentation generator, QDoc is strictly **C++ only** [#f1]_!
+
+Besides, and this was also crucial for us,
+
+	2. There is **no PDF** output!
+
+I was contemplating the idea of creating a better alternative for documenting C/C++ for many years already. But the actual decision to finally get down to it came with the need to document `Jancy <http://tibbo.com/jancy>`_ API for `IO Ninja <http://tibbo.com/ninja>`_ (a universal all-in-one low-level IO debugger).
+
+Jancy is a C-family scripting language, but its keyword set and new syntax constructs make it impossible to be passed to the out-of-the-box Doxygen (and obviously, not to QDoc). And neither provide front-end modularity -- to add a new parser you need to merge it into the monolithic С++ core and re-compile everything.
+
+So, I finally decided to fix the problem **once and for all** -- and **Doxyrest** was born!

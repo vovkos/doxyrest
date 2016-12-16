@@ -9,8 +9,8 @@
 #
 #...............................................................................
 
-set (DOXYREST_VERSION_MAJOR     1)
-set (DOXYREST_VERSION_MINOR     0)
+set (DOXYREST_VERSION_MAJOR     0)
+set (DOXYREST_VERSION_MINOR     9)
 set (DOXYREST_VERSION_REVISION  0)
 set (DOXYREST_VERSION_TAG)
 

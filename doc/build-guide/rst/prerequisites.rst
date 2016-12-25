@@ -22,4 +22,3 @@ The list of Doxyrest prerequisites is split into the following categories for yo
 	prerequisites-cpp.rst
 	prerequisites-tools.rst
 	prerequisites-libs.rst
-

@@ -17,40 +17,24 @@ Doxyrest contains two documentation packages:
 * Build guide
 * Manual
 
-If you have all the required :ref:`prerequisites <optional-tools>` for building documentation, CMake should have created all the necessary shell scripts under: ``./build/doc/<doc-package>``
-
-``sphinx-build`` is always needed; ``pdflatex`` is also needed to build PDF.
-
-Resulting HTML pages will be placed in: ``./build/doc/<doc-package>/html``
-
-Resulting PDF will be placed in: ``./build/doc/<doc-package>/pdf``
+.. expand-macro:: build-doc-intro ./build/doxyrest
 
 Build Guide
 -----------
 
-This is what you are reading right now.
-
-Located at: ``./doc/build-guide``
-
-Build steps:
-
-.. code-block:: bash
-
-	cd ./build/doc/build-guide
-	./build-html
-	./build-pdf
+.. expand-macro:: build-doc-build-guide ./build/doxyrest
 
 Manual
 ------
 
-A manual on Doxyrest command-line tool
+A manual on the Doxyrest command-line tool.
 
-Located at: ``./doc/manual`` (not yet, but soon)
+Documentation source files are located at: ``./doc/manual``
 
 Build steps:
 
 .. code-block:: bash
 
-	cd ./build/doc/manual
+	cd ./build/doxyrest/doc/manual
 	./build-html
 	./build-pdf

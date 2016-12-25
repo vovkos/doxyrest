@@ -9,13 +9,13 @@
 #
 #...............................................................................
 
-set (DOC_NAME      "Doxyrest Documentation Index")
-set (SPHINX_HTML_THEME ${AXL_SPHINX_HTML_THEME})
+set (DOC_NAME "Doxyrest Documentation Index")
 
-set (SHARED_DIR ${AXL_DOC_DIR}/share)
-set (RST_DIR    ${CMAKE_CURRENT_LIST_DIR})
-set (HTML_DIR   ${CMAKE_CURRENT_BINARY_DIR}/html)
-set (TMP_DIR    ${CMAKE_CURRENT_BINARY_DIR}/tmp)
+set (RST_DIR  ${CMAKE_CURRENT_LIST_DIR})
+set (HTML_DIR ${CMAKE_CURRENT_BINARY_DIR}/html)
+set (TMP_DIR  ${CMAKE_CURRENT_BINARY_DIR}/tmp)
+
+set (SPHINX_HTML_THEME ${AXL_SPHINX_HTML_THEME})
 
 #. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
@@ -44,12 +44,12 @@ configure_file (
 
 if (WIN32)
 	configure_file (
-		${SHARED_DIR}/sh/build-html.bat.in
+		${AXL_DOC_SHARE_DIR}/sh/build-html.bat.in
 		build-html.bat
 		)
 else ()
 	axl_configure_file_w_permissions (
-		${SHARED_DIR}/sh/build-html.sh.in
+		${AXL_DOC_SHARE_DIR}/sh/build-html.sh.in
 		build-html.sh
 		OWNER_READ OWNER_WRITE OWNER_EXECUTE
 		GROUP_READ GROUP_WRITE GROUP_EXECUTE

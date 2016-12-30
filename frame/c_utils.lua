@@ -157,7 +157,7 @@ function getItemName (item)
 			parent = parent.m_parent
 		else
 			if parent.m_compoundKind == "namespace" and parent.m_path ~= "" then
- 				-- only add prefix to namespaces, not classes/structs
+				-- only add prefix to namespaces, not classes/structs
 				s = string.gsub (parent.m_path, "/", g_nameDelimiter) .. g_nameDelimiter
 			end
 
@@ -250,6 +250,36 @@ function getItemCid (item)
 
 	s = string.lower (s .. item.m_name)
 	s = ensureUniqueItemName (item, s, g_itemCidMap, "-")
+
+	return s
+end
+
+function getItemImportString (item)
+	local count = #item.m_importArray
+	if count == 0 then
+		return ""
+	end
+
+	local importPrefix
+	local importSuffix
+
+	if $g_language == "cpp" then
+		importPrefix = "\t#include <"
+		importSuffix = ">\n"
+	elseif $g_language == "jancy" then
+		importPrefix = "\timport \""
+		importSuffix = "\"\n"
+	else
+		importPrefix = "\timport "
+		importSuffix = "\n"
+	end
+
+	local s = ".. code-block:: " .. $g_language .. "\n\n"
+
+	for i = 1, count do
+		local import = item.m_importArray [i]
+		s = s .. importPrefix .. import .. "\"\n"
+	end
 
 	return s
 end

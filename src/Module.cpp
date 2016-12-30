@@ -305,6 +305,9 @@ Member::luaExport (lua::LuaState* luaState)
 	luaState->setMemberString ("m_name", m_name);
 	luaState->setMemberString ("m_modifiers", m_modifiers);
 
+	luaExportStringList (luaState, m_importList);
+	luaState->setMember ("m_importArray");
+
 	switch (m_memberKind)
 	{
 	case MemberKind_Typedef:
@@ -438,6 +441,9 @@ Compound::luaExport (lua::LuaState* luaState)
 	luaState->setMemberString ("m_id", m_id);
 	luaState->setMemberString ("m_name", m_name);
 	luaState->setMemberString ("m_title", m_title);
+
+	luaExportStringList (luaState, m_importList);
+	luaState->setMember ("m_importArray");
 
 	switch (m_compoundKind)
 	{

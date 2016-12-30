@@ -247,6 +247,8 @@ CompoundDefType::onStartElement (
 	const char** attributes
 	)
 {
+	sl::BoxIterator <sl::String> stringIt;
+
 	ElemKind elemKind = ElemKindMap::findValue (name, ElemKind_Undefined);
 	switch (elemKind)
 	{
@@ -267,6 +269,10 @@ CompoundDefType::onStartElement (
 		break;
 
 	case ElemKind_Includes:
+		stringIt = m_compound->m_importList.insertTail ();
+		m_parser->pushType <StringType> (stringIt.p (), name, attributes);
+		break;
+
 	case ElemKind_IncludedBy:
 	case ElemKind_IncDepGraph:
 	case ElemKind_InvIncDepGraph:
@@ -609,9 +615,16 @@ MemberDefType::onStartElement (
 	const char** attributes
 	)
 {
+	sl::BoxIterator <sl::String> stringIt;
+
 	ElemKind elemKind = ElemKindMap::findValue (name, ElemKind_Undefined);
 	switch (elemKind)
 	{
+	case ElemKind_Includes:
+		stringIt = m_member->m_importList.insertTail ();
+		m_parser->pushType <StringType> (stringIt.p (), name, attributes);
+		break;
+
 	case ElemKind_TemplateParamList:
 		m_parser->pushType <TemplateParamListType> (&m_member->m_templateParamList, name, attributes);
 		break;
@@ -1070,7 +1083,7 @@ DocParaType::onStartElement (
 	case ElemKind_SimpleSect:
 		m_parser->pushType <DocSimpleSectionType> (&m_paragraphBlock->m_childBlockList, name, attributes);
 		break;
-		
+
 	case ElemKind_ComputerOutput:
 		block = AXL_MEM_NEW (DocBlock);
 		block->m_blockKind = DocBlockKind_ComputerOutput;

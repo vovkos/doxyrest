@@ -273,6 +273,7 @@ struct Member: sl::ListLink
 	LinkedText m_exceptions;
 	sl::String m_modifiers;
 
+	sl::BoxList <sl::String> m_importList;
 	sl::StdList <Param> m_paramList;
 	sl::StdList <Param> m_templateParamList;
 	sl::StdList <Param> m_templateSpecParamList;
@@ -320,6 +321,7 @@ struct Compound: sl::ListLink
 	sl::String m_id;
 	sl::String m_name;
 	sl::String m_title;
+	sl::BoxList <sl::String> m_importList;
 	sl::StdList <Param> m_templateParamList;
 	sl::StdList <Param> m_templateSpecParamList;
 	sl::StdList <Member> m_memberList;
@@ -573,6 +575,25 @@ luaExportListSetParent (
 		it->luaExport (luaState);
 		luaState->pushValue (parentIndex - 2); // [-1] element, [-2] table
 		luaState->setMember (parentFieldName);
+		luaState->setArrayElement (i);
+	}
+}
+
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+inline
+void
+luaExportStringList (
+	lua::LuaState* luaState,
+	const sl::BoxList <sl::String>& list
+	)
+{
+	luaState->createTable (list.getCount ());
+
+	sl::BoxIterator <sl::String> it = list.getHead ();
+	for (size_t i = 1; it; it++, i++) // lua arrays are 1-based
+	{
+		luaState->pushString (*it);
 		luaState->setArrayElement (i);
 	}
 }

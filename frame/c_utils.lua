@@ -263,10 +263,10 @@ function getItemImportString (item)
 	local importPrefix
 	local importSuffix
 
-	if $g_language == "cpp" then
+	if string.match (g_language, "^c[px+]*$") then
 		importPrefix = "\t#include <"
 		importSuffix = ">\n"
-	elseif $g_language == "jancy" then
+	elseif string.match (g_language, "^ja?ncy?$") then
 		importPrefix = "\timport \""
 		importSuffix = "\"\n"
 	else
@@ -274,11 +274,11 @@ function getItemImportString (item)
 		importSuffix = "\n"
 	end
 
-	local s = ".. code-block:: " .. $g_language .. "\n\n"
+	local s = ".. code-block:: " .. g_language .. "\n\n"
 
 	for i = 1, count do
 		local import = item.m_importArray [i]
-		s = s .. importPrefix .. import .. "\"\n"
+		s = s .. importPrefix .. import .. importSuffix
 	end
 
 	return s

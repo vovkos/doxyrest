@@ -442,24 +442,16 @@ Compound::luaExport (lua::LuaState* luaState)
 	luaState->setMemberString ("m_name", m_name);
 	luaState->setMemberString ("m_title", m_title);
 
-	luaExportStringList (luaState, m_importList);
-	luaState->setMember ("m_importArray");
+	Compound* originalCompound = this;
 
 	switch (m_compoundKind)
 	{
 	case CompoundKind_Group:
 		ASSERT (m_doxyGroupCompound);
-		m_doxyGroupCompound->m_briefDescription.luaExport (luaState);
-		luaState->setMember ("m_briefDescription");
-		m_doxyGroupCompound->m_detailedDescription.luaExport (luaState);
-		luaState->setMember ("m_detailedDescription");
+		originalCompound = m_doxyGroupCompound;
 		break;
 
 	case CompoundKind_Namespace:
-		m_briefDescription.luaExport (luaState);
-		luaState->setMember ("m_briefDescription");
-		m_detailedDescription.luaExport (luaState);
-		luaState->setMember ("m_detailedDescription");
 		break;
 
 	case CompoundKind_Struct:
@@ -468,14 +460,20 @@ Compound::luaExport (lua::LuaState* luaState)
 	case CompoundKind_Interface:
 		luaExportList (luaState, m_templateParamList);
 		luaState->setMember ("m_templateParamArray");
+
 		luaExportList (luaState, m_templateSpecParamList);
 		luaState->setMember ("m_templateSpecParamArray");
-		m_briefDescription.luaExport (luaState);
-		luaState->setMember ("m_briefDescription");
-		m_detailedDescription.luaExport (luaState);
-		luaState->setMember ("m_detailedDescription");
 		break;
 	}
+
+	luaExportStringList (luaState, originalCompound->m_importList);
+	luaState->setMember ("m_importArray");
+
+	originalCompound->m_briefDescription.luaExport (luaState);
+	luaState->setMember ("m_briefDescription");
+
+	originalCompound->m_detailedDescription.luaExport (luaState);
+	luaState->setMember ("m_detailedDescription");
 
 	preparePath ();
 	luaState->setMemberString ("m_path", m_path);

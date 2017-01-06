@@ -574,7 +574,7 @@ function getDocBlockListContents (blockList)
 				s = s .. block.m_text .. getDocBlockListContents (block.m_childBlockList)
 				s = ensureExtraNewLine (s)
 			elseif block.m_blockKind == "computeroutput" then
-				s = s .. "`" .. block.m_text .. "`"
+				s = s .. "``" .. block.m_text .. "``"
 			else
 				s = s .. block.m_text .. getDocBlockListContents (block.m_childBlockList)
 

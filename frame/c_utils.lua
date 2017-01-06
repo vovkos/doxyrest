@@ -274,7 +274,9 @@ function getItemImportString (item)
 		importSuffix = "\n"
 	end
 
-	local s = ".. code-block:: " .. g_language .. "\n\n"
+	local s =
+		".. code-block:: " .. g_language .. "\n" ..
+		"\t:class: overview-code-block\n\n"
 
 	for i = 1, count do
 		local import = item.m_importArray [i]

@@ -1054,7 +1054,6 @@ protected:
 		ElemKind_Undefined,
 		ElemKind_Ref,
 		ElemKind_SimpleSect,
-		ElemKind_ComputerOutput,
 
 		// ...add as needed
 	};
@@ -1062,7 +1061,6 @@ protected:
 	AXL_SL_BEGIN_STRING_HASH_TABLE_MAP (ElemKindMap, ElemKind)
 		AXL_SL_HASH_TABLE_MAP_ENTRY ("ref",            ElemKind_Ref)
 		AXL_SL_HASH_TABLE_MAP_ENTRY ("simplesect",     ElemKind_SimpleSect)
-		AXL_SL_HASH_TABLE_MAP_ENTRY ("computeroutput", ElemKind_ComputerOutput)
 	AXL_SL_END_HASH_TABLE_MAP ()
 
 protected:

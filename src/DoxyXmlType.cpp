@@ -1084,15 +1084,9 @@ DocParaType::onStartElement (
 		m_parser->pushType <DocSimpleSectionType> (&m_paragraphBlock->m_childBlockList, name, attributes);
 		break;
 
-	case ElemKind_ComputerOutput:
-		block = AXL_MEM_NEW (DocBlock);
-		block->m_blockKind = DocBlockKind_ComputerOutput;
-		m_paragraphBlock->m_childBlockList.insertTail (block);
-		m_parser->pushType <DocTextType> (block, name, attributes);
-		break;
-
 	default:
 		block = AXL_MEM_NEW (DocBlock);
+		block->m_blockDoxyKind = name;
 		m_paragraphBlock->m_childBlockList.insertTail (block);
 		m_parser->pushType <DocTextType> (block, name, attributes);
 	}

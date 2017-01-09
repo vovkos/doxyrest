@@ -77,7 +77,6 @@ getDocBlockKindString (DocBlockKind blockKind)
 		"internal",       // DocBlockKind_Internal,
 		"simplesect",     // DocBlockKind_SimpleSection,
 		"ref",            // DocBlockKind_Ref,
-		"computeroutput", // DocBlockKind_ComputerOutput
 	};
 
 	return (size_t) blockKind < countof (stringTable) ?
@@ -91,6 +90,7 @@ void
 DocBlock::luaExportMembers (lua::LuaState* luaState)
 {
 	luaState->setMemberString ("m_blockKind", getDocBlockKindString (m_blockKind));
+	luaState->setMemberString ("m_blockDoxyKind", m_blockDoxyKind);
 	luaState->setMemberString ("m_title", m_title);
 	luaState->setMemberString ("m_text", m_text);
 
@@ -755,9 +755,20 @@ NamespaceContents::add (
 	return true;
 }
 
+inline
+bool
+cmpGroups (
+	Namespace* ns1,
+	Namespace* ns2
+	)
+{
+	return ns1->m_compound->m_id < ns2->m_compound->m_id;
+}
+
 void
 NamespaceContents::luaExportMembers (lua::LuaState* luaState)
 {
+	std::sort (m_groupArray.p (), m_groupArray.getEnd (), cmpGroups);
 	luaExportArraySetParent (luaState, m_groupArray, "m_parent");
 	luaState->setMember ("m_groupArray");
 
@@ -846,6 +857,7 @@ GlobalNamespace::build (
 	for (size_t i = 0; i < count; i++)
 	{
 		Compound* compound = module->m_doxyGroupArray [i];
+
 
 		sl::Iterator <Member> memberIt = compound->m_memberList.getHead ();
 		for (; memberIt; memberIt++)
@@ -943,6 +955,7 @@ GlobalNamespace::build (
 
 		case CompoundKind_File:
 			memberIt = compoundIt->m_memberList.getHead ();
+
 			for (; memberIt; memberIt++)
 			{
 				if (memberIt->m_protectionKind > protectionFilter)

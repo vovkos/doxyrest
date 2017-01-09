@@ -59,7 +59,6 @@ enum DocBlockKind
 	DocBlockKind_Internal,
 	DocBlockKind_SimpleSection,
 	DocBlockKind_Ref,
-	DocBlockKind_ComputerOutput,
 };
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -72,6 +71,7 @@ getDocBlockKindString (DocBlockKind flag);
 struct DocBlock: sl::ListLink
 {
 	DocBlockKind m_blockKind;
+	sl::String m_blockDoxyKind;
 	sl::String m_title;
 	sl::String m_text;
 	sl::StdList <DocBlock> m_childBlockList;

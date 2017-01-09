@@ -18,4 +18,6 @@
 #include "axl_st_LuaStringTemplate.h"
 #include "axl_xml_ExpatParser.h"
 
+#include <algorithm>
+
 using namespace axl;

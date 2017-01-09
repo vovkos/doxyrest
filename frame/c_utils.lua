@@ -562,6 +562,47 @@ function ensureExtraNewLine (s)
 	end
 end
 
+function removeCommonSpacePrefix (source)
+
+	local prefix = nil
+
+	local s = "\n" .. source -- add leading '\n'
+
+	for newPrefix in string.gmatch (s, "\n([ \t]*)[^%s]") do
+		if not prefix then
+			prefix = newPrefix
+		else
+			local len = string.len (prefix)
+			local newLen = string.len (newPrefix)
+			if newLen < len then
+				len = newLen
+			end
+
+			for i = 1, len do
+				if string.byte (prefix, i) ~= string.byte (newPrefix, i) then
+					len = i - 1
+					break
+				end
+			end
+
+			if len == 0 then
+				return source
+			else
+				prefix = string.sub (prefix, 1, len)
+			end
+		end
+	end
+
+	if not prefix then
+		return source
+	end
+
+	s = string.gsub (s, "\n" .. prefix, "\n") -- remove common prefix
+	s = string.sub (s, 2) -- remove leading '\n'
+
+	return s
+end
+
 function getDocBlockListContents (blockList)
 	local s = ""
 
@@ -573,8 +614,12 @@ function getDocBlockListContents (blockList)
 				s = s .. ".. rubric:: See also:\n\n"
 				s = s .. block.m_text .. getDocBlockListContents (block.m_childBlockList)
 				s = ensureExtraNewLine (s)
-			elseif block.m_blockKind == "computeroutput" then
+			elseif block.m_blockDoxyKind == "computeroutput" then
 				s = s .. "``" .. block.m_text .. "``"
+			elseif block.m_blockDoxyKind == "bold" then
+				s = s .. "**" .. block.m_text .. "**"
+			elseif block.m_blockDoxyKind == "italic" then
+				s = s .. "*" .. block.m_text .. "*"
 			else
 				s = s .. block.m_text .. getDocBlockListContents (block.m_childBlockList)
 
@@ -588,7 +633,7 @@ function getDocBlockListContents (blockList)
 	s = string.gsub (s, "%s+$", "")   -- trim trailing whitespace
 	s = string.gsub (s, "\t", "    ") -- replace tabs with spaces
 
-	return s
+	return removeCommonSpacePrefix (s)
 end
 
 function getItemBriefDocumentation (item, detailsRefPrefix)

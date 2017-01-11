@@ -650,15 +650,23 @@ function getInternalDocBlockListContents (blockList)
 	return getDocBlockListContentsImpl (blockList, true)
 end
 
-function getItemBriefDocumentation (item, detailsRefPrefix)
-	local s
+function isDocumentationEmpty (description)
+	if description.m_isEmpty then
+		return true
+	end
 
-	if not item.m_briefDescription.m_isEmpty then
-		s = getDocBlockListContents (item.m_briefDescription.m_docBlockList)
-	elseif item.m_detailedDescription.m_isEmpty then
-		return ""
-	else
+	local text = getDocBlockListContents (description.m_docBlockList)
+	return string.len (text) == 0
+end
+
+function getItemBriefDocumentation (item, detailsRefPrefix)
+	local s = getDocBlockListContents (item.m_briefDescription.m_docBlockList)
+
+	if string.len (s) == 0 then
 		s = getDocBlockListContents (item.m_detailedDescription.m_docBlockList)
+		if string.len (s) == 0 then
+			return ""
+		end
 
 		local i = string.find (s, ".", 1, true) -- first sentence only
 		if i then
@@ -677,17 +685,16 @@ function getItemBriefDocumentation (item, detailsRefPrefix)
 end
 
 function getItemDetailedDocumentation (item)
-	local s = getDocBlockListContents (item.m_briefDescription.m_docBlockList)
+	local brief = getDocBlockListContents (item.m_briefDescription.m_docBlockList)
+	local detailed = getDocBlockListContents (item.m_detailedDescription.m_docBlockList)
 
-	if item.m_detailedDescription.m_isEmpty then
-		return s
+	if string.len (detailed) == 0 then
+		return brief
+	elseif string.len (brief) == 0 then
+		return detailed
+	else
+		return brief .. "\n\n" .. detailed
 	end
-
-	if s ~= "" then
-		s = s .. "\n\n"
-	end
-
-	return s .. getDocBlockListContents (item.m_detailedDescription.m_docBlockList)
 end
 
 function removePrimitiveTypedefs (typedefArray)

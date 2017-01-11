@@ -126,9 +126,17 @@ def create_xref_node(raw_text, text, target):
 
 
 def cref_role(typ, raw_text, text, lineno, inliner, options={}, content=[]):
-    node = nodes.literal(raw_text, '')
+    target = 'cid-' + text.lower()
+
+    if text.find(' ') == -1:
+        node = nodes.literal(raw_text, '')
+    else:
+        node = nodes.inline(raw_text, '')
+        target = target.replace(' ', '-')
+
     node['classes'] += ['cref']
-    node += create_xref_node(raw_text, text, 'cid-' + text.lower())
+
+    node += create_xref_node(raw_text, text, target)
 
     return [node], []
 

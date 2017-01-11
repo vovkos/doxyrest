@@ -755,20 +755,9 @@ NamespaceContents::add (
 	return true;
 }
 
-inline
-bool
-cmpGroups (
-	Namespace* ns1,
-	Namespace* ns2
-	)
-{
-	return ns1->m_compound->m_id < ns2->m_compound->m_id;
-}
-
 void
 NamespaceContents::luaExportMembers (lua::LuaState* luaState)
 {
-	std::sort (m_groupArray.p (), m_groupArray.getEnd (), cmpGroups);
 	luaExportArraySetParent (luaState, m_groupArray, "m_parent");
 	luaState->setMember ("m_groupArray");
 

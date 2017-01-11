@@ -254,9 +254,25 @@ function getItemCid (item)
 	return s
 end
 
+function getItemImportArray (item)
+	if next (item.m_importArray) ~= nil then
+		return item.m_importArray
+	end
+
+	local text = getInternalDocBlockListContents (item.m_detailedDescription.m_docBlockList)
+	local importArray = {}
+	local i = 1
+	for import in string.gmatch (text, ":import:([^:]+)") do
+		importArray [i] = import
+		i = i + 1
+	end
+
+	return importArray
+end
+
 function getItemImportString (item)
-	local count = #item.m_importArray
-	if count == 0 then
+	local importArray = getItemImportArray (item)
+	if next (importArray) == nil then
 		return ""
 	end
 
@@ -278,8 +294,8 @@ function getItemImportString (item)
 		".. code-block:: " .. g_language .. "\n" ..
 		"\t:class: overview-code-block\n\n"
 
-	for i = 1, count do
-		local import = item.m_importArray [i]
+	for i = 1, #importArray do
+		local import = importArray [i]
 		s = s .. importPrefix .. import .. importSuffix
 	end
 
@@ -532,19 +548,8 @@ function getTypedefDeclString (typedef, isRef, indent)
 end
 
 function isMemberOfUnnamedType (item)
-	if item.m_detailedDescription.m_isEmpty then
-		return nil
-	end
-
-	local block = item.m_detailedDescription.m_docBlockList [1]
-	if block.m_blockKind ~= "internal" or
-		#block.m_childBlockList < 1 or
-		block.m_childBlockList [1].m_blockKind ~= "paragraph" then
-		return nil
-	end
-
-	local s = block.m_childBlockList [1].m_text
-	return string.match (s, ":unnamed:([%w/:]+)")
+	local text = getInternalDocBlockListContents (item.m_detailedDescription.m_docBlockList)
+	return string.match (text, ":unnamed:([%w/:]+)")
 end
 
 function isUnnamedItem (item)
@@ -603,13 +608,14 @@ function removeCommonSpacePrefix (source)
 	return s
 end
 
-function getDocBlockListContents (blockList)
+function getDocBlockListContentsImpl (blockList, internalFilter)
 	local s = ""
 
 	for i = 1, #blockList do
 		local block = blockList [i]
+		local isInternal = block.m_blockKind == "internal"
 
-		if block.m_blockKind ~= "internal" then
+		if isInternal == internalFilter then
 			if block.m_blockKind == "simplesect" and block.m_simpleSectionKind == "see" then
 				s = s .. ".. rubric:: See also:\n\n"
 				s = s .. block.m_text .. getDocBlockListContents (block.m_childBlockList)
@@ -634,6 +640,14 @@ function getDocBlockListContents (blockList)
 	s = string.gsub (s, "\t", "    ") -- replace tabs with spaces
 
 	return removeCommonSpacePrefix (s)
+end
+
+function getDocBlockListContents (blockList)
+	return getDocBlockListContentsImpl (blockList, false)
+end
+
+function getInternalDocBlockListContents (blockList)
+	return getDocBlockListContentsImpl (blockList, true)
 end
 
 function getItemBriefDocumentation (item, detailsRefPrefix)
@@ -693,6 +707,23 @@ function removePrimitiveTypedefs (typedefArray)
 			table.remove (typedefArray, i)
 		end
 	end
+end
+
+function sortCompound (compound)
+	table.sort (compound.m_groupArray, cmpIds)
+	table.sort (compound.m_namespaceArray, cmpNames)
+	table.sort (compound.m_classArray, cmpNames)
+	table.sort (compound.m_structArray, cmpNames)
+	table.sort (compound.m_unionArray, cmpNames)
+	table.sort (compound.m_defineArray, cmpNames)
+end
+
+function cmpIds (g1, g2)
+	return g1.m_id < g2.m_id
+end
+
+function cmpNames (g1, g2)
+	return g1.m_name < g2.m_name
 end
 
 -------------------------------------------------------------------------------

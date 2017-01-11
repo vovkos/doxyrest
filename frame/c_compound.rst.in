@@ -74,8 +74,7 @@ end
 }
 
 %{
-local hasDetails =
-	not compound.m_detailedDescription.m_isEmpty or
+local hasItems =
 	hasUnnamedEnums or
 	hasDefines or
 	#compound.m_typedefArray > 0 or
@@ -84,6 +83,12 @@ local hasDetails =
 	#compound.m_eventArray > 0 or
 	#compound.m_functionArray > 0 or
 	#compound.m_aliasArray > 0
+
+local hasBothDescriptions =
+	not compound.m_briefDescription.m_isEmpty and
+	not compound.m_detailedDescription.m_isEmpty
+
+local hasDetails = hasItems or hasBothDescriptions
 
 if hasDetails then
 }
@@ -95,7 +100,7 @@ $(getItemBriefDocumentation (compound, "details-"))
 %{
 else
 }
-$(getItemBriefDocumentation (compound))
+$(getItemDetailedDocumentation (compound))
 
 %{
 end -- if

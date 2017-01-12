@@ -11,6 +11,7 @@
 
 Doxyrest
 ========
+.. image:: https://travis-ci.org/vovkos/doxyrest.svg?branch=master
 
 Abstract
 --------

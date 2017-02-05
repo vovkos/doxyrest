@@ -1,0 +1,42 @@
+%{
+--------------------------------------------------------------------------------
+--
+--  This file is part of the Doxyrest toolkit.
+--
+--  Doxyrest is distributed under the MIT license.
+--  For details see accompanying license.txt file,
+--  the public copy of which is also available at:
+--  http://tibbo.com/downloads/archive/doxyrest/license.txt
+--
+--------------------------------------------------------------------------------
+
+local argArray = table.pack (...)
+local compound = argArray [1]
+
+local prevParamCount = 0
+
+for i = 1, #compound.m_constructorArray do
+	local item = compound.m_constructorArray [i]
+	local paramCount = #item.m_paramArray
+	local extraSep = ""
+
+	if paramCount > 1 or prevParamCount > 1 then
+		extraSep = "\n"
+	end
+
+	prevParamCount = paramCount
+}
+$extraSep	$(getVoidFunctionDeclString (item, true, "\t"))
+%{
+end -- for
+
+if g_includeDestructors and compound.m_destructor then
+	local extraSep = ""
+	if prevParamCount > 1 then
+		extraSep = "\n"
+	end
+}
+$extraSep	$(getVoidFunctionDeclString (compound.m_destructor, true, "\t"))
+%{
+end -- if
+}

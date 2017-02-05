@@ -1,0 +1,130 @@
+%{
+--------------------------------------------------------------------------------
+--
+--  This file is part of the Doxyrest toolkit.
+--
+--  Doxyrest is distributed under the MIT license.
+--  For details see accompanying license.txt file,
+--  the public copy of which is also available at:
+--  http://tibbo.com/downloads/archive/doxyrest/license.txt
+--
+--------------------------------------------------------------------------------
+
+local argArray = table.pack (...)
+local compound = argArray [1]
+local variableSectionName = string.lower (argArray [2])
+local functionSectionName = string.lower (argArray [3])
+}
+.. ref-code-block:: $g_language
+	:class: overview-code-block
+
+%{
+if #compound.m_namespaceArray > 0 then
+}
+	// namespaces
+
+%{
+	includeFile ("c_overview_namespaces.rst.in", compound)
+	emit ("\n")
+end -- if
+
+if #compound.m_typedefArray > 0 then
+}
+	// typedefs
+
+%{
+	includeFile ("c_overview_typedefs.rst.in", compound)
+	emit ("\n")
+end -- if
+
+if #compound.m_enumArray > 0 then
+}
+	// enums
+
+%{
+	includeFile ("c_overview_enums.rst.in", compound)
+	emit ("\n")
+end -- if
+
+if #compound.m_structArray > 0 or #compound.m_unionArray > 0 then
+	local sectionName = getDoubleSectionName (
+		"structs", #compound.m_structArray,
+		"unions", #compound.m_unionArray
+		)
+}
+	// $sectionName
+
+%{
+	includeFile ("c_overview_structs.rst.in", compound)
+	includeFile ("c_overview_unions.rst.in", compound)
+	emit ("\n")
+end -- if
+
+if #compound.m_classArray > 0 then
+}
+	// classes
+
+%{
+	includeFile ("c_overview_classes.rst.in", compound)
+	emit ("\n")
+end -- if
+
+if #compound.m_variableArray > 0 or #compound.m_propertyArray > 0 then
+	local sectionName = getDoubleSectionName (
+		variableSectionName, #compound.m_variableArray,
+		"Properties", #compound.m_propertyArray
+		)
+}
+	// $sectionName
+
+%{
+	includeFile ("c_overview_variables.rst.in", compound)
+	includeFile ("c_overview_properties.rst.in", compound)
+	emit ("\n")
+end -- if
+
+if #compound.m_eventArray > 0 then
+}
+	// events
+
+%{
+	includeFile ("c_overview_events.rst.in", compound)
+	emit ("\n")
+end -- if
+
+if #compound.m_constructorArray > 0 or (g_includeDestructors and compound.m_destructor) then
+}
+	// construction
+
+%{
+	includeFile ("c_overview_construction.rst.in", compound)
+	emit ("\n")
+end -- if
+
+if #compound.m_functionArray > 0 then
+}
+	// $functionSectionName
+
+%{
+	includeFile ("c_overview_functions.rst.in", compound)
+	emit ("\n")
+end -- if
+
+if #compound.m_aliasArray > 0 then
+}
+	// aliases
+
+%{
+	includeFile ("c_overview_aliases.rst.in", compound)
+	emit ("\n")
+end -- if
+
+if hasDefines then
+}
+	// macros
+
+%{
+	includeFile ("c_overview_macros.rst.in", compound)
+	emit ("\n")
+end -- if
+}

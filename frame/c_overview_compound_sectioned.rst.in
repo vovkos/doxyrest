@@ -1,0 +1,157 @@
+%{
+--------------------------------------------------------------------------------
+--
+--  This file is part of the Doxyrest toolkit.
+--
+--  Doxyrest is distributed under the MIT license.
+--  For details see accompanying license.txt file,
+--  the public copy of which is also available at:
+--  http://tibbo.com/downloads/archive/doxyrest/license.txt
+--
+--------------------------------------------------------------------------------
+
+local argArray = table.pack (...)
+local compound = argArray [1]
+local variableSectionName = argArray [2]
+local functionSectionName = argArray [3]
+
+if #compound.m_namespaceArray > 0 then
+}
+Namespaces
+----------
+
+.. ref-code-block:: $g_language
+	:class: overview-code-block
+
+%{
+	includeFile ("c_overview_namespaces.rst.in", compound)
+end -- if
+
+if #compound.m_typedefArray > 0 then
+}
+Typedefs
+--------
+
+.. ref-code-block:: $g_language
+	:class: overview-code-block
+
+%{
+	includeFile ("c_overview_typedefs.rst.in", compound)
+end -- if
+
+if #compound.m_enumArray > 0 then
+}
+Enums
+-----
+
+.. ref-code-block:: $g_language
+	:class: overview-code-block
+
+%{
+	includeFile ("c_overview_enums.rst.in", compound)
+end -- if
+
+if #compound.m_structArray > 0 or #compound.m_unionArray > 0 then
+	local sectionName = getDoubleSectionName (
+		"Structs", #compound.m_structArray,
+		"Unions", #compound.m_unionArray
+		)
+}
+$(getTitle (sectionName, "-"))
+
+.. ref-code-block:: $g_language
+	:class: overview-code-block
+
+%{
+	includeFile ("c_overview_structs.rst.in", compound)
+	includeFile ("c_overview_unions.rst.in", compound)
+end -- if
+
+if #compound.m_classArray > 0 then
+}
+Classes
+-------
+
+.. ref-code-block:: $g_language
+	:class: overview-code-block
+
+%{
+	includeFile ("c_overview_classes.rst.in", compound)
+end -- if
+
+if #compound.m_variableArray > 0 or #compound.m_propertyArray > 0 then
+	local sectionName = getDoubleSectionName (
+		variableSectionName, #compound.m_variableArray,
+		"Properties", #compound.m_propertyArray
+		)
+
+}
+$(getTitle (sectionName, "-"))
+
+.. ref-code-block:: $g_language
+	:class: overview-code-block
+
+%{
+	includeFile ("c_overview_variables.rst.in", compound)
+	includeFile ("c_overview_properties.rst.in", compound)
+end -- if
+
+if #compound.m_eventArray > 0 then
+}
+Events
+------
+
+.. ref-code-block:: $g_language
+	:class: overview-code-block
+
+%{
+	includeFile ("c_overview_events.rst.in", compound)
+end -- if
+
+if #compound.m_constructorArray > 0 or (g_includeDestructors and compound.m_destructor) then
+}
+Construction
+------------
+
+.. ref-code-block:: $g_language
+	:class: overview-code-block
+
+%{
+	includeFile ("c_overview_construction.rst.in", compound)
+end -- if
+
+if #compound.m_functionArray > 0 then
+}
+$(getTitle (functionSectionName, "-"))
+
+.. ref-code-block:: $g_language
+	:class: overview-code-block
+
+%{
+	includeFile ("c_overview_functions.rst.in", compound)
+end -- if
+
+if #compound.m_aliasArray > 0 then
+}
+Aliases
+-------
+
+.. ref-code-block:: $g_language
+	:class: overview-code-block
+
+%{
+	includeFile ("c_overview_aliases.rst.in", compound)
+end -- if
+
+if hasDefines then
+}
+Macros
+------
+
+.. ref-code-block:: $g_language
+	:class: overview-code-block
+
+%{
+	includeFile ("c_overview_macros.rst.in", compound)
+end -- if
+}

@@ -567,6 +567,10 @@ function ensureExtraNewLine (s)
 	end
 end
 
+-------------------------------------------------------------------------------
+
+-- item documentation utils
+
 function removeCommonSpacePrefix (source)
 
 	local prefix = nil
@@ -650,15 +654,6 @@ function getInternalDocBlockListContents (blockList)
 	return getDocBlockListContentsImpl (blockList, true)
 end
 
-function isDocumentationEmpty (description)
-	if description.m_isEmpty then
-		return true
-	end
-
-	local text = getDocBlockListContents (description.m_docBlockList)
-	return string.len (text) == 0
-end
-
 function getItemBriefDocumentation (item, detailsRefPrefix)
 	local s = getDocBlockListContents (item.m_briefDescription.m_docBlockList)
 
@@ -697,23 +692,134 @@ function getItemDetailedDocumentation (item)
 	end
 end
 
-function removePrimitiveTypedefs (typedefArray)
+function isDocumentationEmpty (description)
+	if description.m_isEmpty then
+		return true
+	end
+
+	local text = getDocBlockListContents (description.m_docBlockList)
+	return string.len (text) == 0
+end
+
+function hasItemDocumentation (item)
+	return
+		not isDocumentationEmpty (item.m_briefDescription) or
+		not isDocumentationEmpty (item.m_detailedDescription)
+end
+
+function hasDocumentedItems (itemArray)
+	for i = 1, #itemArray do
+		local item = itemArray [i]
+
+		if hasItemDocumentation (item) then
+			return true
+		end
+	end
+
+	return false
+end
+
+-------------------------------------------------------------------------------
+
+-- compound utils
+
+function filterConstructorArray (constructorArray)
+	if g_includeDefaultContructors or next (constructorArray) == nil then
+		return
+	end
+
+	for i = #constructorArray, 1, -1 do
+		item = constructorArray [i]
+		local isExcluded = #item.m_paramArray == 0
+
+		if isExcluded then
+			table.remove (defineArray, i)
+		end
+	end
+end
+
+function filterDefineArray (defineArray)
+	if next (defineArray) == nil then
+		return
+	end
+
+	for i = #defineArray, 1, -1 do
+		item = defineArray [i]
+
+		local isExcluded =
+			not g_includeEmptyDefines and item.m_initializer.m_isEmpty or
+			g_excludeDefinePattern and string.match (item.m_name, g_excludeDefinePattern)
+
+		if isExcluded then
+			table.remove (defineArray, i)
+		end
+	end
+end
+
+function filterTypedefArray (typedefArray)
 	if next (typedefArray) == nil then
 		return
 	end
 
 	for i = #typedefArray, 1, -1 do
-		typedef = typedefArray [i]
+		item = typedefArray [i]
 
 		local typeKind, name = string.match (
-			typedef.m_type.m_plainText,
+			item.m_type.m_plainText,
 			"(%a+)%s+(%w[%w_]*)"
 			)
 
-		if name == typedef.m_name then
+		if name == item.m_name then
 			table.remove (typedefArray, i)
 		end
 	end
+end
+
+
+function collectCompoundStats (compound)
+	local stats = {}
+
+	stats.m_hasUnnamedEnums = false
+	stats.m_hasDocumentedUnnamedEnumValues = false
+
+	for i = 1, #compound.m_enumArray do
+		local item = compound.m_enumArray [i]
+		if isUnnamedItem (item) then
+			stats.m_hasUnnamedEnums = true
+
+			if hasDocumentedItems (item.m_enumValueArray) then
+				stats.m_hasDocumentedUnnamedEnumValues = true
+				break
+			end
+		end
+	end
+
+	stats.m_hasDocumentedTypedefs = hasDocumentedItems (compound.m_typedefArray);
+	stats.m_hasDocumentedVariables = hasDocumentedItems (compound.m_variableArray);
+	stats.m_hasDocumentedProperties = hasDocumentedItems (compound.m_propertyArray);
+	stats.m_hasDocumentedEvents = hasDocumentedItems (compound.m_eventArray);
+	stats.m_hasDocumentedFunctions = hasDocumentedItems (compound.m_functionArray);
+	stats.m_hasDocumentedAliases = hasDocumentedItems (compound.m_aliasArray);
+	stats.m_hasDocumentedDefines = hasDocumentedItems (compound.m_defineArray);
+
+	stats.m_hasDocumentedConstructors =
+		hasDocumentedItems (compound.m_constructorArray) or
+		g_includeDestructors and compound.m_destructor and hasItemDocumentation (compound.m_destructor)
+
+	stats.m_hasDocumentedItems =
+		stats.m_hasDocumentedUnnamedEnumValues or
+		stats.m_hasDocumentedTypedefs or
+		stats.m_hasDocumentedVariables or
+		stats.m_hasDocumentedProperties or
+		stats.m_hasDocumentedEvents or
+		stats.m_hasDocumentedFunctions or
+		stats.m_hasDocumentedAliases or
+		stats.m_hasDocumentedDefines
+
+	stats.m_hasBriefDocumentation = not isDocumentationEmpty (compound.m_briefDescription)
+	stats.m_hasDetailedDocumentation = not isDocumentationEmpty (compound.m_detailedDescription)
+
+	return stats
 end
 
 function sortCompound (compound)

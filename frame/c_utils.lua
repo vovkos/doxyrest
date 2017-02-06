@@ -259,7 +259,7 @@ function getItemImportArray (item)
 		return item.m_importArray
 	end
 
-	local text = getInternalDocBlockListContents (item.m_detailedDescription.m_docBlockList)
+	local text = getItemInternalDocumentation (item)
 	local importArray = {}
 	local i = 1
 	for import in string.gmatch (text, ":import:([^:]+)") do
@@ -300,6 +300,29 @@ function getItemImportString (item)
 	end
 
 	return s
+end
+
+function getItemRefTargetString (item)
+	local s =
+		".. _doxid-" .. item.m_id .. "\n" ..
+		".. _cid-" .. getItemCid (item) .. "\n"
+
+	if item.m_isSubGroupHead then
+		for j = 1, #item.m_subGroupSlaveArray do
+			slaveItem = item.m_subGroupSlaveArray [j]
+
+			s = s ..
+				".. _doxid-" .. slaveItem.m_id .. "\n" ..
+				".. _cid-" .. getItemCid (slaveItem) .. "\n"
+		end
+	end
+
+	return s
+end
+
+function getItemTitleCodeBlockHdr (item)
+	.. ref-code-block:: $g_language
+		:class: title-code-block
 end
 
 function getCompoundTocTree (compound)
@@ -548,7 +571,7 @@ function getTypedefDeclString (typedef, isRef, indent)
 end
 
 function isMemberOfUnnamedType (item)
-	local text = getInternalDocBlockListContents (item.m_detailedDescription.m_docBlockList)
+	local text = getItemInternalDocumentation (item)
 	return string.match (text, ":unnamed:([%w/:]+)")
 end
 
@@ -622,7 +645,7 @@ function getDocBlockListContentsImpl (blockList, internalFilter)
 		if isInternal == internalFilter then
 			if block.m_blockKind == "simplesect" and block.m_simpleSectionKind == "see" then
 				s = s .. ".. rubric:: See also:\n\n"
-				s = s .. block.m_text .. getDocBlockListContents (block.m_childBlockList)
+				s = s .. block.m_text .. getDocBlockListContents (block.m_childBlockList, false)
 				s = ensureExtraNewLine (s)
 			elseif block.m_blockDoxyKind == "computeroutput" then
 				s = s .. "``" .. block.m_text .. "``"
@@ -631,7 +654,7 @@ function getDocBlockListContentsImpl (blockList, internalFilter)
 			elseif block.m_blockDoxyKind == "italic" then
 				s = s .. "*" .. block.m_text .. "*"
 			else
-				s = s .. block.m_text .. getDocBlockListContents (block.m_childBlockList)
+				s = s .. block.m_text .. getDocBlockListContents (block.m_childBlockList, false)
 
 				if block.m_blockKind == "paragraph" then
 					s = ensureExtraNewLine (s)
@@ -650,8 +673,8 @@ function getDocBlockListContents (blockList)
 	return getDocBlockListContentsImpl (blockList, false)
 end
 
-function getInternalDocBlockListContents (blockList)
-	return getDocBlockListContentsImpl (blockList, true)
+function getItemInternalDocumentation (item)
+	return getDocBlockListContentsImpl (item.m_detailedDescription.m_docBlockList, true)
 end
 
 function getItemBriefDocumentation (item, detailsRefPrefix)
@@ -701,36 +724,102 @@ function isDocumentationEmpty (description)
 	return string.len (text) == 0
 end
 
-function hasItemDocumentation (item)
-	return
-		not isDocumentationEmpty (item.m_briefDescription) or
-		not isDocumentationEmpty (item.m_detailedDescription)
+function prepareItemDocumentation (item)
+	local hasBriefDocuemtnation = not isDocumentationEmpty (item.m_briefDescription)
+	local hasDetailedDocuemtnation = not isDocumentationEmpty (item.m_detailedDescription)
+
+	item.m_hasDocumentation = hasBriefDocuemtnation or hasDetailedDocuemtnation
+	if not item.m_hasDocumentation then
+		return false
+	end
+
+	if hasDetailedDocuemtnation then
+		local text = getItemInternalDocumentation (item)
+
+		item.m_isSubGroupHead = string.match (text, ":subgroup:") ~= nil
+		if item.m_isSubGroupHead then
+			item.m_subGroupSlaveArray = {}
+		end
+	end
+
+	return true
 end
 
-function hasDocumentedItems (itemArray)
+function prepareItemArrayDocumentation (
+	itemArray,
+	compound
+	)
+
+	local hasDocumentation = false
+	local subGroupHead = nil
+
 	for i = 1, #itemArray do
 		local item = itemArray [i]
 
-		if hasItemDocumentation (item) then
-			return true
+		prepareItemDocumentation (item)
+
+		if item.m_hasDocumentation then
+			hasDocumentation = true
+			if item.m_isSubGroupHead then
+				subGroupHead = item
+			else
+				subGroupHead = nil
+			end
+		elseif subGroupHead then
+			table.insert (subGroupHead.m_subGroupSlaveArray, item)
+			item.m_subGroupHead = subGroupHead
 		end
+	end
+
+	return hasDocumentation
+end
+
+-------------------------------------------------------------------------------
+
+-- item filtering utils
+
+g_protectionKindMap = {
+	public    = 0,
+	protected = 1,
+	private   = 2,
+	package   = 3,
+}
+
+function isItemExcludedByProtectionFilter (item)
+	local protectionValue = g_protectionKindMap [item.m_protectionKind]
+	if protectionValue > g_protectionFilterValue then
+		return true
 	end
 
 	return false
 end
 
--------------------------------------------------------------------------------
+function filterItemArray (itemArray)
+	if next (itemArray) == nil then
+		return
+	end
 
--- compound utils
+	for i = #itemArray, 1, -1 do
+		item = itemArray [i]
+		local isExcluded = isItemExcludedByProtectionFilter (item)
+
+		if isExcluded then
+			print ("filtering out:", item.m_name)
+			table.remove (itemArray, i)
+		end
+	end
+end
 
 function filterConstructorArray (constructorArray)
-	if g_includeDefaultContructors or next (constructorArray) == nil then
+	if next (constructorArray) == nil then
 		return
 	end
 
 	for i = #constructorArray, 1, -1 do
 		item = constructorArray [i]
-		local isExcluded = #item.m_paramArray == 0
+		local isExcluded =
+			isItemExcludedByProtectionFilter (item) or
+			not g_includeDefaultConstructors and #item.m_paramArray == 0
 
 		if isExcluded then
 			table.remove (defineArray, i)
@@ -764,20 +853,55 @@ function filterTypedefArray (typedefArray)
 	for i = #typedefArray, 1, -1 do
 		item = typedefArray [i]
 
-		local typeKind, name = string.match (
-			item.m_type.m_plainText,
-			"(%a+)%s+(%w[%w_]*)"
-			)
-
+		local isExcluded = isItemExcludedByProtectionFilter (item)
 		if name == item.m_name then
 			table.remove (typedefArray, i)
+		end
+
+		if not g_includePrimitiveTypedefs then
+			local typeKind, name = string.match (
+				item.m_type.m_plainText,
+				"(%a+)%s+(%w[%w_]*)"
+				)
+
+			if name == item.m_name then
+				table.remove (typedefArray, i)
+			end
 		end
 	end
 end
 
+-------------------------------------------------------------------------------
 
-function collectCompoundStats (compound)
+-- item filtering utils
+
+function cmpIds (g1, g2)
+	return g1.m_id < g2.m_id
+end
+
+function cmpNames (g1, g2)
+	return g1.m_name < g2.m_name
+end
+
+function prepareCompound (compound)
 	local stats = {}
+
+	-- filter invisible items out
+
+	filterTypedefArray (compound.m_typedefArray)
+	filterItemArray (compound.m_enumArray)
+	filterItemArray (compound.m_structArray)
+	filterItemArray (compound.m_unionArray)
+	filterItemArray (compound.m_classArray)
+	filterItemArray (compound.m_variableArray)
+	filterItemArray (compound.m_propertyArray)
+	filterItemArray (compound.m_eventArray)
+	filterConstructorArray (compound.m_constructorArray)
+	filterItemArray (compound.m_functionArray)
+	filterItemArray (compound.m_aliasArray)
+	filterDefineArray (compound.m_defineArray)
+
+	-- scan for documentation and create subgroups
 
 	stats.m_hasUnnamedEnums = false
 	stats.m_hasDocumentedUnnamedEnumValues = false
@@ -787,26 +911,25 @@ function collectCompoundStats (compound)
 		if isUnnamedItem (item) then
 			stats.m_hasUnnamedEnums = true
 
-			if hasDocumentedItems (item.m_enumValueArray) then
+			if prepareItemArrayDocumentation (item.m_enumValueArray) then
 				stats.m_hasDocumentedUnnamedEnumValues = true
-				break
 			end
 		end
 	end
 
-	stats.m_hasDocumentedTypedefs = hasDocumentedItems (compound.m_typedefArray);
-	stats.m_hasDocumentedVariables = hasDocumentedItems (compound.m_variableArray);
-	stats.m_hasDocumentedProperties = hasDocumentedItems (compound.m_propertyArray);
-	stats.m_hasDocumentedEvents = hasDocumentedItems (compound.m_eventArray);
-	stats.m_hasDocumentedFunctions = hasDocumentedItems (compound.m_functionArray);
-	stats.m_hasDocumentedAliases = hasDocumentedItems (compound.m_aliasArray);
-	stats.m_hasDocumentedDefines = hasDocumentedItems (compound.m_defineArray);
+	stats.m_hasDocumentedTypedefs = prepareItemArrayDocumentation (compound.m_typedefArray);
+	stats.m_hasDocumentedVariables = prepareItemArrayDocumentation (compound.m_variableArray);
+	stats.m_hasDocumentedProperties = prepareItemArrayDocumentation (compound.m_propertyArray);
+	stats.m_hasDocumentedEvents = prepareItemArrayDocumentation (compound.m_eventArray);
+	stats.m_hasDocumentedFunctions = prepareItemArrayDocumentation (compound.m_functionArray);
+	stats.m_hasDocumentedAliases = prepareItemArrayDocumentation (compound.m_aliasArray);
+	stats.m_hasDocumentedDefines = prepareItemArrayDocumentation (compound.m_defineArray);
 
-	stats.m_hasDocumentedConstructors =
-		hasDocumentedItems (compound.m_constructorArray) or
-		g_includeDestructors and compound.m_destructor and hasItemDocumentation (compound.m_destructor)
+	stats.m_hasDocumentedConstruction =
+		prepareItemArrayDocumentation (compound.m_constructorArray) or
+		g_includeDestructors and compound.m_destructor and prepareItemDocumentation (compound.m_destructor)
 
-	stats.m_hasDocumentedItems =
+	stats.m_prepareItemArrayDocumentation =
 		stats.m_hasDocumentedUnnamedEnumValues or
 		stats.m_hasDocumentedTypedefs or
 		stats.m_hasDocumentedVariables or
@@ -819,24 +942,17 @@ function collectCompoundStats (compound)
 	stats.m_hasBriefDocumentation = not isDocumentationEmpty (compound.m_briefDescription)
 	stats.m_hasDetailedDocumentation = not isDocumentationEmpty (compound.m_detailedDescription)
 
-	return stats
-end
+	-- sort items (only the ones producing separate pages)
 
-function sortCompound (compound)
 	table.sort (compound.m_groupArray, cmpIds)
 	table.sort (compound.m_namespaceArray, cmpNames)
-	table.sort (compound.m_classArray, cmpNames)
+	table.sort (compound.m_enumArray, cmpNames)
 	table.sort (compound.m_structArray, cmpNames)
 	table.sort (compound.m_unionArray, cmpNames)
+	table.sort (compound.m_classArray, cmpNames)
 	table.sort (compound.m_defineArray, cmpNames)
-end
 
-function cmpIds (g1, g2)
-	return g1.m_id < g2.m_id
-end
-
-function cmpNames (g1, g2)
-	return g1.m_name < g2.m_name
+	return stats
 end
 
 -------------------------------------------------------------------------------

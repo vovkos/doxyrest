@@ -24,13 +24,7 @@ else
 	functionSectionName = "Methods"
 end
 
-filterDefineArray (compound.m_defineArray)
-filterTypedefArray (compound.m_typedefArray)
-filterConstructorArray (compound.m_constructorArray)
-
-sortCompound (compound)
-
-compoundStats = collectCompoundStats (compound)
+local compoundStats = prepareCompound (compound)
 
 local hasDetails =
 	compoundStats.m_hasDocumentedItems or
@@ -38,6 +32,7 @@ local hasDetails =
 
 if hasDetails then
 }
+
 Overview
 ~~~~~~~~
 
@@ -62,10 +57,10 @@ for i = 1, #compound.m_groupArray do
 %{
 end -- for
 
-if g_jointOverview then
-	includeFile ("c_overview_compound_joint.rst.in", compound, variableSectionName, functionSectionName)
-else
+if g_sectionedOverview then
 	includeFile ("c_overview_compound_sectioned.rst.in", compound, variableSectionName, functionSectionName)
+else
+	includeFile ("c_overview_compound_joint.rst.in", compound, variableSectionName, functionSectionName)
 end
 
 if hasDetails then
@@ -80,137 +75,29 @@ $(getItemDetailedDocumentation (compound))
 %{
 end -- if
 
-if compoundStats.m_hasUnnamedEnums then
-}
-Enum Members
-------------
+if compoundStats.m_hasDocumentedUnnamedEnumValues then
+	includeFile ("c_details_enums.rst.in", compound)
+end
 
-%{
-	for i = 1, #compound.m_enumArray do
-		local item = compound.m_enumArray [i]
+if compoundStats.m_hasDocumentedTypedefs then
+	includeFile ("c_details_typedefs.rst.in", typedefs)
+end
 
-		if isUnnamedItem (item) then
-			for j = 1, #item.m_enumValueArray do
-				local subItem = item.m_enumValueArray [j]
-}
-.. _doxid-$(subItem.m_id):
-.. _cid-$(getItemCid (subItem)):
-.. ref-code-block:: $g_language
-	:class: title-code-block
+if compoundStats.m_hasDocumentedVariables then
+	includeFile ("c_details_variables.rst.in", variableSectionName)
+end
 
-	$(subItem.m_name)
+if compoundStats.m_hasDocumentedProperties then
+	includeFile ("c_details_properties.rst.in", compound)
+end
 
-$(getItemDetailedDocumentation (subItem))
+if compoundStats.m_hasDocumentedEvents then
+	includeFile ("c_details_events.rst.in", compound)
+end
 
-%{
-			end -- for
-		end -- if
-	end -- for
-end -- if
-
-if #compound.m_typedefArray > 0 then
-}
-Typedefs
---------
-
-%{
-	for i = 1, #compound.m_typedefArray do
-		local item = compound.m_typedefArray [i]
-}
-.. _doxid-$(item.m_id):
-.. _cid-$(getItemCid (item)):
-.. ref-code-block:: $g_language
-	:class: title-code-block
-
-	$(getTypedefDeclString (item, false, "\t"))
-
-$(getItemDetailedDocumentation (item))
-
-%{
-	end -- for
-end -- if
-
-if #compound.m_variableArray > 0 then
-}
-$(getTitle (variableSectionName, "-"))
-
-%{
-	for i = 1, #compound.m_variableArray do
-		local item = compound.m_variableArray [i]
-		local modifiers = ""
-		local suffix = ""
-
-		if item.m_modifiers ~= "" then
-			modifiers = " " .. item.m_modifiers
-		end
-
-		if item.m_argString ~= "" then
-			suffix = " " .. item.m_argString
-		elseif item.m_bitField  ~= "" then
-			suffix = " :" .. item.m_bitField
-		end
-
-		if not isUnnamedItem (item) then
-}
-.. _doxid-$(item.m_id):
-.. _cid-$(getItemCid (item)):
-.. ref-code-block:: $g_language
-	:class: title-code-block
-
-	$(getLinkedTextString (item.m_type, true))$modifiers $(item.m_name)$suffix
-
-$(getItemDetailedDocumentation (item))
-
-%{
-		end -- if
-	end -- for
-end -- if
-
-if #compound.m_propertyArray > 0 then
-}
-Properties
-----------
-
-%{
-	for i = 1, #compound.m_propertyArray do
-		local item = compound.m_propertyArray [i]
-}
-.. _doxid-$(item.m_id):
-.. _cid-$(getItemCid (item)):
-.. ref-code-block:: $g_language
-	:class: title-code-block
-
-	$(getPropertyDeclString (item, false, "\t"))
-
-$(getItemDetailedDocumentation (item))
-
-%{
-	end -- for
-end -- if
-
-if #compound.m_eventArray > 0 then
-}
-Events
-------
-
-%{
-	for i = 1, #compound.m_eventArray do
-		local item = compound.m_eventArray [i]
-}
-.. _doxid-$(item.m_id):
-.. _cid-$(getItemCid (item)):
-.. ref-code-block:: $g_language
-	:class: title-code-block
-
-	$(getEventDeclString (item, false, "\t"))
-
-$(getItemDetailedDocumentation (item))
-
-%{
-	end -- for
-end -- if
-
-if hasConstructionSection then
+if compoundStats.m_hasDocumentedConstruction then
+	includeFile ("c_details_construction.rst.in", compound)
+end
 }
 Construction
 ------------
@@ -231,7 +118,7 @@ $(getItemDetailedDocumentation (item))
 %{
 	end -- for
 
-if g_includeDestructors and compound.m_destructor then
+if g_includeDestructors and compound.m_destructor and compound.m_destructor.m_hasDocumentation then
 }
 .. _doxid-$(item.m_id):
 .. _cid-$(getItemCid (item)):
@@ -248,50 +135,15 @@ end -- if
 	emit ("\n")
 end -- if
 
-if #compound.m_functionArray > 0 then
-}
-$(getTitle (functionSectionName, "-"))
+if compoundStats.m_hasDocumentedFunctions then
+	includeFile ("c_details_functions.rst.in", compound, functionSectionName)
+end
 
-%{
-	for i = 1, #compound.m_functionArray do
-		local item = compound.m_functionArray [i]
-}
-.. _doxid-$(item.m_id):
-.. _cid-$(getItemCid (item)):
-.. ref-code-block:: $g_language
-	:class: title-code-block
+if compoundStats.m_hasDocumentedAliases then
+	includeFile ("c_details_aliases.rst.in", compound)
+end
 
-	$(getFunctionDeclString (item, false, "\t"))
-
-$(getItemDetailedDocumentation (item))
-
-%{
-	end -- for
-end -- if
-
-if #compound.m_aliasArray > 0 then
-}
-Aliases
--------
-
-%{
-	for i = 1, #compound.m_aliasArray do
-		local item = compound.m_aliasArray [i]
-}
-.. _doxid-$(item.m_id):
-.. _cid-$(getItemCid (item)):
-.. ref-code-block:: $g_language
-	:class: title-code-block
-
-	alias $(getItemName (item)) $(getLinkedTextString (item.m_initializer, true))
-
-$(getItemDetailedDocumentation (item))
-
-%{
-	end -- for
-end -- if
-
-if hasDefines then
+if compoundStats.m_hasDocumentedDefines then
 }
 Macros
 ------

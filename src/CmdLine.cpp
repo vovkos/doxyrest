@@ -14,14 +14,6 @@
 
 //..............................................................................
 
-CmdLine::CmdLine ()
-{
-	m_flags = 0;
-	m_protectionFilter = ProtectionKind_Public;
-}
-
-//..............................................................................
-
 bool
 CmdLineParser::onSwitch (
 	SwitchKind switchKind,
@@ -48,16 +40,6 @@ CmdLineParser::onSwitch (
 
 	case CmdLineSwitchKind_FrameDir:
 		m_cmdLine->m_frameDirList.insertTail (value);
-		break;
-
-	case CmdLineSwitchKind_ProtectionFilter:
-		m_cmdLine->m_protectionFilter = ProtectionKindMap::findValue (value, ProtectionKind_Undefined);
-		if (!m_cmdLine->m_protectionFilter)
-		{
-			err::setFormatStringError ("unknown protection '%s'", value.sz ());
-			return false;
-		}
-
 		break;
 
 	case CmdLineSwitchKind_Define:

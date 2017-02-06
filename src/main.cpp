@@ -422,7 +422,7 @@ run (CmdLine* cmdLine)
 
 	result =
 		parser.parseFile (&module, cmdLine->m_inputFileName) &&
-		globalNamespace.build (&module, cmdLine->m_protectionFilter);
+		globalNamespace.build (&module);
 
 	if (!result)
 	{

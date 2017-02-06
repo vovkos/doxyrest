@@ -833,10 +833,7 @@ GlobalNamespace::clear ()
 }
 
 bool
-GlobalNamespace::build (
-	Module* module,
-	ProtectionKind protectionFilter
-	)
+GlobalNamespace::build (Module* module)
 {
 	clear ();
 
@@ -896,9 +893,6 @@ GlobalNamespace::build (
 		sl::Iterator <Member> memberIt = compound->m_memberList.getHead ();
 		for (; memberIt; memberIt++)
 		{
-			if (memberIt->m_protectionKind > protectionFilter)
-				continue;
-
 			Namespace* targetNspace = memberIt->m_doxyGroupCompound ?
 				getSubGroupNamespace (module, nspace, nspace, memberIt->m_doxyGroupCompound) :
 				nspace;
@@ -915,9 +909,6 @@ GlobalNamespace::build (
 				err::setFormatStringError ("can't find compound refid: %s\n", refIt->m_id.sz ());
 				return false;
 			}
-
-			if (innerCompound->m_protectionKind > protectionFilter)
-				continue;
 
 			Namespace* targetNspace = innerCompound->m_doxyGroupCompound ?
 				getSubGroupNamespace (module, nspace, nspace, innerCompound->m_doxyGroupCompound) :
@@ -947,9 +938,6 @@ GlobalNamespace::build (
 
 			for (; memberIt; memberIt++)
 			{
-				if (memberIt->m_protectionKind > protectionFilter)
-					continue;
-
 				NamespaceContents* targetNspace = memberIt->m_doxyGroupCompound ?
 					(NamespaceContents*) getSubGroupNamespace (module, this, NULL, memberIt->m_doxyGroupCompound) :
 					this;
@@ -959,7 +947,7 @@ GlobalNamespace::build (
 			break;
 
 		default:
-			if (!compoundIt->m_parentNamespace && compoundIt->m_protectionKind <= protectionFilter)
+			if (!compoundIt->m_parentNamespace)
 			{
 				NamespaceContents* targetNspace = compoundIt->m_doxyGroupCompound ?
 					(NamespaceContents*) getSubGroupNamespace (module, this, NULL, compoundIt->m_doxyGroupCompound) :

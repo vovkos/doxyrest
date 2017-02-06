@@ -32,15 +32,16 @@ struct Define: sl::ListLink
 struct CmdLine
 {
 	uint_t m_flags;
-	ProtectionKind m_protectionFilter;
-
 	sl::String m_inputFileName;
 	sl::String m_outputFileName;
 	sl::String m_frameFileName;
 	sl::BoxList <sl::String> m_frameDirList;
 	sl::StdList <Define> m_defineList;
 
-	CmdLine ();
+	CmdLine ()
+	{
+		m_flags = 0;
+	}
 };
 
 //..............................................................................
@@ -54,7 +55,6 @@ enum CmdLineSwitchKind
 	CmdLineSwitchKind_FrameFileName,
 	CmdLineSwitchKind_FrameDir,
 	CmdLineSwitchKind_Define,
-	CmdLineSwitchKind_ProtectionFilter,
 };
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -87,12 +87,6 @@ AXL_SL_BEGIN_CMD_LINE_SWITCH_TABLE (CmdLineSwitchTable, CmdLineSwitchKind)
 		CmdLineSwitchKind_FrameDir,
 		"F", "frame-dir", "<dir>",
 		"Add Lua frame directory (multiple allowed)"
-		)
-
-	AXL_SL_CMD_LINE_SWITCH_2 (
-		CmdLineSwitchKind_ProtectionFilter,
-		"p", "protection", "<protection>",
-		"Exclude protected items"
 		)
 
 	AXL_SL_CMD_LINE_SWITCH_2 (

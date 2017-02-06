@@ -459,10 +459,7 @@ public:
 	clear ();
 
 	bool
-	build (
-		Module* module,
-		ProtectionKind protectionFilter
-		);
+	build (Module* module);
 
 	void
 	luaExport (lua::LuaState* luaState);

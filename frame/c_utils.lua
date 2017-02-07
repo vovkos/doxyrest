@@ -179,7 +179,7 @@ function getItemName (item)
 end
 
 function getItemNameForOverview (item)
-	if item.m_hasDocumentation then
+	if hasItemRefTarget (item) then
 		return ":ref:`" .. getItemName (item) .. "<doxid-" .. item.m_id .. ">`"
 	else
 		return getItemName (item)
@@ -326,6 +326,10 @@ function getItemRefTargetString (item)
 	end
 
 	return s
+end
+
+function hasItemRefTarget (item)
+	return item.m_hasDocumentation or item.m_subGroupHead
 end
 
 function getCompoundTocTree (compound)

@@ -178,6 +178,14 @@ function getItemName (item)
 	return s
 end
 
+function getItemNameForOverview (item)
+	if item.m_hasDocumentation then
+		return ":ref:`" .. getItemName (item) .. "<doxid-" .. item.m_id .. ">`"
+	else
+		return getItemName (item)
+	end
+end
+
 g_itemFileNameMap = {}
 g_itemCidMap = {}
 
@@ -255,7 +263,7 @@ function getItemCid (item)
 end
 
 function getItemImportArray (item)
-	if next (item.m_importArray) ~= nil then
+	if item.m_importArray and next (item.m_importArray) ~= nil then
 		return item.m_importArray
 	end
 
@@ -304,25 +312,20 @@ end
 
 function getItemRefTargetString (item)
 	local s =
-		".. _doxid-" .. item.m_id .. "\n" ..
-		".. _cid-" .. getItemCid (item) .. "\n"
+		".. _doxid-" .. item.m_id .. ":\n" ..
+		".. _cid-" .. getItemCid (item) .. ":\n"
 
 	if item.m_isSubGroupHead then
 		for j = 1, #item.m_subGroupSlaveArray do
 			slaveItem = item.m_subGroupSlaveArray [j]
 
 			s = s ..
-				".. _doxid-" .. slaveItem.m_id .. "\n" ..
-				".. _cid-" .. getItemCid (slaveItem) .. "\n"
+				".. _doxid-" .. slaveItem.m_id .. ":\n" ..
+				".. _cid-" .. getItemCid (slaveItem) .. ":\n"
 		end
 	end
 
 	return s
-end
-
-function getItemTitleCodeBlockHdr (item)
-	.. ref-code-block:: $g_language
-		:class: title-code-block
 end
 
 function getCompoundTocTree (compound)
@@ -786,8 +789,9 @@ g_protectionKindMap = {
 }
 
 function isItemExcludedByProtectionFilter (item)
+
 	local protectionValue = g_protectionKindMap [item.m_protectionKind]
-	if protectionValue > g_protectionFilterValue then
+	if protectionValue and protectionValue > g_protectionFilterValue then
 		return true
 	end
 
@@ -929,12 +933,13 @@ function prepareCompound (compound)
 		prepareItemArrayDocumentation (compound.m_constructorArray) or
 		g_includeDestructors and compound.m_destructor and prepareItemDocumentation (compound.m_destructor)
 
-	stats.m_prepareItemArrayDocumentation =
+	stats.m_hasDocumentedItems =
 		stats.m_hasDocumentedUnnamedEnumValues or
 		stats.m_hasDocumentedTypedefs or
 		stats.m_hasDocumentedVariables or
 		stats.m_hasDocumentedProperties or
 		stats.m_hasDocumentedEvents or
+		stats.m_hasDocumentedConstruction or
 		stats.m_hasDocumentedFunctions or
 		stats.m_hasDocumentedAliases or
 		stats.m_hasDocumentedDefines
@@ -950,7 +955,6 @@ function prepareCompound (compound)
 	table.sort (compound.m_structArray, cmpNames)
 	table.sort (compound.m_unionArray, cmpNames)
 	table.sort (compound.m_classArray, cmpNames)
-	table.sort (compound.m_defineArray, cmpNames)
 
 	return stats
 end

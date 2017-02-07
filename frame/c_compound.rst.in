@@ -25,7 +25,12 @@ else
 end
 
 local compoundStats = prepareCompound (compound)
+}
+$(getCompoundTocTree (compound))
 
+$(getItemImportString (compound))
+
+%{
 local hasDetails =
 	compoundStats.m_hasDocumentedItems or
 	compoundStats.m_hasBriefDocumentation and compoundStats.m_hasDetailedDocumentation
@@ -76,15 +81,15 @@ $(getItemDetailedDocumentation (compound))
 end -- if
 
 if compoundStats.m_hasDocumentedUnnamedEnumValues then
-	includeFile ("c_details_enums.rst.in", compound)
+	includeFile ("c_details_unnamed_enum_values.rst.in", compound)
 end
 
 if compoundStats.m_hasDocumentedTypedefs then
-	includeFile ("c_details_typedefs.rst.in", typedefs)
+	includeFile ("c_details_typedefs.rst.in", compound)
 end
 
 if compoundStats.m_hasDocumentedVariables then
-	includeFile ("c_details_variables.rst.in", variableSectionName)
+	includeFile ("c_details_variables.rst.in", compound, variableSectionName)
 end
 
 if compoundStats.m_hasDocumentedProperties then
@@ -98,42 +103,6 @@ end
 if compoundStats.m_hasDocumentedConstruction then
 	includeFile ("c_details_construction.rst.in", compound)
 end
-}
-Construction
-------------
-
-%{
-	for i = 1, #compound.m_constructorArray do
-		local item = compound.m_constructorArray [i]
-}
-.. _doxid-$(item.m_id):
-.. _cid-$(getItemCid (item)):
-.. ref-code-block:: $g_language
-	:class: title-code-block
-
-	$(getVoidFunctionDeclString (item, false, "\t"))
-
-$(getItemDetailedDocumentation (item))
-
-%{
-	end -- for
-
-if g_includeDestructors and compound.m_destructor and compound.m_destructor.m_hasDocumentation then
-}
-.. _doxid-$(item.m_id):
-.. _cid-$(getItemCid (item)):
-.. ref-code-block:: $g_language
-	:class: title-code-block
-
-	$(getVoidFunctionDeclString (item, false, "\t"))
-
-$(getItemDetailedDocumentation (item))
-
-%{
-end -- if
-
-	emit ("\n")
-end -- if
 
 if compoundStats.m_hasDocumentedFunctions then
 	includeFile ("c_details_functions.rst.in", compound, functionSectionName)
@@ -144,39 +113,8 @@ if compoundStats.m_hasDocumentedAliases then
 end
 
 if compoundStats.m_hasDocumentedDefines then
-}
-Macros
-------
-
-%{
-	for i = 1, #compound.m_defineArray do
-		local item = compound.m_defineArray [i]
-		local isShown = true
-
-		if not g_includeEmptyDefines and item.m_initializer.m_isEmpty then
-			isShown = false
-		elseif g_excludeDefinePattern then
-			local m = string.match (item.m_name, g_excludeDefinePattern)
-			if m then
-				isShown = false
-			end
-		end
-
-		if isShown then
-}
-.. _doxid-$(item.m_id):
-.. _cid-$(getItemCid (item)):
-.. ref-code-block:: $g_language
-	:class: title-code-block
-
-	$(getDefineDeclString (item, false))
-
-$(getItemDetailedDocumentation (item))
-
-%{
-		end -- if
-	end -- for
-end -- if
+	includeFile ("c_details_defines.rst.in", compound)
+end
 
 if #compound.m_footnoteArray > 0 then
 }

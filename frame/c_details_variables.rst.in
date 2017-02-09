@@ -43,21 +43,23 @@ for i = 1, #compound.m_variableArray do
 		if item.m_isSubGroupHead then
 			for j = 1, #item.m_subGroupSlaveArray do
 				slaveItem = item.m_subGroupSlaveArray [j]
-				local modifiers = ""
-				local suffix = ""
+				if not isUnnamedItem (slaveItem) then
+					local modifiers = ""
+					local suffix = ""
 
-				if slaveItem.m_modifiers ~= "" then
-					modifiers = " " .. slaveItem.m_modifiers
-				end
+					if slaveItem.m_modifiers ~= "" then
+						modifiers = " " .. slaveItem.m_modifiers
+					end
 
-				if slaveItem.m_argString ~= "" then
-					suffix = " " .. slaveItem.m_argString
-				elseif slaveItem.m_bitField  ~= "" then
-					suffix = " :" .. slaveItem.m_bitField
-				end
+					if slaveItem.m_argString ~= "" then
+						suffix = " " .. slaveItem.m_argString
+					elseif slaveItem.m_bitField  ~= "" then
+						suffix = " :" .. slaveItem.m_bitField
+					end
 }
 	$(getLinkedTextString (slaveItem.m_type, true))$modifiers $(slaveItem.m_name)$suffix
 %{
+				end -- if
 			end -- for
 		end -- if
 }

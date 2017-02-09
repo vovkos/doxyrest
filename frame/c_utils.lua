@@ -186,6 +186,17 @@ function getItemNameForOverview (item)
 	end
 end
 
+function getGroupName (group)
+	local s
+	if string.len (group.m_title) ~= 0 then
+		s = group.m_title
+	else
+		s = group.m_name
+	end
+
+	return s
+end
+
 g_itemFileNameMap = {}
 g_itemCidMap = {}
 
@@ -658,7 +669,7 @@ function getDocBlockListContentsImpl (blockList, internalFilter)
 				s = s .. "``" .. block.m_text .. "``"
 			elseif block.m_blockDoxyKind == "bold" then
 				s = s .. "**" .. block.m_text .. "**"
-			elseif block.m_blockDoxyKind == "italic" then
+			elseif block.m_blockDoxyKind == "emphasis" then
 				s = s .. "*" .. block.m_text .. "*"
 			else
 				s = s .. block.m_text .. getDocBlockListContents (block.m_childBlockList, false)
@@ -693,7 +704,10 @@ function getItemBriefDocumentation (item, detailsRefPrefix)
 			return ""
 		end
 
-		local i = string.find (s, ".", 1, true) -- first sentence only
+		-- generate brief description from first sentence only
+		-- matching space is to handle qualified identifiers (e.g. io.File.open)
+
+		local i = string.find (s, "%.%s", 1)
 		if i then
 			s = string.sub (s, 1, i)
 		end
@@ -812,7 +826,6 @@ function filterItemArray (itemArray)
 		local isExcluded = isItemExcludedByProtectionFilter (item)
 
 		if isExcluded then
-			print ("filtering out:", item.m_name)
 			table.remove (itemArray, i)
 		end
 	end
@@ -830,7 +843,7 @@ function filterConstructorArray (constructorArray)
 			not g_includeDefaultConstructors and #item.m_paramArray == 0
 
 		if isExcluded then
-			table.remove (defineArray, i)
+			table.remove (constructorArray, i)
 		end
 	end
 end
@@ -881,7 +894,7 @@ end
 
 -------------------------------------------------------------------------------
 
--- item filtering utils
+-- compound & enum prep
 
 function cmpIds (g1, g2)
 	return g1.m_id < g2.m_id
@@ -909,6 +922,21 @@ function prepareCompound (compound)
 	filterItemArray (compound.m_aliasArray)
 	filterDefineArray (compound.m_defineArray)
 
+	stats.m_hasItems =
+		#compound.m_namespaceArray ~= 0 or
+		#compound.m_typedefArray ~= 0 or
+		#compound.m_enumArray ~= 0 or
+		#compound.m_structArray ~= 0 or
+		#compound.m_unionArray ~= 0 or
+		#compound.m_classArray ~= 0 or
+		#compound.m_variableArray ~= 0 or
+		#compound.m_propertyArray ~= 0 or
+		#compound.m_eventArray ~= 0 or
+		#compound.m_constructorArray ~= 0 or
+		#compound.m_functionArray ~= 0 or
+		#compound.m_aliasArray ~= 0 or
+		#compound.m_defineArray ~= 0
+
 	-- scan for documentation and create subgroups
 
 	stats.m_hasUnnamedEnums = false
@@ -925,13 +953,13 @@ function prepareCompound (compound)
 		end
 	end
 
-	stats.m_hasDocumentedTypedefs = prepareItemArrayDocumentation (compound.m_typedefArray);
-	stats.m_hasDocumentedVariables = prepareItemArrayDocumentation (compound.m_variableArray);
-	stats.m_hasDocumentedProperties = prepareItemArrayDocumentation (compound.m_propertyArray);
-	stats.m_hasDocumentedEvents = prepareItemArrayDocumentation (compound.m_eventArray);
-	stats.m_hasDocumentedFunctions = prepareItemArrayDocumentation (compound.m_functionArray);
-	stats.m_hasDocumentedAliases = prepareItemArrayDocumentation (compound.m_aliasArray);
-	stats.m_hasDocumentedDefines = prepareItemArrayDocumentation (compound.m_defineArray);
+	stats.m_hasDocumentedTypedefs = prepareItemArrayDocumentation (compound.m_typedefArray)
+	stats.m_hasDocumentedVariables = prepareItemArrayDocumentation (compound.m_variableArray)
+	stats.m_hasDocumentedProperties = prepareItemArrayDocumentation (compound.m_propertyArray)
+	stats.m_hasDocumentedEvents = prepareItemArrayDocumentation (compound.m_eventArray)
+	stats.m_hasDocumentedFunctions = prepareItemArrayDocumentation (compound.m_functionArray)
+	stats.m_hasDocumentedAliases = prepareItemArrayDocumentation (compound.m_aliasArray)
+	stats.m_hasDocumentedDefines = prepareItemArrayDocumentation (compound.m_defineArray)
 
 	stats.m_hasDocumentedConstruction =
 		prepareItemArrayDocumentation (compound.m_constructorArray) or
@@ -962,5 +990,16 @@ function prepareCompound (compound)
 
 	return stats
 end
+
+function prepareEnum (enum)
+	local stats = {}
+
+	stats.m_hasDocumentedEnumValues = prepareItemArrayDocumentation (enum.m_enumValueArray)
+	stats.m_hasBriefDocumentation = not isDocumentationEmpty (enum.m_briefDescription)
+	stats.m_hasDetailedDocumentation = not isDocumentationEmpty (enum.m_detailedDescription)
+
+	return stats
+end
+
 
 -------------------------------------------------------------------------------

@@ -276,7 +276,7 @@ getMemberFlagString (uint_t flags)
 		string += ' ';
 	}
 
-	string.reduceLength (1);
+	string.chop (1);
 	return string;
 }
 

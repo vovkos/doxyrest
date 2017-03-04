@@ -185,14 +185,27 @@ CompoundDefType::create (
 		case AttrKind_Id:
 			m_compound->m_id = attributes [1];
 			mapIt = module->m_compoundMap.visit (m_compound->m_id);
-			if (mapIt->m_value)
+			if (!mapIt->m_value)
 			{
-				err::setFormatStringError ("duplicate compound id: %s", m_compound->m_id.sz ());
-				printf ("duplicate compound id: %s\n", m_compound->m_id.sz ());
-				return false;
+				mapIt->m_value = m_compound;
+			}
+			else
+			{
+				Compound* prevCompound = mapIt->m_value;
+				printf (
+					"duplicate compoud id: %s (%s: %s)\n",
+					m_compound->m_id.sz (),
+					getCompoundKindString (prevCompound->m_compoundKind),
+					prevCompound->m_name.sz ()
+					);
+
+				if (prevCompound->m_detailedDescription.isEmpty () && prevCompound->m_briefDescription.isEmpty ())
+				{
+					printf ("  replacing old compound as it has no documentation\n");
+					mapIt->m_value = m_compound;
+				}
 			}
 
-			mapIt->m_value = m_compound;
 			break;
 
 		case AttrKind_Kind:
@@ -439,14 +452,27 @@ MemberDefType::create (
 				break; // doxy groups contain duplicated definitions of members
 
 			mapIt = module->m_memberMap.visit (m_member->m_id);
-			if (mapIt->m_value)
+			if (!mapIt->m_value)
 			{
-				err::setFormatStringError ("duplicate member id: %s", m_member->m_id.sz ());
-				printf ("duplicate member id: %s\n", m_member->m_id.sz ());
-				return false;
+				mapIt->m_value = m_member;
+			}
+			else
+			{
+				Member* prevMember = mapIt->m_value;
+				printf (
+					"duplicate member id %s (%s: %s)\n",
+					m_member->m_id.sz (),
+					getMemberKindString (prevMember->m_memberKind),
+					prevMember->m_name.sz ()
+					);
+
+				if (prevMember->m_detailedDescription.isEmpty () && prevMember->m_briefDescription.isEmpty ())
+				{
+					printf ("  replacing old member as it has no documentation\n");
+					mapIt->m_value = m_member;
+				}
 			}
 
-			mapIt->m_value = m_member;
 			break;
 
 		case AttrKind_Prot:

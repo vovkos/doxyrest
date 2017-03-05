@@ -94,6 +94,18 @@ DocBlock::luaExportMembers (lua::LuaState* luaState)
 	luaState->setMemberString ("m_title", m_title);
 	luaState->setMemberString ("m_text", m_text);
 
+	// remove empty child blocks
+
+	sl::Iterator <DocBlock> it = m_childBlockList.getHead ();
+	while (it)
+	{
+		sl::Iterator <DocBlock> next = it.getNext ();
+		if (it->m_text.isEmpty () && it->m_childBlockList.isEmpty ())
+			m_childBlockList.erase (it);
+
+		it = next;
+	}
+
 	luaExportList (luaState, m_childBlockList);
 	luaState->setMember ("m_childBlockList");
 }

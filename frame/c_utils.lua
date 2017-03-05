@@ -653,6 +653,52 @@ function removeCommonSpacePrefix (source)
 	return s
 end
 
+function concatDocBlockContents (s1, s2)
+	local length1 = string.len (s1)
+	local length2 = string.len (s2)
+
+	if length1 == 0 then
+		return s2
+	elseif length2 == 0 then
+		return s1
+	end
+
+	local last = string.sub (s1, -1, -1)
+	local first = string.sub (s2, 1, 1)
+
+	if string.match (last, "%s") and string.match (first, "%s") then
+		return s1 .. s2
+	else
+		return s1 .. " " .. s2
+	end
+end
+
+function getDocBlockContents (block)
+	local s
+
+	local childContents = getDocBlockListContents (block.m_childBlockList)
+	local text = concatDocBlockContents (block.m_text, childContents)
+
+	if block.m_blockKind == "simplesect" and block.m_simpleSectionKind == "see" then
+		s = ".. rubric:: See also:\n\n" .. ensureExtraNewLine (text)
+		s =  (s)
+	elseif block.m_blockDoxyKind == "linebreak" then
+		s = "\n\n"
+	elseif block.m_blockDoxyKind == "computeroutput" then
+		s = "``" .. text .. "``"
+	elseif block.m_blockDoxyKind == "bold" then
+		s = "**" .. text .. "**"
+	elseif block.m_blockDoxyKind == "emphasis" then
+		s = "*" .. text .. "*"
+	elseif block.m_blockKind == "paragraph" then
+		s = ensureExtraNewLine (text)
+	else
+		s = text
+	end
+
+	return s
+end
+
 function getDocBlockListContentsImpl (blockList, internalFilter)
 	local s = ""
 
@@ -661,23 +707,8 @@ function getDocBlockListContentsImpl (blockList, internalFilter)
 		local isInternal = block.m_blockKind == "internal"
 
 		if isInternal == internalFilter then
-			if block.m_blockKind == "simplesect" and block.m_simpleSectionKind == "see" then
-				s = s .. ".. rubric:: See also:\n\n"
-				s = s .. block.m_text .. getDocBlockListContents (block.m_childBlockList, false)
-				s = ensureExtraNewLine (s)
-			elseif block.m_blockDoxyKind == "computeroutput" then
-				s = s .. "``" .. block.m_text .. "``"
-			elseif block.m_blockDoxyKind == "bold" then
-				s = s .. "**" .. block.m_text .. "**"
-			elseif block.m_blockDoxyKind == "emphasis" then
-				s = s .. "*" .. block.m_text .. "*"
-			else
-				s = s .. block.m_text .. getDocBlockListContents (block.m_childBlockList, false)
-
-				if block.m_blockKind == "paragraph" then
-					s = ensureExtraNewLine (s)
-				end
-			end
+			local blockContents = getDocBlockContents (block)
+			s = concatDocBlockContents (s, blockContents)
 		end
 	end
 

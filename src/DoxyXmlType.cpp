@@ -1078,15 +1078,15 @@ RefTextType::create (
 bool
 DocParaType::create (
 	DoxyXmlParser* parser,
-	DocParagraphBlock* paragraphBlock,
+	DocBlock* paragraphBlock,
 	const char* name,
 	const char** attributes
 	)
 {
 	m_parser = parser;
 	m_paragraphBlock = paragraphBlock;
-	m_childBlock = AXL_MEM_NEW (DocBlock);
-	m_paragraphBlock->m_childBlockList.insertTail (m_childBlock);
+	m_textBlock = AXL_MEM_NEW (DocBlock);
+	m_paragraphBlock->m_childBlockList.insertTail (m_textBlock);
 
 	return true;
 }
@@ -1114,11 +1114,11 @@ DocParaType::onStartElement (
 		block = AXL_MEM_NEW (DocBlock);
 		block->m_blockDoxyKind = name;
 		m_paragraphBlock->m_childBlockList.insertTail (block);
-		m_parser->pushType <DocTextType> (block, name, attributes);
+		m_parser->pushType <DocParaType> (block, name, attributes);
 	}
 
-	m_childBlock = AXL_MEM_NEW (DocBlock);
-	m_paragraphBlock->m_childBlockList.insertTail (m_childBlock);
+	m_textBlock = AXL_MEM_NEW (DocBlock);
+	m_paragraphBlock->m_childBlockList.insertTail (m_textBlock);
 	return true;
 }
 
@@ -1157,21 +1157,6 @@ DocRefTextType::create (
 		attributes += 2;
 	}
 
-	return true;
-}
-
-//..............................................................................
-
-bool
-DocTextType::create (
-	DoxyXmlParser* parser,
-	DocBlock* block,
-	const char* name,
-	const char** attributes
-	)
-{
-	m_parser = parser;
-	m_block = block;
 	return true;
 }
 

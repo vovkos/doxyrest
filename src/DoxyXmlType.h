@@ -1064,20 +1064,20 @@ protected:
 	AXL_SL_END_HASH_TABLE_MAP ()
 
 protected:
-	DocParagraphBlock* m_paragraphBlock;
-	DocBlock* m_childBlock;
+	DocBlock* m_paragraphBlock;
+	DocBlock* m_textBlock;
 
 public:
 	DocParaType ()
 	{
 		m_paragraphBlock = NULL;
-		m_childBlock = NULL;
+		m_textBlock = NULL;
 	}
 
 	bool
 	create (
 		DoxyXmlParser* parser,
-		DocParagraphBlock* paragraphBlock,
+		DocBlock* paragraphBlock,
 		const char* name,
 		const char** attributes
 		);
@@ -1096,7 +1096,7 @@ public:
 		size_t length
 		)
 	{
-		m_childBlock->m_text.append (string, length);
+		m_textBlock->m_text.append (string, length);
 		return true;
 	}
 };
@@ -1145,39 +1145,6 @@ public:
 		)
 	{
 		m_refBlock->m_text.append (string, length);
-		return true;
-	}
-};
-
-//..............................................................................
-
-class DocTextType: public DoxyXmlType
-{
-protected:
-	DocBlock* m_block;
-
-public:
-	DocTextType ()
-	{
-		m_block = NULL;
-	}
-
-	bool
-	create (
-		DoxyXmlParser* parser,
-		DocBlock* block,
-		const char* name,
-		const char** attributes
-		);
-
-	virtual
-	bool
-	onCharacterData (
-		const char* string,
-		size_t length
-		)
-	{
-		m_block->m_text.append (string, length);
 		return true;
 	}
 };

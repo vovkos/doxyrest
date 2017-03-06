@@ -612,34 +612,34 @@ end
 
 -- item documentation utils
 
-function removeCommonSpacePrefix (source)
-
-	local prefix = nil
+function replaceCommonSpacePrefix (source, replacement)
 
 	local s = "\n" .. source -- add leading '\n'
+	local prefix = nil
+	local len = 0
 
-	for newPrefix in string.gmatch (s, "\n([ \t]*)[^%s]") do
+	for newPrefix in string.gmatch (s, "(\n[ \t]*)[^%s]") do
 		if not prefix then
 			prefix = newPrefix
+			len = string.len (prefix)
 		else
-			local len = string.len (prefix)
 			local newLen = string.len (newPrefix)
 			if newLen < len then
 				len = newLen
 			end
 
-			for i = 1, len do
+			for i = 2, len do
 				if string.byte (prefix, i) ~= string.byte (newPrefix, i) then
 					len = i - 1
 					break
 				end
 			end
 
-			if len == 0 then
-				return source
-			else
-				prefix = string.sub (prefix, 1, len)
-			end
+			prefix = string.sub (prefix, 1, len)
+		end
+
+		if len < 2 then
+			break
 		end
 	end
 
@@ -647,7 +647,11 @@ function removeCommonSpacePrefix (source)
 		return source
 	end
 
-	s = string.gsub (s, "\n" .. prefix, "\n") -- remove common prefix
+	if len < 2 and replacement == "" then
+		return source
+	end
+
+	s = string.gsub (s, prefix, "\n" .. replacement) -- replace common prefix
 	s = string.sub (s, 2) -- remove leading '\n'
 
 	return s
@@ -666,7 +670,7 @@ function concatDocBlockContents (s1, s2)
 	local last = string.sub (s1, -1, -1)
 	local first = string.sub (s2, 1, 1)
 
-	if string.match (last, "%s") and string.match (first, "%s") then
+	if string.match (last, "%s") or string.match (first, "%s") then
 		return s1 .. s2
 	else
 		return s1 .. " " .. s2
@@ -676,24 +680,31 @@ end
 function getDocBlockContents (block)
 	local s
 
-	local childContents = getDocBlockListContents (block.m_childBlockList)
-	local text = concatDocBlockContents (block.m_text, childContents)
-
-	if block.m_blockKind == "simplesect" and block.m_simpleSectionKind == "see" then
-		s = ".. rubric:: See also:\n\n" .. ensureExtraNewLine (text)
-		s =  (s)
-	elseif block.m_blockDoxyKind == "linebreak" then
-		s = "\n\n"
-	elseif block.m_blockDoxyKind == "computeroutput" then
-		s = "``" .. text .. "``"
-	elseif block.m_blockDoxyKind == "bold" then
-		s = "**" .. text .. "**"
-	elseif block.m_blockDoxyKind == "emphasis" then
-		s = "*" .. text .. "*"
-	elseif block.m_blockKind == "paragraph" then
-		s = ensureExtraNewLine (text)
+	if block.m_blockDoxyKind == "programlisting" then
+		local code = getDocBlockListContentsImpl (block.m_childBlockList, false)
+		code = replaceCommonSpacePrefix (code, "    ")
+		s = "\n\n::\n\n" .. ensureExtraNewLine (code)
 	else
-		s = text
+		local childContents = getDocBlockListContentsImpl (block.m_childBlockList, false)
+		local text = concatDocBlockContents (block.m_text, childContents)
+
+		if block.m_blockKind == "simplesect" and block.m_simpleSectionKind == "see" then
+			s = "\n\n.. rubric:: See also:\n\n" .. ensureExtraNewLine (text)
+		elseif block.m_blockDoxyKind == "linebreak" then
+			s = "\n\n"
+		elseif block.m_blockDoxyKind == "computeroutput" then
+			s = "``" .. text .. "``"
+		elseif block.m_blockDoxyKind == "bold" then
+			s = "**" .. text .. "**"
+		elseif block.m_blockDoxyKind == "emphasis" then
+			s = "*" .. text .. "*"
+		elseif block.m_blockDoxyKind == "sp" then
+			s = " "
+		elseif block.m_blockKind == "paragraph" then
+			s = ensureExtraNewLine (text)
+		else
+			s = text
+		end
 	end
 
 	return s
@@ -712,18 +723,24 @@ function getDocBlockListContentsImpl (blockList, internalFilter)
 		end
 	end
 
-	s = string.gsub (s, "%s+$", "")   -- trim trailing whitespace
-	s = string.gsub (s, "\t", "    ") -- replace tabs with spaces
-
-	return removeCommonSpacePrefix (s)
+	return s
 end
 
-function getDocBlockListContents (blockList)
-	return getDocBlockListContentsImpl (blockList, false)
+function getDocBlockListContents (blockList, internalFilter)
+	if not internalFilter then
+		internalFilter = false
+	end
+
+	local s = getDocBlockListContentsImpl (blockList, internalFilter)
+
+	s = string.gsub (s, "%s+$", "") -- trim trailing whitespace
+	s = string.gsub (s, "\t", "    ") -- replace tabs with spaces
+
+	return replaceCommonSpacePrefix (s, "")
 end
 
 function getItemInternalDocumentation (item)
-	return getDocBlockListContentsImpl (item.m_detailedDescription.m_docBlockList, true)
+	return getDocBlockListContents (item.m_detailedDescription.m_docBlockList, true)
 end
 
 function getItemBriefDocumentation (item, detailsRefPrefix)

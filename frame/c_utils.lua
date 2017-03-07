@@ -597,15 +597,9 @@ function isUnnamedItem (item)
 	return item.m_name == "" or string.sub (item.m_name, 1, 1) == "@"
 end
 
-function ensureExtraNewLine (s)
-	local length = string.len (s)
-	if s [length] ~= "\n" then
-		return s .. "\n\n"
-	elseif length < 2 or s [length - 1] ~= "\n" then
-		return s .. "\n"
-	else
-		return s
-	end
+function ensureDoubleNewLine (text)
+	local s = string.gsub (text, "%s+$", "") -- trim trailing whitespace
+	return s .. "\n\n"
 end
 
 -------------------------------------------------------------------------------
@@ -613,7 +607,6 @@ end
 -- item documentation utils
 
 function replaceCommonSpacePrefix (source, replacement)
-
 	local s = "\n" .. source -- add leading '\n'
 	local prefix = nil
 	local len = 0
@@ -677,31 +670,72 @@ function concatDocBlockContents (s1, s2)
 	end
 end
 
-function getDocBlockContents (block)
-	local s
+function getDocBlockContents (block, accumulator)
+	local s = ""
 
-	if block.m_blockDoxyKind == "programlisting" then
-		local code = getDocBlockListContentsImpl (block.m_childBlockList, false)
+	if block.m_blockKind == "programlisting" then
+		local code = getDocBlockListContentsImpl (block.m_childBlockList, false, accumulator)
 		code = replaceCommonSpacePrefix (code, "    ")
-		s = "\n\n::\n\n" .. ensureExtraNewLine (code)
+		code = ensureDoubleNewLine (code)
+		s = "\n\n::\n\n" .. code
 	else
-		local childContents = getDocBlockListContentsImpl (block.m_childBlockList, false)
+		local childContents = getDocBlockListContentsImpl (block.m_childBlockList, false, accumulator)
 		local text = concatDocBlockContents (block.m_text, childContents)
 
-		if block.m_blockKind == "simplesect" and block.m_simpleSectionKind == "see" then
-			s = "\n\n.. rubric:: See also:\n\n" .. ensureExtraNewLine (text)
-		elseif block.m_blockDoxyKind == "linebreak" then
+		if block.m_blockKind == "linebreak" then
 			s = "\n\n"
-		elseif block.m_blockDoxyKind == "computeroutput" then
+		elseif block.m_blockKind == "ref" then
+			s = ":ref:`" .. text .. " <doxid-" .. block.m_id .. ">`"
+		elseif block.m_blockKind == "computeroutput" then
 			s = "``" .. text .. "``"
-		elseif block.m_blockDoxyKind == "bold" then
+		elseif block.m_blockKind == "bold" then
 			s = "**" .. text .. "**"
-		elseif block.m_blockDoxyKind == "emphasis" then
+		elseif block.m_blockKind == "emphasis" then
 			s = "*" .. text .. "*"
-		elseif block.m_blockDoxyKind == "sp" then
+		elseif block.m_blockKind == "sp" then
 			s = " "
-		elseif block.m_blockKind == "paragraph" then
-			s = ensureExtraNewLine (text)
+		elseif block.m_blockKind == "para" then
+			s = string.gsub (text, "%s+$", "") -- trim trailing whitespace
+			if s ~= "" then
+				s = ensureDoubleNewLine (text)
+			end
+		elseif block.m_blockKind == "parametername" then
+			text = string.gsub (text, "^%s", "") -- trim leading whitespace
+			text = string.gsub (text, "%s+$", "") -- trim trailing whitespace
+
+			if not accumulator.m_paramSection then
+				accumulator.m_paramSection = {}
+			end
+
+			local count = #accumulator.m_paramSection
+			accumulator.m_paramSection [count + 1] = {}
+			accumulator.m_paramSection [count + 1].m_name = text
+		elseif block.m_blockKind == "parameterdescription" then
+			text = string.gsub (text, "^%s", "") -- trim leading whitespace
+			text = string.gsub (text, "%s+$", "") -- trim trailing whitespace
+
+			if accumulator.m_paramSection then
+				local count = #accumulator.m_paramSection
+				accumulator.m_paramSection [count].m_description = text
+			end
+		elseif block.m_blockKind == "simplesect" then
+			if block.m_simpleSectionKind == "return" then
+				if not accumulator.m_returnSection then
+					accumulator.m_returnSection = {}
+				end
+
+				local count = #accumulator.m_returnSection
+				accumulator.m_returnSection [count + 1] = text
+			elseif block.m_simpleSectionKind == "see" then
+				if not accumulator.m_seeSection then
+					accumulator.m_seeSection = {}
+				end
+
+				local count = #accumulator.m_seeSection
+				accumulator.m_seeSection [count + 1] = text
+			else
+				s = text
+			end
 		else
 			s = text
 		end
@@ -710,7 +744,7 @@ function getDocBlockContents (block)
 	return s
 end
 
-function getDocBlockListContentsImpl (blockList, internalFilter)
+function getDocBlockListContentsImpl (blockList, internalFilter, accumulator)
 	local s = ""
 
 	for i = 1, #blockList do
@@ -718,7 +752,7 @@ function getDocBlockListContentsImpl (blockList, internalFilter)
 		local isInternal = block.m_blockKind == "internal"
 
 		if isInternal == internalFilter then
-			local blockContents = getDocBlockContents (block)
+			local blockContents = getDocBlockContents (block, accumulator)
 			s = concatDocBlockContents (s, blockContents)
 		end
 	end
@@ -731,9 +765,38 @@ function getDocBlockListContents (blockList, internalFilter)
 		internalFilter = false
 	end
 
-	local s = getDocBlockListContentsImpl (blockList, internalFilter)
+	local accumulator = {}
+	local s = getDocBlockListContentsImpl (blockList, internalFilter, accumulator)
 
-	s = string.gsub (s, "%s+$", "") -- trim trailing whitespace
+	if accumulator.m_paramSection then
+		s = s .. "\n\n.. rubric:: Parameters:\n\n"
+		s = s .. ".. list-table::\n"
+		s = s .. "\t:widths: 20 80\n\n"
+
+		for i = 1, #accumulator.m_paramSection do
+			s = s .. "\t*\n"
+			s = s .. "\t\t- " .. accumulator.m_paramSection [i].m_name .. "\n\n"
+			s = s .. "\t\t- " .. accumulator.m_paramSection [i].m_description .. "\n\n"
+		end
+	end
+
+	if accumulator.m_returnSection then
+		s = s .. "\n\n.. rubric:: Returns:\n\n"
+
+		for i = 1, #accumulator.m_returnSection do
+			s = s .. accumulator.m_returnSection [i]
+		end
+	end
+
+	if accumulator.m_seeSection then
+		s = s .. "\n\n.. rubric:: See also:\n\n"
+
+		for i = 1, #accumulator.m_seeSection do
+			s = s .. accumulator.m_seeSection [i]
+		end
+	end
+
+	s = string.gsub (s, "%s+$", "") -- trim trailing whitespace again
 	s = string.gsub (s, "\t", "    ") -- replace tabs with spaces
 
 	return replaceCommonSpacePrefix (s, "")

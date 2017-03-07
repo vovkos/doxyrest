@@ -413,19 +413,4 @@ AXL_SL_END_HASH_TABLE_MAP ()
 const char*
 getAccessorKindString (AccessorKind accessorKind);
 
-// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-
-enum DocSimpleSectionKind
-{
-	DocSimpleSectionKind_Undefined = 0,
-	DocSimpleSectionKind_See,
-};
-
-AXL_SL_BEGIN_STRING_HASH_TABLE_MAP (DocSimpleSectionKindMap, DocSimpleSectionKind)
-	AXL_SL_HASH_TABLE_MAP_ENTRY ("see", DocSimpleSectionKind_See)
-AXL_SL_END_HASH_TABLE_MAP ()
-
-const char*
-getDocSimpleSectionKindString (DocSimpleSectionKind sectionKind);
-
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+//..............................................................................

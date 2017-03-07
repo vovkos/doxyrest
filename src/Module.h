@@ -51,35 +51,12 @@ struct LinkedText
 
 //..............................................................................
 
-enum DocBlockKind
-{
-	DocBlockKind_Undefined,
-	DocBlockKind_Paragraph,
-	DocBlockKind_Section,
-	DocBlockKind_Internal,
-	DocBlockKind_SimpleSection,
-	DocBlockKind_Ref,
-};
-
-// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-
-const char*
-getDocBlockKindString (DocBlockKind flag);
-
-// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-
 struct DocBlock: sl::ListLink
 {
-	DocBlockKind m_blockKind;
-	sl::String m_blockDoxyKind;
+	sl::String m_blockKind;
 	sl::String m_title;
 	sl::String m_text;
 	sl::StdList <DocBlock> m_childBlockList;
-
-	DocBlock ()
-	{
-		m_blockKind = DocBlockKind_Undefined;
-	}
 
 	virtual ~DocBlock ()
 	{
@@ -103,7 +80,6 @@ struct DocRefBlock: DocBlock
 
 	DocRefBlock ()
 	{
-		m_blockKind = DocBlockKind_Ref;
 		m_refKind = RefKind_Undefined;
 	}
 
@@ -114,24 +90,9 @@ struct DocRefBlock: DocBlock
 
 //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-struct DocParagraphBlock: DocBlock
-{
-	DocParagraphBlock ()
-	{
-		m_blockKind = DocBlockKind_Paragraph;
-	}
-};
-
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-
 struct DocSectionBlock: DocBlock
 {
 	sl::String m_id;
-
-	DocSectionBlock ()
-	{
-		m_blockKind = DocBlockKind_Section;
-	}
 
 	virtual
 	void
@@ -142,9 +103,7 @@ struct DocSectionBlock: DocBlock
 
 struct DocSimpleSectionBlock: DocBlock
 {
-	DocSimpleSectionKind m_simpleSectionKind;
-
-	DocSimpleSectionBlock ();
+	sl::String m_simpleSectionKind;
 
 	virtual
 	void

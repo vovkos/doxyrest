@@ -66,31 +66,10 @@ LinkedText::normalize ()
 
 //..............................................................................
 
-const char*
-getDocBlockKindString (DocBlockKind blockKind)
-{
-	const char* stringTable [] =
-	{
-		"<undefined>",    // DocBlockKind_Undefined,
-		"paragraph",      // DocBlockKind_Paragraph,
-		"section",        // DocBlockKind_Section,
-		"internal",       // DocBlockKind_Internal,
-		"simplesect",     // DocBlockKind_SimpleSection,
-		"ref",            // DocBlockKind_Ref,
-	};
-
-	return (size_t) blockKind < countof (stringTable) ?
-		stringTable [blockKind] :
-		stringTable [DocBlockKind_Undefined];
-}
-
-//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-
 void
 DocBlock::luaExportMembers (lua::LuaState* luaState)
 {
-	luaState->setMemberString ("m_blockKind", getDocBlockKindString (m_blockKind));
-	luaState->setMemberString ("m_blockDoxyKind", m_blockDoxyKind);
+	luaState->setMemberString ("m_blockKind", m_blockKind);
 	luaState->setMemberString ("m_title", m_title);
 	luaState->setMemberString ("m_text", m_text);
 
@@ -146,12 +125,6 @@ DocSectionBlock::luaExport (lua::LuaState* luaState)
 
 //.............................................................................
 
-DocSimpleSectionBlock::DocSimpleSectionBlock ()
-{
-	m_blockKind = DocBlockKind_SimpleSection;
-	m_simpleSectionKind = DocSimpleSectionKind_Undefined;
-}
-
 void
 DocSimpleSectionBlock::luaExport (lua::LuaState* luaState)
 {
@@ -159,7 +132,7 @@ DocSimpleSectionBlock::luaExport (lua::LuaState* luaState)
 
 	DocBlock::luaExportMembers (luaState);
 
-	luaState->setMemberString ("m_simpleSectionKind", getDocSimpleSectionKindString (m_simpleSectionKind));
+	luaState->setMemberString ("m_simpleSectionKind", m_simpleSectionKind);
 }
 
 //.............................................................................

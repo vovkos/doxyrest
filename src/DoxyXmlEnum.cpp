@@ -300,18 +300,4 @@ getAccessorKindString (AccessorKind accessorKind)
 		stringTable [0];
 }
 
-const char*
-getDocSimpleSectionKindString (DocSimpleSectionKind sectionKind)
-{
-	const char* stringTable [] =
-	{
-		"<undefined>", // DocSimpleSectionKind_Undefined,
-		"see",         // DocSimpleSectionKind_See,
-	};
-
-	return (size_t) sectionKind < countof (stringTable) ?
-		stringTable [sectionKind] :
-		stringTable [0];
-};
-
 //..............................................................................

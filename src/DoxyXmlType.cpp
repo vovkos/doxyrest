@@ -748,25 +748,17 @@ DescriptionType::onStartElement (
 	ElemKind elemKind = ElemKindMap::findValue (name, ElemKind_Undefined);
 	switch (elemKind)
 	{
-		DocParagraphBlock* paragraphBlock;
-
 	case ElemKind_Title:
 		m_parser->pushType <StringType> (&m_description->m_title, name, attributes);
 		break;
 
 	case ElemKind_Para:
-		paragraphBlock = AXL_MEM_NEW (DocParagraphBlock);
-		paragraphBlock->m_blockKind = DocBlockKind_Paragraph;
-		m_description->m_docBlockList.insertTail (paragraphBlock);
-		m_parser->pushType <DocParaType> (paragraphBlock, name, attributes);
+		m_parser->pushType <DocParaType> (&m_description->m_docBlockList, name, attributes);
 		break;
 
 	case ElemKind_Sect1:
-		m_parser->pushType <DocSectionBlockType> (&m_description->m_docBlockList, name, attributes);
-		break;
-
 	case ElemKind_Internal:
-		m_parser->pushType <DocInternalBlockType> (&m_description->m_docBlockList, name, attributes);
+		m_parser->pushType <DocSectionBlockType> (&m_description->m_docBlockList, name, attributes);
 		break;
 	}
 
@@ -785,7 +777,7 @@ DocSectionBlockType::create (
 {
 	m_parser = parser;
 	m_sectionBlock = AXL_MEM_NEW (DocSectionBlock);
-	m_sectionBlock->m_blockKind = m_blockKind;
+	m_sectionBlock->m_blockKind = name;
 	list->insertTail (m_sectionBlock);
 
 	while (*attributes)
@@ -813,29 +805,21 @@ DocSectionBlockType::onStartElement (
 	ElemKind elemKind = ElemKindMap::findValue (name, ElemKind_Undefined);
 	switch (elemKind)
 	{
-		DocParagraphBlock* paragraphBlock;
-
 	case ElemKind_Title:
 		m_parser->pushType <StringType> (&m_sectionBlock->m_title, name, attributes);
 		break;
 
 	case ElemKind_Para:
-		paragraphBlock = AXL_MEM_NEW (DocParagraphBlock);
-		m_sectionBlock->m_childBlockList.insertTail (paragraphBlock);
-		m_parser->pushType <DocParaType> (paragraphBlock, name, attributes);
+		m_parser->pushType <DocParaType> (&m_sectionBlock->m_childBlockList, name, attributes);
 		break;
 
 	case ElemKind_Sect1:
 	case ElemKind_Sect2:
 	case ElemKind_Sect3:
 	case ElemKind_Sect4:
+	case ElemKind_Internal:
 		m_parser->pushType <DocSectionBlockType> (&m_sectionBlock->m_childBlockList, name, attributes);
 		break;
-
-	case ElemKind_Internal:
-		m_parser->pushType <DocInternalBlockType> (&m_sectionBlock->m_childBlockList, name, attributes);
-		break;
-
 	}
 
 	return true;
@@ -1078,13 +1062,16 @@ RefTextType::create (
 bool
 DocParaType::create (
 	DoxyXmlParser* parser,
-	DocBlock* paragraphBlock,
+	sl::StdList <DocBlock>* blockList,
 	const char* name,
 	const char** attributes
 	)
 {
 	m_parser = parser;
-	m_paragraphBlock = paragraphBlock;
+	m_paragraphBlock = AXL_MEM_NEW (DocBlock);
+	m_paragraphBlock->m_blockKind = name;
+	blockList->insertTail (m_paragraphBlock);
+
 	m_textBlock = AXL_MEM_NEW (DocBlock);
 	m_paragraphBlock->m_childBlockList.insertTail (m_textBlock);
 
@@ -1097,8 +1084,6 @@ DocParaType::onStartElement (
 	const char** attributes
 	)
 {
-	DocBlock* block;
-
 	ElemKind elemKind = ElemKindMap::findValue (name, ElemKind_Undefined);
 	switch (elemKind)
 	{
@@ -1111,10 +1096,7 @@ DocParaType::onStartElement (
 		break;
 
 	default:
-		block = AXL_MEM_NEW (DocBlock);
-		block->m_blockDoxyKind = name;
-		m_paragraphBlock->m_childBlockList.insertTail (block);
-		m_parser->pushType <DocParaType> (block, name, attributes);
+		m_parser->pushType <DocParaType> (&m_paragraphBlock->m_childBlockList, name, attributes);
 	}
 
 	m_textBlock = AXL_MEM_NEW (DocBlock);
@@ -1134,6 +1116,7 @@ DocRefTextType::create (
 {
 	m_parser = parser;
 	m_refBlock = AXL_MEM_NEW (DocRefBlock);
+	m_refBlock->m_blockKind = name;
 	list->insertTail (m_refBlock);
 
 	while (*attributes)
@@ -1172,6 +1155,7 @@ DocSimpleSectionType::create (
 {
 	m_parser = parser;
 	m_sectionBlock = AXL_MEM_NEW (DocSimpleSectionBlock);
+	m_sectionBlock->m_blockKind = name;
 	list->insertTail (m_sectionBlock);
 
 	while (*attributes)
@@ -1180,7 +1164,7 @@ DocSimpleSectionType::create (
 		switch (attrKind)
 		{
 		case AttrKind_Kind:
-			m_sectionBlock->m_simpleSectionKind = DocSimpleSectionKindMap::findValue (attributes [1], DocSimpleSectionKind_Undefined);
+			m_sectionBlock->m_simpleSectionKind = attributes [1];
 			break;
 		}
 
@@ -1199,12 +1183,8 @@ DocSimpleSectionType::onStartElement (
 	ElemKind elemKind = ElemKindMap::findValue (name, ElemKind_Undefined);
 	switch (elemKind)
 	{
-		DocParagraphBlock* paragraphBlock;
-
 	case ElemKind_Para:
-		paragraphBlock = AXL_MEM_NEW (DocParagraphBlock);
-		m_sectionBlock->m_childBlockList.insertTail (paragraphBlock);
-		m_parser->pushType <DocParaType> (paragraphBlock, name, attributes);
+		m_parser->pushType <DocParaType> (&m_sectionBlock->m_childBlockList, name, attributes);
 		break;
 	}
 

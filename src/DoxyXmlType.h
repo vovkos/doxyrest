@@ -748,15 +748,9 @@ protected:
 	AXL_SL_END_HASH_TABLE_MAP ()
 
 protected:
-	DocBlockKind m_blockKind;
 	DocSectionBlock* m_sectionBlock;
 
 public:
-	DocSectionBlockType ()
-	{
-		m_blockKind = DocBlockKind_Section;
-	}
-
 	bool
 	create (
 		DoxyXmlParser* parser,
@@ -771,17 +765,6 @@ public:
 		const char* name,
 		const char** attributes
 		);
-};
-
-// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-
-class DocInternalBlockType: public DocSectionBlockType
-{
-public:
-	DocInternalBlockType ()
-	{
-		m_blockKind = DocBlockKind_Internal;
-	}
 };
 
 //..............................................................................
@@ -1059,8 +1042,8 @@ protected:
 	};
 
 	AXL_SL_BEGIN_STRING_HASH_TABLE_MAP (ElemKindMap, ElemKind)
-		AXL_SL_HASH_TABLE_MAP_ENTRY ("ref",            ElemKind_Ref)
-		AXL_SL_HASH_TABLE_MAP_ENTRY ("simplesect",     ElemKind_SimpleSect)
+		AXL_SL_HASH_TABLE_MAP_ENTRY ("ref",        ElemKind_Ref)
+		AXL_SL_HASH_TABLE_MAP_ENTRY ("simplesect", ElemKind_SimpleSect)
 	AXL_SL_END_HASH_TABLE_MAP ()
 
 protected:
@@ -1077,7 +1060,7 @@ public:
 	bool
 	create (
 		DoxyXmlParser* parser,
-		DocBlock* paragraphBlock,
+		sl::StdList <DocBlock>* blockList,
 		const char* name,
 		const char** attributes
 		);

@@ -923,19 +923,22 @@ function filterTypedefArray (typedefArray)
 		item = typedefArray [i]
 
 		local isExcluded = isItemExcludedByProtectionFilter (item)
-		if name == item.m_name then
-			table.remove (typedefArray, i)
-		end
 
-		if not g_includePrimitiveTypedefs then
+		if not isExcluded and not g_includePrimitiveTypedefs then
 			local typeKind, name = string.match (
 				item.m_type.m_plainText,
 				"(%a+)%s+(%w[%w_]*)"
 				)
 
 			if name == item.m_name then
-				table.remove (typedefArray, i)
+				isExcluded =
+					item.m_briefDescription.m_isEmpty and
+					item.m_detailedDescription.m_isEmpty
 			end
+		end
+
+		if isExcluded then
+			table.remove (typedefArray, i)
 		end
 	end
 end

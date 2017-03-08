@@ -323,6 +323,7 @@ struct Module
 {
 	sl::String m_version;
 	sl::StdList <Compound> m_compoundList;
+	sl::Array <Compound*> m_pageArray;
 	sl::Array <Compound*> m_namespaceArray;
 	sl::Array <Compound*> m_doxyGroupArray;
 	sl::StringHashTableMap <Compound*> m_compoundMap;
@@ -332,15 +333,13 @@ struct Module
 	Compound*
 	findCompound (const sl::StringRef& id)
 	{
-		sl::StringHashTableMapIterator <Compound*> mapIt = m_compoundMap.find (id);
-		return mapIt ? mapIt->m_value : NULL;
+		return m_compoundMap.findValue (id, NULL);
 	}
 
 	Member*
 	findMember (const sl::StringRef& id)
 	{
-		sl::StringHashTableMapIterator <Member*> mapIt = m_memberMap.find (id);
-		return mapIt ? mapIt->m_value : NULL;
+		return m_memberMap.findValue (id, NULL);
 	}
 };
 

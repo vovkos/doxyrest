@@ -27,6 +27,10 @@ Generator::prepare (
 	m_stringTemplate.m_luaState.registerFunction ("generateFile", generateFile_lua, this);
 
 	globalNamespace->luaExport (&m_stringTemplate.m_luaState);
+	m_stringTemplate.m_luaState.setGlobal ("g_globalNamespace");
+
+	luaExportArray (&m_stringTemplate.m_luaState, module->m_pageArray);
+	m_stringTemplate.m_luaState.setGlobal ("g_pageArray");
 
 	sl::Iterator <Define> it = m_cmdLine->m_defineList.getHead ();
 	for (; it; it++)

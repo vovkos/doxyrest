@@ -463,7 +463,8 @@ Compound::luaExport (lua::LuaState* luaState)
 	preparePath ();
 	luaState->setMemberString ("m_path", m_path);
 
-	m_selfNamespace->luaExportMembers (luaState);
+	if (m_selfNamespace) // pages don't have namespaces
+		m_selfNamespace->luaExportMembers (luaState);
 }
 
 void
@@ -611,6 +612,9 @@ NamespaceContents::add (Compound* compound)
 		m_classArray.append (compound->m_selfNamespace);
 		break;
 
+	case CompoundKind_Page:
+		// pages are handled separately
+
 	case CompoundKind_DoxyGroup:
 	case CompoundKind_Group:
 		// groups are added implicitly, via group members
@@ -619,7 +623,6 @@ NamespaceContents::add (Compound* compound)
 	case CompoundKind_Category:
 	case CompoundKind_Exception:
 	case CompoundKind_File:
-	case CompoundKind_Page:
 	case CompoundKind_Example:
 	case CompoundKind_Dir:
 		// not used in doxyrest
@@ -829,7 +832,6 @@ GlobalNamespace::build (Module* module)
 	{
 		Compound* compound = module->m_doxyGroupArray [i];
 
-
 		sl::Iterator <Member> memberIt = compound->m_memberList.getHead ();
 		for (; memberIt; memberIt++)
 		{
@@ -965,8 +967,6 @@ GlobalNamespace::luaExport (lua::LuaState* luaState)
 
 	emptyDescription.luaExport (luaState);
 	luaState->setMember ("m_detailedDescription");
-
-	luaState->setGlobal ("g_globalNamespace");
 }
 
 Namespace*

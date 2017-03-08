@@ -238,6 +238,10 @@ CompoundDefType::create (
 
 	switch (m_compound->m_compoundKind)
 	{
+	case CompoundKind_Page:
+		module->m_pageArray.append (m_compound);
+		break;
+
 	case CompoundKind_DoxyGroup:
 		module->m_doxyGroupArray.append (m_compound);
 		break;

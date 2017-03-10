@@ -384,8 +384,7 @@ function getCompoundTocTree (compound)
 		s = s .. "\t" .. fileName .. "\n"
 	end
 
-	s = string.gsub (s, "%s+$", "")   -- trim trailing whitespace
-	return s
+	return trimTrailingWhitespace (s)
 end
 
 function getDoubleSectionName (title1, count1, title2, count2)
@@ -597,9 +596,23 @@ function isUnnamedItem (item)
 	return item.m_name == "" or string.sub (item.m_name, 1, 1) == "@"
 end
 
-function ensureDoubleNewLine (text)
-	local s = string.gsub (text, "%s+$", "") -- trim trailing whitespace
-	return s .. "\n\n"
+-------------------------------------------------------------------------------
+
+-- whitespace handling
+
+function trimLeadingWhitespace (string)
+	local s = string.gsub (string, "^%s+", "")
+	return s
+end
+
+function trimTrailingWhitespace (string)
+	local s = string.gsub (string, "%s+$", "")
+	return s
+end
+
+function trimWhitespace (string)
+	local s = trimLeadingWhitespace (string)
+	return trimTrailingWhitespace (s)
 end
 
 -------------------------------------------------------------------------------
@@ -670,16 +683,45 @@ function concatDocBlockContents (s1, s2)
 	end
 end
 
-function getDocBlockContents (block, accumulator)
+function processListDocBlock (block, context, bullet)
+	local s
+
+	local prevIndent = context.m_listItemIndent
+	local prevBullet = context.m_listItemBullet
+
+	if not prevBullet then
+		context.m_listItemIndent = ""
+	else
+		context.m_listItemIndent = prevIndent .. "\t"
+	end
+
+	context.m_listItemBullet = bullet
+
+	s = getDocBlockListContentsImpl (block.m_childBlockList, false, context)
+	s = "\n\n" .. trimTrailingWhitespace (s) .. "\n\n"
+
+	context.m_listItemIndent = prevIndent
+	context.m_listItemBullet = prevBullet
+
+	return s
+end
+
+function getDocBlockContents (block, context)
 	local s = ""
+	local listItemBullet = context.m_listItemBullet
+	local listItemIndent = context.m_listItemIndent
 
 	if block.m_blockKind == "programlisting" then
-		local code = getDocBlockListContentsImpl (block.m_childBlockList, false, accumulator)
+		local code = getDocBlockListContentsImpl (block.m_childBlockList, false, context)
 		code = replaceCommonSpacePrefix (code, "    ")
-		code = ensureDoubleNewLine (code)
-		s = "\n\n::\n\n" .. code
+		code = trimTrailingWhitespace (code)
+		s = "\n\n::\n\n" .. code .. "\n\n"
+	elseif block.m_blockKind == "itemizedlist" then
+		s = processListDocBlock (block, context, "*")
+	elseif block.m_blockKind == "orderedlist" then
+		s = processListDocBlock (block, context, "#.")
 	else
-		local childContents = getDocBlockListContentsImpl (block.m_childBlockList, false, accumulator)
+		local childContents = getDocBlockListContentsImpl (block.m_childBlockList, false, context)
 		local text = concatDocBlockContents (block.m_text, childContents)
 
 		if block.m_blockKind == "linebreak" then
@@ -694,45 +736,60 @@ function getDocBlockContents (block, accumulator)
 			s = "*" .. text .. "*"
 		elseif block.m_blockKind == "sp" then
 			s = " "
+		elseif block.m_blockKind == "listitem" then
+			s = context.m_listItemIndent .. context.m_listItemBullet .. " "
+			s = s .. text .. "\n"
 		elseif block.m_blockKind == "para" then
-			s = string.gsub (text, "%s+$", "") -- trim trailing whitespace
+			s = trimWhitespace (text)
 			if s ~= "" then
-				s = ensureDoubleNewLine (text)
+				s = s .. "\n\n"
 			end
 		elseif block.m_blockKind == "parametername" then
-			text = string.gsub (text, "^%s", "") -- trim leading whitespace
-			text = string.gsub (text, "%s+$", "") -- trim trailing whitespace
+			text = trimWhitespace (text)
 
-			if not accumulator.m_paramSection then
-				accumulator.m_paramSection = {}
+			if not context.m_paramSection then
+				context.m_paramSection = {}
 			end
 
-			local count = #accumulator.m_paramSection
-			accumulator.m_paramSection [count + 1] = {}
-			accumulator.m_paramSection [count + 1].m_name = text
+			local count = #context.m_paramSection
+			context.m_paramSection [count + 1] = {}
+			context.m_paramSection [count + 1].m_name = text
 		elseif block.m_blockKind == "parameterdescription" then
-			text = string.gsub (text, "^%s", "") -- trim leading whitespace
-			text = string.gsub (text, "%s+$", "") -- trim trailing whitespace
+			text = trimWhitespace (text)
 
-			if accumulator.m_paramSection then
-				local count = #accumulator.m_paramSection
-				accumulator.m_paramSection [count].m_description = text
+			if context.m_paramSection then
+				local count = #context.m_paramSection
+				context.m_paramSection [count].m_description = text
+			end
+		elseif string.match (block.m_blockKind, "sect[1-4]") then
+			if block.m_id and block.m_id ~= "" then
+				s = ".. _doxid-" .. block.m_id .. ":\n"
+			end
+
+			if block.m_title and block.m_title ~= "" then
+				s = s .. ".. rubric:: " .. block.m_title .. ":\n"
+			end
+
+			if s ~= "" then
+				s = s .. "\n" .. text
+			else
+				s = text
 			end
 		elseif block.m_blockKind == "simplesect" then
 			if block.m_simpleSectionKind == "return" then
-				if not accumulator.m_returnSection then
-					accumulator.m_returnSection = {}
+				if not context.m_returnSection then
+					context.m_returnSection = {}
 				end
 
-				local count = #accumulator.m_returnSection
-				accumulator.m_returnSection [count + 1] = text
+				local count = #context.m_returnSection
+				context.m_returnSection [count + 1] = text
 			elseif block.m_simpleSectionKind == "see" then
-				if not accumulator.m_seeSection then
-					accumulator.m_seeSection = {}
+				if not context.m_seeSection then
+					context.m_seeSection = {}
 				end
 
-				local count = #accumulator.m_seeSection
-				accumulator.m_seeSection [count + 1] = text
+				local count = #context.m_seeSection
+				context.m_seeSection [count + 1] = text
 			else
 				s = text
 			end
@@ -744,7 +801,7 @@ function getDocBlockContents (block, accumulator)
 	return s
 end
 
-function getDocBlockListContentsImpl (blockList, internalFilter, accumulator)
+function getDocBlockListContentsImpl (blockList, internalFilter, context)
 	local s = ""
 
 	for i = 1, #blockList do
@@ -752,7 +809,7 @@ function getDocBlockListContentsImpl (blockList, internalFilter, accumulator)
 		local isInternal = block.m_blockKind == "internal"
 
 		if isInternal == internalFilter then
-			local blockContents = getDocBlockContents (block, accumulator)
+			local blockContents = getDocBlockContents (block, context)
 			s = concatDocBlockContents (s, blockContents)
 		end
 	end
@@ -765,38 +822,38 @@ function getDocBlockListContents (blockList, internalFilter)
 		internalFilter = false
 	end
 
-	local accumulator = {}
-	local s = getDocBlockListContentsImpl (blockList, internalFilter, accumulator)
+	local context = {}
+	local s = getDocBlockListContentsImpl (blockList, internalFilter, context)
 
-	if accumulator.m_paramSection then
+	if context.m_paramSection then
 		s = s .. "\n\n.. rubric:: Parameters:\n\n"
 		s = s .. ".. list-table::\n"
 		s = s .. "\t:widths: 20 80\n\n"
 
-		for i = 1, #accumulator.m_paramSection do
+		for i = 1, #context.m_paramSection do
 			s = s .. "\t*\n"
-			s = s .. "\t\t- " .. accumulator.m_paramSection [i].m_name .. "\n\n"
-			s = s .. "\t\t- " .. accumulator.m_paramSection [i].m_description .. "\n\n"
+			s = s .. "\t\t- " .. context.m_paramSection [i].m_name .. "\n\n"
+			s = s .. "\t\t- " .. context.m_paramSection [i].m_description .. "\n\n"
 		end
 	end
 
-	if accumulator.m_returnSection then
+	if context.m_returnSection then
 		s = s .. "\n\n.. rubric:: Returns:\n\n"
 
-		for i = 1, #accumulator.m_returnSection do
-			s = s .. accumulator.m_returnSection [i]
+		for i = 1, #context.m_returnSection do
+			s = s .. context.m_returnSection [i]
 		end
 	end
 
-	if accumulator.m_seeSection then
+	if context.m_seeSection then
 		s = s .. "\n\n.. rubric:: See also:\n\n"
 
-		for i = 1, #accumulator.m_seeSection do
-			s = s .. accumulator.m_seeSection [i]
+		for i = 1, #context.m_seeSection do
+			s = s .. context.m_seeSection [i]
 		end
 	end
 
-	s = string.gsub (s, "%s+$", "") -- trim trailing whitespace again
+	s = trimTrailingWhitespace (s)
 	s = string.gsub (s, "\t", "    ") -- replace tabs with spaces
 
 	return replaceCommonSpacePrefix (s, "")
@@ -823,7 +880,7 @@ function getItemBriefDocumentation (item, detailsRefPrefix)
 			s = string.sub (s, 1, i)
 		end
 
-		s = string.gsub (s, "%s+$", "")   -- trim trailing whitespace
+		s = trimTrailingWhitespace (s)
 		s = string.gsub (s, "\t", "    ") -- replace tabs with spaces
 	end
 
@@ -1010,12 +1067,16 @@ end
 
 -- compound & enum prep
 
-function cmpIds (g1, g2)
-	return g1.m_id < g2.m_id
+function cmpIds (i1, i2)
+	return i1.m_id < i2.m_id
 end
 
-function cmpNames (g1, g2)
-	return g1.m_name < g2.m_name
+function cmpNames (i1, i2)
+	return i1.m_name < i2.m_name
+end
+
+function cmpTitles (i1, i2)
+	return i1.m_title < i2.m_title
 end
 
 function prepareCompound (compound)

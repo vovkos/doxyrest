@@ -523,13 +523,19 @@ end
 function getTypedefDeclString (typedef, isRef, indent)
 	local s = "typedef"
 
-	if typedef.m_argString == "" then
+	if next (typedef.m_paramArray) == nil then
 		s = s .. " " .. getLinkedTextString (typedef.m_type, true) .. " "
 
 		if isRef then
-			s = s .. ":ref:`" .. getItemName (typedef)  .. "<doxid-" .. typedef.m_id .. ">` "
+			s = s .. ":ref:`" .. getItemName (typedef)  .. "<doxid-" .. typedef.m_id .. ">`"
 		else
-			s = s .. getItemName (typedef) ..  " "
+			s = s .. getItemName (typedef)
+		end
+
+		if typedef.m_argString ~= "" then
+			s = s .. " " .. typedef.m_argString
+
+			-- todo -- re-format argstring according to the current coding style
 		end
 
 		return s
@@ -555,35 +561,7 @@ function getTypedefDeclString (typedef, isRef, indent)
 		s = s .. getItemName (typedef) ..  " "
 	end
 
-	if #typedef.m_paramArray > 0 then
-		s = s .. getFunctionParamArrayString (typedef.m_paramArray, true, indent)
-		return s
-	end
-
-	s = s .. "("
-
-	if not string.find (typedef.m_argString, ",") then
-		local arg = string.match (typedef.m_argString, "%(([^()]+)%)")
-		if arg then
-			s = s .. arg .. ")"
-		else
-			s = s .. ")"
-		end
-	else
-		s = s .. "\n"
-
-		for arg, term in string.gmatch (typedef.m_argString, "%s*([^,()]+)([,)])") do
-			s = s .. indent .. "    " .. arg
-			if term == "," then
-				s = s .. ",\n"
-			else
-				s = s .. "\n"
-			end
-		end
-
-		s = s .. indent .. "    )"
-	end
-
+	s = s .. getFunctionParamArrayString (typedef.m_paramArray, true, indent)
 	return s
 end
 

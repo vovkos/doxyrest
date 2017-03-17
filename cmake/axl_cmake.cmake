@@ -107,7 +107,7 @@ else ()
 		if (NOT _PATHS_CMAKE)
 			include (${AXL_CMAKE_ORIGIN_DIR}/dependencies.cmake)
 			string (REPLACE ";" " " _PATH_LIST "${AXL_PATH_LIST}")
-			message (FATAL_ERROR "please create paths.cmake and fill it with definitions for: ${_PATH_LIST}")
+			message (FATAL_ERROR "AXL_CMAKE_DIR not found, create paths.cmake and fill it with definitions for: ${_PATH_LIST}")
 		endif ()
 
 		include (${_PATHS_CMAKE})

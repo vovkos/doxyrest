@@ -175,7 +175,7 @@ CompoundDefType::create (
 	m_compound = AXL_MEM_NEW (Compound);
 	module->m_compoundList.insertTail (m_compound);
 
-	sl::StringHashTableMapIterator <Compound*> mapIt;
+	sl::StringHashTableIterator <Compound*> mapIt;
 
 	while (*attributes)
 	{
@@ -440,7 +440,7 @@ MemberDefType::create (
 	m_member->m_parentCompound = parent;
 	parent->m_memberList.insertTail (m_member);
 
-	sl::StringHashTableMapIterator <Member*> mapIt;
+	sl::StringHashTableIterator <Member*> mapIt;
 	while (*attributes)
 	{
 		AttrKind attrKind = AttrKindMap::findValue (attributes [0], AttrKind_Undefined);

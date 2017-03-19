@@ -980,7 +980,7 @@ GlobalNamespace::getSubGroupNamespace (
 	if (doxyGroupCompound->m_doxyGroupCompound) // re-parent to super-group
 		parent = getSubGroupNamespace (module, parent, parentNamespace, doxyGroupCompound->m_doxyGroupCompound);
 
-	sl::StringHashTableMapIterator <Namespace*> localMapIt = parent->m_groupMap.visit (doxyGroupCompound->m_id);
+	sl::StringHashTableIterator <Namespace*> localMapIt = parent->m_groupMap.visit (doxyGroupCompound->m_id);
 	if (localMapIt->m_value)
 		return localMapIt->m_value;
 
@@ -992,7 +992,7 @@ GlobalNamespace::getSubGroupNamespace (
 	compound->m_parentNamespace = parentNamespace;
 	module->m_compoundList.insertTail (compound);
 
-	sl::StringHashTableMapIterator <size_t> globalMapIt = module->m_groupMap.visit (doxyGroupCompound->m_id);
+	sl::StringHashTableIterator <size_t> globalMapIt = module->m_groupMap.visit (doxyGroupCompound->m_id);
 	if (!globalMapIt->m_value)
 	{
 		compound->m_id = doxyGroupCompound->m_id;

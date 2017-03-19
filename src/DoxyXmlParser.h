@@ -44,10 +44,10 @@ protected:
 		ElemKind_DoxygenCompound,
 	};
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE_MAP (ElemKindMap, ElemKind)
-		AXL_SL_HASH_TABLE_MAP_ENTRY ("doxygenindex", ElemKind_DoxygenIndex)
-		AXL_SL_HASH_TABLE_MAP_ENTRY ("doxygen",      ElemKind_DoxygenCompound)
-	AXL_SL_END_HASH_TABLE_MAP ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE (ElemKindMap, ElemKind)
+		AXL_SL_HASH_TABLE_ENTRY ("doxygenindex", ElemKind_DoxygenIndex)
+		AXL_SL_HASH_TABLE_ENTRY ("doxygen",      ElemKind_DoxygenCompound)
+	AXL_SL_END_HASH_TABLE ()
 
 protected:
 	Module* m_module;

@@ -326,9 +326,9 @@ struct Module
 	sl::Array <Compound*> m_pageArray;
 	sl::Array <Compound*> m_namespaceArray;
 	sl::Array <Compound*> m_doxyGroupArray;
-	sl::StringHashTableMap <Compound*> m_compoundMap;
-	sl::StringHashTableMap <Member*> m_memberMap;
-	sl::StringHashTableMap <size_t> m_groupMap;
+	sl::StringHashTable <Compound*> m_compoundMap;
+	sl::StringHashTable <Member*> m_memberMap;
+	sl::StringHashTable <size_t> m_groupMap;
 
 	Compound*
 	findCompound (const sl::StringRef& id)
@@ -364,7 +364,7 @@ struct NamespaceContents
 	sl::Array <Member*> m_constructorArray;
 	Member* m_destructor;
 
-	sl::StringHashTableMap <Namespace*> m_groupMap;
+	sl::StringHashTable <Namespace*> m_groupMap;
 
 	NamespaceContents ()
 	{

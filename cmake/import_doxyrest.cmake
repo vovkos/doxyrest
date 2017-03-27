@@ -18,7 +18,7 @@ axl_find_file (
 if (_CONFIG_CMAKE)
 	include (${_CONFIG_CMAKE})
 
-	message (STATUS "Doxyrest paths:")
+	message (STATUS "Doxyrest ${DOXYREST_VERSION_FULL} paths:")
 	axl_message ("    CMake files:" "${DOXYREST_CMAKE_DIR}")
 	axl_message ("    Frames:"      "${DOXYREST_FRAME_DIR}")
 	axl_message ("    Sphinx exts:" "${DOXYREST_SPHINX_DIR}")

@@ -179,4 +179,11 @@ if (UNIX)
 	endif ()
 endif ()
 
+#. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+install (
+	TARGETS doxyrest
+	DESTINATION ${DOXYREST_INSTALL_INC_SUBDIR}
+	)
+
 #...............................................................................

@@ -11,7 +11,7 @@
 
 @echo off
 
-set DOWNLOAD_DIR=c:\Downloads
+set DOWNLOAD_DIR=c:\downloads
 set DOWNLOAD_DIR_CMAKE=%DOWNLOAD_DIR:\=/%
 
 :: . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -19,8 +19,8 @@ set DOWNLOAD_DIR_CMAKE=%DOWNLOAD_DIR:\=/%
 :: Ragel
 
 mkdir %DOWNLOAD_DIR%\ragel
-appveyor DownloadFile %RAGEL_DOWNLOAD_URL% -FileName %DOWNLOAD_DIR%\ragel\ragel.7z
-7z e -y %DOWNLOAD_DIR%\ragel\ragel.7z -o%DOWNLOAD_DIR%\ragel
+appveyor DownloadFile %RAGEL_DOWNLOAD_URL% -FileName %DOWNLOAD_DIR%\ragel\%RAGEL_DOWNLOAD_FILE%
+7z e -y %DOWNLOAD_DIR%\ragel\%RAGEL_DOWNLOAD_FILE% -o%DOWNLOAD_DIR%\ragel
 
 echo set (RAGEL_EXE %DOWNLOAD_DIR_CMAKE%/ragel/ragel.exe) >> paths.cmake
 
@@ -29,12 +29,24 @@ echo set (RAGEL_EXE %DOWNLOAD_DIR_CMAKE%/ragel/ragel.exe) >> paths.cmake
 :: Lua
 
 mkdir %DOWNLOAD_DIR%\lua
-appveyor DownloadFile %LUA_DOWNLOAD_URL% -FileName %DOWNLOAD_DIR%\lua\lua.zip
-7z x -y %DOWNLOAD_DIR%\lua\lua.zip -o%DOWNLOAD_DIR%\lua
+appveyor DownloadFile %LUA_DOWNLOAD_URL% -FileName %DOWNLOAD_DIR%\lua\%LUA_DOWNLOAD_FILE%
+7z x -y %DOWNLOAD_DIR%\lua\%LUA_DOWNLOAD_FILE% -o%DOWNLOAD_DIR%\lua
 
 echo set (LUA_INC_DIR %DOWNLOAD_DIR_CMAKE%/lua/include) >> paths.cmake
 echo set (LUA_LIB_DIR %DOWNLOAD_DIR_CMAKE%/lua) >> paths.cmake
 echo set (LUA_LIB_NAME %LUA_LIB_NAME%) >> paths.cmake
+
+:: . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+:: Expat
+
+appveyor DownloadFile %EXPAT_DOWNLOAD_URL% -FileName %DOWNLOAD_DIR%\%EXPAT_DOWNLOAD_FILE%
+7z x -y %DOWNLOAD_DIR%\%EXPAT_DOWNLOAD_FILE% -o%DOWNLOAD_DIR%
+7z x -y %DOWNLOAD_DIR%\expat-%EXPAT_VERSION%.tar -o%DOWNLOAD_DIR%
+ren %DOWNLOAD_DIR%\expat-%EXPAT_VERSION% expat
+
+dir %DOWNLOAD_DIR%
+dir %DOWNLOAD_DIR%\expat
 
 :: . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 

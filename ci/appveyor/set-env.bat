@@ -79,9 +79,15 @@ if "%CONFIGURATION%" == "" (set CONFIGURATION=Release)
 
 set LUA_VERSION=5.3.3
 set LUA_LIB_NAME=lua53
-set LUA_DOWNLOAD_URL=https://sourceforge.net/projects/luabinaries/files/%LUA_VERSION%/Windows%%20Libraries/Static/lua-%LUA_VERSION%_%LUA_PLATFORM%_%LUA_TOOLCHAIN%_lib.zip/download
+set LUA_DOWNLOAD_FILE=lua-%LUA_VERSION%_%LUA_PLATFORM%_%LUA_TOOLCHAIN%_lib.zip
+set LUA_DOWNLOAD_URL=https://sourceforge.net/projects/luabinaries/files/%LUA_VERSION%/Windows%%20Libraries/Static/%LUA_DOWNLOAD_FILE%/download
 
-set RAGEL_DOWNLOAD_URL=http://downloads.yorickpeterse.com/files/ragel-68-visualstudio2012.7z
+set EXPAT_VERSION=2.1.0
+set EXPAT_DOWNLOAD_FILE=expat-%EXPAT_VERSION%.tar.gz
+set EXPAT_DOWNLOAD_URL=https://sourceforge.net/projects/expat/files/expat/%EXPAT_VERSION%/%EXPAT_DOWNLOAD_FILE%/download
+
+set RAGEL_DOWNLOAD_FILE=ragel-68-visualstudio2012.7z
+set RAGEL_DOWNLOAD_URL=http://downloads.yorickpeterse.com/files/%RAGEL_DOWNLOAD_FILE%
 
 set CMAKE_FLAGS=-G "%CMAKE_GENERATOR%%CMAKE_GENERATOR_SUFFIX%" -DTARGET_CPU=%TARGET_CPU%
 
@@ -90,6 +96,7 @@ set MSBUILD_FLAGS=/nologo /verbosity:minimal /consoleloggerparameters:Summary /m
 echo ---------------------------------------------------------------------------
 echo LUA_LIB_NAME:       %LUA_LIB_NAME%
 echo LUA_DOWNLOAD_URL:   %LUA_DOWNLOAD_URL%
+echo EXPAT_DOWNLOAD_URL: %EXPAT_DOWNLOAD_URL%
 echo RAGEL_DOWNLOAD_URL: %RAGEL_DOWNLOAD_URL%
 echo CMAKE_FLAGS:        %CMAKE_FLAGS%
 echo MSBUILD_FLAGS:      %MSBUILD_FLAGS%

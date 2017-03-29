@@ -47,6 +47,15 @@ build_script:
     - set THIS_DIR=%CD%
     - set THIS_DIR_CMAKE=%THIS_DIR:\=/%
 
+    - mkdir %DOWNLOAD_DIR%\expat\build
+    - cd %DOWNLOAD_DIR%\expat\build
+    - cmake .. %CMAKE_FLAGS% -DBUILD_shared=OFF -DBUILD_examples=OFF -DBUILD_tests=OFF -DBUILD_tools=OFF
+    - cmake --build . -- %MSBUILD_FLAGS%
+
+    - cd %THIS_DIR%
+    - echo set (EXPAT_INC_DIR %DOWNLOAD_DIR_CMAKE%/expat/lib) >> paths.cmake
+    - echo set (EXPAT_LIB_DIR %DOWNLOAD_DIR_CMAKE%/expat/build/%CONFIGURATION%) >> paths.cmake
+
     - mkdir axl\build
     - cd axl\build
     - cmake .. %CMAKE_FLAGS%

@@ -1,0 +1,61 @@
+#...............................................................................
+#
+#  This file is part of the Doxyrest toolkit.
+#
+#  Doxyrest is distributed under the MIT license.
+#  For details see accompanying license.txt file,
+#  the public copy of which is also available at:
+#  http://tibbo.com/downloads/archive/doxyrest/license.txt
+#
+#...............................................................................
+
+branches:
+    only:
+        - master
+
+image: Visual Studio 2015
+
+init:
+    - git config --global core.autocrlf input
+
+clone_folder: c:\projects\doxyrest
+shallow_clone: true
+
+matrix:
+    fast_finish: false
+
+platform:
+    - x64
+    - x86
+
+configuration:
+    - Debug
+    - Release
+
+environment:
+    matrix:
+        - TOOLCHAIN: msvc10
+        - TOOLCHAIN: msvc12
+        - TOOLCHAIN: msvc14
+
+install:
+    - call ci\appveyor\set-env.bat %TOOLCHAIN% %PLATFORM%
+    - call ci\appveyor\install.bat
+    - git clone https://github.com/vovkos/axl
+
+build_script:
+    - set THIS_DIR=%CD%
+    - set THIS_DIR_CMAKE=%THIS_DIR:\=/%
+
+    - mkdir axl\build
+    - cd axl\build
+    - cmake .. %CMAKE_FLAGS%
+    - cmake --build . -- %MSBUILD_FLAGS%
+
+    - cd %THIS_DIR%
+    - echo set (AXL_CMAKE_DIR %THIS_DIR_CMAKE%/axl/cmake %THIS_DIR_CMAKE%/axl/build/cmake) >> paths.cmake
+
+    - mkdir build
+    - cd build
+    - cmake .. %CMAKE_FLAGS%
+    - cmake --build . -- %MSBUILD_FLAGS%

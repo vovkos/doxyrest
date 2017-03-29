@@ -1,13 +1,13 @@
-:: .............................................................................
+::..............................................................................
 ::
-::  This file is part of the AXL library.
+::  This file is part of the Doxyrest toolkit.
 ::
-::  AXL is distributed under the MIT license.
+::  Doxyrest is distributed under the MIT license.
 ::  For details see accompanying license.txt file,
 ::  the public copy of which is also available at:
-::  http://tibbo.com/downloads/archive/axl/license.txt
+::  http://tibbo.com/downloads/archive/doxyrest/license.txt
 ::
-:: .............................................................................
+::..............................................................................
 
 @echo off
 

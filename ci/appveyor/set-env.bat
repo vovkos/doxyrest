@@ -109,6 +109,4 @@ echo LUA_LIB_NAME:       %LUA_LIB_NAME%
 echo LUA_DOWNLOAD_URL:   %LUA_DOWNLOAD_URL%
 echo EXPAT_DOWNLOAD_URL: %EXPAT_DOWNLOAD_URL%
 echo RAGEL_DOWNLOAD_URL: %RAGEL_DOWNLOAD_URL%
-echo CMAKE_FLAGS:        %CMAKE_FLAGS%
-echo MSBUILD_FLAGS:      %MSBUILD_FLAGS%
 echo ---------------------------------------------------------------------------

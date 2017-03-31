@@ -86,12 +86,23 @@ set EXPAT_VERSION=2.1.0
 set EXPAT_DOWNLOAD_FILE=expat-%EXPAT_VERSION%.tar.gz
 set EXPAT_DOWNLOAD_URL=https://sourceforge.net/projects/expat/files/expat/%EXPAT_VERSION%/%EXPAT_DOWNLOAD_FILE%/download
 
+set EXPAT_CMAKE_FLAFS= ^
+	-DBUILD_shared=OFF ^
+	-DBUILD_examples=OFF ^
+	-DBUILD_tests=OFF ^
+	-DBUILD_tools=OFF
+
 set RAGEL_DOWNLOAD_FILE=ragel-68-visualstudio2012.7z
 set RAGEL_DOWNLOAD_URL=http://downloads.yorickpeterse.com/files/%RAGEL_DOWNLOAD_FILE%
 
-set CMAKE_FLAGS=-G "%CMAKE_GENERATOR%%CMAKE_GENERATOR_SUFFIX%" -DTARGET_CPU=%TARGET_CPU%
+set CMAKE_CONFIGURE_FLAGS=-G "%CMAKE_GENERATOR%%CMAKE_GENERATOR_SUFFIX%"
 
-set MSBUILD_FLAGS=/nologo /verbosity:minimal /consoleloggerparameters:Summary /maxcpucount /property:configuration=%CONFIGURATION%
+set CMAKE_BUILD_FLAGS= ^
+	--config %CONFIGURATION% ^
+	-- ^
+	/nologo ^
+	/verbosity:minimal ^
+	/consoleloggerparameters:Summary
 
 echo ---------------------------------------------------------------------------
 echo LUA_LIB_NAME:       %LUA_LIB_NAME%

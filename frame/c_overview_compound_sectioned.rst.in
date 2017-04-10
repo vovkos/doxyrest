@@ -29,6 +29,8 @@ Namespaces
 end -- if
 
 if #compound.m_typedefArray > 0 then
+
+	emit (getItemArrayOverviewRefTargetString (compound.m_typedefArray))
 }
 Typedefs
 --------
@@ -90,6 +92,8 @@ if #compound.m_variableArray > 0 or #compound.m_propertyArray > 0 then
 		"Properties", #compound.m_propertyArray
 		)
 
+	emit (getItemArrayOverviewRefTargetString (compound.m_variableArray))
+	emit (getItemArrayOverviewRefTargetString (compound.m_propertyArray))
 }
 $(getTitle (sectionName, "-"))
 
@@ -103,6 +107,7 @@ $(getTitle (sectionName, "-"))
 end -- if
 
 if #compound.m_eventArray > 0 then
+	emit (getItemArrayOverviewRefTargetString (compound.m_eventArray))
 }
 Events
 ------
@@ -116,6 +121,11 @@ Events
 end -- if
 
 if #compound.m_constructorArray > 0 or (g_includeDestructors and compound.m_destructor) then
+	emit (getItemArrayOverviewRefTargetString (compound.m_constructorArray))
+
+	if compound.m_destructor and not hasItemRefTarget (compound.m_destructor) then
+		emit (compound.m_destructor)
+	end
 }
 Construction
 ------------
@@ -129,6 +139,7 @@ Construction
 end -- if
 
 if #compound.m_functionArray > 0 then
+	emit (getItemArrayOverviewRefTargetString (compound.m_functionArray))
 }
 $(getTitle (functionSectionName, "-"))
 
@@ -141,6 +152,7 @@ $(getTitle (functionSectionName, "-"))
 end -- if
 
 if #compound.m_aliasArray > 0 then
+	emit (getItemArrayOverviewRefTargetString (compound.m_aliasArray))
 }
 Aliases
 -------
@@ -154,6 +166,7 @@ Aliases
 end -- if
 
 if hasDefines then
+	emit (getItemArrayOverviewRefTargetString (compound.m_defineArray))
 }
 Macros
 ------

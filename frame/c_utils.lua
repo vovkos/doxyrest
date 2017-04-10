@@ -343,6 +343,19 @@ function hasItemRefTarget (item)
 	return item.m_hasDocumentation or item.m_subGroupHead
 end
 
+function getItemArrayOverviewRefTargetString (itemArray)
+	local s = ""
+
+	for i = 1, #itemArray do
+		local item = itemArray [i]
+		if not hasItemRefTarget (item) then
+			s = s .. getItemRefTargetString (item)
+		end
+	end
+
+	return  s
+end
+
 function getCompoundTocTree (compound)
 	local s = ".. toctree::\n\t:hidden:\n\n"
 
@@ -968,7 +981,7 @@ function filterItemArray (itemArray)
 	end
 
 	for i = #itemArray, 1, -1 do
-		item = itemArray [i]
+		local item = itemArray [i]
 		local isExcluded = isItemExcludedByProtectionFilter (item)
 
 		if isExcluded then
@@ -978,18 +991,16 @@ function filterItemArray (itemArray)
 end
 
 function filterConstructorArray (constructorArray)
-	if next (constructorArray) == nil then
-		return
-	end
+	filterItemArray (constructorArray)
 
-	for i = #constructorArray, 1, -1 do
-		item = constructorArray [i]
+	if #constructorArray == 1 then
+		local item = constructorArray [1]
 		local isExcluded =
 			isItemExcludedByProtectionFilter (item) or
 			not g_includeDefaultConstructors and #item.m_paramArray == 0
 
 		if isExcluded then
-			table.remove (constructorArray, i)
+			table.remove (constructorArray, 1)
 		end
 	end
 end
@@ -1000,7 +1011,7 @@ function filterDefineArray (defineArray)
 	end
 
 	for i = #defineArray, 1, -1 do
-		item = defineArray [i]
+		local item = defineArray [i]
 
 		local isExcluded =
 			not g_includeEmptyDefines and item.m_initializer.m_isEmpty or
@@ -1018,8 +1029,7 @@ function filterTypedefArray (typedefArray)
 	end
 
 	for i = #typedefArray, 1, -1 do
-		item = typedefArray [i]
-
+		local item = typedefArray [i]
 		local isExcluded = isItemExcludedByProtectionFilter (item)
 
 		if not isExcluded and not g_includePrimitiveTypedefs then

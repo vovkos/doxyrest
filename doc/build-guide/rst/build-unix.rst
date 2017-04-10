@@ -14,4 +14,4 @@ Building on Unix
 
 .. expand-macro:: build-unix Doxyrest
 
-After the Doxyrest build is complete, the ``doxyrest`` command line tool can be found in ``./build/doxyrest/bin/${CMAKE_BUILD_TYPE}``.
+After the Doxyrest build is complete the ``doxyrest`` command line tool can be found in ``./build/doxyrest/bin/${CMAKE_BUILD_TYPE}``.

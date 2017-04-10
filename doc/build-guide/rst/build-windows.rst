@@ -14,4 +14,4 @@ Building on Windows
 
 .. expand-macro:: build-windows Doxyrest doxyrest_b.sln
 
-After the Doxyrest build is complete , the``doxyrest`` command line tool can be found in ``./build/doxyrest/bin/$(Configuration)``.
+After the Doxyrest build is complete the ``doxyrest`` command line tool can be found in ``./build/doxyrest/bin/$(Configuration)``.

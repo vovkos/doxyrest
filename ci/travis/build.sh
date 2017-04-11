@@ -12,7 +12,12 @@
 THIS_DIR=`pwd`
 
 if [ "$BUILD_DOC" != "" ]; then
-	echo "set (AXL_CMAKE_DIR $THIS_DIR/axl/cmake)" >> paths.cmake
+	mkdir axl/build
+	cd axl/build
+	cmake .. -DTARGET_CPU=$TARGET_CPU -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION
+
+	cd $THIS_DIR
+	echo "set (AXL_CMAKE_DIR $THIS_DIR/axl/cmake $THIS_DIR/axl/build/cmake)" >> paths.cmake
 
 	mkdir build
 	cd build

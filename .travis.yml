@@ -22,10 +22,14 @@ compiler:
     - clang
 
 env:
-    - TARGET_CPU=x86 BUILD_CONFIGURATION=Debug
-    - TARGET_CPU=x86 BUILD_CONFIGURATION=Release
-    - TARGET_CPU=amd64 BUILD_CONFIGURATION=Debug
-    - TARGET_CPU=amd64 BUILD_CONFIGURATION=Release
+    global:
+        - secure: a5zeKcp62rBZCUOZUlkq28V5+9oV2UmdjE2VehGECr7GLLMYKvwgC2+YANvBpAHMOhPB72Run2ckTKFcBlBu7iKNacflFe8AWzjtnT9iPE4iizPfAenYQ9/lzU8U3iuTGdlAalcAVJXQR4OFIUWMnv6V5fFUQ0q/Hfo0sVPZOurbTfN1eoSd1Z8BgEUfmDojdWy3LaD9eyTVpV/yR6zf5waDXNMYQu2RQRAOHG1ak3fSagYqfRPEeQaVNVnznv/voEezZNw1aSnZ9ethpBj5yPAPr/4e3rJAT7J/uRZN2Ju1uswsoOI0w9gwwRZ2dPY3e00I3S6G7adM/3Kw8X8JFNJ3xekG29UuO1WmZp/vp7RFkL22/ngQjKCulgHXY0WAwam4OIiOhYOlA/ym02F521BmcTnYuT9ass8Awh/Nz3d8zmZqFBcQgQE5/CGVoGHIsMx9FjTQZGsAJ+8fvy8uYM3rB7ObntkXy7w3RuSeDHylQpcmP4GUMLLCVjHmHbKHo2oYkEkM6ogYAHwAF2p2HQ74swpIqVK93jpz2uBydqhu4Ax+mstUAYizrvK8a2QZk3P0ob68JNa6bNoYaT43hoHW2ty4mb/JzeC4OeYyYXff4pSdd9YaJFlBB4TQTENH+T4mpP+cbHqstra5/FefXaTgjDEZGFj4TeiP72yqMfQ=
+
+    matrix:
+        - TARGET_CPU=x86 BUILD_CONFIGURATION=Debug
+        - TARGET_CPU=x86 BUILD_CONFIGURATION=Release
+        - TARGET_CPU=amd64 BUILD_CONFIGURATION=Debug
+        - TARGET_CPU=amd64 BUILD_CONFIGURATION=Release
 
 matrix:
     exclude:
@@ -38,8 +42,9 @@ matrix:
         - os:  osx
           env: TARGET_CPU=x86 BUILD_CONFIGURATION=Release
 
-before_install:
+install:
     - source ci/travis/install-$TRAVIS_OS_NAME.sh
+    - pip install sphinx sphinx_rtd_theme
     - git clone https://github.com/vovkos/axl
 
 script:
@@ -57,3 +62,18 @@ script:
     - cd build
     - cmake .. -DTARGET_CPU=$TARGET_CPU -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION
     - make
+
+    - source doc/index/build-html.sh
+    - source doc/manual/build-html.sh
+    - source doc/build-guide/build-html.sh
+
+    - ls doc/html
+
+deploy:
+    provider:     pages
+    skip_cleanup: true
+    local_dir:    doc/html
+    github_token: $GITHUB_TOKEN
+
+    on:
+        branch:   master

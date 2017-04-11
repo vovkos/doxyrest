@@ -16,5 +16,5 @@ Doxyrest is a compiler from **Doxygen** XML to **reStructuredText** -- hence, th
 
 Follow the links below for additional information.
 
-* `Doxyrest Manual <http://docs.tibbo.com/doxyrest/manual>`_
-* `Doxyrest Build Guide <http://docs.tibbo.com/doxyrest/build-guide>`_
+* `Doxyrest Manual <manual/index.html>`_
+* `Doxyrest Build Guide <build-guide/index.html>`_

@@ -24,7 +24,7 @@ paths.cmake
 	SPHINX_BUILD_EXE  # (optional) path to Sphinx compiler executable sphinx-build
 	PDFLATEX_EXE      # (optional) path to Latex-to-PDF compiler
 
-.. expand-macro:: dependencies-cmake AXL
+.. expand-macro:: dependencies-cmake Doxyrest
 
 On Windows you will have to specify paths to the required Lua and Expat libraries -- they are unlikely to be found automatically.
 

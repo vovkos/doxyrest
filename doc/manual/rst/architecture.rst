@@ -15,6 +15,8 @@ Architectural Overview
 In a Nutshell
 ~~~~~~~~~~~~~
 
+.. image:: ../images/doxyrest-pipeline.png
+
 * Doxygen stage:
 	- Doxygen parses source input (``.c``, ``.cpp``, ``.h``, ``.dox``);
 	- Doxygen generates XML database (``.xml``) containing the representation of the source tree (including documentation extracted from the comments);

@@ -51,13 +51,6 @@ Generator::generate (
 {
 	bool result;
 
-	sl::String targetFilePath = io::getFullFilePath (targetFileName);
-	sl::String targetDir = io::getDir (targetFilePath);
-
-	result = io::ensureDirExists (targetDir);
-	if (!result)
-		return false;
-
 	sl::String frameFilePath = io::findFilePath (frameFileName, &m_cmdLine->m_frameDirList);
 	if (frameFilePath.isEmpty ())
 	{
@@ -65,8 +58,13 @@ Generator::generate (
 		return false;
 	}
 
+	sl::String targetDir = io::getDir (targetFileName);
+	result = io::ensureDirExists (targetDir);
+	if (!result)
+		return false;
+
 	m_frameDir = io::getDir (frameFilePath);
-	m_targetDir = io::getDir (targetFilePath);
+	m_targetDir = io::getFullFilePath (targetDir);
 
 	m_stringTemplate.m_luaState.setGlobalString ("g_frameDir", m_frameDir);
 	m_stringTemplate.m_luaState.setGlobalString ("g_targetDir", m_targetDir);
@@ -77,14 +75,6 @@ Generator::generate (
 	result = m_stringTemplate.processFile (&stringBuffer, frameFilePath);
 	if (!result)
 		return false;
-
-	sl::String dir = io::getDir (targetFileName);
-	if (!dir.isEmpty ())
-	{
-		result = io::ensureDirExists (dir);
-		if (!result)
-			return false;
-	}
 
 	io::File targetFile;
 	result = targetFile.open (targetFileName);

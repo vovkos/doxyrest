@@ -688,7 +688,7 @@ function processListDocBlock (block, context, bullet)
 
 	context.m_listItemBullet = bullet
 
-	s = getDocBlockListContentsImpl (block.m_childBlockList, false, context)
+	s = getDocBlockListContentsImpl (block.m_childBlockList, context)
 	s = "\n\n" .. trimTrailingWhitespace (s) .. "\n\n"
 
 	context.m_listItemIndent = prevIndent
@@ -703,7 +703,7 @@ function getDocBlockContents (block, context)
 	local listItemIndent = context.m_listItemIndent
 
 	if block.m_blockKind == "programlisting" then
-		local code = getDocBlockListContentsImpl (block.m_childBlockList, false, context)
+		local code = getDocBlockListContentsImpl (block.m_childBlockList, context)
 		code = replaceCommonSpacePrefix (code, "    ")
 		code = trimTrailingWhitespace (code)
 		s = "\n\n::\n\n" .. code .. "\n\n"
@@ -712,7 +712,7 @@ function getDocBlockContents (block, context)
 	elseif block.m_blockKind == "orderedlist" then
 		s = processListDocBlock (block, context, "#.")
 	else
-		local childContents = getDocBlockListContentsImpl (block.m_childBlockList, false, context)
+		local childContents = getDocBlockListContentsImpl (block.m_childBlockList, context)
 		local text = concatDocBlockContents (block.m_text, childContents)
 
 		if block.m_blockKind == "linebreak" then
@@ -792,14 +792,12 @@ function getDocBlockContents (block, context)
 	return s
 end
 
-function getDocBlockListContentsImpl (blockList, internalFilter, context)
+function getDocBlockListContentsImpl (blockList, context)
 	local s = ""
 
 	for i = 1, #blockList do
 		local block = blockList [i]
-		local isInternal = block.m_blockKind == "internal"
-
-		if isInternal == internalFilter then
+		if block.m_blockKind ~= "internal" then
 			local blockContents = getDocBlockContents (block, context)
 			s = concatDocBlockContents (s, blockContents)
 		end
@@ -808,13 +806,9 @@ function getDocBlockListContentsImpl (blockList, internalFilter, context)
 	return s
 end
 
-function getDocBlockListContents (blockList, internalFilter)
-	if not internalFilter then
-		internalFilter = false
-	end
-
+function getDocBlockListContents (blockList)
 	local context = {}
-	local s = getDocBlockListContentsImpl (blockList, internalFilter, context)
+	local s = getDocBlockListContentsImpl (blockList, context)
 
 	if context.m_paramSection then
 		s = s .. "\n\n.. rubric:: Parameters:\n\n"
@@ -850,8 +844,28 @@ function getDocBlockListContents (blockList, internalFilter)
 	return replaceCommonSpacePrefix (s, "")
 end
 
+function getSimplDocBlockListContents (blockList)
+	local s = ""
+
+	for i = 1, #blockList do
+		local block = blockList [i]
+		s = s .. block.m_text .. getSimplDocBlockListContents (block.m_childBlockList)
+	end
+
+	return s
+end
+
 function getItemInternalDocumentation (item)
-	return getDocBlockListContents (item.m_detailedDescription.m_docBlockList, true)
+	local s = ""
+
+	for i = 1, #item.m_detailedDescription.m_docBlockList do
+		local block = item.m_detailedDescription.m_docBlockList [i]
+		if block.m_blockKind == "internal" then
+			s = s .. block.m_text .. getSimplDocBlockListContents (block.m_childBlockList)
+		end
+	end
+
+	return s
 end
 
 function getItemBriefDocumentation (item, detailsRefPrefix)

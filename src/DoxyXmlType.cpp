@@ -474,6 +474,11 @@ MemberDefType::create (
 				{
 					printf ("  replacing old member as it has no documentation\n");
 					mapIt->m_value = m_member;
+					prevMember->m_flags |= MemberFlag_Duplicate;
+				}
+				else
+				{
+					m_member->m_flags |= MemberFlag_Duplicate;
 				}
 			}
 

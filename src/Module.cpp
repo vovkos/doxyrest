@@ -225,15 +225,17 @@ getMemberFlagString (MemberFlag flag)
 		"readonly",        // MemberFlag_ReadOnly      = 0x00400000,
 		"bound",           // MemberFlag_Bound         = 0x00800000,
 		"removable",       // MemberFlag_Removable     = 0x01000000,
-		"contrained",      // MemberFlag_Contrained   = 0x02000000,
+		"contrained",      // MemberFlag_Contrained    = 0x02000000,
 		"transient",       // MemberFlag_Transient     = 0x04000000,
 		"maybevoid",       // MemberFlag_MaybeVoid     = 0x08000000,
 		"maybedefault",    // MemberFlag_MaybeDefault  = 0x10000000,
 		"maybeambiguous",  // MemberFlag_MaybeAmbiguos = 0x20000000,
+		"duplicate",       // MemberFlag_Duplicate     = 0x40000000,
 	};
 
-	return (size_t) flag < countof (stringTable) ?
-		stringTable [flag] :
+	size_t i = sl::getLoBitIdx32 (flag);
+	return i < countof (stringTable) ?
+		stringTable [i] :
 		"<undefined>";
 }
 
@@ -925,6 +927,9 @@ GlobalNamespace::build (Module* module)
 
 			for (; memberIt; memberIt++)
 			{
+				if (memberIt->m_flags & MemberFlag_Duplicate)
+					continue;
+
 				NamespaceContents* targetNspace = memberIt->m_doxyGroupCompound ?
 					(NamespaceContents*) getSubGroupNamespace (module, this, NULL, memberIt->m_doxyGroupCompound) :
 					this;

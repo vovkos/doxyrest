@@ -200,6 +200,7 @@ enum MemberFlag
 	MemberFlag_MaybeVoid     = 0x08000000,
 	MemberFlag_MaybeDefault  = 0x10000000,
 	MemberFlag_MaybeAmbiguos = 0x20000000,
+	MemberFlag_Duplicate     = 0x40000000,
 };
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -292,9 +293,9 @@ struct Compound: sl::ListLink
 
 	sl::String m_path;
 
-	bool m_isFinal    : 1;
-	bool m_isSealed   : 1;
-	bool m_isAbstract : 1;
+	bool m_isFinal     : 1;
+	bool m_isSealed    : 1;
+	bool m_isAbstract  : 1;
 
 	Description m_briefDescription;
 	Description m_detailedDescription;

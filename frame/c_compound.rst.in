@@ -12,7 +12,6 @@
 
 local argArray = table.pack (...)
 local compound = argArray [1]
-local isGlobalNamespace = argArray [2]
 
 local variableSectionName
 local functionSectionName
@@ -48,45 +47,6 @@ else
 }
 $(getItemDetailedDocumentation (compound))
 
-%{
-end -- if
-
-for i = 1, #compound.m_groupArray do
-	local item = compound.m_groupArray [i]
-	local targetFileName = getItemFileName (item)
-
-	generateFile (targetFileName, "c_group.rst.in", item)
-}
-:ref:`$(getGroupName (item))<doxid-$(item.m_id)>`
-
-%{
-end -- for
-
-if isGlobalNamespace and #g_pageArray > 0 then
-}
-.. toctree::
-	:hidden:
-
-%{
-	local pageList = ""
-	table.sort (g_pageArray, cmpTitles)
-
-	for i = 1, #g_pageArray do
-		local page = g_pageArray [i]
-		local targetFileName0 = getItemFileName (page, "")
-		local targetFileName = targetFileName0 .. ".rst"
-
-		generateFile (targetFileName, "c_page.rst.in", page)
-		pageList = pageList .. ":doc:`" .. targetFileName0 .."`\n\n"
-}
-	$(targetFileName)
-%{
-	end -- for
-}
-
-.. rubric:: Related pages:
-
-$pageList
 %{
 end -- if
 

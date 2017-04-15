@@ -242,8 +242,8 @@ CompoundDefType::create (
 		module->m_pageArray.append (m_compound);
 		break;
 
-	case CompoundKind_DoxyGroup:
-		module->m_doxyGroupArray.append (m_compound);
+	case CompoundKind_Group:
+		module->m_groupArray.append (m_compound);
 		break;
 
 	case CompoundKind_Namespace:
@@ -452,7 +452,7 @@ MemberDefType::create (
 
 		case AttrKind_Id:
 			m_member->m_id = attributes [1];
-			if (parent->m_compoundKind == CompoundKind_DoxyGroup)
+			if (parent->m_compoundKind == CompoundKind_Group)
 				break; // doxy groups contain duplicated definitions of members
 
 			mapIt = module->m_memberMap.visit (m_member->m_id);

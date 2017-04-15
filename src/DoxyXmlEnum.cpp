@@ -171,7 +171,6 @@ getCompoundKindString (CompoundKind compoundKind)
 		"exception",   // CompoundKind_Exception
 		"file",        // CompoundKind_File
 		"namespace",   // CompoundKind_Namespace
-		"doxygroup",   // CompoundKind_DoxyGroup
 		"group",       // CompoundKind_Group
 		"page",        // CompoundKind_Page
 		"example",     // CompoundKind_Example

@@ -73,18 +73,6 @@ DocBlock::luaExportMembers (lua::LuaState* luaState)
 	luaState->setMemberString ("m_title", m_title);
 	luaState->setMemberString ("m_text", m_text);
 
-	// remove empty child blocks
-
-	sl::Iterator <DocBlock> it = m_childBlockList.getHead ();
-	while (it)
-	{
-		sl::Iterator <DocBlock> next = it.getNext ();
-		if (it->m_text.isEmpty () && it->m_childBlockList.isEmpty ())
-			m_childBlockList.erase (it);
-
-		it = next;
-	}
-
 	luaExportList (luaState, m_childBlockList);
 	luaState->setMember ("m_childBlockList");
 }
@@ -272,7 +260,7 @@ getMemberFlagString (uint_t flags)
 Member::Member ()
 {
 	m_parentCompound = NULL;
-	m_doxyGroupCompound = NULL;
+	m_groupCompound = NULL;
 	m_memberKind = MemberKind_Undefined;
 	m_protectionKind = ProtectionKind_Undefined;
 	m_virtualKind = VirtualKind_Undefined;
@@ -289,6 +277,7 @@ Member::luaExport (lua::LuaState* luaState)
 	luaState->setMemberString ("m_virtualKind", getVirtualKindString (m_virtualKind));
 	luaState->setMemberString ("m_flags", getMemberFlagString (m_flags));
 	luaState->setMemberString ("m_id", m_id);
+	luaState->setMemberString ("m_groupId", m_groupCompound ? m_groupCompound->m_id : sl::StringRef ());
 	luaState->setMemberString ("m_name", m_name);
 	luaState->setMemberString ("m_modifiers", m_modifiers);
 
@@ -408,7 +397,7 @@ Compound::Compound ()
 {
 	m_selfNamespace = NULL;
 	m_parentNamespace = NULL;
-	m_doxyGroupCompound = NULL;
+	m_groupCompound = NULL;
 	m_compoundKind = CompoundKind_Undefined;
 	m_languageKind = LanguageKind_Undefined;
 	m_protectionKind = ProtectionKind_Undefined;
@@ -426,18 +415,13 @@ Compound::luaExport (lua::LuaState* luaState)
 	luaState->createTable ();
 	luaState->setMemberString ("m_compoundKind", getCompoundKindString (m_compoundKind));
 	luaState->setMemberString ("m_id", m_id);
+	luaState->setMemberString ("m_groupId", m_groupCompound ? m_groupCompound->m_id : sl::StringRef ());
 	luaState->setMemberString ("m_name", m_name);
 	luaState->setMemberString ("m_title", m_title);
-
-	Compound* originalCompound = this;
 
 	switch (m_compoundKind)
 	{
 	case CompoundKind_Group:
-		ASSERT (m_doxyGroupCompound);
-		originalCompound = m_doxyGroupCompound;
-		break;
-
 	case CompoundKind_Namespace:
 		break;
 
@@ -453,13 +437,13 @@ Compound::luaExport (lua::LuaState* luaState)
 		break;
 	}
 
-	luaExportStringList (luaState, originalCompound->m_importList);
+	luaExportStringList (luaState, m_importList);
 	luaState->setMember ("m_importArray");
 
-	originalCompound->m_briefDescription.luaExport (luaState);
+	m_briefDescription.luaExport (luaState);
 	luaState->setMember ("m_briefDescription");
 
-	originalCompound->m_detailedDescription.luaExport (luaState);
+	m_detailedDescription.luaExport (luaState);
 	luaState->setMember ("m_detailedDescription");
 
 	preparePath ();
@@ -617,7 +601,6 @@ NamespaceContents::add (Compound* compound)
 	case CompoundKind_Page:
 		// pages are handled separately
 
-	case CompoundKind_DoxyGroup:
 	case CompoundKind_Group:
 		// groups are added implicitly, via group members
 
@@ -829,23 +812,23 @@ GlobalNamespace::build (Module* module)
 
 	// loop #1 assign groups
 
-	size_t count = module->m_doxyGroupArray.getCount ();
+	size_t count = module->m_groupArray.getCount ();
 	for (size_t i = 0; i < count; i++)
 	{
-		Compound* compound = module->m_doxyGroupArray [i];
+		Compound* compound = module->m_groupArray [i];
 
 		sl::Iterator <Member> memberIt = compound->m_memberList.getHead ();
 		for (; memberIt; memberIt++)
 		{
 			if (memberIt->m_memberKind == MemberKind_Footnote)
 			{
-				compound->m_doxyGroupFootnoteArray.append (*memberIt);
+				compound->m_groupFootnoteArray.append (*memberIt);
 			}
 			else
 			{
 				Member* member = module->findMember (memberIt->m_id);
 				if (member)
-					member->m_doxyGroupCompound = compound;
+					member->m_groupCompound = compound;
 			}
 		}
 
@@ -854,11 +837,13 @@ GlobalNamespace::build (Module* module)
 		{
 			Compound* innerCompound =  module->findCompound (refIt->m_id);
 			if (innerCompound)
-				innerCompound->m_doxyGroupCompound = compound;
+				innerCompound->m_groupCompound = compound;
 		}
 	}
 
-	// loop #2 initializes namespaces
+	module->m_groupArray.clear (); // will contain non-empty root groups only
+
+	// loop #2 initializes namespaces (including classes, structs, unions)
 
 	count = module->m_namespaceArray.getCount ();
 	for (size_t i = 0; i < count; i++)
@@ -882,11 +867,13 @@ GlobalNamespace::build (Module* module)
 		sl::Iterator <Member> memberIt = compound->m_memberList.getHead ();
 		for (; memberIt; memberIt++)
 		{
-			Namespace* targetNspace = memberIt->m_doxyGroupCompound ?
-				getSubGroupNamespace (module, nspace, nspace, memberIt->m_doxyGroupCompound) :
-				nspace;
+			nspace->add (*memberIt, compound);
 
-			targetNspace->add (*memberIt, compound);
+			if (memberIt->m_groupCompound)
+			{
+				Namespace* groupNspace = getGroupNamespace (module, memberIt->m_groupCompound);
+				groupNspace->add (*memberIt, compound);
+			}
 		}
 
 		sl::Iterator <Ref> refIt = compound->m_innerRefList.getHead ();
@@ -899,12 +886,14 @@ GlobalNamespace::build (Module* module)
 				return false;
 			}
 
-			Namespace* targetNspace = innerCompound->m_doxyGroupCompound ?
-				getSubGroupNamespace (module, nspace, nspace, innerCompound->m_doxyGroupCompound) :
-				nspace;
-
-			targetNspace->add (innerCompound);
+			nspace->add (innerCompound);
 			innerCompound->m_parentNamespace = nspace; // namespace, not group!
+
+			if (innerCompound->m_groupCompound)
+			{
+				Namespace* groupNspace = getGroupNamespace (module, innerCompound->m_groupCompound);
+				groupNspace->add (innerCompound);
+			}
 		}
 	}
 
@@ -917,7 +906,6 @@ GlobalNamespace::build (Module* module)
 
 		switch (compoundIt->m_compoundKind)
 		{
-		case CompoundKind_DoxyGroup:
 		case CompoundKind_Group:
 			// groups are added implicitly, via group members
 			break;
@@ -930,22 +918,24 @@ GlobalNamespace::build (Module* module)
 				if (memberIt->m_flags & MemberFlag_Duplicate)
 					continue;
 
-				NamespaceContents* targetNspace = memberIt->m_doxyGroupCompound ?
-					(NamespaceContents*) getSubGroupNamespace (module, this, NULL, memberIt->m_doxyGroupCompound) :
-					this;
-
-				targetNspace->add (*memberIt, NULL);
+				add (*memberIt, NULL);
+				if (memberIt->m_groupCompound)
+				{
+					Namespace* groupNspace = getGroupNamespace (module, memberIt->m_groupCompound);
+					groupNspace->add (*memberIt, NULL);
+				}
 			}
 			break;
 
 		default:
 			if (!compoundIt->m_parentNamespace)
 			{
-				NamespaceContents* targetNspace = compoundIt->m_doxyGroupCompound ?
-					(NamespaceContents*) getSubGroupNamespace (module, this, NULL, compoundIt->m_doxyGroupCompound) :
-					this;
-
-				targetNspace->add (*compoundIt);
+				add (*compoundIt);
+				if (compoundIt->m_groupCompound)
+				{
+					Namespace* groupNspace = getGroupNamespace (module, compoundIt->m_groupCompound);
+					groupNspace->add (*compoundIt);
+				}
 			}
 		}
 	}
@@ -975,51 +965,30 @@ GlobalNamespace::luaExport (lua::LuaState* luaState)
 }
 
 Namespace*
-GlobalNamespace::getSubGroupNamespace (
+GlobalNamespace::getGroupNamespace (
 	Module* module,
-	NamespaceContents* parent,
-	Namespace* parentNamespace,
-	Compound* doxyGroupCompound
+	Compound* groupCompound
 	)
 {
-	if (doxyGroupCompound->m_doxyGroupCompound) // re-parent to super-group
-		parent = getSubGroupNamespace (module, parent, parentNamespace, doxyGroupCompound->m_doxyGroupCompound);
-
-	sl::StringHashTableIterator <Namespace*> localMapIt = parent->m_groupMap.visit (doxyGroupCompound->m_id);
-	if (localMapIt->m_value)
-		return localMapIt->m_value;
-
-	Compound* compound = AXL_MEM_NEW (Compound);
-	compound->m_compoundKind = CompoundKind_Group;
-	compound->m_doxyGroupCompound = doxyGroupCompound;
-	compound->m_name = doxyGroupCompound->m_name;
-	compound->m_title = doxyGroupCompound->m_title;
-	compound->m_parentNamespace = parentNamespace;
-	module->m_compoundList.insertTail (compound);
-
-	sl::StringHashTableIterator <size_t> globalMapIt = module->m_groupMap.visit (doxyGroupCompound->m_id);
-	if (!globalMapIt->m_value)
-	{
-		compound->m_id = doxyGroupCompound->m_id;
-		globalMapIt->m_value = 2; // start with 2
-	}
-	else
-	{
-		compound->m_id.format ("%s_%d", doxyGroupCompound->m_id.sz (), globalMapIt->m_value);
-		globalMapIt->m_value++;
-	}
+	if (groupCompound->m_selfNamespace)
+		return groupCompound->m_selfNamespace;
 
 	Namespace* nspace = AXL_MEM_NEW (Namespace);
 	m_namespaceList.insertTail (nspace);
-	nspace->m_compound = compound;
-	compound->m_selfNamespace = nspace;
+	nspace->m_compound = groupCompound;
+	groupCompound->m_selfNamespace = nspace;
 
-	size_t count = doxyGroupCompound->m_doxyGroupFootnoteArray.getCount ();
-	for (size_t i = 0; i < count; i++)
-		nspace->add (doxyGroupCompound->m_doxyGroupFootnoteArray [i], NULL); // thisCompound is irrelevant for footnotes
+	if (!groupCompound->m_groupCompound)
+	{
+		module->m_groupArray.append (groupCompound);
+	}
+	else
+	{
+		Namespace* parentGroupNspace = getGroupNamespace (module, groupCompound->m_groupCompound);
+		groupCompound->m_parentNamespace = parentGroupNspace;
+		parentGroupNspace->m_groupArray.append (nspace);
+	}
 
-	localMapIt->m_value = nspace;
-	parent->m_groupArray.append (nspace);
 	return nspace;
 }
 

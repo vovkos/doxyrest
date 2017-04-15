@@ -29,6 +29,9 @@ Generator::prepare (
 	globalNamespace->luaExport (&m_stringTemplate.m_luaState);
 	m_stringTemplate.m_luaState.setGlobal ("g_globalNamespace");
 
+	luaExportArray (&m_stringTemplate.m_luaState, module->m_groupArray);
+	m_stringTemplate.m_luaState.setGlobal ("g_groupArray");
+
 	luaExportArray (&m_stringTemplate.m_luaState, module->m_pageArray);
 	m_stringTemplate.m_luaState.setGlobal ("g_pageArray");
 

@@ -218,8 +218,7 @@ enum CompoundKind
 	CompoundKind_Exception,
 	CompoundKind_File,
 	CompoundKind_Namespace,
-	CompoundKind_DoxyGroup, // this is compound as described in doxy xml
-	CompoundKind_Group, // this is actual group -- intersection of a doxy group and a namespace
+	CompoundKind_Group,
 	CompoundKind_Page,
 	CompoundKind_Example,
 	CompoundKind_Dir,
@@ -235,7 +234,7 @@ AXL_SL_BEGIN_STRING_HASH_TABLE (CompoundKindMap, CompoundKind)
 	AXL_SL_HASH_TABLE_ENTRY ("exception", CompoundKind_Exception)
 	AXL_SL_HASH_TABLE_ENTRY ("file",      CompoundKind_File)
 	AXL_SL_HASH_TABLE_ENTRY ("namespace", CompoundKind_Namespace)
-	AXL_SL_HASH_TABLE_ENTRY ("group",     CompoundKind_DoxyGroup)
+	AXL_SL_HASH_TABLE_ENTRY ("group",     CompoundKind_Group)
 	AXL_SL_HASH_TABLE_ENTRY ("page",      CompoundKind_Page)
 	AXL_SL_HASH_TABLE_ENTRY ("example",   CompoundKind_Example)
 	AXL_SL_HASH_TABLE_ENTRY ("dir",       CompoundKind_Dir)

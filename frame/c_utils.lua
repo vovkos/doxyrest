@@ -197,9 +197,6 @@ function getGroupName (group)
 	return s
 end
 
-g_itemFileNameMap = {}
-g_itemCidMap = {}
-
 function ensureUniqueItemName (item, name, map, sep)
 	local mapValue = map [name]
 
@@ -248,8 +245,6 @@ function getItemFileName (item, suffix)
 	end
 
 	s = s .. string.gsub (item.m_name, '-', "_") -- groups can contain dashes
-	s = ensureUniqueItemName (item, s, g_itemFileNameMap, "_")
-
 	if not suffix then
 		suffix = ".rst"
 	end
@@ -258,6 +253,8 @@ function getItemFileName (item, suffix)
 
 	return s
 end
+
+g_itemCidMap = {}
 
 function getItemCid (item)
 	local s = ""
@@ -356,6 +353,10 @@ function getItemArrayOverviewRefTargetString (itemArray)
 	return  s
 end
 
+function isTocTreeItem (compound, item)
+	return item.m_groupId == "" or item.m_groupId == compound.m_id
+end
+
 function getCompoundTocTree (compound)
 	local s = ".. toctree::\n\t:hidden:\n\n"
 
@@ -367,13 +368,15 @@ function getCompoundTocTree (compound)
 
 	for i = 1, #compound.m_namespaceArray do
 		local item = compound.m_namespaceArray [i]
-		local fileName = getItemFileName (item)
-		s = s .. "\t" .. fileName .. "\n"
+		if isTocTreeItem (compound, item) then
+			local fileName = getItemFileName (item)
+			s = s .. "\t" .. fileName .. "\n"
+		end
 	end
 
 	for i = 1, #compound.m_enumArray do
 		local item = compound.m_enumArray [i]
-		if not isUnnamedItem (item) then
+		if isTocTreeItem (compound, item) and not isUnnamedItem (item) then
 			local fileName = getItemFileName (item)
 			s = s .. "\t" .. fileName .. "\n"
 		end
@@ -381,24 +384,47 @@ function getCompoundTocTree (compound)
 
 	for i = 1, #compound.m_structArray do
 		local item = compound.m_structArray [i]
-		local fileName = getItemFileName (item)
-		s = s .. "\t" .. fileName .. "\n"
+		if isTocTreeItem (compound, item) then
+			local fileName = getItemFileName (item)
+			s = s .. "\t" .. fileName .. "\n"
+		end
 	end
 
 	for i = 1, #compound.m_unionArray do
 		local item = compound.m_unionArray [i]
-		local fileName = getItemFileName (item)
-		s = s .. "\t" .. fileName .. "\n"
+		if isTocTreeItem (compound, item) then
+			local fileName = getItemFileName (item)
+			s = s .. "\t" .. fileName .. "\n"
+		end
 	end
 
 	for i = 1, #compound.m_classArray do
 		local item = compound.m_classArray [i]
-		local fileName = getItemFileName (item)
-		s = s .. "\t" .. fileName .. "\n"
+		if isTocTreeItem (compound, item) then
+			local fileName = getItemFileName (item)
+			s = s .. "\t" .. fileName .. "\n"
+		end
 	end
 
 	return trimTrailingWhitespace (s)
 end
+
+function getGroupTree (group, indent)
+	local s = ""
+
+	if not indent then
+		indent = ""
+	end
+
+	s = "|\t" .. indent .. ":ref:`" .. getGroupName (group) .. "<doxid-" ..group.m_id .. ">`\n"
+
+	for i = 1, #group.m_groupArray do
+		s = s .. getGroupTree (group.m_groupArray [i], indent .. "\t")
+	end
+
+	return s
+end
+
 
 function getDoubleSectionName (title1, count1, title2, count2)
 	local s

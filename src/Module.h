@@ -216,7 +216,7 @@ getMemberFlagString (uint_t flags);
 struct Member: sl::ListLink
 {
 	Compound* m_parentCompound;
-	Compound* m_doxyGroupCompound;
+	Compound* m_groupCompound;
 
 	MemberKind m_memberKind;
 	ProtectionKind m_protectionKind;
@@ -272,7 +272,7 @@ struct Compound: sl::ListLink
 {
 	Namespace* m_selfNamespace;
 	Namespace* m_parentNamespace;
-	Compound* m_doxyGroupCompound;
+	Compound* m_groupCompound;
 
 	CompoundKind m_compoundKind;
 	LanguageKind m_languageKind;
@@ -285,7 +285,7 @@ struct Compound: sl::ListLink
 	sl::StdList <Param> m_templateParamList;
 	sl::StdList <Param> m_templateSpecParamList;
 	sl::StdList <Member> m_memberList;
-	sl::Array <Member*> m_doxyGroupFootnoteArray;
+	sl::Array <Member*> m_groupFootnoteArray;
 
 	sl::StdList <Ref> m_baseRefList;
 	sl::StdList <Ref> m_derivedRefList;
@@ -324,12 +324,11 @@ struct Module
 {
 	sl::String m_version;
 	sl::StdList <Compound> m_compoundList;
-	sl::Array <Compound*> m_pageArray;
 	sl::Array <Compound*> m_namespaceArray;
-	sl::Array <Compound*> m_doxyGroupArray;
+	sl::Array <Compound*> m_groupArray;
+	sl::Array <Compound*> m_pageArray;
 	sl::StringHashTable <Compound*> m_compoundMap;
 	sl::StringHashTable <Member*> m_memberMap;
-	sl::StringHashTable <size_t> m_groupMap;
 
 	Compound*
 	findCompound (const sl::StringRef& id)
@@ -364,8 +363,6 @@ struct NamespaceContents
 	sl::Array <Member*> m_footnoteArray;
 	sl::Array <Member*> m_constructorArray;
 	Member* m_destructor;
-
-	sl::StringHashTable <Namespace*> m_groupMap;
 
 	NamespaceContents ()
 	{
@@ -425,11 +422,9 @@ public:
 
 protected:
 	Namespace*
-	getSubGroupNamespace (
+	getGroupNamespace (
 		Module* module,
-		NamespaceContents* parent,
-		Namespace* parentNamespace,
-		Compound* doxyGroupCompound
+		Compound* groupCompound
 		);
 };
 

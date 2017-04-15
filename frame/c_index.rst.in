@@ -1,0 +1,120 @@
+%{
+--------------------------------------------------------------------------------
+--
+--  This file is part of the Doxyrest toolkit.
+--
+--  Doxyrest is distributed under the MIT license.
+--  For details see accompanying license.txt file,
+--  the public copy of which is also available at:
+--  http://tibbo.com/downloads/archive/doxyrest/license.txt
+--
+--------------------------------------------------------------------------------
+
+dofile (g_frameDir .. "/c_utils.lua")
+
+if not g_language then
+	g_language = "cpp"
+end
+
+if not g_nameDelimiter then
+	g_nameDelimiter = "."
+end
+
+if g_protectionFilter then
+	g_protectionFilterValue = g_protectionKindMap [g_protectionFilter]
+else
+	g_protectionFilterValue = 0
+end
+
+if g_globalDefFile then
+}
+.. include:: $g_globalDefFile
+%{
+end -- if
+
+if g_introFile then
+}
+.. include:: $g_introFile
+
+%{
+else
+	if not g_indexTitle then
+		g_indexTitle = "My Project Documentation"
+	end
+}
+$(getTitle (g_indexTitle, "="))
+
+%{
+end --if
+
+if #g_groupArray > 0 then
+}
+.. toctree::
+	:hidden:
+
+%{
+	local groupTree = ""
+	table.sort (g_groupArray, cmpTitles) -- use cmpIds to sequence logically, not alphabetically
+
+	for i = 1, #g_groupArray do
+		local group = g_groupArray [i]
+		local targetFileName = getItemFileName (group)
+
+		prepareCompound (group)
+		generateFile (targetFileName, "c_group.rst.in", group)
+		groupTree = groupTree .. getGroupTree (group)
+}
+	$(targetFileName)
+%{
+	end -- for
+}
+
+.. rubric:: Further Reading:
+
+$groupTree
+%{
+end -- if
+
+if #g_pageArray > 0 then
+}
+.. toctree::
+	:hidden:
+
+%{
+	local pageList = ""
+	table.sort (g_pageArray, cmpTitles)
+
+	for i = 1, #g_pageArray do
+		local page = g_pageArray [i]
+		local targetFileName0 = getItemFileName (page, "")
+		local targetFileName = targetFileName0 .. ".rst"
+
+		generateFile (targetFileName, "c_page.rst.in", page)
+
+		if targetFileName ~= g_introFile then
+			pageList = pageList .. "|\t:doc:`" .. targetFileName0 .."`\n"
+}
+	$(targetFileName)
+%{
+		end -- if
+	end -- for
+}
+
+.. rubric:: Related Pages:
+
+$pageList
+%{
+end -- if
+
+generateFile ("global.rst", "c_global.rst.in", g_globalNamespace)
+}
+.. rubric:: Reference and Index:
+
+.. toctree::
+	:hidden:
+
+	global.rst
+
+|	:doc:`global`
+|	:ref:`genindex`
+|	:ref:`search`

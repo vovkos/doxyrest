@@ -14,6 +14,26 @@
 
 //..............................................................................
 
+sl::String
+createPath (
+	const sl::StringRef& name,
+	Namespace* parentNamespace
+	)
+{
+	if (!parentNamespace)
+		return name;
+
+	parentNamespace->m_compound->preparePath ();
+	sl::String path = parentNamespace->m_compound->m_path;
+	if (!path.isEmpty ())
+		path += '/';
+
+	path += name;
+	return path;
+}
+
+//..............................................................................
+
 void
 RefText::luaExport (lua::LuaState* luaState)
 {
@@ -171,6 +191,14 @@ EnumValue::luaExport (lua::LuaState* luaState)
 	luaState->setMemberString ("m_id", m_id);
 	luaState->setMemberString ("m_name", m_name);
 
+	m_parentEnum->preparePath ();
+	sl::String path = m_parentEnum->m_path;
+	if (!path.isEmpty ())
+		path += '/';
+
+	path += m_name;
+	luaState->setMemberString ("m_path", path);
+
 	m_initializer.luaExport (luaState);
 	luaState->setMember ("m_initializer");
 
@@ -259,6 +287,7 @@ getMemberFlagString (uint_t flags)
 
 Member::Member ()
 {
+	m_parentNamespace = NULL;
 	m_parentCompound = NULL;
 	m_groupCompound = NULL;
 	m_memberKind = MemberKind_Undefined;
@@ -284,6 +313,9 @@ Member::luaExport (lua::LuaState* luaState)
 	luaExportStringList (luaState, m_importList);
 	luaState->setMember ("m_importArray");
 
+	preparePath ();
+	luaState->setMemberString ("m_path",  m_path);
+
 	switch (m_memberKind)
 	{
 	case MemberKind_Typedef:
@@ -296,21 +328,7 @@ Member::luaExport (lua::LuaState* luaState)
 		break;
 
 	case MemberKind_Enum:
-		if (!m_parentCompound)
-		{
-			luaState->setMemberString ("m_path", m_name);
-		}
-		else
-		{
-			sl::String path =
-				m_name.isEmpty () ? m_parentCompound->m_path :
-				m_parentCompound->m_path.isEmpty () ? m_name :
-				m_parentCompound->m_path + "/" + m_name;
-
-			luaState->setMemberString ("m_path",  path);
-		}
-
-		luaExportListSetParent (luaState, m_enumValueList, "m_parent");
+		luaExportList (luaState, m_enumValueList);
 		luaState->setMember ("m_enumValueArray");
 		break;
 
@@ -419,6 +437,9 @@ Compound::luaExport (lua::LuaState* luaState)
 	luaState->setMemberString ("m_name", m_name);
 	luaState->setMemberString ("m_title", m_title);
 
+	preparePath ();
+	luaState->setMemberString ("m_path", m_path);
+
 	switch (m_compoundKind)
 	{
 	case CompoundKind_Group:
@@ -445,9 +466,6 @@ Compound::luaExport (lua::LuaState* luaState)
 
 	m_detailedDescription.luaExport (luaState);
 	luaState->setMember ("m_detailedDescription");
-
-	preparePath ();
-	luaState->setMemberString ("m_path", m_path);
 
 	if (m_selfNamespace) // pages don't have namespaces
 		m_selfNamespace->luaExportMembers (luaState);
@@ -540,30 +558,6 @@ Compound::createTemplateSpecParam (const sl::StringRef& name)
 
 	m_templateSpecParamList.insertTail (param);
 	return param;
-}
-
-void
-Compound::preparePath ()
-{
-	if (!m_path.isEmpty ())
-		return;
-
-	if (!m_parentNamespace)
-	{
-		if (m_compoundKind != CompoundKind_Group) // groups don't contribute to path
-			m_path = m_name;
-	}
-	else
-	{
-		m_parentNamespace->m_compound->preparePath ();
-		m_path = m_parentNamespace->m_compound->m_path;
-
-		if (m_compoundKind != CompoundKind_Group) // groups don't contribute to path
-		{
-			m_path += '/';
-			m_path += m_name;
-		}
-	}
 }
 
 //..............................................................................
@@ -731,31 +725,31 @@ NamespaceContents::add (
 void
 NamespaceContents::luaExportMembers (lua::LuaState* luaState)
 {
-	luaExportArraySetParent (luaState, m_groupArray, "m_parent");
+	luaExportArray (luaState, m_groupArray);
 	luaState->setMember ("m_groupArray");
 
-	luaExportArraySetParent (luaState, m_namespaceArray, "m_parent");
+	luaExportArray (luaState, m_namespaceArray);
 	luaState->setMember ("m_namespaceArray");
 
-	luaExportArraySetParent (luaState, m_enumArray, "m_parent");
+	luaExportArray (luaState, m_enumArray);
 	luaState->setMember ("m_enumArray");
 
-	luaExportArraySetParent (luaState, m_structArray, "m_parent");
+	luaExportArray (luaState, m_structArray);
 	luaState->setMember ("m_structArray");
 
-	luaExportArraySetParent (luaState, m_unionArray, "m_parent");
+	luaExportArray (luaState, m_unionArray);
 	luaState->setMember ("m_unionArray");
 
-	luaExportArraySetParent (luaState, m_classArray, "m_parent");
+	luaExportArray (luaState, m_classArray);
 	luaState->setMember ("m_classArray");
 
-	luaExportArraySetParent (luaState, m_typedefArray, "m_parent");
+	luaExportArray (luaState, m_typedefArray);
 	luaState->setMember ("m_typedefArray");
 
-	luaExportArraySetParent (luaState, m_variableArray, "m_parent");
+	luaExportArray (luaState, m_variableArray);
 	luaState->setMember ("m_variableArray");
 
-	luaExportArraySetParent (luaState, m_constructorArray, "m_parent");
+	luaExportArray (luaState, m_constructorArray);
 	luaState->setMember ("m_constructorArray");
 
 	if (m_destructor)
@@ -766,22 +760,22 @@ NamespaceContents::luaExportMembers (lua::LuaState* luaState)
 		luaState->setMember ("m_destructor");
 	}
 
-	luaExportArraySetParent (luaState, m_functionArray, "m_parent");
+	luaExportArray (luaState, m_functionArray);
 	luaState->setMember ("m_functionArray");
 
-	luaExportArraySetParent (luaState, m_propertyArray, "m_parent");
+	luaExportArray (luaState, m_propertyArray);
 	luaState->setMember ("m_propertyArray");
 
-	luaExportArraySetParent (luaState, m_eventArray, "m_parent");
+	luaExportArray (luaState, m_eventArray);
 	luaState->setMember ("m_eventArray");
 
-	luaExportArraySetParent (luaState, m_aliasArray, "m_parent");
+	luaExportArray (luaState, m_aliasArray);
 	luaState->setMember ("m_aliasArray");
 
-	luaExportArraySetParent (luaState, m_defineArray, "m_parent");
+	luaExportArray (luaState, m_defineArray);
 	luaState->setMember ("m_defineArray");
 
-	luaExportArraySetParent (luaState, m_footnoteArray, "m_parent");
+	luaExportArray (luaState, m_footnoteArray);
 	luaState->setMember ("m_footnoteArray");
 }
 
@@ -868,6 +862,7 @@ GlobalNamespace::build (Module* module)
 		for (; memberIt; memberIt++)
 		{
 			nspace->add (*memberIt, compound);
+			memberIt->m_parentNamespace = nspace; // namespace, not group!
 
 			if (memberIt->m_groupCompound)
 			{
@@ -976,6 +971,7 @@ GlobalNamespace::getGroupNamespace (
 	Namespace* nspace = AXL_MEM_NEW (Namespace);
 	m_namespaceList.insertTail (nspace);
 	nspace->m_compound = groupCompound;
+	nspace->m_footnoteArray = groupCompound->m_groupFootnoteArray;
 	groupCompound->m_selfNamespace = nspace;
 
 	if (!groupCompound->m_groupCompound)

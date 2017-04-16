@@ -846,6 +846,7 @@ EnumValueType::create (
 {
 	m_parser = parser;
 	m_enumValue = AXL_MEM_NEW (EnumValue);
+	m_enumValue->m_parentEnum = member;
 	member->m_enumValueList.insertTail (m_enumValue);
 
 	while (*attributes)

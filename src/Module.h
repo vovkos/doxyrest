@@ -14,7 +14,16 @@
 #include "DoxyXmlEnum.h"
 
 struct Namespace;
+struct Member;
 struct Compound;
+
+//..............................................................................
+
+sl::String
+createPath (
+	const sl::StringRef& name,
+	Namespace* parentNamespace
+	);
 
 //..............................................................................
 
@@ -151,6 +160,7 @@ struct EnumValue: sl::ListLink
 
 	sl::String m_id;
 	sl::String m_name;
+	Member* m_parentEnum;
 	LinkedText m_initializer;
 
 	Description m_briefDescription;
@@ -215,6 +225,7 @@ getMemberFlagString (uint_t flags);
 
 struct Member: sl::ListLink
 {
+	Namespace* m_parentNamespace;
 	Compound* m_parentCompound;
 	Compound* m_groupCompound;
 
@@ -239,6 +250,8 @@ struct Member: sl::ListLink
 	sl::StdList <Param> m_templateSpecParamList;
 	sl::StdList <EnumValue> m_enumValueList;
 
+	sl::String m_path;
+
 	Description m_briefDescription;
 	Description m_detailedDescription;
 	Description m_inBodyDescription;
@@ -247,6 +260,13 @@ struct Member: sl::ListLink
 
 	void
 	luaExport (lua::LuaState* luaState);
+
+	void
+	preparePath ()
+	{
+		if (m_path.isEmpty ())
+			m_path = createPath (m_name, m_parentNamespace);
+	}
 };
 
 //..............................................................................
@@ -315,7 +335,11 @@ struct Compound: sl::ListLink
 	createTemplateSpecParam (const sl::StringRef& name);
 
 	void
-	preparePath ();
+	preparePath ()
+	{
+		if (m_path.isEmpty ())
+			m_path = createPath (m_name, m_parentNamespace);
+	}
 };
 
 //..............................................................................
@@ -459,41 +483,6 @@ luaExportArray (
 
 template <typename T>
 void
-luaExportArraySetParent (
-	lua::LuaState* luaState,
-	T* const* a,
-	size_t count,
-	const sl::StringRef& parentFieldName,
-	int parentIndex = -1
-	)
-{
-	luaState->createTable (count);
-
-	for (size_t i = 0; i < count; i++)
-	{
-		a [i]->luaExport (luaState);
-		luaState->pushValue (parentIndex - 2); // [-1] element, [-2] table
-		luaState->setMember (parentFieldName);
-		luaState->setArrayElement (i + 1); // lua arrays are 1-based
-	}
-}
-
-template <typename T>
-void
-luaExportArraySetParent (
-	lua::LuaState* luaState,
-	const sl::Array <T*>& array,
-	const sl::StringRef& parentFieldName,
-	int parentIndex = -1
-	)
-{
-	luaExportArraySetParent (luaState, array.cp (), array.getCount (), parentFieldName, parentIndex);
-}
-
-// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-
-template <typename T>
-void
 luaExportList (
 	lua::LuaState* luaState,
 	const sl::StdList <T>& list
@@ -508,29 +497,6 @@ luaExportList (
 		luaState->setArrayElement (i);
 	}
 }
-
-template <typename T>
-void
-luaExportListSetParent (
-	lua::LuaState* luaState,
-	const sl::StdList <T>& list,
-	const sl::StringRef& parentFieldName,
-	int parentIndex = -1
-	)
-{
-	luaState->createTable (list.getCount ());
-
-	sl::Iterator <T> it = list.getHead ();
-	for (size_t i = 1; it; it++, i++) // lua arrays are 1-based
-	{
-		it->luaExport (luaState);
-		luaState->pushValue (parentIndex - 2); // [-1] element, [-2] table
-		luaState->setMember (parentFieldName);
-		luaState->setArrayElement (i);
-	}
-}
-
-// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 inline
 void

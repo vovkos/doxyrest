@@ -15,13 +15,16 @@ local compound = argArray [1]
 
 local variableSectionName
 local functionSectionName
+local prevGetItemName = getItemName
 
 if compound.m_compoundKind == "namespace" or compound.m_compoundKind == "group" then
 	variableSectionName = "Global Variables"
 	functionSectionName = "Global Functions"
+	getItemName = getItemQualifiedName
 else
 	variableSectionName = "Fields"
 	functionSectionName = "Methods"
+	getItemName = getItemSimpleName
 end
 
 local compoundStats = prepareCompound (compound)
@@ -49,6 +52,17 @@ $(getItemDetailedDocumentation (compound))
 
 %{
 end -- if
+
+for i = 1, #compound.m_groupArray do
+	local item = compound.m_groupArray [i]
+	local targetFileName = getItemFileName (item)
+
+	generateFile (targetFileName, "c_group.rst.in", item)
+}
+:ref:`$(getGroupName (item))<doxid-$(item.m_id)>`
+
+%{
+end -- for
 
 if compoundStats.m_hasItems then
 	if g_sectionedOverview then
@@ -121,4 +135,6 @@ if #compound.m_footnoteArray > 0 then
 %{
 	end -- for
 end -- if
+
+getItemName = prevGetItemName
 }

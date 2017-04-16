@@ -19,7 +19,7 @@ $(getTitle (variableSectionName, "-"))
 %{
 for i = 1, #compound.m_variableArray do
 	local item = compound.m_variableArray [i]
-	if not isUnnamedItem (item) and item.m_hasDocumentation then
+	if not isUnnamedItem (item) and isItemInCompoundDetails (item, compound) then
 		local modifiers = ""
 		local suffix = ""
 
@@ -38,7 +38,7 @@ for i = 1, #compound.m_variableArray do
 .. ref-code-block:: $g_language
 	:class: title-code-block
 
-	$(getLinkedTextString (item.m_type, true))$modifiers $(item.m_name)$suffix
+	$(getLinkedTextString (item.m_type, true))$modifiers $(getItemName (item))$suffix
 %{
 		if item.m_isSubGroupHead then
 			for j = 1, #item.m_subGroupSlaveArray do
@@ -57,7 +57,7 @@ for i = 1, #compound.m_variableArray do
 						suffix = " :" .. slaveItem.m_bitField
 					end
 }
-	$(getLinkedTextString (slaveItem.m_type, true))$modifiers $(slaveItem.m_name)$suffix
+	$(getLinkedTextString (slaveItem.m_type, true))$modifiers $(getItemName (slaveItem))$suffix
 %{
 				end -- if
 			end -- for

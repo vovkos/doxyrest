@@ -148,24 +148,8 @@ function getItemKindString (item, itemKindString)
 	return s
 end
 
-function getItemName (item)
+function getItemNameSuffix (item)
 	local s = ""
-	local parent = item.m_parent
-
-	while parent do
-		if parent.m_compoundKind == "group" then
-			parent = parent.m_parent
-		else
-			if parent.m_compoundKind == "namespace" and parent.m_path ~= "" then
-				-- only add prefix to namespaces, not classes/structs
-				s = string.gsub (parent.m_path, "/", g_nameDelimiter) .. g_nameDelimiter
-			end
-
-			break
-		end
-	end
-
-	s = s .. item.m_name
 
 	if item.m_templateParamArray and #item.m_templateParamArray > 0 then
 		s = s .. " " .. getTemplateParamArrayString (item.m_templateParamArray)
@@ -177,6 +161,17 @@ function getItemName (item)
 
 	return s
 end
+
+function getItemSimpleName (item)
+	return item.m_name .. getItemNameSuffix (item)
+end
+
+function getItemQualifiedName (item)
+	local name = string.gsub (item.m_path, "/", g_nameDelimiter)
+	return name .. getItemNameSuffix (item)
+end
+
+getItemName = getItemQualifiedName
 
 function getItemNameForOverview (item)
 	if hasItemRefTarget (item) then
@@ -196,6 +191,8 @@ function getGroupName (group)
 
 	return s
 end
+
+g_itemCidMap = {}
 
 function ensureUniqueItemName (item, name, map, sep)
 	local mapValue = map [name]
@@ -230,7 +227,6 @@ end
 
 function getItemFileName (item, suffix)
 	local s
-	local parent = item.m_parent
 
 	if item.m_compoundKind then
 		s = item.m_compoundKind .. "_"
@@ -240,11 +236,13 @@ function getItemFileName (item, suffix)
 		s = "undef_"
 	end
 
-	if parent and parent.m_path ~= "" then
-		s = s .. string.gsub (parent.m_path, "/", "_") .. "_"
+	if item.m_compoundKind == "group" then
+		s = s .. item.m_name
+		-- s = string.gsub (s, '-', "_") -- groups can contain dashes, get rid of those
+	else
+		s = s .. string.gsub (item.m_path, "/", "_")
 	end
 
-	s = s .. string.gsub (item.m_name, '-', "_") -- groups can contain dashes
 	if not suffix then
 		suffix = ".rst"
 	end
@@ -254,17 +252,16 @@ function getItemFileName (item, suffix)
 	return s
 end
 
-g_itemCidMap = {}
-
 function getItemCid (item)
-	local s = ""
-	local parent = item.m_parent
+	local s
 
-	if parent and parent.m_path ~= "" then
-		s = s .. string.gsub (parent.m_path, "/", g_nameDelimiter) .. g_nameDelimiter
+	if item.m_compoundKind == "group" then
+		s = item.m_name
+	else
+		s = string.gsub (item.m_path, "/", g_nameDelimiter)
 	end
 
-	s = string.lower (s .. item.m_name)
+	s = string.lower (s)
 	s = ensureUniqueItemName (item, s, g_itemCidMap, "-")
 
 	return s
@@ -992,6 +989,14 @@ function prepareItemArrayDocumentation (
 	end
 
 	return hasDocumentation
+end
+
+function isItemInCompoundDetails (item, compound)
+	if not item.m_hasDocumentation then
+		return false
+	end
+
+	return item.m_groupId == "" or item.m_groupId == compound.m_id
 end
 
 -------------------------------------------------------------------------------

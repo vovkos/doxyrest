@@ -15,18 +15,13 @@ local compound = argArray [1]
 
 local indent
 local variable
-local getLocalItemName
 
 if compound.m_compoundKind == "namespace" or compound.m_compoundKind == "group" then
 	indent = ""
 	variable = "variable"
-	getLocalItemName = getItemName
 else
 	indent = "\t"
 	variable = "field"
-	getLocalItemName = function (item)
-		return item.m_name
-	end
 end
 
 for i = 1, #compound.m_groupArray do
@@ -74,7 +69,7 @@ end
 for i = 1, #compound.m_typedefArray do
 	local item = compound.m_typedefArray [i]
 }
-$(indent)\typedef $(getLocalItemName (item))
+$(indent)\typedef $(getItemName (item))
 
 $(indent)	Detailed description for typedef ``$(getItemName (item))``
 
@@ -84,7 +79,7 @@ end -- for
 for i = 1, #compound.m_variableArray do
 	local item = compound.m_variableArray [i]
 }
-$(indent)\$(variable) $(getLocalItemName (item))
+$(indent)\$(variable) $(getItemName (item))
 
 $(indent)	Detailed description for $(variable) ``$(getItemName (item))``
 
@@ -94,7 +89,7 @@ end -- for
 for i = 1, #compound.m_propertyArray do
 	local item = compound.m_propertyArray [i]
 }
-$(indent)\property $(getLocalItemName (item))
+$(indent)\property $(getItemName (item))
 
 $(indent)	Detailed description for property ``$(getItemName (item))``
 
@@ -104,7 +99,7 @@ end -- for
 for i = 1, #compound.m_eventArray do
 	local item = compound.m_eventArray [i]
 }
-$(indent)\event $(getLocalItemName (item))
+$(indent)\event $(getItemName (item))
 
 $(indent)	Detailed description for event ``$(getItemName (item))``
 
@@ -114,7 +109,7 @@ $(indent)	Detailed description for event ``$(getItemName (item))``
 for i = 1, #compound.m_functionArray do
 	local item = compound.m_functionArray [i]
 }
-$(indent)\fn $(getLocalItemName (item))
+$(indent)\fn $(getItemName (item))
 
 $(indent)	Detailed description for function ``$(getItemName (item))``
 
@@ -124,7 +119,7 @@ end -- for
 for i = 1, #compound.m_aliasArray do
 	local item = compound.m_aliasArray [i]
 }
-$(indent)\alias $(getLocalItemName (item))
+$(indent)\alias $(getItemName (item))
 
 $(indent)	Detailed description for alias ``$(getItemName (item))``
 

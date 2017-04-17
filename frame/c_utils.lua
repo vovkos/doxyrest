@@ -770,7 +770,12 @@ function getDocBlockContents (block, context)
 			s = " "
 		elseif block.m_blockKind == "listitem" then
 			s = context.m_listItemIndent .. context.m_listItemBullet .. " "
-			s = s .. text .. "\n"
+			local indent = string.rep (' ', string.len (s))
+
+			text = replaceCommonSpacePrefix (text, indent)
+			text = trimWhitespace (text)
+
+			s = s .. text .. "\n\n"
 		elseif block.m_blockKind == "para" then
 			s = trimWhitespace (text)
 			if s ~= "" then
@@ -823,10 +828,10 @@ function getDocBlockContents (block, context)
 				local count = #context.m_seeSection
 				context.m_seeSection [count + 1] = text
 			else
-				s = text
+				s = trimWhitespace (text)
 			end
 		else
-			s = text
+			s = trimWhitespace (text)
 		end
 	end
 

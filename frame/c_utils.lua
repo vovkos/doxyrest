@@ -738,6 +738,27 @@ function processListDocBlock (block, context, bullet)
 	return s
 end
 
+function processDlListDocBlock (block, context)
+	local prevList = context.m_dlList
+	context.m_dlList = {}
+
+	getDocBlockListContentsImpl (block.m_childBlockList, context)
+
+	local s =
+		".. list-table::\n" ..
+		"\t:widths: 20 80\n\n"
+
+	for i = 1, #context.m_dlList do
+		s = s .. "\t*\n"
+		s = s .. "\t\t- " .. context.m_dlList [i].m_title .. "\n\n"
+		s = s .. "\t\t- " .. context.m_dlList [i].m_description .. "\n\n"
+	end
+
+	context.m_dlList = prevList
+
+	return s
+end
+
 function getDocBlockContents (block, context)
 	local s = ""
 	local listItemBullet = context.m_listItemBullet
@@ -752,6 +773,8 @@ function getDocBlockContents (block, context)
 		s = processListDocBlock (block, context, "*")
 	elseif block.m_blockKind == "orderedlist" then
 		s = processListDocBlock (block, context, "#.")
+	elseif block.m_blockKind == "variablelist" then
+		s = processDlListDocBlock (block, context)
 	else
 		local childContents = getDocBlockListContentsImpl (block.m_childBlockList, context)
 		local text = concatDocBlockContents (block.m_text, childContents)
@@ -768,14 +791,36 @@ function getDocBlockContents (block, context)
 			s = "*" .. text .. "*"
 		elseif block.m_blockKind == "sp" then
 			s = " "
+		elseif block.m_blockKind == "varlistentry" then
+			if not context.m_dlList then
+				error ("unexpected <varlistentry>")
+			end
+
+			local count = #context.m_dlList
+			local entry = {}
+			entry.m_title = trimWhitespace (text)
+			entry.m_description = ""
+			context.m_dlList [count + 1] = entry
 		elseif block.m_blockKind == "listitem" then
-			s = context.m_listItemIndent .. context.m_listItemBullet .. " "
-			local indent = string.rep (' ', string.len (s))
+			if context.m_dlList then
+				local count = #context.m_dlList
+				local entry = context.m_dlList [count]
+				if entry then
+					entry.m_description = trimWhitespace (text)
+				end
+			else
+				if not context.m_listItemBullet then
+					error ("unexpected <listitem>")
+				end
 
-			text = replaceCommonSpacePrefix (text, indent)
-			text = trimWhitespace (text)
+				s = context.m_listItemIndent .. context.m_listItemBullet .. " "
+				local indent = string.rep (' ', string.len (s))
 
-			s = s .. text .. "\n\n"
+				text = replaceCommonSpacePrefix (text, indent)
+				text = trimWhitespace (text)
+
+				s = s .. text .. "\n\n"
+			end
 		elseif block.m_blockKind == "para" then
 			s = trimWhitespace (text)
 			if s ~= "" then
@@ -1043,6 +1088,15 @@ function isItemExcludedByProtectionFilter (item)
 	return false
 end
 
+function isItemExcludedByDocumentationFilter (item)
+
+	if not item.m_hasDocumentation and g_excludeUndocumented then
+		return true
+	end
+
+	return false
+end
+
 function filterItemArray (itemArray)
 	if next (itemArray) == nil then
 		return
@@ -1050,7 +1104,9 @@ function filterItemArray (itemArray)
 
 	for i = #itemArray, 1, -1 do
 		local item = itemArray [i]
-		local isExcluded = isItemExcludedByProtectionFilter (item)
+		local isExcluded =
+			isItemExcludedByProtectionFilter (item) or
+			isItemExcludedByDocumentationFilter (item)
 
 		if isExcluded then
 			table.remove (itemArray, i)
@@ -1065,6 +1121,7 @@ function filterConstructorArray (constructorArray)
 		local item = constructorArray [1]
 		local isExcluded =
 			isItemExcludedByProtectionFilter (item) or
+			isItemExcludedByDocumentationFilter (item) or
 			not g_includeDefaultConstructors and #item.m_paramArray == 0
 
 		if isExcluded then
@@ -1082,6 +1139,8 @@ function filterDefineArray (defineArray)
 		local item = defineArray [i]
 
 		local isExcluded =
+			isItemExcludedByProtectionFilter (item) or
+			isItemExcludedByDocumentationFilter (item) or
 			not g_includeEmptyDefines and item.m_initializer.m_isEmpty or
 			g_excludeDefinePattern and string.match (item.m_name, g_excludeDefinePattern)
 
@@ -1098,7 +1157,9 @@ function filterTypedefArray (typedefArray)
 
 	for i = #typedefArray, 1, -1 do
 		local item = typedefArray [i]
-		local isExcluded = isItemExcludedByProtectionFilter (item)
+		local isExcluded =
+			isItemExcludedByProtectionFilter (item) or
+			isItemExcludedByDocumentationFilter (item)
 
 		if not isExcluded and not g_includePrimitiveTypedefs then
 			local typeKind, name = string.match (
@@ -1137,36 +1198,6 @@ end
 
 function prepareCompound (compound)
 	local stats = {}
-
-	-- filter invisible items out
-
-	filterTypedefArray (compound.m_typedefArray)
-	filterItemArray (compound.m_enumArray)
-	filterItemArray (compound.m_structArray)
-	filterItemArray (compound.m_unionArray)
-	filterItemArray (compound.m_classArray)
-	filterItemArray (compound.m_variableArray)
-	filterItemArray (compound.m_propertyArray)
-	filterItemArray (compound.m_eventArray)
-	filterConstructorArray (compound.m_constructorArray)
-	filterItemArray (compound.m_functionArray)
-	filterItemArray (compound.m_aliasArray)
-	filterDefineArray (compound.m_defineArray)
-
-	stats.m_hasItems =
-		#compound.m_namespaceArray ~= 0 or
-		#compound.m_typedefArray ~= 0 or
-		#compound.m_enumArray ~= 0 or
-		#compound.m_structArray ~= 0 or
-		#compound.m_unionArray ~= 0 or
-		#compound.m_classArray ~= 0 or
-		#compound.m_variableArray ~= 0 or
-		#compound.m_propertyArray ~= 0 or
-		#compound.m_eventArray ~= 0 or
-		#compound.m_constructorArray ~= 0 or
-		#compound.m_functionArray ~= 0 or
-		#compound.m_aliasArray ~= 0 or
-		#compound.m_defineArray ~= 0
 
 	-- scan for documentation and create subgroups
 
@@ -1209,6 +1240,36 @@ function prepareCompound (compound)
 
 	stats.m_hasBriefDocumentation = not isDocumentationEmpty (compound.m_briefDescription)
 	stats.m_hasDetailedDocumentation = not isDocumentationEmpty (compound.m_detailedDescription)
+
+	-- filter invisible items out
+
+	filterTypedefArray (compound.m_typedefArray)
+	filterItemArray (compound.m_enumArray)
+	filterItemArray (compound.m_structArray)
+	filterItemArray (compound.m_unionArray)
+	filterItemArray (compound.m_classArray)
+	filterItemArray (compound.m_variableArray)
+	filterItemArray (compound.m_propertyArray)
+	filterItemArray (compound.m_eventArray)
+	filterConstructorArray (compound.m_constructorArray)
+	filterItemArray (compound.m_functionArray)
+	filterItemArray (compound.m_aliasArray)
+	filterDefineArray (compound.m_defineArray)
+
+	stats.m_hasItems =
+		#compound.m_namespaceArray ~= 0 or
+		#compound.m_typedefArray ~= 0 or
+		#compound.m_enumArray ~= 0 or
+		#compound.m_structArray ~= 0 or
+		#compound.m_unionArray ~= 0 or
+		#compound.m_classArray ~= 0 or
+		#compound.m_variableArray ~= 0 or
+		#compound.m_propertyArray ~= 0 or
+		#compound.m_eventArray ~= 0 or
+		#compound.m_constructorArray ~= 0 or
+		#compound.m_functionArray ~= 0 or
+		#compound.m_aliasArray ~= 0 or
+		#compound.m_defineArray ~= 0
 
 	-- sort items (only the ones producing separate pages)
 

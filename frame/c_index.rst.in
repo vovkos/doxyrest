@@ -53,8 +53,8 @@ if #g_groupArray > 0 then
 	:hidden:
 
 %{
-	local groupTree = ""
 	table.sort (g_groupArray, cmpTitles) -- use cmpIds to sequence logically, not alphabetically
+	local groupTree = ""
 
 	for i = 1, #g_groupArray do
 		local group = g_groupArray [i]
@@ -69,22 +69,21 @@ if #g_groupArray > 0 then
 	end -- for
 }
 
-----------------------------
-
 .. rubric:: Further Reading:
 
 $groupTree
+
 %{
 end -- if
 
-if #g_pageArray > 0 then
+if #g_pageArray > 0 or g_extraPageList then
 }
 .. toctree::
 	:hidden:
 
 %{
-	local pageList = ""
 	table.sort (g_pageArray, cmpTitles)
+	local pageList = ""
 
 	for i = 1, #g_pageArray do
 		local page = g_pageArray [i]
@@ -100,21 +99,28 @@ if #g_pageArray > 0 then
 %{
 		end -- if
 	end -- for
-}
 
---------------------------
+	if g_extraPageList then
+		for fileName in string.gmatch (g_extraPageList, "[^,;]+") do
+			local docName = string.gsub (fileName, "%.rst$", "")
+			pageList = pageList .. "|\t:doc:`" .. docName .."`\n"
+}
+	$(fileName)
+%{
+		end
+	end
+
+}
 
 .. rubric:: Related Pages:
 
 $pageList
+
 %{
 end -- if
 
 generateFile ("global.rst", "c_global.rst.in")
 }
-
---------------------------------
-
 .. rubric:: Reference and Index:
 
 .. toctree::
@@ -124,4 +130,3 @@ generateFile ("global.rst", "c_global.rst.in")
 
 |	:doc:`global`
 |	:ref:`genindex`
-|	:ref:`search`

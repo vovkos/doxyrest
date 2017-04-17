@@ -193,6 +193,7 @@ function getGroupName (group)
 end
 
 g_itemCidMap = {}
+g_itemFileNameMap = {}
 
 function ensureUniqueItemName (item, name, map, sep)
 	local mapValue = map [name]
@@ -200,15 +201,15 @@ function ensureUniqueItemName (item, name, map, sep)
 	if mapValue == nil then
 		mapValue = {}
 		mapValue.m_itemMap = {}
-		mapValue.m_itemMap [item] = 1
+		mapValue.m_itemMap [item.m_id] = 1
 		mapValue.m_count = 1
 		map [name] = mapValue
 	else
-		local index = mapValue.m_itemMap [item]
+		local index = mapValue.m_itemMap [item.m_id]
 
 		if index == nil then
 			index = mapValue.m_count + 1
-			mapValue.m_itemMap [item] = index
+			mapValue.m_itemMap [item.m_id] = index
 			mapValue.m_count = mapValue.m_count + 1
 		end
 
@@ -242,6 +243,8 @@ function getItemFileName (item, suffix)
 	else
 		s = s .. string.gsub (item.m_path, "/", "_")
 	end
+
+	s = ensureUniqueItemName (item, s, g_itemFileNameMap, "-")
 
 	if not suffix then
 		suffix = ".rst"
@@ -422,6 +425,21 @@ function getGroupTree (group, indent)
 	return s
 end
 
+function getNamespaceTree (nspace, indent)
+	local s = ""
+
+	if not indent then
+		indent = ""
+	end
+
+	s = "\t" .. indent .. "namespace :ref:`" .. getItemQualifiedName (nspace) .. "<doxid-" .. nspace.m_id ..">`\n"
+
+	for i = 1, #nspace.m_namespaceArray do
+		s = s .. getNamespaceTree (nspace.m_namespaceArray [i], indent .. "\t")
+	end
+
+	return s
+end
 
 function getDoubleSectionName (title1, count1, title2, count2)
 	local s
@@ -941,7 +959,7 @@ function isDocumentationEmpty (description)
 	return string.len (text) == 0
 end
 
-function prepareItemDocumentation (item)
+function prepareItemDocumentation (item, compound)
 	local hasBriefDocuemtnation = not isDocumentationEmpty (item.m_briefDescription)
 	local hasDetailedDocuemtnation = not isDocumentationEmpty (item.m_detailedDescription)
 
@@ -959,23 +977,23 @@ function prepareItemDocumentation (item)
 		end
 	end
 
+	if item.m_groupId ~= "" and compound and compound.m_compoundKind ~= "group" then
+		return false -- grouped items should be documented on group pages only
+	end
+
 	return true
 end
 
-function prepareItemArrayDocumentation (
-	itemArray,
-	compound
-	)
+function prepareItemArrayDocumentation (itemArray, compound)
 
 	local hasDocumentation = false
 	local subGroupHead = nil
 
 	for i = 1, #itemArray do
 		local item = itemArray [i]
+		local result = prepareItemDocumentation (item, compound)
 
-		prepareItemDocumentation (item)
-
-		if item.m_hasDocumentation then
+		if result then
 			hasDocumentation = true
 			if item.m_isSubGroupHead then
 				subGroupHead = item
@@ -1155,23 +1173,23 @@ function prepareCompound (compound)
 		if isUnnamedItem (item) then
 			stats.m_hasUnnamedEnums = true
 
-			if prepareItemArrayDocumentation (item.m_enumValueArray) then
+			if prepareItemArrayDocumentation (item.m_enumValueArray, compound) then
 				stats.m_hasDocumentedUnnamedEnumValues = true
 			end
 		end
 	end
 
-	stats.m_hasDocumentedTypedefs = prepareItemArrayDocumentation (compound.m_typedefArray)
-	stats.m_hasDocumentedVariables = prepareItemArrayDocumentation (compound.m_variableArray)
-	stats.m_hasDocumentedProperties = prepareItemArrayDocumentation (compound.m_propertyArray)
-	stats.m_hasDocumentedEvents = prepareItemArrayDocumentation (compound.m_eventArray)
-	stats.m_hasDocumentedFunctions = prepareItemArrayDocumentation (compound.m_functionArray)
-	stats.m_hasDocumentedAliases = prepareItemArrayDocumentation (compound.m_aliasArray)
-	stats.m_hasDocumentedDefines = prepareItemArrayDocumentation (compound.m_defineArray)
+	stats.m_hasDocumentedTypedefs = prepareItemArrayDocumentation (compound.m_typedefArray, compound)
+	stats.m_hasDocumentedVariables = prepareItemArrayDocumentation (compound.m_variableArray, compound)
+	stats.m_hasDocumentedProperties = prepareItemArrayDocumentation (compound.m_propertyArray, compound)
+	stats.m_hasDocumentedEvents = prepareItemArrayDocumentation (compound.m_eventArray, compound)
+	stats.m_hasDocumentedFunctions = prepareItemArrayDocumentation (compound.m_functionArray, compound)
+	stats.m_hasDocumentedAliases = prepareItemArrayDocumentation (compound.m_aliasArray, compound)
+	stats.m_hasDocumentedDefines = prepareItemArrayDocumentation (compound.m_defineArray, compound)
 
 	stats.m_hasDocumentedConstruction =
-		prepareItemArrayDocumentation (compound.m_constructorArray) or
-		g_includeDestructors and compound.m_destructor and prepareItemDocumentation (compound.m_destructor)
+		prepareItemArrayDocumentation (compound.m_constructorArray, compound) or
+		g_includeDestructors and compound.m_destructor and prepareItemDocumentation (compound.m_destructor, compound)
 
 	stats.m_hasDocumentedItems =
 		stats.m_hasDocumentedUnnamedEnumValues or

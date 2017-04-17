@@ -53,16 +53,21 @@ $(getItemDetailedDocumentation (compound))
 %{
 end -- if
 
-for i = 1, #compound.m_groupArray do
-	local item = compound.m_groupArray [i]
-	local targetFileName = getItemFileName (item)
+if #compound.m_groupArray > 0 then
+	local groupTree = ""
 
-	generateFile (targetFileName, "c_group.rst.in", item)
+	for i = 1, #compound.m_groupArray do
+		local item = compound.m_groupArray [i]
+		local targetFileName = getItemFileName (item)
+
+		generateFile (targetFileName, "c_group.rst.in", item)
+		groupTree = groupTree .. getGroupTree (item)
+	end -- for
 }
-:ref:`$(getGroupName (item))<doxid-$(item.m_id)>`
+$groupTree
 
 %{
-end -- for
+end -- if
 
 if compoundStats.m_hasItems then
 	if g_sectionedOverview then

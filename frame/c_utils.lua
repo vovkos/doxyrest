@@ -498,7 +498,7 @@ end
 function getFunctionDeclStringImpl (item, returnType, isRef, indent)
 	local s = ""
 
-	if returnType then
+	if returnType and returnType ~= "" then
 		s = returnType
 
 		if g_hasNewLineAfterReturnType then

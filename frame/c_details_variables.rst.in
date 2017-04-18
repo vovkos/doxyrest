@@ -33,12 +33,18 @@ for i = 1, #compound.m_variableArray do
 			suffix = " :" .. item.m_bitField
 		end
 
+		local typeString = getLinkedTextString (item.m_type, true)
+		if string.find (typeString, "@") then
+			typeString = "unnamed-" .. string.match (typeString, "[a-z]+")
+			-- e.g.: unnamed-struct
+		end
+
 		emit (getItemRefTargetString (item))
 }
 .. ref-code-block:: $g_language
 	:class: title-code-block
 
-	$(getLinkedTextString (item.m_type, true))$modifiers $(getItemName (item))$suffix
+	$typeString$modifiers $(getItemName (item))$suffix
 %{
 		if item.m_isSubGroupHead then
 			for j = 1, #item.m_subGroupSlaveArray do
@@ -56,8 +62,14 @@ for i = 1, #compound.m_variableArray do
 					elseif slaveItem.m_bitField  ~= "" then
 						suffix = " :" .. slaveItem.m_bitField
 					end
+
+					local typeString = getLinkedTextString (slaveItem.m_type, true)
+					if string.find (typeString, "@") then
+						typeString = "unnamed-" .. string.match (typeString, "[a-z]+")
+						-- e.g.: unnamed-struct
+					end
 }
-	$(getLinkedTextString (slaveItem.m_type, true))$modifiers $(getItemName (slaveItem))$suffix
+	$typeString$modifiers $(getItemName (slaveItem))$suffix
 %{
 				end -- if
 			end -- for

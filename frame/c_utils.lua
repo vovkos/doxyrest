@@ -761,14 +761,39 @@ end
 
 function getDocBlockContents (block, context)
 	local s = ""
+
 	local listItemBullet = context.m_listItemBullet
 	local listItemIndent = context.m_listItemIndent
 
 	if block.m_blockKind == "programlisting" then
+		context.m_codeBlockKind = block.m_blockKind
 		local code = getDocBlockListContentsImpl (block.m_childBlockList, context)
+		context.m_codeBlockKind = nil
+
 		code = replaceCommonSpacePrefix (code, "    ")
 		code = trimTrailingWhitespace (code)
+
 		s = "\n\n::\n\n" .. code .. "\n\n"
+	elseif block.m_blockKind == "preformatted" then
+		context.m_codeBlockKind = block.m_blockKind
+		local code = getDocBlockListContentsImpl (block.m_childBlockList, context)
+		context.m_codeBlockKind = nil
+
+		code = replaceCommonSpacePrefix (code, "    ")
+		code = trimTrailingWhitespace (code)
+
+		-- raw seems like a better approach, but need to figure something out with indents
+		s = "\n\n.. code-block:: none\n\n" .. code .. "\n\n"
+	elseif block.m_blockKind == "verbatim" and g_verbatimToCodeBlock then
+		context.m_codeBlockKind = block.m_blockKind
+		local code = getDocBlockListContentsImpl (block.m_childBlockList, context)
+		context.m_codeBlockKind = nil
+
+		code = replaceCommonSpacePrefix (code, "    ")
+		code = trimTrailingWhitespace (code)
+
+		-- probably also need to assign some div class
+		s = "\n\n.. code-block:: none\n\n" .. code .. "\n\n"
 	elseif block.m_blockKind == "itemizedlist" then
 		s = processListDocBlock (block, context, "*")
 	elseif block.m_blockKind == "orderedlist" then
@@ -776,8 +801,23 @@ function getDocBlockContents (block, context)
 	elseif block.m_blockKind == "variablelist" then
 		s = processDlListDocBlock (block, context)
 	else
+		local text = block.m_text
 		local childContents = getDocBlockListContentsImpl (block.m_childBlockList, context)
-		local text = concatDocBlockContents (block.m_text, childContents)
+
+		if not context.m_codeBlockKind then
+			if g_escapeAsterisks then
+				text = string.gsub (text, "%*", "\\*")
+			end
+
+			text = trimWhitespace (text)
+			text = concatDocBlockContents (text, childContents)
+		else
+			text = text .. childContents
+
+			if context.m_codeBlockKind ~= "programlisting" then
+				return text
+			end
+		end
 
 		if block.m_blockKind == "linebreak" then
 			s = "\n\n"
@@ -873,10 +913,10 @@ function getDocBlockContents (block, context)
 				local count = #context.m_seeSection
 				context.m_seeSection [count + 1] = text
 			else
-				s = trimWhitespace (text)
+				s = text
 			end
 		else
-			s = trimWhitespace (text)
+			s = text
 		end
 	end
 
@@ -935,12 +975,12 @@ function getDocBlockListContents (blockList)
 	return replaceCommonSpacePrefix (s, "")
 end
 
-function getSimplDocBlockListContents (blockList)
+function getSimpleDocBlockListContents (blockList)
 	local s = ""
 
 	for i = 1, #blockList do
 		local block = blockList [i]
-		s = s .. block.m_text .. getSimplDocBlockListContents (block.m_childBlockList)
+		s = s .. block.m_text .. getSimpleDocBlockListContents (block.m_childBlockList)
 	end
 
 	return s
@@ -952,7 +992,7 @@ function getItemInternalDocumentation (item)
 	for i = 1, #item.m_detailedDescription.m_docBlockList do
 		local block = item.m_detailedDescription.m_docBlockList [i]
 		if block.m_blockKind == "internal" then
-			s = s .. block.m_text .. getSimplDocBlockListContents (block.m_childBlockList)
+			s = s .. block.m_text .. getSimpleDocBlockListContents (block.m_childBlockList)
 		end
 	end
 

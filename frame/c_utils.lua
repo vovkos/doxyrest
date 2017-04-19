@@ -416,7 +416,10 @@ function getGroupTree (group, indent)
 		indent = ""
 	end
 
-	s = "|\t" .. indent .. ":ref:`" .. getGroupName (group) .. "<doxid-" ..group.m_id .. ">`\n"
+	local name = getGroupName (group)
+	name = string.gsub (name, "<", "\\<") -- need to escape opening chevron
+
+	s = "|\t" .. indent .. ":ref:`" .. name .. "<doxid-" ..group.m_id .. ">`\n"
 
 	for i = 1, #group.m_groupArray do
 		s = s .. getGroupTree (group.m_groupArray [i], indent .. "\t")

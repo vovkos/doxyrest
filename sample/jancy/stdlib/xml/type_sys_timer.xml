@@ -1,0 +1,198 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen>
+<compounddef kind='class' id='type_sys_timer' language='Jancy'>
+<compoundname>Timer</compoundname>
+
+<sectiondef>
+<memberdef kind='function' id='function_sys_timer_construct'>
+<functionkind>construct</functionkind>
+<name>construct</name>
+<type>void</type>
+<argsstring>(sys.Timer safe* this)</argsstring>
+<location file='sys_Timer.jnc' line='66' col='2'/>
+</memberdef>
+<memberdef kind='function' id='function_sys_timer_destruct'>
+<functionkind>destruct</functionkind>
+<name>destruct</name>
+<type>void</type>
+<argsstring>(sys.Timer safe* this)</argsstring>
+<location file='sys_Timer.jnc' line='67' col='2'/>
+</memberdef>
+</sectiondef>
+
+<sectiondef>
+<memberdef kind='variable' id='struct_member_sys_timer_iface_m_timerfunc' prot='protected'>
+<name>m_timerFunc</name>
+<type>void function*</type>
+<argsstring>()</argsstring>
+<location file='sys_Timer.jnc' line='64' col='22'/>
+</memberdef>
+
+<memberdef kind='function' id='function_sys_timer_start'>
+<functionkind>named-function</functionkind>
+<name>start</name>
+<type>bool errorcode</type>
+<argsstring>(sys.Timer safe* this, void function* func (), uint64_t dueTime, uint_t interval)</argsstring>
+<param>
+<declname>func</declname>
+<type>void function*</type>
+<array>()</array>
+</param>
+<param>
+<declname>dueTime</declname>
+<type><ref refid="typedef_uint64_t">uint64_t</ref></type>
+<array></array>
+</param>
+<param>
+<declname>interval</declname>
+<type><ref refid="typedef_uint_t">uint_t</ref></type>
+<array></array>
+</param>
+<detaileddescription>
+<para>Starts a new peridodic or non-periodic timer.
+
+The function accepts three arguments. The first one, ``timerFunc`` specifies the function pointer to the timer function to be called when the timer is due. The second one, ``dueTime``, specifies the *timestamp* of the moment when the timer function should be *first* called. The last one, ``period``, specifies the period in milliseconds for a periodic timer, or ``0`` if this is a single-shot timer.
+
+Returns ``true`` on success. If the timer could not be started, error supplied by operating system is set and then the function returns ``false`` [#f2]_.
+
+If the timer has been already started, ``start`` method stops the previous timer first.</para>
+</detaileddescription>
+<location file='sys_Timer.jnc' line='79' col='17'/>
+</memberdef>
+
+<memberdef kind='function' id='function_sys_timer_stop'>
+<functionkind>named-function</functionkind>
+<name>stop</name>
+<type>void</type>
+<argsstring>(sys.Timer safe* this)</argsstring>
+<detaileddescription>
+<para>Stops a previously started timer, does nothing if the timer is not started. This function always succeeds.
+
+For local timers it is recommended to use *disposable* pattern [#f1]_.</para>
+</detaileddescription>
+<location file='sys_Timer.jnc' line='91' col='7'/>
+</memberdef>
+
+<memberdef kind='alias' id='alias_sys_timer_dispose'>
+<name>dispose</name>
+<initializer>= stop</initializer>
+<detaileddescription>
+<para>Effectively makes ``sys.Timer`` a *disposable* class [#f1]_.</para>
+</detaileddescription>
+<location file='sys_Timer.jnc' line='97' col='8'/>
+</memberdef>
+
+<memberdef kind='function' id='function_sys_timer_startduetimer'>
+<functionkind>named-function</functionkind>
+<name>startDueTimer</name>
+<type>bool errorcode</type>
+<argsstring>(sys.Timer safe* this, void function* func (), uint64_t dueTime)</argsstring>
+<param>
+<declname>func</declname>
+<type>void function*</type>
+<array>()</array>
+</param>
+<param>
+<declname>dueTime</declname>
+<type><ref refid="typedef_uint64_t">uint64_t</ref></type>
+<array></array>
+</param>
+<detaileddescription>
+<para>Starts a non-periodic due timer, i.e. you specify the *timestamp* of the moment when your function should be called.
+
+Technically calling startDueTimer is equivalent to calling ``start`` with the last ``interval`` argument set to ``0``.</para>
+</detaileddescription>
+<location file='sys_Timer.jnc' line='105' col='17'/>
+</memberdef>
+
+<memberdef kind='function' id='function_sys_timer_startperiodictimer'>
+<functionkind>named-function</functionkind>
+<name>startPeriodicTimer</name>
+<type>bool errorcode</type>
+<argsstring>(sys.Timer safe* this, void function* func (), uint_t interval)</argsstring>
+<param>
+<declname>func</declname>
+<type>void function*</type>
+<array>()</array>
+</param>
+<param>
+<declname>interval</declname>
+<type><ref refid="typedef_uint_t">uint_t</ref></type>
+<array></array>
+</param>
+<detaileddescription>
+<para>Starts a periodic timer, i.e. the timer will invoke your function each ``interval`` milliseconds.
+
+This is probably the most common type of timer. Technically calling startDueTimer is equivalent to calling ``start`` with the ``dueTime`` argument calculated as ``sys.getTimestamp () + interval``.</para>
+</detaileddescription>
+<location file='sys_Timer.jnc' line='119' col='17'/>
+</memberdef>
+
+<memberdef kind='function' id='function_sys_timer_startsingleshottimer'>
+<functionkind>named-function</functionkind>
+<name>startSingleShotTimer</name>
+<type>bool errorcode</type>
+<argsstring>(sys.Timer safe* this, void function* func (), uint_t delay)</argsstring>
+<param>
+<declname>func</declname>
+<type>void function*</type>
+<array>()</array>
+</param>
+<param>
+<declname>delay</declname>
+<type><ref refid="typedef_uint_t">uint_t</ref></type>
+<array></array>
+</param>
+<detaileddescription>
+<para>Starts a single-shot non-periodic timer, i.e. you specify the delay in milliseconds after passing of which your function will be invoked.
+
+Technically calling startDueTimer is equivalent to calling ``start`` with the ``dueTime`` argument calculated as ``sys.getTimestamp () + interval`` and ``interval`` set to ``0``.</para>
+</detaileddescription>
+<location file='sys_Timer.jnc' line='134' col='17'/>
+</memberdef>
+
+</sectiondef>
+<sectiondef>
+<memberdef kind='footnote'>
+<name>f1</name>
+<detaileddescription>
+<para>|footnote-disposable|</para>
+</detaileddescription>
+</memberdef>
+<memberdef kind='footnote'>
+<name>f2</name>
+<detaileddescription>
+<para>|footnote-errorcode|</para>
+</detaileddescription>
+</memberdef>
+</sectiondef>
+<includes>sys_Timer.jnc</includes>
+<briefdescription><para>This class provides facilities to manage both peridodic (repetitive) and non-periodic (single-shot) timers.</para></briefdescription>
+<detaileddescription>
+<para><![CDATA[Each instance of ``sys.Timer`` manages a single timer (either periodic, or single-shot). You start the timer with ``start``, ``startDueTimer``, ``startSingleShotTimer``, ``startPeriodicTimer`` methods. When the timer is due, it will call the function you have supplied as an argument to one of aforementioned methods.
+
+To stop the timer, invoke ``stop`` method. For local timers it is recommended to use *disposable* pattern [#f1]_.
+
+Code sample::
+
+	import "sys_Timer.jnc"
+
+	onTimer (int param)
+	{
+		// ...
+	}
+
+	int main ()
+	{
+		// ...
+
+		disposable sys.Timer timer;
+		timer.startPeriodic (onTimer ~(1, 2), 1000);
+
+		// ...
+	} // <-- timer.stop will be called]]></para>
+<para><simplesect kind='see'><para>`sys.getTimestamp`</para></simplesect></para>
+</detaileddescription>
+<location file='sys_Timer.jnc' line='62' col='14'/>
+</compounddef>
+</doxygen>

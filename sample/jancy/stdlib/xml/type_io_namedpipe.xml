@@ -1,0 +1,212 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen>
+<compounddef kind='class' id='type_io_namedpipe' language='Jancy'>
+<compoundname>NamedPipe</compoundname>
+
+<sectiondef>
+<memberdef kind='function' id='function_io_namedpipe_construct'>
+<functionkind>construct</functionkind>
+<name>construct</name>
+<type>void</type>
+<argsstring>(io.NamedPipe safe* this)</argsstring>
+<location file='io_NamedPipe.jnc' line='115' col='2'/>
+</memberdef>
+<memberdef kind='function' id='function_io_namedpipe_destruct'>
+<functionkind>destruct</functionkind>
+<name>destruct</name>
+<type>void</type>
+<argsstring>(io.NamedPipe safe* this)</argsstring>
+<location file='io_NamedPipe.jnc' line='116' col='2'/>
+</memberdef>
+</sectiondef>
+
+<sectiondef>
+<memberdef kind='variable' id='struct_member_io_namedpipe_iface_m_isopen' readonly='yes'>
+<name>m_isOpen</name>
+<type>bool</type>
+<modifiers>readonly</modifiers>
+<detaileddescription>
+<para>Holds the open status for the named pipe, i.e. ``true`` if opened; ``false`` otherwise.</para>
+</detaileddescription>
+<location file='io_NamedPipe.jnc' line='107' col='16'/>
+</memberdef>
+
+<memberdef kind='variable' id='struct_member_io_namedpipe_iface_m_syncid'>
+<name>m_syncId</name>
+<type><ref refid="typedef_uint_t">uint_t</ref></type>
+<detaileddescription>
+<para>Holds the synchronization ID for the named pipe [#f3]_.</para>
+</detaileddescription>
+<location file='io_NamedPipe.jnc' line='113' col='9'/>
+</memberdef>
+
+<memberdef kind='function' id='function_io_namedpipe_open'>
+<functionkind>named-function</functionkind>
+<name>open</name>
+<type>bool errorcode</type>
+<argsstring>(io.NamedPipe safe* this, char const* name, size_t backlog 0)</argsstring>
+<param>
+<declname>name</declname>
+<type>char const*</type>
+<array></array>
+</param>
+<param>
+<declname>backlog</declname>
+<type><ref refid="typedef_size_t">size_t</ref></type>
+<array></array>
+<defval>0</defval>
+</param>
+<detaileddescription>
+<para>Opens server-side named pipe(s), effectively starting a named pipe server.
+
+The function accepts two arguments. The first one, ``name``, is used to specify the name of the server-side named pipe. The second one, ``backlog``, specifies the size of the server backlog. Server backlog is defined as the maximum length of the queue of *pending* client-side connections, i.e. connections which has not been accepted via ``accept`` method yet.
+
+Returns ``true`` on success. If the named pipe server could not be opened, IO error supplied by operating system is set and then the function returns ``false`` [#f1]_.</para>
+</detaileddescription>
+<location file='io_NamedPipe.jnc' line='126' col='17'/>
+</memberdef>
+
+<memberdef kind='function' id='function_io_namedpipe_close'>
+<functionkind>named-function</functionkind>
+<name>close</name>
+<type>void</type>
+<argsstring>(io.NamedPipe safe* this)</argsstring>
+<detaileddescription>
+<para>Closes all previously opened server-side named pipes in the backlog; does nothing if the named pipe server is not started. This function always succeeds.
+
+Sometimes it may be convenient to use *disposable* pattern to ensure timely invokation of ``close`` [#f2]_.</para>
+</detaileddescription>
+<location file='io_NamedPipe.jnc' line='137' col='7'/>
+</memberdef>
+
+<memberdef kind='alias' id='alias_io_namedpipe_dispose'>
+<name>dispose</name>
+<initializer>= close</initializer>
+<detaileddescription>
+<para>Effectively makes ``io.NamedPipe`` a *disposable* class [#f2]_.</para>
+</detaileddescription>
+<location file='io_NamedPipe.jnc' line='143' col='8'/>
+</memberdef>
+
+<memberdef kind='function' id='function_io_namedpipe_accept'>
+<functionkind>named-function</functionkind>
+<name>accept</name>
+<type><ref refid="type_io_filestream">io.FileStream</ref>*</type>
+<argsstring>(io.NamedPipe safe* this)</argsstring>
+<detaileddescription>
+<para>Accepts a client connection and returns a resulting `io.FileStream` object to communicate with this particular client. To terminate a client connection, issue ``close`` method on the client file stream object.
+
+The new `io.FileStream` is created with events disabled. Turn events back on after assigning an event handler using `io.FileStream.m_isFileStreamEventEnabled` property.
+
+If method fails, ``null`` value is returned [#f1]_.</para>
+</detaileddescription>
+<location file='io_NamedPipe.jnc' line='153' col='14'/>
+</memberdef>
+
+<memberdef kind='event' id='struct_member_io_namedpipe_iface_m_onincomingconnection'>
+<name>m_onIncomingConnection</name>
+<type>multicast</type>
+<argsstring>(uint_t syncId)</argsstring>
+<param>
+<declname>syncId</declname>
+<type><ref refid="typedef_uint_t">uint_t</ref></type>
+<array></array>
+</param>
+<detaileddescription>
+<para>This event is fired whenever there is a client trying to connect to the named pipe server.
+
+The event handler receives a single ``syncId`` parameter [#f3]_.
+
+Call ``accept`` method to accept incoming connection and start communication with this particular client.</para>
+</detaileddescription>
+<location file='io_NamedPipe.jnc' line='163' col='8'/>
+</memberdef>
+
+</sectiondef>
+<sectiondef>
+<memberdef kind='footnote'>
+<name>f1</name>
+<detaileddescription>
+<para>|footnote-errorcode|</para>
+</detaileddescription>
+</memberdef>
+<memberdef kind='footnote'>
+<name>f2</name>
+<detaileddescription>
+<para>|footnote-disposable|</para>
+</detaileddescription>
+</memberdef>
+<memberdef kind='footnote'>
+<name>f3</name>
+<detaileddescription>
+<para>|footnote-sync-id|</para>
+</detaileddescription>
+</memberdef>
+</sectiondef>
+<includes>io_base.jncx</includes>
+<includes>io_NamedPipe.jnc</includes>
+<briefdescription><para>This class provides high-level asynchronous interface for the *server* side of Windows named pipes. Windows named pipes are widely used for IPC (Inter-Process Communications) between applications, services and drivers on Windows platform.</para></briefdescription>
+<detaileddescription>
+<para>For working from the *client* side of a named pipe, please use `io.File` class.
+
+A typical sequence of steps when working with a named pipe server looks something like this:
+
+* Assign your event handler using ``m_onIncomingConnection`` (you would probably also want to *schedule* your event handler to be run in particular environment, e.g. in specific thread)
+* Open a server-side named pipe with ``open`` method;
+* When ``m_onIncomingConnection`` event is fired, accept a client connection using ``accept`` method;
+* Communicate with the client via `io.FileStream` returned by ``accept``;
+* Close named pipe server and accepted client file streams when no longer needed with ``close`` method.
+
+.. rubric:: Sample code:
+
+.. ref-code-block::
+
+	class MyDialog
+	{
+		// ...
+
+		io.NamedPipe m_namedPipe;
+
+		construct ();
+		onIncomingConnection (uint_t syncId);
+		onFileStreamEvent (`io.FileStreamEventParams` const* params);
+	}
+
+	MyDialog.construct ()
+	{
+		// ...
+		m_namedPipe.m_onIncomingConnection += onIncomingConnection @ g_mainThreadScheduler;
+	}
+
+	MyDialog.onIncomingConnection (uint_t syncId)
+	{
+		if (syncId != m_namedPipe.m_syncId) // late event
+			return;
+
+		`io.FileStream`* fileStream = m_namedPipe.accept (); // file stream events are disabled on accept
+		fileStream.m_onFileStreamEvent += onFileStreamEvent ~(fileStream) @ g_mainThreadScheduler;
+		fileStream.m_isFileStreamEventEnabled = true; // enable events
+	}
+
+	MyDialog.onFileStreamEvent (
+		`io.FileStream`* fileStream,
+		`io.FileStreamEventParams` const* params
+		);
+	{
+		if (syncId != fileStream.m_syncId) // late event
+			return;
+
+		switch (params.m_code)
+		{
+		case `io.FileStreamEventCode.IncomingData`:
+			char buffer [256];
+			size_t size = fileStream.read (buffer, sizeof (buffer));
+			// ...
+			break;
+		}
+	}</para>
+<para><simplesect kind='see'><para>`io.File`, `io.FileStream`</para></simplesect></para>
+</detaileddescription>
+<location file='io_NamedPipe.jnc' line='101' col='14'/>
+</compounddef>
+</doxygen>

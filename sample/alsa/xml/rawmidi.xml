@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="rawmidi" kind="page">
+    <compoundname>rawmidi</compoundname>
+    <title>RawMidi interface</title>
+    <detaileddescription>
+<para>RawMidi Interface is designed to write or read raw (unchanged) MIDI data over the MIDI line without any timestamps defined in interface. MIDI stands Musical Instrument Digital Interface and more information about this standard can be found at <ulink url="http://www.midi.org">http://www.midi.org</ulink>.</para><sect1 id="rawmidi_1rawmidi_general_overview">
+<title>General overview</title>
+<para>The rawmidi implementation uses ring buffers to store outgoing and incoming MIDI stream. The buffer size is tunable and drivers report underruns for incoming stream as well.</para></sect1>
+<sect1 id="rawmidi_1rawmidi_open">
+<title>Open handling</title>
+<para>RawMidi devices are opened exclusively for a selected direction. While more than one process may not open a given MIDI device in the same direction simultaneously, separate processes may open a single MIDI device in different directions (i.e. process one opens a MIDI device in write direction and process two opens the same device in read direction).</para><sect2 id="rawmidi_1rawmidi_open_nonblock">
+<title>Nonblocking open (flag)</title>
+<para>Using <ref refid="group___raw_midi_1ga31ee35659c82272382ccc3014c8a73f8" kindref="member">SND_RAWMIDI_NONBLOCK</ref> flag for <ref refid="group___raw_midi_1ga2ab783051deeb7eb37eb568b76448889" kindref="member">snd_rawmidi_open()</ref> or <ref refid="group___raw_midi_1gaa7e3daf5cf4dd36b2534d2f1d6309477" kindref="member">snd_rawmidi_open_lconf()</ref> instruct device driver to return the -EBUSY error when device is already occupied with another application. This flag also changes behaviour of <ref refid="group___raw_midi_1ga0a30e482efec57f4ea74c533a0f9b134" kindref="member">snd_rawmidi_write()</ref> and <ref refid="group___raw_midi_1ga9b0952fc04facda83cdf1521325ca475" kindref="member">snd_rawmidi_read()</ref> returning -EAGAIN when no more bytes can be processed.</para><para>Note: In opposite (default) behaviour, application is blocked until device resources are free.</para></sect2>
+<sect2 id="rawmidi_1rawmidi_open_append">
+<title>Append open (flag)</title>
+<para>Using <ref refid="group___raw_midi_1ga7060640f32abcd337239bde2c8749d23" kindref="member">SND_RAWMIDI_APPEND</ref> flag (output only) instruct device driver to append contents of written buffer - passed by <ref refid="group___raw_midi_1ga0a30e482efec57f4ea74c533a0f9b134" kindref="member">snd_rawmidi_write()</ref> - atomically to output ring buffer in the kernel space. This flag also means that device is not opened exclusively, so more applications can share given rawmidi device. Note that applications must send the whole MIDI message including the running status, because another writing application might break the MIDI message in the output buffer.</para></sect2>
+<sect2 id="rawmidi_1rawmidi_open_sync">
+<title>Sync open (flag)</title>
+<para>Using <ref refid="group___raw_midi_1gab1a659b38e5174d790d5671739995894" kindref="member">SND_RAWMIDI_SYNC</ref> flag (output only) assures that the contents of output buffer specified using <ref refid="group___raw_midi_1ga0a30e482efec57f4ea74c533a0f9b134" kindref="member">snd_rawmidi_write()</ref> is always drained before the function exits. This behaviour is same like &apos;<ref refid="group___raw_midi_1ga0a30e482efec57f4ea74c533a0f9b134" kindref="member">snd_rawmidi_write()</ref> followed by <ref refid="group___raw_midi_1gabfff7417ec957b7ee07882f91d73d7be" kindref="member">snd_rawmidi_drain()</ref> immediately&apos;.</para></sect2>
+<sect2 id="rawmidi_1rawmidi_io">
+<title>I/O handling</title>
+<para>There is only standard read/write access to device internal ring buffer. Use <ref refid="group___raw_midi_1ga9b0952fc04facda83cdf1521325ca475" kindref="member">snd_rawmidi_read()</ref> and <ref refid="group___raw_midi_1ga0a30e482efec57f4ea74c533a0f9b134" kindref="member">snd_rawmidi_write()</ref> functions to obtain / write MIDI bytes.</para></sect2>
+<sect2 id="rawmidi_1rawmidi_dev_names">
+<title>RawMidi naming conventions</title>
+<para>The ALSA library uses a generic string representation for names of devices. The devices might be virtual, physical or a mix of both. The generic string is passed to <ref refid="group___raw_midi_1ga2ab783051deeb7eb37eb568b76448889" kindref="member">::snd_rawmidi_open()</ref> or <ref refid="group___raw_midi_1gaa7e3daf5cf4dd36b2534d2f1d6309477" kindref="member">::snd_rawmidi_open_lconf()</ref>. It contains two parts: device name and arguments. Devices and arguments are described in configuration files. The usual place for default definitions is at /usr/share/alsa/alsa.conf.</para></sect2>
+<sect2 id="rawmidi_1rawmidi_dev_names_default">
+<title>rawmidi_dev_names_default</title>
+<para>The default device is equal to hw device. The defaults are used:</para><para>defaults.rawmidi.card 0 defaults.rawmidi.device 0 defaults.rawmidi.subdevice -1</para><para>These defaults can be freely overwritten in local configuration files.</para><para>Example:</para><para><programlisting><codeline><highlight class="normal">default</highlight></codeline>
+</programlisting></para></sect2>
+<sect2 id="rawmidi_1rawmidi_dev_names_hw">
+<title>HW device</title>
+<para>The hw device description uses the hw plugin. The three arguments (in order: CARD,DEV,SUBDEV) specify card number or identifier, device number and subdevice number (-1 means any).</para><para>Example:</para><para><programlisting><codeline><highlight class="normal">hw</highlight></codeline>
+<codeline><highlight class="normal">hw:0</highlight></codeline>
+<codeline><highlight class="normal">hw:0,0</highlight></codeline>
+<codeline><highlight class="normal">hw:supersonic,1</highlight></codeline>
+<codeline><highlight class="normal">hw:soundwave,1,2</highlight></codeline>
+<codeline><highlight class="normal">hw:DEV=1,CARD=soundwave,SUBDEV=2</highlight></codeline>
+</programlisting></para></sect2>
+</sect1>
+<sect1 id="rawmidi_1rawmidi_examples">
+<title>Examples</title>
+<para>The full featured examples with cross-links:</para><para><simplesect kind="par"><title>Simple input/output test program</title><para><ref refid="/home/vladimir/Develop/alsa-lib/alsa-lib-1.1.3/src/rawmidi/rawmidi.c_1example_test_rawmidi" kindref="member">example code</ref> </para></simplesect>
+<simplesect kind="par"><title></title><para>This example shows open and read/write rawmidi operations.</para></simplesect>
+</para></sect1>
+<sect1 id="rawmidi_1rawmidi_virt">
+<title>Virtual RawMidi interface</title>
+<para>The &quot;virtual&quot; plugin creates a virtual RawMidi instance on the ALSA sequencer, which can be accessed through the connection of the sequencer ports. There is no connection established as default.</para><para>For creating a virtual RawMidi instance, pass &quot;virtual&quot; as its name at creation.</para><para>Example: <programlisting><codeline><highlight class="normal">snd_rawmidi_open(&amp;read_handle,<sp/>&amp;write_handle,<sp/>&quot;virtual&quot;,<sp/>0);</highlight></codeline>
+</programlisting> </para></sect1>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

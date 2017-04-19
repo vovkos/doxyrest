@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen>
+<compounddef kind='namespace' id='namespace_sys' language='Jancy'>
+<compoundname>sys</compoundname>
+<innerclass refid='type_sys_event'/>
+<innerclass refid='type_sys_notificationevent'/>
+<innerclass refid='type_sys_lock'/>
+<innerclass refid='type_sys_gcstats'/>
+<innerclass refid='type_sys_gctriggers'/>
+<innerclass refid='type_sys_thread'/>
+<innerclass refid='type_sys_timer'/>
+<sectiondef>
+<memberdef kind='function' id='function_sys_getcurrentthreadid'>
+<functionkind>named-function</functionkind>
+<name>getCurrentThreadId</name>
+<type><ref refid="typedef_uintptr_t">uintptr_t</ref></type>
+<argsstring>()</argsstring>
+<detaileddescription>
+<para>Returns the thread identifier (TID) of the current thread.
+
+Translates to ``GetCurrentThreadId`` on Windows and ``pthread_self`` on POSIX.</para>
+</detaileddescription>
+<location file='sys_globals.jnc' line='29' col='11'/>
+</memberdef>
+
+<memberdef kind='function' id='function_sys_createthread'>
+<functionkind>named-function</functionkind>
+<name>createThread</name>
+<type>bool</type>
+<argsstring>(void function* threadFunc ())</argsstring>
+<param>
+<declname>threadFunc</declname>
+<type>void function*</type>
+<array>()</array>
+</param>
+<detaileddescription>
+<para>Creates a new thead and executes ``threadFunc`` in the context of the newly created thread.
+
+If you need to pass extra context parameters to the ``threadFunc``, use partial application as such::
+
+	myThreadFunc (
+		int intContext,
+		char const* stringContext
+		)
+	{
+	}
+
+	// ...
+
+	sys.createThread (myThreadFunc ~(100, "string-context"));</para>
+</detaileddescription>
+<location file='sys_globals.jnc' line='49' col='6'/>
+</memberdef>
+
+<memberdef kind='function' id='function_sys_sleep'>
+<functionkind>named-function</functionkind>
+<name>sleep</name>
+<type>void</type>
+<argsstring>(uint32_t timeout)</argsstring>
+<param>
+<declname>timeout</declname>
+<type><ref refid="typedef_uint32_t">uint32_t</ref></type>
+<array></array>
+</param>
+<detaileddescription>
+<para>Suspends the execution of the calling thread until ``timeout`` interval elapses. ``timeout`` is expressed in milliseconds.</para>
+</detaileddescription>
+<location file='sys_globals.jnc' line='60' col='6'/>
+</memberdef>
+
+<memberdef kind='function' id='function_sys_gettimestamp'>
+<functionkind>named-function</functionkind>
+<name>getTimestamp</name>
+<type><ref refid="typedef_uint64_t">uint64_t</ref></type>
+<argsstring>()</argsstring>
+<detaileddescription>
+<para>Returns current system timestamp. Timestamp is expressed as a 64-bit value representing the number of 100-nanosecond intervals since January 1, 1601 (UTC).
+
+This format is the same as used in Windows ``FILETIME`` struct.</para>
+</detaileddescription>
+<location file='sys_globals.jnc' line='68' col='10'/>
+</memberdef>
+
+<memberdef kind='function' id='function_sys_getgcstats'>
+<functionkind>named-function</functionkind>
+<name>getGcStats</name>
+<type><ref refid="type_sys_gcstats">sys.GcStats</ref></type>
+<argsstring>()</argsstring>
+<location file='sys_globals.jnc' line='88' col='9'/>
+</memberdef>
+
+<memberdef kind='property' id='property_sys_g_gctriggers' static='yes'>
+<name>g_gcTriggers</name>
+<type><ref refid="type_sys_gctriggers">sys.GcTriggers</ref> property</type>
+<location file='sys_globals.jnc' line='96' col='21'/>
+</memberdef>
+
+<memberdef kind='function' id='function_sys_collectgarbage'>
+<functionkind>named-function</functionkind>
+<name>collectGarbage</name>
+<type>void</type>
+<argsstring>()</argsstring>
+<detaileddescription>
+<para>Forces a full cycle of garbage collection.</para>
+</detaileddescription>
+<location file='sys_globals.jnc' line='102' col='6'/>
+</memberdef>
+
+</sectiondef>
+<location file='sys_Event.jnc' line='16' col='11'/>
+</compounddef>
+</doxygen>

@@ -1,0 +1,229 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen>
+<compounddef kind='class' id='type_std_hashtable' language='Jancy'>
+<compoundname>HashTable</compoundname>
+
+<sectiondef>
+<memberdef kind='function' id='function_std_hashtable_construct'>
+<functionkind>construct</functionkind>
+<name>construct</name>
+<type>void</type>
+<argsstring>(std.HashTable safe* this, std.HashFunc thin* hashFunc null, std.IsEqualFunc thin* isEqualFunc null)</argsstring>
+<param>
+<declname>hashFunc</declname>
+<type><ref refid="typedef_std_hashfunc">std.HashFunc</ref> thin*</type>
+<array></array>
+<defval>null</defval>
+</param>
+<param>
+<declname>isEqualFunc</declname>
+<type><ref refid="typedef_std_isequalfunc">std.IsEqualFunc</ref> thin*</type>
+<array></array>
+<defval>null</defval>
+</param>
+<location file='std_HashTable.jnc' line='76' col='2'/>
+</memberdef>
+<memberdef kind='function' id='function_std_hashtable_destruct'>
+<functionkind>destruct</functionkind>
+<name>destruct</name>
+<type>void</type>
+<argsstring>(std.HashTable safe* this)</argsstring>
+<location file='std_HashTable.jnc' line='81' col='2'/>
+</memberdef>
+</sectiondef>
+
+<sectiondef>
+<memberdef kind='variable' id='struct_member_std_hashtable_iface_m_head' readonly='yes'>
+<name>m_head</name>
+<type><ref refid="type_std_mapentry">std.MapEntry</ref> cmut*</type>
+<modifiers>readonly</modifiers>
+<location file='std_HashTable.jnc' line='72' col='26'/>
+</memberdef>
+
+<memberdef kind='variable' id='struct_member_std_hashtable_iface_m_tail' readonly='yes'>
+<name>m_tail</name>
+<type><ref refid="type_std_mapentry">std.MapEntry</ref> cmut*</type>
+<modifiers>readonly</modifiers>
+<location file='std_HashTable.jnc' line='73' col='26'/>
+</memberdef>
+
+<memberdef kind='variable' id='struct_member_std_hashtable_iface_m_count' readonly='yes'>
+<name>m_count</name>
+<type><ref refid="typedef_size_t">size_t</ref></type>
+<modifiers>readonly</modifiers>
+<location file='std_HashTable.jnc' line='74' col='18'/>
+</memberdef>
+
+<memberdef kind='property' id='property_std_hashtable_m_isempty'>
+<name>m_isEmpty</name>
+<type>bool const property</type>
+<argsstring>(std.HashTable safe const* this)</argsstring>
+<detaileddescription>
+<para>Returns ``true`` if hash table is empty; ``false`` otherwise.</para>
+</detaileddescription>
+<location file='std_HashTable.jnc' line='87' col='22'/>
+</memberdef>
+
+<memberdef kind='function' id='function_std_hashtable_clear'>
+<functionkind>named-function</functionkind>
+<name>clear</name>
+<type>void</type>
+<argsstring>(std.HashTable safe* this)</argsstring>
+<detaileddescription>
+<para>Remove all entries from the hash table.</para>
+</detaileddescription>
+<location file='std_HashTable.jnc' line='115' col='2'/>
+</memberdef>
+
+<memberdef kind='function' id='function_std_hashtable_visit'>
+<functionkind>named-function</functionkind>
+<name>visit</name>
+<type><ref refid="type_std_mapentry">std.MapEntry</ref> cmut* errorcode</type>
+<argsstring>(std.HashTable safe* this, variant key)</argsstring>
+<param>
+<declname>key</declname>
+<type>variant</type>
+<array></array>
+</param>
+<location file='std_HashTable.jnc' line='117' col='22'/>
+</memberdef>
+
+<memberdef kind='function' id='function_std_hashtable_find' const='yes'>
+<functionkind>named-function</functionkind>
+<name>find</name>
+<type><ref refid="type_std_mapentry">std.MapEntry</ref> cmut*</type>
+<argsstring>(std.HashTable safe const* this, variant key)</argsstring>
+<param>
+<declname>key</declname>
+<type>variant</type>
+<array></array>
+</param>
+<detaileddescription>
+<para>Looks up a value associated with the key ``key``.
+
+If the value is found, it is copied to the buffer pointed to by ``value``; then ``find`` method returns ``true``.
+
+Returns ``false`` if key ``key`` is not found.</para>
+</detaileddescription>
+<location file='std_HashTable.jnc' line='127' col='17'/>
+</memberdef>
+
+<memberdef kind='function' id='function_std_hashtable_findvalue' const='yes'>
+<functionkind>named-function</functionkind>
+<name>findValue</name>
+<type>variant</type>
+<argsstring>(std.HashTable safe const* this, variant key, variant undefinedValue null)</argsstring>
+<param>
+<declname>key</declname>
+<type>variant</type>
+<array></array>
+</param>
+<param>
+<declname>undefinedValue</declname>
+<type>variant</type>
+<array></array>
+<defval>null</defval>
+</param>
+<detaileddescription>
+<para>Looks up a value associated with the key ``key``.
+
+Returns the found value or ``null`` if the value is not found.
+
+The limitation of this overload is that it's impossible to distinguish between ``null`` being stored as a value associated with ``key`` and ``null`` returned as an indication of *key-not-found*.</para>
+</detaileddescription>
+<location file='std_HashTable.jnc' line='137' col='10'/>
+</memberdef>
+
+<memberdef kind='function' id='function_std_hashtable_add'>
+<functionkind>named-function</functionkind>
+<name>add</name>
+<type><ref refid="type_std_mapentry">std.MapEntry</ref> cmut* errorcode</type>
+<argsstring>(std.HashTable safe* this, variant key, variant value)</argsstring>
+<param>
+<declname>key</declname>
+<type>variant</type>
+<array></array>
+</param>
+<param>
+<declname>value</declname>
+<type>variant</type>
+<array></array>
+</param>
+<detaileddescription>
+<para>Adds a new ``(key; value)`` pair into the hash table.
+
+If ``key`` is already in the hash, ``insert`` re-writes the value of existing association with the new value specified by the ``value`` argument.</para>
+</detaileddescription>
+<location file='std_HashTable.jnc' line='152' col='22'/>
+</memberdef>
+
+<memberdef kind='function' id='function_std_hashtable_remove'>
+<functionkind>named-function</functionkind>
+<name>remove</name>
+<type>void</type>
+<argsstring>(std.HashTable safe* this, std.MapEntry cmut* entry)</argsstring>
+<param>
+<declname>entry</declname>
+<type><ref refid="type_std_mapentry">std.MapEntry</ref> cmut*</type>
+<array></array>
+</param>
+<location file='std_HashTable.jnc' line='162' col='7'/>
+</memberdef>
+
+<memberdef kind='function' id='function_std_hashtable_removekey'>
+<functionkind>named-function</functionkind>
+<name>removeKey</name>
+<type>bool</type>
+<argsstring>(std.HashTable safe* this, variant key)</argsstring>
+<param>
+<declname>key</declname>
+<type>variant</type>
+<array></array>
+</param>
+<detaileddescription>
+<para>Finds and deletes ``key`` from the hash table.
+
+Returns ``true`` if ``key`` was found and ``(key; value)`` pair successfully deleted.
+
+Returns ``false`` if ``key`` was not found.</para>
+</detaileddescription>
+<location file='std_HashTable.jnc' line='172' col='7'/>
+</memberdef>
+
+</sectiondef>
+<includes>std_HashTable.jnc</includes>
+<briefdescription><para>This class provides a hash-table-based mapping from ``variant``-s to ``variant``-s.</para></briefdescription>
+<detaileddescription>
+<para>``std.HashTable`` stores ``(key; value)`` pairs and provides fast lookup of the ``value`` associated with a ``key``.
+
+A typical sequence of steps when working with a hash table usually looks like this:
+
+* Add ``(key; value)`` pairs using ``add`` method (or by accessing the *indexer* property);
+* Remove ``(key; value)`` pairs using ``remove`` or ``removeKey`` methods;
+* Find ``value`` associated with a ``key`` using ``find``, ``findValue`` method (or by accessing the *indexer* property).
+
+.. rubric:: Sample code:
+
+.. ref-code-block::
+
+	enum State
+	{
+		Idle,
+		Running,
+		Stopping,
+		_Count
+	}
+
+	std.HashTable hashTable;
+
+	hashTable [State.Idle] = "idle";
+	hashTable [State.Running] = "running";
+	hashTable [State.Stopping] = "stopping";
+
+	State state = (State) (rand () % State._Count);
+
+	printf ($"state: $(hashTable [state])\n");</para>
+</detaileddescription>
+<location file='std_HashTable.jnc' line='70' col='14'/>
+</compounddef>
+</doxygen>

@@ -1,0 +1,309 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="group__topology_topology" kind="page">
+    <compoundname>topology</compoundname>
+    <title>ALSA Topology Interface</title>
+    <detaileddescription>
+<para>The topology interface allows developers to define DSP topologies in a text file format and to convert the text topology to a binary topology representation that can be understood by the kernel. The topology core currently recognises the following object types :-</para><para><itemizedlist>
+<listitem><para>Controls (mixer, enumerated and byte) including TLV data.</para></listitem><listitem><para>PCMs (Front End DAI &amp; DAI link)</para></listitem><listitem><para>DAPM widgets</para></listitem><listitem><para>DAPM graph elements.</para></listitem><listitem><para>Physical DAI &amp; DAI links</para></listitem><listitem><para>Private data for each object type.</para></listitem><listitem><para>Manifest (containing count of each object type)</para></listitem></itemizedlist>
+</para><para><heading level="3">Topology File Format</heading>
+</para><para>The topology text format uses the standard ALSA configuration file format to describe each topology object type. This allows topology objects to include other topology objects as part of their definition. i.e. a TLV data object can be shared amongst many control objects that use the same TLV data.</para><para><heading level="4">Controls</heading>
+</para><para>Topology audio controls can belong to three different types :-<itemizedlist>
+<listitem><para>Mixer control</para></listitem><listitem><para>Enumerated control</para></listitem><listitem><para>Byte control</para></listitem></itemizedlist>
+</para><para>Each control type can contain TLV data, private data, operations and also belong to widget objects.<linebreak/>
+</para><para><heading level="5">Control Operations</heading>
+</para><para>Driver Kcontrol callback info(), get() and put() operations are mapped with the CTL ops section in topology configuration files. The ctl ops section can assign operations using the standard names (listed below) for the standard kcontrol types or use ID numbers (&gt;256) to map to bespoke driver controls.<linebreak/>
+</para><para><preformatted></preformatted></para><para><preformatted>    ops.&quot;ctl&quot; {
+        info &quot;volsw&quot;
+        get &quot;257&quot;
+        put &quot;257&quot;
+    }</preformatted></para><para><preformatted> </preformatted></para><para>This mapping shows info() using the standard &quot;volsw&quot; info callback whilst the get() and put() are mapped to bespoke driver callbacks. <linebreak/>
+</para><para>The Standard operations names for control get(), put() and info calls are :-<itemizedlist>
+<listitem><para>volsw</para></listitem><listitem><para>volsw_sx</para></listitem><listitem><para>volsw_xr_sx</para></listitem><listitem><para>enum</para></listitem><listitem><para>bytes</para></listitem><listitem><para>enum_value</para></listitem><listitem><para>range</para></listitem><listitem><para>strobe</para></listitem></itemizedlist>
+</para><para><heading level="5">Control Access</heading>
+</para><para>Controls access can be specified using the &quot;access&quot; section. If no &quot;access&quot; section is defined then default RW access flags are set for normal and TLV controls.</para><para><preformatted>
+    access [
+        read
+        write
+        tlv_command
+    ]
+ </preformatted></para><para>The standard access flags are as follows :-<itemizedlist>
+<listitem><para>read</para></listitem><listitem><para>write</para></listitem><listitem><para>read_write</para></listitem><listitem><para>volatile</para></listitem><listitem><para>timestamp</para></listitem><listitem><para>tlv_read</para></listitem><listitem><para>tlv_write</para></listitem><listitem><para>tlv_read_write</para></listitem><listitem><para>tlv_command</para></listitem><listitem><para>inactive</para></listitem><listitem><para>lock</para></listitem><listitem><para>owner</para></listitem><listitem><para>tlv_callback</para></listitem><listitem><para>user</para></listitem></itemizedlist>
+</para><para><heading level="5">Control TLV Data</heading>
+</para><para>Controls can also use TLV data to represent dB information. This can be done by defining a TLV section and using the TLV section within the control. The TLV data for DBScale types are defined as follows :-</para><para><preformatted>
+    scale {
+        min &quot;-9000&quot;
+        step &quot;300&quot;
+        mute &quot;1&quot;
+    }
+ </preformatted></para><para>Where the meanings and values for min, step and mute are exactly the same as defined in driver code.</para><para><heading level="5">Control Channel Mapping</heading>
+</para><para>Controls can also specify which channels they are mapped with. This is useful for userspace as it allows applications to determine the correct control channel for Left and Right etc. Channel maps are defined as follows :-</para><para><preformatted>
+    channel.&quot;name&quot; {
+        reg &quot;0&quot;
+        shift &quot;0&quot;
+    }
+ </preformatted></para><para>The channel map reg is the register offset for the control, shift is the bit shift within the register for the channel and the section name is the channel name and can be one of the following :-</para><para><preformatted>
+  * mono        # mono stream
+  * fl      # front left
+  * fr      # front right
+  * rl      # rear left
+  * rr      # rear right
+  * fc      # front center
+  * lfe     # LFE
+  * sl      # side left
+  * sr      # side right
+  * rc      # rear center
+  * flc     # front left center
+  * frc     # front right center
+  * rlc     # rear left center
+  * rrc     # rear right center
+  * flw     # front left wide
+  * frw     # front right wide
+  * flh     # front left high
+  * fch     # front center high
+  * frh     # front right high
+  * tc      # top center
+  * tfl     # top front left
+  * tfr     # top front right
+  * tfc     # top front center
+  * trl     # top rear left
+  * trr     # top rear right
+  * trc     # top rear center
+  * tflc        # top front left center
+  * tfrc        # top front right center
+  * tsl     # top side left
+  * tsr     # top side right
+  * llfe        # left LFE
+  * rlfe        # right LFE
+  * bc      # bottom center
+  * blc     # bottom left center
+  * brc     # bottom right center
+ </preformatted></para><para><heading level="5">Control Private Data</heading>
+</para><para>Controls can also have private data. This can be done by defining a private data section and including the section within the control. The private data section is defined as follows :-</para><para><preformatted>
+ SectionData.&quot;pdata for EQU1&quot; {
+    file &quot;/path/to/file&quot;
+    bytes &quot;0x12,0x34,0x56,0x78&quot;
+    shorts &quot;0x1122,0x3344,0x5566,0x7788&quot;
+    words &quot;0xaabbccdd,0x11223344,0x66aa77bb,0xefef1234&quot;
+    tuples &quot;section id of the vendor tuples&quot;
+ };
+ </preformatted> The file, bytes, shorts, words and tuples keywords are all mutually exclusive as the private data should only be taken from one source. The private data can either be read from a separate file or defined in the topology file using the bytes, shorts, words or tuples keywords. The keyword tuples is to define vendor specific tuples. Please refer to section Vendor Tokens and Vendor tuples.</para><para><heading level="5">How to define an element with private data</heading>
+</para><para>An element can refer to a single data section or multiple data sections.</para><para><heading level="6">To refer to a single data section:</heading>
+</para><para><preformatted>
+ Sectionxxx.&quot;element name&quot; {
+    ...
+    data &quot;name of data section&quot;     # optional private data
+ }
+ </preformatted></para><para><heading level="6">To refer to multiple data sections:</heading>
+</para><para><preformatted>
+ Sectionxxx.&quot;element name&quot; {
+    ...
+    data [                      # optional private data
+        &quot;name of 1st data section&quot;
+        &quot;name of 2nd data section&quot;
+        ...
+    ]
+ }
+ </preformatted> And data of these sections will be merged in the same order as they are in the list, as the element&apos;s private data for kernel.</para><para><heading level="6">Vendor Tokens</heading>
+</para><para>A vendor token list is defined as a new section. Each token element is a pair of string ID and integer value. And both the ID and value are vendor-specific.</para><para><preformatted>
+ SectionVendorTokens.&quot;id of the vendor tokens&quot; {
+    comment &quot;optional comments&quot;
+    VENDOR_TOKEN_ID1 &quot;1&quot;
+    VENDOR_TOKEN_ID2 &quot;2&quot;
+    VENDOR_TOKEN_ID3 &quot;3&quot;
+    ...
+ }
+ </preformatted></para><para><heading level="6">Vendor Tuples</heading>
+</para><para>Vendor tuples are defined as a new section. It contains a reference to a vendor token list and several tuple arrays. All arrays share a vendor token list, defined by the tokens keyword. Each tuple array is for a specific type, defined by the string following the tuples keyword. Supported types are: string, uuid, bool, byte, short and word.</para><para><preformatted>
+ SectionVendorTuples.&quot;id of the vendor tuples&quot; {
+    tokens &quot;id of the vendor tokens&quot;</preformatted></para><para><preformatted>    tuples.&quot;string&quot; {
+        VENDOR_TOKEN_ID1 &quot;character string&quot;
+        ...
+    }</preformatted></para><para><preformatted>    tuples.&quot;uuid&quot; {         # 16 characters separated by commas
+        VENDOR_TOKEN_ID2 &quot;0x01,0x02,...,0x0f&quot;
+        ...
+    }</preformatted></para><para><preformatted>    tuples.&quot;bool&quot; {
+        VENDOR_TOKEN_ID3 &quot;true/false&quot;
+        ...
+    }</preformatted></para><para><preformatted>    tuples.&quot;byte&quot; {
+        VENDOR_TOKEN_ID4 &quot;0x11&quot;
+        VENDOR_TOKEN_ID5 &quot;0x22&quot;
+        ...
+    }</preformatted></para><para><preformatted>    tuples.&quot;short&quot; {
+        VENDOR_TOKEN_ID6 &quot;0x1122&quot;
+        VENDOR_TOKEN_ID7 &quot;0x3344&quot;
+        ...
+    }</preformatted></para><para><preformatted>    tuples.&quot;word&quot; {
+        VENDOR_TOKEN_ID8 &quot;0x11223344&quot;
+        VENDOR_TOKEN_ID9 &quot;0x55667788&quot;
+        ...
+    }
+ }
+ </preformatted> To define multiple vendor tuples of same type, please append some characters after the type string (&quot;string&quot;, &quot;uuid&quot;, &quot;bool&quot;, &quot;byte&quot;, &quot;short&quot; or &quot;word&quot;), to avoid ID duplication in the SectionVendorTuples.<linebreak/>
+ The parser will check the first few characters in ID to get the tuple type. Here is an example: <preformatted>
+ SectionVendorTuples.&quot;id of the vendor tuples&quot; {
+    ...
+    tuples.&quot;word.module0&quot; {
+        VENDOR_TOKEN_PARAM_ID1 &quot;0x00112233&quot;
+        VENDOR_TOKEN_PARAM_ID2 &quot;0x44556677&quot;
+        ...
+    }</preformatted></para><para><preformatted>    tuples.&quot;word.module2&quot; {
+        VENDOR_TOKEN_PARAM_ID1 &quot;0x11223344&quot;
+        VENDOR_TOKEN_PARAM_ID2 &quot;0x55667788&quot;
+        ...
+    }
+    ...
+ }</preformatted></para><para><preformatted> </preformatted></para><para><heading level="5">Mixer Controls</heading>
+</para><para>A mixer control is defined as a new section that can include channel mapping, TLV data, callback operations and private data. The mixer section also includes a few other config options that are shown here :-</para><para><preformatted>
+ SectionControlMixer.&quot;mixer name&quot; {
+    comment &quot;optional comments&quot;</preformatted></para><para><preformatted>    index &quot;1&quot;           # Index number</preformatted></para><para><preformatted>    channel.&quot;name&quot; {        # Channel maps
+       ....
+    }</preformatted></para><para><preformatted>    ops.&quot;ctl&quot; {         # Ops callback functions
+       ....
+    }</preformatted></para><para><preformatted>    max &quot;32&quot;            # Max control value
+    invert &quot;0&quot;          # Whether control values are inverted</preformatted></para><para><preformatted>    tlv &quot;tld_data&quot;          # optional TLV data</preformatted></para><para><preformatted>    data &quot;pdata for mixer1&quot;     # optional private data
+ }
+ </preformatted></para><para>The section name is used to define the mixer name. The index number can be used to identify topology objects groups. This allows driver operations on objects with index number N and can be used to add/remove pipelines of objects whilst other objects are unaffected.</para><para><heading level="5">Byte Controls</heading>
+</para><para>A byte control is defined as a new section that can include channel mapping, TLV data, callback operations and private data. The bytes section also includes a few other config options that are shown here :-</para><para><preformatted>
+ SectionControlBytes.&quot;name&quot; {
+    comment &quot;optional comments&quot;</preformatted></para><para><preformatted>    index &quot;1&quot;           # Index number</preformatted></para><para><preformatted>    channel.&quot;name&quot; {        # Channel maps
+       ....
+    }</preformatted></para><para><preformatted>    ops.&quot;ctl&quot; {         # Ops callback functions
+       ....
+    }</preformatted></para><para><preformatted>    base &quot;0&quot;            # Register base
+    num_regs &quot;16&quot;           # Number of registers
+    mask &quot;0xff&quot;         # Mask
+    max &quot;255&quot;           # Maximum value</preformatted></para><para><preformatted>    tlv &quot;tld_data&quot;          # optional TLV data</preformatted></para><para><preformatted>    data &quot;pdata for mixer1&quot;     # optional private data
+ }
+ </preformatted></para><para><heading level="5">Enumerated Controls</heading>
+</para><para>A enumerated control is defined as a new section (like mixer and byte) that can include channel mapping, callback operations, private data and text strings to represent the enumerated control options.<linebreak/>
+</para><para>The text strings for the enumerated controls are defined in a separate section as follows :-</para><para><preformatted>
+ SectionText.&quot;name&quot; {</preformatted></para><para><preformatted>        Values [
+            &quot;value1&quot;
+            &quot;value2&quot;
+        &quot;value3&quot;
+        ]
+ }
+ </preformatted></para><para>All the enumerated text values are listed in the values list.<linebreak/>
+ The enumerated control is similar to the other controls and defined as follows :-</para><para><preformatted>
+ SectionControlMixer.&quot;name&quot; {
+    comment &quot;optional comments&quot;</preformatted></para><para><preformatted>    index &quot;1&quot;           # Index number</preformatted></para><para><preformatted>    texts &quot;EQU1&quot;            # Enumerated text items</preformatted></para><para><preformatted>    channel.&quot;name&quot; {        # Channel maps
+       ....
+    }</preformatted></para><para><preformatted>    ops.&quot;ctl&quot; {         # Ops callback functions
+       ....
+    }</preformatted></para><para><preformatted>    data &quot;pdata for mixer1&quot;     # optional private data
+ }
+ </preformatted></para><para><heading level="4">DAPM Graph</heading>
+</para><para>DAPM graphs can easily be defined using the topology file. The format is very similar to the DAPM graph kernel format. :-</para><para><preformatted>
+ SectionGraph.&quot;dsp&quot; {
+    index &quot;1&quot;           # Index number</preformatted></para><para><preformatted>    lines [
+        &quot;sink1, control, source1&quot;
+        &quot;sink2, , source2&quot;
+    ]
+ }
+ </preformatted></para><para>The lines in the graph are defined as a variable size list of sinks, controls and sources. The control name is optional as some graph lines have no associated controls. The section name can be used to differentiate the graph with other graphs, it&apos;s not used by the kernel atm.</para><para><heading level="4">DAPM Widgets</heading>
+</para><para>DAPM widgets are similar to controls in that they can include many other objects. Widgets can contain private data, mixer controls and enum controls.</para><para>The following widget types are supported and match the driver types :-</para><para><itemizedlist>
+<listitem><para>input</para></listitem><listitem><para>output</para></listitem><listitem><para>mux</para></listitem><listitem><para>mixer</para></listitem><listitem><para>pga</para></listitem><listitem><para>out_drv</para></listitem><listitem><para>adc</para></listitem><listitem><para>dac</para></listitem><listitem><para>switch</para></listitem><listitem><para>pre</para></listitem><listitem><para>post</para></listitem><listitem><para>aif_in</para></listitem><listitem><para>aif_out</para></listitem><listitem><para>dai_in</para></listitem><listitem><para>dai_out</para></listitem><listitem><para>dai_link</para></listitem></itemizedlist>
+</para><para>Widgets are defined as follows :-</para><para><preformatted>
+ SectionWidget.&quot;name&quot; {</preformatted></para><para><preformatted>    index &quot;1&quot;           # Index number</preformatted></para><para><preformatted>    type &quot;aif_in&quot;           # Widget type - detailed above
+    stream_name &quot;name&quot;      # Stream name</preformatted></para><para><preformatted>    no_pm &quot;true&quot;            # No PM control bit.
+    reg &quot;20&quot;            # PM bit register offset
+    shift &quot;0&quot;           # PM bit register shift
+    invert &quot;1           # PM bit is inverted
+    subseq &quot;8"          # subsequence number</preformatted></para><para><preformatted>    event_type &quot;1&quot;          # DAPM widget event type
+    event_flags &quot;1&quot;         # DAPM widget event flags</preformatted></para><para><preformatted>    mixer &quot;name&quot;            # Optional Mixer Control
+    enum &quot;name&quot;         # Optional Enum Control</preformatted></para><para><preformatted>    data &quot;name&quot;         # optional private data
+ }
+ </preformatted></para><para>The section name is the widget name. The mixer and enum fields are mutually exclusive and used to include controls into the widget. The index and data fields are the same for widgets as they are for controls whilst the other fields map on very closely to the driver widget fields.</para><para><heading level="5">Widget Private Data</heading>
+</para><para>Widget can have private data. For the format of the private data, please refer to section Control Private Data.</para><para><heading level="4">PCM Capabilities</heading>
+</para><para>Topology can also define the PCM capabilities of front end or physical DAIs. Capabilities can be defined with the following section :-</para><para><preformatted>
+ SectionPCMCapabilities.&quot;name&quot; {</preformatted></para><para><preformatted>    formats &quot;S24_LE,S16_LE&quot;     # Supported formats
+    rate_min &quot;48000&quot;        # Max supported sample rate
+    rate_max &quot;48000&quot;        # Min supported sample rate
+    channels_min &quot;2&quot;        # Min number of channels
+    channels_max &quot;2&quot;        # max number of channels
+ }
+ </preformatted> The supported formats use the same naming convention as the driver macros. The PCM capabilities name can be referred to and included by PCM and physical DAI sections.</para><para><heading level="4">PCM Configurations</heading>
+</para><para>PCM runtime configurations can be defined for playback and capture stream directions with the following section :-</para><para><preformatted>
+ SectionPCMConfig.&quot;name&quot; {</preformatted></para><para><preformatted>    config.&quot;playback&quot; {     # playback config
+        format &quot;S16_LE&quot;     # playback format
+        rate &quot;48000&quot;        # playback sample rate
+        channels &quot;2&quot;        # playback channels
+        tdm_slot &quot;0xf&quot;      # playback TDM slot
+    }</preformatted></para><para><preformatted>    config.&quot;capture&quot; {      # capture config
+        format &quot;S16_LE&quot;     # capture format
+        rate &quot;48000&quot;        # capture sample rate
+        channels &quot;2&quot;        # capture channels
+        tdm_slot &quot;0xf&quot;      # capture TDM slot
+    }
+ }
+ </preformatted></para><para>The supported formats use the same naming convention as the driver macros. The PCM configuration name can be referred to and included by PCM and physical link sections.</para><para><heading level="4">PCM (Front-end DAI &amp; DAI link) </heading>
+</para><para>PCM sections define the supported capabilities and configurations for supported playback and capture streams, names and flags for front end DAI &amp; DAI links. Topology kernel driver will use a PCM object to create a pair of FE DAI &amp; DAI links.</para><para><preformatted>
+ SectionPCM.&quot;name&quot; {</preformatted></para><para><preformatted>    index &quot;1&quot;           # Index number</preformatted></para><para><preformatted>    id &quot;0&quot;              # used for binding to the PCM</preformatted></para><para><preformatted>    dai.&quot;name of front-end DAI&quot; {
+        id &quot;0&quot;      # used for binding to the front-end DAI
+    }</preformatted></para><para><preformatted>    pcm.&quot;playback&quot; {
+        capabilities &quot;capabilities1&quot;    # capabilities for playback</preformatted></para><para><preformatted>        configs [       # supported configs for playback
+            &quot;config1&quot;
+            &quot;config2&quot;
+        ]
+    }</preformatted></para><para><preformatted>    pcm.&quot;capture&quot; {
+        capabilities &quot;capabilities2&quot;    # capabilities for capture</preformatted></para><para><preformatted>        configs [       # supported configs for capture
+            &quot;config1&quot;
+            &quot;config2&quot;
+            &quot;config3&quot;
+        ]
+    }</preformatted></para><para><preformatted>    # Optional boolean flags
+    symmetric_rates         &quot;true&quot;
+    symmetric_channels      &quot;true&quot;
+    symmetric_sample_bits       &quot;false&quot;</preformatted></para><para><preformatted>    data &quot;name&quot;         # optional private data
+ }
+ </preformatted></para><para><heading level="4">Physical DAI Link Configurations</heading>
+</para><para>The runtime configurations of a physical DAI link can be defined by SectionLink. <linebreak/>
+ Backend DAI links belong to physical links, and can be configured by either SectionLink or SectionBE, with same syntax. But SectionBE is deprecated atm since the internal processing is actually same.</para><para><preformatted>
+ SectionLink.&quot;name&quot; {</preformatted></para><para><preformatted>    index &quot;1&quot;           # Index number</preformatted></para><para><preformatted>    id &quot;0&quot;              # used for binding to the link</preformatted></para><para><preformatted>    stream_name &quot;name&quot;      # used for binding to the link</preformatted></para><para><preformatted>    hw_configs [    # runtime supported HW configurations, optional
+        &quot;config1&quot;
+        &quot;config2&quot;
+        ...
+    ]</preformatted></para><para><preformatted>    default_hw_conf_id &quot;1&quot;      #default HW config ID for init</preformatted></para><para><preformatted>    # Optional boolean flags
+    symmetric_rates         &quot;true&quot;
+    symmetric_channels      &quot;false&quot;
+    symmetric_sample_bits       &quot;true&quot;</preformatted></para><para><preformatted>    data &quot;name&quot;         # optional private data
+ }
+ </preformatted></para><para>A physical link can refer to multiple runtime supported hardware configurations, which is defined by SectionHWConfig.</para><para><preformatted>
+ SectionHWConfig.&quot;name&quot; {</preformatted></para><para><preformatted>    id &quot;1&quot;              # used for binding to the config
+    format &quot;I2S&quot;            # physical audio format.
+    bclk   &quot;master&quot;         # Platform is master of bit clock
+    fsync  &quot;slave&quot;          # Platform is slave of fsync
+ }
+ </preformatted></para><para><heading level="4">Physical DAI</heading>
+</para><para>A physical DAI (e.g. backend DAI for DPCM) is defined as a new section that can include a unique ID, playback and capture stream capabilities, optional flags, and private data. <linebreak/>
+ Its PCM stream capablities are same as those for PCM objects, please refer to section &apos;PCM Capabilities&apos;.</para><para><preformatted>
+ SectionDAI.&quot;name&quot; {</preformatted></para><para><preformatted>    index &quot;1&quot;           # Index number</preformatted></para><para><preformatted>    id &quot;0&quot;              # used for binding to the Backend DAI</preformatted></para><para><preformatted>    pcm.&quot;playback&quot; {
+        capabilities &quot;capabilities1&quot;    # capabilities for playback
+    }</preformatted></para><para><preformatted>    pcm.&quot;capture&quot; {
+        capabilities &quot;capabilities2&quot;    # capabilities for capture
+    }</preformatted></para><para><preformatted>    symmetric_rates &quot;true&quot;          # optional flags
+    symmetric_channels &quot;true&quot;
+    symmetric_sample_bits &quot;false&quot;</preformatted></para><para><preformatted>    data &quot;name&quot;         # optional private data
+ }
+ </preformatted></para><para><heading level="4">Manifest Private Data</heading>
+</para><para>Manfiest may have private data. Users need to define a manifest section and add the references to 1 or multiple data sections. Please refer to section &apos;How to define an element with private data&apos;. <linebreak/>
+ And the text conf file can have at most 1 manifest section. <linebreak/>
+<linebreak/>
+</para><para>Manifest section is defined as follows :-</para><para><preformatted>
+ SectionManifest&quot;name&quot; {</preformatted></para><para><preformatted>    data &quot;name&quot;         # optional private data
+ }
+ </preformatted></para><para><heading level="4">Include other files</heading>
+</para><para>Users may include other files in a text conf file via alsaconf syntax &lt;path/to/configuration-file&gt;. This allows users to define common info in separate files (e.g. vendor tokens, tuples) and share them for different platforms, thus save the total size of config files. <linebreak/>
+ Users can also specifiy additional configuraiton directories relative to &quot;/usr/share/alsa/&quot; to search the included files, via alsaconf syntax &lt;searchfdir:/relative-path/to/usr/share/alsa&gt;. <linebreak/>
+<linebreak/>
+</para><para>For example, file A and file B are two text conf files for platform X, they will be installed to /usr/share/alsa/topology/platformx. If we need file A to include file B, in file A we can add: <linebreak/>
+</para><para>&lt;searchdir:topology/platformx&gt; <linebreak/>
+ &lt;name-of-file-B&gt; <linebreak/>
+<linebreak/>
+</para><para>ALSA conf will search and open an included file in the following order of priority:<orderedlist>
+<listitem><para>directly open the file by its name;</para></listitem><listitem><para>search for the file name in &quot;/usr/share/alsa&quot;;</para></listitem><listitem><para>search for the file name in user specified subdirectories under &quot;/usr/share/alsa&quot;.</para></listitem></orderedlist>
+</para><para>The order of the included files need not to be same as their dependencies, since the topology library will load them all before parsing their dependencies. <linebreak/>
+</para><para>The configuration directories defined by a file will only be used to search the files included by this file. </para>    </detaileddescription>
+  </compounddef>
+</doxygen>

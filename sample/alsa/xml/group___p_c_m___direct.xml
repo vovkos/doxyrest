@@ -1,0 +1,431 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="group___p_c_m___direct" kind="group">
+    <compoundname>PCM_Direct</compoundname>
+    <title>Direct Access (MMAP) Functions</title>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="group___p_c_m___direct_1ga6d4acf42de554d4d1177fb035d484ea4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int snd_pcm_mmap_begin</definition>
+        <argsstring>(snd_pcm_t *pcm, const snd_pcm_channel_area_t **areas, snd_pcm_uframes_t *offset, snd_pcm_uframes_t *frames)</argsstring>
+        <name>snd_pcm_mmap_begin</name>
+        <param>
+          <type><ref refid="group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea" kindref="member">snd_pcm_t</ref> *</type>
+          <declname>pcm</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structsnd__pcm__channel__area__t" kindref="compound">snd_pcm_channel_area_t</ref> **</type>
+          <declname>areas</declname>
+        </param>
+        <param>
+          <type><ref refid="group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a" kindref="member">snd_pcm_uframes_t</ref> *</type>
+          <declname>offset</declname>
+        </param>
+        <param>
+          <type><ref refid="group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a" kindref="member">snd_pcm_uframes_t</ref> *</type>
+          <declname>frames</declname>
+        </param>
+        <briefdescription>
+<para>Application request to access a portion of direct (mmap) area. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>pcm</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>PCM handle </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>areas</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Returned mmap channel areas </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Returned mmap area offset in area steps (== frames) </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>frames</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>mmap area portion size in frames (wanted on entry, contiguous available on exit) </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>0 on success otherwise a negative error code</para></simplesect>
+It is necessary to call the <ref refid="group___p_c_m_1ga8bb836bd0c414b59789d51a5f5379c08" kindref="member">snd_pcm_avail_update()</ref> function directly before this call. Otherwise, this function can return a wrong count of available frames.</para><para>The function should be called before a sample-direct area can be accessed. The resulting size parameter is always less or equal to the input count of frames and can be zero, if no frames can be processed (the ring buffer is full).</para><para>See the <ref refid="group___p_c_m___direct_1gac306bd13c305825aa39dd9180a3ad520" kindref="member">snd_pcm_mmap_commit()</ref> function to finish the frame processing in the direct areas.</para><para>The function is thread-safe when built with the proper option. </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Develop/alsa-lib/alsa-lib-1.1.3/include/pcm.h" line="1079" column="1" bodyfile="/home/vladimir/Develop/alsa-lib/alsa-lib-1.1.3/src/pcm/pcm.c" bodystart="6979" bodyend="6992"/>
+      </memberdef>
+      <memberdef kind="function" id="group___p_c_m___direct_1gac306bd13c305825aa39dd9180a3ad520" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c" kindref="member">snd_pcm_sframes_t</ref></type>
+        <definition>snd_pcm_sframes_t snd_pcm_mmap_commit</definition>
+        <argsstring>(snd_pcm_t *pcm, snd_pcm_uframes_t offset, snd_pcm_uframes_t frames)</argsstring>
+        <name>snd_pcm_mmap_commit</name>
+        <param>
+          <type><ref refid="group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea" kindref="member">snd_pcm_t</ref> *</type>
+          <declname>pcm</declname>
+        </param>
+        <param>
+          <type><ref refid="group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a" kindref="member">snd_pcm_uframes_t</ref></type>
+          <declname>offset</declname>
+        </param>
+        <param>
+          <type><ref refid="group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a" kindref="member">snd_pcm_uframes_t</ref></type>
+          <declname>frames</declname>
+        </param>
+        <briefdescription>
+<para>Application has completed the access to area requested with <ref refid="group___p_c_m___direct_1ga6d4acf42de554d4d1177fb035d484ea4" kindref="member">snd_pcm_mmap_begin</ref>. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>pcm</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>PCM handle </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>area offset in area steps (== frames) </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>frames</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>area portion size in frames </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>count of transferred frames otherwise a negative error code</para></simplesect>
+You should pass this function the offset value that <ref refid="group___p_c_m___direct_1ga6d4acf42de554d4d1177fb035d484ea4" kindref="member">snd_pcm_mmap_begin()</ref> returned. The frames parameter should hold the number of frames you have written or read to/from the audio buffer. The frames parameter must never exceed the contiguous frames count that <ref refid="group___p_c_m___direct_1ga6d4acf42de554d4d1177fb035d484ea4" kindref="member">snd_pcm_mmap_begin()</ref> returned. Each call to <ref refid="group___p_c_m___direct_1ga6d4acf42de554d4d1177fb035d484ea4" kindref="member">snd_pcm_mmap_begin()</ref> must be followed by a call to <ref refid="group___p_c_m___direct_1gac306bd13c305825aa39dd9180a3ad520" kindref="member">snd_pcm_mmap_commit()</ref>.</para><para>Example: <programlisting><codeline><highlight class="normal"><sp/>double<sp/>phase<sp/>=<sp/>0;</highlight></codeline>
+<codeline><highlight class="normal"><sp/>const<sp/>snd_pcm_area_t<sp/>*areas;</highlight></codeline>
+<codeline><highlight class="normal"><sp/>snd_pcm_sframes_t<sp/>avail,<sp/>size,<sp/>commitres;</highlight></codeline>
+<codeline><highlight class="normal"><sp/>snd_pcm_uframes_t<sp/>offset,<sp/>frames;</highlight></codeline>
+<codeline><highlight class="normal"><sp/>int<sp/>err;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/>avail<sp/>=<sp/>snd_pcm_avail_update(pcm);</highlight></codeline>
+<codeline><highlight class="normal"><sp/>if<sp/>(avail<sp/>&lt;<sp/>0)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>error(avail);</highlight></codeline>
+<codeline><highlight class="normal"><sp/>//<sp/>at<sp/>this<sp/>point,<sp/>we<sp/>can<sp/>transfer<sp/>at<sp/>least<sp/>&apos;avail&apos;<sp/>frames</highlight></codeline>
+<codeline><highlight class="normal"><sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/>//<sp/>we<sp/>want<sp/>to<sp/>process<sp/>frames<sp/>in<sp/>chunks<sp/>(period_size)</highlight></codeline>
+<codeline><highlight class="normal"><sp/>if<sp/>(avail<sp/>&lt;<sp/>period_size)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>goto<sp/>_skip;</highlight></codeline>
+<codeline><highlight class="normal"><sp/>size<sp/>=<sp/>period_size;</highlight></codeline>
+<codeline><highlight class="normal"><sp/>//<sp/>it<sp/>is<sp/>possible<sp/>that<sp/>contiguous<sp/>areas<sp/>are<sp/>smaller,<sp/>thus<sp/>we<sp/>use<sp/>a<sp/>loop</highlight></codeline>
+<codeline><highlight class="normal"><sp/>while<sp/>(size<sp/>&gt;<sp/>0)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>frames<sp/>=<sp/>size;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>err<sp/>=<sp/>snd_pcm_mmap_begin(pcm_handle,<sp/>&amp;areas,<sp/>&amp;offset,<sp/>&amp;frames);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>if<sp/>(err<sp/>&lt;<sp/>0)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>error(err);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>//<sp/>this<sp/>function<sp/>fills<sp/>the<sp/>areas<sp/>from<sp/>offset<sp/>with<sp/>count<sp/>of<sp/>frames</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>generate_sine(areas,<sp/>offset,<sp/>frames,<sp/>&amp;phase);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>commitres<sp/>=<sp/>snd_pcm_mmap_commit(pcm_handle,<sp/>offset,<sp/>frames);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>if<sp/>(commitres<sp/>&lt;<sp/>0<sp/>||<sp/>commitres<sp/>!=<sp/>frames)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>error(commitres<sp/>&gt;=<sp/>0<sp/>?<sp/>-EPIPE<sp/>:<sp/>commitres);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>size<sp/>-=<sp/>frames;</highlight></codeline>
+<codeline><highlight class="normal"><sp/>}</highlight></codeline>
+<codeline><highlight class="normal">_skip:</highlight></codeline>
+</programlisting></para><para>Look to the <ref refid="pcm_1example_test_pcm" kindref="member">Sine-wave generator</ref> example for more details about the generate_sine function.</para><para>The function is thread-safe when built with the proper option. </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Develop/alsa-lib/alsa-lib-1.1.3/include/pcm.h" line="1083" column="1" bodyfile="/home/vladimir/Develop/alsa-lib/alsa-lib-1.1.3/src/pcm/pcm.c" bodystart="7077" bodyend="7089"/>
+      </memberdef>
+      <memberdef kind="function" id="group___p_c_m___direct_1ga5a9ee8e1e764b12da6d54dfa195f7c52" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c" kindref="member">snd_pcm_sframes_t</ref></type>
+        <definition>snd_pcm_sframes_t snd_pcm_mmap_writei</definition>
+        <argsstring>(snd_pcm_t *pcm, const void *buffer, snd_pcm_uframes_t size)</argsstring>
+        <name>snd_pcm_mmap_writei</name>
+        <param>
+          <type><ref refid="group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea" kindref="member">snd_pcm_t</ref> *</type>
+          <declname>pcm</declname>
+        </param>
+        <param>
+          <type>const void *</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type><ref refid="group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a" kindref="member">snd_pcm_uframes_t</ref></type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Write interleaved frames to a PCM using direct buffer (mmap) </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>pcm</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>PCM handle </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>frames containing buffer </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>frames to be written </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>a positive number of frames actually written otherwise a negative error code </para></simplesect>
+<parameterlist kind="retval"><parameteritem>
+<parameternamelist>
+<parametername>-EBADFD</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>PCM is not in the right state (<ref refid="group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a3eb4a3b75c7d2adb22f1829f3f738b27" kindref="member">SND_PCM_STATE_PREPARED</ref> or <ref refid="group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a86f6fbc796881f19fde0e1957f878147" kindref="member">SND_PCM_STATE_RUNNING</ref>) </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>-EPIPE</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>an underrun occurred </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>-ESTRPIPE</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>a suspend event occurred (stream is suspended and waiting for an application recovery)</para></parameterdescription>
+</parameteritem>
+</parameterlist>
+If the blocking behaviour is selected, then routine waits until all requested bytes are played or put to the playback ring buffer. The count of bytes can be less only if a signal or underrun occurred.</para><para>If the non-blocking behaviour is selected, then routine doesn&apos;t wait at all. </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Develop/alsa-lib/alsa-lib-1.1.3/include/pcm.h" line="1086" column="1" bodyfile="/home/vladimir/Develop/alsa-lib/alsa-lib-1.1.3/src/pcm/pcm_mmap.c" bodystart="149" bodyend="155"/>
+      </memberdef>
+      <memberdef kind="function" id="group___p_c_m___direct_1ga24b6c538c8d7ddd0776ee65f8fb909eb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c" kindref="member">snd_pcm_sframes_t</ref></type>
+        <definition>snd_pcm_sframes_t snd_pcm_mmap_readi</definition>
+        <argsstring>(snd_pcm_t *pcm, void *buffer, snd_pcm_uframes_t size)</argsstring>
+        <name>snd_pcm_mmap_readi</name>
+        <param>
+          <type><ref refid="group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea" kindref="member">snd_pcm_t</ref> *</type>
+          <declname>pcm</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type><ref refid="group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a" kindref="member">snd_pcm_uframes_t</ref></type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Read interleaved frames from a PCM using direct buffer (mmap) </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>pcm</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>PCM handle </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>frames containing buffer </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>frames to be written </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>a positive number of frames actually read otherwise a negative error code </para></simplesect>
+<parameterlist kind="retval"><parameteritem>
+<parameternamelist>
+<parametername>-EBADFD</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>PCM is not in the right state (<ref refid="group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a3eb4a3b75c7d2adb22f1829f3f738b27" kindref="member">SND_PCM_STATE_PREPARED</ref> or <ref refid="group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a86f6fbc796881f19fde0e1957f878147" kindref="member">SND_PCM_STATE_RUNNING</ref>) </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>-EPIPE</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>an overrun occurred </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>-ESTRPIPE</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>a suspend event occurred (stream is suspended and waiting for an application recovery)</para></parameterdescription>
+</parameteritem>
+</parameterlist>
+If the blocking behaviour was selected, then routine waits until all requested bytes are filled. The count of bytes can be less only if a signal or underrun occurred.</para><para>If the non-blocking behaviour is selected, then routine doesn&apos;t wait at all. </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Develop/alsa-lib/alsa-lib-1.1.3/include/pcm.h" line="1087" column="1" bodyfile="/home/vladimir/Develop/alsa-lib/alsa-lib-1.1.3/src/pcm/pcm_mmap.c" bodystart="199" bodyend="205"/>
+      </memberdef>
+      <memberdef kind="function" id="group___p_c_m___direct_1ga092b1a7f387e9fc2977649bfd43b0958" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c" kindref="member">snd_pcm_sframes_t</ref></type>
+        <definition>snd_pcm_sframes_t snd_pcm_mmap_writen</definition>
+        <argsstring>(snd_pcm_t *pcm, void **bufs, snd_pcm_uframes_t size)</argsstring>
+        <name>snd_pcm_mmap_writen</name>
+        <param>
+          <type><ref refid="group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea" kindref="member">snd_pcm_t</ref> *</type>
+          <declname>pcm</declname>
+        </param>
+        <param>
+          <type>void **</type>
+          <declname>bufs</declname>
+        </param>
+        <param>
+          <type><ref refid="group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a" kindref="member">snd_pcm_uframes_t</ref></type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Write non interleaved frames to a PCM using direct buffer (mmap) </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>pcm</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>PCM handle </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>bufs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>frames containing buffers (one for each channel) </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>frames to be written </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>a positive number of frames actually written otherwise a negative error code </para></simplesect>
+<parameterlist kind="retval"><parameteritem>
+<parameternamelist>
+<parametername>-EBADFD</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>PCM is not in the right state (<ref refid="group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a3eb4a3b75c7d2adb22f1829f3f738b27" kindref="member">SND_PCM_STATE_PREPARED</ref> or <ref refid="group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a86f6fbc796881f19fde0e1957f878147" kindref="member">SND_PCM_STATE_RUNNING</ref>) </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>-EPIPE</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>an underrun occurred </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>-ESTRPIPE</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>a suspend event occurred (stream is suspended and waiting for an application recovery)</para></parameterdescription>
+</parameteritem>
+</parameterlist>
+If the blocking behaviour is selected, then routine waits until all requested bytes are played or put to the playback ring buffer. The count of bytes can be less only if a signal or underrun occurred.</para><para>If the non-blocking behaviour is selected, then routine doesn&apos;t wait at all. </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Develop/alsa-lib/alsa-lib-1.1.3/include/pcm.h" line="1088" column="1" bodyfile="/home/vladimir/Develop/alsa-lib/alsa-lib-1.1.3/src/pcm/pcm_mmap.c" bodystart="174" bodyend="180"/>
+      </memberdef>
+      <memberdef kind="function" id="group___p_c_m___direct_1ga29ce9af60eafb67f0303418a176bf3ea" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c" kindref="member">snd_pcm_sframes_t</ref></type>
+        <definition>snd_pcm_sframes_t snd_pcm_mmap_readn</definition>
+        <argsstring>(snd_pcm_t *pcm, void **bufs, snd_pcm_uframes_t size)</argsstring>
+        <name>snd_pcm_mmap_readn</name>
+        <param>
+          <type><ref refid="group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea" kindref="member">snd_pcm_t</ref> *</type>
+          <declname>pcm</declname>
+        </param>
+        <param>
+          <type>void **</type>
+          <declname>bufs</declname>
+        </param>
+        <param>
+          <type><ref refid="group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a" kindref="member">snd_pcm_uframes_t</ref></type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Read non interleaved frames to a PCM using direct buffer (mmap) </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>pcm</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>PCM handle </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>bufs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>frames containing buffers (one for each channel) </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>frames to be written </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>a positive number of frames actually read otherwise a negative error code </para></simplesect>
+<parameterlist kind="retval"><parameteritem>
+<parameternamelist>
+<parametername>-EBADFD</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>PCM is not in the right state (<ref refid="group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a3eb4a3b75c7d2adb22f1829f3f738b27" kindref="member">SND_PCM_STATE_PREPARED</ref> or <ref refid="group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a86f6fbc796881f19fde0e1957f878147" kindref="member">SND_PCM_STATE_RUNNING</ref>) </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>-EPIPE</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>an overrun occurred </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>-ESTRPIPE</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>a suspend event occurred (stream is suspended and waiting for an application recovery)</para></parameterdescription>
+</parameteritem>
+</parameterlist>
+If the blocking behaviour was selected, then routine waits until all requested bytes are filled. The count of bytes can be less only if a signal or underrun occurred.</para><para>If the non-blocking behaviour is selected, then routine doesn&apos;t wait at all. </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Develop/alsa-lib/alsa-lib-1.1.3/include/pcm.h" line="1089" column="1" bodyfile="/home/vladimir/Develop/alsa-lib/alsa-lib-1.1.3/src/pcm/pcm_mmap.c" bodystart="224" bodyend="230"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>See the <ref refid="pcm" kindref="compound">PCM (digital audio) interface</ref> page for more details. </para>    </detaileddescription>
+  </compounddef>
+</doxygen>

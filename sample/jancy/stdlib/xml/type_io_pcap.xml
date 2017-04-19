@@ -1,0 +1,330 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen>
+<compounddef kind='class' id='type_io_pcap' language='Jancy'>
+<compoundname>Pcap</compoundname>
+
+<sectiondef>
+<memberdef kind='function' id='function_io_pcap_construct'>
+<functionkind>construct</functionkind>
+<name>construct</name>
+<type>void</type>
+<argsstring>(io.Pcap safe* this)</argsstring>
+<location file='io_Pcap.jnc' line='192' col='2'/>
+</memberdef>
+<memberdef kind='function' id='function_io_pcap_destruct'>
+<functionkind>destruct</functionkind>
+<name>destruct</name>
+<type>void</type>
+<argsstring>(io.Pcap safe* this)</argsstring>
+<location file='io_Pcap.jnc' line='193' col='2'/>
+</memberdef>
+</sectiondef>
+
+<sectiondef>
+<memberdef kind='variable' id='struct_member_io_pcap_iface_m_filter' readonly='yes'>
+<name>m_filter</name>
+<type>char const*</type>
+<modifiers>readonly</modifiers>
+<detaileddescription>
+<para>Holds currently specified capture filter [#f4]_.</para>
+</detaileddescription>
+<location file='io_Pcap.jnc' line='172' col='23'/>
+</memberdef>
+
+<memberdef kind='variable' id='struct_member_io_pcap_iface_m_ispromiscious' readonly='yes'>
+<name>m_isPromiscious</name>
+<type>bool</type>
+<modifiers>readonly</modifiers>
+<detaileddescription>
+<para>Holds ``true`` if network interface has been opened in promiscuos mode; ``false`` otherwise.</para>
+</detaileddescription>
+<location file='io_Pcap.jnc' line='178' col='16'/>
+</memberdef>
+
+<memberdef kind='variable' id='struct_member_io_pcap_iface_m_isopen' readonly='yes'>
+<name>m_isOpen</name>
+<type>bool</type>
+<modifiers>readonly</modifiers>
+<detaileddescription>
+<para>Holds the open status for the Pcap object, i.e. ``true`` if opened; ``false`` otherwise.</para>
+</detaileddescription>
+<location file='io_Pcap.jnc' line='184' col='16'/>
+</memberdef>
+
+<memberdef kind='variable' id='struct_member_io_pcap_iface_m_syncid'>
+<name>m_syncId</name>
+<type><ref refid="typedef_uint_t">uint_t</ref></type>
+<detaileddescription>
+<para>Holds the synchronization ID for the Pcap object [#f3]_.</para>
+</detaileddescription>
+<location file='io_Pcap.jnc' line='190' col='9'/>
+</memberdef>
+
+<memberdef kind='function' id='function_io_pcap_opendevice'>
+<functionkind>named-function</functionkind>
+<name>openDevice</name>
+<type>bool errorcode</type>
+<argsstring>(io.Pcap safe* this, char const* deviceName, char const* filter null, bool isPromiscious false)</argsstring>
+<param>
+<declname>deviceName</declname>
+<type>char const*</type>
+<array></array>
+</param>
+<param>
+<declname>filter</declname>
+<type>char const*</type>
+<array></array>
+<defval>null</defval>
+</param>
+<param>
+<declname>isPromiscious</declname>
+<type>bool</type>
+<array></array>
+<defval>false</defval>
+</param>
+<detaileddescription>
+<para>Opens a network interface for Pcap capture.
+
+The function accepts 3 arguments. The first one, ``deviceName``, is used to specify the device to start capture on. To obtain a list of available devices, use `io.createPcapDeviceDescList` function.
+
+The second one, ``filter``, allows you to specify a capture filter [#f4]_ which will be applied to incoming packets -- packets which do not pass the filter, will never be signalled via `io.PCapEventCode.ReadyRead` event and could not be read by ``read`` method.
+
+The third and final parameter specifies whether to put interface in promiscuous mode.
+
+Returns ``true`` on success. If live capture on specified device could not be opened, function sets the error reported by Pcap and returns ``false`` [#f1]_.</para>
+</detaileddescription>
+<location file='io_Pcap.jnc' line='207' col='17'/>
+</memberdef>
+
+<memberdef kind='function' id='function_io_pcap_openfile'>
+<functionkind>named-function</functionkind>
+<name>openFile</name>
+<type>bool errorcode</type>
+<argsstring>(io.Pcap safe* this, char const* fileName, char const* filter null)</argsstring>
+<param>
+<declname>fileName</declname>
+<type>char const*</type>
+<array></array>
+</param>
+<param>
+<declname>filter</declname>
+<type>char const*</type>
+<array></array>
+<defval>null</defval>
+</param>
+<detaileddescription>
+<para>Opens a previously captured \*.pcap file specified by ``fileName`` argument.
+
+The second argument, ``filter``, has the same meaning as in ``openDevice`` method [#f4]_.
+
+Returns ``true`` on success. If capture file could not be opened, function sets the error reported by Pcap and returns ``false`` [#f1]_.</para>
+</detaileddescription>
+<location file='io_Pcap.jnc' line='221' col='17'/>
+</memberdef>
+
+<memberdef kind='function' id='function_io_pcap_close'>
+<functionkind>named-function</functionkind>
+<name>close</name>
+<type>void</type>
+<argsstring>(io.Pcap safe* this)</argsstring>
+<detaileddescription>
+<para>Closes a previously opened live capture or a capture file, does nothing if Pcap is not opened. This function always succeeds.
+
+Sometimes it may be convenient to use *disposable* pattern to ensure timely invokation of ``close`` [#f2]_.</para>
+</detaileddescription>
+<location file='io_Pcap.jnc' line='232' col='7'/>
+</memberdef>
+
+<memberdef kind='alias' id='alias_io_pcap_dispose'>
+<name>dispose</name>
+<initializer>= close</initializer>
+<detaileddescription>
+<para>Effectively makes ``io.Pcap`` a *disposable* class [#f2]_.</para>
+</detaileddescription>
+<location file='io_Pcap.jnc' line='238' col='8'/>
+</memberdef>
+
+<memberdef kind='function' id='function_io_pcap_setfilter'>
+<functionkind>named-function</functionkind>
+<name>setFilter</name>
+<type>bool errorcode</type>
+<argsstring>(io.Pcap safe* this, char const* filter)</argsstring>
+<param>
+<declname>filter</declname>
+<type>char const*</type>
+<array></array>
+</param>
+<detaileddescription>
+<para>Allows you to change current capture filter without restarting the capture.
+
+Returns ``true`` on success. If capture filter could not be changed, function sets the error reported by Pcap and returns ``false`` [#f1]_.</para>
+</detaileddescription>
+<location file='io_Pcap.jnc' line='246' col='17'/>
+</memberdef>
+
+<memberdef kind='function' id='function_io_pcap_write'>
+<functionkind>named-function</functionkind>
+<name>write</name>
+<type><ref refid="typedef_size_t">size_t</ref> errorcode</type>
+<argsstring>(io.Pcap safe* this, void const* p, size_t size)</argsstring>
+<param>
+<declname>p</declname>
+<type>void const*</type>
+<array></array>
+</param>
+<param>
+<declname>size</declname>
+<type><ref refid="typedef_size_t">size_t</ref></type>
+<array></array>
+</param>
+<detaileddescription>
+<para>Attempts to inject ``size`` bytes from the buffer pointed to by ``p`` as a packet on a currently opened device.
+
+Returns the actual amount of bytes written on success. If write operation is unsuccessful, function sets the error reported by Pcap and returns ``-1`` [#f1]_.</para>
+</detaileddescription>
+<location file='io_Pcap.jnc' line='254' col='19'/>
+</memberdef>
+
+<memberdef kind='function' id='function_io_pcap_read'>
+<functionkind>named-function</functionkind>
+<name>read</name>
+<type><ref refid="typedef_size_t">size_t</ref> errorcode</type>
+<argsstring>(io.Pcap safe* this, void* p, size_t size)</argsstring>
+<param>
+<declname>p</declname>
+<type>void*</type>
+<array></array>
+</param>
+<param>
+<declname>size</declname>
+<type><ref refid="typedef_size_t">size_t</ref></type>
+<array></array>
+</param>
+<detaileddescription>
+<para>Reads the next packet into the buffer pointed to by ``p`` and ``size`` bytes long.
+
+Returns the actual amount of bytes read or ``-1`` if error occurs.
+
+If read operation is unsuccessful, function sets the error reported by Pcap and returns ``-1`` [#f1]_.
+
+Normally you would call this function from within your event handler for ``ReadyRead`` event. If this function is called when there are no incoming pacets, it blocks until either a packet arrives, or Pcap is closed.</para>
+</detaileddescription>
+<location file='io_Pcap.jnc' line='269' col='19'/>
+</memberdef>
+
+<memberdef kind='event' id='struct_member_io_pcap_iface_m_onpcapevent'>
+<name>m_onPcapEvent</name>
+<type>multicast</type>
+<argsstring>(io.PcapEventParams const* params)</argsstring>
+<param>
+<declname>params</declname>
+<type><ref refid="type_io_pcapeventparams">io.PcapEventParams</ref> const*</type>
+<array></array>
+</param>
+<detaileddescription>
+<para>This event is fired whenever an event occurs on the Pcap capture object.
+
+For the list of possible events, refer to `io.PcapEventCode` enumeration.
+
+Event handler receives a single argument of type `io.PcapEventParams` which holds parameters of the particular event [#f3]_.</para>
+</detaileddescription>
+<location file='io_Pcap.jnc' line='282' col='8'/>
+</memberdef>
+
+</sectiondef>
+<sectiondef>
+<memberdef kind='footnote'>
+<name>f1</name>
+<detaileddescription>
+<para>|footnote-errorcode|</para>
+</detaileddescription>
+</memberdef>
+<memberdef kind='footnote'>
+<name>f2</name>
+<detaileddescription>
+<para>|footnote-disposable|</para>
+</detaileddescription>
+</memberdef>
+<memberdef kind='footnote'>
+<name>f3</name>
+<detaileddescription>
+<para>|footnote-sync-id|</para>
+</detaileddescription>
+</memberdef>
+<memberdef kind='footnote'>
+<name>f4</name>
+<detaileddescription>
+<para>For detailed description of the syntax used in Pcap capture filter expressions refer to: http://www.tcpdump.org/manpages/pcap-filter.7.html</para>
+</detaileddescription>
+</memberdef>
+</sectiondef>
+<includes>io_pcap.jncx</includes>
+<briefdescription><para>This class provides high-level asynchronous interface for the Pcap (Packet Capture) library.</para></briefdescription>
+<detaileddescription>
+<para>Pcap library (called WinPcap on Windows) is de-facto the standard tool for capturing and injecting low-level network traffic.
+
+A typical sequence of steps when working with ``io.Pcap`` looks something like this:
+
+* Assign your event handler using ``m_onPcapEvent`` (you would probably also want to *schedule* your event handler to be run in particular environment, e.g. in specific thread)
+* Open a live capture using ``openDevice`` or a capture file (\*.pcap) using ``openFile`` method;
+* When ``ReadyRead`` event is fired, read packet using ``read`` method;
+* If you opened a live capture, you can also inject packets with ``write`` method;
+* Close Pcap object when no longer needed with ``close`` method.
+
+Code sample:
+
+.. ref-code-block::
+
+	class MyDialog
+	{
+		// ...
+
+		io.Pcap m_pcap;
+
+		construct ();
+
+		startCapture (
+			char const* device,
+			char const* filter = null
+			);
+
+		onPcapEvent (`io.PcapEventParams` const* params);
+	}
+
+	MyDialog.construct ()
+	{
+		// ...
+		m_pcap.m_onPcapEvent += onPcapEvent @ g_mainThreadScheduler;
+	}
+
+	MyDialog.startCapture (
+		char const* device,
+		char const* filter = null
+		)
+	{
+		bool result = try m_pcap.openDevice (device, filter);
+		if (!result)
+		{
+			// handle the error...
+		}
+	}
+
+	MyDialog.onPcapEvent (`io.PcapEventParams` const* params);
+	{
+		if (syncId != m_pcap.m_syncId) // late event
+			return;
+
+		switch (params.m_code)
+		{
+		case `io.PcapEventCode.ReadyRead`:
+			char buffer [256];
+			size_t size = m_pcap.read (buffer, sizeof (buffer));
+			// ...
+			break;
+		}
+	}</para>
+<para><simplesect kind='see'><para>`io.PcapEventParams`, `io.PcapEventCode`</para></simplesect></para>
+</detaileddescription>
+<location file='io_Pcap.jnc' line='166' col='14'/>
+</compounddef>
+</doxygen>

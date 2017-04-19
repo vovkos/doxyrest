@@ -1,0 +1,841 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="group__apr__skiplist" kind="group">
+    <compoundname>apr_skiplist</compoundname>
+    <title>Skip list implementation</title>
+      <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="group__apr__skiplist_1ga873aa114e692e48c6587277680ceba87" prot="public" static="no">
+        <type>int(*</type>
+        <definition>typedef int(* apr_skiplist_compare) (void *, void *)</definition>
+        <argsstring>)(void *, void *)</argsstring>
+        <name>apr_skiplist_compare</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>apr_skiplist_compare is the function type that must be implemented per object type that is used in a skip list for comparisons to maintain order. A value &lt;0 indicates placement after this node; a value of 0 indicates collision with this exact node; a value &gt;0 indicates placement before this node. </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/apr_skiplist.h" line="47" column="1" bodyfile="include/apr_skiplist.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__apr__skiplist_1ga326fdccaf516e5296969fa03bbda3fca" prot="public" static="no">
+        <type>void(*</type>
+        <definition>typedef void(* apr_skiplist_freefunc) (void *)</definition>
+        <argsstring>)(void *)</argsstring>
+        <name>apr_skiplist_freefunc</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>apr_skiplist_freefunc is the function type that must be implemented to handle elements as they are removed from a skip list. </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/apr_skiplist.h" line="53" column="1" bodyfile="include/apr_skiplist.h" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48" prot="public" static="no">
+        <type>struct <ref refid="group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48" kindref="member">apr_skiplist</ref></type>
+        <definition>typedef struct apr_skiplist apr_skiplist</definition>
+        <argsstring></argsstring>
+        <name>apr_skiplist</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Opaque structure used to represent the skip list </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/apr_skiplist.h" line="53" column="1" bodyfile="include/apr_skiplist.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__apr__skiplist_1gafb934f577d03de823aa4d62b41399bc0" prot="public" static="no">
+        <type>struct <ref refid="group__apr__skiplist_1gafb934f577d03de823aa4d62b41399bc0" kindref="member">apr_skiplistnode</ref></type>
+        <definition>typedef struct apr_skiplistnode apr_skiplistnode</definition>
+        <argsstring></argsstring>
+        <name>apr_skiplistnode</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Opaque structure </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/apr_skiplist.h" line="53" column="1" bodyfile="include/apr_skiplist.h" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="group__apr__skiplist_1ga42fd4de5a4239c988c3d57f88bd685d6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void *</type>
+        <definition>void* apr_skiplist_alloc</definition>
+        <argsstring>(apr_skiplist *sl, size_t size)</argsstring>
+        <name>apr_skiplist_alloc</name>
+        <param>
+          <type><ref refid="group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48" kindref="member">apr_skiplist</ref> *</type>
+          <declname>sl</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Allocate memory using the same mechanism as the skip list. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>sl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The skip list </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The amount to allocate </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="remark"><para>If a pool was provided to <ref refid="group__apr__skiplist_1ga53f636612f9d82ef2886a85d33c704ed" kindref="member">apr_skiplist_init()</ref>, memory will be allocated from the pool or from a free list maintained with the skip list. Otherwise, memory will be allocated using the C standard library heap functions. </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/apr_skiplist.h" line="78" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="group__apr__skiplist_1ga9e799684f45cc8a1b673cc99ca935f2b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void apr_skiplist_free</definition>
+        <argsstring>(apr_skiplist *sl, void *mem)</argsstring>
+        <name>apr_skiplist_free</name>
+        <param>
+          <type><ref refid="group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48" kindref="member">apr_skiplist</ref> *</type>
+          <declname>sl</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>mem</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Free memory using the same mechanism as the skip list. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>sl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The skip list </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>mem</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to free </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="remark"><para>If a pool was provided to <ref refid="group__apr__skiplist_1ga53f636612f9d82ef2886a85d33c704ed" kindref="member">apr_skiplist_init()</ref>, memory will be added to a free list maintained with the skip list and be available to operations on the skip list or to other calls to <ref refid="group__apr__skiplist_1ga42fd4de5a4239c988c3d57f88bd685d6" kindref="member">apr_skiplist_alloc()</ref>. Otherwise, memory will be freed using the C standard library heap functions. </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/apr_skiplist.h" line="90" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="group__apr__skiplist_1ga53f636612f9d82ef2886a85d33c704ed" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c" kindref="member">apr_status_t</ref></type>
+        <definition>apr_status_t apr_skiplist_init</definition>
+        <argsstring>(apr_skiplist **sl, apr_pool_t *p)</argsstring>
+        <name>apr_skiplist_init</name>
+        <param>
+          <type><ref refid="group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48" kindref="member">apr_skiplist</ref> **</type>
+          <declname>sl</declname>
+        </param>
+        <param>
+          <type><ref refid="group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb" kindref="member">apr_pool_t</ref> *</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Allocate a new skip list <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>sl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pointer in which to return the newly created skip list </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>p</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pool from which to allocate the skip list (optional). </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="remark"><para>Unlike most APR functions, a pool is optional. If no pool is provided, the C standard library heap functions will be used instead. </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/apr_skiplist.h" line="99" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="group__apr__skiplist_1ga61bebe90df16a4ea8a6ab6c6b6792e4a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void apr_skiplist_set_compare</definition>
+        <argsstring>(apr_skiplist *sl, apr_skiplist_compare XXX1, apr_skiplist_compare XXX2)</argsstring>
+        <name>apr_skiplist_set_compare</name>
+        <param>
+          <type><ref refid="group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48" kindref="member">apr_skiplist</ref> *</type>
+          <declname>sl</declname>
+        </param>
+        <param>
+          <type><ref refid="group__apr__skiplist_1ga873aa114e692e48c6587277680ceba87" kindref="member">apr_skiplist_compare</ref></type>
+          <declname>XXX1</declname>
+        </param>
+        <param>
+          <type><ref refid="group__apr__skiplist_1ga873aa114e692e48c6587277680ceba87" kindref="member">apr_skiplist_compare</ref></type>
+          <declname>XXX2</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Set the comparison functions to be used for searching the skip list. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>sl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The skip list </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>XXX1</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>FIXME </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>XXX2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>FIXME</para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="remark"><para>If existing comparison functions are being replaced, the index will be replaced during this call. That is a potentially expensive operation. </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/apr_skiplist.h" line="111" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="group__apr__skiplist_1ga7f9e8bd8d1900d64c82ca5c9113621a8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void apr_skiplist_add_index</definition>
+        <argsstring>(apr_skiplist *sl, apr_skiplist_compare XXX1, apr_skiplist_compare XXX2)</argsstring>
+        <name>apr_skiplist_add_index</name>
+        <param>
+          <type><ref refid="group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48" kindref="member">apr_skiplist</ref> *</type>
+          <declname>sl</declname>
+        </param>
+        <param>
+          <type><ref refid="group__apr__skiplist_1ga873aa114e692e48c6587277680ceba87" kindref="member">apr_skiplist_compare</ref></type>
+          <declname>XXX1</declname>
+        </param>
+        <param>
+          <type><ref refid="group__apr__skiplist_1ga873aa114e692e48c6587277680ceba87" kindref="member">apr_skiplist_compare</ref></type>
+          <declname>XXX2</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Set the indexing functions to the specified comparison functions and rebuild the index. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>sl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The skip list </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>XXX1</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>FIXME </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>XXX2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>FIXME</para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="remark"><para>If an index already exists, it will not be replaced and the comparison functions will not be changed. </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/apr_skiplist.h" line="124" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="group__apr__skiplist_1ga2a4515bc1a4174fde279c2edc5dd2593" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group__apr__skiplist_1gafb934f577d03de823aa4d62b41399bc0" kindref="member">apr_skiplistnode</ref> *</type>
+        <definition>apr_skiplistnode* apr_skiplist_getlist</definition>
+        <argsstring>(apr_skiplist *sl)</argsstring>
+        <name>apr_skiplist_getlist</name>
+        <param>
+          <type><ref refid="group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48" kindref="member">apr_skiplist</ref> *</type>
+          <declname>sl</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Return the list maintained by the skip list abstraction. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>sl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The skip list </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/apr_skiplist.h" line="131" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="group__apr__skiplist_1gac1dc196aa51b1370cdc41e6258c36d7c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void *</type>
+        <definition>void* apr_skiplist_find_compare</definition>
+        <argsstring>(apr_skiplist *sl, void *data, apr_skiplistnode **iter, apr_skiplist_compare func)</argsstring>
+        <name>apr_skiplist_find_compare</name>
+        <param>
+          <type><ref refid="group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48" kindref="member">apr_skiplist</ref> *</type>
+          <declname>sl</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type><ref refid="group__apr__skiplist_1gafb934f577d03de823aa4d62b41399bc0" kindref="member">apr_skiplistnode</ref> **</type>
+          <declname>iter</declname>
+        </param>
+        <param>
+          <type><ref refid="group__apr__skiplist_1ga873aa114e692e48c6587277680ceba87" kindref="member">apr_skiplist_compare</ref></type>
+          <declname>func</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Return the next matching element in the skip list using the specified comparison function. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>sl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The skip list </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The value to search for </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>iter</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A pointer to the returned skip list node representing the element found </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>func</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The comparison function to use </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/apr_skiplist.h" line="142" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="group__apr__skiplist_1gab28a7376e3483ae1104f2665d9859b95" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void *</type>
+        <definition>void* apr_skiplist_find</definition>
+        <argsstring>(apr_skiplist *sl, void *data, apr_skiplistnode **iter)</argsstring>
+        <name>apr_skiplist_find</name>
+        <param>
+          <type><ref refid="group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48" kindref="member">apr_skiplist</ref> *</type>
+          <declname>sl</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type><ref refid="group__apr__skiplist_1gafb934f577d03de823aa4d62b41399bc0" kindref="member">apr_skiplistnode</ref> **</type>
+          <declname>iter</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Return the next matching element in the skip list using the current comparison function. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>sl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The skip list </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The value to search for </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>iter</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A pointer to the returned skip list node representing the element found </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/apr_skiplist.h" line="155" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="group__apr__skiplist_1gaca0e377b36847ed03c3a135f0f3f353e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void *</type>
+        <definition>void* apr_skiplist_next</definition>
+        <argsstring>(apr_skiplist *sl, apr_skiplistnode **iter)</argsstring>
+        <name>apr_skiplist_next</name>
+        <param>
+          <type><ref refid="group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48" kindref="member">apr_skiplist</ref> *</type>
+          <declname>sl</declname>
+        </param>
+        <param>
+          <type><ref refid="group__apr__skiplist_1gafb934f577d03de823aa4d62b41399bc0" kindref="member">apr_skiplistnode</ref> **</type>
+          <declname>iter</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Return the next element in the skip list. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>sl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The skip list </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>iter</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>On entry, a pointer to the skip list node to start with; on return, a pointer to the skip list node representing the element returned </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="remark"><para>If iter points to a NULL value on entry, NULL will be returned. </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/apr_skiplist.h" line="164" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="group__apr__skiplist_1ga02ff03a8282b561edf01b3291c154af4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void *</type>
+        <definition>void* apr_skiplist_previous</definition>
+        <argsstring>(apr_skiplist *sl, apr_skiplistnode **iter)</argsstring>
+        <name>apr_skiplist_previous</name>
+        <param>
+          <type><ref refid="group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48" kindref="member">apr_skiplist</ref> *</type>
+          <declname>sl</declname>
+        </param>
+        <param>
+          <type><ref refid="group__apr__skiplist_1gafb934f577d03de823aa4d62b41399bc0" kindref="member">apr_skiplistnode</ref> **</type>
+          <declname>iter</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Return the previous element in the skip list. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>sl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The skip list </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>iter</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>On entry, a pointer to the skip list node to start with; on return, a pointer to the skip list node representing the element returned </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="remark"><para>If iter points to a NULL value on entry, NULL will be returned. </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/apr_skiplist.h" line="173" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="group__apr__skiplist_1ga01b128d5160bc905f4b60a120ca10b2e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group__apr__skiplist_1gafb934f577d03de823aa4d62b41399bc0" kindref="member">apr_skiplistnode</ref> *</type>
+        <definition>apr_skiplistnode* apr_skiplist_insert_compare</definition>
+        <argsstring>(apr_skiplist *sl, void *data, apr_skiplist_compare comp)</argsstring>
+        <name>apr_skiplist_insert_compare</name>
+        <param>
+          <type><ref refid="group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48" kindref="member">apr_skiplist</ref> *</type>
+          <declname>sl</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type><ref refid="group__apr__skiplist_1ga873aa114e692e48c6587277680ceba87" kindref="member">apr_skiplist_compare</ref></type>
+          <declname>comp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Insert an element into the skip list using the specified comparison function if it does not already exist. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>sl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The skip list </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element to insert </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>comp</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The comparison function to use for placement into the skip list </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/apr_skiplist.h" line="182" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="group__apr__skiplist_1ga1aaaa029b9f166baf320bf43e6887b4d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group__apr__skiplist_1gafb934f577d03de823aa4d62b41399bc0" kindref="member">apr_skiplistnode</ref> *</type>
+        <definition>apr_skiplistnode* apr_skiplist_insert</definition>
+        <argsstring>(apr_skiplist *sl, void *data)</argsstring>
+        <name>apr_skiplist_insert</name>
+        <param>
+          <type><ref refid="group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48" kindref="member">apr_skiplist</ref> *</type>
+          <declname>sl</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Insert an element into the skip list using the existing comparison function if it does not already exist (as determined by the comparison function) <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>sl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The skip list </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element to insert </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="remark"><para>If no comparison function has been set for the skip list, the element will not be inserted and NULL will be returned. </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/apr_skiplist.h" line="193" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="group__apr__skiplist_1ga9770c39604e7491da4c67282758690c2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int apr_skiplist_remove_compare</definition>
+        <argsstring>(apr_skiplist *sl, void *data, apr_skiplist_freefunc myfree, apr_skiplist_compare comp)</argsstring>
+        <name>apr_skiplist_remove_compare</name>
+        <param>
+          <type><ref refid="group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48" kindref="member">apr_skiplist</ref> *</type>
+          <declname>sl</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type><ref refid="group__apr__skiplist_1ga326fdccaf516e5296969fa03bbda3fca" kindref="member">apr_skiplist_freefunc</ref></type>
+          <declname>myfree</declname>
+        </param>
+        <param>
+          <type><ref refid="group__apr__skiplist_1ga873aa114e692e48c6587277680ceba87" kindref="member">apr_skiplist_compare</ref></type>
+          <declname>comp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Remove an element from the skip list using the specified comparison function for locating the element. In the case of duplicates, the 1st entry will be removed. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>sl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The skip list </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element to remove </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>myfree</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A function to be called for each removed element </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>comp</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The comparison function to use for placement into the skip list </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="remark"><para>If the element is not found, 0 will be returned. Otherwise, the heightXXX will be returned. </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/apr_skiplist.h" line="205" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="group__apr__skiplist_1ga682f5e7dfcc4359097b9a4b96d053eff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int apr_skiplist_remove</definition>
+        <argsstring>(apr_skiplist *sl, void *data, apr_skiplist_freefunc myfree)</argsstring>
+        <name>apr_skiplist_remove</name>
+        <param>
+          <type><ref refid="group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48" kindref="member">apr_skiplist</ref> *</type>
+          <declname>sl</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type><ref refid="group__apr__skiplist_1ga326fdccaf516e5296969fa03bbda3fca" kindref="member">apr_skiplist_freefunc</ref></type>
+          <declname>myfree</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Remove an element from the skip list using the existing comparison function for locating the element. In the case of duplicates, the 1st entry will be removed. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>sl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The skip list </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The element to remove </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>myfree</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A function to be called for each removed element </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="remark"><para>If the element is not found, 0 will be returned. Otherwise, the heightXXX will be returned. </para></simplesect>
+<simplesect kind="remark"><para>If no comparison function has been set for the skip list, the element will not be removed and 0 will be returned. </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/apr_skiplist.h" line="219" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="group__apr__skiplist_1ga67d3e8a4a817bf85f1999f41d9d4ec11" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void apr_skiplist_remove_all</definition>
+        <argsstring>(apr_skiplist *sl, apr_skiplist_freefunc myfree)</argsstring>
+        <name>apr_skiplist_remove_all</name>
+        <param>
+          <type><ref refid="group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48" kindref="member">apr_skiplist</ref> *</type>
+          <declname>sl</declname>
+        </param>
+        <param>
+          <type><ref refid="group__apr__skiplist_1ga326fdccaf516e5296969fa03bbda3fca" kindref="member">apr_skiplist_freefunc</ref></type>
+          <declname>myfree</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Remove all elements from the skip list. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>sl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The skip list </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>myfree</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A function to be called for each removed element </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/apr_skiplist.h" line="226" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="group__apr__skiplist_1ga6d24c06537535773ad3b4d18c6efefc3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void apr_skiplist_destroy</definition>
+        <argsstring>(apr_skiplist *sl, apr_skiplist_freefunc myfree)</argsstring>
+        <name>apr_skiplist_destroy</name>
+        <param>
+          <type><ref refid="group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48" kindref="member">apr_skiplist</ref> *</type>
+          <declname>sl</declname>
+        </param>
+        <param>
+          <type><ref refid="group__apr__skiplist_1ga326fdccaf516e5296969fa03bbda3fca" kindref="member">apr_skiplist_freefunc</ref></type>
+          <declname>myfree</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Remove each element from the skip list. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>sl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The skip list </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>myfree</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A function to be called for each removed element </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/apr_skiplist.h" line="233" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="group__apr__skiplist_1ga237063a88253165f074c04ab9b0f17a3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void *</type>
+        <definition>void* apr_skiplist_pop</definition>
+        <argsstring>(apr_skiplist *sl, apr_skiplist_freefunc myfree)</argsstring>
+        <name>apr_skiplist_pop</name>
+        <param>
+          <type><ref refid="group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48" kindref="member">apr_skiplist</ref> *</type>
+          <declname>sl</declname>
+        </param>
+        <param>
+          <type><ref refid="group__apr__skiplist_1ga326fdccaf516e5296969fa03bbda3fca" kindref="member">apr_skiplist_freefunc</ref></type>
+          <declname>myfree</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Return the first element in the skip list, removing the element from the skip list. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>sl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The skip list </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>myfree</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A function to be called for the removed element </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="remark"><para>NULL will be returned if there are no elements </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/apr_skiplist.h" line="241" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="group__apr__skiplist_1ga96068b644647e86139bd6fdb0fcfebf3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void *</type>
+        <definition>void* apr_skiplist_peek</definition>
+        <argsstring>(apr_skiplist *sl)</argsstring>
+        <name>apr_skiplist_peek</name>
+        <param>
+          <type><ref refid="group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48" kindref="member">apr_skiplist</ref> *</type>
+          <declname>sl</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Return the first element in the skip list, leaving the element in the skip list. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>sl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The skip list </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="remark"><para>NULL will be returned if there are no elements </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/apr_skiplist.h" line="248" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="group__apr__skiplist_1gab54881447708cf725758860c88ba52a6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48" kindref="member">apr_skiplist</ref> *</type>
+        <definition>apr_skiplist* apr_skiplist_merge</definition>
+        <argsstring>(apr_skiplist *sl1, apr_skiplist *sl2)</argsstring>
+        <name>apr_skiplist_merge</name>
+        <param>
+          <type><ref refid="group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48" kindref="member">apr_skiplist</ref> *</type>
+          <declname>sl1</declname>
+        </param>
+        <param>
+          <type><ref refid="group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48" kindref="member">apr_skiplist</ref> *</type>
+          <declname>sl2</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Merge two skip lists. XXX SEMANTICS <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>sl1</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>One of two skip lists to be merged </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>sl2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The other of two skip lists to be merged </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/apr_skiplist.h" line="255" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Refer to <ulink url="http://en.wikipedia.org/wiki/Skip_list">http://en.wikipedia.org/wiki/Skip_list</ulink> for information about the purpose of and ideas behind skip lists. </para>    </detaileddescription>
+  </compounddef>
+</doxygen>

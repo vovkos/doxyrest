@@ -1,0 +1,179 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="libssh_tutor_scp" kind="page">
+    <compoundname>libssh_tutor_scp</compoundname>
+    <title>Chapter 6: The SCP subsystem</title>
+    <detaileddescription>
+<sect1 id="libssh_tutor_scp_1scp_subsystem">
+<title>The SCP subsystem</title>
+<para>The SCP subsystem has far less functionnality than the SFTP subsystem. However, if you only need to copy files from and to the remote system, it does its job.</para><sect2 id="libssh_tutor_scp_1scp_session">
+<title>Opening and closing a SCP session</title>
+<para>Like in the SFTP subsystem, you don&apos;t handle the SSH channels directly. Instead, you open a &quot;SCP session&quot;.</para><para>When you open your SCP session, you have to choose between read or write mode. You can&apos;t do both in the same session. So you specify either SSH_SCP_READ or SSH_SCP_WRITE as the second parameter of function <ref refid="group__libssh__scp_1ga9fcd39a2bb6438e39cf19ff859dc2f2e" kindref="member">ssh_scp_new()</ref>.</para><para>Another important mode flag for opening your SCP session is SSH_SCP_RECURSIVE. When you use SSH_SCP_RECURSIVE, you declare that you are willing to emulate the behaviour of &quot;scp -r&quot; command in your program, no matter it is for reading or for writing.</para><para>Once your session is created, you initialize it with <ref refid="group__libssh__scp_1ga1db56dcb9dee01dd0b679b3b11151110" kindref="member">ssh_scp_init()</ref>. When you have finished transferring files, you terminate the SCP connection with <ref refid="group__libssh__scp_1ga14d31059dcf6fb2325fb960da8e4474e" kindref="member">ssh_scp_close()</ref>. Finally, you can dispose the SCP connection with <ref refid="group__libssh__scp_1gac29000cdb07c74d54251fbd838c0c661" kindref="member">ssh_scp_free()</ref>.</para><para>The example below does the maintenance work to open a SCP connection for writing in recursive mode:</para><para><programlisting><codeline><highlight class="normal">int<sp/>scp_write(ssh_session<sp/>session)</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>ssh_scp<sp/>scp;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>int<sp/>rc;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>scp<sp/>=<sp/>ssh_scp_new</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>(session,<sp/>SSH_SCP_WRITE<sp/>|<sp/>SSH_SCP_RECURSIVE,<sp/>&quot;.&quot;);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>if<sp/>(scp<sp/>==<sp/>NULL)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;Error<sp/>allocating<sp/>scp<sp/>session:<sp/>%s\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ssh_get_error(session));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>return<sp/>SSH_ERROR;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>rc<sp/>=<sp/>ssh_scp_init(scp);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>if<sp/>(rc<sp/>!=<sp/>SSH_OK)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;Error<sp/>initializing<sp/>scp<sp/>session:<sp/>%s\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ssh_get_error(session));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>ssh_scp_free(scp);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>return<sp/>rc;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>...</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>ssh_scp_close(scp);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>ssh_scp_free(scp);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>return<sp/>SSH_OK;</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para><para>The example below shows how to open a connection to read a single file:</para><para><programlisting><codeline><highlight class="normal">int<sp/>scp_read(ssh_session<sp/>session)</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>ssh_scp<sp/>scp;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>int<sp/>rc;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>scp<sp/>=<sp/>ssh_scp_new</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>(session,<sp/>SSH_SCP_READ,<sp/>&quot;helloworld/helloworld.txt&quot;);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>if<sp/>(scp<sp/>==<sp/>NULL)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;Error<sp/>allocating<sp/>scp<sp/>session:<sp/>%s\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ssh_get_error(session));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>return<sp/>SSH_ERROR;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>rc<sp/>=<sp/>ssh_scp_init(scp);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>if<sp/>(rc<sp/>!=<sp/>SSH_OK)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;Error<sp/>initializing<sp/>scp<sp/>session:<sp/>%s\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ssh_get_error(session));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>ssh_scp_free(scp);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>return<sp/>rc;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>...</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>ssh_scp_close(scp);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>ssh_scp_free(scp);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>return<sp/>SSH_OK;</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para></sect2>
+<sect2 id="libssh_tutor_scp_1scp_write">
+<title>Creating files and directories</title>
+<para>You create directories with <ref refid="group__libssh__scp_1gaa584f03d4e3d582ac10a3a19818ec56d" kindref="member">ssh_scp_push_directory()</ref>. In recursive mode, you are placed in this directory once it is created. If the directory already exists and if you are in recursive mode, you simply enter that directory.</para><para>Creating files is done in two steps. First, you prepare the writing with <ref refid="group__libssh__scp_1ga544f4b9c525071910110ada94148adc6" kindref="member">ssh_scp_push_file()</ref>. Then, you write the data with <ref refid="group__libssh__scp_1ga11f48e2cf62bcec20d9232ed3ca41752" kindref="member">ssh_scp_write()</ref>. The length of the data to write must be identical between both function calls. There&apos;s no need to &quot;open&quot; nor &quot;close&quot; the file, this is done automatically on the remote end. If the file already exists, it is overwritten and truncated.</para><para>The following example creates a new directory named &quot;helloworld/&quot;, then creates a file named &quot;helloworld.txt&quot; in that directory:</para><para><programlisting><codeline><highlight class="normal">int<sp/>scp_helloworld(ssh_session<sp/>session,<sp/>ssh_scp<sp/>scp)</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>int<sp/>rc;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>const<sp/>char<sp/>*helloworld<sp/>=<sp/>&quot;Hello,<sp/>world!\n&quot;;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>int<sp/>length<sp/>=<sp/>strlen(helloworld);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>rc<sp/>=<sp/>ssh_scp_push_directory(scp,<sp/>&quot;helloworld&quot;,<sp/>S_IRWXU);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>if<sp/>(rc<sp/>!=<sp/>SSH_OK)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;Can&apos;t<sp/>create<sp/>remote<sp/>directory:<sp/>%s\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ssh_get_error(session));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>return<sp/>rc;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>rc<sp/>=<sp/>ssh_scp_push_file</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>(scp,<sp/>&quot;helloworld.txt&quot;,<sp/>length,<sp/>S_IRUSR<sp/>|<sp/><sp/>S_IWUSR);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>if<sp/>(rc<sp/>!=<sp/>SSH_OK)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;Can&apos;t<sp/>open<sp/>remote<sp/>file:<sp/>%s\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ssh_get_error(session));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>return<sp/>rc;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>rc<sp/>=<sp/>ssh_scp_write(scp,<sp/>helloworld,<sp/>length);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>if<sp/>(rc<sp/>!=<sp/>SSH_OK)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;Can&apos;t<sp/>write<sp/>to<sp/>remote<sp/>file:<sp/>%s\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ssh_get_error(session));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>return<sp/>rc;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>return<sp/>SSH_OK;</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para></sect2>
+<sect2 id="libssh_tutor_scp_1scp_recursive_write">
+<title>Copying full directory trees to the remote server</title>
+<para>Let&apos;s say you want to copy the following tree of files to the remote site:</para><para><verbatim>               +-- file1
+       +-- B --+
+       |       +-- file2
+-- A --+ 
+       |       +-- file3
+       +-- C --+
+               +-- file4
+</verbatim></para><para>You would do it that way:<itemizedlist>
+<listitem><para>open the session in recursive mode</para></listitem><listitem><para>enter directory A</para></listitem><listitem><para>enter its subdirectory B</para></listitem><listitem><para>create file1 in B</para></listitem><listitem><para>create file2 in B</para></listitem><listitem><para>leave directory B</para></listitem><listitem><para>enter subdirectory C</para></listitem><listitem><para>create file3 in C</para></listitem><listitem><para>create file4 in C</para></listitem><listitem><para>leave directory C</para></listitem><listitem><para>leave directory A</para></listitem></itemizedlist>
+</para><para>To leave a directory, call <ref refid="group__libssh__scp_1ga2ca698c1e49612c083d9f8a72df52188" kindref="member">ssh_scp_leave_directory()</ref>.</para></sect2>
+<sect2 id="libssh_tutor_scp_1scp_read">
+<title>Reading files and directories</title>
+<para>To receive files, you pull requests from the other side with <ref refid="group__libssh__scp_1gaba59cd8cc77d219cac93f865445c6e47" kindref="member">ssh_scp_pull_request()</ref>. If this function returns SSH_SCP_REQUEST_NEWFILE, then you must get ready for the reception. You can get the size of the data to receive with <ref refid="group__libssh__scp_1ga8b6f736a5b5af73cf59c7825d7e61966" kindref="member">ssh_scp_request_get_size()</ref> and allocate a buffer accordingly. When you are ready, you accept the request with <ref refid="group__libssh__scp_1gad3bb38b15f02597cc1e155c526a51e51" kindref="member">ssh_scp_accept_request()</ref>, then read the data with <ref refid="group__libssh__scp_1ga10bf627407959b51a7c39b37e8d46460" kindref="member">ssh_scp_read()</ref>.</para><para>The following example receives a single file. The name of the file to receive has been given earlier, when the scp session was opened:</para><para><programlisting><codeline><highlight class="normal">int<sp/>scp_receive(ssh_session<sp/>session,<sp/>ssh_scp<sp/>scp)</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>int<sp/>rc;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>int<sp/>size,<sp/>mode;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>char<sp/>*filename,<sp/>*buffer;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>rc<sp/>=<sp/>ssh_scp_pull_request(scp);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>if<sp/>(rc<sp/>!=<sp/>SSH_SCP_REQUEST_NEWFILE)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;Error<sp/>receiving<sp/>information<sp/>about<sp/>file:<sp/>%s\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ssh_get_error(session));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>return<sp/>SSH_ERROR;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>size<sp/>=<sp/>ssh_scp_request_get_size(scp);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>filename<sp/>=<sp/>strdup(ssh_scp_request_get_filename(scp));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>mode<sp/>=<sp/>ssh_scp_request_get_permissions(scp);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>printf(&quot;Receiving<sp/>file<sp/>%s,<sp/>size<sp/>%d,<sp/>permisssions<sp/>0%o\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>filename,<sp/>size,<sp/>mode);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>free(filename);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>buffer<sp/>=<sp/>malloc(size);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>if<sp/>(buffer<sp/>==<sp/>NULL)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;Memory<sp/>allocation<sp/>error\n&quot;);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>return<sp/>SSH_ERROR;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>ssh_scp_accept_request(scp);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>rc<sp/>=<sp/>ssh_scp_read(scp,<sp/>buffer,<sp/>size);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>if<sp/>(rc<sp/>==<sp/>SSH_ERROR)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;Error<sp/>receiving<sp/>file<sp/>data:<sp/>%s\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ssh_get_error(session));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>free(buffer);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>return<sp/>rc;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>printf(&quot;Done\n&quot;);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>write(1,<sp/>buffer,<sp/>size);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>free(buffer);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>rc<sp/>=<sp/>ssh_scp_pull_request(scp);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>if<sp/>(rc<sp/>!=<sp/>SSH_SCP_REQUEST_EOF)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;Unexpected<sp/>request:<sp/>%s\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ssh_get_error(session));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>return<sp/>SSH_ERROR;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>return<sp/>SSH_OK;</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para><para>In this example, since we just requested a single file, we expect ssh_scp_request() to return SSH_SCP_REQUEST_NEWFILE first, then SSH_SCP_REQUEST_EOF. That&apos;s quite a naive approach; for example, the remote server might send a warning as well (return code SSH_SCP_REQUEST_WARNING) and the example would fail. A more comprehensive reception program would receive the requests in a loop and analyze them carefully until SSH_SCP_REQUEST_EOF has been received.</para></sect2>
+<sect2 id="libssh_tutor_scp_1scp_recursive_read">
+<title>Receiving full directory trees from the remote server</title>
+<para>If you opened the SCP session in recursive mode, the remote end will be telling you when to change directory.</para><para>In that case, when <ref refid="group__libssh__scp_1gaba59cd8cc77d219cac93f865445c6e47" kindref="member">ssh_scp_pull_request()</ref> answers SSH_SCP_REQUEST_NEWDIRECTORY, you should make that local directory (if it does not exist yet) and enter it. When <ref refid="group__libssh__scp_1gaba59cd8cc77d219cac93f865445c6e47" kindref="member">ssh_scp_pull_request()</ref> answers SSH_SCP_REQUEST_ENDDIRECTORY, you should leave the current directory. </para></sect2>
+</sect1>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

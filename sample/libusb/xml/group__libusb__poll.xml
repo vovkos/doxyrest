@@ -1,0 +1,741 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="group__libusb__poll" kind="group">
+    <compoundname>libusb_poll</compoundname>
+    <title>Polling and timing</title>
+    <innerclass refid="structlibusb__pollfd" prot="public">libusb_pollfd</innerclass>
+      <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="group__libusb__poll_1ga2962a11284b09a3f18936d8f73a43804" prot="public" static="no">
+        <type>void(*</type>
+        <definition>typedef void( * libusb_pollfd_added_cb) (int fd, short events, void *user_data)</definition>
+        <argsstring>)(int fd, short events, void *user_data)</argsstring>
+        <name>libusb_pollfd_added_cb</name>
+        <briefdescription>
+<para>Callback function, invoked when a new file descriptor should be added to the set of file descriptors monitored for events. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>fd</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the new file descriptor </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>events</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>events to monitor for, see <ref refid="structlibusb__pollfd" kindref="compound">libusb_pollfd</ref> for a description </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>user_data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>User data pointer specified in <ref refid="group__libusb__poll_1ga1b7b2deb193f2e9ffda5e727361d7e67" kindref="member">libusb_set_pollfd_notifiers()</ref> call </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="see"><para><ref refid="group__libusb__poll_1ga1b7b2deb193f2e9ffda5e727361d7e67" kindref="member">libusb_set_pollfd_notifiers()</ref> </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/libusb.h" line="1853" column="1" bodyfile="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/libusb.h" bodystart="1853" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__libusb__poll_1ga32aa803f54cfb5bfe8b41747e6b62af5" prot="public" static="no">
+        <type>void(*</type>
+        <definition>typedef void( * libusb_pollfd_removed_cb) (int fd, void *user_data)</definition>
+        <argsstring>)(int fd, void *user_data)</argsstring>
+        <name>libusb_pollfd_removed_cb</name>
+        <briefdescription>
+<para>Callback function, invoked when a file descriptor should be removed from the set of file descriptors being monitored for events. </para>        </briefdescription>
+        <detaileddescription>
+<para>After returning from this callback, do not use that file descriptor again. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>fd</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the file descriptor to stop monitoring </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>user_data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>User data pointer specified in <ref refid="group__libusb__poll_1ga1b7b2deb193f2e9ffda5e727361d7e67" kindref="member">libusb_set_pollfd_notifiers()</ref> call </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="see"><para><ref refid="group__libusb__poll_1ga1b7b2deb193f2e9ffda5e727361d7e67" kindref="member">libusb_set_pollfd_notifiers()</ref> </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/libusb.h" line="1865" column="1" bodyfile="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/libusb.h" bodystart="1865" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="group__libusb__poll_1ga6e5a116d5c9498ca4a0e29587fec1a05" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int libusb_try_lock_events</definition>
+        <argsstring>(libusb_context *ctx)</argsstring>
+        <name>libusb_try_lock_events</name>
+        <param>
+          <type><ref refid="group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833" kindref="member">libusb_context</ref> *</type>
+          <declname>ctx</declname>
+        </param>
+        <briefdescription>
+<para>Attempt to acquire the event handling lock. </para>        </briefdescription>
+        <detaileddescription>
+<para>This lock is used to ensure that only one thread is monitoring libusb event sources at any one time.</para><para>You only need to use this lock if you are developing an application which calls poll() or select() on libusb&apos;s file descriptors directly. If you stick to libusb&apos;s event handling loop functions (e.g. <ref refid="group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327" kindref="member">libusb_handle_events()</ref>) then you do not need to be concerned with this locking.</para><para>While holding this lock, you are trusted to actually be handling events. If you are no longer handling events, you must call <ref refid="group__libusb__poll_1gacefbeabdd3409490dc4678f00779c165" kindref="member">libusb_unlock_events()</ref> as soon as possible.</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ctx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the context to operate on, or NULL for the default context </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>0 if the lock was obtained successfully </para></simplesect>
+<simplesect kind="return"><para>1 if the lock was not obtained (i.e. another thread holds the lock) <ref refid="libusb_mtasync" kindref="compound">Multi-threaded applications and asynchronous I/O</ref> </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" line="1740" column="1" bodyfile="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" bodystart="1740" bodyend="1762"/>
+      </memberdef>
+      <memberdef kind="function" id="group__libusb__poll_1gaa72153938dc4f34decfacbc6cc6237ef" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void libusb_lock_events</definition>
+        <argsstring>(libusb_context *ctx)</argsstring>
+        <name>libusb_lock_events</name>
+        <param>
+          <type><ref refid="group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833" kindref="member">libusb_context</ref> *</type>
+          <declname>ctx</declname>
+        </param>
+        <briefdescription>
+<para>Acquire the event handling lock, blocking until successful acquisition if it is contended. </para>        </briefdescription>
+        <detaileddescription>
+<para>This lock is used to ensure that only one thread is monitoring libusb event sources at any one time.</para><para>You only need to use this lock if you are developing an application which calls poll() or select() on libusb&apos;s file descriptors directly. If you stick to libusb&apos;s event handling loop functions (e.g. <ref refid="group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327" kindref="member">libusb_handle_events()</ref>) then you do not need to be concerned with this locking.</para><para>While holding this lock, you are trusted to actually be handling events. If you are no longer handling events, you must call <ref refid="group__libusb__poll_1gacefbeabdd3409490dc4678f00779c165" kindref="member">libusb_unlock_events()</ref> as soon as possible.</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ctx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the context to operate on, or NULL for the default context <ref refid="libusb_mtasync" kindref="compound">Multi-threaded applications and asynchronous I/O</ref> </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" line="1782" column="1" bodyfile="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" bodystart="1782" bodyend="1787"/>
+      </memberdef>
+      <memberdef kind="function" id="group__libusb__poll_1gacefbeabdd3409490dc4678f00779c165" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void libusb_unlock_events</definition>
+        <argsstring>(libusb_context *ctx)</argsstring>
+        <name>libusb_unlock_events</name>
+        <param>
+          <type><ref refid="group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833" kindref="member">libusb_context</ref> *</type>
+          <declname>ctx</declname>
+        </param>
+        <briefdescription>
+<para>Release the lock previously acquired with <ref refid="group__libusb__poll_1ga6e5a116d5c9498ca4a0e29587fec1a05" kindref="member">libusb_try_lock_events()</ref> or <ref refid="group__libusb__poll_1gaa72153938dc4f34decfacbc6cc6237ef" kindref="member">libusb_lock_events()</ref>. </para>        </briefdescription>
+        <detaileddescription>
+<para>Releasing this lock will wake up any threads blocked on <ref refid="group__libusb__poll_1gae22755d523560be2867be7d09034ca50" kindref="member">libusb_wait_for_event()</ref>.</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ctx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the context to operate on, or NULL for the default context <ref refid="libusb_mtasync" kindref="compound">Multi-threaded applications and asynchronous I/O</ref> </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" line="1797" column="1" bodyfile="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" bodystart="1797" bodyend="1809"/>
+      </memberdef>
+      <memberdef kind="function" id="group__libusb__poll_1ga63592b28c265185d9469d1e6920d8373" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int libusb_event_handling_ok</definition>
+        <argsstring>(libusb_context *ctx)</argsstring>
+        <name>libusb_event_handling_ok</name>
+        <param>
+          <type><ref refid="group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833" kindref="member">libusb_context</ref> *</type>
+          <declname>ctx</declname>
+        </param>
+        <briefdescription>
+<para>Determine if it is still OK for this thread to be doing event handling. </para>        </briefdescription>
+        <detaileddescription>
+<para>Sometimes, libusb needs to temporarily pause all event handlers, and this is the function you should use before polling file descriptors to see if this is the case.</para><para>If this function instructs your thread to give up the events lock, you should just continue the usual logic that is documented in <ref refid="libusb_mtasync" kindref="compound">Multi-threaded applications and asynchronous I/O</ref>. On the next iteration, your thread will fail to obtain the events lock, and will hence become an event waiter.</para><para>This function should be called while the events lock is held: you don&apos;t need to worry about the results of this function if your thread is not the current event handler.</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ctx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the context to operate on, or NULL for the default context </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>1 if event handling can start or continue </para></simplesect>
+<simplesect kind="return"><para>0 if this thread must give up the events lock <ref refid="libusb_mtasync_1fullstory" kindref="member">Multi-threaded I/O: the full story</ref> </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" line="1832" column="1" bodyfile="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" bodystart="1832" bodyend="1848"/>
+      </memberdef>
+      <memberdef kind="function" id="group__libusb__poll_1ga3a0a6e8be310c20f1ca68722149f9dbf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int libusb_event_handler_active</definition>
+        <argsstring>(libusb_context *ctx)</argsstring>
+        <name>libusb_event_handler_active</name>
+        <param>
+          <type><ref refid="group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833" kindref="member">libusb_context</ref> *</type>
+          <declname>ctx</declname>
+        </param>
+        <briefdescription>
+<para>Determine if an active thread is handling events (i.e. </para>        </briefdescription>
+        <detaileddescription>
+<para>if anyone is holding the event handling lock).</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ctx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the context to operate on, or NULL for the default context </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>1 if a thread is handling events </para></simplesect>
+<simplesect kind="return"><para>0 if there are no threads currently handling events <ref refid="libusb_mtasync" kindref="compound">Multi-threaded applications and asynchronous I/O</ref> </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" line="1860" column="1" bodyfile="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" bodystart="1860" bodyend="1876"/>
+      </memberdef>
+      <memberdef kind="function" id="group__libusb__poll_1ga188b6c50944b49f122ccfd45b93fa9f2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void libusb_interrupt_event_handler</definition>
+        <argsstring>(libusb_context *ctx)</argsstring>
+        <name>libusb_interrupt_event_handler</name>
+        <param>
+          <type><ref refid="group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833" kindref="member">libusb_context</ref> *</type>
+          <declname>ctx</declname>
+        </param>
+        <briefdescription>
+<para>Interrupt any active thread that is handling events. </para>        </briefdescription>
+        <detaileddescription>
+<para>This is mainly useful for interrupting a dedicated event handling thread when an application wishes to call <ref refid="group__libusb__lib_1ga86532f222d4f1332a5f8f5eef9a92da9" kindref="member">libusb_exit()</ref>.</para><para>Since version 1.0.21, <ref refid="group__libusb__misc_1gaabe4bc36a83358685d36a6c853cbb4de" kindref="member">LIBUSB_API_VERSION</ref> &gt;= 0x01000105</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ctx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the context to operate on, or NULL for the default context <ref refid="libusb_mtasync" kindref="compound">Multi-threaded applications and asynchronous I/O</ref> </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" line="1888" column="1" bodyfile="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" bodystart="1888" bodyend="1899"/>
+      </memberdef>
+      <memberdef kind="function" id="group__libusb__poll_1ga150865a3f35c38173d688efa7ee52929" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void libusb_lock_event_waiters</definition>
+        <argsstring>(libusb_context *ctx)</argsstring>
+        <name>libusb_lock_event_waiters</name>
+        <param>
+          <type><ref refid="group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833" kindref="member">libusb_context</ref> *</type>
+          <declname>ctx</declname>
+        </param>
+        <briefdescription>
+<para>Acquire the event waiters lock. </para>        </briefdescription>
+        <detaileddescription>
+<para>This lock is designed to be obtained under the situation where you want to be aware when events are completed, but some other thread is event handling so calling <ref refid="group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327" kindref="member">libusb_handle_events()</ref> is not allowed.</para><para>You then obtain this lock, re-check that another thread is still handling events, then call <ref refid="group__libusb__poll_1gae22755d523560be2867be7d09034ca50" kindref="member">libusb_wait_for_event()</ref>.</para><para>You only need to use this lock if you are developing an application which calls poll() or select() on libusb&apos;s file descriptors directly, <bold>and</bold> may potentially be handling events from 2 threads simultaenously. If you stick to libusb&apos;s event handling loop functions (e.g. <ref refid="group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327" kindref="member">libusb_handle_events()</ref>) then you do not need to be concerned with this locking.</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ctx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the context to operate on, or NULL for the default context <ref refid="libusb_mtasync" kindref="compound">Multi-threaded applications and asynchronous I/O</ref> </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" line="1920" column="1" bodyfile="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" bodystart="1920" bodyend="1924"/>
+      </memberdef>
+      <memberdef kind="function" id="group__libusb__poll_1ga41d7716458c11ee02d0deb19a31233ed" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void libusb_unlock_event_waiters</definition>
+        <argsstring>(libusb_context *ctx)</argsstring>
+        <name>libusb_unlock_event_waiters</name>
+        <param>
+          <type><ref refid="group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833" kindref="member">libusb_context</ref> *</type>
+          <declname>ctx</declname>
+        </param>
+        <briefdescription>
+<para>Release the event waiters lock. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ctx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the context to operate on, or NULL for the default context <ref refid="libusb_mtasync" kindref="compound">Multi-threaded applications and asynchronous I/O</ref> </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" line="1931" column="1" bodyfile="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" bodystart="1931" bodyend="1935"/>
+      </memberdef>
+      <memberdef kind="function" id="group__libusb__poll_1gae22755d523560be2867be7d09034ca50" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int libusb_wait_for_event</definition>
+        <argsstring>(libusb_context *ctx, struct timeval *tv)</argsstring>
+        <name>libusb_wait_for_event</name>
+        <param>
+          <type><ref refid="group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833" kindref="member">libusb_context</ref> *</type>
+          <declname>ctx</declname>
+        </param>
+        <param>
+          <type>struct timeval *</type>
+          <declname>tv</declname>
+        </param>
+        <briefdescription>
+<para>Wait for another thread to signal completion of an event. </para>        </briefdescription>
+        <detaileddescription>
+<para>Must be called with the event waiters lock held, see <ref refid="group__libusb__poll_1ga150865a3f35c38173d688efa7ee52929" kindref="member">libusb_lock_event_waiters()</ref>.</para><para>This function will block until any of the following conditions are met:<orderedlist>
+<listitem><para>The timeout expires</para></listitem><listitem><para>A transfer completes</para></listitem><listitem><para>A thread releases the event handling lock through <ref refid="group__libusb__poll_1gacefbeabdd3409490dc4678f00779c165" kindref="member">libusb_unlock_events()</ref></para></listitem></orderedlist>
+</para><para>Condition 1 is obvious. Condition 2 unblocks your thread <emphasis>after</emphasis> the callback for the transfer has completed. Condition 3 is important because it means that the thread that was previously handling events is no longer doing so, so if any events are to complete, another thread needs to step up and start event handling.</para><para>This function releases the event waiters lock before putting your thread to sleep, and reacquires the lock as it is being woken up.</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ctx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the context to operate on, or NULL for the default context </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>tv</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>maximum timeout for this blocking function. A NULL value indicates unlimited timeout. </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>0 after a transfer completes or another thread stops event handling </para></simplesect>
+<simplesect kind="return"><para>1 if the timeout expired <ref refid="libusb_mtasync" kindref="compound">Multi-threaded applications and asynchronous I/O</ref> </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" line="1962" column="1" bodyfile="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" bodystart="1962" bodyend="1979"/>
+      </memberdef>
+      <memberdef kind="function" id="group__libusb__poll_1ga43e52b912a760b41a0cf8a4a472fbd5b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int libusb_handle_events_timeout_completed</definition>
+        <argsstring>(libusb_context *ctx, struct timeval *tv, int *completed)</argsstring>
+        <name>libusb_handle_events_timeout_completed</name>
+        <param>
+          <type><ref refid="group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833" kindref="member">libusb_context</ref> *</type>
+          <declname>ctx</declname>
+        </param>
+        <param>
+          <type>struct timeval *</type>
+          <declname>tv</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>completed</declname>
+        </param>
+        <briefdescription>
+<para>Handle any pending events. </para>        </briefdescription>
+        <detaileddescription>
+<para>libusb determines &quot;pending events&quot; by checking if any timeouts have expired and by checking the set of file descriptors for activity.</para><para>If a zero timeval is passed, this function will handle any already-pending events and then immediately return in non-blocking style.</para><para>If a non-zero timeval is passed and no events are currently pending, this function will block waiting for events to handle up until the specified timeout. If an event arrives or a signal is raised, this function will return early.</para><para>If the parameter completed is not NULL then <emphasis>after obtaining the event handling lock</emphasis> this function will return immediately if the integer pointed to is not 0. This allows for race free waiting for the completion of a specific transfer.</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ctx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the context to operate on, or NULL for the default context </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>tv</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the maximum time to block waiting for events, or an all zero timeval struct for non-blocking mode </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>completed</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>pointer to completion integer to check, or NULL </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>0 on success, or a LIBUSB_ERROR code on failure <ref refid="libusb_mtasync" kindref="compound">Multi-threaded applications and asynchronous I/O</ref> </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" line="2327" column="1" bodyfile="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" bodystart="2327" bodyend="2378"/>
+      </memberdef>
+      <memberdef kind="function" id="group__libusb__poll_1ga6deff4c7d3a6c04bb9ec9fd259b48933" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int libusb_handle_events_timeout</definition>
+        <argsstring>(libusb_context *ctx, struct timeval *tv)</argsstring>
+        <name>libusb_handle_events_timeout</name>
+        <param>
+          <type><ref refid="group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833" kindref="member">libusb_context</ref> *</type>
+          <declname>ctx</declname>
+        </param>
+        <param>
+          <type>struct timeval *</type>
+          <declname>tv</declname>
+        </param>
+        <briefdescription>
+<para>Handle any pending events. </para>        </briefdescription>
+        <detaileddescription>
+<para>Like <ref refid="group__libusb__poll_1ga43e52b912a760b41a0cf8a4a472fbd5b" kindref="member">libusb_handle_events_timeout_completed()</ref>, but without the completed parameter, calling this function is equivalent to calling <ref refid="group__libusb__poll_1ga43e52b912a760b41a0cf8a4a472fbd5b" kindref="member">libusb_handle_events_timeout_completed()</ref> with a NULL completed parameter.</para><para>This function is kept primarily for backwards compatibility. All new code should call <ref refid="group__libusb__poll_1ga0bc99f39e4cf5ad393cd5936c36037d1" kindref="member">libusb_handle_events_completed()</ref> or <ref refid="group__libusb__poll_1ga43e52b912a760b41a0cf8a4a472fbd5b" kindref="member">libusb_handle_events_timeout_completed()</ref> to avoid race conditions.</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ctx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the context to operate on, or NULL for the default context </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>tv</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the maximum time to block waiting for events, or an all zero timeval struct for non-blocking mode </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>0 on success, or a LIBUSB_ERROR code on failure </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" line="2396" column="1" bodyfile="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" bodystart="2396" bodyend="2400"/>
+      </memberdef>
+      <memberdef kind="function" id="group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int libusb_handle_events</definition>
+        <argsstring>(libusb_context *ctx)</argsstring>
+        <name>libusb_handle_events</name>
+        <param>
+          <type><ref refid="group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833" kindref="member">libusb_context</ref> *</type>
+          <declname>ctx</declname>
+        </param>
+        <briefdescription>
+<para>Handle any pending events in blocking mode. </para>        </briefdescription>
+        <detaileddescription>
+<para>There is currently a timeout hardcoded at 60 seconds but we plan to make it unlimited in future. For finer control over whether this function is blocking or non-blocking, or for control over the timeout, use <ref refid="group__libusb__poll_1ga43e52b912a760b41a0cf8a4a472fbd5b" kindref="member">libusb_handle_events_timeout_completed()</ref> instead.</para><para>This function is kept primarily for backwards compatibility. All new code should call <ref refid="group__libusb__poll_1ga0bc99f39e4cf5ad393cd5936c36037d1" kindref="member">libusb_handle_events_completed()</ref> or <ref refid="group__libusb__poll_1ga43e52b912a760b41a0cf8a4a472fbd5b" kindref="member">libusb_handle_events_timeout_completed()</ref> to avoid race conditions.</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ctx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the context to operate on, or NULL for the default context </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>0 on success, or a LIBUSB_ERROR code on failure </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" line="2416" column="1" bodyfile="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" bodystart="2416" bodyend="2422"/>
+      </memberdef>
+      <memberdef kind="function" id="group__libusb__poll_1ga0bc99f39e4cf5ad393cd5936c36037d1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int libusb_handle_events_completed</definition>
+        <argsstring>(libusb_context *ctx, int *completed)</argsstring>
+        <name>libusb_handle_events_completed</name>
+        <param>
+          <type><ref refid="group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833" kindref="member">libusb_context</ref> *</type>
+          <declname>ctx</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>completed</declname>
+        </param>
+        <briefdescription>
+<para>Handle any pending events in blocking mode. </para>        </briefdescription>
+        <detaileddescription>
+<para>Like <ref refid="group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327" kindref="member">libusb_handle_events()</ref>, with the addition of a completed parameter to allow for race free waiting for the completion of a specific transfer.</para><para>See <ref refid="group__libusb__poll_1ga43e52b912a760b41a0cf8a4a472fbd5b" kindref="member">libusb_handle_events_timeout_completed()</ref> for details on the completed parameter.</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ctx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the context to operate on, or NULL for the default context </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>completed</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>pointer to completion integer to check, or NULL </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>0 on success, or a LIBUSB_ERROR code on failure <ref refid="libusb_mtasync" kindref="compound">Multi-threaded applications and asynchronous I/O</ref> </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" line="2438" column="1" bodyfile="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" bodystart="2438" bodyend="2445"/>
+      </memberdef>
+      <memberdef kind="function" id="group__libusb__poll_1ga71da081f97afa3bf68aed8e372254e8f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int libusb_handle_events_locked</definition>
+        <argsstring>(libusb_context *ctx, struct timeval *tv)</argsstring>
+        <name>libusb_handle_events_locked</name>
+        <param>
+          <type><ref refid="group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833" kindref="member">libusb_context</ref> *</type>
+          <declname>ctx</declname>
+        </param>
+        <param>
+          <type>struct timeval *</type>
+          <declname>tv</declname>
+        </param>
+        <briefdescription>
+<para>Handle any pending events by polling file descriptors, without checking if any other threads are already doing so. </para>        </briefdescription>
+        <detaileddescription>
+<para>Must be called with the event lock held, see <ref refid="group__libusb__poll_1gaa72153938dc4f34decfacbc6cc6237ef" kindref="member">libusb_lock_events()</ref>.</para><para>This function is designed to be called under the situation where you have taken the event lock and are calling poll()/select() directly on libusb&apos;s file descriptors (as opposed to using <ref refid="group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327" kindref="member">libusb_handle_events()</ref> or similar). You detect events on libusb&apos;s descriptors, so you then call this function with a zero timeout value (while still holding the event lock).</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ctx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the context to operate on, or NULL for the default context </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>tv</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the maximum time to block waiting for events, or zero for non-blocking mode </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>0 on success, or a LIBUSB_ERROR code on failure <ref refid="libusb_mtasync" kindref="compound">Multi-threaded applications and asynchronous I/O</ref> </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" line="2464" column="1" bodyfile="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" bodystart="2464" bodyend="2478"/>
+      </memberdef>
+      <memberdef kind="function" id="group__libusb__poll_1gae7a654315636bebf404c1784429f06df" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int libusb_pollfds_handle_timeouts</definition>
+        <argsstring>(libusb_context *ctx)</argsstring>
+        <name>libusb_pollfds_handle_timeouts</name>
+        <param>
+          <type><ref refid="group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833" kindref="member">libusb_context</ref> *</type>
+          <declname>ctx</declname>
+        </param>
+        <briefdescription>
+<para>Determines whether your application must apply special timing considerations when monitoring libusb&apos;s file descriptors. </para>        </briefdescription>
+        <detaileddescription>
+<para>This function is only useful for applications which retrieve and poll libusb&apos;s file descriptors in their own main loop (<ref refid="group__libusb__poll_1libusb_pollmain" kindref="member">The more advanced option</ref>).</para><para>Ordinarily, libusb&apos;s event handler needs to be called into at specific moments in time (in addition to times when there is activity on the file descriptor set). The usual approach is to use <ref refid="group__libusb__poll_1ga5bc6f5bc71a43845244912da6679f634" kindref="member">libusb_get_next_timeout()</ref> to learn about when the next timeout occurs, and to adjust your poll()/select() timeout accordingly so that you can make a call into the library at that time.</para><para>Some platforms supported by libusb do not come with this baggage - any events relevant to timing will be represented by activity on the file descriptor set, and <ref refid="group__libusb__poll_1ga5bc6f5bc71a43845244912da6679f634" kindref="member">libusb_get_next_timeout()</ref> will always return 0. This function allows you to detect whether you are running on such a platform.</para><para>Since v1.0.5.</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ctx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the context to operate on, or NULL for the default context </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>0 if you must call into libusb at times determined by <ref refid="group__libusb__poll_1ga5bc6f5bc71a43845244912da6679f634" kindref="member">libusb_get_next_timeout()</ref>, or 1 if all timeout events are handled internally or through regular activity on the file descriptors. <ref refid="group__libusb__poll_1libusb_pollmain" kindref="member">Polling libusb file descriptors for event handling</ref> </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" line="2508" column="1" bodyfile="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" bodystart="2508" bodyend="2517"/>
+      </memberdef>
+      <memberdef kind="function" id="group__libusb__poll_1ga5bc6f5bc71a43845244912da6679f634" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int libusb_get_next_timeout</definition>
+        <argsstring>(libusb_context *ctx, struct timeval *tv)</argsstring>
+        <name>libusb_get_next_timeout</name>
+        <param>
+          <type><ref refid="group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833" kindref="member">libusb_context</ref> *</type>
+          <declname>ctx</declname>
+        </param>
+        <param>
+          <type>struct timeval *</type>
+          <declname>tv</declname>
+        </param>
+        <briefdescription>
+<para>Determine the next internal timeout that libusb needs to handle. </para>        </briefdescription>
+        <detaileddescription>
+<para>You only need to use this function if you are calling poll() or select() or similar on libusb&apos;s file descriptors yourself - you do not need to use it if you are calling <ref refid="group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327" kindref="member">libusb_handle_events()</ref> or a variant directly.</para><para>You should call this function in your main loop in order to determine how long to wait for select() or poll() to return results. libusb needs to be called into at this timeout, so you should use it as an upper bound on your select() or poll() call.</para><para>When the timeout has expired, call into <ref refid="group__libusb__poll_1ga6deff4c7d3a6c04bb9ec9fd259b48933" kindref="member">libusb_handle_events_timeout()</ref> (perhaps in non-blocking mode) so that libusb can handle the timeout.</para><para>This function may return 1 (success) and an all-zero timeval. If this is the case, it indicates that libusb has a timeout that has already expired so you should call <ref refid="group__libusb__poll_1ga6deff4c7d3a6c04bb9ec9fd259b48933" kindref="member">libusb_handle_events_timeout()</ref> or similar immediately. A return code of 0 indicates that there are no pending timeouts.</para><para>On some platforms, this function will always returns 0 (no pending timeouts). See <ref refid="group__libusb__poll_1polltime" kindref="member">Notes on time-based events</ref>.</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ctx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the context to operate on, or NULL for the default context </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>tv</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>output location for a relative time against the current clock in which libusb must be called into in order to process timeout events </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>0 if there are no pending timeouts, 1 if a timeout was returned, or LIBUSB_ERROR_OTHER on failure </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" line="2547" column="1" bodyfile="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" bodystart="2547" bodyend="2602"/>
+      </memberdef>
+      <memberdef kind="function" id="group__libusb__poll_1ga1b7b2deb193f2e9ffda5e727361d7e67" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void libusb_set_pollfd_notifiers</definition>
+        <argsstring>(libusb_context *ctx, libusb_pollfd_added_cb added_cb, libusb_pollfd_removed_cb removed_cb, void *user_data)</argsstring>
+        <name>libusb_set_pollfd_notifiers</name>
+        <param>
+          <type><ref refid="group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833" kindref="member">libusb_context</ref> *</type>
+          <declname>ctx</declname>
+        </param>
+        <param>
+          <type><ref refid="group__libusb__poll_1ga2962a11284b09a3f18936d8f73a43804" kindref="member">libusb_pollfd_added_cb</ref></type>
+          <declname>added_cb</declname>
+        </param>
+        <param>
+          <type><ref refid="group__libusb__poll_1ga32aa803f54cfb5bfe8b41747e6b62af5" kindref="member">libusb_pollfd_removed_cb</ref></type>
+          <declname>removed_cb</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>user_data</declname>
+        </param>
+        <briefdescription>
+<para>Register notification functions for file descriptor additions/removals. </para>        </briefdescription>
+        <detaileddescription>
+<para>These functions will be invoked for every new or removed file descriptor that libusb uses as an event source.</para><para>To remove notifiers, pass NULL values for the function pointers.</para><para>Note that file descriptors may have been added even before you register these notifiers (e.g. at <ref refid="group__libusb__lib_1ga9517c37281bba0b51cc62eba728be48b" kindref="member">libusb_init()</ref> time).</para><para>Additionally, note that the removal notifier may be called during <ref refid="group__libusb__lib_1ga86532f222d4f1332a5f8f5eef9a92da9" kindref="member">libusb_exit()</ref> (e.g. when it is closing file descriptors that were opened and added to the poll set at <ref refid="group__libusb__lib_1ga9517c37281bba0b51cc62eba728be48b" kindref="member">libusb_init()</ref> time). If you don&apos;t want this, remove the notifiers immediately before calling <ref refid="group__libusb__lib_1ga86532f222d4f1332a5f8f5eef9a92da9" kindref="member">libusb_exit()</ref>.</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ctx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the context to operate on, or NULL for the default context </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>added_cb</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>pointer to function for addition notifications </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>removed_cb</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>pointer to function for removal notifications </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>user_data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>User data to be passed back to callbacks (useful for passing context information) </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" line="2625" column="1" bodyfile="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" bodystart="2625" bodyend="2633"/>
+      </memberdef>
+      <memberdef kind="function" id="group__libusb__poll_1ga54c27dcf8a95d2a3a03cfb7dd37eae63" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>const struct <ref refid="structlibusb__pollfd" kindref="compound">libusb_pollfd</ref> **</type>
+        <definition>const struct libusb_pollfd** libusb_get_pollfds</definition>
+        <argsstring>(libusb_context *ctx)</argsstring>
+        <name>libusb_get_pollfds</name>
+        <param>
+          <type><ref refid="group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833" kindref="member">libusb_context</ref> *</type>
+          <declname>ctx</declname>
+        </param>
+        <briefdescription>
+<para>Retrieve a list of file descriptors that should be polled by your main loop as libusb event sources. </para>        </briefdescription>
+        <detaileddescription>
+<para>The returned list is NULL-terminated and should be freed with <ref refid="group__libusb__poll_1gad703b12ab275b6420c2c27e6279c955f" kindref="member">libusb_free_pollfds()</ref> when done. The actual list contents must not be touched.</para><para>As file descriptors are a Unix-specific concept, this function is not available on Windows and will always return NULL.</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>ctx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the context to operate on, or NULL for the default context </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>a NULL-terminated list of <ref refid="structlibusb__pollfd" kindref="compound">libusb_pollfd</ref> structures </para></simplesect>
+<simplesect kind="return"><para>NULL on error </para></simplesect>
+<simplesect kind="return"><para>NULL on platforms where the functionality is not available </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" line="2719" column="1" bodyfile="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" bodystart="2719" bodyend="2746"/>
+      </memberdef>
+      <memberdef kind="function" id="group__libusb__poll_1gad703b12ab275b6420c2c27e6279c955f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void libusb_free_pollfds</definition>
+        <argsstring>(const struct libusb_pollfd **pollfds)</argsstring>
+        <name>libusb_free_pollfds</name>
+        <param>
+          <type>const struct <ref refid="structlibusb__pollfd" kindref="compound">libusb_pollfd</ref> **</type>
+          <declname>pollfds</declname>
+        </param>
+        <briefdescription>
+<para>Free a list of <ref refid="structlibusb__pollfd" kindref="compound">libusb_pollfd</ref> structures. </para>        </briefdescription>
+        <detaileddescription>
+<para>This should be called for all pollfd lists allocated with <ref refid="group__libusb__poll_1ga54c27dcf8a95d2a3a03cfb7dd37eae63" kindref="member">libusb_get_pollfds()</ref>.</para><para>Since version 1.0.20, <ref refid="group__libusb__misc_1gaabe4bc36a83358685d36a6c853cbb4de" kindref="member">LIBUSB_API_VERSION</ref> &gt;= 0x01000104</para><para>It is legal to call this function with a NULL pollfd list. In this case, the function will simply return safely.</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>pollfds</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the list of <ref refid="structlibusb__pollfd" kindref="compound">libusb_pollfd</ref> structures to free </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" line="2759" column="1" bodyfile="/home/vladimir/Develop/libusb/libusb-1.0.21/libusb/io.c" bodystart="2759" bodyend="2765"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>This page documents libusb&apos;s functions for polling events and timing. </para>    </briefdescription>
+    <detaileddescription>
+<para>These functions are only necessary for users of the <ref refid="group__libusb__asyncio" kindref="compound">asynchronous API</ref>. If you are only using the simpler <ref refid="group__libusb__syncio" kindref="compound">synchronous API</ref> then you do not need to ever call these functions.</para><para>The justification for the functionality described here has already been discussed in the <ref refid="group__libusb__asyncio_1asyncevent" kindref="member">event handling</ref> section of the asynchronous API documentation. In summary, libusb does not create internal threads for event processing and hence relies on your application calling into libusb at certain points in time so that pending events can be handled.</para><para>Your main loop is probably already calling poll() or select() or a variant on a set of file descriptors for other event sources (e.g. keyboard button presses, mouse movements, network sockets, etc). You then add libusb&apos;s file descriptors to your poll()/select() calls, and when activity is detected on such descriptors you know it is time to call <ref refid="group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327" kindref="member">libusb_handle_events()</ref>.</para><para>There is one final event handling complication. libusb supports asynchronous transfers which time out after a specified time period.</para><para>On some platforms a timerfd is used, so the timeout handling is just another fd, on other platforms this requires that libusb is called into at or after the timeout to handle it. So, in addition to considering libusb&apos;s file descriptors in your main event loop, you must also consider that libusb sometimes needs to be called into at fixed points in time even when there is no file descriptor activity, see <ref refid="group__libusb__poll_1polltime" kindref="member">Notes on time-based events</ref> details.</para><para>In order to know precisely when libusb needs to be called into, libusb offers you a set of pollable file descriptors and information about when the next timeout expires.</para><para>If you are using the asynchronous I/O API, you must take one of the two following options, otherwise your I/O will not complete.</para><sect1 id="group__libusb__poll_1pollsimple">
+<title>The simple option</title>
+<para>If your application revolves solely around libusb and does not need to handle other event sources, you can have a program structure as follows: <programlisting><codeline><highlight class="normal">//<sp/>initialize<sp/>libusb</highlight></codeline>
+<codeline><highlight class="normal">//<sp/>find<sp/>and<sp/>open<sp/>device</highlight></codeline>
+<codeline><highlight class="normal">//<sp/>maybe<sp/>fire<sp/>off<sp/>some<sp/>initial<sp/>async<sp/>I/O</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">while<sp/>(user_has_not_requested_exit)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>libusb_handle_events(ctx);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>clean<sp/>up<sp/>and<sp/>exit</highlight></codeline>
+</programlisting></para><para>With such a simple main loop, you do not have to worry about managing sets of file descriptors or handling timeouts. <ref refid="group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327" kindref="member">libusb_handle_events()</ref> will handle those details internally.</para></sect1>
+<sect1 id="group__libusb__poll_1libusb_pollmain">
+<title>The more advanced option</title>
+<para><simplesect kind="note"><para>This functionality is currently only available on Unix-like platforms. On Windows, <ref refid="group__libusb__poll_1ga54c27dcf8a95d2a3a03cfb7dd37eae63" kindref="member">libusb_get_pollfds()</ref> simply returns NULL. Applications which want to support Windows are advised to use an <ref refid="group__libusb__asyncio_1eventthread" kindref="member">event handling thread</ref> instead.</para></simplesect>
+In more advanced applications, you will already have a main loop which is monitoring other event sources: network sockets, X11 events, mouse movements, etc. Through exposing a set of file descriptors, libusb is designed to cleanly integrate into such main loops.</para><para>In addition to polling file descriptors for the other event sources, you take a set of file descriptors from libusb and monitor those too. When you detect activity on libusb&apos;s file descriptors, you call <ref refid="group__libusb__poll_1ga6deff4c7d3a6c04bb9ec9fd259b48933" kindref="member">libusb_handle_events_timeout()</ref> in non-blocking mode.</para><para>What&apos;s more, libusb may also need to handle events at specific moments in time. No file descriptor activity is generated at these times, so your own application needs to be continually aware of when the next one of these moments occurs (through calling <ref refid="group__libusb__poll_1ga5bc6f5bc71a43845244912da6679f634" kindref="member">libusb_get_next_timeout()</ref>), and then it needs to call <ref refid="group__libusb__poll_1ga6deff4c7d3a6c04bb9ec9fd259b48933" kindref="member">libusb_handle_events_timeout()</ref> in non-blocking mode when these moments occur. This means that you need to adjust your poll()/select() timeout accordingly.</para><para>libusb provides you with a set of file descriptors to poll and expects you to poll all of them, treating them as a single entity. The meaning of each file descriptor in the set is an internal implementation detail, platform-dependent and may vary from release to release. Don&apos;t try and interpret the meaning of the file descriptors, just do as libusb indicates, polling all of them at once.</para><para>In pseudo-code, you want something that looks like: <programlisting><codeline><highlight class="normal">//<sp/>initialise<sp/>libusb</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">libusb_get_pollfds(ctx)</highlight></codeline>
+<codeline><highlight class="normal">while<sp/>(user<sp/>has<sp/>not<sp/>requested<sp/>application<sp/>exit)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>libusb_get_next_timeout(ctx);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>poll(on<sp/>libusb<sp/>file<sp/>descriptors<sp/>plus<sp/>any<sp/>other<sp/>event<sp/>sources<sp/>of<sp/>interest,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>using<sp/>a<sp/>timeout<sp/>no<sp/>larger<sp/>than<sp/>the<sp/>value<sp/>libusb<sp/>just<sp/>suggested)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>(poll()<sp/>indicated<sp/>activity<sp/>on<sp/>libusb<sp/>file<sp/>descriptors)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>libusb_handle_events_timeout(ctx,<sp/>&amp;zero_tv);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>(time<sp/>has<sp/>elapsed<sp/>to<sp/>or<sp/>beyond<sp/>the<sp/>libusb<sp/>timeout)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>libusb_handle_events_timeout(ctx,<sp/>&amp;zero_tv);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>handle<sp/>events<sp/>from<sp/>other<sp/>sources<sp/>here</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>clean<sp/>up<sp/>and<sp/>exit</highlight></codeline>
+</programlisting></para><sect2 id="group__libusb__poll_1polltime">
+<title>Notes on time-based events</title>
+<para>The above complication with having to track time and call into libusb at specific moments is a bit of a headache. For maximum compatibility, you do need to write your main loop as above, but you may decide that you can restrict the supported platforms of your application and get away with a more simplistic scheme.</para><para>These time-based event complications are <bold>not</bold> required on the following platforms:<itemizedlist>
+<listitem><para>Darwin</para></listitem><listitem><para>Linux, provided that the following version requirements are satisfied:<itemizedlist>
+<listitem><para>Linux v2.6.27 or newer, compiled with timerfd support</para></listitem><listitem><para>glibc v2.9 or newer</para></listitem><listitem><para>libusb v1.0.5 or newer</para></listitem></itemizedlist>
+</para></listitem></itemizedlist>
+</para><para>Under these configurations, <ref refid="group__libusb__poll_1ga5bc6f5bc71a43845244912da6679f634" kindref="member">libusb_get_next_timeout()</ref> will <emphasis>always</emphasis> return 0, so your main loop can be simplified to: <programlisting><codeline><highlight class="normal">//<sp/>initialise<sp/>libusb</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">libusb_get_pollfds(ctx)</highlight></codeline>
+<codeline><highlight class="normal">while<sp/>(user<sp/>has<sp/>not<sp/>requested<sp/>application<sp/>exit)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>poll(on<sp/>libusb<sp/>file<sp/>descriptors<sp/>plus<sp/>any<sp/>other<sp/>event<sp/>sources<sp/>of<sp/>interest,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>using<sp/>any<sp/>timeout<sp/>that<sp/>you<sp/>like)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>(poll()<sp/>indicated<sp/>activity<sp/>on<sp/>libusb<sp/>file<sp/>descriptors)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>libusb_handle_events_timeout(ctx,<sp/>&amp;zero_tv);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>handle<sp/>events<sp/>from<sp/>other<sp/>sources<sp/>here</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>clean<sp/>up<sp/>and<sp/>exit</highlight></codeline>
+</programlisting></para><para>Do remember that if you simplify your main loop to the above, you will lose compatibility with some platforms (including legacy Linux platforms, and <emphasis>any future platforms supported by libusb which may have time-based event requirements</emphasis>). The resultant problems will likely appear as strange bugs in your application.</para><para>You can use the <ref refid="group__libusb__poll_1gae7a654315636bebf404c1784429f06df" kindref="member">libusb_pollfds_handle_timeouts()</ref> function to do a runtime check to see if it is safe to ignore the time-based event complications. If your application has taken the shortcut of ignoring libusb&apos;s next timeout in your main loop, then you are advised to check the return value of <ref refid="group__libusb__poll_1gae7a654315636bebf404c1784429f06df" kindref="member">libusb_pollfds_handle_timeouts()</ref> during application startup, and to abort if the platform does suffer from these timing complications.</para></sect2>
+<sect2 id="group__libusb__poll_1fdsetchange">
+<title>Changes in the file descriptor set</title>
+<para>The set of file descriptors that libusb uses as event sources may change during the life of your application. Rather than having to repeatedly call <ref refid="group__libusb__poll_1ga54c27dcf8a95d2a3a03cfb7dd37eae63" kindref="member">libusb_get_pollfds()</ref>, you can set up notification functions for when the file descriptor set changes using <ref refid="group__libusb__poll_1ga1b7b2deb193f2e9ffda5e727361d7e67" kindref="member">libusb_set_pollfd_notifiers()</ref>.</para></sect2>
+<sect2 id="group__libusb__poll_1mtissues">
+<title>Multi-threaded considerations</title>
+<para>Unfortunately, the situation is complicated further when multiple threads come into play. If two threads are monitoring the same file descriptors, the fact that only one thread will be woken up when an event occurs causes some headaches.</para><para>The events lock, event waiters lock, and <ref refid="group__libusb__poll_1ga71da081f97afa3bf68aed8e372254e8f" kindref="member">libusb_handle_events_locked()</ref> entities are added to solve these problems. You do not need to be concerned with these entities otherwise.</para><para>See the extra documentation: <ref refid="libusb_mtasync" kindref="compound">Multi-threaded applications and asynchronous I/O</ref> </para></sect2>
+</sect1>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

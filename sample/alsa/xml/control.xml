@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="control" kind="page">
+    <compoundname>control</compoundname>
+    <title>Control interface</title>
+    <detaileddescription>
+<para>Control interface is designed to access primitive controls. There is also interface notifying about control and structure changes.</para><sect1 id="control_1control_general_overview">
+<title>General overview</title>
+<para>In ALSA control feature, each sound card can have control elements. The elements are managed according to below model.</para><para><itemizedlist>
+<listitem><para>element set<itemizedlist>
+<listitem><para>A set of elements with the same attribute (i.e. name, get/put operations). Some element sets can be added to a sound card by drivers in kernel and userspace applications.</para></listitem></itemizedlist>
+</para></listitem><listitem><para>element<itemizedlist>
+<listitem><para>An element can be identified by userspace applications. Each element has own identical information.</para></listitem></itemizedlist>
+</para></listitem><listitem><para>member<itemizedlist>
+<listitem><para>An element includes some members to have a value. The value of each member can be changed by both of userspace applications and drivers in kernel.</para></listitem></itemizedlist>
+</para></listitem></itemizedlist>
+</para><para>Each element can be identified by two ways; a combination of name and index, or numerical number (numid).</para><para>The type of element set is one of integer, integerr64, boolean, enumerators, bytes and IEC958 structure. This indicates the type of value for each member in elements included in the element set.</para><para>When the value of member is changed, corresponding events are transferred to userspace applications. The applications should subscribe any events in advance.</para></sect1>
+<sect1 id="control_1tlv_blob">
+<title>Supplemental data for elements in an element set</title>
+<para>TLV feature is designed to transfer data in a shape of Type/Length/Value, between a driver and any userspace applications. The main purpose is to attach supplement information for elements to an element set; e.g. dB range.</para><para>At first, this feature was implemented to add pre-defined data readable to userspace applications. Soon, it was extended to handle several operations; read, write and command. The original implementation remains as the read operation. The command operation allows drivers to have own implementations against requests from userspace applications.</para><para>This feature was introduced to ALSA control feature in 2006, at commit c7a0708a2362, corresponding to a series of work for Linux kernel (42750b04c5ba and 8aa9b586e420).</para><para>There&apos;s no limitation about maximum size of the data, therefore it can be used to deliver quite large arbitrary data from userspace to in-kernel drivers via ALSA control character device. Focusing on this nature, as of 2016, some in-kernel implementations utilize this feature for I/O operations. This is against the original design. </para></sect1>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,198 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen>
+<compounddef kind='class' id='type_io_mappedfile' language='Jancy'>
+<compoundname>MappedFile</compoundname>
+
+<sectiondef>
+<memberdef kind='function' id='function_io_mappedfile_construct'>
+<functionkind>construct</functionkind>
+<name>construct</name>
+<type>void</type>
+<argsstring>(io.MappedFile safe* this)</argsstring>
+<location file='io_MappedFile.jnc' line='102' col='2'/>
+</memberdef>
+<memberdef kind='function' id='function_io_mappedfile_destruct'>
+<functionkind>destruct</functionkind>
+<name>destruct</name>
+<type>void</type>
+<argsstring>(io.MappedFile safe* this)</argsstring>
+<location file='io_MappedFile.jnc' line='103' col='2'/>
+</memberdef>
+</sectiondef>
+
+<sectiondef>
+<memberdef kind='property' id='property_io_mappedfile_m_dynamicviewlimit'>
+<name>m_dynamicViewLimit</name>
+<type><ref refid="typedef_size_t">size_t</ref> property</type>
+<argsstring>(io.MappedFile safe const* this)</argsstring>
+<modifiers>autoget</modifiers>
+<detaileddescription>
+<para>Holds the maximum amount of *dynamic* views maintained in ``io.MappedFile`` internal database. Once dynamic view limit is exhausted, the dynamic view which has not been accessed *the longest*, is unmapped and released.
+
+The required amount of dynamic view limit, of course, depends on the particular algorithm used to access regions of the file -- i.e. how many regions you need to access simultaneously.</para>
+</detaileddescription>
+<location file='io_MappedFile.jnc' line='86' col='26'/>
+</memberdef>
+
+<memberdef kind='variable' id='struct_member_io_mappedfile_iface_m_isopen' readonly='yes'>
+<name>m_isOpen</name>
+<type>bool</type>
+<modifiers>readonly</modifiers>
+<detaileddescription>
+<para>Holds the open status for the mapped file, i.e. ``true`` if opened; ``false`` otherwise.</para>
+</detaileddescription>
+<location file='io_MappedFile.jnc' line='92' col='16'/>
+</memberdef>
+
+<memberdef kind='property' id='property_io_mappedfile_m_size'>
+<name>m_size</name>
+<type><ref refid="typedef_uint64_t">uint64_t</ref> property</type>
+<argsstring>(io.MappedFile safe const* this)</argsstring>
+<detaileddescription>
+<para>This property is used for getting and setting file size.
+
+Reading from this property returns current size of the file; writing to it sets new size. If setting new size fails, IO error supplied by operating system is set; then dynamic exception is thrown.</para>
+</detaileddescription>
+<location file='io_MappedFile.jnc' line='100' col='20'/>
+</memberdef>
+
+<memberdef kind='function' id='function_io_mappedfile_open'>
+<functionkind>named-function</functionkind>
+<name>open</name>
+<type>bool errorcode</type>
+<argsstring>(io.MappedFile safe* this, char const* name, io.FileOpenFlags flags 0)</argsstring>
+<param>
+<declname>name</declname>
+<type>char const*</type>
+<array></array>
+</param>
+<param>
+<declname>flags</declname>
+<type><ref refid="type_io_fileopenflags">io.FileOpenFlags</ref></type>
+<array></array>
+<defval>0</defval>
+</param>
+<detaileddescription>
+<para>Opens or creates a file, but no mappings are created.
+
+The function accepts two arguments. The first one, ``name`` specifies the name of the file/device. The second one, ``flags``, can be used to specify open options. Check `io.FileOpenFlags` for the complete list of options.
+
+If file could not be opened, IO error supplied by operating system is set and then the function returns ``false`` [#f1]_.</para>
+</detaileddescription>
+<location file='io_MappedFile.jnc' line='113' col='17'/>
+</memberdef>
+
+<memberdef kind='function' id='function_io_mappedfile_close'>
+<functionkind>named-function</functionkind>
+<name>close</name>
+<type>void</type>
+<argsstring>(io.MappedFile safe* this)</argsstring>
+<detaileddescription>
+<para>Closes a previously opened file, does nothing if the file is not opened. This function always succeeds.
+
+Sometimes it may be convenient to use *disposable* pattern to ensure timely invokation of ``close`` [#f2]_.</para>
+</detaileddescription>
+<location file='io_MappedFile.jnc' line='124' col='7'/>
+</memberdef>
+
+<memberdef kind='alias' id='alias_io_mappedfile_dispose'>
+<name>dispose</name>
+<initializer>= close</initializer>
+<detaileddescription>
+<para>Effectively makes ``io.MappedFile`` a *disposable* class [#f2]_.</para>
+</detaileddescription>
+<location file='io_MappedFile.jnc' line='130' col='13'/>
+</memberdef>
+
+<memberdef kind='function' id='function_io_mappedfile_view'>
+<functionkind>named-function</functionkind>
+<name>view</name>
+<type>void* errorcode</type>
+<argsstring>(io.MappedFile safe* this, uint64_t offset, size_t size, bool isPermanent false)</argsstring>
+<param>
+<declname>offset</declname>
+<type><ref refid="typedef_uint64_t">uint64_t</ref></type>
+<array></array>
+</param>
+<param>
+<declname>size</declname>
+<type><ref refid="typedef_size_t">size_t</ref></type>
+<array></array>
+</param>
+<param>
+<declname>isPermanent</declname>
+<type>bool</type>
+<array></array>
+<defval>false</defval>
+</param>
+<detaileddescription>
+<para>Provides access to the region of the file at ``offset`` and ``size`` bytes long. The final, third argument is used to specify whether the requested view should be *permanent* or *dynamic*.
+
+Returns a pointer to the requested region, or ``null`` if mapping operation failed [#f1]_.</para>
+</detaileddescription>
+<location file='io_MappedFile.jnc' line='138' col='18'/>
+</memberdef>
+
+</sectiondef>
+<sectiondef>
+<memberdef kind='footnote'>
+<name>f1</name>
+<detaileddescription>
+<para>|footnote-errorcode|</para>
+</detaileddescription>
+</memberdef>
+<memberdef kind='footnote'>
+<name>f2</name>
+<detaileddescription>
+<para>|footnote-disposable|</para>
+</detaileddescription>
+</memberdef>
+</sectiondef>
+<includes>io_base.jncx</includes>
+<includes>io_MappedFile.jnc</includes>
+<briefdescription><para>This class provides high level mapped access to the contents of regular disk files.</para></briefdescription>
+<detaileddescription>
+<para><![CDATA[From the client point of view, ``io.MappedFile`` exposes the most natural interface imaginable. You just tell: I want to access a region of the file at *this* offset, and of *this* length. And you get a pointer to this region (or ``null`` if this could not be done). That's it! Actual mapping operations, aligning offsets and maintaining a database of previously mapped views is happening behind the stage.
+
+Views provided by ``io.MappedFile`` can be *permanent* or *dynamic*. A pointer to a permanent view, as the name suggests, remains valid *all the time* while the file is open. Pointers to *dynamic* views, on the other hand, do expire. You can only access ``m_dynamicViewLimit`` views at the same time. Expiration queue is organized in FIFO (first-in-first-out) manner, but it is readjusted each time user requests access to the region with ``view`` method (last accessed view is moved to the tail of the expiration queue).
+
+.. rubric:: Sample code:
+
+.. ref-code-block::
+
+	struct Hdr
+	{
+		uint32_t m_signature;
+		uint32_t m_version;
+		uint32_t m_sectionCount;
+		// ...
+	}
+
+	struct SectionDesc
+	{
+		uint64_t m_offset;
+		uint64_t m_size;
+	}
+
+	foo (char const* fileName)
+	{
+		disposable io.MappedFile file;
+		file.open (fileName, `io.FileOpenFlags.ReadOnly`);
+		Hdr const* hdr = file.view (0, sizeof (Hdr), true); // permanent view of header
+
+		size_t offset = sizeof (Hdr);
+		for (size_t i = 0; i < hdr.m_sectionCount; i++, offset += sizeof (SectionDesc))
+		{
+			SectionDesc const* sectionDesc = file.view (offset, sizeof (SectionDesc));
+			void const* section = file.view (sectionDesc.m_offset, sectionDesc.m_size);
+			// ...
+		}
+
+	catch:
+		// handle error
+	}]]></para>
+<para><simplesect kind='see'><para>`io.File`</para></simplesect></para>
+</detaileddescription>
+<location file='io_MappedFile.jnc' line='78' col='14'/>
+</compounddef>
+</doxygen>

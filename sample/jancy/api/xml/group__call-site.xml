@@ -1,0 +1,192 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="group__call-site" kind="group">
+    <compoundname>call-site</compoundname>
+    <title>Call Site</title>
+      <sectiondef kind="define">
+      <memberdef kind="define" id="group__call-site_1gae6b91ecc1c7e634749ebfe9db4167d9d" prot="public" static="no">
+        <name>JNC_BEGIN_GC_SITE</name>
+        <param></param>
+        <initializer>{</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Marks the beginning of a Jancy GC region.</para><para>Any GC allocation should happen within the bounds of such a region; otherwise, an attempt to GC-allocate leads to undefined behavior. </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Projects/ioninja/jancy/include/jnc_CallSite.h" line="43" column="11"/>
+      </memberdef>
+      <memberdef kind="define" id="group__call-site_1gaad3fd1ea84fdddf7d2460bb49a505059" prot="public" static="no">
+        <name>JNC_END_GC_SITE</name>
+        <param></param>
+        <initializer>}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Marks the endning of a Jancy GC region. </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Projects/ioninja/jancy/include/jnc_CallSite.h" line="44" column="10"/>
+      </memberdef>
+      <memberdef kind="define" id="group__call-site_1gaac077a1c9e0ad6a10d7edc972b8fc0e8" prot="public" static="no">
+        <name>JNC_BEGIN_CALL_SITE_IMPL</name>
+        <param><defname>runtime</defname></param>
+        <initializer><ref refid="structjnc___runtime" kindref="compound">jnc_Runtime</ref>* __jncRuntime = (runtime); \
+	<ref refid="structjnc___call_site" kindref="compound">jnc_CallSite</ref> __jncCallSite; \
+	<ref refid="structjnc___sjlj_frame" kindref="compound">jnc_SjljFrame</ref> __jncSjljFrame; \
+	<ref refid="structjnc___sjlj_frame" kindref="compound">jnc_SjljFrame</ref>* __jncSjljPrevFrame; \
+	int __jncSjljBranch; \
+	<ref refid="group__base-def_1ga41365cfdb4186feb5a764b46778350e2" kindref="member">JNC_ASSERT</ref> (runtime); \
+	jnc_Runtime_initializeCallSite (__jncRuntime, &amp;__jncCallSite); \
+	__jncSjljPrevFrame = jnc_Runtime_setSjljFrame (__jncRuntime, &amp;__jncSjljFrame); \
+	__jncSjljBranch = setjmp (__jncSjljFrame.m_jmpBuf); \
+	if (!__jncSjljBranch) \
+	{</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Projects/ioninja/jancy/include/jnc_CallSite.h" line="49" column="9" bodyfile="/home/vladimir/Projects/ioninja/jancy/include/jnc_CallSite.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="group__call-site_1ga77d26c184021f51bea579414cc909b35" prot="public" static="no">
+        <name>JNC_CALL_SITE_CATCH</name>
+        <param></param>
+        <initializer>} \
+	else \
+	{ \
+		{ \
+			<ref refid="structjnc___sjlj_frame" kindref="compound">jnc_SjljFrame</ref>* prev = jnc_Runtime_setSjljFrame (__jncRuntime, __jncSjljPrevFrame); \
+			<ref refid="group__base-def_1ga41365cfdb4186feb5a764b46778350e2" kindref="member">JNC_ASSERT</ref> (prev == &amp;__jncSjljFrame); \
+		}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Projects/ioninja/jancy/include/jnc_CallSite.h" line="62" column="9" bodyfile="/home/vladimir/Projects/ioninja/jancy/include/jnc_CallSite.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="group__call-site_1ga74fd781597a5f07ffb7cfff615cfeebb" prot="public" static="no">
+        <name>JNC_CALL_SITE_FINALLY</name>
+        <param></param>
+        <initializer>} \
+	{ \
+		{ \
+			<ref refid="structjnc___sjlj_frame" kindref="compound">jnc_SjljFrame</ref>* prev = jnc_Runtime_setSjljFrame (__jncRuntime, __jncSjljPrevFrame); \
+			<ref refid="group__base-def_1ga41365cfdb4186feb5a764b46778350e2" kindref="member">JNC_ASSERT</ref> (prev == &amp;__jncSjljFrame || prev == __jncSjljPrevFrame); \
+		}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Projects/ioninja/jancy/include/jnc_CallSite.h" line="71" column="9" bodyfile="/home/vladimir/Projects/ioninja/jancy/include/jnc_CallSite.h" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="group__call-site_1ga6663b46d878ebd69a6ba1009adf8ceac" prot="public" static="no">
+        <name>JNC_END_CALL_SITE_IMPL</name>
+        <param></param>
+        <initializer>} \
+	{ \
+		<ref refid="structjnc___sjlj_frame" kindref="compound">jnc_SjljFrame</ref>* prev = jnc_Runtime_setSjljFrame (__jncRuntime, __jncSjljPrevFrame); \
+		<ref refid="group__base-def_1ga41365cfdb4186feb5a764b46778350e2" kindref="member">JNC_ASSERT</ref> (prev == &amp;__jncSjljFrame || prev == __jncSjljPrevFrame); \
+	} \
+	__jncCallSite.m_result = __jncSjljBranch == 0; \
+	jnc_Runtime_uninitializeCallSite (__jncRuntime, &amp;__jncCallSite);</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Projects/ioninja/jancy/include/jnc_CallSite.h" line="79" column="9" bodyfile="/home/vladimir/Projects/ioninja/jancy/include/jnc_CallSite.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="group__call-site_1gae5037d846eb3184509c3d1a243cb2400" prot="public" static="no">
+        <name>JNC_BEGIN_CALL_SITE</name>
+        <param><defname>runtime</defname></param>
+        <initializer><ref refid="group__call-site_1gae6b91ecc1c7e634749ebfe9db4167d9d" kindref="member">JNC_BEGIN_GC_SITE</ref> () \
+	JNC_BEGIN_CALL_SITE_IMPL (runtime)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Projects/ioninja/jancy/include/jnc_CallSite.h" line="90" column="9" bodyfile="/home/vladimir/Projects/ioninja/jancy/include/jnc_CallSite.h" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="group__call-site_1ga2859d35d68099292d436b7225d5983a9" prot="public" static="no">
+        <name>JNC_END_CALL_SITE</name>
+        <param></param>
+        <initializer>JNC_END_CALL_SITE_IMPL () \
+	<ref refid="group__call-site_1gaad3fd1ea84fdddf7d2460bb49a505059" kindref="member">JNC_END_GC_SITE</ref> ()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Projects/ioninja/jancy/include/jnc_CallSite.h" line="94" column="9" bodyfile="/home/vladimir/Projects/ioninja/jancy/include/jnc_CallSite.h" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="group__call-site_1gae0b8fa53ceb8bcaade4ed3ced3d1bb4e" prot="public" static="no">
+        <name>JNC_END_CALL_SITE_EX</name>
+        <param><defname>result</defname></param>
+        <initializer>JNC_END_CALL_SITE_IMPL() \
+	*(result) = __jncCallSite.m_result != 0; \
+	<ref refid="group__call-site_1gaad3fd1ea84fdddf7d2460bb49a505059" kindref="member">JNC_END_GC_SITE</ref> ()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Projects/ioninja/jancy/include/jnc_CallSite.h" line="98" column="9" bodyfile="/home/vladimir/Projects/ioninja/jancy/include/jnc_CallSite.h" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="group__call-site_1ga50521a4d879daa47f6c8bc9944511771" prot="public" static="no">
+        <name>JNC_BEGIN_NESTED_CALL_SITE</name>
+        <param><defname>runtime</defname></param>
+        <initializer>{ \
+	JNC_BEGIN_CALL_SITE_IMPL (runtime)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Projects/ioninja/jancy/include/jnc_CallSite.h" line="107" column="9" bodyfile="/home/vladimir/Projects/ioninja/jancy/include/jnc_CallSite.h" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="group__call-site_1ga6d0730b595d5240f05149df3af4ce697" prot="public" static="no">
+        <name>JNC_END_NESTED_CALL_SITE</name>
+        <param></param>
+        <initializer>JNC_END_CALL_SITE_IMPL () \
+	}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Projects/ioninja/jancy/include/jnc_CallSite.h" line="111" column="9" bodyfile="/home/vladimir/Projects/ioninja/jancy/include/jnc_CallSite.h" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="group__call-site_1gaff19d72050f0cc5d32c0e6b43815fd50" prot="public" static="no">
+        <name>JNC_END_NESTED_CALL_SITE_EX</name>
+        <param><defname>result</defname></param>
+        <initializer>JNC_END_CALL_SITE_IMPL() \
+	*(result) = __jncCallSite.m_result != 0; \
+	}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/vladimir/Projects/ioninja/jancy/include/jnc_CallSite.h" line="115" column="9" bodyfile="/home/vladimir/Projects/ioninja/jancy/include/jnc_CallSite.h" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

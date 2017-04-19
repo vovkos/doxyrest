@@ -1,0 +1,301 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="libssh_tutor_sftp" kind="page">
+    <compoundname>libssh_tutor_sftp</compoundname>
+    <title>Chapter 5: The SFTP subsystem</title>
+    <detaileddescription>
+<sect1 id="libssh_tutor_sftp_1sftp_subsystem">
+<title>The SFTP subsystem</title>
+<para>SFTP stands for &quot;Secure File Transfer Protocol&quot;. It enables you to safely transfer files between the local and the remote computer. It reminds a lot of the old FTP protocol.</para><para>SFTP is a rich protocol. It lets you do over the network almost everything that you can do with local files:<itemizedlist>
+<listitem><para>send files</para></listitem><listitem><para>modify only a portion of a file</para></listitem><listitem><para>receive files</para></listitem><listitem><para>receive only a portion of a file</para></listitem><listitem><para>get file owner and group</para></listitem><listitem><para>get file permissions</para></listitem><listitem><para>set file owner and group</para></listitem><listitem><para>set file permissions</para></listitem><listitem><para>remove files</para></listitem><listitem><para>rename files</para></listitem><listitem><para>create a directory</para></listitem><listitem><para>remove a directory</para></listitem><listitem><para>retrieve the list of files in a directory</para></listitem><listitem><para>get the target of a symbolic link</para></listitem><listitem><para>create symbolic links</para></listitem><listitem><para>get information about mounted filesystems.</para></listitem></itemizedlist>
+</para><para>The current implemented version of the SFTP protocol is version 3. All functions aren&apos;t implemented yet, but the most important are.</para><sect2 id="libssh_tutor_sftp_1sftp_session">
+<title>Opening and closing a SFTP session</title>
+<para>Unlike with remote shells and remote commands, when you use the SFTP subsystem, you don&apos;t handle directly the SSH channels. Instead, you open a &quot;SFTP session&quot;.</para><para>The function <ref refid="group__libssh__sftp_1ga32c8e182e97352e1aa8a20443c320d7f" kindref="member">sftp_new()</ref> creates a new SFTP session. The function <ref refid="group__libssh__sftp_1ga6eb5a92e33493ec3d9a3576e1617da0d" kindref="member">sftp_init()</ref> initializes it. The function <ref refid="group__libssh__sftp_1ga155c66639cb3342c7e02a96c8dbf7501" kindref="member">sftp_free()</ref> deletes it.</para><para>As you see, all the SFTP-related functions start with the &quot;sftp_&quot; prefix instead of the usual &quot;ssh_&quot; prefix.</para><para>The example below shows how to use these functions:</para><para><programlisting><codeline><highlight class="normal">#include<sp/>&lt;libssh/sftp.h&gt;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">int<sp/>sftp_helloworld(ssh_session<sp/>session)</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>sftp_session<sp/>sftp;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>int<sp/>rc;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>sftp<sp/>=<sp/>sftp_new(session);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>if<sp/>(sftp<sp/>==<sp/>NULL)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;Error<sp/>allocating<sp/>SFTP<sp/>session:<sp/>%s\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ssh_get_error(session));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>return<sp/>SSH_ERROR;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>rc<sp/>=<sp/>sftp_init(sftp);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>if<sp/>(rc<sp/>!=<sp/>SSH_OK)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;Error<sp/>initializing<sp/>SFTP<sp/>session:<sp/>%s.\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>sftp_get_error(sftp));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>sftp_free(sftp);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>return<sp/>rc;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>...</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>sftp_free(sftp);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>return<sp/>SSH_OK;</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para></sect2>
+<sect2 id="libssh_tutor_sftp_1sftp_errors">
+<title>Analyzing SFTP errors</title>
+<para>In case of a problem, the function <ref refid="group__libssh__sftp_1ga1f7fca4091a0075d9e69e47c928f7494" kindref="member">sftp_get_error()</ref> returns a SFTP-specific error number, in addition to the regular SSH error number returned by ssh_get_error_number().</para><para>Possible errors are:<itemizedlist>
+<listitem><para>SSH_FX_OK: no error</para></listitem><listitem><para>SSH_FX_EOF: end-of-file encountered</para></listitem><listitem><para>SSH_FX_NO_SUCH_FILE: file does not exist</para></listitem><listitem><para>SSH_FX_PERMISSION_DENIED: permission denied</para></listitem><listitem><para>SSH_FX_FAILURE: generic failure</para></listitem><listitem><para>SSH_FX_BAD_MESSAGE: garbage received from server</para></listitem><listitem><para>SSH_FX_NO_CONNECTION: no connection has been set up</para></listitem><listitem><para>SSH_FX_CONNECTION_LOST: there was a connection, but we lost it</para></listitem><listitem><para>SSH_FX_OP_UNSUPPORTED: operation not supported by libssh yet</para></listitem><listitem><para>SSH_FX_INVALID_HANDLE: invalid file handle</para></listitem><listitem><para>SSH_FX_NO_SUCH_PATH: no such file or directory path exists</para></listitem><listitem><para>SSH_FX_FILE_ALREADY_EXISTS: an attempt to create an already existing file or directory has been made</para></listitem><listitem><para>SSH_FX_WRITE_PROTECT: write-protected filesystem</para></listitem><listitem><para>SSH_FX_NO_MEDIA: no media was in remote drive</para></listitem></itemizedlist>
+</para></sect2>
+<sect2 id="libssh_tutor_sftp_1sftp_mkdir">
+<title>Creating a directory</title>
+<para>The function <ref refid="group__libssh__sftp_1ga9cc63cd3efe83edfa3f6a4c5314383cb" kindref="member">sftp_mkdir()</ref> tahes the &quot;SFTP session&quot; we juste created as its first argument. It also needs the name of the file to create, and the desired permissions. The permissions are the same as for the usual mkdir() function. To get a comprehensive list of the available permissions, use the &quot;man 2 stat&quot; command. The desired permissions are combined with the remote user&apos;s mask to determine the effective permissions.</para><para>The code below creates a directory named &quot;helloworld&quot; in the current directory that can be read and written only by its owner:</para><para><programlisting><codeline><highlight class="normal">#include<sp/>&lt;libssh/sftp.h&gt;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&lt;sys/stat.h&gt;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">int<sp/>sftp_helloworld(ssh_session<sp/>session,<sp/>sftp_session<sp/>sftp)</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>int<sp/>rc;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>rc<sp/>=<sp/>sftp_mkdir(sftp,<sp/>&quot;helloworld&quot;,<sp/>S_IRWXU);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>if<sp/>(rc<sp/>!=<sp/>SSH_OK)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>(sftp_get_error(sftp)<sp/>!=<sp/>SSH_FX_FILE_ALREADY_EXISTS)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;Can&apos;t<sp/>create<sp/>directory:<sp/>%s\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ssh_get_error(session));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>return<sp/>rc;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>...</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>return<sp/>SSH_OK;</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para><para>Unlike its equivalent in the SCP subsystem, this function does NOT change the current directory to the newly created subdirectory.</para></sect2>
+<sect2 id="libssh_tutor_sftp_1sftp_write">
+<title>Copying a file to the remote computer</title>
+<para>You handle the contents of a remote file just like you would do with a local file: you open the file in a given mode, move the file pointer in it, read or write data, and close the file.</para><para>The <ref refid="group__libssh__sftp_1gab95cb5fe091efcc49dfa7729e4d48010" kindref="member">sftp_open()</ref> function is very similar to the regular open() function, excepted that it returns a file handle of type sftp_file. This file handle is then used by the other file manipulation functions and remains valid until you close the remote file with <ref refid="group__libssh__sftp_1ga5878919249d4e8abe59b0ec699eed293" kindref="member">sftp_close()</ref>.</para><para>The example below creates a new file named &quot;helloworld.txt&quot; in the newly created &quot;helloworld&quot; directory. If the file already exists, it will be truncated. It then writes the famous &quot;Hello, World!&quot; sentence to the file, followed by a new line character. Finally, the file is closed:</para><para><programlisting><codeline><highlight class="normal">#include<sp/>&lt;libssh/sftp.h&gt;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&lt;sys/stat.h&gt;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&lt;fcntl.h&gt;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">int<sp/>sftp_helloworld(ssh_session<sp/>session,<sp/>sftp_session<sp/>sftp)</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>int<sp/>access_type<sp/>=<sp/>O_WRONLY<sp/>|<sp/>O_CREAT<sp/>|<sp/>O_TRUNC;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>sftp_file<sp/>file;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>const<sp/>char<sp/>*helloworld<sp/>=<sp/>&quot;Hello,<sp/>World!\n&quot;;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>int<sp/>length<sp/>=<sp/>strlen(helloworld);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>int<sp/>rc,<sp/>nwritten;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>...</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>file<sp/>=<sp/>sftp_open(sftp,<sp/>&quot;helloworld/helloworld.txt&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>access_type,<sp/>S_IRWXU);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>if<sp/>(file<sp/>==<sp/>NULL)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;Can&apos;t<sp/>open<sp/>file<sp/>for<sp/>writing:<sp/>%s\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ssh_get_error(session));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>return<sp/>SSH_ERROR;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>nwritten<sp/>=<sp/>sftp_write(file,<sp/>helloworld,<sp/>length);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>if<sp/>(nwritten<sp/>!=<sp/>length)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;Can&apos;t<sp/>write<sp/>data<sp/>to<sp/>file:<sp/>%s\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ssh_get_error(session));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>sftp_close(file);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>return<sp/>SSH_ERROR;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>rc<sp/>=<sp/>sftp_close(file);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>if<sp/>(rc<sp/>!=<sp/>SSH_OK)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;Can&apos;t<sp/>close<sp/>the<sp/>written<sp/>file:<sp/>%s\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ssh_get_error(session));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>return<sp/>rc;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>return<sp/>SSH_OK;</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para></sect2>
+<sect2 id="libssh_tutor_sftp_1sftp_read">
+<title>Reading a file from the remote computer</title>
+<para>The nice thing with reading a file over the network through SFTP is that it can be done both in a synchronous way or an asynchronous way. If you read the file asynchronously, your program can do something else while it waits for the results to come.</para><para>Synchronous read is done with <ref refid="group__libssh__sftp_1ga6c2bfeb2e089f54c04afe1e484a7fff2" kindref="member">sftp_read()</ref>.</para><para>Files are normally transferred in chunks. A good chunk size is 16 KB. The following example transfers the remote file &quot;/etc/profile&quot; in 16 KB chunks. For each chunk we request, sftp_read blocks till the data has been received:</para><para><programlisting><codeline><highlight class="normal">//<sp/>Good<sp/>chunk<sp/>size</highlight></codeline>
+<codeline><highlight class="normal">#define<sp/>MAX_XFER_BUF_SIZE<sp/>16384</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">int<sp/>sftp_read_sync(ssh_session<sp/>session,<sp/>sftp_session<sp/>sftp)</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>int<sp/>access_type;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>sftp_file<sp/>file;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>char<sp/>buffer[MAX_XFER_BUF_SIZE];</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>int<sp/>nbytes,<sp/>nwritten,<sp/>rc;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>int<sp/>fd;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>access_type<sp/>=<sp/>O_RDONLY;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>file<sp/>=<sp/>sftp_open(sftp,<sp/>&quot;/etc/profile&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>access_type,<sp/>0);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>if<sp/>(file<sp/>==<sp/>NULL)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;Can&apos;t<sp/>open<sp/>file<sp/>for<sp/>reading:<sp/>%s\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ssh_get_error(session));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>return<sp/>SSH_ERROR;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>fd<sp/>=<sp/>open(&quot;/path/to/profile&quot;,<sp/>O_CREAT);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>if<sp/>(fd<sp/>&lt;<sp/>0)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;Can&apos;t<sp/>open<sp/>file<sp/>for<sp/>writing:<sp/>%s\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>strerror(errno));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>return<sp/>SSH_ERROR;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>for<sp/>(;;)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>nbytes<sp/>=<sp/>sftp_read(file,<sp/>buffer,<sp/>sizeof(buffer));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>if<sp/>(nbytes<sp/>==<sp/>0)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>break;<sp/>//<sp/>EOF</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/>else<sp/>if<sp/>(nbytes<sp/>&lt;<sp/>0)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;Error<sp/>while<sp/>reading<sp/>file:<sp/>%s\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ssh_get_error(session));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>sftp_close(file);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>return<sp/>SSH_ERROR;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>nwritten<sp/>=<sp/>write(fd,<sp/>buffer,<sp/>nbytes);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>if<sp/>(nwritten<sp/>!=<sp/>nbytes)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;Error<sp/>writing:<sp/>%s\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>strerror(errno));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>sftp_close(file);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>return<sp/>SSH_ERROR;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>rc<sp/>=<sp/>sftp_close(file);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>if<sp/>(rc<sp/>!=<sp/>SSH_OK)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;Can&apos;t<sp/>close<sp/>the<sp/>read<sp/>file:<sp/>%s\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ssh_get_error(session));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>return<sp/>rc;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>return<sp/>SSH_OK;</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para><para>Asynchronous read is done in two steps, first <ref refid="group__libssh__sftp_1ga4c2cca19b38c54d4b04bb3584b0517cd" kindref="member">sftp_async_read_begin()</ref>, which returns a &quot;request handle&quot;, and then <ref refid="group__libssh__sftp_1ga4399c7ccd8b39a460265047f9d7bc9b1" kindref="member">sftp_async_read()</ref>, which uses that request handle. If the file has been opened in nonblocking mode, then <ref refid="group__libssh__sftp_1ga4399c7ccd8b39a460265047f9d7bc9b1" kindref="member">sftp_async_read()</ref> might return SSH_AGAIN, which means that the request hasn&apos;t completed yet and that the function should be called again later on. Otherwise, <ref refid="group__libssh__sftp_1ga4399c7ccd8b39a460265047f9d7bc9b1" kindref="member">sftp_async_read()</ref> waits for the data to come. To open a file in nonblocking mode, call <ref refid="group__libssh__sftp_1gac0ccac0257aece8197654bed83b7ec01" kindref="member">sftp_file_set_nonblocking()</ref> right after you opened it. Default is blocking mode.</para><para>The example below reads a very big file in asynchronous, nonblocking, mode. Each time the data is not ready yet, a counter is incremented.</para><para><programlisting><codeline><highlight class="normal">//<sp/>Good<sp/>chunk<sp/>size</highlight></codeline>
+<codeline><highlight class="normal">#define<sp/>MAX_XFER_BUF_SIZE<sp/>16384</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">int<sp/>sftp_read_async(ssh_session<sp/>session,<sp/>sftp_session<sp/>sftp)</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>int<sp/>access_type;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>sftp_file<sp/>file;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>char<sp/>buffer[MAX_XFER_BUF_SIZE];</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>int<sp/>async_request;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>int<sp/>nbytes;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>long<sp/>counter;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>int<sp/>rc;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>access_type<sp/>=<sp/>O_RDONLY;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>file<sp/>=<sp/>sftp_open(sftp,<sp/>&quot;some_very_big_file&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>access_type,<sp/>0);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>if<sp/>(file<sp/>==<sp/>NULL)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;Can&apos;t<sp/>open<sp/>file<sp/>for<sp/>reading:<sp/>%s\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ssh_get_error(session));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>return<sp/>SSH_ERROR;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>sftp_file_set_nonblocking(file);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>async_request<sp/>=<sp/>sftp_async_read_begin(file,<sp/>sizeof(buffer));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>counter<sp/>=<sp/>0L;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>usleep(10000);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>if<sp/>(async_request<sp/>&gt;=<sp/>0)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>nbytes<sp/>=<sp/>sftp_async_read(file,<sp/>buffer,<sp/>sizeof(buffer),</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>async_request);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}<sp/>else<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>nbytes<sp/>=<sp/>-1;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>while<sp/>(nbytes<sp/>&gt;<sp/>0<sp/>||<sp/>nbytes<sp/>==<sp/>SSH_AGAIN)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>(nbytes<sp/>&gt;<sp/>0)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>write(1,<sp/>buffer,<sp/>nbytes);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>async_request<sp/>=<sp/>sftp_async_read_begin(file,<sp/>sizeof(buffer));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/>else<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>counter++;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>usleep(10000);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>(async_request<sp/>&gt;=<sp/>0)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>nbytes<sp/>=<sp/>sftp_async_read(file,<sp/>buffer,<sp/>sizeof(buffer),</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>async_request);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/>else<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>nbytes<sp/>=<sp/>-1;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>if<sp/>(nbytes<sp/>&lt;<sp/>0)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;Error<sp/>while<sp/>reading<sp/>file:<sp/>%s\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ssh_get_error(session));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>sftp_close(file);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>return<sp/>SSH_ERROR;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>printf(&quot;The<sp/>counter<sp/>has<sp/>reached<sp/>value:<sp/>%ld\n&quot;,<sp/>counter);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>rc<sp/>=<sp/>sftp_close(file);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>if<sp/>(rc<sp/>!=<sp/>SSH_OK)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;Can&apos;t<sp/>close<sp/>the<sp/>read<sp/>file:<sp/>%s\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ssh_get_error(session));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>return<sp/>rc;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>return<sp/>SSH_OK;</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para></sect2>
+<sect2 id="libssh_tutor_sftp_1sftp_ls">
+<title>Listing the contents of a directory</title>
+<para>The functions <ref refid="group__libssh__sftp_1gab4290874bdb55796b2823496e0d9b7ec" kindref="member">sftp_opendir()</ref>, <ref refid="group__libssh__sftp_1ga976ecf6f7d415856e1fd4a0f16ada9b8" kindref="member">sftp_readdir()</ref>, <ref refid="group__libssh__sftp_1gad60f8e71b06eb8fdae2b262bb58f8fec" kindref="member">sftp_dir_eof()</ref>, and <ref refid="group__libssh__sftp_1ga35551e5b28b192ef8035628d347f7d3e" kindref="member">sftp_closedir()</ref> enable to list the contents of a directory. They use a new handle_type, &quot;sftp_dir&quot;, which gives access to the directory being read.</para><para>In addition, <ref refid="group__libssh__sftp_1ga976ecf6f7d415856e1fd4a0f16ada9b8" kindref="member">sftp_readdir()</ref> returns a &quot;sftp_attributes&quot; which is a pointer to a structure with informations about a directory entry:<itemizedlist>
+<listitem><para>name: the name of the file or directory</para></listitem><listitem><para>size: its size in bytes</para></listitem><listitem><para>etc.</para></listitem></itemizedlist>
+</para><para><ref refid="group__libssh__sftp_1ga976ecf6f7d415856e1fd4a0f16ada9b8" kindref="member">sftp_readdir()</ref> might return NULL under two conditions:<itemizedlist>
+<listitem><para>when the end of the directory has been met</para></listitem><listitem><para>when an error occured</para></listitem></itemizedlist>
+</para><para>To tell the difference, call <ref refid="group__libssh__sftp_1gad60f8e71b06eb8fdae2b262bb58f8fec" kindref="member">sftp_dir_eof()</ref>.</para><para>The attributes must be freed with <ref refid="group__libssh__sftp_1gadee9f7af9fc1ad3a0a66c7d97bf7977c" kindref="member">sftp_attributes_free()</ref> when no longer needed.</para><para>The following example reads the contents of some remote directory:</para><para><programlisting><codeline><highlight class="normal">int<sp/>sftp_list_dir(ssh_session<sp/>session,<sp/>sftp_session<sp/>sftp)</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>sftp_dir<sp/>dir;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>sftp_attributes<sp/>attributes;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>int<sp/>rc;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>dir<sp/>=<sp/>sftp_opendir(sftp,<sp/>&quot;/var/log&quot;);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>if<sp/>(!dir)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;Directory<sp/>not<sp/>opened:<sp/>%s\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ssh_get_error(session));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>return<sp/>SSH_ERROR;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>printf(&quot;Name<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Size<sp/>Perms<sp/><sp/><sp/><sp/>Owner\tGroup\n&quot;);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>while<sp/>((attributes<sp/>=<sp/>sftp_readdir(sftp,<sp/>dir))<sp/>!=<sp/>NULL)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>printf(&quot;%-20s<sp/>%10llu<sp/>%.8o<sp/>%s(%d)\t%s(%d)\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>attributes-&gt;name,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>(long<sp/>long<sp/>unsigned<sp/>int)<sp/>attributes-&gt;size,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>attributes-&gt;permissions,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>attributes-&gt;owner,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>attributes-&gt;uid,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>attributes-&gt;group,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>attributes-&gt;gid);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>sftp_attributes_free(attributes);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>if<sp/>(!sftp_dir_eof(dir))</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;Can&apos;t<sp/>list<sp/>directory:<sp/>%s\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ssh_get_error(session));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>sftp_closedir(dir);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>return<sp/>SSH_ERROR;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/>rc<sp/>=<sp/>sftp_closedir(dir);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>if<sp/>(rc<sp/>!=<sp/>SSH_OK)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;Can&apos;t<sp/>close<sp/>directory:<sp/>%s\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ssh_get_error(session));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>return<sp/>rc;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting> </para></sect2>
+</sect1>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

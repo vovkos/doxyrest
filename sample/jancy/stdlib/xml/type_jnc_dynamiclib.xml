@@ -1,0 +1,170 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen>
+<compounddef kind='class' id='type_jnc_dynamiclib' language='Jancy'>
+<compoundname>DynamicLib</compoundname>
+
+<sectiondef>
+<memberdef kind='function' id='function_jnc_dynamiclib_destruct'>
+<functionkind>destruct</functionkind>
+<name>destruct</name>
+<type>void</type>
+<argsstring>(jnc.DynamicLib safe* this)</argsstring>
+<location file='jnc_DynamicLib.jnc' line='103' col='2'/>
+</memberdef>
+</sectiondef>
+
+<sectiondef>
+<memberdef kind='variable' id='struct_member_jnc_dynamiclib_iface_m_handle' readonly='yes'>
+<name>m_handle</name>
+<type>void thin*</type>
+<modifiers>readonly</modifiers>
+<detaileddescription>
+<para>This field holds the native handle of the dynamic library (``HMODULE`` returned by  ``LoadLibraryW`` on Windows, ``void*`` returned by ``dlopen`` on POSIX)
+
+Usually, you should ignore this field -- unless you plan to do some platform-dependent low-level magic.</para>
+</detaileddescription>
+<location file='jnc_DynamicLib.jnc' line='89' col='22'/>
+</memberdef>
+
+<memberdef kind='property' id='property_jnc_dynamiclib_m_isopen'>
+<name>m_isOpen</name>
+<type>bool const property</type>
+<argsstring>(jnc.DynamicLib safe const* this)</argsstring>
+<detaileddescription>
+<para>Holds the open status for the dynamic library, i.e. ``true`` if opened; ``false`` otherwise.</para>
+</detaileddescription>
+<location file='jnc_DynamicLib.jnc' line='95' col='11'/>
+</memberdef>
+
+<memberdef kind='function' id='function_jnc_dynamiclib_open'>
+<functionkind>named-function</functionkind>
+<name>open</name>
+<type>bool errorcode</type>
+<argsstring>(jnc.DynamicLib safe* this, char const* fileName)</argsstring>
+<param>
+<declname>fileName</declname>
+<type>char const*</type>
+<array></array>
+</param>
+<detaileddescription>
+<para>Opens (loads) a dynamic library.
+
+The function accepts a single ``fileName`` argument, which specifies the name of the library-containing file.
+
+Returns ``true`` on success. If the dynamic library could not be loaded, IO error supplied by the dynamic loader of the operating system is set and then the function returns ``false`` [#f1]_.</para>
+</detaileddescription>
+<location file='jnc_DynamicLib.jnc' line='116' col='17'/>
+</memberdef>
+
+<memberdef kind='function' id='function_jnc_dynamiclib_close'>
+<functionkind>named-function</functionkind>
+<name>close</name>
+<type>void</type>
+<argsstring>(jnc.DynamicLib safe* this)</argsstring>
+<detaileddescription>
+<para>Closes (releases) a previously loaded dynamic library, does nothing if no library is loaded. This function always succeeds.
+
+Sometimes it may be convenient to use *disposable* pattern to ensure timely invokation of ``close`` [#f2]_.</para>
+</detaileddescription>
+<location file='jnc_DynamicLib.jnc' line='124' col='7'/>
+</memberdef>
+
+<memberdef kind='alias' id='alias_jnc_dynamiclib_dispose'>
+<name>dispose</name>
+<initializer>= close</initializer>
+<detaileddescription>
+<para>Effectively makes ``jnc.DynamicLib`` a *disposable* class [#f2]_.</para>
+</detaileddescription>
+<location file='jnc_DynamicLib.jnc' line='130' col='8'/>
+</memberdef>
+
+<memberdef kind='function' id='function_jnc_dynamiclib_getfunction'>
+<functionkind>named-function</functionkind>
+<name>getFunction</name>
+<type>void thin* errorcode</type>
+<argsstring>(jnc.DynamicLib safe* this, char const* fileName)</argsstring>
+<param>
+<declname>fileName</declname>
+<type>char const*</type>
+<array></array>
+</param>
+<detaileddescription>
+<para>Resolves a function name in the previously loaded dynamic library.
+
+The function accepts a single ``name`` argument, which specifies the name of the function. Note that if this is a ``C++`` function, name should be properly *mangled*. On the other hand, ``C`` functions do not have to be prefixed with underscore character ``_``.
+
+Returns abstract pointer (``void thin*``), which then has to be cast to a ``thin`` function pointer of the proper type (e.g., ``void thin function* (int)``.
+
+If the function name could not be resolved, IO error supplied by the dynamic loader of the operating system is set and then the function returns ``null`` [#f1]_.</para>
+</detaileddescription>
+<location file='jnc_DynamicLib.jnc' line='142' col='23'/>
+</memberdef>
+
+</sectiondef>
+<sectiondef>
+<memberdef kind='footnote'>
+<name>f1</name>
+<detaileddescription>
+<para>|footnote-errorcode|</para>
+</detaileddescription>
+</memberdef>
+<memberdef kind='footnote'>
+<name>f2</name>
+<detaileddescription>
+<para>|footnote-disposable|</para>
+</detaileddescription>
+</memberdef>
+</sectiondef>
+<briefdescription><para>This class provides direct access to functions in *dynamic libraries* (also known as *shared libraries*).</para></briefdescription>
+<detaileddescription>
+<para>You can use ``jnc.DynamicLib`` in one of the two ways.
+
+One way is to explicitly load a dynamic library by file name, resolve function names to pointers, (unsafely) cast these pointers to appropriate function pointer types, and then call these function pointers:
+
+.. ref-code-block::
+
+	void foo ()
+	{
+		jnc.DynamicLib lib;
+		lib.open ("libname"); // load library
+		void thin* p = lib.getFunction ("foo"); // resolve function by name
+
+		typedef void stdcall FooFunc (int); // specify function type
+
+		unsafe
+		{
+			FooFunc thin* foo = (FooFunc thin*) p; // cast to proper function type
+		}
+
+		foo (100); // call this function
+
+	catch:
+		// handle error...
+	}
+
+Alternatively, you can declare a pseudo-interface using ``dynamiclib`` keyword, and then simply call methods of this interface. Eventually it will result in the same sequence of steps, and even the base implementation class will be the same, ``jnc.DynamicLib``. But all the above steps will be done behind the scene -- Jancy compiler will generate necessary calls automatically. Moreover, once the resolve completes, the result is cached, so the next time you call the same functions, cached pointer will be used and no repetitive resolve-by-name is going to happen.
+
+Needless to say, this is the preferred approach:
+
+.. ref-code-block::
+
+	dynamiclib MyLib // this pseudo-interface will use jnc.DynamicLib behind the scene
+	{
+		void stdcall foo (int);
+	}
+
+	void foo ()
+	{
+		MyLib myLib;
+		myLib.open ("libname"); // load library
+		myLib.lib.foo (100); // resolve, cache and call
+
+	catch:
+		// handle error...
+	}
+
+Please note that when accessing functions from the dynamic library (``foo`` in the example above), you need to prefix it with ``lib.`` qualifier -- this design was chosen to avoid conflicts between library functions and ``jnc.DynamicLib`` members.</para>
+</detaileddescription>
+<location file='jnc_DynamicLib.jnc' line='81' col='7'/>
+</compounddef>
+</doxygen>

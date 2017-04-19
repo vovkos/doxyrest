@@ -1,0 +1,338 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen>
+<compounddef kind='class' id='type_std_list' language='Jancy'>
+<compoundname>List</compoundname>
+
+<sectiondef>
+<memberdef kind='variable' id='struct_member_std_list_iface_m_head' readonly='yes'>
+<name>m_head</name>
+<type><ref refid="type_std_listentry">std.ListEntry</ref> cmut*</type>
+<modifiers>readonly</modifiers>
+<detaileddescription>
+<para>Holds a pointer to the *list head* (the first element of the list) or ``null`` if the list is empty.</para>
+</detaileddescription>
+<location file='std_List.jnc' line='101' col='22'/>
+</memberdef>
+
+<memberdef kind='variable' id='struct_member_std_list_iface_m_tail' readonly='yes'>
+<name>m_tail</name>
+<type><ref refid="type_std_listentry">std.ListEntry</ref> cmut*</type>
+<modifiers>readonly</modifiers>
+<detaileddescription>
+<para>Holds a pointer to the *list tail* (the last element of the list) or ``null`` if the list is empty.</para>
+</detaileddescription>
+<location file='std_List.jnc' line='107' col='22'/>
+</memberdef>
+
+<memberdef kind='variable' id='struct_member_std_list_iface_m_count' readonly='yes'>
+<name>m_count</name>
+<type><ref refid="typedef_size_t">size_t</ref></type>
+<modifiers>readonly</modifiers>
+<detaileddescription>
+<para>Holds number of elements on the list.</para>
+</detaileddescription>
+<location file='std_List.jnc' line='113' col='18'/>
+</memberdef>
+
+<memberdef kind='function' id='function_std_list_clear'>
+<functionkind>named-function</functionkind>
+<name>clear</name>
+<type>void</type>
+<argsstring>(std.List safe* this)</argsstring>
+<detaileddescription>
+<para>Removes all elements from the lists.</para>
+</detaileddescription>
+<location file='std_List.jnc' line='119' col='2'/>
+</memberdef>
+
+<memberdef kind='function' id='function_std_list_takeover'>
+<functionkind>named-function</functionkind>
+<name>takeOver</name>
+<type>void</type>
+<argsstring>(std.List safe* this, std.List* list)</argsstring>
+<param>
+<declname>list</declname>
+<type><ref refid="type_std_list">std.List</ref>*</type>
+<array></array>
+</param>
+<detaileddescription>
+<para>Moves all the elements from the source list ``list`` to this list.
+
+After the take-over, ``list`` will be empty and this list will contain the same elements as ``list`` originally did.
+
+This operation is performed in constant time no matter the size of the source list -- so it's always more efficient than clearing the list first and then adding all the items from the source list in a loop.</para>
+</detaileddescription>
+<location file='std_List.jnc' line='129' col='2'/>
+</memberdef>
+
+<memberdef kind='function' id='function_std_list_add'>
+<functionkind>named-function</functionkind>
+<name>add</name>
+<type><ref refid="type_std_listentry">std.ListEntry</ref> cmut* errorcode</type>
+<argsstring>(std.List safe* this, variant data)</argsstring>
+<param>
+<declname>data</declname>
+<type>variant</type>
+<array></array>
+</param>
+<detaileddescription>
+<para>Adds item ``data``  to the list.
+
+Returns a pointer to the new `std.ListEntry`.
+
+Equivalent to ``insertTail``.</para>
+</detaileddescription>
+<location file='std_List.jnc' line='139' col='23'/>
+</memberdef>
+
+<memberdef kind='function' id='function_std_list_inserthead'>
+<functionkind>named-function</functionkind>
+<name>insertHead</name>
+<type><ref refid="type_std_listentry">std.ListEntry</ref> cmut* errorcode</type>
+<argsstring>(std.List safe* this, variant data)</argsstring>
+<param>
+<declname>data</declname>
+<type>variant</type>
+<array></array>
+</param>
+<detaileddescription>
+<para>Inserts item ``data`` to the head of the list.
+
+Returns a pointer to the new `std.ListEntry`.</para>
+</detaileddescription>
+<location file='std_List.jnc' line='150' col='23'/>
+</memberdef>
+
+<memberdef kind='function' id='function_std_list_inserttail'>
+<functionkind>named-function</functionkind>
+<name>insertTail</name>
+<type><ref refid="type_std_listentry">std.ListEntry</ref> cmut* errorcode</type>
+<argsstring>(std.List safe* this, variant data)</argsstring>
+<param>
+<declname>data</declname>
+<type>variant</type>
+<array></array>
+</param>
+<detaileddescription>
+<para>Inserts item ``data`` to the tail of the list.
+
+Returns a pointer to the new `std.ListEntry`.</para>
+</detaileddescription>
+<location file='std_List.jnc' line='158' col='23'/>
+</memberdef>
+
+<memberdef kind='function' id='function_std_list_insertbefore'>
+<functionkind>named-function</functionkind>
+<name>insertBefore</name>
+<type><ref refid="type_std_listentry">std.ListEntry</ref> cmut* errorcode</type>
+<argsstring>(std.List safe* this, variant item, std.ListEntry cmut* before)</argsstring>
+<param>
+<declname>item</declname>
+<type>variant</type>
+<array></array>
+</param>
+<param>
+<declname>before</declname>
+<type><ref refid="type_std_listentry">std.ListEntry</ref> cmut*</type>
+<array></array>
+</param>
+<detaileddescription>
+<para>Inserts item ``data`` before the item entry pointed to by ``entry`` argument.
+
+If ``entry == null`` then this method is equivalent to ``insertTail``.
+
+Returns a pointer to the new `std.ListEntry`.</para>
+</detaileddescription>
+<location file='std_List.jnc' line='168' col='23'/>
+</memberdef>
+
+<memberdef kind='function' id='function_std_list_insertafter'>
+<functionkind>named-function</functionkind>
+<name>insertAfter</name>
+<type><ref refid="type_std_listentry">std.ListEntry</ref> cmut* errorcode</type>
+<argsstring>(std.List safe* this, variant item, std.ListEntry cmut* before)</argsstring>
+<param>
+<declname>item</declname>
+<type>variant</type>
+<array></array>
+</param>
+<param>
+<declname>before</declname>
+<type><ref refid="type_std_listentry">std.ListEntry</ref> cmut*</type>
+<array></array>
+</param>
+<detaileddescription>
+<para>Inserts item ``data`` after the item entry pointed to by ``entry`` argument.
+
+If ``entry == null`` then this method is equivalent to ``insertHead``.
+
+Returns a pointer to the new `std.ListEntry`.</para>
+</detaileddescription>
+<location file='std_List.jnc' line='181' col='23'/>
+</memberdef>
+
+<memberdef kind='function' id='function_std_list_movetohead'>
+<functionkind>named-function</functionkind>
+<name>moveToHead</name>
+<type>void</type>
+<argsstring>(std.List safe* this, std.ListEntry cmut* entry)</argsstring>
+<param>
+<declname>entry</declname>
+<type><ref refid="type_std_listentry">std.ListEntry</ref> cmut*</type>
+<array></array>
+</param>
+<detaileddescription>
+<para>Moves item entry pointed to by ``entry`` to the head of the list.
+
+After this call ``m_head`` will be pointing to ``entry``.</para>
+</detaileddescription>
+<location file='std_List.jnc' line='192' col='2'/>
+</memberdef>
+
+<memberdef kind='function' id='function_std_list_movetotail'>
+<functionkind>named-function</functionkind>
+<name>moveToTail</name>
+<type>void</type>
+<argsstring>(std.List safe* this, std.ListEntry cmut* entry)</argsstring>
+<param>
+<declname>entry</declname>
+<type><ref refid="type_std_listentry">std.ListEntry</ref> cmut*</type>
+<array></array>
+</param>
+<detaileddescription>
+<para>Moves item entry pointed to by  ``entry`` to the tail of the list.
+
+After this call ``m_tail`` will be pointing to ``entry``.</para>
+</detaileddescription>
+<location file='std_List.jnc' line='200' col='2'/>
+</memberdef>
+
+<memberdef kind='function' id='function_std_list_movebefore'>
+<functionkind>named-function</functionkind>
+<name>moveBefore</name>
+<type>void</type>
+<argsstring>(std.List safe* this, std.ListEntry cmut* entry, std.ListEntry cmut* before)</argsstring>
+<param>
+<declname>entry</declname>
+<type><ref refid="type_std_listentry">std.ListEntry</ref> cmut*</type>
+<array></array>
+</param>
+<param>
+<declname>before</declname>
+<type><ref refid="type_std_listentry">std.ListEntry</ref> cmut*</type>
+<array></array>
+</param>
+<detaileddescription>
+<para>Moves item entry pointed to by ``entry`` before item entry pointed to by  ``before``.
+
+If ``entry == null`` then this method is equivalent to ``moveToTail``.</para>
+</detaileddescription>
+<location file='std_List.jnc' line='208' col='2'/>
+</memberdef>
+
+<memberdef kind='function' id='function_std_list_moveafter'>
+<functionkind>named-function</functionkind>
+<name>moveAfter</name>
+<type>void</type>
+<argsstring>(std.List safe* this, std.ListEntry cmut* entry, std.ListEntry cmut* before)</argsstring>
+<param>
+<declname>entry</declname>
+<type><ref refid="type_std_listentry">std.ListEntry</ref> cmut*</type>
+<array></array>
+</param>
+<param>
+<declname>before</declname>
+<type><ref refid="type_std_listentry">std.ListEntry</ref> cmut*</type>
+<array></array>
+</param>
+<detaileddescription>
+<para>Moves item entry pointed to by  ``entry`` after item entry pointed to by ``after``.
+
+If ``after == null`` then this method is equivalent to ``moveToHead``.</para>
+</detaileddescription>
+<location file='std_List.jnc' line='219' col='2'/>
+</memberdef>
+
+<memberdef kind='function' id='function_std_list_removehead'>
+<functionkind>named-function</functionkind>
+<name>removeHead</name>
+<type>variant</type>
+<argsstring>(std.List safe* this)</argsstring>
+<detaileddescription>
+<para>Removes head item entry.
+
+Returns the value of `std.ListEntry.m_data` field of the removed list head.
+
+If list is empty at the moment of removal does nothing and returns ``null``.</para>
+</detaileddescription>
+<location file='std_List.jnc' line='232' col='10'/>
+</memberdef>
+
+<memberdef kind='function' id='function_std_list_removetail'>
+<functionkind>named-function</functionkind>
+<name>removeTail</name>
+<type>variant</type>
+<argsstring>(std.List safe* this)</argsstring>
+<detaileddescription>
+<para>Removes tail item entry.
+
+Returns the value of `std.ListEntry.m_data` field of the removed list tail.
+
+If list is empty at the moment of removal does nothing and returns ``null``.</para>
+</detaileddescription>
+<location file='std_List.jnc' line='242' col='10'/>
+</memberdef>
+
+<memberdef kind='function' id='function_std_list_remove'>
+<functionkind>named-function</functionkind>
+<name>remove</name>
+<type>variant</type>
+<argsstring>(std.List safe* this, std.ListEntry cmut* entry)</argsstring>
+<param>
+<declname>entry</declname>
+<type><ref refid="type_std_listentry">std.ListEntry</ref> cmut*</type>
+<array></array>
+</param>
+<detaileddescription>
+<para>Removes item entry pointed to by ``entry``.
+
+Returns the value of ``entry.m_data`` field.</para>
+</detaileddescription>
+<location file='std_List.jnc' line='250' col='10'/>
+</memberdef>
+
+</sectiondef>
+<includes>std_List.jnc</includes>
+<briefdescription><para>This class provides a doubly linked list container for ``variant`` values.</para></briefdescription>
+<detaileddescription>
+<para><![CDATA[A typical sequence of steps when working with a doubly linked list usually looks like this:
+
+* Add items using *insert* methods: ``insertHead``, ``insertTail``, ``insertBefore``, ``insertAfter``;
+* Remove items using *remove* methods: ``removeHead``, ``removeTail``, ``removeBefore``, ``removeAfter``, ``remove``;
+* Iterate over items by starting with ``m_head`` or ``m_tail`` and then move to the next element by inspecting `std.ListEntry.m_next` or `std.ListEntry.m_prev`.
+
+.. rubric:: Sample code:
+
+.. ref-code-block::
+
+	std.List list;
+
+	// add items...
+
+	int a [] = { 10, 20, 30, 40, 50, }
+
+	for (size_t i = 0; i < countof (a); i++)
+		list.insertTail (a [i]);
+
+	// iterate over list...
+
+	std.ListEntry* e = list.m_head;
+	for (; e; e = e.m_next)
+	{
+		// access e.m_data...
+	}]]></para>
+<para><simplesect kind='see'><para>`std.ListEntry`</para></simplesect></para>
+</detaileddescription>
+<location file='std_List.jnc' line='95' col='7'/>
+</compounddef>
+</doxygen>

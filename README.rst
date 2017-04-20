@@ -25,19 +25,23 @@ Doxyrest is a compiler from **Doxygen** XML to **reStructuredText** -- hence, th
 
 .. image:: /doc/manual/images/doxyrest-pipeline.png
 
-This elaborate pipeline builds **beautiful** documentation for C/C++ APIs without (or with minor) changes to the existing Doxygen-based documentation.
+This elaborate pipeline allows building **beautiful** documentation for C/C++ APIs without (or with minor) changes to the existing in-source Doxygen documentation.
 
 Samples
 -------
 
-Check out the results of Doxyrest' handiwork:
+Check out the results of Doxyrest' handiwork in application to a few open-source projects:
 
-* `Jancy Standard Library <https://vovkos.github.io/jancy/stdlib>`_
-* `Jancy C API <https://vovkos.github.io/jancy/api>`_
 * `LibUSB <https://vovkos.github.io/doxyrest/samples/libusb>`_
 * `LibSSH <https://vovkos.github.io/doxyrest/samples/libssh>`_
 * `ALSA Library <https://vovkos.github.io/doxyrest/samples/alsa>`_
 * `Apache Portable Runtime <https://vovkos.github.io/doxyrest/samples/apr>`_
+
+The best part about Doxyrest approach is: everything is **100% customizable**! You can play with **Sphinx themes** on the back-end to change visual appearance (fonts, colors, page layout). But you can also adjust or completely rewrite **Lua frames** for more drastic effects -- from tweaking the declaration coding style to changing the whole documentation structure!
+
+You can even replace Doxygen with your own generator of Doxygen-style XML database and use it for documenting APIs in **any other languages**!
+
+* `Jancy Standard Library <https://vovkos.github.io/jancy/stdlib>`_
 
 Documentation
 -------------

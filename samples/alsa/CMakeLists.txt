@@ -88,6 +88,12 @@ if (WIN32)
 		${AXL_DOC_SHARE_DIR}/sh/build-html.bat.in
 		build-html.bat
 		)
+
+	add_test (
+		NAME sample-alsa
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+		COMMAND build-rst.bat
+		)
 else ()
 	axl_configure_file_w_permissions (
 		${AXL_DOC_SHARE_DIR}/sh/build-rst.sh.in
@@ -103,6 +109,12 @@ else ()
 		OWNER_READ OWNER_WRITE OWNER_EXECUTE
 		GROUP_READ GROUP_WRITE GROUP_EXECUTE
 		WORLD_READ WORLD_WRITE WORLD_EXECUTE
+		)
+
+	add_test (
+		NAME sample-alsa
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+		COMMAND ./build-rst.sh
 		)
 endif ()
 

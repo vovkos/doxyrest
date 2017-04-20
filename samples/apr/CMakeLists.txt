@@ -34,7 +34,7 @@ set (
 	${XML_DIR}/index.xml
 	-D g_hasNewLineAfterReturnType
 	-D g_nameDelimiter=::
-	-D g_introFile=page_index.rst
+	-D "\"g_indexTitle=Apache Portable Runtime Documentation\""
 	-D g_escapeAsterisks
 	-D g_verbatimToCodeBlock
 	-o ${RST_DIR}/index.rst

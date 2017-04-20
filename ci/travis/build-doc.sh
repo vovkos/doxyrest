@@ -9,25 +9,19 @@
 #
 #...............................................................................
 
-THIS_DIR=`pwd`
-
-mkdir axl/build
-cd axl/build
-cmake .. -DTARGET_CPU=$TARGET_CPU -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION
-make
-
-cd $THIS_DIR
-echo "set (AXL_CMAKE_DIR $THIS_DIR/axl/cmake $THIS_DIR/axl/build/cmake)" >> paths.cmake
-
-mkdir build
-cd build
-cmake .. -DTARGET_CPU=$TARGET_CPU -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION
-make
-
 if [ "$BUILD_DOC" != "" ]; then
 	source doc/index/build-html.sh
 	source doc/manual/build-html.sh
 	source doc/build-guide/build-html.sh
+
+	source samples/libusb/build-rst.sh
+	source samples/libusb/build-html.sh
+	source samples/libssh/build-rst.sh
+	source samples/libssh/build-html.sh
+	source samples/alsa/build-rst.sh
+	source samples/alsa/build-html.sh
+	source samples/apr/build-rst.sh
+	source samples/apr/build-html.sh
 
 	touch doc/html/.nojekyll
 fi

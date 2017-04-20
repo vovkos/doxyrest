@@ -52,7 +52,26 @@ install:
     - git clone --depth 1 https://github.com/vovkos/axl
 
 script:
-    - source ci/travis/build.sh
+    - THIS_DIR=`pwd`
+
+    - mkdir axl/build
+    - cd axl/build
+    - cmake .. -DTARGET_CPU=$TARGET_CPU -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION
+    - make
+
+    - cd $THIS_DIR
+    - echo "set (AXL_CMAKE_DIR $THIS_DIR/axl/cmake $THIS_DIR/axl/build/cmake)" >> paths.cmake
+
+    - mkdir build
+    - cd build
+    - cmake .. -DTARGET_CPU=$TARGET_CPU -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION
+    - make
+
+    - ctest --output-on-failure
+
+    - cd $THIS_DIR
+    - source ci/travis/build-doc.sh
+    - source ci/travis/get-coverage.sh
 
 deploy:
     provider:      pages

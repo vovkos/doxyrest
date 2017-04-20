@@ -832,6 +832,8 @@ function getDocBlockContents (block, context)
 			s = "**" .. text .. "**"
 		elseif block.m_blockKind == "emphasis" then
 			s = "*" .. text .. "*"
+		elseif block.m_blockKind == "heading" then
+			s = ".. rubric:: " .. text .. "\n\n"
 		elseif block.m_blockKind == "sp" then
 			s = " "
 		elseif block.m_blockKind == "varlistentry" then

@@ -49,3 +49,11 @@ else
 	echo "set (LUA_LIB_DIR /usr/lib/i386-linux-gnu)" >> paths.cmake
 	echo "set (OPENSSL_INC_DIR DISABLED)" >> paths.cmake
 fi
+
+# lcov doesn't work with clang on ubuntu out-of-the-box
+# also, coverage should be collected without optimizations
+
+if [ "$CC" != "clang" ] && [ "$BUILD_CONFIGURATION" == "Debug" ]; then
+	sudo apt-get install -y lcov
+	echo "axl_override_setting (GCC_FLAG_COVERAGE -coverage)" >> settings.cmake
+fi

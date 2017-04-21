@@ -33,30 +33,29 @@ Samples
 Check out the results of Doxyrest' handiwork in application to a few open-source projects:
 
 .. list-table::
-	:widths: 10 10 10 60 10
 
 	*	- LibUSB
 		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/samples/libusb>`__
 		- `sphinxdoc <https://vovkos.github.io/doxyrest/samples/libusb-sphinxdoc>`__
-		-
+		- vs
 		- `original <http://libusb.sourceforge.net/api-1.0>`__
 
 	*	- LibSSH
 		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/samples/libssh>`__
 		- `sphinxdoc <https://vovkos.github.io/doxyrest/samples/libssh-sphinxdoc>`__
-		-
+		- vs
 		- `original <http://api.libssh.org/stable>`__
 
 	*	- ALSA Library
 		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/samples/alsa>`__
 		- `sphinxdoc <https://vovkos.github.io/doxyrest/samples/alsa-sphinxdoc>`__
-		-
+		- vs
 		- `original <http://www.alsa-project.org/alsa-doc/alsa-lib>`__
 
 	*	- Apache Portable Runtime
 		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/samples/apr>`__
 		- `sphinxdoc <https://vovkos.github.io/doxyrest/samples/apr-sphinxdoc>`__
-		-
+		- vs
 		- `original <https://apr.apache.org/docs/apr/1.5>`_
 
 The best part about Doxyrest approach is: it's modular and **100% customizable**! You can play with **Sphinx themes** to change visual appearance (fonts, colors, page layout, etc). Or you can adjust **Lua frames** for more drastic effects -- from tweaking the declaration coding style to changing the whole structure of documentation!
@@ -86,15 +85,11 @@ Here is a list of steps required to apply Doxyrest to existing Doxygen-based pro
 		sys.path.insert(1, os.path.abspath('$DOXYREST_SPHINX_DIR'))
 		extensions += ['doxyrest', 'cpplexer']
 
-	Usually, Doxygen-based documentation has a main page (created with the ``\\mainpage`` directive). If that's the case, add this to avoid build warnings (this page will be force-included)::
+	Usually, Doxygen-based documentation has a main page (created with the ``\mainpage`` directive). If that's the case, add this to avoid build warnings (this page will be force-included)::
 
 		exclude_patterns += ['page_index.rst']
 
 #.	Run Doxygen to generate an XML database. The exact way of doing so depends on the project; it may look like::
-
-		doxygen
-
-	or::
 
 		make doc
 
@@ -102,13 +97,17 @@ Here is a list of steps required to apply Doxyrest to existing Doxygen-based pro
 
 		cmake --build . --target doc
 
+	or simply::
+
+		doxygen
+
 #. 	Run Doxyrest to build reStructuredText documentation from the XML database obtained on the previous step::
 
 		doxyrest $DOXYGEN_XML_DIR/index.xml -o $TMP_RST_DIR/index.rst -F $DOXYREST_FRAME_DIR -f c_index.rst.in
 
 	If your project has a main page, add the following to the command line: ``-D g_introFile=page_index.rst`` to force-include the contents of the main page into ``index.rst``.
 
-#. 	Finally, run Sphinx to build a beautiful HTML documentation::
+#. 	Finally, run Sphinx to build HTML pages::
 
 		sphinx-build -b html $TMP_RST_DIR $OUTPUT_HTML_DIR
 

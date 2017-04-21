@@ -20,22 +20,22 @@ source doc/manual/build-html.sh
 source doc/build-guide/build-html.sh
 
 source samples/libusb/build-rst.sh
-source samples/libusb/build-html.sh sphinxdoc
+source samples/libusb/build-html.sh -D html_theme=sphinxdoc
 mv doc/html/samples/{libusb,libusb-sphinxdoc}
 source samples/libusb/build-html.sh
 
 source samples/libssh/build-rst.sh
-source samples/libssh/build-html.sh sphinxdoc
+source samples/libssh/build-html.sh -D html_theme=sphinxdoc
 mv doc/html/samples/{libusb,libssh-sphinxdoc}
 source samples/libssh/build-html.sh
 
 source samples/alsa/build-rst.sh
-source samples/alsa/build-html.sh sphinxdoc
+source samples/alsa/build-html.sh -D html_theme=sphinxdoc
 mv doc/html/samples/{libusb,alsa-sphinxdoc}
 source samples/alsa/build-html.sh
 
 source samples/apr/build-rst.sh
-source samples/apr/build-html.sh sphinxdoc
+source samples/apr/build-html.sh -D html_theme=sphinxdoc
 mv doc/html/samples/{apr,apr-sphinxdoc}
 source samples/apr/build-html.sh
 

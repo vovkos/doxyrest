@@ -76,7 +76,7 @@ Here is a list of steps required to apply Doxyrest to existing Doxygen-based pro
 
 		GENERATE_XML = YES
 
-	It is also recommended (but no required) to turn off XML program listing as it vastly increses the size of XML database. To do so, add::
+	It is also recommended to turn off XML program listing as it vastly increses the size of XML databases. To do so, add::
 
 		XML_PROGRAMLISTING = NO
 

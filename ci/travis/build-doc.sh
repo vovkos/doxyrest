@@ -26,12 +26,12 @@ source samples/libusb/build-html.sh
 
 source samples/libssh/build-rst.sh
 source samples/libssh/build-html.sh -D html_theme=sphinxdoc
-mv doc/html/samples/{libusb,libssh-sphinxdoc}
+mv doc/html/samples/{libssh,libssh-sphinxdoc}
 source samples/libssh/build-html.sh
 
 source samples/alsa/build-rst.sh
 source samples/alsa/build-html.sh -D html_theme=sphinxdoc
-mv doc/html/samples/{libusb,alsa-sphinxdoc}
+mv doc/html/samples/{alsa,alsa-sphinxdoc}
 source samples/alsa/build-html.sh
 
 source samples/apr/build-rst.sh

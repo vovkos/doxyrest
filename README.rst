@@ -32,34 +32,48 @@ Samples
 
 Check out the results of Doxyrest' handiwork in application to a few open-source projects:
 
-* LibUSB
-	- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/samples/libusb>`_
-	- `sphinxdoc <https://vovkos.github.io/doxyrest/samples/libusb-sphinxdoc>`_
+.. list-table::
+	:widths: 10 10 10 60 10
 
-* LibSSH
-	- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/samples/libssh>`_
-	- `sphinxdoc <https://vovkos.github.io/doxyrest/samples/libssh-sphinxdoc>`_
+	*	- LibUSB
+		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/samples/libusb>`__
+		- `sphinxdoc <https://vovkos.github.io/doxyrest/samples/libusb-sphinxdoc>`__
+		-
+		- `original <http://libusb.sourceforge.net/api-1.0>`__
 
-* ALSA Library
-	- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/samples/alsa>`_
-	- `sphinxdoc <https://vovkos.github.io/doxyrest/samples/alsa-sphinxdoc>`_
+	*	- LibSSH
+		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/samples/libssh>`__
+		- `sphinxdoc <https://vovkos.github.io/doxyrest/samples/libssh-sphinxdoc>`__
+		-
+		- `original <http://api.libssh.org/stable>`__
 
-* Apache Portable Runtime
-	- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/samples/apr>`_
-	- `sphinxdoc <https://vovkos.github.io/doxyrest/samples/apr-sphinxdoc>`_
+	*	- ALSA Library
+		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/samples/alsa>`__
+		- `sphinxdoc <https://vovkos.github.io/doxyrest/samples/alsa-sphinxdoc>`__
+		-
+		- `original <http://www.alsa-project.org/alsa-doc/alsa-lib>`__
+
+	*	- Apache Portable Runtime
+		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/samples/apr>`__
+		- `sphinxdoc <https://vovkos.github.io/doxyrest/samples/apr-sphinxdoc>`__
+		-
+		- `original <https://apr.apache.org/docs/apr/1.5>`_
 
 The best part about Doxyrest approach is: it's modular and **100% customizable**! You can play with **Sphinx themes** to change visual appearance (fonts, colors, page layout, etc). Or you can adjust **Lua frames** for more drastic effects -- from tweaking the declaration coding style to changing the whole structure of documentation!
 
 You can even replace Doxygen with your own generator of Doxygen-style XML database and then apply the very same approach to documenting APIs in **any other languages**:
 
-* `Jancy Standard Library <https://vovkos.github.io/jancy/stdlib>`_
+.. list-table::
+
+	* 	- Jancy Standard Library
+		- `sphinx_rtd_theme <https://vovkos.github.io/jancy/stdlib>`__
 
 Quick HOWTO
 -----------
 
 Here is a list of steps required to apply Doxyrest to existing Doxygen-based projects:
 
-* 	In your Doxygen configuration file ``Doxyfile`` add::
+#. 	In your Doxygen configuration file ``Doxyfile`` add::
 
 		GENERATE_XML = YES
 
@@ -67,7 +81,7 @@ Here is a list of steps required to apply Doxyrest to existing Doxygen-based pro
 
 		XML_PROGRAMLISTING = NO
 
-* 	Prepare Sphinx configuration file ``conf.py`` -- either take an existing one and fine tune it to your liking, or generate a new one with ``sphinx-quickstart``. Now add Doxyrest extensions ``doxyrest`` and ``cpplexer``::
+#. 	Prepare Sphinx configuration file ``conf.py`` -- either take an existing one and fine tune it to your liking, or generate a new one with ``sphinx-quickstart``. Now add Doxyrest extensions ``doxyrest`` and ``cpplexer``::
 
 		sys.path.insert(1, os.path.abspath('$DOXYREST_SPHINX_DIR'))
 		extensions += ['doxyrest', 'cpplexer']
@@ -76,7 +90,7 @@ Here is a list of steps required to apply Doxyrest to existing Doxygen-based pro
 
 		exclude_patterns += ['page_index.rst']
 
-*	Run Doxygen to generate an XML database. The exact way of doing so depends on the project; it may look like::
+#.	Run Doxygen to generate an XML database. The exact way of doing so depends on the project; it may look like::
 
 		doxygen
 
@@ -88,17 +102,17 @@ Here is a list of steps required to apply Doxyrest to existing Doxygen-based pro
 
 		cmake --build . --target doc
 
-* 	Run Doxyrest to build reStructuredText documentation from the XML database obtained on the previous step::
+#. 	Run Doxyrest to build reStructuredText documentation from the XML database obtained on the previous step::
 
 		doxyrest $DOXYGEN_XML_DIR/index.xml -o $TMP_RST_DIR/index.rst -F $DOXYREST_FRAME_DIR -f c_index.rst.in
 
 	If your project has a main page, add the following to the command line: ``-D g_introFile=page_index.rst`` to force-include the contents of the main page into ``index.rst``.
 
-* 	Finally, run Sphinx to build a beautiful HTML documentation::
+#. 	Finally, run Sphinx to build a beautiful HTML documentation::
 
 		sphinx-build -b html $TMP_RST_DIR $OUTPUT_HTML_DIR
 
-*	Open ``$OUTPUT_HTML_DIR/index.html`` and enjoy the new awesome look of your documentation!
+Now open ``$OUTPUT_HTML_DIR/index.html`` and enjoy the new awesome look of your documentation!
 
 Of course, you can also follow the `build logs <https://travis-ci.org/vovkos/doxyrest>`_ on Travis CI -- always a great way to reproduce build steps.
 

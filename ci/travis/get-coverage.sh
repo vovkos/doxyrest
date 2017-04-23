@@ -9,6 +9,12 @@
 #
 #...............................................................................
 
+# codecov seems to fail at properly combining lcov reports from multiple jobs
+# so let's only collect coverage under linux gcc amd64 for now
+if [ "$TRAVIS_OS_NAME" != "linux" ] || [ "$TARGET_CPU" != "amd64" ]; then
+	return
+fi
+
 if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CC" == "clang" ]; then
 	return # lcov doesn't work with clang on ubuntu out-of-the-box
 fi

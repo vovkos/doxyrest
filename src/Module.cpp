@@ -755,8 +755,6 @@ NamespaceContents::luaExportMembers (lua::LuaState* luaState)
 	if (m_destructor)
 	{
 		m_destructor->luaExport (luaState);
-		luaState->pushValue (-2);
-		luaState->setMember ("m_parent");
 		luaState->setMember ("m_destructor");
 	}
 

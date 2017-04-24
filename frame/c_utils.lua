@@ -878,9 +878,11 @@ function getDocBlockContents (block, context)
 				context.m_paramSection = {}
 			end
 
-			local count = #context.m_paramSection
-			context.m_paramSection [count + 1] = {}
-			context.m_paramSection [count + 1].m_name = text
+			local i = #context.m_paramSection + 1
+
+			context.m_paramSection [i] = {}
+			context.m_paramSection [i].m_name = text
+			context.m_paramSection [i].m_description = ""
 		elseif block.m_blockKind == "parameterdescription" then
 			text = trimWhitespace (text)
 

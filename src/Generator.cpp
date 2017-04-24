@@ -156,7 +156,8 @@ Generator::includeFile_lua (lua_State* h)
 	bool result = self->processFile (NULL, fileName, 1);
 	if (!result)
 	{
-		luaState.error (err::getLastErrorDescription ());
+		luaState.prepareLastErrorString ();
+		luaState.error ();
 		ASSERT (false);
 		return -1;
 	}
@@ -177,7 +178,8 @@ Generator::generateFile_lua (lua_State* h)
 	bool result = self->processFile (targetFileName, frameFileName, 2);
 	if (!result)
 	{
-		luaState.error (err::getLastErrorDescription ());
+		luaState.prepareLastErrorString ();
+		luaState.error ();
 		ASSERT (false);
 		return -1;
 	}

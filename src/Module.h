@@ -256,6 +256,8 @@ struct Member: sl::ListLink
 	Description m_detailedDescription;
 	Description m_inBodyDescription;
 
+	size_t m_cacheIdx;
+
 	Member ();
 
 	void
@@ -311,6 +313,9 @@ struct Compound: sl::ListLink
 	sl::StdList <Ref> m_derivedRefList;
 	sl::StdList <Ref> m_innerRefList;
 
+	sl::Array <Compound*> m_baseTypeArray;
+	sl::Array <Compound*> m_derivedTypeArray;
+
 	sl::String m_path;
 
 	bool m_isFinal     : 1;
@@ -319,6 +324,8 @@ struct Compound: sl::ListLink
 
 	Description m_briefDescription;
 	Description m_detailedDescription;
+
+	size_t m_cacheIdx;
 
 	Compound ();
 

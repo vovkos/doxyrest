@@ -26,6 +26,9 @@ Generator::prepare (
 	m_stringTemplate.m_luaState.registerFunction ("includeFile", includeFile_lua, this);
 	m_stringTemplate.m_luaState.registerFunction ("generateFile", generateFile_lua, this);
 
+	m_stringTemplate.m_luaState.createTable ();
+	m_stringTemplate.m_luaState.setGlobal ("g_exportCache");
+
 	globalNamespace->luaExport (&m_stringTemplate.m_luaState);
 	m_stringTemplate.m_luaState.setGlobal ("g_globalNamespace");
 
@@ -44,6 +47,11 @@ Generator::prepare (
 		else
 			m_stringTemplate.m_luaState.setGlobalString (define->m_name, define->m_value);
 	}
+
+	// export cache is only needed during export-time
+
+	m_stringTemplate.m_luaState.pushNil ();
+	m_stringTemplate.m_luaState.setGlobal ("g_exportCache");
 }
 
 bool

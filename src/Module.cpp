@@ -294,12 +294,27 @@ Member::Member ()
 	m_protectionKind = ProtectionKind_Undefined;
 	m_virtualKind = VirtualKind_Undefined;
 	m_flags = 0;
+	m_cacheIdx = -1;
 }
 
 void
 Member::luaExport (lua::LuaState* luaState)
 {
+	if (m_cacheIdx != -1)
+	{
+		luaState->getGlobalArrayElement ("g_exportCache", m_cacheIdx);
+		return;
+	}
+
+	// add to the global cache first
+
+	m_cacheIdx = luaState->getGlobalArrayLen ("g_exportCache") + 1;
+
 	luaState->createTable ();
+	luaState->pushValue (); // duplicate
+	luaState->setGlobalArrayElement ("g_exportCache", m_cacheIdx);
+
+	// now fill the members
 
 	luaState->setMemberString ("m_memberKind", getMemberKindString (m_memberKind));
 	luaState->setMemberString ("m_protectionKind", getProtectionKindString (m_protectionKind));
@@ -422,15 +437,31 @@ Compound::Compound ()
 	m_isFinal = false;
 	m_isSealed = false;
 	m_isAbstract = false;
+	m_cacheIdx = -1;
 }
 
 void
 Compound::luaExport (lua::LuaState* luaState)
 {
+	if (m_cacheIdx != -1)
+	{
+		luaState->getGlobalArrayElement ("g_exportCache", m_cacheIdx);
+		return;
+	}
+
 	unqualifyName ();
 	unspecializeName ();
 
+	// add to the global cache first
+
+	m_cacheIdx = luaState->getGlobalArrayLen ("g_exportCache") + 1;
+
 	luaState->createTable ();
+	luaState->pushValue (); // duplicate
+	luaState->setGlobalArrayElement ("g_exportCache", m_cacheIdx);
+
+	// now fill the members
+
 	luaState->setMemberString ("m_compoundKind", getCompoundKindString (m_compoundKind));
 	luaState->setMemberString ("m_id", m_id);
 	luaState->setMemberString ("m_groupId", m_groupCompound ? m_groupCompound->m_id : sl::StringRef ());
@@ -455,6 +486,12 @@ Compound::luaExport (lua::LuaState* luaState)
 
 		luaExportList (luaState, m_templateSpecParamList);
 		luaState->setMember ("m_templateSpecParamArray");
+
+		luaExportArray (luaState, m_baseTypeArray);
+		luaState->setMember ("m_baseTypeArray");
+
+		luaExportArray (luaState, m_derivedTypeArray);
+		luaState->setMember ("m_derivedTypeArray");
 		break;
 	}
 
@@ -848,7 +885,7 @@ GlobalNamespace::build (Module* module)
 		compound->m_selfNamespace = nspace;
 	}
 
-	// loop #3 resolves inner references and add members
+	// loop #3 resolves inner, base and derived references and add members
 
 	for (size_t i = 0; i < count; i++)
 	{
@@ -887,6 +924,32 @@ GlobalNamespace::build (Module* module)
 				Namespace* groupNspace = getGroupNamespace (module, innerCompound->m_groupCompound);
 				groupNspace->add (innerCompound);
 			}
+		}
+
+		refIt = compound->m_baseRefList.getHead ();
+		for (; refIt; refIt++)
+		{
+			Compound* baseCompound = module->findCompound (refIt->m_id);
+			if (!baseCompound)
+			{
+				err::setFormatStringError ("can't find compound refid: %s\n", refIt->m_id.sz ());
+				return false;
+			}
+
+			compound->m_baseTypeArray.append (baseCompound);
+		}
+
+		refIt = compound->m_derivedRefList.getHead ();
+		for (; refIt; refIt++)
+		{
+			Compound* derivedCompound = module->findCompound (refIt->m_id);
+			if (!derivedCompound)
+			{
+				err::setFormatStringError ("can't find compound refid: %s\n", refIt->m_id.sz ());
+				return false;
+			}
+
+			compound->m_derivedTypeArray.append (derivedCompound);
 		}
 	}
 

@@ -438,7 +438,7 @@ function getNamespaceTree (nspace, indent)
 	s = "\t" .. indent .. "namespace :ref:`" .. getItemQualifiedName (nspace) .. "<doxid-" .. nspace.m_id ..">`\n"
 
 	for i = 1, #nspace.m_namespaceArray do
-		s = s .. getNamespaceTree (nspace.m_namespaceArray [i], indent .. "\t")
+		s = s .. getNamespaceTree (nspace.m_namespaceArray [i], indent .. "    ")
 	end
 
 	return s

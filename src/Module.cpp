@@ -449,9 +449,6 @@ Compound::luaExport (lua::LuaState* luaState)
 		return;
 	}
 
-	unqualifyName ();
-	unspecializeName ();
-
 	// add to the global cache first
 
 	m_cacheIdx = luaState->getGlobalArrayLen ("g_exportCache") + 1;
@@ -893,6 +890,11 @@ GlobalNamespace::build (Module* module)
 		Namespace* nspace = compound->m_selfNamespace;
 		ASSERT (nspace);
 
+		// clean-up compound name 
+
+		compound->unqualifyName ();
+		compound->unspecializeName ();
+
 		sl::Iterator <Member> memberIt = compound->m_memberList.getHead ();
 		for (; memberIt; memberIt++)
 		{
@@ -912,7 +914,7 @@ GlobalNamespace::build (Module* module)
 			Compound* innerCompound = module->findCompound (refIt->m_id);
 			if (!innerCompound)
 			{
-				err::setFormatStringError ("can't find compound refid: %s\n", refIt->m_id.sz ());
+				err::setFormatStringError ("can't find inner compound refid: %s\n", refIt->m_id.sz ());
 				return false;
 			}
 
@@ -929,11 +931,22 @@ GlobalNamespace::build (Module* module)
 		refIt = compound->m_baseRefList.getHead ();
 		for (; refIt; refIt++)
 		{
-			Compound* baseCompound = module->findCompound (refIt->m_id);
-			if (!baseCompound)
+			Compound* baseCompound;
+
+			if (refIt->m_id.isEmpty ()) // template base, name only
 			{
-				err::setFormatStringError ("can't find compound refid: %s\n", refIt->m_id.sz ());
-				return false;
+				baseCompound = AXL_MEM_NEW (Compound);
+				baseCompound->m_name = refIt->m_text;
+				module->m_compoundList.insertTail (baseCompound);
+			}
+			else 
+			{
+				baseCompound = module->findCompound (refIt->m_id);
+				if (!baseCompound)
+				{
+					err::setFormatStringError ("can't find base compound refid: %s\n", refIt->m_id.sz ());
+					return false;
+				}
 			}
 
 			compound->m_baseTypeArray.append (baseCompound);
@@ -945,7 +958,7 @@ GlobalNamespace::build (Module* module)
 			Compound* derivedCompound = module->findCompound (refIt->m_id);
 			if (!derivedCompound)
 			{
-				err::setFormatStringError ("can't find compound refid: %s\n", refIt->m_id.sz ());
+				err::setFormatStringError ("can't find derived compound refid: %s\n", refIt->m_id.sz ());
 				return false;
 			}
 
@@ -962,8 +975,8 @@ GlobalNamespace::build (Module* module)
 
 		switch (compoundIt->m_compoundKind)
 		{
-		case CompoundKind_Group:
-			// groups are added implicitly, via group members
+		case CompoundKind_Undefined: // template base type or incomplete compound
+		case CompoundKind_Group:     // groups are added implicitly, via group members			
 			break;
 
 		case CompoundKind_File:

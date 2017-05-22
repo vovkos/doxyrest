@@ -11,19 +11,41 @@
 --------------------------------------------------------------------------------
 
 local argArray = table.pack (...)
-local itemArray = argArray [1]
+local compound = argArray [1]
 
-for i = 1, #itemArray do
-	local item = itemArray [i]
+local indent = ""
 
-	if item.m_id ~= "" then
+if compound.m_baseTypeArray and #compound.m_baseTypeArray > 0 then
+
+	for i = 1, #compound.m_baseTypeArray do
+		local item = compound.m_baseTypeArray [i]
+
+		if item.m_id ~= "" then
 }
-	$(item.m_compoundKind) :ref:`$(getItemName (item))<doxid-$(item.m_id)>`
+	$(item.m_compoundKind) :ref:`$(getItemQualifiedName (item))<doxid-$(item.m_id)>`
 %{
-	else
+		else
 }
-	$(getItemName (item))
+		$(getItemName (item))
 %{
-	end -- if
-end -- for
+		end -- if
+	end -- for
+
+	indent = "    "
+end -- if
+}
+	$indent$(compound.m_compoundKind) $(getItemQualifiedName (compound))
+%{
+
+indent = indent .. "    "
+
+if compound.m_derivedTypeArray and #compound.m_derivedTypeArray > 0 then
+
+	for i = 1, #compound.m_derivedTypeArray do
+		local item = compound.m_derivedTypeArray [i]
+}
+	$indent$(item.m_compoundKind) :ref:`$(getItemQualifiedName (item))<doxid-$(item.m_id)>`
+%{
+	end -- for
+end -- if
 }

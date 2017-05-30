@@ -42,10 +42,10 @@ Generator::prepare (
 	for (; it; it++)
 	{
 		Define* define = *it;
-		if (define->m_value.isEmpty ())
-			m_stringTemplate.m_luaState.setGlobalBoolean (define->m_name, true);
-		else
+		if (define->m_hasValue)
 			m_stringTemplate.m_luaState.setGlobalString (define->m_name, define->m_value);
+		else
+			m_stringTemplate.m_luaState.setGlobalBoolean (define->m_name, true);
 	}
 
 	// export cache is only needed during export-time

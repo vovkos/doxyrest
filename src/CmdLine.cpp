@@ -54,6 +54,7 @@ CmdLineParser::onSwitch (
 		{
 			define->m_name = value.getSubString (0, i);
 			define->m_value = value.getSubString (i + 1);
+			define->m_hasValue = true; // even if value empty
 		}
 
 		m_cmdLine->m_defineList.insertTail (define);

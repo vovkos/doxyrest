@@ -27,6 +27,12 @@ struct Define: sl::ListLink
 {
 	sl::String m_name;
 	sl::String m_value;
+	bool m_hasValue;
+
+	Define ()
+	{
+		m_hasValue = false;
+	}
 };
 
 struct CmdLine

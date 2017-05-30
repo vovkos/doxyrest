@@ -671,6 +671,41 @@ public:
 
 //..............................................................................
 
+class LocationType: public DoxyXmlType
+{
+protected:
+	enum AttrKind
+	{
+		AttrKind_Undefined,
+		AttrKind_File,
+		AttrKind_Line,
+		AttrKind_Column,
+		AttrKind_BodyFile,
+		AttrKind_BodyStart,
+		AttrKind_BodyEnd,
+	};
+
+	AXL_SL_BEGIN_STRING_HASH_TABLE (AttrKindMap, AttrKind)
+		AXL_SL_HASH_TABLE_ENTRY ("file",      AttrKind_File)
+		AXL_SL_HASH_TABLE_ENTRY ("line",      AttrKind_Line)
+		AXL_SL_HASH_TABLE_ENTRY ("column",    AttrKind_Column)
+		AXL_SL_HASH_TABLE_ENTRY ("bodyfile",  AttrKind_BodyFile)
+		AXL_SL_HASH_TABLE_ENTRY ("bodystart", AttrKind_BodyStart)
+		AXL_SL_HASH_TABLE_ENTRY ("bodyend",   AttrKind_BodyEnd)
+	AXL_SL_END_HASH_TABLE ()
+
+public:
+	bool
+	create (
+		DoxyXmlParser* parser,
+		Location* location,
+		const char* name,
+		const char** attributes
+		);
+};
+
+//..............................................................................
+
 class DescriptionType: public DoxyXmlType
 {
 protected:

@@ -135,6 +135,27 @@ struct Description
 	luaExport (lua::LuaState* luaState);
 };
 
+//.............................................................................
+
+struct Location
+{
+	sl::String m_file;
+	int m_line;
+	int m_column;
+
+	sl::String m_bodyFile;
+	int m_bodyStartLine;
+	int m_bodyEndLine;
+
+	bool isEmpty ()
+	{
+		return m_file.isEmpty ();
+	}
+
+	void
+	luaExport (lua::LuaState* luaState);
+};
+
 //..............................................................................
 
 struct Param: sl::ListLink
@@ -255,6 +276,7 @@ struct Member: sl::ListLink
 	Description m_briefDescription;
 	Description m_detailedDescription;
 	Description m_inBodyDescription;
+	Location m_location;
 
 	size_t m_cacheIdx;
 
@@ -324,6 +346,7 @@ struct Compound: sl::ListLink
 
 	Description m_briefDescription;
 	Description m_detailedDescription;
+	Location m_location;
 
 	size_t m_cacheIdx;
 

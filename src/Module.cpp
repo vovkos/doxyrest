@@ -156,6 +156,21 @@ Description::luaExport (lua::LuaState* luaState)
 	luaState->setMember ("m_docBlockList");
 }
 
+//.............................................................................
+
+void
+Location::luaExport (lua::LuaState* luaState)
+{
+	luaState->createTable ();
+
+	luaState->setMemberString ("m_file", m_file);
+	luaState->setMemberInteger ("m_line", m_line);
+	luaState->setMemberInteger ("m_column", m_column);
+	luaState->setMemberString ("m_bodyFile", m_bodyFile);
+	luaState->setMemberInteger ("m_bodyStartLine", m_bodyStartLine);
+	luaState->setMemberInteger ("m_bodyEndLine", m_bodyEndLine);
+}
+
 //..............................................................................
 
 void
@@ -422,6 +437,9 @@ Member::luaExport (lua::LuaState* luaState)
 
 	m_inBodyDescription.luaExport (luaState);
 	luaState->setMember ("m_inBodyDescription");
+
+	m_location.luaExport (luaState);
+	luaState->setMember ("m_location");
 }
 
 //..............................................................................
@@ -500,6 +518,9 @@ Compound::luaExport (lua::LuaState* luaState)
 
 	m_detailedDescription.luaExport (luaState);
 	luaState->setMember ("m_detailedDescription");
+
+	m_location.luaExport (luaState);
+	luaState->setMember ("m_location");
 
 	if (m_selfNamespace) // pages don't have namespaces
 		m_selfNamespace->luaExportMembers (luaState);

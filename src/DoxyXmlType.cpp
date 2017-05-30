@@ -320,10 +320,13 @@ CompoundDefType::onStartElement (
 		m_parser->pushType <DescriptionType> (&m_compound->m_detailedDescription, name, attributes);
 		break;
 
+	case ElemKind_Location:
+		m_parser->pushType <LocationType> (&m_compound->m_location, name, attributes);
+		break;
+
 	case ElemKind_InheritanceGraph:
 	case ElemKind_CollaborationGraph:
 	case ElemKind_ProgramListing:
-	case ElemKind_Location:
 	case ElemKind_ListOfAllMembers:
 		break;
 	}
@@ -721,6 +724,9 @@ MemberDefType::onStartElement (
 		break;
 
 	case ElemKind_Location:
+		m_parser->pushType <LocationType> (&m_member->m_location, name, attributes);
+		break;
+
 	case ElemKind_References:
 	case ElemKind_ReferencedBy:
 		break;
@@ -770,6 +776,53 @@ DescriptionType::onStartElement (
 		m_parser->pushType <DocSectionBlockType> (&m_description->m_docBlockList, name, attributes);
 		break;
 	}
+
+	return true;
+}
+
+//..............................................................................
+
+bool
+LocationType::create (
+	DoxyXmlParser* parser,
+	Location* location,
+	const char* name,
+	const char** attributes
+	)
+{
+	sl::StringHashTableIterator <Member*> mapIt;
+	while (*attributes)
+	{
+		AttrKind attrKind = AttrKindMap::findValue (attributes [0], AttrKind_Undefined);
+		switch (attrKind)
+		{
+		case AttrKind_File:
+			location->m_file = attributes [1];
+			break;
+
+		case AttrKind_Line:
+			location->m_line = atoi (attributes [1]);
+			break;
+
+		case AttrKind_Column:
+			location->m_column = atoi (attributes [1]);
+			break;
+
+		case AttrKind_BodyFile:
+			location->m_bodyFile = attributes [1];
+			break;
+
+		case AttrKind_BodyStart:
+			location->m_bodyStartLine = atoi (attributes [1]);
+			break;
+
+		case AttrKind_BodyEnd:
+			location->m_bodyEndLine = atoi (attributes [1]);
+			break;
+		}
+
+		attributes += 2;
+	};
 
 	return true;
 }

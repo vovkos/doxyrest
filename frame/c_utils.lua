@@ -1135,6 +1135,21 @@ function isItemExcludedByProtectionFilter (item)
 	return false
 end
 
+function isItemExcludedByLocationFilter (item)
+
+	-- exclude c++ sources unless asked explicitly with g_includeCppSources
+
+	if item.m_location and
+		not g_includeCppSources and
+		string.match (g_language, "^c[px+]*$") and
+		string.match (item.m_location.m_file, "%.c[px+]*$")	then
+
+		return true
+	end
+
+	return false
+end
+
 function isItemExcludedByDocumentationFilter (item)
 
 	if not item.m_hasDocumentation and g_excludeUndocumented then
@@ -1153,10 +1168,49 @@ function filterItemArray (itemArray)
 		local item = itemArray [i]
 		local isExcluded =
 			isItemExcludedByProtectionFilter (item) or
+			isItemExcludedByLocationFilter (item) or
 			isItemExcludedByDocumentationFilter (item)
 
 		if isExcluded then
 			table.remove (itemArray, i)
+		end
+	end
+end
+
+function filterNamespaceArray (namespaceArray)
+	if next (namespaceArray) == nil then
+		return
+	end
+
+	for i = #namespaceArray, 1, -1 do
+		local item = namespaceArray [i]
+		local isExcluded =
+			isUnnamedItem (item) or
+			isItemExcludedByLocationFilter (item)
+
+		if isExcluded then
+			table.remove (namespaceArray, i)
+		end
+	end
+end
+
+function filterDefineArray (defineArray)
+	if next (defineArray) == nil then
+		return
+	end
+
+	for i = #defineArray, 1, -1 do
+		local item = defineArray [i]
+
+		local isExcluded =
+			isItemExcludedByProtectionFilter (item) or
+			isItemExcludedByLocationFilter (item) or
+			isItemExcludedByDocumentationFilter (item) or
+			not g_includeEmptyDefines and item.m_initializer.m_isEmpty or
+			g_excludeDefinePattern and string.match (item.m_name, g_excludeDefinePattern)
+
+		if isExcluded then
+			table.remove (defineArray, i)
 		end
 	end
 end
@@ -1186,7 +1240,7 @@ function filterDefineArray (defineArray)
 		local item = defineArray [i]
 
 		local isExcluded =
-			isItemExcludedByProtectionFilter (item) or
+			isItemExcludedByLocationFilter (item) or
 			isItemExcludedByDocumentationFilter (item) or
 			not g_includeEmptyDefines and item.m_initializer.m_isEmpty or
 			g_excludeDefinePattern and string.match (item.m_name, g_excludeDefinePattern)
@@ -1206,6 +1260,7 @@ function filterTypedefArray (typedefArray)
 		local item = typedefArray [i]
 		local isExcluded =
 			isItemExcludedByProtectionFilter (item) or
+			isItemExcludedByLocationFilter (item) or
 			isItemExcludedByDocumentationFilter (item)
 
 		if not isExcluded and not g_includePrimitiveTypedefs then
@@ -1290,6 +1345,7 @@ function prepareCompound (compound)
 
 	-- filter invisible items out
 
+	filterNamespaceArray (compound.m_namespaceArray)
 	filterTypedefArray (compound.m_typedefArray)
 	filterItemArray (compound.m_enumArray)
 	filterItemArray (compound.m_structArray)

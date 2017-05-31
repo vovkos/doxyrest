@@ -241,7 +241,8 @@ function getItemFileName (item, suffix)
 		s = s .. item.m_name
 		-- s = string.gsub (s, '-', "_") -- groups can contain dashes, get rid of those
 	else
-		s = s .. string.gsub (item.m_path, "/", "_")
+		local path = string.gsub (item.m_path, "/operator[%s%p]+$", "/operator")
+		s = s .. string.gsub (path, "/", "_")
 	end
 
 	s = ensureUniqueItemName (item, s, g_itemFileNameMap, "-")
@@ -261,7 +262,8 @@ function getItemCid (item)
 	if item.m_compoundKind == "group" then
 		s = item.m_name
 	else
-		s = string.gsub (item.m_path, "/", g_nameDelimiter)
+		local path = string.gsub (item.m_path, "/operator[%s%p]+$", "/operator")
+		s = string.gsub (path, "/", g_nameDelimiter)
 	end
 
 	s = string.lower (s)

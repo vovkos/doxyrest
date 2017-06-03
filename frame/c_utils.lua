@@ -38,11 +38,14 @@ function getLinkedTextString (text, isRef)
 		local text = getNormalizedCppString (refText.m_text)
 
 		if refText.m_id ~= "" then
+			text = string.gsub (text, "<", "\\<") -- escape left chevron
 			s = s .. ":ref:`" .. text .. "<doxid-" .. refText.m_id .. ">`"
 		else
 			s = s .. text
 		end
 	end
+
+	s = string.gsub (s, "\n", " ") -- callsites of getLinkedTextString don't expect newline chars
 
 	return s
 end
@@ -262,8 +265,9 @@ function getItemCid (item)
 	if item.m_compoundKind == "group" then
 		s = item.m_name
 	else
-		local path = string.gsub (item.m_path, "/operator[%s%p]+$", "/operator")
-		s = string.gsub (path, "/", g_nameDelimiter)
+		s = string.gsub (item.m_path, "/operator[%s%p]+$", "/operator")
+		s = string.gsub (s, "@[0-9]+/", "")
+		s = string.gsub (s, "/", g_nameDelimiter)
 	end
 
 	s = string.lower (s)
@@ -355,8 +359,34 @@ function getItemArrayOverviewRefTargetString (itemArray)
 	return  s
 end
 
+function getEnumOverviewRefTargetString (enum)
+	local s = ""
+
+	for i = 1, #enum.m_enumValueArray do
+		local enumValue = enum.m_enumValueArray [i]
+		if not hasItemRefTarget (enumValue) then
+			s = s .. getItemRefTargetString (enumValue)
+		end
+	end
+
+	return  s
+end
+
+function getEnumArrayOverviewRefTargetString (enumArray)
+	local s = ""
+
+	for i = 1, #enumArray do
+		local enum = enumArray [i]
+		if isUnnamedItem (enum) then
+			s = s .. getEnumOverviewRefTargetString (enum)
+		end
+	end
+
+	return  s
+end
+
 function isTocTreeItem (compound, item)
-	return item.m_groupId == "" or item.m_groupId == compound.m_id
+	return not item.m_groupId or item.m_groupId == compound.m_id
 end
 
 function getCompoundTocTree (compound)
@@ -419,7 +449,7 @@ function getGroupTree (group, indent)
 	end
 
 	local name = getGroupName (group)
-	name = string.gsub (name, "<", "\\<") -- need to escape opening chevron
+	name = string.gsub (name, "<", "\\<") -- escape left chevron
 
 	s = "|\t" .. indent .. ":ref:`" .. name .. "<doxid-" ..group.m_id .. ">`\n"
 
@@ -798,7 +828,7 @@ function getDocBlockContents (block, context)
 		code = trimTrailingWhitespace (code)
 
 		-- probably also need to assign some div class
-		s = "\n\n.. code-block:: none\n\n" .. code .. "\n\n"
+		s = "\n\n.. code-block:: " .. g_verbatimToCodeBlock .. "\n\n" .. code .. "\n\n"
 	elseif block.m_blockKind == "itemizedlist" then
 		s = processListDocBlock (block, context, "*")
 	elseif block.m_blockKind == "orderedlist" then
@@ -827,6 +857,7 @@ function getDocBlockContents (block, context)
 		if block.m_blockKind == "linebreak" then
 			s = "\n\n"
 		elseif block.m_blockKind == "ref" then
+			text = string.gsub (text, "<", "\\<") -- escape left chevron
 			s = ":ref:`" .. text .. " <doxid-" .. block.m_id .. ">`"
 		elseif block.m_blockKind == "computeroutput" then
 			s = "``" .. text .. "``"
@@ -1076,7 +1107,7 @@ function prepareItemDocumentation (item, compound)
 		end
 	end
 
-	if item.m_groupId ~= "" and compound and compound.m_compoundKind ~= "group" then
+	if item.m_groupId and compound and compound.m_id ~= item.m_groupId then
 		return false -- grouped items should be documented on group pages only
 	end
 
@@ -1090,8 +1121,8 @@ function prepareItemArrayDocumentation (itemArray, compound)
 
 	for i = 1, #itemArray do
 		local item = itemArray [i]
-		local result = prepareItemDocumentation (item, compound)
 
+		local result = prepareItemDocumentation (item, compound)
 		if result then
 			hasDocumentation = true
 			if item.m_isSubGroupHead then
@@ -1113,7 +1144,7 @@ function isItemInCompoundDetails (item, compound)
 		return false
 	end
 
-	return item.m_groupId == "" or item.m_groupId == compound.m_id
+	return not item.m_groupId or item.m_groupId == compound.m_id
 end
 
 -------------------------------------------------------------------------------
@@ -1152,15 +1183,6 @@ function isItemExcludedByLocationFilter (item)
 	return false
 end
 
-function isItemExcludedByDocumentationFilter (item)
-
-	if not item.m_hasDocumentation and g_excludeUndocumented then
-		return true
-	end
-
-	return false
-end
-
 function filterItemArray (itemArray)
 	if next (itemArray) == nil then
 		return
@@ -1170,11 +1192,28 @@ function filterItemArray (itemArray)
 		local item = itemArray [i]
 		local isExcluded =
 			isItemExcludedByProtectionFilter (item) or
-			isItemExcludedByLocationFilter (item) or
-			isItemExcludedByDocumentationFilter (item)
+			isItemExcludedByLocationFilter (item)
 
 		if isExcluded then
 			table.remove (itemArray, i)
+		end
+	end
+end
+
+function filterEnumArray (enumArray)
+	if next (enumArray) == nil then
+		return
+	end
+
+	for i = #enumArray, 1, -1 do
+		local enum = enumArray [i]
+		local isExcluded =
+			isItemExcludedByProtectionFilter (enum) or
+			isItemExcludedByLocationFilter (enum) or
+			isUnnamedItem (enum) and #enum.m_enumValueArray == 0
+
+		if isExcluded then
+			table.remove (enumArray, i)
 		end
 	end
 end
@@ -1196,27 +1235,6 @@ function filterNamespaceArray (namespaceArray)
 	end
 end
 
-function filterDefineArray (defineArray)
-	if next (defineArray) == nil then
-		return
-	end
-
-	for i = #defineArray, 1, -1 do
-		local item = defineArray [i]
-
-		local isExcluded =
-			isItemExcludedByProtectionFilter (item) or
-			isItemExcludedByLocationFilter (item) or
-			isItemExcludedByDocumentationFilter (item) or
-			not g_includeEmptyDefines and item.m_initializer.m_isEmpty or
-			g_excludeDefinePattern and string.match (item.m_name, g_excludeDefinePattern)
-
-		if isExcluded then
-			table.remove (defineArray, i)
-		end
-	end
-end
-
 function filterConstructorArray (constructorArray)
 	filterItemArray (constructorArray)
 
@@ -1224,7 +1242,6 @@ function filterConstructorArray (constructorArray)
 		local item = constructorArray [1]
 		local isExcluded =
 			isItemExcludedByProtectionFilter (item) or
-			isItemExcludedByDocumentationFilter (item) or
 			not g_includeDefaultConstructors and #item.m_paramArray == 0
 
 		if isExcluded then
@@ -1243,8 +1260,7 @@ function filterDefineArray (defineArray)
 
 		local isExcluded =
 			isItemExcludedByLocationFilter (item) or
-			isItemExcludedByDocumentationFilter (item) or
-			not g_includeEmptyDefines and item.m_initializer.m_isEmpty or
+			g_excludeEmptyDefines and item.m_initializer.m_isEmpty or
 			g_excludeDefinePattern and string.match (item.m_name, g_excludeDefinePattern)
 
 		if isExcluded then
@@ -1262,8 +1278,7 @@ function filterTypedefArray (typedefArray)
 		local item = typedefArray [i]
 		local isExcluded =
 			isItemExcludedByProtectionFilter (item) or
-			isItemExcludedByLocationFilter (item) or
-			isItemExcludedByDocumentationFilter (item)
+			isItemExcludedByLocationFilter (item)
 
 		if not isExcluded and not g_includePrimitiveTypedefs then
 			local typeKind, name = string.match (
@@ -1301,6 +1316,10 @@ function cmpTitles (i1, i2)
 end
 
 function prepareCompound (compound)
+	if compound.m_stats then
+		return compound.m_stats
+	end
+
 	local stats = {}
 
 	-- scan for documentation and create subgroups
@@ -1310,6 +1329,7 @@ function prepareCompound (compound)
 
 	for i = 1, #compound.m_enumArray do
 		local item = compound.m_enumArray [i]
+
 		if isUnnamedItem (item) then
 			stats.m_hasUnnamedEnums = true
 
@@ -1349,7 +1369,7 @@ function prepareCompound (compound)
 
 	filterNamespaceArray (compound.m_namespaceArray)
 	filterTypedefArray (compound.m_typedefArray)
-	filterItemArray (compound.m_enumArray)
+	filterEnumArray (compound.m_enumArray)
 	filterItemArray (compound.m_structArray)
 	filterItemArray (compound.m_unionArray)
 	filterItemArray (compound.m_classArray)
@@ -1385,6 +1405,7 @@ function prepareCompound (compound)
 	table.sort (compound.m_unionArray, cmpNames)
 	table.sort (compound.m_classArray, cmpNames)
 
+	compound.m_stats = stats
 	return stats
 end
 

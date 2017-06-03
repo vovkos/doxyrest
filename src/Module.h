@@ -16,6 +16,7 @@
 struct Namespace;
 struct Member;
 struct Compound;
+struct Module;
 
 //..............................................................................
 
@@ -83,6 +84,8 @@ struct DocBlock: sl::ListLink
 
 struct DocRefBlock: DocBlock
 {
+	Module* m_module;
+
 	RefKind m_refKind;
 	sl::String m_id;
 	sl::String m_external;
@@ -90,6 +93,7 @@ struct DocRefBlock: DocBlock
 	DocRefBlock ()
 	{
 		m_refKind = RefKind_Undefined;
+		m_module = NULL;
 	}
 
 	virtual
@@ -187,15 +191,17 @@ struct EnumValue: sl::ListLink
 	Description m_briefDescription;
 	Description m_detailedDescription;
 
+	bool m_isDuplicate;
+
 	EnumValue ()
 	{
 		m_protectionKind = ProtectionKind_Undefined;
+		m_isDuplicate = false;
 	}
 
 	void
 	luaExport (lua::LuaState* luaState);
 };
-
 
 //..............................................................................
 
@@ -308,6 +314,19 @@ struct Ref: sl::ListLink
 		m_protectionKind = ProtectionKind_Undefined;
 		m_virtualKind = VirtualKind_Undefined;
 	}
+
+	size_t
+	hash () const
+	{
+		size_t hash0 = sl::djb2 (m_id, m_id.getLength ());
+		return sl::djb2 (hash0, m_text, m_text.getLength ());
+	}
+
+	bool
+	isEqual (const Ref& ref) const
+	{
+		return m_id == ref.m_id && m_text == ref.m_text;
+	}
 };
 
 //..............................................................................
@@ -343,6 +362,7 @@ struct Compound: sl::ListLink
 	bool m_isFinal     : 1;
 	bool m_isSealed    : 1;
 	bool m_isAbstract  : 1;
+	bool m_isDuplicate : 1;
 
 	Description m_briefDescription;
 	Description m_detailedDescription;
@@ -383,18 +403,7 @@ struct Module
 	sl::Array <Compound*> m_pageArray;
 	sl::StringHashTable <Compound*> m_compoundMap;
 	sl::StringHashTable <Member*> m_memberMap;
-
-	Compound*
-	findCompound (const sl::StringRef& id)
-	{
-		return m_compoundMap.findValue (id, NULL);
-	}
-
-	Member*
-	findMember (const sl::StringRef& id)
-	{
-		return m_memberMap.findValue (id, NULL);
-	}
+	sl::StringHashTable <EnumValue*> m_enumValueMap;
 };
 
 //..............................................................................
@@ -542,6 +551,42 @@ luaExportStringList (
 	{
 		luaState->pushString (*it);
 		luaState->setArrayElement (i);
+	}
+}
+
+//..............................................................................
+
+template <typename T>
+void
+removeDuplicates (sl::StdList <T>* list)
+{
+	sl::DuckTypePtrHashTable <T, bool> map;
+
+	sl::Iterator <T> it = list->getHead ();
+	while (it)
+	{
+		sl::Iterator <T> next = it.getNext ();
+		bool result = map.addIfNotExists (*it, true);
+		if (!result)
+			list->erase (it);
+
+		it = next;
+	}
+}
+
+template <>
+inline
+void
+removeDuplicates <EnumValue> (sl::StdList <EnumValue>* list)
+{
+	sl::Iterator <EnumValue> it = list->getHead ();
+	while (it)
+	{
+		sl::Iterator <EnumValue> next = it.getNext ();
+		if (it->m_isDuplicate)
+			list->erase (it);
+
+		it = next;
 	}
 }
 

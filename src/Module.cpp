@@ -112,6 +112,17 @@ DocRefBlock::luaExport (lua::LuaState* luaState)
 {
 	luaState->createTable ();
 
+	if (m_refKind == RefKind_Compound)
+	{
+		Compound* compound = m_module->m_compoundMap.findValue (m_id, NULL);
+		if (!compound || compound->m_compoundKind == CompoundKind_File) // we don't export files, so remove reference
+		{
+			m_blockKind = "computeroutput";
+			DocBlock::luaExportMembers (luaState);
+			return;
+		}
+	}
+
 	DocBlock::luaExportMembers (luaState);
 
 	luaState->setMemberString ("m_refKind", getRefKindString (m_refKind));
@@ -336,9 +347,11 @@ Member::luaExport (lua::LuaState* luaState)
 	luaState->setMemberString ("m_virtualKind", getVirtualKindString (m_virtualKind));
 	luaState->setMemberString ("m_flags", getMemberFlagString (m_flags));
 	luaState->setMemberString ("m_id", m_id);
-	luaState->setMemberString ("m_groupId", m_groupCompound ? m_groupCompound->m_id : sl::StringRef ());
 	luaState->setMemberString ("m_name", m_name);
 	luaState->setMemberString ("m_modifiers", m_modifiers);
+
+	if (m_groupCompound)
+		luaState->setMemberString ("m_groupId", m_groupCompound->m_id);
 
 	luaExportStringList (luaState, m_importList);
 	luaState->setMember ("m_importArray");
@@ -358,6 +371,7 @@ Member::luaExport (lua::LuaState* luaState)
 		break;
 
 	case MemberKind_Enum:
+		removeDuplicates (&m_enumValueList);
 		luaExportList (luaState, m_enumValueList);
 		luaState->setMember ("m_enumValueArray");
 		break;
@@ -455,6 +469,7 @@ Compound::Compound ()
 	m_isFinal = false;
 	m_isSealed = false;
 	m_isAbstract = false;
+	m_isDuplicate = false;
 	m_cacheIdx = -1;
 }
 
@@ -479,9 +494,11 @@ Compound::luaExport (lua::LuaState* luaState)
 
 	luaState->setMemberString ("m_compoundKind", getCompoundKindString (m_compoundKind));
 	luaState->setMemberString ("m_id", m_id);
-	luaState->setMemberString ("m_groupId", m_groupCompound ? m_groupCompound->m_id : sl::StringRef ());
 	luaState->setMemberString ("m_name", m_name);
 	luaState->setMemberString ("m_title", m_title);
+
+	if (m_groupCompound)
+		luaState->setMemberString ("m_groupId", m_groupCompound->m_id);
 
 	preparePath ();
 	luaState->setMemberString ("m_path", m_path);
@@ -620,6 +637,9 @@ Compound::createTemplateSpecParam (const sl::StringRef& name)
 bool
 NamespaceContents::add (Compound* compound)
 {
+	if (compound->m_isDuplicate)
+		return false;
+
 	switch (compound->m_compoundKind)
 	{
 	case CompoundKind_Namespace:
@@ -687,6 +707,9 @@ NamespaceContents::add (
 	Compound* thisCompound
 	)
 {
+	if (member->m_flags & MemberFlag_Duplicate)
+		return false;
+
 	enum FunctionKind
 	{
 		FunctionKind_Normal = 0,
@@ -873,7 +896,7 @@ GlobalNamespace::build (Module* module)
 			}
 			else
 			{
-				Member* member = module->findMember (memberIt->m_id);
+				Member* member = module->m_memberMap.findValue (memberIt->m_id, NULL);
 				if (member)
 					member->m_groupCompound = compound;
 			}
@@ -882,7 +905,7 @@ GlobalNamespace::build (Module* module)
 		sl::Iterator <Ref> refIt = compound->m_innerRefList.getHead ();
 		for (; refIt; refIt++)
 		{
-			Compound* innerCompound =  module->findCompound (refIt->m_id);
+			Compound* innerCompound = module->m_compoundMap.findValue (refIt->m_id, NULL);
 			if (innerCompound)
 				innerCompound->m_groupCompound = compound;
 		}
@@ -911,7 +934,7 @@ GlobalNamespace::build (Module* module)
 		Namespace* nspace = compound->m_selfNamespace;
 		ASSERT (nspace);
 
-		// clean-up compound name 
+		// clean-up compound name
 
 		compound->unqualifyName ();
 		compound->unspecializeName ();
@@ -932,7 +955,7 @@ GlobalNamespace::build (Module* module)
 		sl::Iterator <Ref> refIt = compound->m_innerRefList.getHead ();
 		for (; refIt; refIt++)
 		{
-			Compound* innerCompound = module->findCompound (refIt->m_id);
+			Compound* innerCompound = module->m_compoundMap.findValue (refIt->m_id, NULL);
 			if (!innerCompound)
 			{
 				err::setFormatStringError ("can't find inner compound refid: %s\n", refIt->m_id.sz ());
@@ -949,6 +972,9 @@ GlobalNamespace::build (Module* module)
 			}
 		}
 
+		removeDuplicates (&compound->m_baseRefList);
+		removeDuplicates (&compound->m_derivedRefList);
+
 		refIt = compound->m_baseRefList.getHead ();
 		for (; refIt; refIt++)
 		{
@@ -960,9 +986,9 @@ GlobalNamespace::build (Module* module)
 				baseCompound->m_name = refIt->m_text;
 				module->m_compoundList.insertTail (baseCompound);
 			}
-			else 
+			else
 			{
-				baseCompound = module->findCompound (refIt->m_id);
+				baseCompound = module->m_compoundMap.findValue (refIt->m_id, NULL);
 				if (!baseCompound)
 				{
 					err::setFormatStringError ("can't find base compound refid: %s\n", refIt->m_id.sz ());
@@ -976,7 +1002,7 @@ GlobalNamespace::build (Module* module)
 		refIt = compound->m_derivedRefList.getHead ();
 		for (; refIt; refIt++)
 		{
-			Compound* derivedCompound = module->findCompound (refIt->m_id);
+			Compound* derivedCompound = module->m_compoundMap.findValue (refIt->m_id, NULL);
 			if (!derivedCompound)
 			{
 				err::setFormatStringError ("can't find derived compound refid: %s\n", refIt->m_id.sz ());
@@ -985,6 +1011,8 @@ GlobalNamespace::build (Module* module)
 
 			compound->m_derivedTypeArray.append (derivedCompound);
 		}
+
+
 	}
 
 	// loop #3 adds leftovers to the global namespace
@@ -997,7 +1025,7 @@ GlobalNamespace::build (Module* module)
 		switch (compoundIt->m_compoundKind)
 		{
 		case CompoundKind_Undefined: // template base type or incomplete compound
-		case CompoundKind_Group:     // groups are added implicitly, via group members			
+		case CompoundKind_Group:     // groups are added implicitly, via group members
 			break;
 
 		case CompoundKind_File:

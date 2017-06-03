@@ -203,6 +203,11 @@ CompoundDefType::create (
 				{
 					printf ("  replacing old compound as it has no documentation\n");
 					mapIt->m_value = m_compound;
+					prevCompound->m_isDuplicate = true;
+				}
+				else
+				{
+					m_compound->m_isDuplicate = true;
 				}
 			}
 
@@ -897,11 +902,14 @@ EnumValueType::create (
 	const char** attributes
 	)
 {
+	Module* module = parser->getModule ();
+
 	m_parser = parser;
 	m_enumValue = AXL_MEM_NEW (EnumValue);
 	m_enumValue->m_parentEnum = member;
 	member->m_enumValueList.insertTail (m_enumValue);
 
+	sl::StringHashTableIterator <EnumValue*> mapIt;
 	while (*attributes)
 	{
 		AttrKind attrKind = AttrKindMap::findValue (attributes [0], AttrKind_Undefined);
@@ -909,6 +917,33 @@ EnumValueType::create (
 		{
 		case AttrKind_Id:
 			m_enumValue->m_id = attributes [1];
+
+			mapIt = module->m_enumValueMap.visit (m_enumValue->m_id);
+			if (!mapIt->m_value)
+			{
+				mapIt->m_value = m_enumValue;
+			}
+			else
+			{
+				EnumValue* prevEnumValue = mapIt->m_value;
+				printf (
+					"duplicate enum value id %s (%s)\n",
+					m_enumValue->m_id.sz (),
+					prevEnumValue->m_name.sz ()
+					);
+
+				if (prevEnumValue->m_detailedDescription.isEmpty () && prevEnumValue->m_briefDescription.isEmpty ())
+				{
+					printf ("  replacing old enum value it has no documentation\n");
+					mapIt->m_value = m_enumValue;
+					prevEnumValue->m_isDuplicate = true;
+				}
+				else
+				{
+					m_enumValue->m_isDuplicate = true;
+				}
+			}
+
 			break;
 
 		case AttrKind_Prot:
@@ -1179,6 +1214,7 @@ DocRefTextType::create (
 {
 	m_parser = parser;
 	m_refBlock = AXL_MEM_NEW (DocRefBlock);
+	m_refBlock->m_module = m_parser->getModule ();
 	m_refBlock->m_blockKind = name;
 	list->insertTail (m_refBlock);
 

@@ -169,6 +169,8 @@ getCompoundKindString (CompoundKind compoundKind)
 		"protocol",    // CompoundKind_Protocol
 		"category",    // CompoundKind_Category
 		"exception",   // CompoundKind_Exception
+		"service",     // CompoundKind_Service
+		"singleton",   // CompoundKind_Singleton
 		"file",        // CompoundKind_File
 		"namespace",   // CompoundKind_Namespace
 		"group",       // CompoundKind_Group

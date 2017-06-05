@@ -256,6 +256,9 @@ CompoundDefType::create (
 	case CompoundKind_Union:
 	case CompoundKind_Class:
 	case CompoundKind_Interface:
+	case CompoundKind_Exception:
+	case CompoundKind_Service:
+	case CompoundKind_Singleton:
 		module->m_namespaceArray.append (m_compound);
 		break;
 	}

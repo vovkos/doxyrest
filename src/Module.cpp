@@ -513,6 +513,9 @@ Compound::luaExport (lua::LuaState* luaState)
 	case CompoundKind_Union:
 	case CompoundKind_Class:
 	case CompoundKind_Interface:
+	case CompoundKind_Exception:
+	case CompoundKind_Service:
+	case CompoundKind_Singleton:
 		luaExportList (luaState, m_templateParamList);
 		luaState->setMember ("m_templateParamArray");
 
@@ -647,11 +650,6 @@ NamespaceContents::add (Compound* compound)
 		m_namespaceArray.append (compound->m_selfNamespace);
 		break;
 
-	case CompoundKind_Class:
-		ASSERT (compound->m_selfNamespace);
-		m_classArray.append (compound->m_selfNamespace);
-		break;
-
 	case CompoundKind_Struct:
 		ASSERT (compound->m_selfNamespace);
 		m_structArray.append (compound->m_selfNamespace);
@@ -662,9 +660,29 @@ NamespaceContents::add (Compound* compound)
 		m_unionArray.append (compound->m_selfNamespace);
 		break;
 
-	case CompoundKind_Interface:
+	case CompoundKind_Class:
 		ASSERT (compound->m_selfNamespace);
 		m_classArray.append (compound->m_selfNamespace);
+		break;
+
+	case CompoundKind_Interface:
+		ASSERT (compound->m_selfNamespace);
+		m_interfaceArray.append (compound->m_selfNamespace);
+		break;
+
+	case CompoundKind_Exception:
+		ASSERT (compound->m_selfNamespace);
+		m_exceptionArray.append (compound->m_selfNamespace);
+		break;
+
+	case CompoundKind_Service:
+		ASSERT (compound->m_selfNamespace);
+		m_serviceArray.append (compound->m_selfNamespace);
+		break;
+
+	case CompoundKind_Singleton:
+		ASSERT (compound->m_selfNamespace);
+		m_singletonArray.append (compound->m_selfNamespace);
 		break;
 
 	case CompoundKind_Page:
@@ -675,7 +693,6 @@ NamespaceContents::add (Compound* compound)
 
 	case CompoundKind_Protocol:
 	case CompoundKind_Category:
-	case CompoundKind_Exception:
 	case CompoundKind_File:
 	case CompoundKind_Example:
 	case CompoundKind_Dir:
@@ -820,6 +837,18 @@ NamespaceContents::luaExportMembers (lua::LuaState* luaState)
 
 	luaExportArray (luaState, m_classArray);
 	luaState->setMember ("m_classArray");
+
+	luaExportArray (luaState, m_interfaceArray);
+	luaState->setMember ("m_interfaceArray");
+
+	luaExportArray (luaState, m_exceptionArray);
+	luaState->setMember ("m_exceptionArray");
+
+	luaExportArray (luaState, m_serviceArray);
+	luaState->setMember ("m_serviceArray");
+
+	luaExportArray (luaState, m_singletonArray);
+	luaState->setMember ("m_singletonArray");
 
 	luaExportArray (luaState, m_typedefArray);
 	luaState->setMember ("m_typedefArray");

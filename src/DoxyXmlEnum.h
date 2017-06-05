@@ -216,6 +216,8 @@ enum CompoundKind
 	CompoundKind_Protocol,
 	CompoundKind_Category,
 	CompoundKind_Exception,
+	CompoundKind_Service,
+	CompoundKind_Singleton,
 	CompoundKind_File,
 	CompoundKind_Namespace,
 	CompoundKind_Group,
@@ -232,6 +234,8 @@ AXL_SL_BEGIN_STRING_HASH_TABLE (CompoundKindMap, CompoundKind)
 	AXL_SL_HASH_TABLE_ENTRY ("protocol",  CompoundKind_Protocol)
 	AXL_SL_HASH_TABLE_ENTRY ("category",  CompoundKind_Category)
 	AXL_SL_HASH_TABLE_ENTRY ("exception", CompoundKind_Exception)
+	AXL_SL_HASH_TABLE_ENTRY ("service",   CompoundKind_Service)
+	AXL_SL_HASH_TABLE_ENTRY ("singleton", CompoundKind_Singleton)
 	AXL_SL_HASH_TABLE_ENTRY ("file",      CompoundKind_File)
 	AXL_SL_HASH_TABLE_ENTRY ("namespace", CompoundKind_Namespace)
 	AXL_SL_HASH_TABLE_ENTRY ("group",     CompoundKind_Group)

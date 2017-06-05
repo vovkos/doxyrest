@@ -416,6 +416,10 @@ struct NamespaceContents
 	sl::Array <Namespace*> m_structArray;
 	sl::Array <Namespace*> m_unionArray;
 	sl::Array <Namespace*> m_classArray;
+	sl::Array <Namespace*> m_interfaceArray;
+	sl::Array <Namespace*> m_exceptionArray;
+	sl::Array <Namespace*> m_serviceArray;
+	sl::Array <Namespace*> m_singletonArray;
 	sl::Array <Member*> m_typedefArray;
 	sl::Array <Member*> m_variableArray;
 	sl::Array <Member*> m_functionArray;

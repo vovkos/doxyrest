@@ -430,8 +430,40 @@ function getCompoundTocTree (compound)
 		end
 	end
 
+	for i = 1, #compound.m_interfaceArray do
+		local item = compound.m_interfaceArray [i]
+		if isTocTreeItem (compound, item) then
+			local fileName = getItemFileName (item)
+			s = s .. "\t" .. fileName .. "\n"
+		end
+	end
+
+	for i = 1, #compound.m_exceptionArray do
+		local item = compound.m_exceptionArray [i]
+		if isTocTreeItem (compound, item) then
+			local fileName = getItemFileName (item)
+			s = s .. "\t" .. fileName .. "\n"
+		end
+	end
+
 	for i = 1, #compound.m_classArray do
 		local item = compound.m_classArray [i]
+		if isTocTreeItem (compound, item) then
+			local fileName = getItemFileName (item)
+			s = s .. "\t" .. fileName .. "\n"
+		end
+	end
+
+	for i = 1, #compound.m_singletonArray do
+		local item = compound.m_singletonArray [i]
+		if isTocTreeItem (compound, item) then
+			local fileName = getItemFileName (item)
+			s = s .. "\t" .. fileName .. "\n"
+		end
+	end
+
+	for i = 1, #compound.m_serviceArray do
+		local item = compound.m_serviceArray [i]
 		if isTocTreeItem (compound, item) then
 			local fileName = getItemFileName (item)
 			s = s .. "\t" .. fileName .. "\n"
@@ -780,7 +812,7 @@ function processDlListDocBlock (block, context)
 	getDocBlockListContentsImpl (block.m_childBlockList, context)
 
 	local s =
-		".. list-table::\n" ..
+		"\n\n.. list-table::\n" ..
 		"\t:widths: 20 80\n\n"
 
 	for i = 1, #context.m_dlList do
@@ -860,7 +892,11 @@ function getDocBlockContents (block, context)
 			text = string.gsub (text, "<", "\\<") -- escape left chevron
 			s = ":ref:`" .. text .. " <doxid-" .. block.m_id .. ">`"
 		elseif block.m_blockKind == "computeroutput" then
-			s = "``" .. text .. "``"
+			if string.find (text, "\n") then
+				s = "\n\n.. code-block:: none\n\n" .. text
+			else
+				s = "``" .. text .. "``"
+			end
 		elseif block.m_blockKind == "bold" then
 			s = "**" .. text .. "**"
 		elseif block.m_blockKind == "emphasis" then
@@ -918,6 +954,10 @@ function getDocBlockContents (block, context)
 			context.m_paramSection [i].m_description = ""
 		elseif block.m_blockKind == "parameterdescription" then
 			text = trimWhitespace (text)
+
+			if string.find (text, "\n") then
+				text = "\n" .. replaceCommonSpacePrefix (text, "\t\t  ") -- add paramter table offset "- "
+			end
 
 			if context.m_paramSection then
 				local count = #context.m_paramSection
@@ -1372,7 +1412,11 @@ function prepareCompound (compound)
 	filterEnumArray (compound.m_enumArray)
 	filterItemArray (compound.m_structArray)
 	filterItemArray (compound.m_unionArray)
+	filterItemArray (compound.m_interfaceArray)
+	filterItemArray (compound.m_exceptionArray)
 	filterItemArray (compound.m_classArray)
+	filterItemArray (compound.m_singletonArray)
+	filterItemArray (compound.m_serviceArray)
 	filterItemArray (compound.m_variableArray)
 	filterItemArray (compound.m_propertyArray)
 	filterItemArray (compound.m_eventArray)
@@ -1387,7 +1431,11 @@ function prepareCompound (compound)
 		#compound.m_enumArray ~= 0 or
 		#compound.m_structArray ~= 0 or
 		#compound.m_unionArray ~= 0 or
+		#compound.m_interfaceArray ~= 0 or
+		#compound.m_exceptionArray ~= 0 or
 		#compound.m_classArray ~= 0 or
+		#compound.m_singletonArray ~= 0 or
+		#compound.m_serviceArray ~= 0 or
 		#compound.m_variableArray ~= 0 or
 		#compound.m_propertyArray ~= 0 or
 		#compound.m_eventArray ~= 0 or
@@ -1396,14 +1444,19 @@ function prepareCompound (compound)
 		#compound.m_aliasArray ~= 0 or
 		#compound.m_defineArray ~= 0
 
-	-- sort items (only the ones producing separate pages)
+	-- sort items -- only the ones producing separate pages;
+	-- also, defines, which always go to the global namespace
 
 	table.sort (compound.m_groupArray, cmpIds)
 	table.sort (compound.m_namespaceArray, cmpNames)
 	table.sort (compound.m_enumArray, cmpNames)
 	table.sort (compound.m_structArray, cmpNames)
 	table.sort (compound.m_unionArray, cmpNames)
+	table.sort (compound.m_interfaceArray, cmpNames)
+	table.sort (compound.m_exceptionArray, cmpNames)
 	table.sort (compound.m_classArray, cmpNames)
+	table.sort (compound.m_serviceArray, cmpNames)
+	table.sort (compound.m_defineArray, cmpNames)
 
 	compound.m_stats = stats
 	return stats

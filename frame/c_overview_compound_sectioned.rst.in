@@ -82,8 +82,35 @@ $(getTitle (sectionName, "-"))
 	:class: overview-code-block
 
 %{
-	includeFile ("c_overview_structs.rst.in", compound)
-	includeFile ("c_overview_unions.rst.in", compound)
+	includeFile ("c_overview_classes.rst.in", compound, compound.m_structArray)
+	includeFile ("c_overview_classes.rst.in", compound, compound.m_unionArray)
+	emit ("\n")
+end -- if
+
+if #compound.m_interfaceArray > 0 then
+}
+Interfaces
+----------
+
+.. ref-code-block:: $g_language
+	:class: overview-code-block
+
+%{
+	includeFile ("c_overview_classes.rst.in", compound, compound.m_interfaceArray)
+	emit ("\n")
+end -- if
+
+
+if #compound.m_exceptionArray > 0 then
+}
+Exceptions
+----------
+
+.. ref-code-block:: $g_language
+	:class: overview-code-block
+
+%{
+	includeFile ("c_overview_classes.rst.in", compound, compound.m_exceptionArray)
 	emit ("\n")
 end -- if
 
@@ -96,7 +123,33 @@ Classes
 	:class: overview-code-block
 
 %{
-	includeFile ("c_overview_classes.rst.in", compound)
+	includeFile ("c_overview_classes.rst.in", compound, compound.m_classArray)
+	emit ("\n")
+end -- if
+
+if #compound.m_singletonArray > 0 then
+}
+Singletons
+----------
+
+.. ref-code-block:: $g_language
+	:class: overview-code-block
+
+%{
+	includeFile ("c_overview_classes.rst.in", compound, compound.m_singletonArray)
+	emit ("\n")
+end -- if
+
+if #compound.m_serviceArray > 0 then
+}
+Services
+--------
+
+.. ref-code-block:: $g_language
+	:class: overview-code-block
+
+%{
+	includeFile ("c_overview_classes.rst.in", compound, compound.m_serviceArray)
 	emit ("\n")
 end -- if
 

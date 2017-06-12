@@ -570,7 +570,7 @@ removeDuplicates (sl::StdList <T>* list)
 	while (it)
 	{
 		sl::Iterator <T> next = it.getNext ();
-		bool result = map.addIfNotExists (*it, true);
+		bool result = map.addIfNotExists (*it, true) != NULL;
 		if (!result)
 			list->erase (it);
 

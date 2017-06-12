@@ -85,7 +85,7 @@ if (WIN32)
 	add_test (
 		NAME sample-jancy-api
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-		COMMAND build-rst.bat
+		COMMAND build-rst.bat $<CONFIGURATION>
 		)
 else ()
 	axl_configure_file_w_permissions (

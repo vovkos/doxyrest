@@ -86,7 +86,7 @@ set EXPAT_VERSION=2.1.0
 set EXPAT_DOWNLOAD_FILE=expat-%EXPAT_VERSION%.tar.gz
 set EXPAT_DOWNLOAD_URL=https://sourceforge.net/projects/expat/files/expat/%EXPAT_VERSION%/%EXPAT_DOWNLOAD_FILE%/download
 
-set EXPAT_CMAKE_FLAFS= ^
+set EXPAT_CMAKE_FLAGS= ^
 	-DBUILD_shared=OFF ^
 	-DBUILD_examples=OFF ^
 	-DBUILD_tests=OFF ^

@@ -47,7 +47,7 @@ ren %DOWNLOAD_DIR%\expat-%EXPAT_VERSION% expat
 
 :: patch CMakeLists.txt /MD => /MT
 
-copy ci\appveyor\md-to-mt.cmake %DOWNLOAD_DIR%\expat
+copy %~dp0\md-to-mt.cmake %DOWNLOAD_DIR%\expat
 echo include (md-to-mt.cmake) >> %DOWNLOAD_DIR%\expat\CMakeLists.txt
 
 :: . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .

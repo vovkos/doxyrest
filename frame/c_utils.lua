@@ -536,6 +536,14 @@ function getTitle (title, underline)
 	return title .. "\n" .. string.rep (underline, #title)
 end
 
+function getProtectionSuffix (item)
+	if item.m_protectionKind and item.m_protectionKind ~= "public" then
+		return " // " .. item.m_protectionKind
+	else
+		return ""
+	end
+end
+
 function getPropertyDeclString (item, isRef, indent)
 	local s = getLinkedTextString (item.m_returnType, true)
 

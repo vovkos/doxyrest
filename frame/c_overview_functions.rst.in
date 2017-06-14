@@ -12,6 +12,21 @@
 
 local argArray = table.pack (...)
 local compound = argArray [1]
+local sectionName = argArray [2]
+
+local protectionKind = compound.m_functionArray [1].m_protectionKind
+
+if hasNonPublicItems (compound.m_functionArray) then
+}
+	// $protectionKind $sectionName
+
+%{
+else
+}
+	// $sectionName
+
+%{
+end -- if
 
 local prevParamCount = 0
 
@@ -24,9 +39,19 @@ for i = 1, #compound.m_functionArray do
 		extraSep = "\n"
 	end
 
+	if item.m_protectionKind ~= protectionKind then
+		protectionKind = item.m_protectionKind
+		extraSep = ""
+}
+
+	// $protectionKind $sectionName
+
+%{
+	end -- if
+
 	prevParamCount = paramCount
 }
-$extraSep	$(getFunctionDeclString (item, hasItemRefTarget (item), "\t"))$(getProtectionSuffix (item))
+$extraSep	$(getFunctionDeclString (item, hasItemRefTarget (item), "\t"))
 %{
 end -- for
 }

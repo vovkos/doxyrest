@@ -13,6 +13,20 @@
 local argArray = table.pack (...)
 local compound = argArray [1]
 
+local protectionKind = compound.m_eventArray [1].m_protectionKind
+
+if hasNonPublicItems (compound.m_eventArray) then
+}
+	// $protectionKind events
+
+%{
+else
+}
+	// events
+
+%{
+end -- if
+
 local prevParamCount = 0
 
 for i = 1, #compound.m_eventArray do
@@ -24,9 +38,19 @@ for i = 1, #compound.m_eventArray do
 		extraSep = "\n"
 	end
 
+	if item.m_protectionKind ~= protectionKind then
+		protectionKind = item.m_protectionKind
+		extraSep = ""
+}
+
+	// $protectionKind events
+
+%{
+	end -- if
+
 	prevParamCount = paramCount
 }
-$extraSep	$(getEventDeclString (item, hasItemRefTarget (item), "\t"))$(getProtectionSuffix (item))
+$extraSep	$(getEventDeclString (item, hasItemRefTarget (item), "\t"))
 %{
 end -- for
 }

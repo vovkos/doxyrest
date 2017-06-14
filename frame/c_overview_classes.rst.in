@@ -13,14 +13,38 @@
 local argArray = table.pack (...)
 local compound = argArray [1]
 local itemArray = argArray [2]
+local sectionName = argArray [3]
+
+local protectionKind = itemArray [1].m_protectionKind
+
+if hasNonPublicItems (itemArray) then
+}
+	// $protectionKind $sectionName
+
+%{
+else
+}
+	// $sectionName
+
+%{
+end -- if
 
 for i = 1, #itemArray do
 	local item = itemArray [i]
 	local targetFileName = getItemFileName (item)
 
-	if compound.m_compoundKind ~= "group" then
+	if compound.m_compoundKind ~= "group" and compound.m_compoundKind ~= "base-compound" then
 		generateFile (targetFileName, "c_class.rst.in", item)
 	end
+
+	if item.m_protectionKind ~= protectionKind then
+		protectionKind = item.m_protectionKind
+}
+
+	// $protectionKind $sectionName
+
+%{
+	end -- if
 }
 	$(item.m_compoundKind) :ref:`$(getItemName (item))<doxid-$(item.m_id)>`
 %{

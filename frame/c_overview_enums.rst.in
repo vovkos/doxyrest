@@ -14,6 +14,20 @@ local argArray = table.pack (...)
 local compound = argArray [1]
 local prevGetItemName = getItemName
 
+local protectionKind = compound.m_enumArray [1].m_protectionKind
+
+if hasNonPublicItems (compound.m_enumArray) then
+}
+	// $protectionKind enums
+
+%{
+else
+}
+	// enums
+
+%{
+end -- if
+
 getItemName = getItemSimpleName
 
 local isLastUnnamed = false
@@ -21,6 +35,15 @@ local isLastUnnamed = false
 for i = 1, #compound.m_enumArray do
 	local item = compound.m_enumArray [i]
 	local enumKind = getItemKindString (item, "enum")
+
+	if item.m_protectionKind ~= protectionKind then
+		protectionKind = item.m_protectionKind
+}
+
+	// $protectionKind enums
+
+%{
+	end -- if
 
 	if isUnnamedItem (item) then
 		if i > 1 then
@@ -44,7 +67,7 @@ for i = 1, #compound.m_enumArray do
 	else
 		local targetFileName = getItemFileName (item)
 
-		if compound.m_compoundKind ~= "group" then
+		if compound.m_compoundKind ~= "group" and compound.m_compoundKind ~= "base-compound" then
 			generateFile (targetFileName, "c_enum.rst.in", item)
 		end
 

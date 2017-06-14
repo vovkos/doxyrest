@@ -13,6 +13,20 @@
 local argArray = table.pack (...)
 local compound = argArray [1]
 
+local protectionKind = compound.m_constructorArray [1].m_protectionKind
+
+if hasNonPublicItems (compound.m_constructorArray) then
+}
+	// $protectionKind constructors
+
+%{
+else
+}
+	// construction
+
+%{
+end -- if
+
 local prevParamCount = 0
 
 for i = 1, #compound.m_constructorArray do
@@ -24,9 +38,19 @@ for i = 1, #compound.m_constructorArray do
 		extraSep = "\n"
 	end
 
+	if item.m_protectionKind ~= protectionKind then
+		protectionKind = item.m_protectionKind
+		extraSep = ""
+}
+
+	// $protectionKind constructors
+
+%{
+	end -- if
+
 	prevParamCount = paramCount
 }
-$extraSep	$(getFunctionDeclString (item, hasItemRefTarget (item), "\t"))$(getProtectionSuffix (item))
+$extraSep	$(getFunctionDeclString (item, hasItemRefTarget (item), "\t"))
 %{
 end -- for
 
@@ -37,7 +61,7 @@ if g_includeDestructors and compound.m_destructor then
 		extraSep = "\n"
 	end
 }
-$extraSep	$(getFunctionDeclString (item, hasItemRefTarget (item), "\t"))$(getProtectionSuffix (item))
+$extraSep	$(getFunctionDeclString (item, hasItemRefTarget (item), "\t"))
 %{
 end -- if
 }

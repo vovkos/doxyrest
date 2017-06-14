@@ -13,6 +13,20 @@
 local argArray = table.pack (...)
 local compound = argArray [1]
 
+local protectionKind = compound.m_propertyArray [1].m_protectionKind
+
+if hasNonPublicItems (compound.m_propertyArray) then
+}
+	// $protectionKind properties
+
+%{
+else
+}
+	// properties
+
+%{
+end -- if
+
 local prevParamCount = 0
 
 for i = 1, #compound.m_propertyArray do
@@ -25,9 +39,19 @@ for i = 1, #compound.m_propertyArray do
 		extraSep = "\n"
 	end
 
+	if item.m_protectionKind ~= protectionKind then
+		protectionKind = item.m_protectionKind
+		extraSep = ""
+}
+
+	// $protectionKind properties
+
+%{
+	end -- if
+
 	prevParamCount = paramCount
 }
-$extraSep	$(getPropertyDeclString (item, hasItemRefTarget (item), "\t"))$(getProtectionSuffix (item))
+$extraSep	$(getPropertyDeclString (item, hasItemRefTarget (item), "\t"))
 %{
 end -- for
 }

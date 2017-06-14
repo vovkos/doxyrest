@@ -12,6 +12,21 @@
 
 local argArray = table.pack (...)
 local compound = argArray [1]
+local sectionName = argArray [2]
+
+local protectionKind = compound.m_variableArray [1].m_protectionKind
+
+if hasNonPublicItems (compound.m_variableArray) then
+}
+	// $protectionKind $sectionName
+
+%{
+else
+}
+	// $sectionName
+
+%{
+end -- if
 
 local indent = ""
 local unnamedStack = {}
@@ -21,6 +36,15 @@ local isLastUnnamed = false
 local i = 1
 while i <= #compound.m_variableArray do
 	local item = compound.m_variableArray [i]
+
+	if item.m_protectionKind ~= protectionKind then
+		protectionKind = item.m_protectionKind
+}
+
+	// $protectionKind $sectionName
+
+%{
+	end -- if
 
 	if not isUnnamedItem (item) then
 		local modifiers = ""
@@ -66,7 +90,7 @@ while i <= #compound.m_variableArray do
 			isLastUnnamed = false
 		end
 }
-	$indent$(getLinkedTextString (item.m_type, true))$modifiers $(getItemNameForOverview (item))$suffix$(getProtectionSuffix (item))
+	$indent$(getLinkedTextString (item.m_type, true))$modifiers $(getItemNameForOverview (item))$suffix
 %{
 	elseif unnamedStackSize > 0 and not unnamedStack [unnamedStackSize] then
 		unnamedStack [unnamedStackSize] = 0 -- terminate this stack entry
@@ -101,7 +125,7 @@ while i <= #compound.m_variableArray do
 
 			i = i + 1 -- skip next
 }
-	$indent}$modifiers $(getItemNameForOverview (nextItem))$(getProtectionSuffix (nextItem))
+	$indent}$modifiers $(getItemNameForOverview (nextItem))
 %{
 		else
 }

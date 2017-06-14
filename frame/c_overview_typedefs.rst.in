@@ -13,6 +13,20 @@
 local argArray = table.pack (...)
 local compound = argArray [1]
 
+local protectionKind = compound.m_typedefArray [1].m_protectionKind
+
+if hasNonPublicItems (compound.m_typedefArray) then
+}
+	// $protectionKind typedefs
+
+%{
+else
+}
+	// typedefs
+
+%{
+end -- if
+
 local prevParamCount = 0
 
 for i = 1, #compound.m_typedefArray do
@@ -20,6 +34,15 @@ for i = 1, #compound.m_typedefArray do
 
 	local paramCount = 0
 	local extraSep = ""
+
+	if item.m_protectionKind ~= protectionKind then
+		protectionKind = item.m_protectionKind
+}
+
+	// $protectionKind typedefs
+
+%{
+	end -- if
 
 	-- currently getTypedefDeclString doesn't re-format argstring according to the current coding style
 	-- so don't insert extra empty lines between mult-arg typedefs
@@ -38,7 +61,7 @@ for i = 1, #compound.m_typedefArray do
 
 	-- prevParamCount = paramCount
 }
-$extraSep	$(getTypedefDeclString (item, hasItemRefTarget (item), "\t"))$(getProtectionSuffix (item))
+$extraSep	$(getTypedefDeclString (item, hasItemRefTarget (item), "\t"))
 %{
 end -- for
 }

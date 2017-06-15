@@ -317,8 +317,8 @@ Member::Member ()
 	m_parentCompound = NULL;
 	m_groupCompound = NULL;
 	m_memberKind = MemberKind_Undefined;
-	m_protectionKind = ProtectionKind_Undefined;
-	m_virtualKind = VirtualKind_Undefined;
+	m_protectionKind = ProtectionKind_Public;
+	m_virtualKind = VirtualKind_NonVirtual;
 	m_flags = 0;
 	m_cacheIdx = -1;
 }
@@ -465,7 +465,7 @@ Compound::Compound ()
 	m_groupCompound = NULL;
 	m_compoundKind = CompoundKind_Undefined;
 	m_languageKind = LanguageKind_Undefined;
-	m_protectionKind = ProtectionKind_Undefined;
+	m_protectionKind = ProtectionKind_Public;
 	m_isFinal = false;
 	m_isSealed = false;
 	m_isAbstract = false;

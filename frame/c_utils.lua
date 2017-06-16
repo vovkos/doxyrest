@@ -705,25 +705,6 @@ end
 
 -------------------------------------------------------------------------------
 
--- whitespace handling
-
-function trimLeadingWhitespace (string)
-	local s = string.gsub (string, "^%s+", "")
-	return s
-end
-
-function trimTrailingWhitespace (string)
-	local s = string.gsub (string, "%s+$", "")
-	return s
-end
-
-function trimWhitespace (string)
-	local s = trimLeadingWhitespace (string)
-	return trimTrailingWhitespace (s)
-end
-
--------------------------------------------------------------------------------
-
 -- item documentation utils
 
 function replaceCommonSpacePrefix (source, replacement)
@@ -1206,8 +1187,15 @@ g_protectionKindMap = {
 	package   = 3,
 }
 
-g_minProtection = 0
-g_maxProtection = 3
+g_protectionNameMap = {
+	[0] = "public",
+	[1] = "protected",
+	[2] = "private",
+	[3] = "package",
+}
+
+g_minProtectionValue = 0
+g_maxProtectionValue = 3
 
 function isItemExcludedByProtectionFilter (item)
 
@@ -1217,46 +1205,6 @@ function isItemExcludedByProtectionFilter (item)
 	end
 
 	return false
-end
-
--- returns non-public item count
-
-function sortByProtection (array)
-	if next (array) == nil then
-		return 0
-	end
-
-	local bucketArray  = {}
-	for i = g_minProtection, g_maxProtection do
-		bucketArray [i] = {}
-	end
-
-	for i = 1, #array do
-		local item = array [i]
-		local protectionValue = g_protectionKindMap [item.m_protectionKind]
-
-		if not protectionValue then
-			protectionValue = 0 -- assume public
-		end
-
-		table.insert (bucketArray [protectionValue], item)
-	end
-
-	local result = {}
-	local k = 1
-
-	for i = g_minProtection, g_maxProtection do
-		local bucket = bucketArray [i]
-
-		for j = 1, #bucket do
-			array [k] = bucket [j]
-			k = k + 1
-		end
-	end
-
-	assert (k == #array + 1)
-
-	return #array - #bucketArray [0]
 end
 
 function hasNonPublicItems (array)
@@ -1400,14 +1348,6 @@ function filterTypedefArray (typedefArray)
 	end
 end
 
-function concatenateTables (t1, t2)
-	local j = #t1 + 1
-	for i = 1, #t2 do
-		t1 [j] = t2 [i]
-		j = j + 1
-	end
-end
-
 -------------------------------------------------------------------------------
 
 -- base compound is an artificial compound holding all inherited members
@@ -1446,47 +1386,148 @@ function addToBaseCompound (baseCompound, baseTypeArray)
 	end
 end
 
+function createPseudoCompound (compoundKind)
+	local compound = {}
+
+	compound.m_compoundKind = compoundKind
+	compound.m_baseTypeMap = {}
+	compound.m_namespaceArray = {}
+	compound.m_typedefArray = {}
+	compound.m_enumArray = {}
+	compound.m_structArray = {}
+	compound.m_unionArray = {}
+	compound.m_interfaceArray = {}
+	compound.m_exceptionArray = {}
+	compound.m_classArray = {}
+	compound.m_singletonArray = {}
+	compound.m_serviceArray = {}
+	compound.m_variableArray = {}
+	compound.m_propertyArray = {}
+	compound.m_eventArray = {}
+	compound.m_constructorArray = {}
+	compound.m_functionArray = {}
+	compound.m_aliasArray = {}
+	compound.m_defineArray = {}
+
+	return compound
+end
+
 function createBaseCompound (compound)
-	local baseCompound = {}
+	compound.m_baseCompound = createPseudoCompound ("base-compound")
+	addToBaseCompound (compound.m_baseCompound, compound.m_baseTypeArray)
+	handleCompoundProtection (compound.m_baseCompound)
+end
 
-	baseCompound.m_compoundKind = "base-compound"
-	baseCompound.m_baseTypeMap = {}
-	baseCompound.m_namespaceArray = {}
-	baseCompound.m_typedefArray = {}
-	baseCompound.m_enumArray = {}
-	baseCompound.m_structArray = {}
-	baseCompound.m_unionArray = {}
-	baseCompound.m_interfaceArray = {}
-	baseCompound.m_exceptionArray = {}
-	baseCompound.m_classArray = {}
-	baseCompound.m_singletonArray = {}
-	baseCompound.m_serviceArray = {}
-	baseCompound.m_variableArray = {}
-	baseCompound.m_propertyArray = {}
-	baseCompound.m_eventArray = {}
-	baseCompound.m_constructorArray = {}
-	baseCompound.m_functionArray = {}
-	baseCompound.m_aliasArray = {}
-	baseCompound.m_defineArray = {}
+function sortByProtection (array)
+	if next (array) == nil then
+		return
+	end
 
-	compound.m_baseCompound = baseCompound
+	local bucketArray  = {}
+	for i = g_minProtectionValue, g_maxProtectionValue do
+		bucketArray [i] = {}
+	end
 
-	addToBaseCompound (baseCompound, compound.m_baseTypeArray)
+	for i = 1, #array do
+		local item = array [i]
+		local protectionValue = g_protectionKindMap [item.m_protectionKind]
 
-	sortByProtection (baseCompound.m_typedefArray)
-	sortByProtection (baseCompound.m_enumArray)
-	sortByProtection (baseCompound.m_structArray)
-	sortByProtection (baseCompound.m_unionArray)
-	sortByProtection (baseCompound.m_interfaceArray)
-	sortByProtection (baseCompound.m_exceptionArray)
-	sortByProtection (baseCompound.m_classArray)
-	sortByProtection (baseCompound.m_singletonArray)
-	sortByProtection (baseCompound.m_serviceArray)
-	sortByProtection (baseCompound.m_variableArray)
-	sortByProtection (baseCompound.m_propertyArray)
-	sortByProtection (baseCompound.m_eventArray)
-	sortByProtection (baseCompound.m_functionArray)
-	sortByProtection (baseCompound.m_aliasArray)
+		if not protectionValue then
+			protectionValue = 0 -- assume public
+		end
+
+		table.insert (bucketArray [protectionValue], item)
+	end
+
+	local result = {}
+	local k = 1
+
+	for i = g_minProtectionValue, g_maxProtectionValue do
+		local bucket = bucketArray [i]
+
+		for j = 1, #bucket do
+			array [k] = bucket [j]
+			k = k + 1
+		end
+	end
+
+	assert (k == #array + 1)
+
+	return #array - #bucketArray [0]
+end
+
+function addToProtectionCompounds (compound, arrayName)
+	local array = compound [arrayName]
+
+	if next (array) == nil then
+		return
+	end
+
+	for i = 1, #array do
+		local item = array [i]
+		local protectionValue = g_protectionKindMap [item.m_protectionKind]
+
+		if not protectionValue then
+			protectionValue = 0 -- assume public
+		end
+
+		local protectionCompound = compound.m_protectionCompoundArray [protectionValue]
+		local targetArray = protectionCompound [arrayName]
+
+		table.insert (targetArray, item)
+		protectionCompound.m_isEmpty = nil
+	end
+end
+
+function handleCompoundProtection (compound)
+
+	if g_noProtectionSections then
+		sortByProtection (compound.m_typedefArray)
+		sortByProtection (compound.m_enumArray)
+		sortByProtection (compound.m_structArray)
+		sortByProtection (compound.m_unionArray)
+		sortByProtection (compound.m_interfaceArray)
+		sortByProtection (compound.m_exceptionArray)
+		sortByProtection (compound.m_classArray)
+		sortByProtection (compound.m_singletonArray)
+		sortByProtection (compound.m_serviceArray)
+		sortByProtection (compound.m_variableArray)
+		sortByProtection (compound.m_propertyArray)
+		sortByProtection (compound.m_eventArray)
+		sortByProtection (compound.m_functionArray)
+		sortByProtection (compound.m_aliasArray)
+	else
+		compound.m_protectionCompoundArray = {}
+
+		for i = g_minProtectionValue, g_maxProtectionValue do
+			local protectionCompound = createPseudoCompound ("protection-compound")
+			protectionCompound.m_isEmpty = true
+			compound.m_protectionCompoundArray [i] = protectionCompound
+		end
+
+		addToProtectionCompounds (compound, "m_typedefArray")
+		addToProtectionCompounds (compound, "m_enumArray")
+		addToProtectionCompounds (compound, "m_structArray")
+		addToProtectionCompounds (compound, "m_unionArray")
+		addToProtectionCompounds (compound, "m_interfaceArray")
+		addToProtectionCompounds (compound, "m_exceptionArray")
+		addToProtectionCompounds (compound, "m_classArray")
+		addToProtectionCompounds (compound, "m_singletonArray")
+		addToProtectionCompounds (compound, "m_serviceArray")
+		addToProtectionCompounds (compound, "m_variableArray")
+		addToProtectionCompounds (compound, "m_propertyArray")
+		addToProtectionCompounds (compound, "m_eventArray")
+		addToProtectionCompounds (compound, "m_functionArray")
+		addToProtectionCompounds (compound, "m_aliasArray")
+
+		-- eliminate empty protection compounds
+
+		for i = g_minProtectionValue, g_maxProtectionValue do
+			if compound.m_protectionCompoundArray [i].m_isEmpty then
+				compound.m_protectionCompoundArray [i] = nil
+			end
+		end
+	end
 end
 
 -------------------------------------------------------------------------------
@@ -1608,29 +1649,13 @@ function prepareCompound (compound)
 	table.sort (compound.m_serviceArray, cmpNames)
 	table.sort (compound.m_defineArray, cmpNames)
 
-	-- stable sort by protection (public first)
-
-	sortByProtection (compound.m_typedefArray)
-	sortByProtection (compound.m_enumArray)
-	sortByProtection (compound.m_structArray)
-	sortByProtection (compound.m_unionArray)
-	sortByProtection (compound.m_interfaceArray)
-	sortByProtection (compound.m_exceptionArray)
-	sortByProtection (compound.m_classArray)
-	sortByProtection (compound.m_singletonArray)
-	sortByProtection (compound.m_serviceArray)
-	sortByProtection (compound.m_variableArray)
-	sortByProtection (compound.m_propertyArray)
-	sortByProtection (compound.m_eventArray)
-	sortByProtection (compound.m_constructorArray)
-	sortByProtection (compound.m_functionArray)
-	sortByProtection (compound.m_aliasArray)
-
 	compound.m_stats = stats
 
 	if compound.m_baseTypeArray and next (compound.m_baseTypeArray) ~= nil then
 		createBaseCompound (compound)
 	end
+
+	handleCompoundProtection (compound)
 
 	return stats
 end
@@ -1645,5 +1670,36 @@ function prepareEnum (enum)
 	return stats
 end
 
+-------------------------------------------------------------------------------
+
+-- generic utils
+
+function captialize (string)
+	local s = string.gsub (string, "^%l", string.upper)
+	return s
+end
+
+function concatenateTables (t1, t2)
+	local j = #t1 + 1
+	for i = 1, #t2 do
+		t1 [j] = t2 [i]
+		j = j + 1
+	end
+end
+
+function trimLeadingWhitespace (string)
+	local s = string.gsub (string, "^%s+", "")
+	return s
+end
+
+function trimTrailingWhitespace (string)
+	local s = string.gsub (string, "%s+$", "")
+	return s
+end
+
+function trimWhitespace (string)
+	local s = trimLeadingWhitespace (string)
+	return trimTrailingWhitespace (s)
+end
 
 -------------------------------------------------------------------------------

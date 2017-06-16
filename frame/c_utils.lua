@@ -1265,7 +1265,8 @@ function hasNonPublicItems (array)
 	end
 
 	local lastItem = array [#array]
-	return g_protectionKindMap [lastItem.m_protectionKind]
+	local protectionValue = g_protectionKindMap [lastItem.m_protectionKind]
+	return protectionValue and protectionValue > 0
 end
 
 function isItemExcludedByLocationFilter (item)
@@ -1472,21 +1473,20 @@ function createBaseCompound (compound)
 
 	addToBaseCompound (baseCompound, compound.m_baseTypeArray)
 
-	baseCompound.m_nonPublicItemCount =
-		sortByProtection (baseCompound.m_typedefArray) +
-		sortByProtection (baseCompound.m_enumArray) +
-		sortByProtection (baseCompound.m_structArray) +
-		sortByProtection (baseCompound.m_unionArray) +
-		sortByProtection (baseCompound.m_interfaceArray) +
-		sortByProtection (baseCompound.m_exceptionArray) +
-		sortByProtection (baseCompound.m_classArray) +
-		sortByProtection (baseCompound.m_singletonArray) +
-		sortByProtection (baseCompound.m_serviceArray) +
-		sortByProtection (baseCompound.m_variableArray) +
-		sortByProtection (baseCompound.m_propertyArray) +
-		sortByProtection (baseCompound.m_eventArray) +
-		sortByProtection (baseCompound.m_functionArray) +
-		sortByProtection (baseCompound.m_aliasArray)
+	sortByProtection (baseCompound.m_typedefArray)
+	sortByProtection (baseCompound.m_enumArray)
+	sortByProtection (baseCompound.m_structArray)
+	sortByProtection (baseCompound.m_unionArray)
+	sortByProtection (baseCompound.m_interfaceArray)
+	sortByProtection (baseCompound.m_exceptionArray)
+	sortByProtection (baseCompound.m_classArray)
+	sortByProtection (baseCompound.m_singletonArray)
+	sortByProtection (baseCompound.m_serviceArray)
+	sortByProtection (baseCompound.m_variableArray)
+	sortByProtection (baseCompound.m_propertyArray)
+	sortByProtection (baseCompound.m_eventArray)
+	sortByProtection (baseCompound.m_functionArray)
+	sortByProtection (baseCompound.m_aliasArray)
 end
 
 -------------------------------------------------------------------------------
@@ -1610,22 +1610,21 @@ function prepareCompound (compound)
 
 	-- stable sort by protection (public first)
 
-	compound.m_nonPublicItemCount =
-		sortByProtection (compound.m_typedefArray) +
-		sortByProtection (compound.m_enumArray) +
-		sortByProtection (compound.m_structArray) +
-		sortByProtection (compound.m_unionArray) +
-		sortByProtection (compound.m_interfaceArray) +
-		sortByProtection (compound.m_exceptionArray) +
-		sortByProtection (compound.m_classArray) +
-		sortByProtection (compound.m_singletonArray) +
-		sortByProtection (compound.m_serviceArray) +
-		sortByProtection (compound.m_variableArray) +
-		sortByProtection (compound.m_propertyArray) +
-		sortByProtection (compound.m_eventArray) +
-		sortByProtection (compound.m_constructorArray) +
-		sortByProtection (compound.m_functionArray) +
-		sortByProtection (compound.m_aliasArray)
+	sortByProtection (compound.m_typedefArray)
+	sortByProtection (compound.m_enumArray)
+	sortByProtection (compound.m_structArray)
+	sortByProtection (compound.m_unionArray)
+	sortByProtection (compound.m_interfaceArray)
+	sortByProtection (compound.m_exceptionArray)
+	sortByProtection (compound.m_classArray)
+	sortByProtection (compound.m_singletonArray)
+	sortByProtection (compound.m_serviceArray)
+	sortByProtection (compound.m_variableArray)
+	sortByProtection (compound.m_propertyArray)
+	sortByProtection (compound.m_eventArray)
+	sortByProtection (compound.m_constructorArray)
+	sortByProtection (compound.m_functionArray)
+	sortByProtection (compound.m_aliasArray)
 
 	compound.m_stats = stats
 

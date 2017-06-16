@@ -355,7 +355,8 @@ struct Compound: sl::ListLink
 	sl::StdList <Ref> m_innerRefList;
 
 	sl::Array <Compound*> m_baseTypeArray;
-	sl::Array <Compound*> m_derivedTypeArray;
+	sl::Array <Compound*> m_derivedTypeArray_doxy; // explicitly specified in doxy
+	sl::Array <Compound*> m_derivedTypeArray_auto; // auto-generated
 
 	sl::String m_path;
 

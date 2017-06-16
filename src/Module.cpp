@@ -525,7 +525,15 @@ Compound::luaExport (lua::LuaState* luaState)
 		luaExportArray (luaState, m_baseTypeArray);
 		luaState->setMember ("m_baseTypeArray");
 
-		luaExportArray (luaState, m_derivedTypeArray);
+		// prefer explicitly specified derived type (fallback to auto-generated if absent)
+
+		luaExportArray (
+			luaState,
+			!m_derivedTypeArray_doxy.isEmpty () ?
+				m_derivedTypeArray_doxy :
+				m_derivedTypeArray_auto
+			);
+
 		luaState->setMember ("m_derivedTypeArray");
 		break;
 	}
@@ -1023,6 +1031,8 @@ GlobalNamespace::build (Module* module)
 					err::setFormatStringError ("can't find base compound refid: %s\n", refIt->m_id.sz ());
 					return false;
 				}
+
+				baseCompound->m_derivedTypeArray_auto.append (compound);
 			}
 
 			compound->m_baseTypeArray.append (baseCompound);
@@ -1038,10 +1048,8 @@ GlobalNamespace::build (Module* module)
 				return false;
 			}
 
-			compound->m_derivedTypeArray.append (derivedCompound);
+			compound->m_derivedTypeArray_doxy.append (derivedCompound);
 		}
-
-
 	}
 
 	// loop #3 adds leftovers to the global namespace

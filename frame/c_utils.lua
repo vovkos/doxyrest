@@ -1414,6 +1414,7 @@ end
 
 function createBaseCompound (compound)
 	compound.m_baseCompound = createPseudoCompound ("base-compound")
+	compound.m_baseCompound.m_isBaseCompound = true
 	addToBaseCompound (compound.m_baseCompound, compound.m_baseTypeArray)
 	handleCompoundProtection (compound.m_baseCompound)
 end
@@ -1494,6 +1495,7 @@ function handleCompoundProtection (compound)
 		sortByProtection (compound.m_variableArray)
 		sortByProtection (compound.m_propertyArray)
 		sortByProtection (compound.m_eventArray)
+		sortByProtection (compound.m_constructorArray)
 		sortByProtection (compound.m_functionArray)
 		sortByProtection (compound.m_aliasArray)
 	else
@@ -1502,9 +1504,11 @@ function handleCompoundProtection (compound)
 		for i = g_minProtectionValue, g_maxProtectionValue do
 			local protectionCompound = createPseudoCompound ("protection-compound")
 			protectionCompound.m_isEmpty = true
+			protectionCompound.m_isBaseCompound = compound.m_isBaseCompound
 			compound.m_protectionCompoundArray [i] = protectionCompound
 		end
 
+		addToProtectionCompounds (compound, "m_namespaceArray")
 		addToProtectionCompounds (compound, "m_typedefArray")
 		addToProtectionCompounds (compound, "m_enumArray")
 		addToProtectionCompounds (compound, "m_structArray")
@@ -1517,8 +1521,10 @@ function handleCompoundProtection (compound)
 		addToProtectionCompounds (compound, "m_variableArray")
 		addToProtectionCompounds (compound, "m_propertyArray")
 		addToProtectionCompounds (compound, "m_eventArray")
+		addToProtectionCompounds (compound, "m_constructorArray")
 		addToProtectionCompounds (compound, "m_functionArray")
 		addToProtectionCompounds (compound, "m_aliasArray")
+		addToProtectionCompounds (compound, "m_defineArray")
 
 		-- eliminate empty protection compounds
 

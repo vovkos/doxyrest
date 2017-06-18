@@ -809,13 +809,15 @@ NamespaceContents::add (
 		m_footnoteArray.append (member);
 		break;
 
+	case MemberKind_Interface:
+	case MemberKind_Service:
+		ASSERT (false); // should have been handled earlier
+
 	case MemberKind_Signal:
 	case MemberKind_Prototype:
 	case MemberKind_Friend:
 	case MemberKind_Dcop:
 	case MemberKind_Slot:
-	case MemberKind_Interface:
-	case MemberKind_Service:
 	case MemberKind_EnumValue:
 
 	default:
@@ -979,13 +981,34 @@ GlobalNamespace::build (Module* module)
 		sl::Iterator <Member> memberIt = compound->m_memberList.getHead ();
 		for (; memberIt; memberIt++)
 		{
-			nspace->add (*memberIt, compound);
-			memberIt->m_parentNamespace = nspace; // namespace, not group!
+			Compound* memberCompound;
 
-			if (memberIt->m_groupCompound)
+			switch (memberIt->m_memberKind)
 			{
-				Namespace* groupNspace = getGroupNamespace (module, memberIt->m_groupCompound);
-				groupNspace->add (*memberIt, compound);
+			case MemberKind_Interface:
+			case MemberKind_Service:
+				memberCompound = createMemberCompound (module, *memberIt);
+
+				nspace->add (memberCompound);
+				memberCompound->m_parentNamespace = nspace; // namespace, not group!
+
+				if (memberCompound->m_groupCompound)
+				{
+					Namespace* groupNspace = getGroupNamespace (module, memberCompound->m_groupCompound);
+					groupNspace->add (memberCompound);
+				}
+
+				break;
+
+			default:
+				nspace->add (*memberIt, compound);
+				memberIt->m_parentNamespace = nspace; // namespace, not group!
+
+				if (memberIt->m_groupCompound)
+				{
+					Namespace* groupNspace = getGroupNamespace (module, memberIt->m_groupCompound);
+					groupNspace->add (*memberIt, compound);
+				}
 			}
 		}
 
@@ -1070,14 +1093,33 @@ GlobalNamespace::build (Module* module)
 
 			for (; memberIt; memberIt++)
 			{
+				Compound* memberCompound;
+
 				if (memberIt->m_flags & MemberFlag_Duplicate)
 					continue;
 
-				add (*memberIt, NULL);
-				if (memberIt->m_groupCompound)
+				switch (memberIt->m_memberKind)
 				{
-					Namespace* groupNspace = getGroupNamespace (module, memberIt->m_groupCompound);
-					groupNspace->add (*memberIt, NULL);
+				case MemberKind_Interface:
+				case MemberKind_Service:
+					memberCompound = createMemberCompound (module, *memberIt);
+					add (memberCompound);
+
+					if (memberCompound->m_groupCompound)
+					{
+						Namespace* groupNspace = getGroupNamespace (module, memberCompound->m_groupCompound);
+						groupNspace->add (memberCompound);
+					}
+
+					break;
+
+				default:
+					add (*memberIt, NULL);
+					if (memberIt->m_groupCompound)
+					{
+						Namespace* groupNspace = getGroupNamespace (module, memberIt->m_groupCompound);
+						groupNspace->add (*memberIt, NULL);
+					}
 				}
 			}
 			break;
@@ -1146,6 +1188,27 @@ GlobalNamespace::getGroupNamespace (
 	}
 
 	return nspace;
+}
+
+Compound*
+GlobalNamespace::createMemberCompound (
+	Module* module,
+	Member* member
+	)
+{
+	Compound* compound = AXL_MEM_NEW (Compound);
+	compound->m_compoundKind = member->m_memberKind == MemberKind_Service ? CompoundKind_Service : CompoundKind_Interface;
+	compound->m_name = member->m_name;
+	compound->m_id = member->m_id;
+	compound->m_groupCompound = member->m_groupCompound;
+	compound->m_briefDescription.takeOver (&member->m_briefDescription);
+	compound->m_detailedDescription.takeOver (&member->m_detailedDescription);
+	compound->m_selfNamespace = AXL_MEM_NEW (Namespace);
+	compound->m_selfNamespace->m_compound = compound;
+	m_namespaceList.insertTail (compound->m_selfNamespace);
+	module->m_compoundList.insertTail (compound);
+
+	return compound;
 }
 
 //..............................................................................

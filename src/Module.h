@@ -136,6 +136,13 @@ struct Description
 	}
 
 	void
+	takeOver (Description* description)
+	{
+		m_title = description->m_title;
+		m_docBlockList.takeOver (&description->m_docBlockList);
+	}
+
+	void
 	luaExport (lua::LuaState* luaState);
 };
 
@@ -493,6 +500,12 @@ protected:
 	getGroupNamespace (
 		Module* module,
 		Compound* groupCompound
+		);
+
+	Compound*
+	createMemberCompound (
+		Module* module,
+		Member* member
 		);
 };
 

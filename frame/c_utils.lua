@@ -1218,18 +1218,20 @@ function hasNonPublicItems (array)
 end
 
 function isItemExcludedByLocationFilter (item)
-
-	-- exclude c++ sources unless asked explicitly with g_includeCppSources
-
-	if item.m_location and
-		not g_includeCppSources and
-		string.match (g_language, "^c[px+]*$") and
-		string.match (item.m_location.m_file, "%.c[px+]*$")	then
-
-		return true
+	if not item.m_location then
+		return false
 	end
 
-	return false
+	return
+		-- exclude c++ sources unless asked explicitly with g_includeCppSources
+		not g_includeCppSources and
+		string.match (g_language, "^c[px+]*$") and
+		string.match (item.m_location.m_file, "%.c[px+]*$")
+
+		or
+		-- exclude explicitly specified locations
+		g_excludeLocationPattern and
+		string.match (item.m_location.m_file, g_excludeLocationPattern)
 end
 
 function filterItemArray (itemArray)
@@ -1603,6 +1605,10 @@ function prepareCompound (compound)
 	stats.m_hasDetailedDocumentation = not isDocumentationEmpty (compound.m_detailedDescription)
 
 	-- filter invisible items out
+
+	if compound.m_derivedTypeArray then
+		filterItemArray (compound.m_derivedTypeArray)
+	end
 
 	filterNamespaceArray (compound.m_namespaceArray)
 	filterTypedefArray (compound.m_typedefArray)

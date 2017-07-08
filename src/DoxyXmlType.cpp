@@ -920,6 +920,9 @@ EnumValueType::create (
 		{
 		case AttrKind_Id:
 			m_enumValue->m_id = attributes [1];
+			ASSERT (member->m_parentCompound);
+			if (member->m_parentCompound->m_compoundKind == CompoundKind_Group)
+				break; // doxy groups contain duplicated definitions of members
 
 			mapIt = module->m_enumValueMap.visit (m_enumValue->m_id);
 			if (!mapIt->m_value)

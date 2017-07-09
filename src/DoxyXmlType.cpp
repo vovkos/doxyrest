@@ -193,7 +193,7 @@ CompoundDefType::create (
 			{
 				Compound* prevCompound = mapIt->m_value;
 				printf (
-					"duplicate compoud id: %s (%s: %s)\n",
+					"warning: duplicate compoud id: %s (%s: %s)\n",
 					m_compound->m_id.sz (),
 					getCompoundKindString (prevCompound->m_compoundKind),
 					prevCompound->m_name.sz ()
@@ -256,6 +256,7 @@ CompoundDefType::create (
 	case CompoundKind_Union:
 	case CompoundKind_Class:
 	case CompoundKind_Interface:
+	case CompoundKind_Protocol:
 	case CompoundKind_Exception:
 	case CompoundKind_Service:
 	case CompoundKind_Singleton:
@@ -475,7 +476,7 @@ MemberDefType::create (
 			{
 				Member* prevMember = mapIt->m_value;
 				printf (
-					"duplicate member id %s (%s: %s)\n",
+					"warning: duplicate member id %s (%s: %s)\n",
 					m_member->m_id.sz (),
 					getMemberKindString (prevMember->m_memberKind),
 					prevMember->m_name.sz ()
@@ -933,7 +934,7 @@ EnumValueType::create (
 			{
 				EnumValue* prevEnumValue = mapIt->m_value;
 				printf (
-					"duplicate enum value id %s (%s)\n",
+					"warning: duplicate enum value id %s (%s)\n",
 					m_enumValue->m_id.sz (),
 					prevEnumValue->m_name.sz ()
 					);

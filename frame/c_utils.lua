@@ -438,6 +438,14 @@ function getCompoundTocTree (compound)
 		end
 	end
 
+	for i = 1, #compound.m_protocolArray do
+		local item = compound.m_protocolArray [i]
+		if isTocTreeItem (compound, item) then
+			local fileName = getItemFileName (item)
+			s = s .. "\t" .. fileName .. "\n"
+		end
+	end
+
 	for i = 1, #compound.m_exceptionArray do
 		local item = compound.m_exceptionArray [i]
 		if isTocTreeItem (compound, item) then
@@ -1375,6 +1383,7 @@ function addToBaseCompound (baseCompound, baseTypeArray)
 			concatenateTables (baseCompound.m_structArray, baseType.m_structArray)
 			concatenateTables (baseCompound.m_unionArray, baseType.m_unionArray)
 			concatenateTables (baseCompound.m_interfaceArray, baseType.m_interfaceArray)
+			concatenateTables (baseCompound.m_protocolArray, baseType.m_protocolArray)
 			concatenateTables (baseCompound.m_exceptionArray, baseType.m_exceptionArray)
 			concatenateTables (baseCompound.m_classArray, baseType.m_classArray)
 			concatenateTables (baseCompound.m_singletonArray, baseType.m_singletonArray)
@@ -1399,6 +1408,7 @@ function createPseudoCompound (compoundKind)
 	compound.m_structArray = {}
 	compound.m_unionArray = {}
 	compound.m_interfaceArray = {}
+	compound.m_protocolArray = {}
 	compound.m_exceptionArray = {}
 	compound.m_classArray = {}
 	compound.m_singletonArray = {}
@@ -1490,6 +1500,7 @@ function handleCompoundProtection (compound)
 		sortByProtection (compound.m_structArray)
 		sortByProtection (compound.m_unionArray)
 		sortByProtection (compound.m_interfaceArray)
+		sortByProtection (compound.m_protocolArray)
 		sortByProtection (compound.m_exceptionArray)
 		sortByProtection (compound.m_classArray)
 		sortByProtection (compound.m_singletonArray)
@@ -1516,6 +1527,7 @@ function handleCompoundProtection (compound)
 		addToProtectionCompounds (compound, "m_structArray")
 		addToProtectionCompounds (compound, "m_unionArray")
 		addToProtectionCompounds (compound, "m_interfaceArray")
+		addToProtectionCompounds (compound, "m_protocolArray")
 		addToProtectionCompounds (compound, "m_exceptionArray")
 		addToProtectionCompounds (compound, "m_classArray")
 		addToProtectionCompounds (compound, "m_singletonArray")
@@ -1616,6 +1628,7 @@ function prepareCompound (compound)
 	filterItemArray (compound.m_structArray)
 	filterItemArray (compound.m_unionArray)
 	filterItemArray (compound.m_interfaceArray)
+	filterItemArray (compound.m_protocolArray)
 	filterItemArray (compound.m_exceptionArray)
 	filterItemArray (compound.m_classArray)
 	filterItemArray (compound.m_singletonArray)
@@ -1635,6 +1648,7 @@ function prepareCompound (compound)
 		#compound.m_structArray ~= 0 or
 		#compound.m_unionArray ~= 0 or
 		#compound.m_interfaceArray ~= 0 or
+		#compound.m_protocolArray ~= 0 or
 		#compound.m_exceptionArray ~= 0 or
 		#compound.m_classArray ~= 0 or
 		#compound.m_singletonArray ~= 0 or
@@ -1656,6 +1670,7 @@ function prepareCompound (compound)
 	table.sort (compound.m_structArray, cmpNames)
 	table.sort (compound.m_unionArray, cmpNames)
 	table.sort (compound.m_interfaceArray, cmpNames)
+	table.sort (compound.m_protocolArray, cmpNames)
 	table.sort (compound.m_exceptionArray, cmpNames)
 	table.sort (compound.m_classArray, cmpNames)
 	table.sort (compound.m_serviceArray, cmpNames)

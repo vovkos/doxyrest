@@ -513,6 +513,7 @@ Compound::luaExport (lua::LuaState* luaState)
 	case CompoundKind_Union:
 	case CompoundKind_Class:
 	case CompoundKind_Interface:
+	case CompoundKind_Protocol:
 	case CompoundKind_Exception:
 	case CompoundKind_Service:
 	case CompoundKind_Singleton:
@@ -678,6 +679,11 @@ NamespaceContents::add (Compound* compound)
 		m_interfaceArray.append (compound->m_selfNamespace);
 		break;
 
+	case CompoundKind_Protocol:
+		ASSERT (compound->m_selfNamespace);
+		m_protocolArray.append (compound->m_selfNamespace);
+		break;
+
 	case CompoundKind_Exception:
 		ASSERT (compound->m_selfNamespace);
 		m_exceptionArray.append (compound->m_selfNamespace);
@@ -699,7 +705,6 @@ NamespaceContents::add (Compound* compound)
 	case CompoundKind_Group:
 		// groups are added implicitly, via group members
 
-	case CompoundKind_Protocol:
 	case CompoundKind_Category:
 	case CompoundKind_File:
 	case CompoundKind_Example:
@@ -850,6 +855,9 @@ NamespaceContents::luaExportMembers (lua::LuaState* luaState)
 
 	luaExportArray (luaState, m_interfaceArray);
 	luaState->setMember ("m_interfaceArray");
+
+	luaExportArray (luaState, m_protocolArray);
+	luaState->setMember ("m_protocolArray");
 
 	luaExportArray (luaState, m_exceptionArray);
 	luaState->setMember ("m_exceptionArray");
@@ -1018,8 +1026,8 @@ GlobalNamespace::build (Module* module)
 			Compound* innerCompound = module->m_compoundMap.findValue (refIt->m_id, NULL);
 			if (!innerCompound)
 			{
-				err::setFormatStringError ("can't find inner compound refid: %s\n", refIt->m_id.sz ());
-				return false;
+				printf ("warning: can't find inner compound refid: %s\n", refIt->m_id.sz ());
+				continue;
 			}
 
 			nspace->add (innerCompound);
@@ -1067,8 +1075,8 @@ GlobalNamespace::build (Module* module)
 			Compound* derivedCompound = module->m_compoundMap.findValue (refIt->m_id, NULL);
 			if (!derivedCompound)
 			{
-				err::setFormatStringError ("can't find derived compound refid: %s\n", refIt->m_id.sz ());
-				return false;
+				printf ("warning: can't find derived compound refid: %s\n", refIt->m_id.sz ());
+				continue;
 			}
 
 			compound->m_derivedTypeArray_doxy.append (derivedCompound);

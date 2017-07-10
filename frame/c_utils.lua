@@ -848,6 +848,26 @@ function getDocBlockContents (block, context)
 
 		-- raw seems like a better approach, but need to figure something out with indents
 		s = "\n\n.. code-block:: none\n\n" .. code .. "\n\n"
+	elseif block.m_blockKind == "formula" then
+		context.m_codeBlockKind = block.m_blockKind
+		local code = getDocBlockListContentsImpl (block.m_childBlockList, context)
+		context.m_codeBlockKind = nil
+
+		local isInline = string.sub (code, 1, 1) == "$"
+
+		-- take away framing tokens
+		code = string.gsub (code, "^\\?[$%[]", "")
+		code = string.gsub (code, "\\?[$%]]$", "")
+
+		if isInline then
+			s = ":math:`" .. code .. "`"
+		else
+			code = replaceCommonSpacePrefix (code, "    ")
+			code = trimTrailingWhitespace (code)
+
+			-- raw seems like a better approach, but need to figure something out with indents
+			s = "\n\n.. math::\n\n" .. code .. "\n\n"
+		end
 	elseif block.m_blockKind == "verbatim" and g_verbatimToCodeBlock then
 		context.m_codeBlockKind = block.m_blockKind
 		local code = getDocBlockListContentsImpl (block.m_childBlockList, context)

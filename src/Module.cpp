@@ -115,7 +115,7 @@ DocRefBlock::luaExport (lua::LuaState* luaState)
 	if (m_refKind == RefKind_Compound)
 	{
 		Compound* compound = m_module->m_compoundMap.findValue (m_id, NULL);
-		if (!compound || compound->m_compoundKind == CompoundKind_File) // we don't export files, so remove reference
+		if (compound && compound->m_compoundKind == CompoundKind_File) // we don't export files, so remove reference
 		{
 			m_blockKind = "computeroutput";
 			DocBlock::luaExportMembers (luaState);

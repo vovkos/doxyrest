@@ -788,7 +788,7 @@ function processListDocBlock (block, context, bullet)
 	if not prevBullet then
 		context.m_listItemIndent = ""
 	else
-		context.m_listItemIndent = prevIndent .. "\t"
+		context.m_listItemIndent = prevIndent .. "    "
 	end
 
 	context.m_listItemBullet = bullet
@@ -908,6 +908,20 @@ function getDocBlockContents (block, context)
 		elseif block.m_blockKind == "ref" then
 			text = string.gsub (text, "<", "\\<") -- escape left chevron
 			s = ":ref:`" .. text .. " <doxid-" .. block.m_id .. ">`"
+		elseif block.m_blockKind == "anchor" then
+			s = ":target:`doxid-" .. block.m_id .. "`" .. text
+		elseif block.m_blockKind == "image" then
+			s = "\n\n.. image:: " .. block.m_name .. "\n"
+			if block.m_width ~= 0 then
+				s = s .. "\t:width: " .. block.m_width .. "\n"
+			end
+			if block.m_height ~= 0 then
+				s = s .. "\t:height: " .. block.m_height .. "\n"
+			end
+			if block.m_text ~= "" then
+				s = s .. "\t:alt: " .. block.m_text .. "\n"
+			end
+			s = s .. "\n"
 		elseif block.m_blockKind == "computeroutput" then
 			if string.find (text, "\n") then
 				s = "\n\n.. code-block:: none\n\n" .. text

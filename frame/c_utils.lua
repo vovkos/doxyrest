@@ -837,7 +837,7 @@ function getDocBlockContents (block, context)
 		code = replaceCommonSpacePrefix (code, "    ")
 		code = trimTrailingWhitespace (code)
 
-		s = "\n\n::\n\n" .. code .. "\n\n"
+		s = "\n\n.. ref-code-block:: " .. g_language .. "\n\n" .. code .. "\n\n"
 	elseif block.m_blockKind == "preformatted" then
 		context.m_codeBlockKind = block.m_blockKind
 		local code = getDocBlockListContentsImpl (block.m_childBlockList, context)
@@ -923,7 +923,9 @@ function getDocBlockContents (block, context)
 			end
 			s = s .. "\n"
 		elseif block.m_blockKind == "computeroutput" then
-			if string.find (text, "\n") then
+			if context.m_codeBlockKind == "programlisting" then
+				s = text
+			elseif string.find (text, "\n") then
 				s = "\n\n.. code-block:: none\n\n" .. text
 			else
 				s = "``" .. text .. "``"
@@ -1041,7 +1043,11 @@ function getDocBlockListContentsImpl (blockList, context)
 		local block = blockList [i]
 		if block.m_blockKind ~= "internal" then
 			local blockContents = getDocBlockContents (block, context)
-			s = concatDocBlockContents (s, blockContents)
+			if not context.m_codeBlockKind then
+				s = concatDocBlockContents (s, blockContents)
+			else
+				s = s .. blockContents
+			end
 		end
 	end
 

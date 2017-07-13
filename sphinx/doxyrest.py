@@ -141,6 +141,16 @@ def cref_role(typ, raw_text, text, lineno, inliner, options={}, content=[]):
     return [node], []
 
 
+def target_role(typ, raw_text, text, lineno, inliner, options={}, content=[]):
+    node = nodes.target(raw_text, '')
+    node.line = lineno
+    node['ids'] += [text]
+    node['names'] += [text]
+
+    inliner.document.note_explicit_target(node)
+    return [node], []
+
+
 def setup(app):
     app.add_node(
         HighlightedText,
@@ -149,6 +159,7 @@ def setup(app):
         )
 
     app.add_role('cref', cref_role)
+    app.add_role('target', target_role)
 
     directives.register_directive('ref-code-block', RefCodeBlock)
     directives.register_directive('code-block', RefCodeBlock) # replace

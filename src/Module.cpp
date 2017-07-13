@@ -133,6 +133,33 @@ DocRefBlock::luaExport (lua::LuaState* luaState)
 //.............................................................................
 
 void
+DocAnchorBlock::luaExport (lua::LuaState* luaState)
+{
+	luaState->createTable ();
+
+	DocBlock::luaExportMembers (luaState);
+
+	luaState->setMemberString ("m_id", m_id);
+}
+
+//.............................................................................
+
+void
+DocImageBlock::luaExport (lua::LuaState* luaState)
+{
+	luaState->createTable ();
+
+	DocBlock::luaExportMembers (luaState);
+
+	luaState->setMemberString ("m_imageKind", getImageKindString (m_imageKind));
+	luaState->setMemberString ("m_name", m_name);
+	luaState->setMemberInteger ("m_width", m_width);
+	luaState->setMemberInteger ("m_height", m_height);
+}
+
+//.............................................................................
+
+void
 DocSectionBlock::luaExport (lua::LuaState* luaState)
 {
 	luaState->createTable ();

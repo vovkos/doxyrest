@@ -174,6 +174,7 @@ CompoundDefType::create (
 	m_parser = parser;
 	m_compound = AXL_MEM_NEW (Compound);
 	module->m_compoundList.insertTail (m_compound);
+	parser->pushCompound (m_compound);
 
 	sl::StringHashTableIterator <Compound*> mapIt;
 
@@ -341,6 +342,14 @@ CompoundDefType::onStartElement (
 	}
 
 	return true;
+}
+
+void
+CompoundDefType::onPopType ()
+{
+	ASSERT (m_parser);
+	Compound* prevCompound = m_parser->popCompound ();
+	ASSERT (prevCompound == m_compound);
 }
 
 //..............................................................................
@@ -1196,6 +1205,14 @@ DocParaType::onStartElement (
 		m_parser->pushType <DocRefTextType> (&m_paragraphBlock->m_childBlockList, name, attributes);
 		break;
 
+	case ElemKind_Anchor:
+		m_parser->pushType <DocAnchorType> (&m_paragraphBlock->m_childBlockList, name, attributes);
+		break;
+
+	case ElemKind_Image:
+		m_parser->pushType <DocImageType> (&m_paragraphBlock->m_childBlockList, name, attributes);
+		break;
+
 	case ElemKind_SimpleSect:
 		m_parser->pushType <DocSimpleSectionType> (&m_paragraphBlock->m_childBlockList, name, attributes);
 		break;
@@ -1240,6 +1257,85 @@ DocRefTextType::create (
 
 		case AttrKind_External:
 			m_refBlock->m_external = attributes [1];
+			break;
+		}
+
+		attributes += 2;
+	}
+
+	return true;
+}
+
+//..............................................................................
+
+bool
+DocAnchorType::create (
+	DoxyXmlParser* parser,
+	sl::StdList <DocBlock>* list,
+	const char* name,
+	const char** attributes
+	)
+{
+	m_parser = parser;
+	m_anchorBlock = AXL_MEM_NEW (DocAnchorBlock);
+	m_anchorBlock->m_blockKind = name;
+	list->insertTail (m_anchorBlock);
+
+	while (*attributes)
+	{
+		AttrKind attrKind = AttrKindMap::findValue (attributes [0], AttrKind_Undefined);
+		switch (attrKind)
+		{
+		case AttrKind_Id:
+			m_anchorBlock->m_id = attributes [1];
+			break;
+		}
+
+		attributes += 2;
+	}
+
+	Compound* compound = parser->getCurrentCompound ();
+	if (m_anchorBlock->m_id.isPrefix ("_")) // doxygen citelist pages seem to omit page ids in acnhors; restore those
+		m_anchorBlock->m_id.insert (0, compound->m_id);
+
+	m_anchorBlock->m_id.makeLowerCase (); // there is no configuration setting to force Doxygen to case-fold anchors
+	return true;
+}
+
+//..............................................................................
+
+bool
+DocImageType::create (
+	DoxyXmlParser* parser,
+	sl::StdList <DocBlock>* list,
+	const char* name,
+	const char** attributes
+	)
+{
+	m_parser = parser;
+	m_imageBlock = AXL_MEM_NEW (DocImageBlock);
+	m_imageBlock->m_blockKind = name;
+	list->insertTail (m_imageBlock);
+
+	while (*attributes)
+	{
+		AttrKind attrKind = AttrKindMap::findValue (attributes [0], AttrKind_Undefined);
+		switch (attrKind)
+		{
+		case AttrKind_Type:
+			m_imageBlock->m_imageKind = ImageKindMap::findValue (attributes [1], ImageKind_Undefined);
+			break;
+
+		case AttrKind_Name:
+			m_imageBlock->m_name = attributes [1];
+			break;
+
+		case AttrKind_Width:
+			m_imageBlock->m_width = atoi (attributes [1]);
+			break;
+
+		case AttrKind_Height:
+			m_imageBlock->m_height = atoi (attributes [1]);
 			break;
 		}
 

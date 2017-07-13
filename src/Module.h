@@ -103,6 +103,31 @@ struct DocRefBlock: DocBlock
 
 //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
+struct DocAnchorBlock: DocBlock
+{
+	sl::String m_id;
+
+	virtual
+	void
+	luaExport (lua::LuaState* luaState);
+};
+
+//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+struct DocImageBlock: DocBlock
+{
+	ImageKind m_imageKind;
+	sl::String m_name;
+	int m_width;
+	int m_height;
+
+	virtual
+	void
+	luaExport (lua::LuaState* luaState);
+};
+
+//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
 struct DocSectionBlock: DocBlock
 {
 	sl::String m_id;

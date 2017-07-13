@@ -60,6 +60,7 @@ DoxyXmlParser::popType ()
 	ASSERT (!m_typeStack.isEmpty ());
 
 	DoxyXmlType* type = m_typeStack.getBack ().m_type;
+	type->onPopType ();
 	AXL_MEM_DELETE (type);
 
 	m_typeStack.pop ();

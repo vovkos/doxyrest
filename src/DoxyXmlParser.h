@@ -55,6 +55,7 @@ protected:
 	sl::String m_filePath;
 	sl::String m_baseDir;
 	sl::Array <TypeStackEntry> m_typeStack;
+	sl::Array <Compound*> m_compoundStack;
 
 #if _PRINT_XML
 	size_t m_indent;
@@ -135,6 +136,24 @@ public:
 		TypeStackEntry entry = { type, 0 };
 		m_typeStack.append (entry);
 		return type->create (this, context, name, attributes);
+	}
+
+	Compound*
+	getCurrentCompound ()
+	{
+		return !m_compoundStack.isEmpty () ? m_compoundStack.getBack () : NULL;
+	}
+
+	size_t
+	pushCompound (Compound* compound)
+	{
+		return m_compoundStack.append (compound);
+	}
+
+	Compound*
+	popCompound ()
+	{
+		return m_compoundStack.getBackAndPop ();
 	}
 
 protected:

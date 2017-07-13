@@ -68,6 +68,12 @@ public:
 	{
 		return true;
 	}
+
+	virtual
+	void
+	onPopType ()
+	{
+	}
 };
 
 //..............................................................................
@@ -314,6 +320,10 @@ public:
 		const char* name,
 		const char** attributes
 		);
+
+	virtual
+	void
+	onPopType ();
 };
 
 //..............................................................................
@@ -1071,6 +1081,8 @@ protected:
 	{
 		ElemKind_Undefined,
 		ElemKind_Ref,
+		ElemKind_Anchor,
+		ElemKind_Image,
 		ElemKind_SimpleSect,
 
 		// ...add as needed
@@ -1078,6 +1090,8 @@ protected:
 
 	AXL_SL_BEGIN_STRING_HASH_TABLE (ElemKindMap, ElemKind)
 		AXL_SL_HASH_TABLE_ENTRY ("ref",        ElemKind_Ref)
+		AXL_SL_HASH_TABLE_ENTRY ("anchor",     ElemKind_Anchor)
+		AXL_SL_HASH_TABLE_ENTRY ("image",      ElemKind_Image)
 		AXL_SL_HASH_TABLE_ENTRY ("simplesect", ElemKind_SimpleSect)
 	AXL_SL_END_HASH_TABLE ()
 
@@ -1163,6 +1177,100 @@ public:
 		)
 	{
 		m_refBlock->m_text.append (string, length);
+		return true;
+	}
+};
+
+//..............................................................................
+
+class DocAnchorType: public DoxyXmlType
+{
+protected:
+	enum AttrKind
+	{
+		AttrKind_Undefined,
+		AttrKind_Id,
+	};
+
+	AXL_SL_BEGIN_STRING_HASH_TABLE (AttrKindMap, AttrKind)
+		AXL_SL_HASH_TABLE_ENTRY ("id",    AttrKind_Id)
+	AXL_SL_END_HASH_TABLE ()
+
+protected:
+	DocAnchorBlock* m_anchorBlock;
+
+public:
+	DocAnchorType ()
+	{
+		m_anchorBlock = NULL;
+	}
+
+	bool
+	create (
+		DoxyXmlParser* parser,
+		sl::StdList <DocBlock>* list,
+		const char* name,
+		const char** attributes
+		);
+
+	virtual
+	bool
+	onCharacterData (
+		const char* string,
+		size_t length
+		)
+	{
+		m_anchorBlock->m_text.append (string, length);
+		return true;
+	}
+};
+
+//..............................................................................
+
+class DocImageType: public DoxyXmlType
+{
+protected:
+	enum AttrKind
+	{
+		AttrKind_Undefined,
+		AttrKind_Type,
+		AttrKind_Name,
+		AttrKind_Width,
+		AttrKind_Height,
+	};
+
+	AXL_SL_BEGIN_STRING_HASH_TABLE (AttrKindMap, AttrKind)
+		AXL_SL_HASH_TABLE_ENTRY ("type",    AttrKind_Type)
+		AXL_SL_HASH_TABLE_ENTRY ("name",    AttrKind_Name)
+		AXL_SL_HASH_TABLE_ENTRY ("width",   AttrKind_Width)
+		AXL_SL_HASH_TABLE_ENTRY ("height",  AttrKind_Height)
+	AXL_SL_END_HASH_TABLE ()
+
+protected:
+	DocImageBlock* m_imageBlock;
+
+public:
+	DocImageType ()
+	{
+		m_imageBlock = NULL;
+	}
+
+	bool
+	create (
+		DoxyXmlParser* parser,
+		sl::StdList <DocBlock>* list,
+		const char* name,
+		const char** attributes
+		);
+
+	virtual
+	bool
+	onCharacterData (
+		const char* string,
+		size_t length
+		)
+	{
+		m_imageBlock->m_text.append (string, length);
 		return true;
 	}
 };

@@ -95,17 +95,16 @@ if #g_pageArray > 0 or g_extraPageList then
 
 %{
 	table.sort (g_pageArray, cmpTitles)
-	local pageList = ""
+	local pageTree = ""
 
 	for i = 1, #g_pageArray do
 		local page = g_pageArray [i]
-		local targetFileName0 = getItemFileName (page, "")
-		local targetFileName = targetFileName0 .. ".rst"
+		local targetFileName = getItemFileName (page)
 
 		generateFile (targetFileName, "c_page.rst.in", page)
 
 		if targetFileName ~= g_introFile then
-			pageList = pageList .. "|\t:doc:`" .. targetFileName0 .."`\n"
+			pageTree = pageTree .. getPageTree (page, targetFileName)
 }
 	$(targetFileName)
 %{
@@ -115,18 +114,17 @@ if #g_pageArray > 0 or g_extraPageList then
 	if g_extraPageList then
 		for fileName in string.gmatch (g_extraPageList, "[^,;]+") do
 			local docName = string.gsub (fileName, "%.rst$", "")
-			pageList = pageList .. "|\t:doc:`" .. docName .."`\n"
+			pageTree = pageTree .. "|\t:doc:`" .. docName .."`\n"
 }
 	$(fileName)
 %{
 		end
 	end
-
 }
 
 .. rubric:: Related Pages:
 
-$pageList
+$pageTree
 
 %{
 end -- if

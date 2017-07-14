@@ -500,6 +500,25 @@ function getGroupTree (group, indent)
 	return s
 end
 
+function getPageTree (page, fileName, indent)
+	local s = ""
+
+	if not indent then
+		indent = ""
+	end
+
+	local docName = string.gsub (fileName, "%.rst$", "")
+
+	s = "|\t" .. indent .. ":doc:`" .. docName .. "`\n"
+
+	for i = 1, #page.m_subPageArray do
+		local subPage = page.m_subPageArray [i]
+		s = s .. getPageTree (subPage, getItemFileName (subPage), indent .. "\t")
+	end
+
+	return s
+end
+
 function getNamespaceTree (nspace, indent)
 	local s = ""
 

@@ -390,12 +390,15 @@ struct Compound: sl::ListLink
 	sl::Array <Compound*> m_derivedTypeArray_doxy; // explicitly specified in doxy
 	sl::Array <Compound*> m_derivedTypeArray_auto; // auto-generated
 
+	sl::Array <Compound*> m_subPageArray;
+
 	sl::String m_path;
 
 	bool m_isFinal     : 1;
 	bool m_isSealed    : 1;
 	bool m_isAbstract  : 1;
 	bool m_isDuplicate : 1;
+	bool m_isSubPage   : 1;
 
 	Description m_briefDescription;
 	Description m_detailedDescription;
@@ -595,42 +598,6 @@ luaExportStringList (
 	{
 		luaState->pushString (*it);
 		luaState->setArrayElement (i);
-	}
-}
-
-//..............................................................................
-
-template <typename T>
-void
-removeDuplicates (sl::StdList <T>* list)
-{
-	sl::DuckTypePtrHashTable <T, bool> map;
-
-	sl::Iterator <T> it = list->getHead ();
-	while (it)
-	{
-		sl::Iterator <T> next = it.getNext ();
-		bool result = map.addIfNotExists (*it, true) != NULL;
-		if (!result)
-			list->erase (it);
-
-		it = next;
-	}
-}
-
-template <>
-inline
-void
-removeDuplicates <EnumValue> (sl::StdList <EnumValue>* list)
-{
-	sl::Iterator <EnumValue> it = list->getHead ();
-	while (it)
-	{
-		sl::Iterator <EnumValue> next = it.getNext ();
-		if (it->m_isDuplicate)
-			list->erase (it);
-
-		it = next;
 	}
 }
 

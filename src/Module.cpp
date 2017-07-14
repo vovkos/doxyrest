@@ -32,6 +32,63 @@ createPath (
 	return path;
 }
 
+template <typename T>
+void
+removeDuplicates (sl::StdList <T>* list)
+{
+	sl::DuckTypePtrHashTable <T, bool> map;
+
+	sl::Iterator <T> it = list->getHead ();
+	while (it)
+	{
+		sl::Iterator <T> next = it.getNext ();
+		bool result = map.addIfNotExists (*it, true) != NULL;
+		if (!result)
+			list->erase (it);
+
+		it = next;
+	}
+}
+
+template <>
+void
+removeDuplicates <EnumValue> (sl::StdList <EnumValue>* list)
+{
+	sl::Iterator <EnumValue> it = list->getHead ();
+	while (it)
+	{
+		sl::Iterator <EnumValue> next = it.getNext ();
+		if (it->m_isDuplicate)
+			list->erase (it);
+
+		it = next;
+	}
+}
+
+void
+removeSubPages (sl::Array <Compound*>* pageArray)
+{
+	Compound** p = *pageArray;
+	size_t count = pageArray->getCount ();
+
+	size_t i = 0;
+	while (i < count && !p [i]->m_isSubPage)
+		i++;
+
+	size_t j = i;
+	for (i++; i < count; i++)
+	{
+		Compound* compound = p [i];
+		if (!compound->m_isSubPage)
+		{
+			p [j] = p [i];
+			j++;
+		}
+	}
+
+	pageArray->setCount (j);
+}
+
 //..............................................................................
 
 void
@@ -497,6 +554,7 @@ Compound::Compound ()
 	m_isSealed = false;
 	m_isAbstract = false;
 	m_isDuplicate = false;
+	m_isSubPage = false;
 	m_cacheIdx = -1;
 }
 
@@ -534,6 +592,11 @@ Compound::luaExport (lua::LuaState* luaState)
 	{
 	case CompoundKind_Group:
 	case CompoundKind_Namespace:
+		break;
+
+	case CompoundKind_Page:
+		luaExportArray (luaState, m_subPageArray);
+		luaState->setMember ("m_subPageArray");
 		break;
 
 	case CompoundKind_Struct:
@@ -1110,7 +1173,31 @@ GlobalNamespace::build (Module* module)
 		}
 	}
 
-	// loop #3 adds leftovers to the global namespace
+	// loop #4 resolves sub pages
+
+	count = module->m_pageArray.getCount ();
+	for (size_t i = 0; i < count; i++)
+	{
+		Compound* compound = module->m_pageArray [i];
+
+		sl::Iterator <Ref> refIt = compound->m_innerRefList.getHead ();
+		for (; refIt; refIt++)
+		{
+			Compound* subPage = module->m_compoundMap.findValue (refIt->m_id, NULL);
+			if (!subPage)
+			{
+				printf ("warning: can't find subpage refid: %s\n", refIt->m_id.sz ());
+				continue;
+			}
+
+			compound->m_subPageArray.append (subPage);
+			subPage->m_isSubPage = true;
+		}
+	}
+
+	removeSubPages (&module->m_pageArray);
+
+	// loop #5 adds leftovers to the global namespace
 
 	sl::Iterator <Compound> compoundIt = module->m_compoundList.getHead ();
 	for (; compoundIt; compoundIt++)

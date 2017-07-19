@@ -11,6 +11,7 @@
 
 import re
 from docutils.parsers.rst import Directive, directives
+from docutils.transforms import Transform
 from docutils import nodes
 from sphinx import roles, addnodes, config
 
@@ -151,6 +152,57 @@ def target_role(typ, raw_text, text, lineno, inliner, options={}, content=[]):
     return [node], []
 
 
+class RefTransform(Transform):
+    default_priority = 100
+
+    node_classes = {
+        nodes.literal,
+        nodes.strong,
+        nodes.emphasis
+    }
+
+    def __init__(self, document, startnode=None):
+        Transform.__init__(self, document, startnode)
+        self.re_prog = re.compile('(:c?ref:)?`(.+?)(\s*<([^<>]*)>)?`')
+
+    def node_filter(node):
+        for node_class in RefTransform.node_classes:
+            if isinstance (node, node_class):
+                return node['classes'] == []
+
+        return False
+
+    def apply(self):
+        for node in self.document.traverse(RefTransform.node_filter):
+            code = node.astext()
+            node.children = []
+
+            pos = 0
+
+            while True:
+                match = self.re_prog.search(code, pos)
+                if match is None:
+                    plain_text = code[pos:]
+                    if plain_text != "":
+                        node += nodes.Text(plain_text, plain_text)
+                    break
+
+                plain_text = code[pos:match.start()]
+                if plain_text != "":
+                    node += nodes.Text(plain_text, plain_text)
+
+                raw_text = match.group(0)
+                role = match.group(1)
+                text = match.group(2)
+                target = match.group(4)
+
+                if not role or role == ':cref:':
+                    target = 'cid-' + text.lower ()
+
+                node += create_xref_node(raw_text, text, target)
+                pos = match.end()
+
+
 def setup(app):
     app.add_node(
         HighlightedText,
@@ -163,3 +215,5 @@ def setup(app):
 
     directives.register_directive('ref-code-block', RefCodeBlock)
     directives.register_directive('code-block', RefCodeBlock) # replace
+
+    app.add_transform(RefTransform)

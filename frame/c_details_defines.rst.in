@@ -21,17 +21,30 @@ for i = 1, #compound.m_defineArray do
 	local item = compound.m_defineArray [i]
 	if isItemInCompoundDetails (item, compound) then
 		emit (getItemRefTargetString (item))
+
+		local decl = getDefineDeclString (item, false)
+		local isPrevMl = string.find (decl, "\n")
 }
 .. ref-code-block:: $g_language
 	:class: title-code-block
 
-	$(getDefineDeclString (item, false))
+	$decl
 %{
 		if item.m_isSubGroupHead then
 			for j = 1, #item.m_subGroupSlaveArray do
 				slaveItem = item.m_subGroupSlaveArray [j]
+				local extraSep = ""
+
+				local decl = getDefineDeclString (slaveItem, false)
+				local isMl = string.find (decl, "\n")
+
+				if isMl or isPrevMl then
+					extraSep = "\n"
+				end
+
+				isPrevMl = isMl
 }
-	$(getDefineDeclString (slaveItem, false))
+$extraSep	$decl
 %{
 			end -- for
 		end -- if

@@ -21,36 +21,31 @@ for i = 1, #compound.m_typedefArray do
 	local item = compound.m_typedefArray [i]
 	if isItemInCompoundDetails (item, compound) then
 		emit (getItemRefTargetString (item))
+
+		local decl = getTypedefDeclString (item, false, "\t")
+		local isPrevMl = string.find (decl, "\n")
 }
 .. ref-code-block:: $g_language
 	:class: title-code-block
 
-	$(getTypedefDeclString (item, false, "\t"))
+	$decl
 %{
 		if item.m_isSubGroupHead then
-			local prevParamCount = 0
-			if item.m_argString ~= "" and string.find (item.m_argString, ",") then
-				prevParamCount = 2
-			end
-
 			for j = 1, #item.m_subGroupSlaveArray do
 				slaveItem = item.m_subGroupSlaveArray [j]
-				local paramCount = 0
 				local extraSep = ""
 
-				if slaveItem.m_argString ~= "" then
-					if string.find (slaveItem.m_argString, ",") then
-						paramCount = 2
-					end
+				local decl = getTypedefDeclString (slaveItem, false, "\t")
+				local isMl = string.find (decl, "\n")
 
-					if g_hasNewLineAfterReturnType or paramCount > 1 or prevParamCount > 1 then
-						extraSep = "\n"
-					end
+				if isMl or isPrevMl then
+					extraSep = "\n"
 				end
+
+				isPrevMl = isMl
 }
-$extraSep	$(getTypedefDeclString (slaveItem, false, "\t"))
+$extraSep	$decl
 %{
-				prevParamCount = paramCount
 			end -- for
 		end -- if
 }

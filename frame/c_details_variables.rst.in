@@ -33,10 +33,15 @@ for i = 1, #compound.m_variableArray do
 			suffix = " :" .. item.m_bitField
 		end
 
-		local typeString = getLinkedTextString (item.m_type, true)
-		if string.find (typeString, "@") then
-			typeString = "unnamed-" .. string.match (typeString, "[a-z]+")
+		local type = getLinkedTextString (item.m_type, true)
+		if string.find (type, "@") then
+			type = "unnamed-" .. string.match (type, "[a-z]+")
 			-- e.g.: unnamed-struct
+		end
+
+		local static = ""
+		if string.find (item.m_flags, "static") then
+			static = "static "
 		end
 
 		emit (getItemRefTargetString (item))
@@ -44,7 +49,7 @@ for i = 1, #compound.m_variableArray do
 .. ref-code-block:: $g_language
 	:class: title-code-block
 
-	$typeString$modifiers $(getItemName (item))$suffix
+	$static$type$modifiers $(getItemName (item))$suffix
 %{
 		if item.m_isSubGroupHead then
 			for j = 1, #item.m_subGroupSlaveArray do
@@ -63,13 +68,18 @@ for i = 1, #compound.m_variableArray do
 						suffix = " :" .. slaveItem.m_bitField
 					end
 
-					local typeString = getLinkedTextString (slaveItem.m_type, true)
-					if string.find (typeString, "@") then
-						typeString = "unnamed-" .. string.match (typeString, "[a-z]+")
+					local type = getLinkedTextString (slaveItem.m_type, true)
+					if string.find (type, "@") then
+						type = "unnamed-" .. string.match (type, "[a-z]+")
 						-- e.g.: unnamed-struct
 					end
+
+					local static = ""
+					if string.find (item.m_flags, "static") then
+						static = "static "
+					end
 }
-	$typeString$modifiers $(getItemName (slaveItem))$suffix
+	$static$type$modifiers $(getItemName (slaveItem))$suffix
 %{
 				end -- if
 			end -- for

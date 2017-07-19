@@ -17,10 +17,22 @@ local compound = argArray [1]
 
 %{
 
+local isPrevMl = false
+
 for i = 1, #compound.m_defineArray do
 	local item = compound.m_defineArray [i]
+	local extraSep = ""
+
+	local decl = getDefineDeclString (item, hasItemRefTarget (item))
+	local isMl = string.find (decl, "\n")
+
+	if i > 1 and (isMl or isPrevMl) then
+		extraSep = "\n"
+	end
+
+	isPrevMl = isMl
 }
-	$(getDefineDeclString (item, hasItemRefTarget (item)))
+$extraSep	$decl
 %{
 end -- for
 }

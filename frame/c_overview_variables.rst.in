@@ -54,10 +54,14 @@ while i <= #compound.m_variableArray do
 			modifiers = " " .. item.m_modifiers
 		end
 
-		if item.m_argString ~= "" then
-			suffix = " " .. item.m_argString
-		elseif item.m_bitField  ~= "" then
+		if item.m_bitField  ~= "" then
 			suffix = " :" .. item.m_bitField
+		elseif item.m_argString ~= "" then
+			if string.sub (item.m_argString, 1, 1) ~= "(" then
+				suffix = item.m_argString
+			else
+				suffix = " " .. item.m_argString
+			end
 		end
 
 		local unnamed = isMemberOfUnnamedType (item)
@@ -89,8 +93,13 @@ while i <= #compound.m_variableArray do
 			emit ("\n")
 			isLastUnnamed = false
 		end
+
+		local static = ""
+		if string.find (item.m_flags, "static") then
+			static = "static "
+		end
 }
-	$indent$(getLinkedTextString (item.m_type, true))$modifiers $(getItemNameForOverview (item))$suffix
+	$indent$static$(getLinkedTextString (item.m_type, true))$modifiers $(getItemNameForOverview (item))$suffix
 %{
 	elseif unnamedStackSize > 0 and not unnamedStack [unnamedStackSize] then
 		unnamedStack [unnamedStackSize] = 0 -- terminate this stack entry

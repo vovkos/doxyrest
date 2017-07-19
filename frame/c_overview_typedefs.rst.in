@@ -27,12 +27,10 @@ else
 %{
 end -- if
 
-local prevParamCount = 0
+local isPrevMl = false
 
 for i = 1, #compound.m_typedefArray do
 	local item = compound.m_typedefArray [i]
-
-	local paramCount = 0
 	local extraSep = ""
 
 	if item.m_protectionKind ~= protectionKind then
@@ -44,24 +42,16 @@ for i = 1, #compound.m_typedefArray do
 %{
 	end -- if
 
-	-- currently getTypedefDeclString doesn't re-format argstring according to the current coding style
-	-- so don't insert extra empty lines between mult-arg typedefs
+	local decl = getTypedefDeclString (item, hasItemRefTarget (item), "\t")
+	local isMl = string.find (decl, "\n")
 
-	-- if item.m_argString ~= "" then
-	-- 	if string.find (item.m_argString, ",") then
-	-- 		paramCount = 2
-	-- 	else
-	-- 		paramCount = 0
-	-- 	end
+	if i > 1 and (isMl or isPrevMl) then
+		extraSep = "\n"
+	end
 
-	--	if i > 1 and (g_hasNewLineAfterReturnType or paramCount > 1 or prevParamCount > 1) then
-	--		extraSep = "\n"
-	--	end
-	-- end
-
-	-- prevParamCount = paramCount
+	isPrevMl = isMl
 }
-$extraSep	$(getTypedefDeclString (item, hasItemRefTarget (item), "\t"))
+$extraSep	$decl
 %{
 end -- for
 }

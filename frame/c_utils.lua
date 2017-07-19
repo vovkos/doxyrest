@@ -102,7 +102,7 @@ function getParamArrayString_sl (paramArray, isRef, lbrace, rbrace)
 	return s
 end
 
-function getParamArrayString_ml (paramArray, isRef, lbrace, rbrace, indent)
+function getParamArrayString_ml (paramArray, isRef, lbrace, rbrace, indent, nl)
 	local s
 	local count = #paramArray
 
@@ -111,7 +111,7 @@ function getParamArrayString_ml (paramArray, isRef, lbrace, rbrace, indent)
 	elseif count == 1  then
 		s = lbrace .. getParamString (paramArray [1], isRef) .. rbrace
 	else
-		s = lbrace .. "\n" .. indent .. "    "
+		s = lbrace .. nl .. indent .. "    "
 
 		for i = 1, count do
 			s = s .. getParamString (paramArray [i], isRef)
@@ -120,7 +120,7 @@ function getParamArrayString_ml (paramArray, isRef, lbrace, rbrace, indent)
 				s = s .. ","
 			end
 
-			s = s .. "\n" .. indent .. "    "
+			s = s .. nl .. indent .. "    "
 		end
 		s = s .. rbrace
 	end
@@ -129,7 +129,7 @@ function getParamArrayString_ml (paramArray, isRef, lbrace, rbrace, indent)
 end
 
 function getFunctionParamArrayString (paramArray, isRef, indent)
-	return getParamArrayString_ml (paramArray, isRef, "(", ")", indent)
+	return getParamArrayString_ml (paramArray, isRef, "(", ")", indent, "\n")
 end
 
 function getTemplateParamArrayString (paramArray, isRef)
@@ -137,7 +137,7 @@ function getTemplateParamArrayString (paramArray, isRef)
 end
 
 function getDefineParamArrayString (paramArray, isRef)
-	return getParamArrayString_sl (paramArray, isRef, "(", ")")
+	return getParamArrayString_ml (paramArray, isRef, "(", ")", "\t", " \\\n")
 end
 
 function getItemKindString (item, itemKindString)
@@ -159,7 +159,7 @@ function getItemNameSuffix (item)
 	end
 
 	if item.m_templateSpecParamArray and #item.m_templateSpecParamArray > 0 then
-		s = s .. " " .. getTemplateParamArrayString (item.m_templateSpecParamArray)
+		s = s .. " " ..  getTemplateParamArrayString (item.m_templateSpecParamArray)
 	end
 
 	return s
@@ -571,6 +571,14 @@ function getProtectionSuffix (item)
 	end
 end
 
+function getFunctionModifierDelimiter (indent)
+	if g_hasNewLineAfterReturnType then
+		return "\n" .. indent
+	else
+		return " "
+	end
+end
+
 function getPropertyDeclString (item, isRef, indent)
 	local s = getLinkedTextString (item.m_returnType, true)
 
@@ -578,11 +586,7 @@ function getPropertyDeclString (item, isRef, indent)
 		s = string.gsub (s, "property", item.m_modifiers .. " property")
 	end
 
-	if g_hasNewLineAfterReturnType then
-		s = s .. "\n" .. indent
-	else
-		s = s .. " "
-	end
+	s = s .. getFunctionModifierDelimiter (indent)
 
 	if isRef then
 		s = s .. ":ref:`" .. getItemName (item)  .. "<doxid-" .. item.m_id .. ">` "
@@ -600,24 +604,20 @@ end
 function getFunctionDeclStringImpl (item, returnType, isRef, indent)
 	local s = ""
 
-	if returnType and returnType ~= "" then
-		s = returnType
+	if string.find (item.m_flags, "static") then
+		s = "static" .. getFunctionModifierDelimiter (indent)
+	elseif item.m_virtualKind == "pure-virtual" then
+		s = "virtual" .. getFunctionModifierDelimiter (indent)
+	elseif item.m_virtualKind ~= "non-virtual" then
+		s = item.m_virtualKind .. getFunctionModifierDelimiter (indent)
+	end
 
-		if g_hasNewLineAfterReturnType then
-			s = s .. "\n" .. indent
-		else
-			s = s .. " "
-		end
+	if returnType and returnType ~= "" then
+		s = s .. returnType .. getFunctionModifierDelimiter (indent)
 	end
 
 	if item.m_modifiers ~= "" then
-		s = s .. item.m_modifiers
-
-		if g_hasNewLineAfterReturnType then
-			s = s .. "\n" .. indent
-		else
-			s = s .. " "
-		end
+		s = s .. item.m_modifiers .. getFunctionModifierDelimiter (indent)
 	end
 
 	if isRef then
@@ -627,6 +627,14 @@ function getFunctionDeclStringImpl (item, returnType, isRef, indent)
 	end
 
 	s = s .. getFunctionParamArrayString (item.m_paramArray, true, indent)
+
+	if string.find (item.m_flags, "const") then
+		s = s .. " const"
+	end
+
+	if item.m_virtualKind == "pure-virtual" then
+		s = s .. " = 0"
+	end
 
 	return s
 end
@@ -689,27 +697,18 @@ function getTypedefDeclString (typedef, isRef, indent)
 		end
 
 		if typedef.m_argString ~= "" then
-			s = s .. " " .. typedef.m_argString
+			local c = string.sub (typedef.m_argString, 1, 1)
+			if c ~= ")" then -- nested declarator, e.g. int (*Func) (int a)
+				s = s .. " "
+			end
 
-			-- todo -- re-format argstring according to the current coding style
+			s = s .. formatArgDeclString (typedef.m_argString, indent)
 		end
 
 		return s
 	end
 
-	if g_hasNewLineAfterReturnType then
-		s = s .. "\n" .. indent
-	else
-		s = s .. " "
-	end
-
-	s = s .. getLinkedTextString (typedef.m_type, true)
-
-	if g_hasNewLineAfterReturnType then
-		s = s .. "\n" .. indent
-	else
-		s = s .. " "
-	end
+ 	s = s .. getFunctionModifierDelimiter (indent) .. getLinkedTextString (typedef.m_type, true) .. getFunctionModifierDelimiter (indent)
 
 	if isRef then
 		s = s .. ":ref:`" .. getItemName (typedef)  .. "<doxid-" .. typedef.m_id .. ">` "
@@ -728,6 +727,71 @@ end
 
 function isUnnamedItem (item)
 	return item.m_name == "" or string.sub (item.m_name, 1, 1) == "@"
+end
+
+g_closingBracketChar =
+{
+	["("] = ")",
+	["["] = "]",
+	["<"] = ">",
+	["{"] = "}",
+}
+
+function formatArgDeclString (decl, indent)
+	local bracket = {}
+	bracket [0] = {}
+	bracket [0].m_result = ""
+
+	local level = 0
+	local pos = 1
+	local len = string.len (decl)
+
+	for i = 1, len do
+		local c = string.sub (decl, i, i)
+
+		if c == "(" or c == "[" or c == "<" or c == "{" then
+			local chunk = trimLeadingWhitespace (string.sub (decl, pos, i))
+			pos = i + 1
+
+			bracket [level].m_result = bracket [level].m_result .. chunk
+
+			level = level + 1
+			bracket [level] = {}
+			bracket [level].m_closingChar = g_closingBracketChar [c]
+			bracket [level].m_result = ""
+		elseif level > 0 then
+			if c == ',' then
+				if not bracket [level].m_delimiter then
+					bracket [level].m_delimiter = "\n" .. indent .. string.rep ("    ", level)
+					bracket [level].m_result = bracket [level].m_delimiter .. bracket [level].m_result
+				end
+
+				local chunk = trimLeadingWhitespace (string.sub (decl, pos, i))
+				pos = i + 1
+
+				bracket [level].m_result = bracket [level].m_result .. chunk .. bracket [level].m_delimiter
+				pos = i + 1
+			elseif c == bracket [level].m_closingChar then
+				local chunk = trimLeadingWhitespace (string.sub (decl, pos, i - 1))
+				pos = i
+
+				bracket [level].m_result = bracket [level].m_result .. chunk
+
+				if bracket [level].m_delimiter then
+					bracket [level].m_result = bracket [level].m_result .. bracket [level].m_delimiter
+				end
+
+				level = level - 1
+				bracket [level].m_result = bracket [level].m_result .. bracket [level + 1].m_result
+			end
+		end
+	end
+
+	if pos <= len then
+		bracket [0].m_result = bracket [0].m_result .. string.sub (decl, pos)
+	end
+
+	return bracket [0].m_result
 end
 
 -------------------------------------------------------------------------------
@@ -801,21 +865,12 @@ end
 function processListDocBlock (block, context, bullet)
 	local s
 
-	local prevIndent = context.m_listItemIndent
 	local prevBullet = context.m_listItemBullet
-
-	if not prevBullet then
-		context.m_listItemIndent = ""
-	else
-		context.m_listItemIndent = prevIndent .. "    "
-	end
-
 	context.m_listItemBullet = bullet
 
 	s = getDocBlockListContentsImpl (block.m_childBlockList, context)
 	s = "\n\n" .. trimTrailingWhitespace (s) .. "\n\n"
 
-	context.m_listItemIndent = prevIndent
 	context.m_listItemBullet = prevBullet
 
 	return s
@@ -833,8 +888,13 @@ function processDlListDocBlock (block, context)
 
 	for i = 1, #context.m_dlList do
 		s = s .. "\t*\n"
-		s = s .. "\t\t- " .. context.m_dlList [i].m_title .. "\n\n"
-		s = s .. "\t\t- " .. context.m_dlList [i].m_description .. "\n\n"
+
+		local entry = context.m_dlList [i]
+		local title = replaceCommonSpacePrefix (entry.m_title, "\t\t  ")
+		local description = replaceCommonSpacePrefix (entry.m_description, "\t\t  ")
+
+		s = s .. "\t\t- " .. trimLeadingWhitespace (title) .. "\n\n"
+		s = s .. "\t\t- " .. trimLeadingWhitespace (description) .. "\n\n"
 	end
 
 	context.m_dlList = prevList
@@ -844,9 +904,6 @@ end
 
 function getDocBlockContents (block, context)
 	local s = ""
-
-	local listItemBullet = context.m_listItemBullet
-	local listItemIndent = context.m_listItemIndent
 
 	if block.m_blockKind == "programlisting" then
 		context.m_codeBlockKind = block.m_blockKind
@@ -979,7 +1036,7 @@ function getDocBlockContents (block, context)
 					error ("unexpected <listitem>")
 				end
 
-				s = context.m_listItemIndent .. context.m_listItemBullet .. " "
+				s = context.m_listItemBullet .. " "
 				local indent = string.rep (' ', string.len (s))
 
 				text = replaceCommonSpacePrefix (text, indent)
@@ -1203,11 +1260,7 @@ function prepareItemDocumentation (item, compound)
 		end
 	end
 
-	if item.m_groupId and compound and compound.m_id ~= item.m_groupId then
-		return false -- grouped items should be documented on group pages only
-	end
-
-	return true
+	return not compound or not item.m_groupId or item.m_groupId == compound.m_id
 end
 
 function prepareItemArrayDocumentation (itemArray, compound)

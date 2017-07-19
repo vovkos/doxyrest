@@ -1173,9 +1173,14 @@ GlobalNamespace::build (
 			compound->m_baseTypeArray.append (baseCompound);
 		}
 
+		sl::StringHashTable <bool> idMap; // derivedcompoundref may specify the same class multiple types -- we don't want that
+
 		refIt = compound->m_derivedRefList.getHead ();
 		for (; refIt; refIt++)
 		{
+			if (!idMap.addIfNotExists (refIt->m_id, true))
+				continue;
+
 			Compound* derivedCompound = module->m_compoundMap.findValue (refIt->m_id, NULL);
 			if (!derivedCompound)
 			{

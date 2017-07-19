@@ -408,6 +408,14 @@ struct Compound: sl::ListLink
 
 	Compound ();
 
+	bool
+	isMemberGroupAllowed ()
+	{
+		return
+			m_compoundKind == CompoundKind_Namespace ||
+			m_compoundKind == CompoundKind_File;
+	}
+
 	void
 	luaExport (lua::LuaState* luaState);
 
@@ -519,7 +527,10 @@ public:
 	clear ();
 
 	bool
-	build (Module* module);
+	build (
+		Module* module,
+		uint_t cmdLineFlags
+		);
 
 	void
 	luaExport (lua::LuaState* luaState);

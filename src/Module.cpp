@@ -11,6 +11,7 @@
 
 #include "pch.h"
 #include "Module.h"
+#include "CmdLine.h"
 
 //..............................................................................
 
@@ -433,6 +434,8 @@ Member::luaExport (lua::LuaState* luaState)
 	luaState->setMemberString ("m_id", m_id);
 	luaState->setMemberString ("m_name", m_name);
 	luaState->setMemberString ("m_modifiers", m_modifiers);
+
+	AXL_TODO ("use g_exportCache to export group tables instead of IDs (more natural to use from the Lua frames)")
 
 	if (m_groupCompound)
 		luaState->setMemberString ("m_groupId", m_groupCompound->m_id);
@@ -1013,17 +1016,21 @@ GlobalNamespace::clear ()
 }
 
 bool
-GlobalNamespace::build (Module* module)
+GlobalNamespace::build (
+	Module* module,
+	uint_t cmdLineFlags
+	)
 {
 	clear ();
 
 	// loop #1 assign groups
 
+	bool isMemberGroupAllowed = (cmdLineFlags & CmdLineFlag_AllowMemberGroups) != 0;
+
 	size_t count = module->m_groupArray.getCount ();
 	for (size_t i = 0; i < count; i++)
 	{
 		Compound* compound = module->m_groupArray [i];
-
 		sl::Iterator <Member> memberIt = compound->m_memberList.getHead ();
 		for (; memberIt; memberIt++)
 		{
@@ -1034,7 +1041,7 @@ GlobalNamespace::build (Module* module)
 			else
 			{
 				Member* member = module->m_memberMap.findValue (memberIt->m_id, NULL);
-				if (member)
+				if (member && (isMemberGroupAllowed || member->m_parentCompound->isMemberGroupAllowed ()))
 					member->m_groupCompound = compound;
 			}
 		}
@@ -1125,8 +1132,15 @@ GlobalNamespace::build (Module* module)
 
 			if (innerCompound->m_groupCompound)
 			{
-				Namespace* groupNspace = getGroupNamespace (module, innerCompound->m_groupCompound);
-				groupNspace->add (innerCompound);
+				if (isMemberGroupAllowed || compound->isMemberGroupAllowed ())
+				{
+					Namespace* groupNspace = getGroupNamespace (module, innerCompound->m_groupCompound);
+					groupNspace->add (innerCompound);
+				}
+				else
+				{
+					innerCompound->m_groupCompound = NULL;
+				}
 			}
 		}
 

@@ -17,8 +17,9 @@
 
 enum CmdLineFlag
 {
-	CmdLineFlag_Help    = 0x0001,
-	CmdLineFlag_Version = 0x0002,
+	CmdLineFlag_Help              = 0x0001,
+	CmdLineFlag_Version           = 0x0002,
+	CmdLineFlag_AllowMemberGroups = 0x0004,
 };
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -61,6 +62,7 @@ enum CmdLineSwitchKind
 	CmdLineSwitchKind_FrameFileName,
 	CmdLineSwitchKind_FrameDir,
 	CmdLineSwitchKind_Define,
+	CmdLineSwitchKind_AllowMemberGroups,
 };
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -99,6 +101,12 @@ AXL_SL_BEGIN_CMD_LINE_SWITCH_TABLE (CmdLineSwitchTable, CmdLineSwitchKind)
 		CmdLineSwitchKind_Define,
 		"D", "define", "<name>[=<value>]",
 		"Define a Lua variable"
+		)
+
+	AXL_SL_CMD_LINE_SWITCH (
+		CmdLineSwitchKind_AllowMemberGroups,
+		"allow-member-groups", NULL,
+		"Allow grouping for type members"
 		)
 
 AXL_SL_END_CMD_LINE_SWITCH_TABLE ()

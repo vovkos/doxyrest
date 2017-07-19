@@ -29,6 +29,8 @@ else
 %{
 end -- if
 
+local isPrevMl = false
+
 for i = 1, #itemArray do
 	local item = itemArray [i]
 	local targetFileName = getItemFileName (item)
@@ -37,16 +39,28 @@ for i = 1, #itemArray do
 		generateFile (targetFileName, "c_class.rst.in", item)
 	end
 
+	local decl = getClassDeclString (item, true, false, "\t")
+	local isMl = string.find (decl, "\n")
+	local extraSep = ""
+
+	if i > 1 and (isMl or isPrevMl) then
+		extraSep = "\n"
+	end
+
+	isPrevMl = isMl
+
 	if item.m_protectionKind ~= protectionKind then
 		protectionKind = item.m_protectionKind
+		extraSep = ""
 }
 
 	// $protectionKind $sectionName
 
 %{
+		isPrevMl = isMl
 	end -- if
 }
-	$(item.m_compoundKind) :ref:`$(getItemName (item))<doxid-$(item.m_id)>`
+$extraSep	$decl
 %{
 end -- for
 }

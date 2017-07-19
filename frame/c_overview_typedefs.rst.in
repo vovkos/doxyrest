@@ -31,25 +31,25 @@ local isPrevMl = false
 
 for i = 1, #compound.m_typedefArray do
 	local item = compound.m_typedefArray [i]
-	local extraSep = ""
-
-	if item.m_protectionKind ~= protectionKind then
-		protectionKind = item.m_protectionKind
-}
-
-	// $protectionKind typedefs
-
-%{
-	end -- if
-
 	local decl = getTypedefDeclString (item, hasItemRefTarget (item), "\t")
 	local isMl = string.find (decl, "\n")
+	local extraSep = ""
 
 	if i > 1 and (isMl or isPrevMl) then
 		extraSep = "\n"
 	end
 
 	isPrevMl = isMl
+
+	if item.m_protectionKind ~= protectionKind then
+		protectionKind = item.m_protectionKind
+		extraSep = ""
+}
+
+	// $protectionKind typedefs
+
+%{
+	end -- if
 }
 $extraSep	$decl
 %{

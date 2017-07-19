@@ -12,49 +12,61 @@
 
 local argArray = table.pack (...)
 local compound = argArray [1]
+
+local decl = getClassDeclString (compound, false, false, "\t")
+
+if not compound.m_baseTypeArray or #compound.m_baseTypeArray == 0 then
 }
-	// inheritance
-
+	$decl
 %{
-
-local indent = ""
-
-if compound.m_baseTypeArray and #compound.m_baseTypeArray > 0 then
-
-	for i = 1, #compound.m_baseTypeArray do
-		local item = compound.m_baseTypeArray [i]
-
-		if item.m_id ~= "" then
+else
+	if #compound.m_baseTypeArray == 1 then
+		local item = compound.m_baseTypeArray [1]
+		local protection = compound.m_baseTypeProtectionArray [1]
 }
-	$(item.m_compoundKind) :ref:`$(getItemQualifiedName (item))<doxid-$(item.m_id)>`
+	$decl: $(getBaseClassString (item, protection))
 %{
-		elseif
-			g_unidentifiedBaseTypeKind and
-			tostring (g_unidentifiedBaseTypeKind) ~= "" then
+	else
 }
-	$g_unidentifiedBaseTypeKind $(getItemName (item))
+	$decl:
 %{
-		else
-}
-	$(getItemName (item))
-%{
-		end -- if
-	end -- for
+		for i = 1, #compound.m_baseTypeArray do
+			local item = compound.m_baseTypeArray [i]
+			local protection = compound.m_baseTypeProtectionArray [i]
+			local comma = ""
 
-	indent = "    "
+			if i < #compound.m_baseTypeArray then
+				comma = ","
+			end
+
+}
+		$(getBaseClassString (item, protection))
+%{
+		end -- for
+	end -- if
 end -- if
-}
-	$indent$(compound.m_compoundKind) $(getItemQualifiedName (compound))
-%{
-
-indent = indent .. "    "
 
 if compound.m_derivedTypeArray and #compound.m_derivedTypeArray > 0 then
+}
+
+	// direct descendants
+
+%{
+	local isPrevMl = false
 
 	for i = 1, #compound.m_derivedTypeArray do
 		local item = compound.m_derivedTypeArray [i]
+		local decl = getClassDeclString (item, true, true, "\t")
+		local isMl = string.find (decl, "\n")
+		local extraSep = ""
+
+		if i > 1 and (isMl or isPrevMl) then
+			extraSep = "\n"
+		end
+
+		isPrevMl = isMl
 }
-	$indent$(item.m_compoundKind) :ref:`$(getItemQualifiedName (item))<doxid-$(item.m_id)>`
+$extraSep	$decl
 %{
 	end -- for
 end -- if

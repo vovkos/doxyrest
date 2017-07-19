@@ -132,14 +132,6 @@ function getFunctionParamArrayString (paramArray, isRef, indent)
 	return getParamArrayString_ml (paramArray, isRef, "(", ")", indent, "\n")
 end
 
-function getTemplateParamArrayString (paramArray, isRef)
-	return getParamArrayString_sl (paramArray, isRef, "<", ">")
-end
-
-function getDefineParamArrayString (paramArray, isRef)
-	return getParamArrayString_ml (paramArray, isRef, "(", ")", "\t", " \\\n")
-end
-
 function getItemKindString (item, itemKindString)
 	local s = ""
 
@@ -151,27 +143,21 @@ function getItemKindString (item, itemKindString)
 	return s
 end
 
-function getItemNameSuffix (item)
-	local s = ""
-
-	if item.m_templateParamArray and #item.m_templateParamArray > 0 then
-		s = s .. " " .. getTemplateParamArrayString (item.m_templateParamArray)
+function getTemplateSpecSuffix (item)
+	if not item.m_templateSpecParamArray or #item.m_templateSpecParamArray == 0 then
+		return ""
 	end
 
-	if item.m_templateSpecParamArray and #item.m_templateSpecParamArray > 0 then
-		s = s .. " " ..  getTemplateParamArrayString (item.m_templateSpecParamArray)
-	end
-
-	return s
+	return " " .. getParamArrayString_sl (item.m_templateSpecParamArray, false, "<", ">")
 end
 
 function getItemSimpleName (item)
-	return item.m_name .. getItemNameSuffix (item)
+	return item.m_name .. getTemplateSpecSuffix (item)
 end
 
 function getItemQualifiedName (item)
 	local name = string.gsub (item.m_path, "/", g_nameDelimiter)
-	return name .. getItemNameSuffix (item)
+	return name .. getTemplateSpecSuffix (item)
 end
 
 getItemName = getItemQualifiedName
@@ -604,12 +590,17 @@ end
 function getFunctionDeclStringImpl (item, returnType, isRef, indent)
 	local s = ""
 
+	if item.m_templateParamArray and #item.m_templateParamArray > 0 or
+		item.m_templateSpecParamArray and #item.m_templateSpecParamArray > 0 then
+		s = "template " .. getParamArrayString_ml (item.m_templateParamArray, false, "<", ">", "\t", "\n") .. "\n" .. indent
+	end
+
 	if string.find (item.m_flags, "static") then
-		s = "static" .. getFunctionModifierDelimiter (indent)
+		s = s .. "static" .. getFunctionModifierDelimiter (indent)
 	elseif item.m_virtualKind == "pure-virtual" then
-		s = "virtual" .. getFunctionModifierDelimiter (indent)
+		s = s .. "virtual" .. getFunctionModifierDelimiter (indent)
 	elseif item.m_virtualKind ~= "non-virtual" then
-		s = item.m_virtualKind .. getFunctionModifierDelimiter (indent)
+		s = s .. item.m_virtualKind .. getFunctionModifierDelimiter (indent)
 	end
 
 	if returnType and returnType ~= "" then
@@ -666,7 +657,7 @@ function getEventDeclString (event, isRef, indent)
 		)
 end
 
-function getDefineDeclString (define, isRef)
+function getDefineDeclString (define, isRef, indent)
 	local s = "#define "
 
 	if isRef then
@@ -678,7 +669,7 @@ function getDefineDeclString (define, isRef)
 	if #define.m_paramArray > 0 then
 		-- no space between name and params!
 
-		s = s .. getDefineParamArrayString (define.m_paramArray, true)
+		s = s .. getParamArrayString_ml (define.m_paramArray, false, "(", ")", indent, " \\\n")
 	end
 
 	return s
@@ -717,6 +708,48 @@ function getTypedefDeclString (typedef, isRef, indent)
 	end
 
 	s = s .. getFunctionParamArrayString (typedef.m_paramArray, true, indent)
+	return s
+end
+
+function getClassDeclString (class, isRef, isQualifiedName, indent)
+	local s = ""
+
+	if #class.m_templateParamArray > 0 or #class.m_templateSpecParamArray > 0 then
+		s = "template " .. getParamArrayString_ml (class.m_templateParamArray, false, "<", ">", indent, "\n") .. "\n" .. indent
+	end
+
+	local name
+
+	if isQualifiedName then
+		name = getItemQualifiedName (class)
+	else
+		name = getItemName (class)
+	end
+
+	s = s .. class.m_compoundKind .. " "
+
+	if isRef then
+		s = s .. ":ref:`" .. name  .. "<doxid-" .. class.m_id .. ">` "
+	else
+		s = s .. name ..  " "
+	end
+
+	return s
+end
+
+function getBaseClassString (class, protection)
+	local s = ""
+
+	if string.match (g_language, "^c[px+]*$") then
+		s = protection .. " "
+	end
+
+	if class.m_id ~= "" then
+		s = s .. ":ref:`" .. getItemQualifiedName (class) .. "<doxid-" .. class.m_id .. ">`"
+	else
+		s = s .. getItemName (class)
+	end
+
 	return s
 end
 

@@ -27,16 +27,19 @@ else
 %{
 end -- if
 
-local prevParamCount = 0
+local isPrevMl = false
 
 for i = 1, #compound.m_eventArray do
 	local item = compound.m_eventArray [i]
-	local paramCount = #item.m_paramArray
+	local decl = getEventDeclString (item, hasItemRefTarget (item), "\t")
+	local isMl = string.find (decl, "\n")
 	local extraSep = ""
 
-	if i > 1 and (g_hasNewLineAfterReturnType or paramCount > 1 or prevParamCount > 1) then
+	if i > 1 and (isMl or isPrevMl) then
 		extraSep = "\n"
 	end
+
+	isPrevMl = isMl
 
 	if item.m_protectionKind ~= protectionKind then
 		protectionKind = item.m_protectionKind
@@ -47,10 +50,8 @@ for i = 1, #compound.m_eventArray do
 
 %{
 	end -- if
-
-	prevParamCount = paramCount
 }
-$extraSep	$(getEventDeclString (item, hasItemRefTarget (item), "\t"))
+$extraSep	$decl
 %{
 end -- for
 }

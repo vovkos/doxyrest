@@ -149,12 +149,16 @@ enum VirtualKind
 	VirtualKind_NonVirtual,
 	VirtualKind_Virtual,
 	VirtualKind_PureVirtual,
+	VirtualKind_Abstract,
+	VirtualKind_Override,
 };
 
 AXL_SL_BEGIN_STRING_HASH_TABLE (VirtualKindMap, VirtualKind)
 	AXL_SL_HASH_TABLE_ENTRY ("non-virtual",  VirtualKind_NonVirtual)
 	AXL_SL_HASH_TABLE_ENTRY ("virtual",      VirtualKind_Virtual)
 	AXL_SL_HASH_TABLE_ENTRY ("pure-virtual", VirtualKind_PureVirtual)
+	AXL_SL_HASH_TABLE_ENTRY ("abstract",     VirtualKind_Abstract)
+	AXL_SL_HASH_TABLE_ENTRY ("override",     VirtualKind_Override)
 AXL_SL_END_HASH_TABLE ()
 
 const char*

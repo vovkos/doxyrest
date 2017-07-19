@@ -114,6 +114,8 @@ getVirtualKindString (VirtualKind virtualKind)
 		"non-virtual",  // VirtualKind_NonVirtual
 		"virtual",      // VirtualKind_Virtual
 		"pure-virtual", // VirtualKind_PureVirtual
+		"abstract",     // VirtualKind_Abstract,
+		"override",     // VirtualKind_Override,
 	};
 
 	return (size_t) virtualKind < countof (stringTable) ?

@@ -389,6 +389,7 @@ struct Compound: sl::ListLink
 	sl::Array <Compound*> m_baseTypeArray;
 	sl::Array <Compound*> m_derivedTypeArray_doxy; // explicitly specified in doxy
 	sl::Array <Compound*> m_derivedTypeArray_auto; // auto-generated
+	sl::Array <ProtectionKind> m_baseTypeProtectionArray;
 
 	sl::Array <Compound*> m_subPageArray;
 
@@ -606,10 +607,7 @@ luaExportStringList (
 
 	sl::BoxIterator <sl::String> it = list.getHead ();
 	for (size_t i = 1; it; it++, i++) // lua arrays are 1-based
-	{
-		luaState->pushString (*it);
-		luaState->setArrayElement (i);
-	}
+		luaState->setArrayElementString (i, *it);
 }
 
 //..............................................................................

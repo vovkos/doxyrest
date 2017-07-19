@@ -591,6 +591,8 @@ Compound::luaExport (lua::LuaState* luaState)
 	preparePath ();
 	luaState->setMemberString ("m_path", m_path);
 
+	size_t count;
+
 	switch (m_compoundKind)
 	{
 	case CompoundKind_Group:
@@ -618,6 +620,13 @@ Compound::luaExport (lua::LuaState* luaState)
 
 		luaExportArray (luaState, m_baseTypeArray);
 		luaState->setMember ("m_baseTypeArray");
+
+		count = m_baseTypeProtectionArray.getCount ();
+		luaState->createTable (count);
+		for (size_t i = 0; i < count; i++)
+			luaState->setArrayElementString (i + 1, getProtectionKindString (m_baseTypeProtectionArray [i]));
+
+		luaState->setMember ("m_baseTypeProtectionArray");
 
 		// prefer explicitly specified derived type (fallback to auto-generated if absent)
 
@@ -1171,6 +1180,7 @@ GlobalNamespace::build (
 			}
 
 			compound->m_baseTypeArray.append (baseCompound);
+			compound->m_baseTypeProtectionArray.append (refIt->m_protectionKind);
 		}
 
 		sl::StringHashTable <bool> idMap; // derivedcompoundref may specify the same class multiple types -- we don't want that

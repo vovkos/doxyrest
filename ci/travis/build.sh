@@ -24,9 +24,26 @@ pushd build
 cmake .. -DTARGET_CPU=$TARGET_CPU -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION
 make
 ctest --output-on-failure
+
+if [ "$BUILD_PACKAGE" != "" ]; then
+	fakeroot cpack -G TXZ --config CPackConfig.cmake
+
+	echo 'include (CPackConfig.cmake)'          >  print-package-file-name.cmake
+	echo 'message (${CMAKE_PACKAGE_FILE_NAME})' >> print-package-file-name.cmake
+
+	CMAKE_PACKAGE_FILE_NAME=`cmake -P print-package-file-name.cmake 2>&1`
+	DOXYREST_TAR=$THIS_DIR/$CMAKE_PACKAGE_FILE_NAME.tar.xz
+fi
+
 popd
 
-source ci/travis/get-coverage.sh
+if [ "$GET_COVERAGE" != "" ]; then
+	lcov --capture --directory . --no-external --output-file coverage.info
+	lcov --remove coverage.info '*/axl/*' --output-file coverage.info
+	lcov --list coverage.info
+
+	curl -s https://codecov.io/bash | bash
+fi
 
 if [ "$BUILD_DOC" != "" ]; then
 	pushd build

@@ -9,19 +9,11 @@
 #
 #...............................................................................
 
-# manually install CMake -- we need at least CMake 3.3
-
-CMAKE_VERSION=3.3.2
-CMAKE_VERSION_DIR=v3.3
-CMAKE_OS=Linux-x86_64
-CMAKE_TAR=cmake-$CMAKE_VERSION-$CMAKE_OS.tar.gz
-CMAKE_URL=http://www.cmake.org/files/$CMAKE_VERSION_DIR/$CMAKE_TAR
-CMAKE_DIR=$(pwd)/cmake-$CMAKE_VERSION
+# manually install CMake (we need at least CMake 3.3, repos only have 3.2)
 
 wget --quiet $CMAKE_URL
 mkdir -p $CMAKE_DIR
 tar --strip-components=1 -xzf $CMAKE_TAR -C $CMAKE_DIR
-export PATH=$CMAKE_DIR/bin:$PATH
 
 # now to official APT packages
 
@@ -50,10 +42,7 @@ else
 	echo "set (OPENSSL_INC_DIR DISABLED)" >> paths.cmake
 fi
 
-# lcov doesn't work with clang on ubuntu out-of-the-box
-# also, coverage should be collected without optimizations
-
-if [ "$CC" != "clang" ] && [ "$BUILD_CONFIGURATION" == "Debug" ]; then
+if [ "$GET_COVERAGE" != "" ]; then
 	sudo apt-get install -y lcov
 	echo "axl_override_setting (GCC_FLAG_COVERAGE -coverage)" >> settings.cmake
 fi

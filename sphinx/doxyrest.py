@@ -165,6 +165,7 @@ class RefTransform(Transform):
         Transform.__init__(self, document, startnode)
         self.re_prog = re.compile('(:c?ref:)?`(.+?)(\s*<([^<>]*)>)?`')
 
+    @staticmethod
     def node_filter(node):
         for node_class in RefTransform.node_classes:
             if isinstance (node, node_class):

@@ -11,6 +11,7 @@
 
 # codecov seems to fail at properly combining lcov reports from multiple jobs
 # so let's only collect coverage under linux gcc amd64 for now
+
 if [ "$TRAVIS_OS_NAME" != "linux" ] || [ "$TARGET_CPU" != "amd64" ]; then
 	return
 fi

@@ -19,9 +19,9 @@ brew install ragel
 if [ "$BUILD_CONFIGURATION" == "Debug" ]; then
 	brew install lcov
 	echo "axl_override_setting (GCC_FLAG_COVERAGE -coverage)" >> settings.cmake
-fi
+else
+ 	BUILD_DOC=ON
 
-if [ "$BUILD_DOC" != "" ]; then
 	pip install sphinx sphinx_rtd_theme
 	rvm get stable
 fi

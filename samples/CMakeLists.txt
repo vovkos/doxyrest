@@ -9,11 +9,21 @@
 #
 #...............................................................................
 
-add_subdirectory (jancy-api)
-add_subdirectory (jancy-stdlib)
-add_subdirectory (libusb)
-add_subdirectory (libssh)
-add_subdirectory (alsa)
-add_subdirectory (apr)
+option (
+	BUILD_DOXYREST_SAMPLES
+	"Build example documentation for a bunch of opensource projects (used for testing as well)"
+	ON
+	)
+
+if (BUILD_DOXYREST_SAMPLES)
+	add_subdirectory (jancy-api)
+	add_subdirectory (jancy-stdlib)
+	add_subdirectory (libusb)
+	add_subdirectory (libssh)
+	add_subdirectory (alsa)
+	add_subdirectory (apr)
+	add_subdirectory (opencv)
+	add_subdirectory (poco)
+endif ()
 
 #...............................................................................

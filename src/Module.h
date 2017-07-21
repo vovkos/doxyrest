@@ -446,6 +446,7 @@ struct Module
 	sl::Array <Compound*> m_namespaceArray;
 	sl::Array <Compound*> m_groupArray;
 	sl::Array <Compound*> m_pageArray;
+	sl::Array <Compound*> m_exampleArray;
 	sl::StringHashTable <Compound*> m_compoundMap;
 	sl::StringHashTable <Member*> m_memberMap;
 	sl::StringHashTable <EnumValue*> m_enumValueMap;

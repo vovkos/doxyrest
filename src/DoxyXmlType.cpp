@@ -244,12 +244,16 @@ CompoundDefType::create (
 
 	switch (m_compound->m_compoundKind)
 	{
+	case CompoundKind_Group:
+		module->m_groupArray.append (m_compound);
+		break;
+
 	case CompoundKind_Page:
 		module->m_pageArray.append (m_compound);
 		break;
 
-	case CompoundKind_Group:
-		module->m_groupArray.append (m_compound);
+	case CompoundKind_Example:
+		module->m_exampleArray.append (m_compound);
 		break;
 
 	case CompoundKind_Namespace:

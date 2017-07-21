@@ -38,6 +38,9 @@ Generator::prepare (
 	luaExportArray (&m_stringTemplate.m_luaState, module->m_pageArray);
 	m_stringTemplate.m_luaState.setGlobal ("g_pageArray");
 
+	luaExportArray (&m_stringTemplate.m_luaState, module->m_exampleArray);
+	m_stringTemplate.m_luaState.setGlobal ("g_exampleArray");
+
 	sl::Iterator <Define> it = m_cmdLine->m_defineList.getHead ();
 	for (; it; it++)
 	{

@@ -129,6 +129,35 @@ $pageTree
 %{
 end -- if
 
+if #g_exampleArray > 0 then
+}
+.. toctree::
+	:hidden:
+
+%{
+	table.sort (g_exampleArray, cmpNames)
+	local exampleList = ""
+
+	for i = 1, #g_exampleArray do
+		local example = g_exampleArray [i]
+		local targetFileName = getItemFileName (example)
+		local docName = string.gsub (targetFileName, "%.rst$", "")
+
+		generateFile (targetFileName, "c_example.rst.in", example)
+		exampleList = exampleList .. "|\t:doc:`" .. docName .."`\n"
+}
+	$(targetFileName)
+%{
+	end -- for
+}
+
+.. rubric:: Examples:
+
+$exampleList
+
+%{
+end -- if
+
 generateFile ("global.rst", "c_global.rst.in")
 }
 .. rubric:: Reference and Index:

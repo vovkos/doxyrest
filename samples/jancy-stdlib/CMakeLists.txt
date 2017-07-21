@@ -16,7 +16,7 @@ set (DOC_NAME "Jancy Standard Library Reference")
 set (STATIC_RST_DIR ${CMAKE_CURRENT_LIST_DIR}/rst)
 set (JANCY_SPHINX_DIR ${CMAKE_CURRENT_LIST_DIR}/sphinx)
 
-set (XML_DIR  ${CMAKE_CURRENT_LIST_DIR}/xml)
+set (XML_DIR  ${CMAKE_CURRENT_BINARY_DIR}/xml)
 set (RST_DIR  ${CMAKE_CURRENT_BINARY_DIR}/rst)
 set (TMP_DIR  ${CMAKE_CURRENT_BINARY_DIR}/tmp)
 set (HTML_DIR ${DOXYREST_DOC_DIR}/html/samples/jancy-stdlib)
@@ -65,6 +65,13 @@ foreach (_VAR ${CMD_LINE_VAR_LIST})
 endforeach ()
 
 #. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+axl_message ("Unpacking Jancy Standard Library Doxygen XML database...")
+
+execute_process (
+	COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_CURRENT_LIST_DIR}/xml.tar.xz
+	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+	)
 
 configure_file (
 	conf.py.in

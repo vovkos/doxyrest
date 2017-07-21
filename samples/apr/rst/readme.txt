@@ -1,1 +1,0 @@
-This directory has to contain at least one file so git can index it.

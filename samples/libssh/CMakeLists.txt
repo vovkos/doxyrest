@@ -18,9 +18,8 @@ set (LIBSSH_VERSION_REVISION 5)
 set (LIBSSH_VERSION_COMPANY "LibSSH Maintainers")
 set (LIBSSH_VERSION_YEARS   "2003-2017")
 
-set (STATIC_RST_DIR ${CMAKE_CURRENT_LIST_DIR}/rst)
-
-set (XML_DIR  ${CMAKE_CURRENT_LIST_DIR}/xml)
+set (STATIC_RST_DIR)
+set (XML_DIR  ${CMAKE_CURRENT_BINARY_DIR}/xml)
 set (RST_DIR  ${CMAKE_CURRENT_BINARY_DIR}/rst)
 set (TMP_DIR  ${CMAKE_CURRENT_BINARY_DIR}/tmp)
 set (HTML_DIR ${DOXYREST_DOC_DIR}/html/samples/libssh)
@@ -70,6 +69,13 @@ foreach (_VAR ${CMD_LINE_VAR_LIST})
 endforeach ()
 
 #. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+axl_message ("Unpacking LibSSH Doxygen XML database...")
+
+execute_process (
+	COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_CURRENT_LIST_DIR}/xml.tar.xz
+	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+	)
 
 configure_file (
 	conf.py.in

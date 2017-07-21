@@ -17,6 +17,8 @@ Doxyrest
 	:target: https://ci.appveyor.com/project/vovkos/doxyrest
 .. image:: https://codecov.io/gh/vovkos/doxyrest/branch/master/graph/badge.svg
 	:target: https://codecov.io/gh/vovkos/doxyrest
+.. image:: https://img.shields.io/badge/donate-@jancy.org-blue.svg
+	:target: http://jancy.org/donate.html?donate=doxyrest
 
 Abstract
 --------
@@ -31,6 +33,8 @@ Samples
 -------
 
 Check out the results of Doxyrest' handiwork in application to a few open-source projects:
+
+.. rubric:: C projects
 
 .. list-table::
 
@@ -58,9 +62,36 @@ Check out the results of Doxyrest' handiwork in application to a few open-source
 		- vs
 		- `original <https://apr.apache.org/docs/apr/1.5>`_
 
-The best part about Doxyrest approach is: it's modular and **100% customizable**! You can play with **Sphinx themes** to change visual appearance (fonts, colors, page layout, etc). Or you can adjust **Lua frames** for more drastic effects -- from tweaking the declaration coding style to changing the whole structure of documentation!
+.. rubric:: C++ projects
 
-You can even replace Doxygen with your own generator of Doxygen-style XML database and then apply the very same approach to documenting APIs in **any other languages**:
+.. list-table::
+
+	*	- OpenCV
+		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/samples/opencv>`__
+		- `sphinxdoc <https://vovkos.github.io/doxyrest/samples/opencv-sphinxdoc>`__
+		- vs
+		- `original <http://docs.opencv.org/trunk>`__
+
+	*	- POCO
+		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/samples/poco>`__
+		- `sphinxdoc <https://vovkos.github.io/doxyrest/samples/poco-sphinxdoc>`__
+		- vs
+		- `original <https://pocoproject.org/docs>`__
+
+Doxyrest generates decent overview even if the project has little or no Doxygen documentation comments
+
+.. rubric:: C++ without Doxy-comments
+
+.. list-table::
+
+	* 	- AXL
+		- `sphinx_rtd_theme <https://vovkos.github.io/axl/manual>`__
+
+But the best part about Doxyrest approach is that it's modular and **100% customizable**! You can play with **Sphinx themes** to change visual appearance (fonts, colors, page layout, etc). Or you can adjust **Lua frames** for more drastic effects -- from tweaking the declaration coding style to changing the whole structure of documentation!
+
+You can even replace Doxygen with your own generator of Doxygen-style XML database and then apply the very same approach to documenting APIs in **other languages**:
+
+.. rubric:: Other languages
 
 .. list-table::
 
@@ -72,13 +103,23 @@ Quick HOWTO
 
 Here is a list of steps required to apply Doxyrest to existing Doxygen-based projects:
 
-#. 	In your Doxygen configuration file ``Doxyfile`` add::
+#. 	In your Doxygen configuration file ``Doxyfile`` set::
 
-		GENERATE_XML = YES
+		GENERATE_XML         = YES  # self-explanatory
 
-	It is also recommended to turn off XML program listing as it vastly increses the size of XML databases. To do so, add::
+		CASE_SENSE_NAME      = NO   # essential! Sphinx uses lowercase reference IDs,
+		                            # so Doxygen can't use mixed-case for IDs
 
-		XML_PROGRAMLISTING = NO
+		HIDE_UNDOC_RELATIONS = YES  # important for C++ projects -- otherwise Doxygen
+		                            # may generate bogus links to template arguments
+
+		XML_PROGRAMLISTING   = NO   # not essential, but recommended -- XML program
+		                            # listing as it vastly increses the size of XML
+
+		EXTRACT_ALL          = YES  # not essential, but recommended if your project
+		                            # sets AUTOLINK_SUPPORT is set to ON (like most
+		                            # projects do) -- otherwise auto-generated links
+		                            # may point to discarded items
 
 #. 	Prepare Sphinx configuration file ``conf.py`` -- either take an existing one and fine tune it to your liking, or generate a new one with ``sphinx-quickstart``. Now add Doxyrest extensions ``doxyrest`` and ``cpplexer``::
 
@@ -105,7 +146,19 @@ Here is a list of steps required to apply Doxyrest to existing Doxygen-based pro
 
 		doxyrest $DOXYGEN_XML_DIR/index.xml -o $TMP_RST_DIR/index.rst -F $DOXYREST_FRAME_DIR -f c_index.rst.in
 
-	If your project has a main page, add the following to the command line: ``-D g_introFile=page_index.rst`` to force-include the contents of the main page into ``index.rst``.
+	If your project has a main page (see above), append the following to the command line to force-include the contents of ``page_index.rst`` into ``index.rst``::
+
+		-D g_introFile=page_index.rst
+
+	If your documentation uses ``\\verbatim`` Doxygen-directives, you can convert those to reStructuredText code blocks by appending::
+
+		-D g_verbatimToCodeBlock=cpp
+
+	For some Doxygen-based project it also may helps to add::
+
+	 	-D g_escapeAsterisks
+
+	This only makes a difference if asterisks characters ``*``, which have special meaning in reStriucturedText, are used in regular paragraph text of your documentation; asterisks in code snippets will work just fine even without this switch.
 
 #. 	Finally, run Sphinx to build HTML pages::
 

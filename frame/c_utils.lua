@@ -935,33 +935,46 @@ function processDlListDocBlock (block, context)
 	return s
 end
 
+function getCodeDocBlockContents (block, context)
+	context.m_codeBlockKind = block.m_blockKind
+	local s = getDocBlockListContentsImpl (block.m_childBlockList, context)
+	context.m_codeBlockKind = nil
+
+	return s
+end
+
 function getDocBlockContents (block, context)
 	local s = ""
 
-	if block.m_blockKind == "programlisting" then
-		context.m_codeBlockKind = block.m_blockKind
-		local code = getDocBlockListContentsImpl (block.m_childBlockList, context)
-		context.m_codeBlockKind = nil
+	if block.m_blockKind == "computeroutput" then
+		if context.m_codeBlockKind then
+			s = block.m_text .. getDocBlockListContentsImpl (block.m_childBlockList, context)
+		else
+			local code = block.m_text .. getCodeDocBlockContents (block, context)
 
+			if not string.find (code, "\n") then
+				s = "``" .. code .. "``"
+			else
+				code = replaceCommonSpacePrefix (code, "    ")
+				code = trimTrailingWhitespace (code)
+				s = "\n\n.. code-block:: none\n\n" .. code
+			end
+		end
+	elseif block.m_blockKind == "programlisting" then
+		local code = getCodeDocBlockContents (block, context)
 		code = replaceCommonSpacePrefix (code, "    ")
 		code = trimTrailingWhitespace (code)
 
 		s = "\n\n.. ref-code-block:: " .. g_language .. "\n\n" .. code .. "\n\n"
 	elseif block.m_blockKind == "preformatted" then
-		context.m_codeBlockKind = block.m_blockKind
-		local code = getDocBlockListContentsImpl (block.m_childBlockList, context)
-		context.m_codeBlockKind = nil
-
+		local code = getCodeDocBlockContents (block, context)
 		code = replaceCommonSpacePrefix (code, "    ")
 		code = trimTrailingWhitespace (code)
 
 		-- raw seems like a better approach, but need to figure something out with indents
 		s = "\n\n.. code-block:: none\n\n" .. code .. "\n\n"
 	elseif block.m_blockKind == "formula" then
-		context.m_codeBlockKind = block.m_blockKind
-		local code = getDocBlockListContentsImpl (block.m_childBlockList, context)
-		context.m_codeBlockKind = nil
-
+		local code = getCodeDocBlockContents (block, context)
 		local isInline = string.sub (code, 1, 1) == "$"
 
 		-- take away framing tokens
@@ -978,10 +991,7 @@ function getDocBlockContents (block, context)
 			s = "\n\n.. math::\n\n" .. code .. "\n\n"
 		end
 	elseif block.m_blockKind == "verbatim" and g_verbatimToCodeBlock then
-		context.m_codeBlockKind = block.m_blockKind
-		local code = getDocBlockListContentsImpl (block.m_childBlockList, context)
-		context.m_codeBlockKind = nil
-
+		local code = getCodeDocBlockContents (block, context)
 		code = replaceCommonSpacePrefix (code, "    ")
 		code = trimTrailingWhitespace (code)
 
@@ -1031,18 +1041,18 @@ function getDocBlockContents (block, context)
 				s = s .. "\t:alt: " .. block.m_text .. "\n"
 			end
 			s = s .. "\n"
-		elseif block.m_blockKind == "computeroutput" then
-			if context.m_codeBlockKind == "programlisting" then
-				s = text
-			elseif string.find (text, "\n") then
-				s = "\n\n.. code-block:: none\n\n" .. text
-			else
-				s = "``" .. text .. "``"
-			end
 		elseif block.m_blockKind == "bold" then
-			s = "**" .. text .. "**"
+			if not string.find (text, "\n") then -- single line only
+				s = "**" .. text .. "**"
+			else
+				s = text
+			end
 		elseif block.m_blockKind == "emphasis" then
-			s = "*" .. text .. "*"
+			if not string.find (text, "\n") then -- single line only
+				s = "*" .. text .. "*"
+			else
+				s = text
+			end
 		elseif block.m_blockKind == "heading" then
 			s = ".. rubric:: " .. text .. "\n\n"
 		elseif block.m_blockKind == "sp" then
@@ -1376,12 +1386,6 @@ function isItemExcludedByLocationFilter (item)
 	end
 
 	return
-		-- exclude c++ sources unless asked explicitly with g_includeCppSources
-		not g_includeCppSources and
-		string.match (g_language, "^c[px+]*$") and
-		string.match (item.m_location.m_file, "%.c[px+]*$")
-
-		or
 		-- exclude explicitly specified locations
 		g_excludeLocationPattern and
 		string.match (item.m_location.m_file, g_excludeLocationPattern)

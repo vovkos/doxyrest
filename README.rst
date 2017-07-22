@@ -18,6 +18,7 @@ Doxyrest
 .. image:: https://codecov.io/gh/vovkos/doxyrest/branch/master/graph/badge.svg
 	:target: https://codecov.io/gh/vovkos/doxyrest
 .. image:: https://img.shields.io/badge/donate-@jancy.org-blue.svg
+	:align: right
 	:target: http://jancy.org/donate.html?donate=doxyrest
 
 Abstract
@@ -34,7 +35,8 @@ Samples
 
 Check out the results of Doxyrest' handiwork in application to a few open-source projects:
 
-.. rubric:: C projects
+C libraries
+~~~~~~~~~~~
 
 .. list-table::
 
@@ -62,13 +64,14 @@ Check out the results of Doxyrest' handiwork in application to a few open-source
 		- vs
 		- `original <https://apr.apache.org/docs/apr/1.5>`_
 
-.. rubric:: C++ projects
+C++ libraries
+~~~~~~~~~~~~~
 
 .. list-table::
 
 	*	- OpenCV
-		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/samples/opencv>`__
-		- `sphinxdoc <https://vovkos.github.io/doxyrest/samples/opencv-sphinxdoc>`__
+		- `sphinx_rtd_theme <https://vovkos.github.io/opencv-doxyrest-doc/sphinx_rtd_theme>`__
+		- `sphinxdoc <https://vovkos.github.io/opencv-doxyrest-doc/sphinxdoc>`__
 		- vs
 		- `original <http://docs.opencv.org/trunk>`__
 
@@ -78,50 +81,52 @@ Check out the results of Doxyrest' handiwork in application to a few open-source
 		- vs
 		- `original <https://pocoproject.org/docs>`__
 
-Doxyrest generates decent overview even if the project has little or no Doxygen documentation comments
-
-.. rubric:: C++ without Doxy-comments
+Doxyrest generates decent overview even if the project has little or no Doxygen documentation comments:
 
 .. list-table::
 
 	* 	- AXL
-		- `sphinx_rtd_theme <https://vovkos.github.io/axl/manual>`__
+		- `sphinx_rtd_theme <https://vovkos.github.io/axl/manual/global.html>`__
 
-But the best part about Doxyrest approach is that it's modular and **100% customizable**! You can play with **Sphinx themes** to change visual appearance (fonts, colors, page layout, etc). Or you can adjust **Lua frames** for more drastic effects -- from tweaking the declaration coding style to changing the whole structure of documentation!
+But the best part about Doxyrest approach is that it's modular and 100% customizable. You can play with **Sphinx themes** to change visual appearance (fonts, colors, page layout, etc). Or you can adjust **Lua frames** for more drastic effects -- from tweaking the declaration coding style to changing the whole structure of documentation!
 
-You can even replace Doxygen with your own generator of Doxygen-style XML database and then apply the very same approach to documenting APIs in **other languages**:
+You can even replace Doxygen with your own generator of Doxygen-style XML database and then apply the very same approach to documenting APIs in other languages:
 
-.. rubric:: Other languages
+Jancy libraries
+~~~~~~~~~~~~~~~
 
 .. list-table::
 
-	* 	- Jancy Standard Library
+	*	- Jancy Standard Library
 		- `sphinx_rtd_theme <https://vovkos.github.io/jancy/stdlib>`__
+
+	*	- IO Ninja Jancy API
+		- `sphinx_rtd_theme <http://docs.tibbo.com/ioninja/api>`__
 
 Quick HOWTO
 -----------
 
 Here is a list of steps required to apply Doxyrest to existing Doxygen-based projects:
 
-#. 	In your Doxygen configuration file ``Doxyfile`` set::
+#.	In your Doxygen configuration file ``Doxyfile`` set::
 
 		GENERATE_XML         = YES  # self-explanatory
 
 		CASE_SENSE_NAME      = NO   # essential! Sphinx uses lowercase reference IDs,
-		                            # so Doxygen can't use mixed-case for IDs
+		                            # so Doxygen can't use mixed-case IDs
 
 		HIDE_UNDOC_RELATIONS = YES  # important for C++ projects -- otherwise Doxygen
 		                            # may generate bogus links to template arguments
 
-		XML_PROGRAMLISTING   = NO   # not essential, but recommended -- XML program
-		                            # listing as it vastly increses the size of XML
+		XML_PROGRAMLISTING   = NO   # not essential, but highly recommended -- enabling
+		                            # program listing vastly increases the size of XML
 
 		EXTRACT_ALL          = YES  # not essential, but recommended if your project
-		                            # sets AUTOLINK_SUPPORT is set to ON (like most
-		                            # projects do) -- otherwise auto-generated links
-		                            # may point to discarded items
+		                            # sets AUTOLINK_SUPPORT to ON (like most projects
+		                            # do) -- otherwise auto-generated links may point
+		                            # to discarded items
 
-#. 	Prepare Sphinx configuration file ``conf.py`` -- either take an existing one and fine tune it to your liking, or generate a new one with ``sphinx-quickstart``. Now add Doxyrest extensions ``doxyrest`` and ``cpplexer``::
+#.	Prepare Sphinx configuration file ``conf.py`` -- either take an existing one and fine tune it to your liking, or generate a new one with ``sphinx-quickstart``. Now add Doxyrest extensions ``doxyrest`` and ``cpplexer``::
 
 		sys.path.insert(1, os.path.abspath('$DOXYREST_SPHINX_DIR'))
 		extensions += ['doxyrest', 'cpplexer']
@@ -142,7 +147,7 @@ Here is a list of steps required to apply Doxyrest to existing Doxygen-based pro
 
 		doxygen
 
-#. 	Run Doxyrest to build reStructuredText documentation from the XML database obtained on the previous step::
+#.	Run Doxyrest to build reStructuredText documentation from the XML database obtained on the previous step::
 
 		doxyrest $DOXYGEN_XML_DIR/index.xml -o $TMP_RST_DIR/index.rst -F $DOXYREST_FRAME_DIR -f c_index.rst.in
 
@@ -150,17 +155,17 @@ Here is a list of steps required to apply Doxyrest to existing Doxygen-based pro
 
 		-D g_introFile=page_index.rst
 
-	If your documentation uses ``\\verbatim`` Doxygen-directives, you can convert those to reStructuredText code blocks by appending::
+	If your documentation uses ``\verbatim`` Doxygen-directives, you can convert those to reStructuredText code blocks by appending::
 
 		-D g_verbatimToCodeBlock=cpp
 
 	For some Doxygen-based project it also may helps to add::
 
-	 	-D g_escapeAsterisks
+		-D g_escapeAsterisks
 
 	This only makes a difference if asterisks characters ``*``, which have special meaning in reStriucturedText, are used in regular paragraph text of your documentation; asterisks in code snippets will work just fine even without this switch.
 
-#. 	Finally, run Sphinx to build HTML pages::
+#.	Finally, run Sphinx to build HTML pages::
 
 		sphinx-build -b html $TMP_RST_DIR $OUTPUT_HTML_DIR
 

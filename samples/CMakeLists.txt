@@ -16,6 +16,8 @@ option (
 	)
 
 if (BUILD_DOXYREST_SAMPLES)
+	set (DOXYREST_SAMPLE_SH_DIR "${CMAKE_CURRENT_LIST_DIR}/sh")
+
 	add_subdirectory (jancy-api)
 	add_subdirectory (jancy-stdlib)
 	add_subdirectory (libusb)

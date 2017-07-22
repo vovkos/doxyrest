@@ -18,7 +18,9 @@ set (LIBSSH_VERSION_REVISION 5)
 set (LIBSSH_VERSION_COMPANY "LibSSH Maintainers")
 set (LIBSSH_VERSION_YEARS   "2003-2017")
 
+set (XML_TAR_FILE ${CMAKE_CURRENT_LIST_DIR}/xml.tar.xz)
 set (STATIC_RST_DIR)
+
 set (XML_DIR  ${CMAKE_CURRENT_BINARY_DIR}/xml)
 set (RST_DIR  ${CMAKE_CURRENT_BINARY_DIR}/rst)
 set (TMP_DIR  ${CMAKE_CURRENT_BINARY_DIR}/tmp)
@@ -70,13 +72,6 @@ endforeach ()
 
 #. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-axl_message ("Unpacking LibSSH Doxygen XML database...")
-
-execute_process (
-	COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_CURRENT_LIST_DIR}/xml.tar.xz
-	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-	)
-
 configure_file (
 	conf.py.in
 	conf.py
@@ -84,6 +79,16 @@ configure_file (
 
 if (WIN32)
 	string (REPLACE "$(Configuration)" "%1" DOXYREST_EXE "${DOXYREST_EXE}")
+
+	configure_file (
+		${DOXYREST_SAMPLE_SH_DIR}/unpack-xml.bat.in
+		unpack-xml.bat
+		)
+
+	configure_file (
+		${DOXYREST_SAMPLE_SH_DIR}/test.bat.in
+		test.bat
+		)
 
 	configure_file (
 		${AXL_DOC_SHARE_DIR}/sh/build-rst.bat.in
@@ -98,9 +103,25 @@ if (WIN32)
 	add_test (
 		NAME sample-libssh
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-		COMMAND build-rst.bat $<CONFIGURATION>
+		COMMAND test.bat $<CONFIGURATION>
 		)
 else ()
+	axl_configure_file_w_permissions (
+		${DOXYREST_SAMPLE_SH_DIR}/unpack-xml.sh.in
+		unpack-xml.sh
+		OWNER_READ OWNER_WRITE OWNER_EXECUTE
+		GROUP_READ GROUP_WRITE GROUP_EXECUTE
+		WORLD_READ WORLD_WRITE WORLD_EXECUTE
+		)
+
+	axl_configure_file_w_permissions (
+		${DOXYREST_SAMPLE_SH_DIR}/test.sh.in
+		test.sh
+		OWNER_READ OWNER_WRITE OWNER_EXECUTE
+		GROUP_READ GROUP_WRITE GROUP_EXECUTE
+		WORLD_READ WORLD_WRITE WORLD_EXECUTE
+		)
+
 	axl_configure_file_w_permissions (
 		${AXL_DOC_SHARE_DIR}/sh/build-rst.sh.in
 		build-rst.sh
@@ -120,7 +141,7 @@ else ()
 	add_test (
 		NAME sample-libssh
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-		COMMAND ./build-rst.sh
+		COMMAND ./test.sh
 		)
 endif ()
 

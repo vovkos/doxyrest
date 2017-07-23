@@ -36,6 +36,7 @@ set (
 	-D g_hasNewLineAfterReturnType
 	-D g_nameDelimiter=::
 	-D g_verbatimToCodeBlock=cpp
+	-D g_indexTitle="${DOC_NAME}"
 	-D g_escapeAsterisks
 	-o ${RST_DIR}/index.rst
 	-F ${DOXYREST_FRAME_DIR}

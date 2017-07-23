@@ -72,11 +72,6 @@ if [ "$BUILD_DOC" != "" ]; then
 	mv doc/html/samples/{apr,apr-sphinxdoc}
 	source samples/apr/build-html.sh
 
-	source samples/opencv/build-rst.sh
-	source samples/opencv/build-html.sh -D html_theme=sphinxdoc
-	mv doc/html/samples/{opencv,opencv-sphinxdoc}
-	source samples/opencv/build-html.sh
-
 	source samples/poco/build-rst.sh
 	source samples/poco/build-html.sh -D html_theme=sphinxdoc
 	mv doc/html/samples/{poco,poco-sphinxdoc}

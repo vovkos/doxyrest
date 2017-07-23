@@ -731,7 +731,7 @@ function getClassDeclString (class, isRef, isQualifiedName, indent)
 	if isRef then
 		s = s .. ":ref:`" .. name  .. "<doxid-" .. class.m_id .. ">` "
 	else
-		s = s .. name ..  " "
+		s = s .. name
 	end
 
 	return s

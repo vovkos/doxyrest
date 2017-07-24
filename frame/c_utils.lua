@@ -287,7 +287,7 @@ function getItemImportString (item)
 	local importPrefix
 	local importSuffix
 
-	if string.match (g_language, "^c[px+]*$") then
+	if string.match (g_language, "^c[px+]*$") or g_language == "idl" then
 		importPrefix = "\t#include <"
 		importSuffix = ">\n"
 	elseif string.match (g_language, "^ja?ncy?$") then
@@ -747,7 +747,12 @@ function getBaseClassString (class, protection)
 	if class.m_id ~= "" then
 		s = s .. ":ref:`" .. getItemQualifiedName (class) .. "<doxid-" .. class.m_id .. ">`"
 	else
-		s = s .. getItemName (class)
+		local url = g_importUrlMap [class.m_importId]
+		if url then
+			s = s .. "`" .. getItemName (class) .. "<" .. url .. ">`__"
+		else
+			s = s .. getItemName (class)
+		end
 	end
 
 	return s

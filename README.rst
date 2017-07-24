@@ -161,7 +161,7 @@ Here is a list of steps required to apply Doxyrest to existing Doxygen-based pro
 
 		-D g_introFile=page_index.rst
 
-	Otherwise, you may want to specify the title for ``index.rst`` (default title is "My Project Documentation"):
+	Otherwise, you may want to specify the title for ``index.rst`` (default title is "My Project Documentation")::
 
 		-D "g_indexTitle=Title Goes Here"
 

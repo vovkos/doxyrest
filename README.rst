@@ -101,14 +101,16 @@ Jancy libraries
 		- `sphinx_rtd_theme <https://vovkos.github.io/jancy/stdlib>`__
 
 	*	- IO Ninja Jancy API
-		- `sphinx_rtd_theme <http://docs.tibbo.com/ioninja/api>`__
+		- `sphinx_rtd_theme <http://ioninja.com/doc/api>`__
 
 Quick HOWTO
 -----------
 
 Here is a list of steps required to apply Doxyrest to existing Doxygen-based projects:
 
-#.	In your Doxygen configuration file ``Doxyfile`` set::
+#.	In your Doxygen configuration file ``Doxyfile`` set:
+
+	.. code-block:: bash
 
 		GENERATE_XML         = YES  # self-explanatory
 
@@ -126,12 +128,16 @@ Here is a list of steps required to apply Doxyrest to existing Doxygen-based pro
 		                            # do) -- otherwise auto-generated links may point
 		                            # to discarded items
 
-#.	Prepare Sphinx configuration file ``conf.py`` -- either take an existing one and fine tune it to your liking, or generate a new one with ``sphinx-quickstart``. Now add Doxyrest extensions ``doxyrest`` and ``cpplexer``::
+#.	Prepare Sphinx configuration file ``conf.py`` -- either take an existing one and fine tune it to your liking, or generate a new one with ``sphinx-quickstart``. Now add Doxyrest extensions ``doxyrest`` and ``cpplexer``:
+
+	.. code-block:: python
 
 		sys.path.insert(1, os.path.abspath('$DOXYREST_SPHINX_DIR'))
 		extensions += ['doxyrest', 'cpplexer']
 
-	Usually, Doxygen-based documentation has a main page (created with the ``\mainpage`` directive). If that's the case, add this to avoid build warnings (this page will be force-included)::
+	Usually, Doxygen-based documentation has a main page (created with the ``\mainpage`` directive). If that's the case, add this to avoid build warnings (this page will be force-included):
+
+	.. code-block:: python
 
 		exclude_patterns += ['page_index.rst']
 
@@ -155,11 +161,15 @@ Here is a list of steps required to apply Doxyrest to existing Doxygen-based pro
 
 		-D g_introFile=page_index.rst
 
+	Otherwise, you may want to specify the title for ``index.rst`` (default title is "My Project Documentation"):
+
+		-D "g_indexTitle=Title Goes Here"
+
 	If your documentation uses ``\verbatim`` Doxygen-directives, you can convert those to reStructuredText code blocks by appending::
 
 		-D g_verbatimToCodeBlock=cpp
 
-	For some Doxygen-based project it also may helps to add::
+	For some Doxygen-based project it also may help to add::
 
 		-D g_escapeAsterisks
 

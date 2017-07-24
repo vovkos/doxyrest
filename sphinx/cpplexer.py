@@ -227,7 +227,7 @@ class CppLexer(CFamilyLexer):
     tokens = {
         'statements': [
             (words((
-                'asm', 'catch', 'const_cast', 'delete', 'dynamic_cast', 'explicit',
+                'asm', 'catch', 'class', 'const_cast', 'delete', 'dynamic_cast', 'explicit',
                 'export', 'friend', 'mutable', 'namespace', 'new', 'operator',
                 'private', 'protected', 'public', 'reinterpret_cast',
                 'restrict', 'static_cast', 'template', 'this', 'throw', 'throws',
@@ -236,7 +236,6 @@ class CppLexer(CFamilyLexer):
                 'alignas', 'alignof', 'static_assert', 'noexcept', 'override',
                 'final'), suffix=r'\b'), Keyword),
             (r'char(16_t|32_t)\b', Keyword.Type),
-            (r'(class)(\s+)', bygroups(Keyword, Text), 'classname'),
             # C++11 raw strings
             (r'R"\(', String, 'rawstring'),
             inherit,
@@ -249,11 +248,6 @@ class CppLexer(CFamilyLexer):
                    prefix=r'__', suffix=r'\b'), Keyword.Reserved),
             # Offload C++ extensions, http://offload.codeplay.com/
             (r'__(offload|blockingoffload|outer)\b', Keyword.Pseudo),
-        ],
-        'classname': [
-            (r'[a-zA-Z_]\w*', Name.Class, '#pop'),
-            # template specification
-            (r'\s*(?=>)', Text, '#pop'),
         ],
         'rawstring': [
             (r'\)"', String, '#pop'),
@@ -272,14 +266,44 @@ class CppLexer(CFamilyLexer):
             return 0.4
 
 
+class IdlLexer(CppLexer):
+    """
+    For Intefce Definition Language source code.
+    """
+    name = 'IDL'
+    aliases = ['idl']
+    filenames = ['*.idl']
+    mimetypes = ['text/x-idl']
+    priority = 0.1
+
+    tokens = {
+        'statements': [
+            (words((
+                'interface', 'protocol', 'exception', 'service', 'singleton', 'module',
+                'any', 'boolean', 'string', 'sequence'), suffix=r'\b'), Keyword),
+            inherit,
+        ],
+        'root': [
+            inherit,
+        ],
+    }
+
+    def __init__(self, **options):
+        CppLexer.__init__(self, **options)
+
+
 def setup(app):
     options = {}
     options['stripnl'] = False
     options['ensurenl'] = False
 
-    clexer = CLexer(**options)
-    cpplexer = CppLexer(**options)
-    lexers['c'] = clexer
-    lexers['cpp'] = cpplexer
-    lexers['cxx'] = cpplexer
-    lexers['c++'] = cpplexer
+    c_lexer = CLexer(**options)
+    cpp_lexer = CppLexer(**options)
+    idl_lexer = IdlLexer(**options)
+
+    lexers['c'] = c_lexer
+    lexers['cpp'] = cpp_lexer
+    lexers['cxx'] = cpp_lexer
+    lexers['c++'] = cpp_lexer
+    lexers['c++'] = cpp_lexer
+    lexers['idl'] = idl_lexer

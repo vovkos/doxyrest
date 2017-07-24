@@ -585,6 +585,9 @@ Compound::luaExport (lua::LuaState* luaState)
 	luaState->setMemberString ("m_name", m_name);
 	luaState->setMemberString ("m_title", m_title);
 
+	if (!m_importId.isEmpty ())
+		luaState->setMemberString ("m_importId", m_importId);
+
 	if (m_groupCompound)
 		luaState->setMemberString ("m_groupId", m_groupCompound->m_id);
 
@@ -1161,9 +1164,11 @@ GlobalNamespace::build (
 		{
 			Compound* baseCompound;
 
-			if (refIt->m_id.isEmpty ()) // template base, name only
+			if (refIt->m_id.isEmpty () || !refIt->m_importId.isEmpty ()) // template or imported base
 			{
 				baseCompound = AXL_MEM_NEW (Compound);
+				baseCompound->m_id = refIt->m_id;
+				baseCompound->m_importId = refIt->m_importId;
 				baseCompound->m_name = refIt->m_text;
 				module->m_compoundList.insertTail (baseCompound);
 			}

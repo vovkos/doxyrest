@@ -379,6 +379,10 @@ RefType::create (
 			m_ref->m_id = attributes [1];
 			break;
 
+		case AttrKind_ImportId:
+			m_ref->m_importId = attributes [1];
+			break;
+
 		case AttrKind_Prot:
 			m_ref->m_protectionKind = ProtectionKindMap::findValue (attributes [1], ProtectionKind_Undefined);
 			break;

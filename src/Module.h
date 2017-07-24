@@ -339,6 +339,7 @@ struct Ref: sl::ListLink
 	VirtualKind m_virtualKind;
 
 	sl::String m_id;
+	sl::String m_importId;
 	sl::String m_text;
 
 	Ref ()
@@ -374,6 +375,7 @@ struct Compound: sl::ListLink
 	ProtectionKind m_protectionKind;
 
 	sl::String m_id;
+	sl::String m_importId;
 	sl::String m_name;
 	sl::String m_title;
 	sl::BoxList <sl::String> m_importList;

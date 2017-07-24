@@ -428,14 +428,16 @@ protected:
 	{
 		AttrKind_Undefined,
 		AttrKind_RefId,
+		AttrKind_ImportId,
 		AttrKind_Prot,
 		AttrKind_Virt,
 	};
 
 	AXL_SL_BEGIN_STRING_HASH_TABLE (AttrKindMap, AttrKind)
-		AXL_SL_HASH_TABLE_ENTRY ("refid", AttrKind_RefId)
-		AXL_SL_HASH_TABLE_ENTRY ("prot",  AttrKind_Prot)
-		AXL_SL_HASH_TABLE_ENTRY ("virt",  AttrKind_Virt)
+		AXL_SL_HASH_TABLE_ENTRY ("refid",    AttrKind_RefId)
+		AXL_SL_HASH_TABLE_ENTRY ("importid", AttrKind_ImportId)
+		AXL_SL_HASH_TABLE_ENTRY ("prot",     AttrKind_Prot)
+		AXL_SL_HASH_TABLE_ENTRY ("virt",     AttrKind_Virt)
 	AXL_SL_END_HASH_TABLE ()
 
 protected:

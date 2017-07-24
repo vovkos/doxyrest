@@ -953,7 +953,7 @@ function getDocBlockContents (block, context)
 			local code = block.m_text .. getCodeDocBlockContents (block, context)
 
 			if not string.find (code, "\n") then
-				s = "``" .. code .. "``"
+				s = "``" .. trimWhitespace (code) .. "``"
 			else
 				code = replaceCommonSpacePrefix (code, "    ")
 				code = trimTrailingWhitespace (code)
@@ -1574,10 +1574,13 @@ function createPseudoCompound (compoundKind)
 end
 
 function createBaseCompound (compound)
-	compound.m_baseCompound = createPseudoCompound ("base-compound")
-	compound.m_baseCompound.m_isBaseCompound = true
-	addToBaseCompound (compound.m_baseCompound, compound.m_baseTypeArray)
-	handleCompoundProtection (compound.m_baseCompound)
+	local baseCompound = createPseudoCompound ("base-compound")
+	baseCompound.m_isBaseCompound = true
+	addToBaseCompound (baseCompound, compound.m_baseTypeArray)
+	baseCompound.m_hasItems = hasCompoundItems (baseCompound)
+	handleCompoundProtection (baseCompound)
+
+	compound.m_baseCompound = baseCompound
 end
 
 function sortByProtection (array)
@@ -1715,12 +1718,61 @@ function cmpTitles (i1, i2)
 	return i1.m_title < i2.m_title
 end
 
+function hasCompoundItems (compound)
+	return
+		#compound.m_namespaceArray ~= 0 or
+		#compound.m_typedefArray ~= 0 or
+		#compound.m_enumArray ~= 0 or
+		#compound.m_structArray ~= 0 or
+		#compound.m_unionArray ~= 0 or
+		#compound.m_interfaceArray ~= 0 or
+		#compound.m_protocolArray ~= 0 or
+		#compound.m_exceptionArray ~= 0 or
+		#compound.m_classArray ~= 0 or
+		#compound.m_singletonArray ~= 0 or
+		#compound.m_serviceArray ~= 0 or
+		#compound.m_variableArray ~= 0 or
+		#compound.m_propertyArray ~= 0 or
+		#compound.m_eventArray ~= 0 or
+		#compound.m_constructorArray ~= 0 or
+		#compound.m_functionArray ~= 0 or
+		#compound.m_aliasArray ~= 0 or
+		#compound.m_defineArray ~= 0
+end
+
 function prepareCompound (compound)
 	if compound.m_stats then
 		return compound.m_stats
 	end
 
 	local stats = {}
+
+	-- filter invisible items out
+
+	if compound.m_derivedTypeArray then
+		filterItemArray (compound.m_derivedTypeArray)
+	end
+
+	filterNamespaceArray (compound.m_namespaceArray)
+	filterTypedefArray (compound.m_typedefArray)
+	filterEnumArray (compound.m_enumArray)
+	filterItemArray (compound.m_structArray)
+	filterItemArray (compound.m_unionArray)
+	filterItemArray (compound.m_interfaceArray)
+	filterItemArray (compound.m_protocolArray)
+	filterItemArray (compound.m_exceptionArray)
+	filterItemArray (compound.m_classArray)
+	filterItemArray (compound.m_singletonArray)
+	filterItemArray (compound.m_serviceArray)
+	filterItemArray (compound.m_variableArray)
+	filterItemArray (compound.m_propertyArray)
+	filterItemArray (compound.m_eventArray)
+	filterConstructorArray (compound.m_constructorArray)
+	filterItemArray (compound.m_functionArray)
+	filterItemArray (compound.m_aliasArray)
+	filterDefineArray (compound.m_defineArray)
+
+	stats.m_hasItems = hasCompoundItems (compound)
 
 	-- scan for documentation and create subgroups
 
@@ -1764,51 +1816,6 @@ function prepareCompound (compound)
 
 	stats.m_hasBriefDocumentation = not isDocumentationEmpty (compound.m_briefDescription)
 	stats.m_hasDetailedDocumentation = not isDocumentationEmpty (compound.m_detailedDescription)
-
-	-- filter invisible items out
-
-	if compound.m_derivedTypeArray then
-		filterItemArray (compound.m_derivedTypeArray)
-	end
-
-	filterNamespaceArray (compound.m_namespaceArray)
-	filterTypedefArray (compound.m_typedefArray)
-	filterEnumArray (compound.m_enumArray)
-	filterItemArray (compound.m_structArray)
-	filterItemArray (compound.m_unionArray)
-	filterItemArray (compound.m_interfaceArray)
-	filterItemArray (compound.m_protocolArray)
-	filterItemArray (compound.m_exceptionArray)
-	filterItemArray (compound.m_classArray)
-	filterItemArray (compound.m_singletonArray)
-	filterItemArray (compound.m_serviceArray)
-	filterItemArray (compound.m_variableArray)
-	filterItemArray (compound.m_propertyArray)
-	filterItemArray (compound.m_eventArray)
-	filterConstructorArray (compound.m_constructorArray)
-	filterItemArray (compound.m_functionArray)
-	filterItemArray (compound.m_aliasArray)
-	filterDefineArray (compound.m_defineArray)
-
-	stats.m_hasItems =
-		#compound.m_namespaceArray ~= 0 or
-		#compound.m_typedefArray ~= 0 or
-		#compound.m_enumArray ~= 0 or
-		#compound.m_structArray ~= 0 or
-		#compound.m_unionArray ~= 0 or
-		#compound.m_interfaceArray ~= 0 or
-		#compound.m_protocolArray ~= 0 or
-		#compound.m_exceptionArray ~= 0 or
-		#compound.m_classArray ~= 0 or
-		#compound.m_singletonArray ~= 0 or
-		#compound.m_serviceArray ~= 0 or
-		#compound.m_variableArray ~= 0 or
-		#compound.m_propertyArray ~= 0 or
-		#compound.m_eventArray ~= 0 or
-		#compound.m_constructorArray ~= 0 or
-		#compound.m_functionArray ~= 0 or
-		#compound.m_aliasArray ~= 0 or
-		#compound.m_defineArray ~= 0
 
 	-- sort items -- only the ones producing separate pages;
 	-- also, defines, which always go to the global namespace

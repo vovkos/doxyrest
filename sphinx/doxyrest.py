@@ -145,7 +145,6 @@ def cref_role(typ, raw_text, text, lineno, inliner, options={}, content=[]):
 def target_role(typ, raw_text, text, lineno, inliner, options={}, content=[]):
     node = nodes.target(raw_text, '')
     node.line = lineno
-    node['ids'] += [text]
     node['names'] += [text]
 
     inliner.document.note_explicit_target(node)

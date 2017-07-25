@@ -46,3 +46,9 @@ if [ "$GET_COVERAGE" != "" ]; then
 	sudo apt-get install -y lcov
 	echo "axl_override_setting (GCC_FLAG_COVERAGE -coverage)" >> settings.cmake
 fi
+
+if [ "$BUILD_PACKAGE" != "" ]; then
+	sudo apt-get install -y fakeroot
+fi
+
+exit 0 # ignore any errors

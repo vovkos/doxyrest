@@ -23,3 +23,5 @@ fi
 if [ "$BUILD_PACKAGE" != "" ]; then
 	brew install fakeroot
 fi
+
+exit 0 # ignore any errors

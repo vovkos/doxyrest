@@ -38,10 +38,10 @@ if not "%BUILD_PACKAGE%" == "" (
 	cpack -G 7Z --config CPackConfig.cmake
 
 	echo "include (CPackConfig.cmake)"          >  print-package-file-name.cmake
-	echo "message (${CMAKE_PACKAGE_FILE_NAME})" >> print-package-file-name.cmake
+	echo "message (${CPACK_PACKAGE_FILE_NAME})" >> print-package-file-name.cmake
 
-	for /f "usebackq tokens=*" %%i in (`cmake -P print-package-file-name.cmake 2>&1`) do (set CMAKE_PACKAGE_FILE_NAME=%%i)
-	set DOXYREST_PACKAGE_FILE=%CMAKE_PACKAGE_FILE_NAME%.7z
+	for /f "usebackq tokens=*" %%i in (`cmake -P print-package-file-name.cmake 2^>^&1`) do (set CPACK_PACKAGE_FILE_NAME=%%i)
+	set DOXYREST_PACKAGE_FILE=%CPACK_PACKAGE_FILE_NAME%.7z
 
 	del print-package-file-name.cmake
 )

@@ -44,31 +44,7 @@ install:
     - git clone --depth 1 https://github.com/vovkos/axl
 
 build_script:
-    - set THIS_DIR=%CD%
-    - set THIS_DIR_CMAKE=%THIS_DIR:\=/%
-
-    - mkdir %DOWNLOAD_DIR%\expat\build
-    - cd %DOWNLOAD_DIR%\expat\build
-    - cmake .. %CMAKE_CONFIGURE_FLAGS% %EXPAT_CMAKE_FLAGS%
-    - cmake --build . %CMAKE_BUILD_FLAGS%
-
-    - cd %THIS_DIR%
-    - echo set (EXPAT_INC_DIR %DOWNLOAD_DIR_CMAKE%/expat/lib) >> paths.cmake
-    - echo set (EXPAT_LIB_DIR %DOWNLOAD_DIR_CMAKE%/expat/build/%CONFIGURATION%) >> paths.cmake
-
-    - mkdir axl\build
-    - cd axl\build
-    - cmake .. %CMAKE_CONFIGURE_FLAGS%
-    - cmake --build . %CMAKE_BUILD_FLAGS%
-
-    - cd %THIS_DIR%
-    - echo set (AXL_CMAKE_DIR %THIS_DIR_CMAKE%/axl/cmake %THIS_DIR_CMAKE%/axl/build/cmake) >> paths.cmake
-
-    - mkdir build
-    - cd build
-    - cmake .. %CMAKE_CONFIGURE_FLAGS%
-    - cmake --build . %CMAKE_BUILD_FLAGS%
-
+    - call ci\appveyor\build.bat
     - ps: Add-AppveyorMessage "APPVEYOR_REPO_COMMIT=$env:APPVEYOR_REPO_COMMIT"
 
 test_script:
@@ -81,3 +57,21 @@ notifications:
 
         url: http://jancy.org:5005/appveyor-ci
 
+artifacts:
+    -   path: $(DOXYREST_PACKAGE_FILE)
+        name: doxyrest_package
+
+deploy:
+    description: '$(APPVEYOR_REPO_TAG_NAME)'
+    provider: GitHub
+
+    auth_token:
+        secure: Fu74ylq5QefgNWwNJ/f9OuEYykWNLRetDgRTED5UhVD6Dczu9btgesmnuvFkp874
+
+    artifact: doxyrest_package
+    force_update: true
+
+    on:
+        appveyor_repo_tag: true
+        toolchain: msvc10
+        configuration: Release

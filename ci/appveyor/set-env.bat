@@ -76,6 +76,7 @@ goto :loop
 if "%TOOLCHAIN%" == "" goto :msvc14
 if "%TARGET_CPU%" == "" goto :amd64
 if "%CONFIGURATION%" == "" (set CONFIGURATION=Release)
+if not "%APPVEYOR_REPO_TAG_NAME%" == "" if "%TOOLCHAIN%" == "msvc10" if "%CONFIGURATION%" == "Release" (set BUILD_PACKAGE=ON)
 
 set LUA_VERSION=5.3.3
 set LUA_LIB_NAME=lua53

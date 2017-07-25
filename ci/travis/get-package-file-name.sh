@@ -17,6 +17,6 @@ echo 'include (build/CPackConfig.cmake)'    >  print-package-file-name.cmake
 echo 'message (${CPACK_PACKAGE_FILE_NAME})' >> print-package-file-name.cmake
 
 CPACK_PACKAGE_FILE_NAME=`cmake -P print-package-file-name.cmake 2>&1`
-export DOXYREST_PACKAGE_FILE=$THIS_DIR/$CPACK_PACKAGE_FILE_NAME.tar.xz
+export DOXYREST_PACKAGE_FILE=build/$CPACK_PACKAGE_FILE_NAME.tar.xz
 
 rm print-package-file-name.cmake

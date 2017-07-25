@@ -34,14 +34,22 @@ cd build
 cmake .. %CMAKE_CONFIGURE_FLAGS%
 cmake --build . %CMAKE_BUILD_FLAGS%
 
-if not "%BUILD_PACKAGE%" == "" (
+if not "%BUILD_PACKAGE%" == "" (call :package)
+
+goto :eof
+
+:package
 	cpack -G 7Z --config CPackConfig.cmake
 
-	echo "include (CPackConfig.cmake)"          >  print-package-file-name.cmake
-	echo "message (${CPACK_PACKAGE_FILE_NAME})" >> print-package-file-name.cmake
+	echo include (CPackConfig.cmake)          >  print-package-file-name.cmake
+	echo message (${CPACK_PACKAGE_FILE_NAME}) >> print-package-file-name.cmake
+
+	type print-package-file-name.cmake
+	cmake -P print-package-file-name.cmake
 
 	for /f "usebackq tokens=*" %%i in (`cmake -P print-package-file-name.cmake 2^>^&1`) do (set CPACK_PACKAGE_FILE_NAME=%%i)
-	set DOXYREST_PACKAGE_FILE=%CPACK_PACKAGE_FILE_NAME%.7z
+	set DOXYREST_PACKAGE_FILE=build\%CPACK_PACKAGE_FILE_NAME%.7z
+	echo DOXYREST_PACKAGE_FILE=%DOXYREST_PACKAGE_FILE%
 
 	del print-package-file-name.cmake
-)
+	goto :eof

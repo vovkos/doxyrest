@@ -28,7 +28,7 @@ Doxyrest is a compiler from **Doxygen** XML to **reStructuredText** -- hence, th
 
 .. image:: /doc/manual/images/doxyrest-pipeline.png
 
-This elaborate pipeline allows building **beautiful** documentation for C/C++ APIs with little-to-no changes in the existing in-source Doxygen documentation.
+This elaborate pipeline allows building beautiful documentation for C/C++ APIs with **little-to-no changes** in the existing in-source Doxygen comments.
 
 Samples
 -------
@@ -81,16 +81,16 @@ C++ libraries
 		- vs
 		- `original <https://pocoproject.org/docs>`__
 
-Doxyrest generates decent overview even if the project has little or no Doxygen documentation comments:
+Doxyrest generates a decent overview even if a project has no Doxygen documentation comments at all:
 
 .. list-table::
 
 	* 	- AXL
 		- `sphinx_rtd_theme <https://vovkos.github.io/axl/manual/global.html>`__
 
-But the best part about Doxyrest approach is that it's modular and 100% customizable. You can play with **Sphinx themes** to change visual appearance (fonts, colors, page layout, etc). Or you can adjust **Lua frames** for more drastic effects -- from tweaking the declaration coding style to changing the whole structure of documentation!
+But the best part about Doxyrest approach is that it's modular and 100% customizable. You can play with **Sphinx themes** to change visual appearance (fonts, colors, page layout, etc). Or you can modify **Lua frames** for more drastic effects -- from tweaking the declaration coding style to changing the whole structure of documentation!
 
-You can even replace Doxygen with your own generator of Doxygen-style XML database and then apply the very same approach to documenting APIs in other languages:
+You can even replace Doxygen with your own generator of Doxygen-style XML database and then apply the same pipeline for documenting APIs in other languages:
 
 Jancy libraries
 ~~~~~~~~~~~~~~~

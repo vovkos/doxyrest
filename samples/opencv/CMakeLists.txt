@@ -37,6 +37,7 @@ set (
 	-D g_nameDelimiter=::
 	-D g_verbatimToCodeBlock=cpp
 	-D g_escapeAsterisks
+	-D g_protectionFilter=protected
 	-D g_introFile=page_intro.rst
 	-o ${RST_DIR}/index.rst
 	-F ${DOXYREST_FRAME_DIR}

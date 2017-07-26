@@ -9,7 +9,7 @@
 #
 #...............................................................................
 
-set (DOC_NAME "POCO Documentation")
+set (DOC_NAME "POCO C++ Libraries Documentation")
 
 set (POCO_VERSION_MAJOR 1)
 set (POCO_VERSION_MINOR 7)
@@ -36,8 +36,9 @@ set (
 	-D g_hasNewLineAfterReturnType
 	-D g_nameDelimiter=::
 	-D g_verbatimToCodeBlock=cpp
-	-D g_indexTitle="${DOC_NAME}"
+	-D "g_indexTitle=${DOC_NAME}"
 	-D g_escapeAsterisks
+	-D g_protectionFilter=protected
 	-o ${RST_DIR}/index.rst
 	-F ${DOXYREST_FRAME_DIR}
 	-f c_index.rst.in

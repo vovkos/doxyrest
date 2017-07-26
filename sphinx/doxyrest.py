@@ -70,7 +70,7 @@ class RefCodeBlock(Directive):
 
     def __init__(self, *args, **kwargs):
         Directive.__init__(self, *args, **kwargs)
-        self.re_prog = re.compile('(:c?ref:)?`(.+?)(\s*<([^<>]*)>)?`')
+        self.re_prog = re.compile('(:c?ref:)?`((.+?)(\s*<([^<>]*)>)?)`(_+)?')
 
     def run(self):
         config = self.state.document.settings.env.config
@@ -99,13 +99,20 @@ class RefCodeBlock(Directive):
 
             raw_text = match.group(0)
             role = match.group(1)
-            text = match.group(2)
-            target = match.group(4)
+            contents = match.group(2)
+            text = match.group(3)
+            target = match.group(5)
+            underscore = match.group(6)
 
-            if not role or role == ':cref:':
-                target = 'cid-' + text.lower ()
+            if underscore:
+                ref_node = nodes.reference(raw_text, text, refuri=target if target else text)
+            elif not role or role == ':cref:':
+                target = 'cid-' + contents.lower ()
+                ref_node = create_xref_node(raw_text, contents, target)
+            else:
+                ref_node = create_xref_node(raw_text, text, target)
 
-            node += create_xref_node(raw_text, text, target)
+            node += ref_node
             pos = match.end()
 
         self.add_name(node)

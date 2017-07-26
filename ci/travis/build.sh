@@ -66,11 +66,6 @@ if [ "$BUILD_DOC" != "" ]; then
 	mv doc/html/samples/{apr,apr-sphinxdoc}
 	source samples/apr/build-html.sh
 
-	source samples/poco/build-rst.sh
-	source samples/poco/build-html.sh -D html_theme=sphinxdoc
-	mv doc/html/samples/{poco,poco-sphinxdoc}
-	source samples/poco/build-html.sh
-
 	touch doc/html/.nojekyll
 
 	popd

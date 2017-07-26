@@ -30,6 +30,13 @@ Doxyrest is a compiler from **Doxygen** XML to **reStructuredText** -- hence, th
 
 This elaborate pipeline allows building beautiful documentation for C/C++ APIs with **little-to-no changes** in the existing in-source Doxygen comments.
 
+Downloads
+---------
+
+* `Doxyrest 1.1.0 <https://github.com/vovkos/doxyrest/releases/tag/doxyrest-1.1.0>`__
+
+	The first official release of Doxyrest on GitHub releases. Stable enough to be applied to C++ projects as large and complex as `OpenCV <https://vovkos.github.io/doxyrest-showcase/opencv/sphinx_rtd_theme>`__.
+
 Samples
 -------
 
@@ -70,14 +77,14 @@ C++ libraries
 .. list-table::
 
 	*	- OpenCV
-		- `sphinx_rtd_theme <https://vovkos.github.io/opencv-doxyrest-doc/sphinx_rtd_theme>`__
-		- `sphinxdoc <https://vovkos.github.io/opencv-doxyrest-doc/sphinxdoc>`__
+		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest-showcase/opencv/sphinx_rtd_theme>`__
+		- `sphinxdoc <https://vovkos.github.io/doxyrest-showcase/opencv/sphinxdoc>`__
 		- vs
 		- `original <http://docs.opencv.org/trunk>`__
 
-	*	- POCO
-		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/samples/poco>`__
-		- `sphinxdoc <https://vovkos.github.io/doxyrest/samples/poco-sphinxdoc>`__
+	*	- POCO Libraries
+		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest-showcase/poco/sphinx_rtd_theme>`__
+		- `sphinxdoc <https://vovkos.github.io/doxyrest-showcase/poco/sphinxdoc>`__
 		- vs
 		- `original <https://pocoproject.org/docs>`__
 
@@ -88,7 +95,7 @@ Doxyrest generates a decent overview even if a project has no Doxygen documentat
 	* 	- AXL
 		- `sphinx_rtd_theme <https://vovkos.github.io/axl/manual/global.html>`__
 
-But the best part about Doxyrest approach is that it's modular and 100% customizable. You can play with **Sphinx themes** to change visual appearance (fonts, colors, page layout, etc). Or you can modify **Lua frames** for more drastic effects -- from tweaking the declaration coding style to changing the whole structure of documentation!
+But the best part about the Doxyrest approach is that it's modular and 100% customizable. You can play with **Sphinx themes** to change visual appearance (fonts, colors, page layout, etc). Or you can modify **Lua frames** for more drastic effects -- from tweaking the declaration coding style to changing the whole structure of documentation!
 
 You can even replace Doxygen with your own generator of Doxygen-style XML database and then apply the same pipeline for documenting APIs in other languages:
 
@@ -108,13 +115,15 @@ Quick HOWTO
 
 Here is a list of steps required to apply Doxyrest to existing Doxygen-based projects:
 
-#.	In your Doxygen configuration file ``Doxyfile`` set:
+#.	Get Doxyrest binaries -- either download precompiled packages from the latest `GitHub release <https://github.com/vovkos/doxyrest/releases/latest>`__ or build Doxyrest yourself. If you've chosen the latter, it's recommended to build using the auxillary bundle repo `doxyrest_b <https://github.com/vovkos/doxyrest_b>`__. Refer to the `Doxyrest Build Guide <https://vovkos.github.io/doxyrest/build-guide>`__ for more details.
+
+#.	Adjust the following settings in your Doxygen configuration file ``Doxyfile``:
 
 	.. code-block:: bash
 
 		GENERATE_XML         = YES  # self-explanatory
 
-		CASE_SENSE_NAME      = NO   # essential! Sphinx uses lowercase reference IDs,
+		CASE_SENSE_NAMES     = NO   # essential! Sphinx uses lowercase reference IDs,
 		                            # so Doxygen can't use mixed-case IDs
 
 		HIDE_UNDOC_RELATIONS = YES  # important for C++ projects -- otherwise Doxygen
@@ -173,7 +182,7 @@ Here is a list of steps required to apply Doxyrest to existing Doxygen-based pro
 
 		-D g_escapeAsterisks
 
-	This only makes a difference if asterisks characters ``*``, which have special meaning in reStriucturedText, are used in regular paragraph text of your documentation; asterisks in code snippets will work just fine even without this switch.
+	This only makes a difference if asterisks characters ``*`` (which have special meaning in reStriucturedText) are used in regular paragraph text of your documentation. Asterisks in code snippets will work just fine even without this switch.
 
 #.	Finally, run Sphinx to build HTML pages::
 
@@ -188,5 +197,5 @@ Documentation
 
 Follow the links below for additional information:
 
-* `Doxyrest Manual <https://vovkos.github.io/doxyrest/manual>`_
-* `Doxyrest Build Guide <https://vovkos.github.io/doxyrest/build-guide>`_
+* `Doxyrest Manual <https://vovkos.github.io/doxyrest/manual>`__
+* `Doxyrest Build Guide <https://vovkos.github.io/doxyrest/build-guide>`__

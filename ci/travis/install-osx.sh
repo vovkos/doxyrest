@@ -14,12 +14,6 @@ brew install lua
 brew install expat
 brew install ragel
 
-if [ "$BUILD_DOC" != "" ]; then
-	pip install sphinx sphinx_rtd_theme
-	rvm get stable
-	echo rvm_auto_reload_flag=1 >> ~/.rvmrc
-fi
-
 if [ "$BUILD_PACKAGE" != "" ]; then
 	brew install fakeroot
 fi

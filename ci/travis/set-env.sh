@@ -25,8 +25,10 @@ if [ "$TRAVIS_OS_NAME" == "linux" ]; then
 	if [ "$CC" != "clang" ] && [ "$BUILD_CONFIGURATION" == "Debug" ]; then
 		export GET_COVERAGE=ON
 	fi
-elif [ "$TRAVIS_OS_NAME" == "osx" ]; then
-	if [ "$BUILD_CONFIGURATION" == "Release" ]; then
+
+	if [ "$TARGET_CPU" == "amd64" ] && \
+	   [ "$CC" == "gcc" ] && \
+	   [ "$BUILD_CONFIGURATION" == "Release" ]; then
 		export BUILD_DOC=ON
 	fi
 fi

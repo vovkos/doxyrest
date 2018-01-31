@@ -47,6 +47,10 @@ if [ "$GET_COVERAGE" != "" ]; then
 	echo "axl_override_setting (GCC_FLAG_COVERAGE -coverage)" >> settings.cmake
 fi
 
+if [ "$BUILD_DOC" != "" ]; then
+	sudo pip install sphinx sphinx_rtd_theme
+fi
+
 if [ "$BUILD_PACKAGE" != "" ]; then
 	sudo apt-get install -y fakeroot
 fi

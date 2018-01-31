@@ -93,8 +93,7 @@ set EXPAT_CMAKE_FLAGS= ^
 	-DBUILD_tests=OFF ^
 	-DBUILD_tools=OFF
 
-set RAGEL_DOWNLOAD_FILE=ragel-68-visualstudio2012.7z
-set RAGEL_DOWNLOAD_URL=http://downloads.yorickpeterse.com/files/%RAGEL_DOWNLOAD_FILE%
+set RAGEL_DOWNLOAD_URL=https://github.com/eloraiby/ragel-windows/raw/master/ragel.exe
 
 set CMAKE_CONFIGURE_FLAGS=-G "%CMAKE_GENERATOR%%CMAKE_GENERATOR_SUFFIX%"
 

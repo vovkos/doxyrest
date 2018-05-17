@@ -195,7 +195,7 @@ if (WIN32)
 			TARGET doxyrest
 			POST_BUILD
 			COMMAND
-				echo "Copying DLL files for doxyrest..."
+				echo Copying DLL files for doxyrest...
 			COMMAND
 				${CMAKE_COMMAND} -E copy
 				${_DLL_LIST}

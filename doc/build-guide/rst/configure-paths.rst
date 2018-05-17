@@ -57,11 +57,11 @@ On Windows you will have to specify paths to the required Lua and Expat librarie
 	set (EXPAT_INC_DIR c:/Develop/expat/expat-${EXPAT_VERSION}/lib)
 
 	if ("${TARGET_CPU}" STREQUAL "amd64")
-		set (LUA_LIB_DIR   c:/Develop/lua/lua-${LUA_VERSION}/lib/amd64/${CONFIGURATION_SUFFIX})
-		set (EXPAT_LIB_DIR c:/Develop/expat/expat-${EXPAT_VERSION}/build/msvc10-amd64/${CONFIGURATION_SUFFIX})
+		set (LUA_LIB_DIR   c:/Develop/lua/lua-${LUA_VERSION}/lib/amd64/${CONFIGURATION})
+		set (EXPAT_LIB_DIR c:/Develop/expat/expat-${EXPAT_VERSION}/build/msvc10-amd64/${CONFIGURATION})
 	else ()
-		set (LUA_LIB_DIR   c:/Develop/lua/lua-${LUA_VERSION}/lib/x86/${CONFIGURATION_SUFFIX})
-		set (EXPAT_LIB_DIR c:/Develop/expat/expat-${EXPAT_VERSION}/build/msvc10/${CONFIGURATION_SUFFIX})
+		set (LUA_LIB_DIR   c:/Develop/lua/lua-${LUA_VERSION}/lib/x86/${CONFIGURATION})
+		set (EXPAT_LIB_DIR c:/Develop/expat/expat-${EXPAT_VERSION}/build/msvc10/${CONFIGURATION})
 	endif()
 
 	set (SPHINX_BUILD_EXE c:/Develop/ActivePython/Scripts/sphinx-build.exe)

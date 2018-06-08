@@ -33,21 +33,21 @@ exit -1
 :msvc10
 set TOOLCHAIN=msvc10
 set CMAKE_GENERATOR=Visual Studio 10 2010
-set LUA_TOOLCHAIN=vc10
+set LUA_TOOLCHAIN=dll10
 shift
 goto :loop
 
 :msvc12
 set TOOLCHAIN=msvc12
 set CMAKE_GENERATOR=Visual Studio 12 2013
-set LUA_TOOLCHAIN=vc12
+set LUA_TOOLCHAIN=dll12
 shift
 goto :loop
 
 :msvc14
 set TOOLCHAIN=msvc14
 set CMAKE_GENERATOR=Visual Studio 14 2015
-set LUA_TOOLCHAIN=vc14
+set LUA_TOOLCHAIN=dll14
 shift
 goto :loop
 
@@ -81,7 +81,7 @@ if not "%APPVEYOR_REPO_TAG_NAME%" == "" if "%TOOLCHAIN%" == "msvc10" if "%CONFIG
 set LUA_VERSION=5.3.3
 set LUA_LIB_NAME=lua53
 set LUA_DOWNLOAD_FILE=lua-%LUA_VERSION%_%LUA_PLATFORM%_%LUA_TOOLCHAIN%_lib.zip
-set LUA_DOWNLOAD_URL=https://sourceforge.net/projects/luabinaries/files/%LUA_VERSION%/Windows%%20Libraries/Static/%LUA_DOWNLOAD_FILE%/download
+set LUA_DOWNLOAD_URL=https://sourceforge.net/projects/luabinaries/files/%LUA_VERSION%/Windows%%20Libraries/Dynamic/%LUA_DOWNLOAD_FILE%/download
 
 set EXPAT_VERSION=2.1.0
 set EXPAT_DOWNLOAD_FILE=expat-%EXPAT_VERSION%.tar.gz

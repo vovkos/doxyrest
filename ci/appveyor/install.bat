@@ -44,11 +44,6 @@ appveyor DownloadFile %EXPAT_DOWNLOAD_URL% -FileName %DOWNLOAD_DIR%\%EXPAT_DOWNL
 7z x -y %DOWNLOAD_DIR%\expat-%EXPAT_VERSION%.tar -o%DOWNLOAD_DIR%
 ren %DOWNLOAD_DIR%\expat-%EXPAT_VERSION% expat
 
-:: patch CMakeLists.txt /MD => /MT
-
-copy %~dp0\md-to-mt.cmake %DOWNLOAD_DIR%\expat
-echo include (md-to-mt.cmake) >> %DOWNLOAD_DIR%\expat\CMakeLists.txt
-
 :: . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 :: Get rid of Xamarin annoying build warnings

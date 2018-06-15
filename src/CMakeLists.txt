@@ -201,6 +201,11 @@ if (WIN32)
 				${_DLL_LIST}
 				${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CONFIGURATION}
 			)
+
+		install (
+			FILES ${_DLL_LIST}
+			DESTINATION ${DOXYREST_INSTALL_BIN_SUBDIR}
+			)
 	endif ()
 endif ()
 
@@ -208,7 +213,7 @@ endif ()
 
 install (
 	TARGETS doxyrest
-	DESTINATION ${DOXYREST_INSTALL_INC_SUBDIR}
+	DESTINATION ${DOXYREST_INSTALL_BIN_SUBDIR}
 	)
 
 #...............................................................................

@@ -33,9 +33,8 @@ This elaborate pipeline allows building beautiful documentation for C/C++ APIs w
 Downloads
 ---------
 
+* `Doxyrest 1.1.1 <https://github.com/vovkos/doxyrest/releases/tag/doxyrest-1.1.1>`__
 * `Doxyrest 1.1.0 <https://github.com/vovkos/doxyrest/releases/tag/doxyrest-1.1.0>`__
-
-	The first official release of Doxyrest on GitHub releases. Stable enough to be applied to C++ projects as large and complex as `OpenCV <https://vovkos.github.io/doxyrest-showcase/opencv/sphinx_rtd_theme>`__.
 
 Samples
 -------

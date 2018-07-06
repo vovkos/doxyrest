@@ -1357,8 +1357,8 @@ GlobalNamespace::createMemberCompound (
 	compound->m_name = member->m_name;
 	compound->m_id = member->m_id;
 	compound->m_groupCompound = member->m_groupCompound;
-	compound->m_briefDescription.takeOver (&member->m_briefDescription);
-	compound->m_detailedDescription.takeOver (&member->m_detailedDescription);
+	sl::takeOver (&compound->m_briefDescription, &member->m_briefDescription);
+	sl::takeOver (&compound->m_detailedDescription, &member->m_detailedDescription);
 	compound->m_selfNamespace = AXL_MEM_NEW (Namespace);
 	compound->m_selfNamespace->m_compound = compound;
 	m_namespaceList.insertTail (compound->m_selfNamespace);

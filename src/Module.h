@@ -161,13 +161,6 @@ struct Description
 	}
 
 	void
-	takeOver (Description* description)
-	{
-		m_title = description->m_title;
-		m_docBlockList.takeOver (&description->m_docBlockList);
-	}
-
-	void
 	luaExport (lua::LuaState* luaState);
 };
 

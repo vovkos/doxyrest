@@ -43,7 +43,7 @@ struct CmdLine
 	sl::String m_outputFileName;
 	sl::String m_frameFileName;
 	sl::BoxList <sl::String> m_frameDirList;
-	sl::StdList <Define> m_defineList;
+	sl::List <Define> m_defineList;
 
 	CmdLine ()
 	{

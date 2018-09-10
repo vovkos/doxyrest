@@ -361,7 +361,7 @@ CompoundDefType::onPopType ()
 bool
 RefType::create (
 	DoxyXmlParser* parser,
-	sl::StdList <Ref>* list,
+	sl::List <Ref>* list,
 	const char* name,
 	const char** attributes
 	)
@@ -858,7 +858,7 @@ LocationType::create (
 bool
 DocSectionBlockType::create (
 	DoxyXmlParser* parser,
-	sl::StdList <DocBlock>* list,
+	sl::List <DocBlock>* list,
 	const char* name,
 	const char** attributes
 	)
@@ -1015,7 +1015,7 @@ EnumValueType::onStartElement (
 bool
 TemplateParamListType::create (
 	DoxyXmlParser* parser,
-	sl::StdList <Param>* list,
+	sl::List <Param>* list,
 	const char* name,
 	const char** attributes
 	)
@@ -1047,7 +1047,7 @@ TemplateParamListType::onStartElement (
 bool
 ParamType::create (
 	DoxyXmlParser* parser,
-	sl::StdList <Param>* list,
+	sl::List <Param>* list,
 	const char* name,
 	const char** attributes
 	)
@@ -1184,7 +1184,7 @@ RefTextType::create (
 bool
 DocParaType::create (
 	DoxyXmlParser* parser,
-	sl::StdList <DocBlock>* blockList,
+	sl::List <DocBlock>* blockList,
 	const char* name,
 	const char** attributes
 	)
@@ -1239,7 +1239,7 @@ DocParaType::onStartElement (
 bool
 DocRefTextType::create (
 	DoxyXmlParser* parser,
-	sl::StdList <DocBlock>* list,
+	sl::List <DocBlock>* list,
 	const char* name,
 	const char** attributes
 	)
@@ -1279,7 +1279,7 @@ DocRefTextType::create (
 bool
 DocAnchorType::create (
 	DoxyXmlParser* parser,
-	sl::StdList <DocBlock>* list,
+	sl::List <DocBlock>* list,
 	const char* name,
 	const char** attributes
 	)
@@ -1315,7 +1315,7 @@ DocAnchorType::create (
 bool
 DocImageType::create (
 	DoxyXmlParser* parser,
-	sl::StdList <DocBlock>* list,
+	sl::List <DocBlock>* list,
 	const char* name,
 	const char** attributes
 	)
@@ -1358,7 +1358,7 @@ DocImageType::create (
 bool
 DocSimpleSectionType::create (
 	DoxyXmlParser* parser,
-	sl::StdList <DocBlock>* list,
+	sl::List <DocBlock>* list,
 	const char* name,
 	const char** attributes
 	)

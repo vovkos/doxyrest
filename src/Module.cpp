@@ -35,7 +35,7 @@ createPath (
 
 template <typename T>
 void
-removeDuplicates (sl::StdList <T>* list)
+removeDuplicates (sl::List <T>* list)
 {
 	sl::DuckTypePtrHashTable <T, bool> map;
 
@@ -53,7 +53,7 @@ removeDuplicates (sl::StdList <T>* list)
 
 template <>
 void
-removeDuplicates <EnumValue> (sl::StdList <EnumValue>* list)
+removeDuplicates <EnumValue> (sl::List <EnumValue>* list)
 {
 	sl::Iterator <EnumValue> it = list->getHead ();
 	while (it)

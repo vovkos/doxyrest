@@ -50,7 +50,7 @@ struct RefText: sl::ListLink
 struct LinkedText
 {
 	sl::String m_plainText;
-	sl::StdList <RefText> m_refTextList;
+	sl::List <RefText> m_refTextList;
 
 	void
 	luaExport (lua::LuaState* luaState);
@@ -66,7 +66,7 @@ struct DocBlock: sl::ListLink
 	sl::String m_blockKind;
 	sl::String m_title;
 	sl::String m_text;
-	sl::StdList <DocBlock> m_childBlockList;
+	sl::List <DocBlock> m_childBlockList;
 
 	virtual ~DocBlock ()
 	{
@@ -153,7 +153,7 @@ struct DocSimpleSectionBlock: DocBlock
 struct Description
 {
 	sl::String m_title;
-	sl::StdList <DocBlock> m_docBlockList;
+	sl::List <DocBlock> m_docBlockList;
 
 	bool isEmpty ()
 	{
@@ -297,10 +297,10 @@ struct Member: sl::ListLink
 	sl::String m_modifiers;
 
 	sl::BoxList <sl::String> m_importList;
-	sl::StdList <Param> m_paramList;
-	sl::StdList <Param> m_templateParamList;
-	sl::StdList <Param> m_templateSpecParamList;
-	sl::StdList <EnumValue> m_enumValueList;
+	sl::List <Param> m_paramList;
+	sl::List <Param> m_templateParamList;
+	sl::List <Param> m_templateSpecParamList;
+	sl::List <EnumValue> m_enumValueList;
 
 	sl::String m_path;
 
@@ -372,14 +372,14 @@ struct Compound: sl::ListLink
 	sl::String m_name;
 	sl::String m_title;
 	sl::BoxList <sl::String> m_importList;
-	sl::StdList <Param> m_templateParamList;
-	sl::StdList <Param> m_templateSpecParamList;
-	sl::StdList <Member> m_memberList;
+	sl::List <Param> m_templateParamList;
+	sl::List <Param> m_templateSpecParamList;
+	sl::List <Member> m_memberList;
 	sl::Array <Member*> m_groupFootnoteArray;
 
-	sl::StdList <Ref> m_baseRefList;
-	sl::StdList <Ref> m_derivedRefList;
-	sl::StdList <Ref> m_innerRefList;
+	sl::List <Ref> m_baseRefList;
+	sl::List <Ref> m_derivedRefList;
+	sl::List <Ref> m_innerRefList;
 
 	sl::Array <Compound*> m_baseTypeArray;
 	sl::Array <Compound*> m_derivedTypeArray_doxy; // explicitly specified in doxy
@@ -437,7 +437,7 @@ struct Compound: sl::ListLink
 struct Module
 {
 	sl::String m_version;
-	sl::StdList <Compound> m_compoundList;
+	sl::List <Compound> m_compoundList;
 	sl::Array <Compound*> m_namespaceArray;
 	sl::Array <Compound*> m_groupArray;
 	sl::Array <Compound*> m_pageArray;
@@ -517,7 +517,7 @@ struct Namespace:
 class GlobalNamespace: public NamespaceContents
 {
 protected:
-	sl::StdList <Namespace> m_namespaceList;
+	sl::List <Namespace> m_namespaceList;
 
 public:
 	void
@@ -579,7 +579,7 @@ template <typename T>
 void
 luaExportList (
 	lua::LuaState* luaState,
-	sl::StdList <T>& list
+	sl::List <T>& list
 	)
 {
 	luaState->createTable (list.getCount ());

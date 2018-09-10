@@ -452,7 +452,7 @@ public:
 	bool
 	create (
 		DoxyXmlParser* parser,
-		sl::StdList <Ref>* list,
+		sl::List <Ref>* list,
 		const char* name,
 		const char** attributes
 		);
@@ -801,7 +801,7 @@ public:
 	bool
 	create (
 		DoxyXmlParser* parser,
-		sl::StdList <DocBlock>* list,
+		sl::List <DocBlock>* list,
 		const char* name,
 		const char** attributes
 		);
@@ -888,7 +888,7 @@ protected:
 	AXL_SL_END_HASH_TABLE ()
 
 protected:
-	sl::StdList <Param>* m_list;
+	sl::List <Param>* m_list;
 
 public:
 	TemplateParamListType ()
@@ -899,7 +899,7 @@ public:
 	bool
 	create (
 		DoxyXmlParser* parser,
-		sl::StdList <Param>* list,
+		sl::List <Param>* list,
 		const char* name,
 		const char** attributes
 		);
@@ -958,7 +958,7 @@ public:
 	bool
 	create (
 		DoxyXmlParser* parser,
-		sl::StdList <Param>* list,
+		sl::List <Param>* list,
 		const char* name,
 		const char** attributes
 		);
@@ -1111,7 +1111,7 @@ public:
 	bool
 	create (
 		DoxyXmlParser* parser,
-		sl::StdList <DocBlock>* blockList,
+		sl::List <DocBlock>* blockList,
 		const char* name,
 		const char** attributes
 		);
@@ -1166,7 +1166,7 @@ public:
 	bool
 	create (
 		DoxyXmlParser* parser,
-		sl::StdList <DocBlock>* list,
+		sl::List <DocBlock>* list,
 		const char* name,
 		const char** attributes
 		);
@@ -1210,7 +1210,7 @@ public:
 	bool
 	create (
 		DoxyXmlParser* parser,
-		sl::StdList <DocBlock>* list,
+		sl::List <DocBlock>* list,
 		const char* name,
 		const char** attributes
 		);
@@ -1260,7 +1260,7 @@ public:
 	bool
 	create (
 		DoxyXmlParser* parser,
-		sl::StdList <DocBlock>* list,
+		sl::List <DocBlock>* list,
 		const char* name,
 		const char** attributes
 		);
@@ -1309,7 +1309,7 @@ public:
 	bool
 	create (
 		DoxyXmlParser* parser,
-		sl::StdList <DocBlock>* list,
+		sl::List <DocBlock>* list,
 		const char* name,
 		const char** attributes
 		);

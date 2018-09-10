@@ -41,10 +41,10 @@ Generator::prepare (
 	luaExportArray (&m_stringTemplate.m_luaState, module->m_exampleArray);
 	m_stringTemplate.m_luaState.setGlobal ("g_exampleArray");
 
-	sl::Iterator <Define> it = m_cmdLine->m_defineList.getHead ();
+	sl::ConstIterator <Define> it = m_cmdLine->m_defineList.getHead ();
 	for (; it; it++)
 	{
-		Define* define = *it;
+		const Define* define = *it;
 		if (define->m_hasValue)
 			m_stringTemplate.m_luaState.setGlobalString (define->m_name, define->m_value);
 		else

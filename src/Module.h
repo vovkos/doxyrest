@@ -569,7 +569,7 @@ template <typename T>
 void
 luaExportArray (
 	lua::LuaState* luaState,
-	const sl::Array <T*>& array
+	sl::Array <T*>& array
 	)
 {
 	luaExportArray (luaState, array.cp (), array.getCount ());
@@ -579,7 +579,7 @@ template <typename T>
 void
 luaExportList (
 	lua::LuaState* luaState,
-	const sl::StdList <T>& list
+	sl::StdList <T>& list
 	)
 {
 	luaState->createTable (list.getCount ());
@@ -596,7 +596,7 @@ inline
 void
 luaExportStringList (
 	lua::LuaState* luaState,
-	const sl::BoxList <sl::String>& list
+	sl::BoxList <sl::String>& list
 	)
 {
 	luaState->createTable (list.getCount ());

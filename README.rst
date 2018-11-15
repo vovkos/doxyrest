@@ -33,7 +33,7 @@ This elaborate pipeline allows building beautiful documentation for C/C++ APIs w
 Downloads
 ---------
 
-* `Doxyrest 1.1.1 <https://github.com/vovkos/doxyrest/releases/tag/doxyrest-1.1.1>`__
+* `Doxyrest 1.1.1-a <https://github.com/vovkos/doxyrest/releases/tag/doxyrest-1.1.1-a>`__
 * `Doxyrest 1.1.0 <https://github.com/vovkos/doxyrest/releases/tag/doxyrest-1.1.0>`__
 
 Samples

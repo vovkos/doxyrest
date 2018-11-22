@@ -141,7 +141,7 @@ Generator::processFile (
 		sl::String prevTargetFileName = m_stringTemplate.m_luaState.getGlobalString ("g_targetFileName");
 		m_stringTemplate.m_luaState.setGlobalString ("g_targetFileName", targetFileName);
 
-		sl::String targetFilePath = m_targetDir + "/" + targetFileName;
+		sl::String targetFilePath = io::concatFilePath (m_targetDir, targetFileName);
 		result = m_stringTemplate.processFileToFile (targetFilePath, frameFilePath);
 		if (!result)
 			return false;

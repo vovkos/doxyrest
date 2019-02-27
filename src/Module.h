@@ -21,7 +21,7 @@ struct Module;
 //..............................................................................
 
 sl::String
-createPath (
+createPath(
 	const sl::StringRef& name,
 	Namespace* parentNamespace
 	);
@@ -36,13 +36,13 @@ struct RefText: sl::ListLink
 	sl::String m_external;
 	sl::String m_tooltip;
 
-	RefText ()
+	RefText()
 	{
 		m_refKind = RefKind_Undefined;
 	}
 
 	void
-	luaExport (lua::LuaState* luaState);
+	luaExport(lua::LuaState* luaState);
 };
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -50,13 +50,13 @@ struct RefText: sl::ListLink
 struct LinkedText
 {
 	sl::String m_plainText;
-	sl::List <RefText> m_refTextList;
+	sl::List<RefText> m_refTextList;
 
 	void
-	luaExport (lua::LuaState* luaState);
+	luaExport(lua::LuaState* luaState);
 
 	void
-	normalize ();
+	normalize();
 };
 
 //..............................................................................
@@ -66,18 +66,18 @@ struct DocBlock: sl::ListLink
 	sl::String m_blockKind;
 	sl::String m_title;
 	sl::String m_text;
-	sl::List <DocBlock> m_childBlockList;
+	sl::List<DocBlock> m_childBlockList;
 
-	virtual ~DocBlock ()
+	virtual ~DocBlock()
 	{
 	}
 
 	virtual
 	void
-	luaExport (lua::LuaState* luaState);
+	luaExport(lua::LuaState* luaState);
 
 	void
-	luaExportMembers (lua::LuaState* luaState);
+	luaExportMembers(lua::LuaState* luaState);
 };
 
 //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -90,7 +90,7 @@ struct DocRefBlock: DocBlock
 	sl::String m_id;
 	sl::String m_external;
 
-	DocRefBlock ()
+	DocRefBlock()
 	{
 		m_refKind = RefKind_Undefined;
 		m_module = NULL;
@@ -98,7 +98,7 @@ struct DocRefBlock: DocBlock
 
 	virtual
 	void
-	luaExport (lua::LuaState* luaState);
+	luaExport(lua::LuaState* luaState);
 };
 
 //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -109,7 +109,7 @@ struct DocAnchorBlock: DocBlock
 
 	virtual
 	void
-	luaExport (lua::LuaState* luaState);
+	luaExport(lua::LuaState* luaState);
 };
 
 //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -123,7 +123,7 @@ struct DocImageBlock: DocBlock
 
 	virtual
 	void
-	luaExport (lua::LuaState* luaState);
+	luaExport(lua::LuaState* luaState);
 };
 
 //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -134,7 +134,7 @@ struct DocSectionBlock: DocBlock
 
 	virtual
 	void
-	luaExport (lua::LuaState* luaState);
+	luaExport(lua::LuaState* luaState);
 };
 
 //.............................................................................
@@ -145,7 +145,7 @@ struct DocSimpleSectionBlock: DocBlock
 
 	virtual
 	void
-	luaExport (lua::LuaState* luaState);
+	luaExport(lua::LuaState* luaState);
 };
 
 //.............................................................................
@@ -153,15 +153,15 @@ struct DocSimpleSectionBlock: DocBlock
 struct Description
 {
 	sl::String m_title;
-	sl::List <DocBlock> m_docBlockList;
+	sl::List<DocBlock> m_docBlockList;
 
-	bool isEmpty ()
+	bool isEmpty()
 	{
-		return m_title.isEmpty () && m_docBlockList.isEmpty ();
+		return m_title.isEmpty() && m_docBlockList.isEmpty();
 	}
 
 	void
-	luaExport (lua::LuaState* luaState);
+	luaExport(lua::LuaState* luaState);
 };
 
 //.............................................................................
@@ -176,13 +176,13 @@ struct Location
 	int m_bodyStartLine;
 	int m_bodyEndLine;
 
-	bool isEmpty ()
+	bool isEmpty()
 	{
-		return m_file.isEmpty ();
+		return m_file.isEmpty();
 	}
 
 	void
-	luaExport (lua::LuaState* luaState);
+	luaExport(lua::LuaState* luaState);
 };
 
 //..............................................................................
@@ -199,7 +199,7 @@ struct Param: sl::ListLink
 	Description m_briefDescription;
 
 	void
-	luaExport (lua::LuaState* luaState);
+	luaExport(lua::LuaState* luaState);
 };
 
 //..............................................................................
@@ -218,14 +218,14 @@ struct EnumValue: sl::ListLink
 
 	bool m_isDuplicate;
 
-	EnumValue ()
+	EnumValue()
 	{
 		m_protectionKind = ProtectionKind_Undefined;
 		m_isDuplicate = false;
 	}
 
 	void
-	luaExport (lua::LuaState* luaState);
+	luaExport(lua::LuaState* luaState);
 };
 
 //..............................................................................
@@ -268,10 +268,10 @@ enum MemberFlag
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 const char*
-getMemberFlagString (MemberFlag flag);
+getMemberFlagString(MemberFlag flag);
 
 sl::String
-getMemberFlagString (uint_t flags);
+getMemberFlagString(uint_t flags);
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
@@ -296,11 +296,11 @@ struct Member: sl::ListLink
 	LinkedText m_exceptions;
 	sl::String m_modifiers;
 
-	sl::BoxList <sl::String> m_importList;
-	sl::List <Param> m_paramList;
-	sl::List <Param> m_templateParamList;
-	sl::List <Param> m_templateSpecParamList;
-	sl::List <EnumValue> m_enumValueList;
+	sl::BoxList<sl::String> m_importList;
+	sl::List<Param> m_paramList;
+	sl::List<Param> m_templateParamList;
+	sl::List<Param> m_templateSpecParamList;
+	sl::List<EnumValue> m_enumValueList;
 
 	sl::String m_path;
 
@@ -311,16 +311,16 @@ struct Member: sl::ListLink
 
 	size_t m_cacheIdx;
 
-	Member ();
+	Member();
 
 	void
-	luaExport (lua::LuaState* luaState);
+	luaExport(lua::LuaState* luaState);
 
 	void
-	preparePath ()
+	preparePath()
 	{
-		if (m_path.isEmpty ())
-			m_path = createPath (m_name, m_parentNamespace);
+		if (m_path.isEmpty())
+			m_path = createPath(m_name, m_parentNamespace);
 	}
 };
 
@@ -335,21 +335,21 @@ struct Ref: sl::ListLink
 	sl::String m_importId;
 	sl::String m_text;
 
-	Ref ()
+	Ref()
 	{
 		m_protectionKind = ProtectionKind_Undefined;
 		m_virtualKind = VirtualKind_Undefined;
 	}
 
 	size_t
-	hash () const
+	hash() const
 	{
-		size_t hash0 = sl::djb2 (m_id, m_id.getLength ());
-		return sl::djb2 (hash0, m_text, m_text.getLength ());
+		size_t hash0 = sl::djb2(m_id, m_id.getLength());
+		return sl::djb2(hash0, m_text, m_text.getLength());
 	}
 
 	bool
-	isEqual (const Ref& ref) const
+	isEqual(const Ref& ref) const
 	{
 		return m_id == ref.m_id && m_text == ref.m_text;
 	}
@@ -371,22 +371,22 @@ struct Compound: sl::ListLink
 	sl::String m_importId;
 	sl::String m_name;
 	sl::String m_title;
-	sl::BoxList <sl::String> m_importList;
-	sl::List <Param> m_templateParamList;
-	sl::List <Param> m_templateSpecParamList;
-	sl::List <Member> m_memberList;
-	sl::Array <Member*> m_groupFootnoteArray;
+	sl::BoxList<sl::String> m_importList;
+	sl::List<Param> m_templateParamList;
+	sl::List<Param> m_templateSpecParamList;
+	sl::List<Member> m_memberList;
+	sl::Array<Member*> m_groupFootnoteArray;
 
-	sl::List <Ref> m_baseRefList;
-	sl::List <Ref> m_derivedRefList;
-	sl::List <Ref> m_innerRefList;
+	sl::List<Ref> m_baseRefList;
+	sl::List<Ref> m_derivedRefList;
+	sl::List<Ref> m_innerRefList;
 
-	sl::Array <Compound*> m_baseTypeArray;
-	sl::Array <Compound*> m_derivedTypeArray_doxy; // explicitly specified in doxy
-	sl::Array <Compound*> m_derivedTypeArray_auto; // auto-generated
-	sl::Array <ProtectionKind> m_baseTypeProtectionArray;
+	sl::Array<Compound*> m_baseTypeArray;
+	sl::Array<Compound*> m_derivedTypeArray_doxy; // explicitly specified in doxy
+	sl::Array<Compound*> m_derivedTypeArray_auto; // auto-generated
+	sl::Array<ProtectionKind> m_baseTypeProtectionArray;
 
-	sl::Array <Compound*> m_subPageArray;
+	sl::Array<Compound*> m_subPageArray;
 
 	sl::String m_path;
 
@@ -402,10 +402,10 @@ struct Compound: sl::ListLink
 
 	size_t m_cacheIdx;
 
-	Compound ();
+	Compound();
 
 	bool
-	isMemberGroupAllowed ()
+	isMemberGroupAllowed()
 	{
 		return
 			m_compoundKind == CompoundKind_Namespace ||
@@ -413,22 +413,22 @@ struct Compound: sl::ListLink
 	}
 
 	void
-	luaExport (lua::LuaState* luaState);
+	luaExport(lua::LuaState* luaState);
 
 	void
-	unqualifyName ();
+	unqualifyName();
 
 	void
-	unspecializeName ();
+	unspecializeName();
 
 	Param*
-	createTemplateSpecParam (const sl::StringRef& name);
+	createTemplateSpecParam(const sl::StringRef& name);
 
 	void
-	preparePath ()
+	preparePath()
 	{
-		if (m_path.isEmpty ())
-			m_path = createPath (m_name, m_parentNamespace);
+		if (m_path.isEmpty())
+			m_path = createPath(m_name, m_parentNamespace);
 	}
 };
 
@@ -437,58 +437,58 @@ struct Compound: sl::ListLink
 struct Module
 {
 	sl::String m_version;
-	sl::List <Compound> m_compoundList;
-	sl::Array <Compound*> m_namespaceArray;
-	sl::Array <Compound*> m_groupArray;
-	sl::Array <Compound*> m_pageArray;
-	sl::Array <Compound*> m_exampleArray;
-	sl::StringHashTable <Compound*> m_compoundMap;
-	sl::StringHashTable <Member*> m_memberMap;
-	sl::StringHashTable <EnumValue*> m_enumValueMap;
+	sl::List<Compound> m_compoundList;
+	sl::Array<Compound*> m_namespaceArray;
+	sl::Array<Compound*> m_groupArray;
+	sl::Array<Compound*> m_pageArray;
+	sl::Array<Compound*> m_exampleArray;
+	sl::StringHashTable<Compound*> m_compoundMap;
+	sl::StringHashTable<Member*> m_memberMap;
+	sl::StringHashTable<EnumValue*> m_enumValueMap;
 };
 
 //..............................................................................
 
 struct NamespaceContents
 {
-	sl::Array <Namespace*> m_groupArray;
-	sl::Array <Namespace*> m_namespaceArray;
-	sl::Array <Member*> m_enumArray;
-	sl::Array <Namespace*> m_structArray;
-	sl::Array <Namespace*> m_unionArray;
-	sl::Array <Namespace*> m_classArray;
-	sl::Array <Namespace*> m_interfaceArray;
-	sl::Array <Namespace*> m_protocolArray;
-	sl::Array <Namespace*> m_exceptionArray;
-	sl::Array <Namespace*> m_serviceArray;
-	sl::Array <Namespace*> m_singletonArray;
-	sl::Array <Member*> m_typedefArray;
-	sl::Array <Member*> m_variableArray;
-	sl::Array <Member*> m_functionArray;
-	sl::Array <Member*> m_propertyArray;
-	sl::Array <Member*> m_eventArray;
-	sl::Array <Member*> m_aliasArray;
-	sl::Array <Member*> m_defineArray;
-	sl::Array <Member*> m_footnoteArray;
-	sl::Array <Member*> m_constructorArray;
+	sl::Array<Namespace*> m_groupArray;
+	sl::Array<Namespace*> m_namespaceArray;
+	sl::Array<Member*> m_enumArray;
+	sl::Array<Namespace*> m_structArray;
+	sl::Array<Namespace*> m_unionArray;
+	sl::Array<Namespace*> m_classArray;
+	sl::Array<Namespace*> m_interfaceArray;
+	sl::Array<Namespace*> m_protocolArray;
+	sl::Array<Namespace*> m_exceptionArray;
+	sl::Array<Namespace*> m_serviceArray;
+	sl::Array<Namespace*> m_singletonArray;
+	sl::Array<Member*> m_typedefArray;
+	sl::Array<Member*> m_variableArray;
+	sl::Array<Member*> m_functionArray;
+	sl::Array<Member*> m_propertyArray;
+	sl::Array<Member*> m_eventArray;
+	sl::Array<Member*> m_aliasArray;
+	sl::Array<Member*> m_defineArray;
+	sl::Array<Member*> m_footnoteArray;
+	sl::Array<Member*> m_constructorArray;
 	Member* m_destructor;
 
-	NamespaceContents ()
+	NamespaceContents()
 	{
 		m_destructor = NULL;
 	}
 
 	bool
-	add (Compound* compound);
+	add(Compound* compound);
 
 	bool
-	add (
+	add(
 		Member* member,
 		Compound* thisCompound
 		);
 
 	void
-	luaExportMembers (lua::LuaState* luaState);
+	luaExportMembers(lua::LuaState* luaState);
 };
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -499,16 +499,16 @@ struct Namespace:
 {
 	Compound* m_compound;
 
-	Namespace ()
+	Namespace()
 	{
 		m_compound = NULL;
 	}
 
 	void
-	luaExport (lua::LuaState* luaState)
+	luaExport(lua::LuaState* luaState)
 	{
-		ASSERT (m_compound);
-		m_compound->luaExport (luaState);
+		ASSERT(m_compound);
+		m_compound->luaExport(luaState);
 	}
 };
 
@@ -517,30 +517,30 @@ struct Namespace:
 class GlobalNamespace: public NamespaceContents
 {
 protected:
-	sl::List <Namespace> m_namespaceList;
+	sl::List<Namespace> m_namespaceList;
 
 public:
 	void
-	clear ();
+	clear();
 
 	bool
-	build (
+	build(
 		Module* module,
 		uint_t cmdLineFlags
 		);
 
 	void
-	luaExport (lua::LuaState* luaState);
+	luaExport(lua::LuaState* luaState);
 
 protected:
 	Namespace*
-	getGroupNamespace (
+	getGroupNamespace(
 		Module* module,
 		Compound* groupCompound
 		);
 
 	Compound*
-	createMemberCompound (
+	createMemberCompound(
 		Module* module,
 		Member* member
 		);
@@ -550,60 +550,60 @@ protected:
 
 template <typename T>
 void
-luaExportArray (
+luaExportArray(
 	lua::LuaState* luaState,
 	T* const* a,
 	size_t count
 	)
 {
-	luaState->createTable (count);
+	luaState->createTable(count);
 
 	for (size_t i = 0; i < count; i++)
 	{
-		a [i]->luaExport (luaState);
-		luaState->setArrayElement (i + 1); // lua arrays are 1-based
+		a[i]->luaExport(luaState);
+		luaState->setArrayElement(i + 1); // lua arrays are 1-based
 	}
 }
 
 template <typename T>
 void
-luaExportArray (
+luaExportArray(
 	lua::LuaState* luaState,
-	sl::Array <T*>& array
+	sl::Array<T*>& array
 	)
 {
-	luaExportArray (luaState, array.cp (), array.getCount ());
+	luaExportArray(luaState, array.cp(), array.getCount());
 }
 
 template <typename T>
 void
-luaExportList (
+luaExportList(
 	lua::LuaState* luaState,
-	sl::List <T>& list
+	sl::List<T>& list
 	)
 {
-	luaState->createTable (list.getCount ());
+	luaState->createTable(list.getCount());
 
-	sl::Iterator <T> it = list.getHead ();
+	sl::Iterator<T> it = list.getHead();
 	for (size_t i = 1; it; it++, i++) // lua arrays are 1-based
 	{
-		it->luaExport (luaState);
-		luaState->setArrayElement (i);
+		it->luaExport(luaState);
+		luaState->setArrayElement(i);
 	}
 }
 
 inline
 void
-luaExportStringList (
+luaExportStringList(
 	lua::LuaState* luaState,
-	sl::BoxList <sl::String>& list
+	sl::BoxList<sl::String>& list
 	)
 {
-	luaState->createTable (list.getCount ());
+	luaState->createTable(list.getCount());
 
-	sl::BoxIterator <sl::String> it = list.getHead ();
+	sl::BoxIterator<sl::String> it = list.getHead();
 	for (size_t i = 1; it; it++, i++) // lua arrays are 1-based
-		luaState->setArrayElementString (i, *it);
+		luaState->setArrayElementString(i, *it);
 }
 
 //..............................................................................

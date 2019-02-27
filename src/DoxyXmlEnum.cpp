@@ -15,24 +15,24 @@
 //..............................................................................
 
 const char*
-getBoolKindString (BoolKind boolKind)
+getBoolKindString(BoolKind boolKind)
 {
-	const char* stringTable [] =
+	const char* stringTable[] =
 	{
 		"<undefined>", // BoolKind_Undefined
 		"yes",         // BoolKind_Yes
 		"no",          // BoolKind_No
 	};
 
-	return (size_t) boolKind < countof (stringTable) ?
-		stringTable [boolKind] :
-		stringTable [0];
+	return (size_t)boolKind < countof(stringTable) ?
+		stringTable[boolKind] :
+		stringTable[0];
 }
 
 const char*
-getLanguageKindString (LanguageKind languageKind)
+getLanguageKindString(LanguageKind languageKind)
 {
-	const char* stringTable [] =
+	const char* stringTable[] =
 	{
 		"<undefined>", // LanguageKind_Undefined
 		"Unknown",     // LanguageKind_Unknown
@@ -53,15 +53,15 @@ getLanguageKindString (LanguageKind languageKind)
 		"Jancy",       // LanguageKind_Jancy
 	};
 
-	return (size_t) languageKind < countof (stringTable) ?
-		stringTable [languageKind] :
-		stringTable [0];
+	return (size_t)languageKind < countof(stringTable) ?
+		stringTable[languageKind] :
+		stringTable[0];
 }
 
 const char*
-getMemberKindString (MemberKind memberKind)
+getMemberKindString(MemberKind memberKind)
 {
-	const char* stringTable [] =
+	const char* stringTable[] =
 	{
 		"<undefined>", // MemberKind_Undefined
 		"define",      // MemberKind_Define
@@ -83,15 +83,15 @@ getMemberKindString (MemberKind memberKind)
 		"footnote",    // MemberKind_Footnote
 	};
 
-	return (size_t) memberKind < countof (stringTable) ?
-		stringTable [memberKind] :
-		stringTable [0];
+	return (size_t)memberKind < countof(stringTable) ?
+		stringTable[memberKind] :
+		stringTable[0];
 }
 
 const char*
-getProtectionKindString (ProtectionKind protectionKind)
+getProtectionKindString(ProtectionKind protectionKind)
 {
-	const char* stringTable [] =
+	const char* stringTable[] =
 	{
 		"<undefined>", // ProtectionKind_Undefined
 		"public",      // ProtectionKind_Public
@@ -100,15 +100,15 @@ getProtectionKindString (ProtectionKind protectionKind)
 		"package",     // ProtectionKind_Package
 	};
 
-	return (size_t) protectionKind < countof (stringTable) ?
-		stringTable [protectionKind] :
-		stringTable [0];
+	return (size_t)protectionKind < countof(stringTable) ?
+		stringTable[protectionKind] :
+		stringTable[0];
 }
 
 const char*
-getVirtualKindString (VirtualKind virtualKind)
+getVirtualKindString(VirtualKind virtualKind)
 {
-	const char* stringTable [] =
+	const char* stringTable[] =
 	{
 		"<undefined>",  // VirtualKind_Undefined
 		"non-virtual",  // VirtualKind_NonVirtual
@@ -118,30 +118,30 @@ getVirtualKindString (VirtualKind virtualKind)
 		"override",     // VirtualKind_Override,
 	};
 
-	return (size_t) virtualKind < countof (stringTable) ?
-		stringTable [virtualKind] :
-		stringTable [0];
+	return (size_t)virtualKind < countof(stringTable) ?
+		stringTable[virtualKind] :
+		stringTable[0];
 }
 
 const char*
-getRefKindString (RefKind refKind)
+getRefKindString(RefKind refKind)
 {
-	const char* stringTable [] =
+	const char* stringTable[] =
 	{
 		"<undefined>", // RefKind_Undefined
 		"compound",    // RefKind_Compound
 		"member",      // RefKind_Member
 	};
 
-	return (size_t) refKind < countof (stringTable) ?
-		stringTable [refKind] :
-		stringTable [0];
+	return (size_t)refKind < countof(stringTable) ?
+		stringTable[refKind] :
+		stringTable[0];
 }
 
 const char*
-getGraphRelationKindString (GraphRelationKind graphRelationKind)
+getGraphRelationKindString(GraphRelationKind graphRelationKind)
 {
-	const char* stringTable [] =
+	const char* stringTable[] =
 	{
 		"<undefined>",           // GraphRelationKind_Undefined
 		"include",               // GraphRelationKind_Include
@@ -153,15 +153,15 @@ getGraphRelationKindString (GraphRelationKind graphRelationKind)
 		"type-constraint",       // GraphRelationKind_TypeConstraint
 	};
 
-	return (size_t) graphRelationKind < countof (stringTable) ?
-		stringTable [graphRelationKind] :
-		stringTable [0];
+	return (size_t)graphRelationKind < countof(stringTable) ?
+		stringTable[graphRelationKind] :
+		stringTable[0];
 }
 
 const char*
-getCompoundKindString (CompoundKind compoundKind)
+getCompoundKindString(CompoundKind compoundKind)
 {
-	const char* stringTable [] =
+	const char* stringTable[] =
 	{
 		"<undefined>", // CompoundKind_Undefined
 		"class",       // CompoundKind_Class
@@ -181,15 +181,15 @@ getCompoundKindString (CompoundKind compoundKind)
 		"dir",         // CompoundKind_Dir
 	};
 
-	return (size_t) compoundKind < countof (stringTable) ?
-		stringTable [compoundKind] :
-		stringTable [0];
+	return (size_t)compoundKind < countof(stringTable) ?
+		stringTable[compoundKind] :
+		stringTable[0];
 }
 
 const char*
-getSectionKindString (SectionKind sectionKind)
+getSectionKindString(SectionKind sectionKind)
 {
-	const char* stringTable [] =
+	const char* stringTable[] =
 	{
 		"<undefined>",             // SectionKind_Undefined
 		"user-defined",            // SectionKind_UserDefined
@@ -230,15 +230,15 @@ getSectionKindString (SectionKind sectionKind)
 		"var",                     // SectionKind_Var
 	};
 
-	return (size_t) sectionKind < countof (stringTable) ?
-		stringTable [sectionKind] :
-		stringTable [0];
+	return (size_t)sectionKind < countof(stringTable) ?
+		stringTable[sectionKind] :
+		stringTable[0];
 }
 
 const char*
-getImageKindString (ImageKind imageKind)
+getImageKindString(ImageKind imageKind)
 {
-	const char* stringTable [] =
+	const char* stringTable[] =
 	{
 		"<undefined>", // ImageKind_Undefined
 		"html",        // ImageKind_Html
@@ -246,15 +246,15 @@ getImageKindString (ImageKind imageKind)
 		"rtf",         // ImageKind_Rtf
 	};
 
-	return (size_t) imageKind < countof (stringTable) ?
-		stringTable [imageKind] :
-		stringTable [0];
+	return (size_t)imageKind < countof(stringTable) ?
+		stringTable[imageKind] :
+		stringTable[0];
 }
 
 const char*
-getParamListKindString (ParamListKind paramListKind)
+getParamListKindString(ParamListKind paramListKind)
 {
-	const char* stringTable [] =
+	const char* stringTable[] =
 	{
 		"<undefined>",   // ParamListKind_Undefined
 		"param",         // ParamListKind_Param
@@ -263,15 +263,15 @@ getParamListKindString (ParamListKind paramListKind)
 		"templateparam", // ParamListKind_TemplateParam
 	};
 
-	return (size_t) paramListKind < countof (stringTable) ?
-		stringTable [paramListKind] :
-		stringTable [0];
+	return (size_t)paramListKind < countof(stringTable) ?
+		stringTable[paramListKind] :
+		stringTable[0];
 }
 
 const char*
-getParamDirKindString (ParamDirKind paramDirKind)
+getParamDirKindString(ParamDirKind paramDirKind)
 {
-	const char* stringTable [] =
+	const char* stringTable[] =
 	{
 		"<undefined>", // ParamDirKind_Undefined
 		"in",          // ParamDirKind_In
@@ -279,15 +279,15 @@ getParamDirKindString (ParamDirKind paramDirKind)
 		"inout",       // ParamDirKind_InOut
 	};
 
-	return (size_t) paramDirKind < countof (stringTable) ?
-		stringTable [paramDirKind] :
-		stringTable [0];
+	return (size_t)paramDirKind < countof(stringTable) ?
+		stringTable[paramDirKind] :
+		stringTable[0];
 }
 
 const char*
-getAccessorKindString (AccessorKind accessorKind)
+getAccessorKindString(AccessorKind accessorKind)
 {
-	const char* stringTable [] =
+	const char* stringTable[] =
 	{
 		"<undefined>", // AccessorKind_Undefined
 		"retain",      // AccessorKind_Retain
@@ -298,9 +298,9 @@ getAccessorKindString (AccessorKind accessorKind)
 		"unretained",  // AccessorKind_Unretained
 	};
 
-	return (size_t) accessorKind < countof (stringTable) ?
-		stringTable [accessorKind] :
-		stringTable [0];
+	return (size_t)accessorKind < countof(stringTable) ?
+		stringTable[accessorKind] :
+		stringTable[0];
 }
 
 //..............................................................................

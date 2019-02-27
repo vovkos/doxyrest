@@ -9,7 +9,7 @@
 #
 #...............................................................................
 
-set (
+set(
 	AXL_PATH_LIST
 
 	LUA_INC_DIR
@@ -22,7 +22,7 @@ set (
 	PDFLATEX_EXE
 	)
 
-set (
+set(
 	AXL_IMPORT_LIST
 
 	REQUIRED

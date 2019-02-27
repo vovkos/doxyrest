@@ -15,12 +15,12 @@
 //..............................................................................
 
 bool
-CmdLineParser::onSwitch (
+CmdLineParser::onSwitch(
 	SwitchKind switchKind,
 	const sl::StringRef& value
 	)
 {
-	switch (switchKind)
+	switch(switchKind)
 	{
 	case CmdLineSwitchKind_Help:
 		m_cmdLine->m_flags |= CmdLineFlag_Help;
@@ -43,12 +43,12 @@ CmdLineParser::onSwitch (
 		break;
 
 	case CmdLineSwitchKind_FrameDir:
-		m_cmdLine->m_frameDirList.insertTail (value);
+		m_cmdLine->m_frameDirList.insertTail(value);
 		break;
 
 	case CmdLineSwitchKind_Define:
-		Define* define = AXL_MEM_NEW (Define);
-		size_t i = value.find ('=');
+		Define* define = AXL_MEM_NEW(Define);
+		size_t i = value.find('=');
 
 		if (i == -1)
 		{
@@ -56,12 +56,12 @@ CmdLineParser::onSwitch (
 		}
 		else
 		{
-			define->m_name = value.getSubString (0, i);
-			define->m_value = value.getSubString (i + 1);
+			define->m_name = value.getSubString(0, i);
+			define->m_value = value.getSubString(i + 1);
 			define->m_hasValue = true; // even if value empty
 		}
 
-		m_cmdLine->m_defineList.insertTail (define);
+		m_cmdLine->m_defineList.insertTail(define);
 		break;
 	}
 
@@ -69,21 +69,21 @@ CmdLineParser::onSwitch (
 }
 
 bool
-CmdLineParser::finalize ()
+CmdLineParser::finalize()
 {
-	if (m_cmdLine->m_inputFileName.isEmpty ())
+	if (m_cmdLine->m_inputFileName.isEmpty())
 	{
 		if (!m_cmdLine->m_flags)
 			m_cmdLine->m_flags = CmdLineFlag_Help;
 	}
 	else
 	{
-		if (m_cmdLine->m_outputFileName.isEmpty ())
-			m_cmdLine->m_outputFileName = io::getFileName (m_cmdLine->m_inputFileName) + ".rst";
+		if (m_cmdLine->m_outputFileName.isEmpty())
+			m_cmdLine->m_outputFileName = io::getFileName(m_cmdLine->m_inputFileName) + ".rst";
 
-		if (m_cmdLine->m_frameFileName.isEmpty ())
+		if (m_cmdLine->m_frameFileName.isEmpty())
 		{
-			err::setError ("master frame file name missing\n");
+			err::setError("master frame file name missing\n");
 			return false;
 		}
 	}

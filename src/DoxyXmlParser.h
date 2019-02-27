@@ -26,9 +26,9 @@ enum DoxyXmlFileKind
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-class DoxyXmlParser: public xml::ExpatParser <DoxyXmlParser>
+class DoxyXmlParser: public xml::ExpatParser<DoxyXmlParser>
 {
-	friend class xml::ExpatParser <DoxyXmlParser>;
+	friend class xml::ExpatParser<DoxyXmlParser>;
 
 protected:
 	struct TypeStackEntry
@@ -44,51 +44,51 @@ protected:
 		ElemKind_DoxygenCompound,
 	};
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (ElemKindMap, ElemKind)
-		AXL_SL_HASH_TABLE_ENTRY ("doxygenindex", ElemKind_DoxygenIndex)
-		AXL_SL_HASH_TABLE_ENTRY ("doxygen",      ElemKind_DoxygenCompound)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(ElemKindMap, ElemKind)
+		AXL_SL_HASH_TABLE_ENTRY("doxygenindex", ElemKind_DoxygenIndex)
+		AXL_SL_HASH_TABLE_ENTRY("doxygen",      ElemKind_DoxygenCompound)
+	AXL_SL_END_HASH_TABLE()
 
 protected:
 	Module* m_module;
 	DoxyXmlFileKind m_fileKind;
 	sl::String m_filePath;
 	sl::String m_baseDir;
-	sl::Array <TypeStackEntry> m_typeStack;
-	sl::Array <Compound*> m_compoundStack;
+	sl::Array<TypeStackEntry> m_typeStack;
+	sl::Array<Compound*> m_compoundStack;
 
 #if _PRINT_XML
 	size_t m_indent;
 #endif
 
 public:
-	DoxyXmlParser ();
+	DoxyXmlParser();
 
-	~DoxyXmlParser ()
+	~DoxyXmlParser()
 	{
-		clear ();
+		clear();
 	}
 
 	Module*
-	getModule ()
+	getModule()
 	{
 		return m_module;
 	}
 
 	const sl::String&
-	getFilePath ()
+	getFilePath()
 	{
 		return m_filePath;
 	}
 
 	const sl::String&
-	getBaseDir ()
+	getBaseDir()
 	{
 		return m_baseDir;
 	}
 
 	bool
-	parseFile (
+	parseFile(
 		Module* module,
 		DoxyXmlFileKind fileKind,
 		const sl::StringRef& fileName,
@@ -96,29 +96,29 @@ public:
 		);
 
 	bool
-	parseFile (
+	parseFile(
 		Module* module,
 		const sl::StringRef& fileName,
 		size_t blockSize = -1
 		)
 	{
-		return parseFile (module, DoxyXmlFileKind_Index, fileName, blockSize);
+		return parseFile(module, DoxyXmlFileKind_Index, fileName, blockSize);
 	}
 
 	void
-	clear ();
+	clear();
 
 	template <typename T>
 	bool
-	pushType (
+	pushType(
 		const char* name,
 		const char** attributes
 		)
 	{
-		T* type = AXL_MEM_NEW (T);
+		T* type = AXL_MEM_NEW(T);
 		TypeStackEntry entry = { type, 0 };
-		m_typeStack.append (entry);
-		return type->create (this, name, attributes);
+		m_typeStack.append(entry);
+		return type->create(this, name, attributes);
 	}
 
 	template <
@@ -126,62 +126,62 @@ public:
 		typename Context
 		>
 	bool
-	pushType (
+	pushType(
 		Context* context,
 		const char* name,
 		const char** attributes
 		)
 	{
-		T* type = AXL_MEM_NEW (T);
+		T* type = AXL_MEM_NEW(T);
 		TypeStackEntry entry = { type, 0 };
-		m_typeStack.append (entry);
-		return type->create (this, context, name, attributes);
+		m_typeStack.append(entry);
+		return type->create(this, context, name, attributes);
 	}
 
 	Compound*
-	getCurrentCompound ()
+	getCurrentCompound()
 	{
-		return !m_compoundStack.isEmpty () ? m_compoundStack.getBack () : NULL;
+		return !m_compoundStack.isEmpty() ? m_compoundStack.getBack() : NULL;
 	}
 
 	size_t
-	pushCompound (Compound* compound)
+	pushCompound(Compound* compound)
 	{
-		return m_compoundStack.append (compound);
+		return m_compoundStack.append(compound);
 	}
 
 	Compound*
-	popCompound ()
+	popCompound()
 	{
-		return m_compoundStack.getBackAndPop ();
+		return m_compoundStack.getBackAndPop();
 	}
 
 protected:
 	void
-	onStartElement (
+	onStartElement(
 		const char* name,
 		const char** attributes
 		);
 
 	void
-	onEndElement (const char* name);
+	onEndElement(const char* name);
 
 	void
-	onCharacterData (
+	onCharacterData(
 		const char* string,
 		size_t length
 		);
 
 	void
-	popType ();
+	popType();
 
 private:
 #if _PRINT_XML
 	void
-	printIndent ();
+	printIndent();
 
 	void
-	printElement (
+	printElement(
 		const char* name,
 		const char** attributes
 		);

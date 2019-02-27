@@ -28,46 +28,46 @@ protected:
 	sl::String m_targetDir;
 
 public:
-	Generator (const CmdLine* cmdLine)
+	Generator(const CmdLine* cmdLine)
 	{
 		m_cmdLine = cmdLine;
 	}
 
 	void
-	prepare (
+	prepare(
 		Module* module,
 		GlobalNamespace* globalNamespace
 		);
 
 	bool
-	generate (
+	generate(
 		const sl::StringRef& targetFileName,
 		const sl::StringRef& frameFileName
 		);
 
 	bool
-	generate (
+	generate(
 		Module* module,
 		GlobalNamespace* globalNamespace,
 		const sl::StringRef& targetFileName,
 		const sl::StringRef& frameFileName
 		)
 	{
-		prepare (module, globalNamespace);
-		return generate (targetFileName, frameFileName);
+		prepare(module, globalNamespace);
+		return generate(targetFileName, frameFileName);
 	}
 
 protected:
 	static
 	int
-	includeFile_lua (lua_State* h);
+	includeFile_lua(lua_State* h);
 
 	static
 	int
-	generateFile_lua (lua_State* h);
+	generateFile_lua(lua_State* h);
 
 	bool
-	processFile (
+	processFile(
 		const sl::StringRef& targetFileName,
 		const sl::StringRef& frameFileName,
 		size_t baseArgCount

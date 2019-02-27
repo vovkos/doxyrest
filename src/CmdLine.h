@@ -30,7 +30,7 @@ struct Define: sl::ListLink
 	sl::String m_value;
 	bool m_hasValue;
 
-	Define ()
+	Define()
 	{
 		m_hasValue = false;
 	}
@@ -42,10 +42,10 @@ struct CmdLine
 	sl::String m_inputFileName;
 	sl::String m_outputFileName;
 	sl::String m_frameFileName;
-	sl::BoxList <sl::String> m_frameDirList;
-	sl::List <Define> m_defineList;
+	sl::BoxList<sl::String> m_frameDirList;
+	sl::List<Define> m_defineList;
 
-	CmdLine ()
+	CmdLine()
 	{
 		m_flags = 0;
 	}
@@ -67,81 +67,81 @@ enum CmdLineSwitchKind
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-AXL_SL_BEGIN_CMD_LINE_SWITCH_TABLE (CmdLineSwitchTable, CmdLineSwitchKind)
-	AXL_SL_CMD_LINE_SWITCH_2 (
+AXL_SL_BEGIN_CMD_LINE_SWITCH_TABLE(CmdLineSwitchTable, CmdLineSwitchKind)
+	AXL_SL_CMD_LINE_SWITCH_2(
 		CmdLineSwitchKind_Help,
 		"h", "help", NULL,
 		"Display this help"
 		)
-	AXL_SL_CMD_LINE_SWITCH_2 (
+	AXL_SL_CMD_LINE_SWITCH_2(
 		CmdLineSwitchKind_Version,
 		"v", "version", NULL,
 		"Display version of doxyrest"
 		)
 
-	AXL_SL_CMD_LINE_SWITCH_2 (
+	AXL_SL_CMD_LINE_SWITCH_2(
 		CmdLineSwitchKind_OutputFileName,
 		"o", "output", "<file>",
 		"Specify master (index) output file"
 		)
 
-	AXL_SL_CMD_LINE_SWITCH_2 (
+	AXL_SL_CMD_LINE_SWITCH_2(
 		CmdLineSwitchKind_FrameFileName,
 		"f", "frame", "<file>",
 		"Specify Lua master (index) frame file"
 		)
 
-	AXL_SL_CMD_LINE_SWITCH_2 (
+	AXL_SL_CMD_LINE_SWITCH_2(
 		CmdLineSwitchKind_FrameDir,
 		"F", "frame-dir", "<dir>",
 		"Add Lua frame directory (multiple allowed)"
 		)
 
-	AXL_SL_CMD_LINE_SWITCH_2 (
+	AXL_SL_CMD_LINE_SWITCH_2(
 		CmdLineSwitchKind_Define,
 		"D", "define", "<name>[=<value>]",
 		"Define a Lua variable"
 		)
 
-	AXL_SL_CMD_LINE_SWITCH (
+	AXL_SL_CMD_LINE_SWITCH(
 		CmdLineSwitchKind_AllowMemberGroups,
 		"allow-member-groups", NULL,
 		"Allow grouping for type members"
 		)
 
-AXL_SL_END_CMD_LINE_SWITCH_TABLE ()
+AXL_SL_END_CMD_LINE_SWITCH_TABLE()
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-class CmdLineParser: public sl::CmdLineParser <CmdLineParser, CmdLineSwitchTable>
+class CmdLineParser: public sl::CmdLineParser<CmdLineParser, CmdLineSwitchTable>
 {
-	friend class sl::CmdLineParser <CmdLineParser, CmdLineSwitchTable>;
+	friend class sl::CmdLineParser<CmdLineParser, CmdLineSwitchTable>;
 
 protected:
 	CmdLine* m_cmdLine;
 
 public:
-	CmdLineParser (CmdLine* cmdLine)
+	CmdLineParser(CmdLine* cmdLine)
 	{
 		m_cmdLine = cmdLine;
 	}
 
 protected:
 	bool
-	onValue (const sl::StringRef& value)
+	onValue(const sl::StringRef& value)
 	{
 		m_cmdLine->m_inputFileName = value;
 		return true;
 	}
 
 	bool
-	onSwitch (
+	onSwitch(
 		SwitchKind switchKind,
 		const sl::StringRef& value
 		);
 
 	bool
-	finalize ();
+	finalize();
 };
 
 //..............................................................................

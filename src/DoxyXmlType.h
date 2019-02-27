@@ -26,13 +26,13 @@ protected:
 	DoxyXmlParser* m_parser;
 
 public:
-	DoxyXmlType ()
+	DoxyXmlType()
 	{
 		m_parser = NULL;
 	}
 
 	bool
-	create (
+	create(
 		DoxyXmlParser* parser,
 		const char* name,
 		const char** attributes
@@ -44,7 +44,7 @@ public:
 
 	virtual
 	bool
-	onStartElement (
+	onStartElement(
 		const char* name,
 		const char** attributes
 		)
@@ -54,14 +54,14 @@ public:
 
 	virtual
 	bool
-	onEndElement (const char* name)
+	onEndElement(const char* name)
 	{
 		return true;
 	}
 
 	virtual
 	bool
-	onCharacterData (
+	onCharacterData(
 		const char* string,
 		size_t length
 		)
@@ -71,7 +71,7 @@ public:
 
 	virtual
 	void
-	onPopType ()
+	onPopType()
 	{
 	}
 };
@@ -84,13 +84,13 @@ protected:
 	sl::String* m_string;
 
 public:
-	StringType ()
+	StringType()
 	{
 		m_string = NULL;
 	}
 
 	bool
-	create (
+	create(
 		DoxyXmlParser* parser,
 		sl::String* string,
 		const char* name,
@@ -103,12 +103,12 @@ public:
 
 	virtual
 	bool
-	onCharacterData (
+	onCharacterData(
 		const char* string,
 		size_t length
 		)
 	{
-		m_string->append (string, length);
+		m_string->append(string, length);
 		return true;
 	}
 };
@@ -137,22 +137,22 @@ protected:
 		CompoundAttrKind_Kind,
 	};
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (IndexElemKindMap, IndexElemKind)
-		AXL_SL_HASH_TABLE_ENTRY ("compound", IndexElemKind_Compound)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(IndexElemKindMap, IndexElemKind)
+		AXL_SL_HASH_TABLE_ENTRY("compound", IndexElemKind_Compound)
+	AXL_SL_END_HASH_TABLE()
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (IndexAttrKindMap, IndexAttrKind)
-		AXL_SL_HASH_TABLE_ENTRY ("version", IndexAttrKind_Version)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(IndexAttrKindMap, IndexAttrKind)
+		AXL_SL_HASH_TABLE_ENTRY("version", IndexAttrKind_Version)
+	AXL_SL_END_HASH_TABLE()
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (CompoundAttrKindMap, CompoundAttrKind)
-		AXL_SL_HASH_TABLE_ENTRY ("refid", CompoundAttrKind_RefId)
-		AXL_SL_HASH_TABLE_ENTRY ("kind",  CompoundAttrKind_Kind)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(CompoundAttrKindMap, CompoundAttrKind)
+		AXL_SL_HASH_TABLE_ENTRY("refid", CompoundAttrKind_RefId)
+		AXL_SL_HASH_TABLE_ENTRY("kind",  CompoundAttrKind_Kind)
+	AXL_SL_END_HASH_TABLE()
 
 public:
 	bool
-	create (
+	create(
 		DoxyXmlParser* parser,
 		const char* name,
 		const char** attributes
@@ -160,20 +160,20 @@ public:
 
 	virtual
 	bool
-	onStartElement (
+	onStartElement(
 		const char* name,
 		const char** attributes
 		);
 
 protected:
 	bool
-	onCompound (
+	onCompound(
 		const char* name,
 		const char** attributes
 		);
 
 	bool
-	parseCompound (const char* refId);
+	parseCompound(const char* refId);
 };
 
 //..............................................................................
@@ -193,17 +193,17 @@ protected:
 		AttrKind_Version,
 	};
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (ElemKindMap, ElemKind)
-		AXL_SL_HASH_TABLE_ENTRY ("compounddef", ElemKind_CompoundDef)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(ElemKindMap, ElemKind)
+		AXL_SL_HASH_TABLE_ENTRY("compounddef", ElemKind_CompoundDef)
+	AXL_SL_END_HASH_TABLE()
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (AttrKindMap, AttrKind)
-		AXL_SL_HASH_TABLE_ENTRY ("version", AttrKind_Version)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(AttrKindMap, AttrKind)
+		AXL_SL_HASH_TABLE_ENTRY("version", AttrKind_Version)
+	AXL_SL_END_HASH_TABLE()
 
 public:
 	bool
-	create (
+	create(
 		DoxyXmlParser* parser,
 		const char* name,
 		const char** attributes
@@ -211,7 +211,7 @@ public:
 
 	virtual
 	bool
-	onStartElement (
+	onStartElement(
 		const char* name,
 		const char** attributes
 		);
@@ -262,53 +262,53 @@ protected:
 		AttrKind_Abstract,
 	};
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (ElemKindMap, ElemKind)
-		AXL_SL_HASH_TABLE_ENTRY ("compoundname",        ElemKind_CompoundName)
-		AXL_SL_HASH_TABLE_ENTRY ("title",               ElemKind_Title)
-		AXL_SL_HASH_TABLE_ENTRY ("basecompoundref",     ElemKind_BaseCompoundRef)
-		AXL_SL_HASH_TABLE_ENTRY ("derivedcompoundref",  ElemKind_DerivedCompoundRef)
-		AXL_SL_HASH_TABLE_ENTRY ("includes",            ElemKind_Includes)
-		AXL_SL_HASH_TABLE_ENTRY ("includedby",          ElemKind_IncludedBy)
-		AXL_SL_HASH_TABLE_ENTRY ("incdepgraph",         ElemKind_IncDepGraph)
-		AXL_SL_HASH_TABLE_ENTRY ("invincdepgraph",      ElemKind_InvIncDepGraph)
-		AXL_SL_HASH_TABLE_ENTRY ("innerdir",            ElemKind_InnerDir)
-		AXL_SL_HASH_TABLE_ENTRY ("innerdile",           ElemKind_InnerFile)
-		AXL_SL_HASH_TABLE_ENTRY ("innerclass",          ElemKind_InnerClass)
-		AXL_SL_HASH_TABLE_ENTRY ("innernamespace",      ElemKind_InnerNamespace)
-		AXL_SL_HASH_TABLE_ENTRY ("innerpage",           ElemKind_InnerPage)
-		AXL_SL_HASH_TABLE_ENTRY ("innergroup",          ElemKind_InnerGroup)
-		AXL_SL_HASH_TABLE_ENTRY ("templateparamlist",   ElemKind_TemplateParamList)
-		AXL_SL_HASH_TABLE_ENTRY ("sectiondef",          ElemKind_SectionDef)
-		AXL_SL_HASH_TABLE_ENTRY ("briefdescription",    ElemKind_BriefDescription)
-		AXL_SL_HASH_TABLE_ENTRY ("detaileddescription", ElemKind_DetailedDescription)
-		AXL_SL_HASH_TABLE_ENTRY ("inheritancegraph",    ElemKind_InheritanceGraph)
-		AXL_SL_HASH_TABLE_ENTRY ("collaborationgraph",  ElemKind_CollaborationGraph)
-		AXL_SL_HASH_TABLE_ENTRY ("programlisting",      ElemKind_ProgramListing)
-		AXL_SL_HASH_TABLE_ENTRY ("location",            ElemKind_Location)
-		AXL_SL_HASH_TABLE_ENTRY ("listofallmembers",    ElemKind_ListOfAllMembers)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(ElemKindMap, ElemKind)
+		AXL_SL_HASH_TABLE_ENTRY("compoundname",        ElemKind_CompoundName)
+		AXL_SL_HASH_TABLE_ENTRY("title",               ElemKind_Title)
+		AXL_SL_HASH_TABLE_ENTRY("basecompoundref",     ElemKind_BaseCompoundRef)
+		AXL_SL_HASH_TABLE_ENTRY("derivedcompoundref",  ElemKind_DerivedCompoundRef)
+		AXL_SL_HASH_TABLE_ENTRY("includes",            ElemKind_Includes)
+		AXL_SL_HASH_TABLE_ENTRY("includedby",          ElemKind_IncludedBy)
+		AXL_SL_HASH_TABLE_ENTRY("incdepgraph",         ElemKind_IncDepGraph)
+		AXL_SL_HASH_TABLE_ENTRY("invincdepgraph",      ElemKind_InvIncDepGraph)
+		AXL_SL_HASH_TABLE_ENTRY("innerdir",            ElemKind_InnerDir)
+		AXL_SL_HASH_TABLE_ENTRY("innerdile",           ElemKind_InnerFile)
+		AXL_SL_HASH_TABLE_ENTRY("innerclass",          ElemKind_InnerClass)
+		AXL_SL_HASH_TABLE_ENTRY("innernamespace",      ElemKind_InnerNamespace)
+		AXL_SL_HASH_TABLE_ENTRY("innerpage",           ElemKind_InnerPage)
+		AXL_SL_HASH_TABLE_ENTRY("innergroup",          ElemKind_InnerGroup)
+		AXL_SL_HASH_TABLE_ENTRY("templateparamlist",   ElemKind_TemplateParamList)
+		AXL_SL_HASH_TABLE_ENTRY("sectiondef",          ElemKind_SectionDef)
+		AXL_SL_HASH_TABLE_ENTRY("briefdescription",    ElemKind_BriefDescription)
+		AXL_SL_HASH_TABLE_ENTRY("detaileddescription", ElemKind_DetailedDescription)
+		AXL_SL_HASH_TABLE_ENTRY("inheritancegraph",    ElemKind_InheritanceGraph)
+		AXL_SL_HASH_TABLE_ENTRY("collaborationgraph",  ElemKind_CollaborationGraph)
+		AXL_SL_HASH_TABLE_ENTRY("programlisting",      ElemKind_ProgramListing)
+		AXL_SL_HASH_TABLE_ENTRY("location",            ElemKind_Location)
+		AXL_SL_HASH_TABLE_ENTRY("listofallmembers",    ElemKind_ListOfAllMembers)
+	AXL_SL_END_HASH_TABLE()
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (AttrKindMap, AttrKind)
-		AXL_SL_HASH_TABLE_ENTRY ("id",       AttrKind_Id)
-		AXL_SL_HASH_TABLE_ENTRY ("kind",     AttrKind_Kind)
-		AXL_SL_HASH_TABLE_ENTRY ("language", AttrKind_Language)
-		AXL_SL_HASH_TABLE_ENTRY ("prot",     AttrKind_Prot)
-		AXL_SL_HASH_TABLE_ENTRY ("final",    AttrKind_Final)
-		AXL_SL_HASH_TABLE_ENTRY ("sealed",   AttrKind_Sealed)
-		AXL_SL_HASH_TABLE_ENTRY ("abstract", AttrKind_Abstract)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(AttrKindMap, AttrKind)
+		AXL_SL_HASH_TABLE_ENTRY("id",       AttrKind_Id)
+		AXL_SL_HASH_TABLE_ENTRY("kind",     AttrKind_Kind)
+		AXL_SL_HASH_TABLE_ENTRY("language", AttrKind_Language)
+		AXL_SL_HASH_TABLE_ENTRY("prot",     AttrKind_Prot)
+		AXL_SL_HASH_TABLE_ENTRY("final",    AttrKind_Final)
+		AXL_SL_HASH_TABLE_ENTRY("sealed",   AttrKind_Sealed)
+		AXL_SL_HASH_TABLE_ENTRY("abstract", AttrKind_Abstract)
+	AXL_SL_END_HASH_TABLE()
 
 protected:
 	Compound* m_compound;
 
 public:
-	CompoundDefType ()
+	CompoundDefType()
 	{
 		m_compound = NULL;
 	}
 
 	bool
-	create (
+	create(
 		DoxyXmlParser* parser,
 		const char* name,
 		const char** attributes
@@ -316,14 +316,14 @@ public:
 
 	virtual
 	bool
-	onStartElement (
+	onStartElement(
 		const char* name,
 		const char** attributes
 		);
 
 	virtual
 	void
-	onPopType ();
+	onPopType();
 };
 
 //..............................................................................
@@ -337,9 +337,9 @@ protected:
 		ElemKind_Member,
 	};
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (ElemKindMap, ElemKind)
-		AXL_SL_HASH_TABLE_ENTRY ("member", ElemKind_Member)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(ElemKindMap, ElemKind)
+		AXL_SL_HASH_TABLE_ENTRY("member", ElemKind_Member)
+	AXL_SL_END_HASH_TABLE()
 
 public:
 };
@@ -365,17 +365,17 @@ protected:
 		AttrKind_AmbiguityScope,
 	};
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (ElemKindMap, ElemKind)
-		AXL_SL_HASH_TABLE_ENTRY ("scope", ElemKind_Scope)
-		AXL_SL_HASH_TABLE_ENTRY ("name",  ElemKind_Name)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(ElemKindMap, ElemKind)
+		AXL_SL_HASH_TABLE_ENTRY("scope", ElemKind_Scope)
+		AXL_SL_HASH_TABLE_ENTRY("name",  ElemKind_Name)
+	AXL_SL_END_HASH_TABLE()
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (AttrKindMap, AttrKind)
-		AXL_SL_HASH_TABLE_ENTRY ("refid", AttrKind_RefId)
-		AXL_SL_HASH_TABLE_ENTRY ("prot",  AttrKind_Prot)
-		AXL_SL_HASH_TABLE_ENTRY ("virt",  AttrKind_Virt)
-		AXL_SL_HASH_TABLE_ENTRY ("ambiguityscope", AttrKind_AmbiguityScope)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(AttrKindMap, AttrKind)
+		AXL_SL_HASH_TABLE_ENTRY("refid", AttrKind_RefId)
+		AXL_SL_HASH_TABLE_ENTRY("prot",  AttrKind_Prot)
+		AXL_SL_HASH_TABLE_ENTRY("virt",  AttrKind_Virt)
+		AXL_SL_HASH_TABLE_ENTRY("ambiguityscope", AttrKind_AmbiguityScope)
+	AXL_SL_END_HASH_TABLE()
 
 public:
 };
@@ -393,11 +393,11 @@ protected:
 		AttrKind_Virt,
 	};
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (AttrKindMap, AttrKind)
-		AXL_SL_HASH_TABLE_ENTRY ("refid", AttrKind_RefId)
-		AXL_SL_HASH_TABLE_ENTRY ("prot",  AttrKind_Prot)
-		AXL_SL_HASH_TABLE_ENTRY ("virt",  AttrKind_Virt)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(AttrKindMap, AttrKind)
+		AXL_SL_HASH_TABLE_ENTRY("refid", AttrKind_RefId)
+		AXL_SL_HASH_TABLE_ENTRY("prot",  AttrKind_Prot)
+		AXL_SL_HASH_TABLE_ENTRY("virt",  AttrKind_Virt)
+	AXL_SL_END_HASH_TABLE()
 
 public:
 };
@@ -433,38 +433,38 @@ protected:
 		AttrKind_Virt,
 	};
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (AttrKindMap, AttrKind)
-		AXL_SL_HASH_TABLE_ENTRY ("refid",    AttrKind_RefId)
-		AXL_SL_HASH_TABLE_ENTRY ("importid", AttrKind_ImportId)
-		AXL_SL_HASH_TABLE_ENTRY ("prot",     AttrKind_Prot)
-		AXL_SL_HASH_TABLE_ENTRY ("virt",     AttrKind_Virt)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(AttrKindMap, AttrKind)
+		AXL_SL_HASH_TABLE_ENTRY("refid",    AttrKind_RefId)
+		AXL_SL_HASH_TABLE_ENTRY("importid", AttrKind_ImportId)
+		AXL_SL_HASH_TABLE_ENTRY("prot",     AttrKind_Prot)
+		AXL_SL_HASH_TABLE_ENTRY("virt",     AttrKind_Virt)
+	AXL_SL_END_HASH_TABLE()
 
 protected:
 	Ref* m_ref;
 
 public:
-	RefType ()
+	RefType()
 	{
 		m_ref = NULL;
 	}
 
 	bool
-	create (
+	create(
 		DoxyXmlParser* parser,
-		sl::List <Ref>* list,
+		sl::List<Ref>* list,
 		const char* name,
 		const char** attributes
 		);
 
 	virtual
 	bool
-	onCharacterData (
+	onCharacterData(
 		const char* string,
 		size_t length
 		)
 	{
-		m_ref->m_text.append (string, length);
+		m_ref->m_text.append(string, length);
 		return true;
 	}
 };
@@ -488,27 +488,27 @@ protected:
 		AttrKind_Kind,
 	};
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (ElemKindMap, ElemKind)
-		AXL_SL_HASH_TABLE_ENTRY ("header",      ElemKind_Header)
-		AXL_SL_HASH_TABLE_ENTRY ("description", ElemKind_Description)
-		AXL_SL_HASH_TABLE_ENTRY ("memberdef",   ElemKind_MemberDef)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(ElemKindMap, ElemKind)
+		AXL_SL_HASH_TABLE_ENTRY("header",      ElemKind_Header)
+		AXL_SL_HASH_TABLE_ENTRY("description", ElemKind_Description)
+		AXL_SL_HASH_TABLE_ENTRY("memberdef",   ElemKind_MemberDef)
+	AXL_SL_END_HASH_TABLE()
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (AttrKindMap, AttrKind)
-		AXL_SL_HASH_TABLE_ENTRY ("kind", AttrKind_Kind)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(AttrKindMap, AttrKind)
+		AXL_SL_HASH_TABLE_ENTRY("kind", AttrKind_Kind)
+	AXL_SL_END_HASH_TABLE()
 
 protected:
 	Compound* m_parent;
 
 public:
-	SectionDefType ()
+	SectionDefType()
 	{
 		m_parent = NULL;
 	}
 
 	bool
-	create (
+	create(
 		DoxyXmlParser* parser,
 		Compound* parent,
 		const char* name,
@@ -517,7 +517,7 @@ public:
 
 	virtual
 	bool
-	onStartElement (
+	onStartElement(
 		const char* name,
 		const char** attributes
 		);
@@ -594,79 +594,79 @@ protected:
 		AttrKind_MaybeAmbiguos,
 	};
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (ElemKindMap, ElemKind)
-		AXL_SL_HASH_TABLE_ENTRY ("templateparamlist",    ElemKind_TemplateParamList)
-		AXL_SL_HASH_TABLE_ENTRY ("type",                 ElemKind_Type)
-		AXL_SL_HASH_TABLE_ENTRY ("definition",           ElemKind_Definition)
-		AXL_SL_HASH_TABLE_ENTRY ("argsstring",           ElemKind_ArgString)
-		AXL_SL_HASH_TABLE_ENTRY ("name",                 ElemKind_Name)
-		AXL_SL_HASH_TABLE_ENTRY ("read",                 ElemKind_Read)
-		AXL_SL_HASH_TABLE_ENTRY ("write",                ElemKind_Write)
-		AXL_SL_HASH_TABLE_ENTRY ("bitfield",             ElemKind_BitField)
-		AXL_SL_HASH_TABLE_ENTRY ("reimplements",         ElemKind_Reimplements)
-		AXL_SL_HASH_TABLE_ENTRY ("reimplementedby",      ElemKind_ReimplementedBy)
-		AXL_SL_HASH_TABLE_ENTRY ("param",                ElemKind_Param)
-		AXL_SL_HASH_TABLE_ENTRY ("enumvalue",            ElemKind_EnumValue)
-		AXL_SL_HASH_TABLE_ENTRY ("initializer",          ElemKind_Initializer)
-		AXL_SL_HASH_TABLE_ENTRY ("exceptions",           ElemKind_Exceptions)
-		AXL_SL_HASH_TABLE_ENTRY ("briefdescription",     ElemKind_BriefDescription)
-		AXL_SL_HASH_TABLE_ENTRY ("detaileddescription",  ElemKind_DetailedDescription)
-		AXL_SL_HASH_TABLE_ENTRY ("inbodydescription",    ElemKind_InBodyDescription)
-		AXL_SL_HASH_TABLE_ENTRY ("location",             ElemKind_Location)
-		AXL_SL_HASH_TABLE_ENTRY ("references",           ElemKind_References)
-		AXL_SL_HASH_TABLE_ENTRY ("referencedby",         ElemKind_ReferencedBy)
-		AXL_SL_HASH_TABLE_ENTRY ("modifiers",            ElemKind_Modifiers)
-		AXL_SL_HASH_TABLE_ENTRY ("includes",             ElemKind_Includes)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(ElemKindMap, ElemKind)
+		AXL_SL_HASH_TABLE_ENTRY("templateparamlist",    ElemKind_TemplateParamList)
+		AXL_SL_HASH_TABLE_ENTRY("type",                 ElemKind_Type)
+		AXL_SL_HASH_TABLE_ENTRY("definition",           ElemKind_Definition)
+		AXL_SL_HASH_TABLE_ENTRY("argsstring",           ElemKind_ArgString)
+		AXL_SL_HASH_TABLE_ENTRY("name",                 ElemKind_Name)
+		AXL_SL_HASH_TABLE_ENTRY("read",                 ElemKind_Read)
+		AXL_SL_HASH_TABLE_ENTRY("write",                ElemKind_Write)
+		AXL_SL_HASH_TABLE_ENTRY("bitfield",             ElemKind_BitField)
+		AXL_SL_HASH_TABLE_ENTRY("reimplements",         ElemKind_Reimplements)
+		AXL_SL_HASH_TABLE_ENTRY("reimplementedby",      ElemKind_ReimplementedBy)
+		AXL_SL_HASH_TABLE_ENTRY("param",                ElemKind_Param)
+		AXL_SL_HASH_TABLE_ENTRY("enumvalue",            ElemKind_EnumValue)
+		AXL_SL_HASH_TABLE_ENTRY("initializer",          ElemKind_Initializer)
+		AXL_SL_HASH_TABLE_ENTRY("exceptions",           ElemKind_Exceptions)
+		AXL_SL_HASH_TABLE_ENTRY("briefdescription",     ElemKind_BriefDescription)
+		AXL_SL_HASH_TABLE_ENTRY("detaileddescription",  ElemKind_DetailedDescription)
+		AXL_SL_HASH_TABLE_ENTRY("inbodydescription",    ElemKind_InBodyDescription)
+		AXL_SL_HASH_TABLE_ENTRY("location",             ElemKind_Location)
+		AXL_SL_HASH_TABLE_ENTRY("references",           ElemKind_References)
+		AXL_SL_HASH_TABLE_ENTRY("referencedby",         ElemKind_ReferencedBy)
+		AXL_SL_HASH_TABLE_ENTRY("modifiers",            ElemKind_Modifiers)
+		AXL_SL_HASH_TABLE_ENTRY("includes",             ElemKind_Includes)
+	AXL_SL_END_HASH_TABLE()
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (AttrKindMap, AttrKind)
-		AXL_SL_HASH_TABLE_ENTRY ("kind",           AttrKind_Kind)
-		AXL_SL_HASH_TABLE_ENTRY ("id",             AttrKind_Id)
-		AXL_SL_HASH_TABLE_ENTRY ("prot",           AttrKind_Prot)
-		AXL_SL_HASH_TABLE_ENTRY ("static",         AttrKind_Static)
-		AXL_SL_HASH_TABLE_ENTRY ("const",          AttrKind_Const)
-		AXL_SL_HASH_TABLE_ENTRY ("explicit",       AttrKind_Explicit)
-		AXL_SL_HASH_TABLE_ENTRY ("inline",         AttrKind_Inline)
-		AXL_SL_HASH_TABLE_ENTRY ("virt",           AttrKind_Virtual)
-		AXL_SL_HASH_TABLE_ENTRY ("volatile",       AttrKind_Volatile)
-		AXL_SL_HASH_TABLE_ENTRY ("mutable",        AttrKind_Mutable)
-		AXL_SL_HASH_TABLE_ENTRY ("readable",       AttrKind_Readable)
-		AXL_SL_HASH_TABLE_ENTRY ("writable",       AttrKind_Writeable)
-		AXL_SL_HASH_TABLE_ENTRY ("initonly",       AttrKind_InitOnly)
-		AXL_SL_HASH_TABLE_ENTRY ("settable",       AttrKind_Settable)
-		AXL_SL_HASH_TABLE_ENTRY ("gettable",       AttrKind_Gettable)
-		AXL_SL_HASH_TABLE_ENTRY ("final",          AttrKind_Final)
-		AXL_SL_HASH_TABLE_ENTRY ("sealed",         AttrKind_Sealed)
-		AXL_SL_HASH_TABLE_ENTRY ("new",            AttrKind_New)
-		AXL_SL_HASH_TABLE_ENTRY ("add",            AttrKind_Add)
-		AXL_SL_HASH_TABLE_ENTRY ("remove",         AttrKind_Remove)
-		AXL_SL_HASH_TABLE_ENTRY ("raise",          AttrKind_Raise)
-		AXL_SL_HASH_TABLE_ENTRY ("optional",       AttrKind_Optional)
-		AXL_SL_HASH_TABLE_ENTRY ("required",       AttrKind_Required)
-		AXL_SL_HASH_TABLE_ENTRY ("accessor",       AttrKind_Accessor)
-		AXL_SL_HASH_TABLE_ENTRY ("attribute",      AttrKind_Attribute)
-		AXL_SL_HASH_TABLE_ENTRY ("property",       AttrKind_Property)
-		AXL_SL_HASH_TABLE_ENTRY ("readonly",       AttrKind_ReadOnly)
-		AXL_SL_HASH_TABLE_ENTRY ("bound",          AttrKind_Bound)
-		AXL_SL_HASH_TABLE_ENTRY ("removable",      AttrKind_Removable)
-		AXL_SL_HASH_TABLE_ENTRY ("contrained",     AttrKind_Contrained)
-		AXL_SL_HASH_TABLE_ENTRY ("transient",      AttrKind_Transient)
-		AXL_SL_HASH_TABLE_ENTRY ("maybevoid",      AttrKind_MaybeVoid)
-		AXL_SL_HASH_TABLE_ENTRY ("maybedefault",   AttrKind_MaybeDefault)
-		AXL_SL_HASH_TABLE_ENTRY ("maybeambiguous", AttrKind_MaybeAmbiguos)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(AttrKindMap, AttrKind)
+		AXL_SL_HASH_TABLE_ENTRY("kind",           AttrKind_Kind)
+		AXL_SL_HASH_TABLE_ENTRY("id",             AttrKind_Id)
+		AXL_SL_HASH_TABLE_ENTRY("prot",           AttrKind_Prot)
+		AXL_SL_HASH_TABLE_ENTRY("static",         AttrKind_Static)
+		AXL_SL_HASH_TABLE_ENTRY("const",          AttrKind_Const)
+		AXL_SL_HASH_TABLE_ENTRY("explicit",       AttrKind_Explicit)
+		AXL_SL_HASH_TABLE_ENTRY("inline",         AttrKind_Inline)
+		AXL_SL_HASH_TABLE_ENTRY("virt",           AttrKind_Virtual)
+		AXL_SL_HASH_TABLE_ENTRY("volatile",       AttrKind_Volatile)
+		AXL_SL_HASH_TABLE_ENTRY("mutable",        AttrKind_Mutable)
+		AXL_SL_HASH_TABLE_ENTRY("readable",       AttrKind_Readable)
+		AXL_SL_HASH_TABLE_ENTRY("writable",       AttrKind_Writeable)
+		AXL_SL_HASH_TABLE_ENTRY("initonly",       AttrKind_InitOnly)
+		AXL_SL_HASH_TABLE_ENTRY("settable",       AttrKind_Settable)
+		AXL_SL_HASH_TABLE_ENTRY("gettable",       AttrKind_Gettable)
+		AXL_SL_HASH_TABLE_ENTRY("final",          AttrKind_Final)
+		AXL_SL_HASH_TABLE_ENTRY("sealed",         AttrKind_Sealed)
+		AXL_SL_HASH_TABLE_ENTRY("new",            AttrKind_New)
+		AXL_SL_HASH_TABLE_ENTRY("add",            AttrKind_Add)
+		AXL_SL_HASH_TABLE_ENTRY("remove",         AttrKind_Remove)
+		AXL_SL_HASH_TABLE_ENTRY("raise",          AttrKind_Raise)
+		AXL_SL_HASH_TABLE_ENTRY("optional",       AttrKind_Optional)
+		AXL_SL_HASH_TABLE_ENTRY("required",       AttrKind_Required)
+		AXL_SL_HASH_TABLE_ENTRY("accessor",       AttrKind_Accessor)
+		AXL_SL_HASH_TABLE_ENTRY("attribute",      AttrKind_Attribute)
+		AXL_SL_HASH_TABLE_ENTRY("property",       AttrKind_Property)
+		AXL_SL_HASH_TABLE_ENTRY("readonly",       AttrKind_ReadOnly)
+		AXL_SL_HASH_TABLE_ENTRY("bound",          AttrKind_Bound)
+		AXL_SL_HASH_TABLE_ENTRY("removable",      AttrKind_Removable)
+		AXL_SL_HASH_TABLE_ENTRY("contrained",     AttrKind_Contrained)
+		AXL_SL_HASH_TABLE_ENTRY("transient",      AttrKind_Transient)
+		AXL_SL_HASH_TABLE_ENTRY("maybevoid",      AttrKind_MaybeVoid)
+		AXL_SL_HASH_TABLE_ENTRY("maybedefault",   AttrKind_MaybeDefault)
+		AXL_SL_HASH_TABLE_ENTRY("maybeambiguous", AttrKind_MaybeAmbiguos)
+	AXL_SL_END_HASH_TABLE()
 
 protected:
 	Member* m_member;
 
 public:
-	MemberDefType ()
+	MemberDefType()
 	{
 		m_member = NULL;
 	}
 
 	bool
-	create (
+	create(
 		DoxyXmlParser* parser,
 		Compound* parent,
 		const char* name,
@@ -675,7 +675,7 @@ public:
 
 	virtual
 	bool
-	onStartElement (
+	onStartElement(
 		const char* name,
 		const char** attributes
 		);
@@ -697,18 +697,18 @@ protected:
 		AttrKind_BodyEnd,
 	};
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (AttrKindMap, AttrKind)
-		AXL_SL_HASH_TABLE_ENTRY ("file",      AttrKind_File)
-		AXL_SL_HASH_TABLE_ENTRY ("line",      AttrKind_Line)
-		AXL_SL_HASH_TABLE_ENTRY ("column",    AttrKind_Column)
-		AXL_SL_HASH_TABLE_ENTRY ("bodyfile",  AttrKind_BodyFile)
-		AXL_SL_HASH_TABLE_ENTRY ("bodystart", AttrKind_BodyStart)
-		AXL_SL_HASH_TABLE_ENTRY ("bodyend",   AttrKind_BodyEnd)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(AttrKindMap, AttrKind)
+		AXL_SL_HASH_TABLE_ENTRY("file",      AttrKind_File)
+		AXL_SL_HASH_TABLE_ENTRY("line",      AttrKind_Line)
+		AXL_SL_HASH_TABLE_ENTRY("column",    AttrKind_Column)
+		AXL_SL_HASH_TABLE_ENTRY("bodyfile",  AttrKind_BodyFile)
+		AXL_SL_HASH_TABLE_ENTRY("bodystart", AttrKind_BodyStart)
+		AXL_SL_HASH_TABLE_ENTRY("bodyend",   AttrKind_BodyEnd)
+	AXL_SL_END_HASH_TABLE()
 
 public:
 	bool
-	create (
+	create(
 		DoxyXmlParser* parser,
 		Location* location,
 		const char* name,
@@ -730,19 +730,19 @@ protected:
 		ElemKind_Internal,
 	};
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (ElemKindMap, ElemKind)
-		AXL_SL_HASH_TABLE_ENTRY ("title",    ElemKind_Title)
-		AXL_SL_HASH_TABLE_ENTRY ("para",     ElemKind_Para)
-		AXL_SL_HASH_TABLE_ENTRY ("sect1",    ElemKind_Sect1)
-		AXL_SL_HASH_TABLE_ENTRY ("internal", ElemKind_Internal)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(ElemKindMap, ElemKind)
+		AXL_SL_HASH_TABLE_ENTRY("title",    ElemKind_Title)
+		AXL_SL_HASH_TABLE_ENTRY("para",     ElemKind_Para)
+		AXL_SL_HASH_TABLE_ENTRY("sect1",    ElemKind_Sect1)
+		AXL_SL_HASH_TABLE_ENTRY("internal", ElemKind_Internal)
+	AXL_SL_END_HASH_TABLE()
 
 protected:
 	Description* m_description;
 
 public:
 	bool
-	create (
+	create(
 		DoxyXmlParser* parser,
 		Description* description,
 		const char* name,
@@ -751,7 +751,7 @@ public:
 
 	virtual
 	bool
-	onStartElement (
+	onStartElement(
 		const char* name,
 		const char** attributes
 		);
@@ -780,35 +780,35 @@ protected:
 		AttrKind_Id,
 	};
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (ElemKindMap, ElemKind)
-		AXL_SL_HASH_TABLE_ENTRY ("title",    ElemKind_Title)
-		AXL_SL_HASH_TABLE_ENTRY ("para",     ElemKind_Para)
-		AXL_SL_HASH_TABLE_ENTRY ("sect1",    ElemKind_Sect1)
-		AXL_SL_HASH_TABLE_ENTRY ("sect2",    ElemKind_Sect2)
-		AXL_SL_HASH_TABLE_ENTRY ("sect3",    ElemKind_Sect3)
-		AXL_SL_HASH_TABLE_ENTRY ("sect4",    ElemKind_Sect4)
-		AXL_SL_HASH_TABLE_ENTRY ("internal", ElemKind_Internal)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(ElemKindMap, ElemKind)
+		AXL_SL_HASH_TABLE_ENTRY("title",    ElemKind_Title)
+		AXL_SL_HASH_TABLE_ENTRY("para",     ElemKind_Para)
+		AXL_SL_HASH_TABLE_ENTRY("sect1",    ElemKind_Sect1)
+		AXL_SL_HASH_TABLE_ENTRY("sect2",    ElemKind_Sect2)
+		AXL_SL_HASH_TABLE_ENTRY("sect3",    ElemKind_Sect3)
+		AXL_SL_HASH_TABLE_ENTRY("sect4",    ElemKind_Sect4)
+		AXL_SL_HASH_TABLE_ENTRY("internal", ElemKind_Internal)
+	AXL_SL_END_HASH_TABLE()
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (AttrKindMap, AttrKind)
-		AXL_SL_HASH_TABLE_ENTRY ("id", AttrKind_Id)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(AttrKindMap, AttrKind)
+		AXL_SL_HASH_TABLE_ENTRY("id", AttrKind_Id)
+	AXL_SL_END_HASH_TABLE()
 
 protected:
 	DocSectionBlock* m_sectionBlock;
 
 public:
 	bool
-	create (
+	create(
 		DoxyXmlParser* parser,
-		sl::List <DocBlock>* list,
+		sl::List<DocBlock>* list,
 		const char* name,
 		const char** attributes
 		);
 
 	virtual
 	bool
-	onStartElement (
+	onStartElement(
 		const char* name,
 		const char** attributes
 		);
@@ -835,29 +835,29 @@ protected:
 		AttrKind_Prot,
 	};
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (ElemKindMap, ElemKind)
-		AXL_SL_HASH_TABLE_ENTRY ("name",                ElemKind_Name)
-		AXL_SL_HASH_TABLE_ENTRY ("initializer",         ElemKind_Initializer)
-		AXL_SL_HASH_TABLE_ENTRY ("briefdescription",    ElemKind_BriefDescription)
-		AXL_SL_HASH_TABLE_ENTRY ("detaileddescription", ElemKind_DetailedDescription)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(ElemKindMap, ElemKind)
+		AXL_SL_HASH_TABLE_ENTRY("name",                ElemKind_Name)
+		AXL_SL_HASH_TABLE_ENTRY("initializer",         ElemKind_Initializer)
+		AXL_SL_HASH_TABLE_ENTRY("briefdescription",    ElemKind_BriefDescription)
+		AXL_SL_HASH_TABLE_ENTRY("detaileddescription", ElemKind_DetailedDescription)
+	AXL_SL_END_HASH_TABLE()
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (AttrKindMap, AttrKind)
-		AXL_SL_HASH_TABLE_ENTRY ("id",   AttrKind_Id)
-		AXL_SL_HASH_TABLE_ENTRY ("prot", AttrKind_Prot)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(AttrKindMap, AttrKind)
+		AXL_SL_HASH_TABLE_ENTRY("id",   AttrKind_Id)
+		AXL_SL_HASH_TABLE_ENTRY("prot", AttrKind_Prot)
+	AXL_SL_END_HASH_TABLE()
 
 protected:
 	EnumValue* m_enumValue;
 
 public:
-	EnumValueType ()
+	EnumValueType()
 	{
 		m_enumValue = NULL;
 	}
 
 	bool
-	create (
+	create(
 		DoxyXmlParser* parser,
 		Member* member,
 		const char* name,
@@ -866,7 +866,7 @@ public:
 
 	virtual
 	bool
-	onStartElement (
+	onStartElement(
 		const char* name,
 		const char** attributes
 		);
@@ -883,29 +883,29 @@ protected:
 		ElemKind_Param,
 	};
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (ElemKindMap, ElemKind)
-		AXL_SL_HASH_TABLE_ENTRY ("param", ElemKind_Param)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(ElemKindMap, ElemKind)
+		AXL_SL_HASH_TABLE_ENTRY("param", ElemKind_Param)
+	AXL_SL_END_HASH_TABLE()
 
 protected:
-	sl::List <Param>* m_list;
+	sl::List<Param>* m_list;
 
 public:
-	TemplateParamListType ()
+	TemplateParamListType()
 	{
 		m_list = NULL;
 	}
 
 	bool
-	create (
+	create(
 		DoxyXmlParser* parser,
-		sl::List <Param>* list,
+		sl::List<Param>* list,
 		const char* name,
 		const char** attributes
 		);
 
 	bool
-	create (
+	create(
 		DoxyXmlParser* parser,
 		const char* name,
 		const char** attributes
@@ -913,7 +913,7 @@ public:
 
 	virtual
 	bool
-	onStartElement (
+	onStartElement(
 		const char* name,
 		const char** attributes
 		);
@@ -936,36 +936,36 @@ protected:
 		ElemKind_BriefDescription,
 	};
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (ElemKindMap, ElemKind)
-		AXL_SL_HASH_TABLE_ENTRY ("type",             ElemKind_Type)
-		AXL_SL_HASH_TABLE_ENTRY ("declname",         ElemKind_DeclName)
-		AXL_SL_HASH_TABLE_ENTRY ("defname",          ElemKind_DefName)
-		AXL_SL_HASH_TABLE_ENTRY ("array",            ElemKind_Array)
-		AXL_SL_HASH_TABLE_ENTRY ("defval",           ElemKind_DefVal)
-		AXL_SL_HASH_TABLE_ENTRY ("typeconstraint",   ElemKind_TypeConstraint)
-		AXL_SL_HASH_TABLE_ENTRY ("briefdescription", ElemKind_BriefDescription)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(ElemKindMap, ElemKind)
+		AXL_SL_HASH_TABLE_ENTRY("type",             ElemKind_Type)
+		AXL_SL_HASH_TABLE_ENTRY("declname",         ElemKind_DeclName)
+		AXL_SL_HASH_TABLE_ENTRY("defname",          ElemKind_DefName)
+		AXL_SL_HASH_TABLE_ENTRY("array",            ElemKind_Array)
+		AXL_SL_HASH_TABLE_ENTRY("defval",           ElemKind_DefVal)
+		AXL_SL_HASH_TABLE_ENTRY("typeconstraint",   ElemKind_TypeConstraint)
+		AXL_SL_HASH_TABLE_ENTRY("briefdescription", ElemKind_BriefDescription)
+	AXL_SL_END_HASH_TABLE()
 
 protected:
 	Param* m_param;
 
 public:
-	ParamType ()
+	ParamType()
 	{
 		m_param = NULL;
 	}
 
 	bool
-	create (
+	create(
 		DoxyXmlParser* parser,
-		sl::List <Param>* list,
+		sl::List<Param>* list,
 		const char* name,
 		const char** attributes
 		);
 
 	virtual
 	bool
-	onStartElement (
+	onStartElement(
 		const char* name,
 		const char** attributes
 		);
@@ -982,23 +982,23 @@ protected:
 		ElemKind_Ref,
 	};
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (ElemKindMap, ElemKind)
-		AXL_SL_HASH_TABLE_ENTRY ("ref", ElemKind_Ref)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(ElemKindMap, ElemKind)
+		AXL_SL_HASH_TABLE_ENTRY("ref", ElemKind_Ref)
+	AXL_SL_END_HASH_TABLE()
 
 protected:
 	LinkedText* m_linkedText;
 	RefText* m_refText;
 
 public:
-	LinkedTextType ()
+	LinkedTextType()
 	{
 		m_linkedText = NULL;
 		m_refText = NULL;
 	}
 
 	bool
-	create (
+	create(
 		DoxyXmlParser* parser,
 		LinkedText* linkedText,
 		const char* name,
@@ -1007,19 +1007,19 @@ public:
 
 	virtual
 	bool
-	onStartElement (
+	onStartElement(
 		const char* name,
 		const char** attributes
 		);
 
 	virtual
 	bool
-	onCharacterData (
+	onCharacterData(
 		const char* string,
 		size_t length
 		)
 	{
-		m_refText->m_text.append (string, length);
+		m_refText->m_text.append(string, length);
 		return true;
 	}
 };
@@ -1038,24 +1038,24 @@ protected:
 		AttrKind_Tooltip,
 	};
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (AttrKindMap, AttrKind)
-		AXL_SL_HASH_TABLE_ENTRY ("refid",    AttrKind_RefId)
-		AXL_SL_HASH_TABLE_ENTRY ("kindref",  AttrKind_KindRef)
-		AXL_SL_HASH_TABLE_ENTRY ("external", AttrKind_External)
-		AXL_SL_HASH_TABLE_ENTRY ("tooltip",  AttrKind_Tooltip)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(AttrKindMap, AttrKind)
+		AXL_SL_HASH_TABLE_ENTRY("refid",    AttrKind_RefId)
+		AXL_SL_HASH_TABLE_ENTRY("kindref",  AttrKind_KindRef)
+		AXL_SL_HASH_TABLE_ENTRY("external", AttrKind_External)
+		AXL_SL_HASH_TABLE_ENTRY("tooltip",  AttrKind_Tooltip)
+	AXL_SL_END_HASH_TABLE()
 
 protected:
 	RefText* m_refText;
 
 public:
-	RefTextType ()
+	RefTextType()
 	{
 		m_refText = NULL;
 	}
 
 	bool
-	create (
+	create(
 		DoxyXmlParser* parser,
 		LinkedText* linkedText,
 		const char* name,
@@ -1064,12 +1064,12 @@ public:
 
 	virtual
 	bool
-	onCharacterData (
+	onCharacterData(
 		const char* string,
 		size_t length
 		)
 	{
-		m_refText->m_text.append (string, length);
+		m_refText->m_text.append(string, length);
 		return true;
 	}
 };
@@ -1090,47 +1090,47 @@ protected:
 		// ...add as needed
 	};
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (ElemKindMap, ElemKind)
-		AXL_SL_HASH_TABLE_ENTRY ("ref",        ElemKind_Ref)
-		AXL_SL_HASH_TABLE_ENTRY ("anchor",     ElemKind_Anchor)
-		AXL_SL_HASH_TABLE_ENTRY ("image",      ElemKind_Image)
-		AXL_SL_HASH_TABLE_ENTRY ("simplesect", ElemKind_SimpleSect)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(ElemKindMap, ElemKind)
+		AXL_SL_HASH_TABLE_ENTRY("ref",        ElemKind_Ref)
+		AXL_SL_HASH_TABLE_ENTRY("anchor",     ElemKind_Anchor)
+		AXL_SL_HASH_TABLE_ENTRY("image",      ElemKind_Image)
+		AXL_SL_HASH_TABLE_ENTRY("simplesect", ElemKind_SimpleSect)
+	AXL_SL_END_HASH_TABLE()
 
 protected:
 	DocBlock* m_paragraphBlock;
 	DocBlock* m_textBlock;
 
 public:
-	DocParaType ()
+	DocParaType()
 	{
 		m_paragraphBlock = NULL;
 		m_textBlock = NULL;
 	}
 
 	bool
-	create (
+	create(
 		DoxyXmlParser* parser,
-		sl::List <DocBlock>* blockList,
+		sl::List<DocBlock>* blockList,
 		const char* name,
 		const char** attributes
 		);
 
 	virtual
 	bool
-	onStartElement (
+	onStartElement(
 		const char* name,
 		const char** attributes
 		);
 
 	virtual
 	bool
-	onCharacterData (
+	onCharacterData(
 		const char* string,
 		size_t length
 		)
 	{
-		m_textBlock->m_text.append (string, length);
+		m_textBlock->m_text.append(string, length);
 		return true;
 	}
 };
@@ -1148,37 +1148,37 @@ protected:
 		AttrKind_External,
 	};
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (AttrKindMap, AttrKind)
-		AXL_SL_HASH_TABLE_ENTRY ("refid",    AttrKind_RefId)
-		AXL_SL_HASH_TABLE_ENTRY ("kindref",  AttrKind_KindRef)
-		AXL_SL_HASH_TABLE_ENTRY ("external", AttrKind_External)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(AttrKindMap, AttrKind)
+		AXL_SL_HASH_TABLE_ENTRY("refid",    AttrKind_RefId)
+		AXL_SL_HASH_TABLE_ENTRY("kindref",  AttrKind_KindRef)
+		AXL_SL_HASH_TABLE_ENTRY("external", AttrKind_External)
+	AXL_SL_END_HASH_TABLE()
 
 protected:
 	DocRefBlock* m_refBlock;
 
 public:
-	DocRefTextType ()
+	DocRefTextType()
 	{
 		m_refBlock = NULL;
 	}
 
 	bool
-	create (
+	create(
 		DoxyXmlParser* parser,
-		sl::List <DocBlock>* list,
+		sl::List<DocBlock>* list,
 		const char* name,
 		const char** attributes
 		);
 
 	virtual
 	bool
-	onCharacterData (
+	onCharacterData(
 		const char* string,
 		size_t length
 		)
 	{
-		m_refBlock->m_text.append (string, length);
+		m_refBlock->m_text.append(string, length);
 		return true;
 	}
 };
@@ -1194,35 +1194,35 @@ protected:
 		AttrKind_Id,
 	};
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (AttrKindMap, AttrKind)
-		AXL_SL_HASH_TABLE_ENTRY ("id",    AttrKind_Id)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(AttrKindMap, AttrKind)
+		AXL_SL_HASH_TABLE_ENTRY("id",    AttrKind_Id)
+	AXL_SL_END_HASH_TABLE()
 
 protected:
 	DocAnchorBlock* m_anchorBlock;
 
 public:
-	DocAnchorType ()
+	DocAnchorType()
 	{
 		m_anchorBlock = NULL;
 	}
 
 	bool
-	create (
+	create(
 		DoxyXmlParser* parser,
-		sl::List <DocBlock>* list,
+		sl::List<DocBlock>* list,
 		const char* name,
 		const char** attributes
 		);
 
 	virtual
 	bool
-	onCharacterData (
+	onCharacterData(
 		const char* string,
 		size_t length
 		)
 	{
-		m_anchorBlock->m_text.append (string, length);
+		m_anchorBlock->m_text.append(string, length);
 		return true;
 	}
 };
@@ -1241,38 +1241,38 @@ protected:
 		AttrKind_Height,
 	};
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (AttrKindMap, AttrKind)
-		AXL_SL_HASH_TABLE_ENTRY ("type",    AttrKind_Type)
-		AXL_SL_HASH_TABLE_ENTRY ("name",    AttrKind_Name)
-		AXL_SL_HASH_TABLE_ENTRY ("width",   AttrKind_Width)
-		AXL_SL_HASH_TABLE_ENTRY ("height",  AttrKind_Height)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(AttrKindMap, AttrKind)
+		AXL_SL_HASH_TABLE_ENTRY("type",    AttrKind_Type)
+		AXL_SL_HASH_TABLE_ENTRY("name",    AttrKind_Name)
+		AXL_SL_HASH_TABLE_ENTRY("width",   AttrKind_Width)
+		AXL_SL_HASH_TABLE_ENTRY("height",  AttrKind_Height)
+	AXL_SL_END_HASH_TABLE()
 
 protected:
 	DocImageBlock* m_imageBlock;
 
 public:
-	DocImageType ()
+	DocImageType()
 	{
 		m_imageBlock = NULL;
 	}
 
 	bool
-	create (
+	create(
 		DoxyXmlParser* parser,
-		sl::List <DocBlock>* list,
+		sl::List<DocBlock>* list,
 		const char* name,
 		const char** attributes
 		);
 
 	virtual
 	bool
-	onCharacterData (
+	onCharacterData(
 		const char* string,
 		size_t length
 		)
 	{
-		m_imageBlock->m_text.append (string, length);
+		m_imageBlock->m_text.append(string, length);
 		return true;
 	}
 };
@@ -1294,29 +1294,29 @@ protected:
 		AttrKind_Kind,
 	};
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (ElemKindMap, ElemKind)
-		AXL_SL_HASH_TABLE_ENTRY ("para", ElemKind_Para)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(ElemKindMap, ElemKind)
+		AXL_SL_HASH_TABLE_ENTRY("para", ElemKind_Para)
+	AXL_SL_END_HASH_TABLE()
 
-	AXL_SL_BEGIN_STRING_HASH_TABLE (AttrKindMap, AttrKind)
-		AXL_SL_HASH_TABLE_ENTRY ("kind", AttrKind_Kind)
-	AXL_SL_END_HASH_TABLE ()
+	AXL_SL_BEGIN_STRING_HASH_TABLE(AttrKindMap, AttrKind)
+		AXL_SL_HASH_TABLE_ENTRY("kind", AttrKind_Kind)
+	AXL_SL_END_HASH_TABLE()
 
 protected:
 	DocSimpleSectionBlock* m_sectionBlock;
 
 public:
 	bool
-	create (
+	create(
 		DoxyXmlParser* parser,
-		sl::List <DocBlock>* list,
+		sl::List<DocBlock>* list,
 		const char* name,
 		const char** attributes
 		);
 
 	virtual
 	bool
-	onStartElement (
+	onStartElement(
 		const char* name,
 		const char** attributes
 		);

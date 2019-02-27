@@ -15,7 +15,7 @@
 
 //..............................................................................
 
-DoxyXmlParser::DoxyXmlParser ()
+DoxyXmlParser::DoxyXmlParser()
 {
 	m_module = NULL;
 	m_fileKind = DoxyXmlFileKind_Index;
@@ -26,7 +26,7 @@ DoxyXmlParser::DoxyXmlParser ()
 }
 
 bool
-DoxyXmlParser::parseFile (
+DoxyXmlParser::parseFile(
 	Module* module,
 	DoxyXmlFileKind fileKind,
 	const sl::StringRef& fileName,
@@ -35,51 +35,51 @@ DoxyXmlParser::parseFile (
 {
 	m_module = module;
 	m_fileKind = fileKind;
-	m_filePath = io::getFullFilePath (fileName);
-	m_baseDir = io::getDir (m_filePath);
+	m_filePath = io::getFullFilePath(fileName);
+	m_baseDir = io::getDir(m_filePath);
 
-	return xml::ExpatParser <DoxyXmlParser>::parseFile (fileName);
+	return xml::ExpatParser<DoxyXmlParser>::parseFile(fileName);
 }
 
 void
-DoxyXmlParser::clear ()
+DoxyXmlParser::clear()
 {
-	size_t count = m_typeStack.getCount ();
+	size_t count = m_typeStack.getCount();
 	for (size_t i = 0; i < count; i++)
 	{
-		DoxyXmlType* type = m_typeStack [i].m_type;
-		AXL_MEM_DELETE (type);
+		DoxyXmlType* type = m_typeStack[i].m_type;
+		AXL_MEM_DELETE(type);
 	}
 
-	m_typeStack.clear ();
+	m_typeStack.clear();
 }
 
 void
-DoxyXmlParser::popType ()
+DoxyXmlParser::popType()
 {
-	ASSERT (!m_typeStack.isEmpty ());
+	ASSERT(!m_typeStack.isEmpty());
 
-	DoxyXmlType* type = m_typeStack.getBack ().m_type;
-	type->onPopType ();
-	AXL_MEM_DELETE (type);
+	DoxyXmlType* type = m_typeStack.getBack().m_type;
+	type->onPopType();
+	AXL_MEM_DELETE(type);
 
-	m_typeStack.pop ();
+	m_typeStack.pop();
 }
 
 void
-DoxyXmlParser::onStartElement (
+DoxyXmlParser::onStartElement(
 	const char* name,
 	const char** attributes
 	)
 {
 #if _PRINT_XML
-	printElement (name, attributes);
+	printElement(name, attributes);
 	m_indent++;
 #endif
 
-	if (!m_typeStack.isEmpty ())
+	if (!m_typeStack.isEmpty())
 	{
-		TypeStackEntry* entry = &m_typeStack.getBack ();
+		TypeStackEntry* entry = &m_typeStack.getBack();
 
 		if (entry->m_depth != 0)
 		{
@@ -87,39 +87,39 @@ DoxyXmlParser::onStartElement (
 		}
 		else
 		{
-			entry->m_type->onStartElement (name, attributes);
-			if (entry == &m_typeStack.getBack ()) // no new types were added
+			entry->m_type->onStartElement(name, attributes);
+			if (entry == &m_typeStack.getBack()) // no new types were added
 				entry->m_depth++;
 		}
 	}
 	else
 	{
-		ElemKind elemKind = ElemKindMap::findValue (name, ElemKind_Undefined);
-		switch (elemKind)
+		ElemKind elemKind = ElemKindMap::findValue(name, ElemKind_Undefined);
+		switch(elemKind)
 		{
 		case ElemKind_DoxygenIndex:
-			pushType <DoxygenIndexType> (name, attributes);
+			pushType<DoxygenIndexType> (name, attributes);
 			break;
 
 		case ElemKind_DoxygenCompound:
-			pushType <DoxygenCompoundType> (name, attributes);
+			pushType<DoxygenCompoundType> (name, attributes);
 			break;
 		}
 	}
 }
 
 void
-DoxyXmlParser::onEndElement (const char* name)
+DoxyXmlParser::onEndElement(const char* name)
 {
 #if _PRINT_XML
 	m_indent--;
-	printIndent ();
-	printf ("</%s>\n", name);
+	printIndent();
+	printf("</%s>\n", name);
 #endif
 
-	if (!m_typeStack.isEmpty ())
+	if (!m_typeStack.isEmpty())
 	{
-		TypeStackEntry* entry = &m_typeStack.getBack ();
+		TypeStackEntry* entry = &m_typeStack.getBack();
 
 		if (entry->m_depth != 0)
 		{
@@ -127,66 +127,66 @@ DoxyXmlParser::onEndElement (const char* name)
 		}
 		else
 		{
-			entry->m_type->onEndElement (name);
-			popType ();
+			entry->m_type->onEndElement(name);
+			popType();
 		}
 	}
 }
 
 void
-DoxyXmlParser::onCharacterData (
+DoxyXmlParser::onCharacterData(
 	const char* string,
 	size_t length
 	)
 {
 #if _PRINT_XML
-	printIndent ();
-	printf ("%s\n", sl::String (string, length).sz ());
+	printIndent();
+	printf("%s\n", sl::String(string, length).sz());
 #endif
 
-	if (!m_typeStack.isEmpty ())
+	if (!m_typeStack.isEmpty())
 	{
-		TypeStackEntry* entry = &m_typeStack.getBack ();
+		TypeStackEntry* entry = &m_typeStack.getBack();
 
 		if (entry->m_depth == 0)
-			entry->m_type->onCharacterData (string, length);
+			entry->m_type->onCharacterData(string, length);
 	}
 }
 
 #if _PRINT_XML
 void
-DoxyXmlParser::printIndent ()
+DoxyXmlParser::printIndent()
 {
 	for (size_t i = 0; i < m_indent; i++)
-		printf ("  ");
+		printf("  ");
 }
 
 void
-DoxyXmlParser::printElement (
+DoxyXmlParser::printElement(
 	const char* name,
 	const char** attributes
 	)
 {
-	printIndent ();
-	printf ("<%s", name);
+	printIndent();
+	printf("<%s", name);
 
 	if (*attributes)
 	{
-		printf ("\n");
+		printf("\n");
 		m_indent++;
 
 		while (*attributes)
 		{
-			printIndent ();
-			printf ("%s = %s\n", attributes [0], attributes [1]);
+			printIndent();
+			printf("%s = %s\n", attributes [0], attributes [1]);
 			attributes += 2;
 		}
 
 		m_indent--;
-		printIndent ();
+		printIndent();
 	}
 
-	printf (">\n");
+	printf(">\n");
 }
 #endif
 

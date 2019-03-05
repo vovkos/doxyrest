@@ -31,28 +31,32 @@ end -- if
 local isPrevMl = false
 
 for i = 1, #compound.m_functionArray do
-	local item = compound.m_functionArray [i]
-	local decl = getFunctionDeclString (item, hasItemRefTarget (item), "\t")
-	local isMl = string.find (decl, "\n")
-	local extraSep = ""
+    local item = compound.m_functionArray [i]
+    local hasref = hasItemRefTarget (item)
 
-	if i > 1 and (isMl or isPrevMl) then
-		extraSep = "\n"
-	end
+    if hasref then
+        local decl = getFunctionDeclString (item, hasref, "\t")
+        local isMl = string.find (decl, "\n")
+        local extraSep = ""
 
-	isPrevMl = isMl
+        if i > 1 and (isMl or isPrevMl) then
+               extraSep = "\n"
+        end
 
-	if item.m_protectionKind ~= protectionKind then
-		protectionKind = item.m_protectionKind
-		extraSep = ""
+        isPrevMl = isMl
+
+        if item.m_protectionKind ~= protectionKind then
+               protectionKind = item.m_protectionKind
+               extraSep = ""
 }
 
 	// $protectionKind $sectionName
 
 %{
-	end -- if
+        end -- if
 }
 $extraSep	$decl
 %{
+    end -- if
 end -- for
 }

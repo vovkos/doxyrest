@@ -87,7 +87,9 @@ while i <= #compound.m_variableArray do
 				unnamedStack [unnamedStackSize] = n
 				indent = indent .. "    "
 			end -- while
-		end -- if
+
+			isLastUnnamed = false
+		end
 
 		if isLastUnnamed then
 			emit ("\n")
@@ -101,8 +103,18 @@ while i <= #compound.m_variableArray do
 }
 	$indent$static$(getLinkedTextString (item.m_type, true))$modifiers $(getItemNameForOverview (item))$suffix
 %{
-	elseif unnamedStackSize > 0 and not unnamedStack [unnamedStackSize] then
-		unnamedStack [unnamedStackSize] = 0 -- terminate this stack entry
+	else -- unnamed item
+		local j
+		for j = 1, unnamedStackSize do
+			if not unnamedStack [j] then -- terminate this stack entry and everything above
+				local k
+				for k = j, unnamedStackSize do
+					unnamedStack [k] = 0
+				end -- for
+
+				break
+			end -- if
+		end -- for
 	end -- if
 
 	while unnamedStackSize > 0 do
@@ -119,17 +131,17 @@ while i <= #compound.m_variableArray do
 		unnamedStackSize = unnamedStackSize - 1
 		isLastUnnamed = true
 
-		local isNextItemHasUnnamedType = false
+		local useNextItem = false
 		local nextItem = compound.m_variableArray [i + 1]
-		if nextItem then
+		if nextItem and not isUnnamedItem (nextItem) then
 			local typeString = getLinkedTextString (nextItem.m_type, false)
-			isNextItemHasUnnamedType = string.find (typeString, "@")
+			useNextItem = string.find (typeString, "@") -- next item is a field of THIS unnamed type
 		end
 
-		if isNextItemHasUnnamedType then
+		if useNextItem then
 			local modifiers = ""
-			if item.m_modifiers ~= "" then
-				modifiers = " " .. item.m_modifiers
+			if nextItem.m_modifiers ~= "" then
+				modifiers = " " .. nextItem.m_modifiers
 			end
 
 			i = i + 1 -- skip next

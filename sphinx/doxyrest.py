@@ -14,6 +14,7 @@ from docutils.parsers.rst import Directive, directives
 from docutils.transforms import Transform
 from docutils import nodes
 from sphinx import roles, addnodes, config
+import os.path
 
 
 class HighlightedText(nodes.General, nodes.TextElement):
@@ -210,6 +211,19 @@ class RefTransform(Transform):
                 pos = match.end()
 
 
+def on_builder_inited(app):
+    css_dir = os.path.dirname(os.path.realpath(__file__)) + '/css/'
+    app.config.html_static_path += [css_dir + 'doxyrest-pygments.css']
+    app.add_stylesheet('doxyrest-pygments.css')
+
+    supported_themes = {'sphinx_rtd_theme', 'sphinxdoc'}
+
+    if app.config.html_theme in supported_themes:
+        css_file = 'doxyrest-' + app.config.html_theme + '.css'
+        app.config.html_static_path += [css_dir + css_file];
+        app.add_stylesheet(css_file);
+
+
 def setup(app):
     app.add_node(
         HighlightedText,
@@ -224,3 +238,5 @@ def setup(app):
     directives.register_directive('code-block', RefCodeBlock) # replace
 
     app.add_transform(RefTransform)
+
+    app.connect('builder-inited', on_builder_inited)

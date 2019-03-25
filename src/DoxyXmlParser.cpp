@@ -95,7 +95,7 @@ DoxyXmlParser::onStartElement(
 	else
 	{
 		ElemKind elemKind = ElemKindMap::findValue(name, ElemKind_Undefined);
-		switch(elemKind)
+		switch (elemKind)
 		{
 		case ElemKind_DoxygenIndex:
 			pushType<DoxygenIndexType> (name, attributes);

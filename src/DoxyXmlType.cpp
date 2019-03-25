@@ -29,7 +29,7 @@ DoxygenIndexType::create(
 	while (*attributes)
 	{
 		IndexAttrKind attrKind = IndexAttrKindMap::findValue(attributes[0], IndexAttrKind_Undefined);
-		switch(attrKind)
+		switch (attrKind)
 		{
 		case IndexAttrKind_Version:
 			module->m_version = attributes[1];
@@ -49,7 +49,7 @@ DoxygenIndexType::onStartElement(
 	)
 {
 	IndexElemKind elemKind = IndexElemKindMap::findValue(name, IndexElemKind_Undefined);
-	switch(elemKind)
+	switch (elemKind)
 	{
 	case IndexElemKind_Compound:
 		onCompound(name, attributes);
@@ -71,7 +71,7 @@ DoxygenIndexType::onCompound(
 	while (*attributes)
 	{
 		CompoundAttrKind attrKind = CompoundAttrKindMap::findValue(attributes[0], CompoundAttrKind_Undefined);
-		switch(attrKind)
+		switch (attrKind)
 		{
 		case CompoundAttrKind_RefId:
 			refId = attributes[1];
@@ -123,7 +123,7 @@ DoxygenCompoundType::create(
 	while (*attributes)
 	{
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
-		switch(attrKind)
+		switch (attrKind)
 		{
 		case AttrKind_Version:
 			if (module->m_version.isEmpty())
@@ -151,7 +151,7 @@ DoxygenCompoundType::onStartElement(
 	)
 {
 	ElemKind elemKind = ElemKindMap::findValue(name, ElemKind_Undefined);
-	switch(elemKind)
+	switch (elemKind)
 	{
 	case ElemKind_CompoundDef:
 		return m_parser->pushType<CompoundDefType> (name, attributes);
@@ -181,7 +181,7 @@ CompoundDefType::create(
 	while (*attributes)
 	{
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
-		switch(attrKind)
+		switch (attrKind)
 		{
 		case AttrKind_Id:
 			m_compound->m_id = attributes[1];
@@ -242,7 +242,7 @@ CompoundDefType::create(
 		attributes += 2;
 	}
 
-	switch(m_compound->m_compoundKind)
+	switch (m_compound->m_compoundKind)
 	{
 	case CompoundKind_Group:
 		module->m_groupArray.append(m_compound);
@@ -281,7 +281,7 @@ CompoundDefType::onStartElement(
 	sl::BoxIterator<sl::String> stringIt;
 
 	ElemKind elemKind = ElemKindMap::findValue(name, ElemKind_Undefined);
-	switch(elemKind)
+	switch (elemKind)
 	{
 	case ElemKind_CompoundName:
 		m_parser->pushType<StringType> (&m_compound->m_name, name, attributes);
@@ -373,7 +373,7 @@ RefType::create(
 	while (*attributes)
 	{
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
-		switch(attrKind)
+		switch (attrKind)
 		{
 		case AttrKind_RefId:
 			m_ref->m_id = attributes[1];
@@ -416,7 +416,7 @@ SectionDefType::create(
 	while (*attributes)
 	{
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
-		switch(attrKind)
+		switch (attrKind)
 		{
 		case AttrKind_Kind:
 			sectionKind = SectionKindMap::findValue(attributes[1], SectionKind_Undefined);
@@ -436,7 +436,7 @@ SectionDefType::onStartElement(
 	)
 {
 	ElemKind elemKind = ElemKindMap::findValue(name, ElemKind_Undefined);
-	switch(elemKind)
+	switch (elemKind)
 	{
 	case ElemKind_Header:
 		break;
@@ -473,7 +473,7 @@ MemberDefType::create(
 	while (*attributes)
 	{
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
-		switch(attrKind)
+		switch (attrKind)
 		{
 		case AttrKind_Kind:
 			m_member->m_memberKind = MemberKindMap::findValue(attributes[1], MemberKind_Undefined);
@@ -682,7 +682,7 @@ MemberDefType::onStartElement(
 	sl::BoxIterator<sl::String> stringIt;
 
 	ElemKind elemKind = ElemKindMap::findValue(name, ElemKind_Undefined);
-	switch(elemKind)
+	switch (elemKind)
 	{
 	case ElemKind_Includes:
 		stringIt = m_member->m_importList.insertTail();
@@ -787,7 +787,7 @@ DescriptionType::onStartElement(
 	)
 {
 	ElemKind elemKind = ElemKindMap::findValue(name, ElemKind_Undefined);
-	switch(elemKind)
+	switch (elemKind)
 	{
 	case ElemKind_Title:
 		m_parser->pushType<StringType> (&m_description->m_title, name, attributes);
@@ -820,7 +820,7 @@ LocationType::create(
 	while (*attributes)
 	{
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
-		switch(attrKind)
+		switch (attrKind)
 		{
 		case AttrKind_File:
 			location->m_file = attributes[1];
@@ -871,7 +871,7 @@ DocSectionBlockType::create(
 	while (*attributes)
 	{
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
-		switch(attrKind)
+		switch (attrKind)
 		{
 		case AttrKind_Id:
 			m_sectionBlock->m_id = attributes[1];
@@ -891,7 +891,7 @@ DocSectionBlockType::onStartElement(
 	)
 {
 	ElemKind elemKind = ElemKindMap::findValue(name, ElemKind_Undefined);
-	switch(elemKind)
+	switch (elemKind)
 	{
 	case ElemKind_Title:
 		m_parser->pushType<StringType> (&m_sectionBlock->m_title, name, attributes);
@@ -934,7 +934,7 @@ EnumValueType::create(
 	while (*attributes)
 	{
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
-		switch(attrKind)
+		switch (attrKind)
 		{
 		case AttrKind_Id:
 			m_enumValue->m_id = attributes[1];
@@ -988,7 +988,7 @@ EnumValueType::onStartElement(
 	)
 {
 	ElemKind elemKind = ElemKindMap::findValue(name, ElemKind_Undefined);
-	switch(elemKind)
+	switch (elemKind)
 	{
 	case ElemKind_Name:
 		m_parser->pushType<StringType> (&m_enumValue->m_name, name, attributes);
@@ -1032,7 +1032,7 @@ TemplateParamListType::onStartElement(
 	)
 {
 	ElemKind elemKind = ElemKindMap::findValue(name, ElemKind_Undefined);
-	switch(elemKind)
+	switch (elemKind)
 	{
 	case ElemKind_Param:
 		m_parser->pushType<ParamType> (m_list, name, attributes);
@@ -1066,7 +1066,7 @@ ParamType::onStartElement(
 	)
 {
 	ElemKind elemKind = ElemKindMap::findValue(name, ElemKind_Undefined);
-	switch(elemKind)
+	switch (elemKind)
 	{
 	case ElemKind_Type:
 		m_parser->pushType<LinkedTextType> (&m_param->m_type, name, attributes);
@@ -1125,7 +1125,7 @@ LinkedTextType::onStartElement(
 	)
 {
 	ElemKind elemKind = ElemKindMap::findValue(name, ElemKind_Undefined);
-	switch(elemKind)
+	switch (elemKind)
 	{
 	case ElemKind_Ref:
 		m_parser->pushType<RefTextType> (m_linkedText, name, attributes);
@@ -1154,7 +1154,7 @@ RefTextType::create(
 	while (*attributes)
 	{
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
-		switch(attrKind)
+		switch (attrKind)
 		{
 		case AttrKind_RefId:
 			m_refText->m_id = attributes[1];
@@ -1207,7 +1207,7 @@ DocParaType::onStartElement(
 	)
 {
 	ElemKind elemKind = ElemKindMap::findValue(name, ElemKind_Undefined);
-	switch(elemKind)
+	switch (elemKind)
 	{
 	case ElemKind_Ref:
 		m_parser->pushType<DocRefTextType> (&m_paragraphBlock->m_childBlockList, name, attributes);
@@ -1253,7 +1253,7 @@ DocRefTextType::create(
 	while (*attributes)
 	{
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
-		switch(attrKind)
+		switch (attrKind)
 		{
 		case AttrKind_RefId:
 			m_refBlock->m_id = attributes[1];
@@ -1292,7 +1292,7 @@ DocAnchorType::create(
 	while (*attributes)
 	{
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
-		switch(attrKind)
+		switch (attrKind)
 		{
 		case AttrKind_Id:
 			m_anchorBlock->m_id = attributes[1];
@@ -1328,7 +1328,7 @@ DocImageType::create(
 	while (*attributes)
 	{
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
-		switch(attrKind)
+		switch (attrKind)
 		{
 		case AttrKind_Type:
 			m_imageBlock->m_imageKind = ImageKindMap::findValue(attributes[1], ImageKind_Undefined);
@@ -1371,7 +1371,7 @@ DocSimpleSectionType::create(
 	while (*attributes)
 	{
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
-		switch(attrKind)
+		switch (attrKind)
 		{
 		case AttrKind_Kind:
 			m_sectionBlock->m_simpleSectionKind = attributes[1];
@@ -1391,7 +1391,7 @@ DocSimpleSectionType::onStartElement(
 	)
 {
 	ElemKind elemKind = ElemKindMap::findValue(name, ElemKind_Undefined);
-	switch(elemKind)
+	switch (elemKind)
 	{
 	case ElemKind_Para:
 		m_parser->pushType<DocParaType> (&m_sectionBlock->m_childBlockList, name, attributes);

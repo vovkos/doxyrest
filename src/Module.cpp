@@ -446,7 +446,7 @@ Member::luaExport(lua::LuaState* luaState)
 	preparePath();
 	luaState->setMemberString("m_path",  m_path);
 
-	switch(m_memberKind)
+	switch (m_memberKind)
 	{
 	case MemberKind_Typedef:
 		m_type.luaExport(luaState);
@@ -596,7 +596,7 @@ Compound::luaExport(lua::LuaState* luaState)
 
 	size_t count;
 
-	switch(m_compoundKind)
+	switch (m_compoundKind)
 	{
 	case CompoundKind_Group:
 	case CompoundKind_Namespace:
@@ -669,7 +669,7 @@ Compound::unqualifyName()
 
 	for (; p < end; p++)
 	{
-		switch(*p)
+		switch (*p)
 		{
 		case '<':
 			p = end;
@@ -703,7 +703,7 @@ Compound::unspecializeName()
 
 	for (; p < end; p++)
 	{
-		switch(*p)
+		switch (*p)
 		{
 		case '<':
 			level++;
@@ -757,7 +757,7 @@ NamespaceContents::add(Compound* compound)
 	if (compound->m_isDuplicate)
 		return false;
 
-	switch(compound->m_compoundKind)
+	switch (compound->m_compoundKind)
 	{
 	case CompoundKind_Namespace:
 		ASSERT(compound->m_selfNamespace);
@@ -854,7 +854,7 @@ NamespaceContents::add(
 
 	FunctionKind functionKind;
 
-	switch(member->m_memberKind)
+	switch (member->m_memberKind)
 	{
 	case MemberKind_Property:
 		m_propertyArray.append(member);
@@ -880,7 +880,7 @@ NamespaceContents::add(
 		functionKind = FunctionKind_Normal;
 
 		if (thisCompound)
-			switch(thisCompound->m_languageKind)
+			switch (thisCompound->m_languageKind)
 			{
 			case LanguageKind_Cpp:
 			case LanguageKind_Java:
@@ -1100,7 +1100,7 @@ GlobalNamespace::build(
 		{
 			Compound* memberCompound;
 
-			switch(memberIt->m_memberKind)
+			switch (memberIt->m_memberKind)
 			{
 			case MemberKind_Interface:
 			case MemberKind_Service:
@@ -1238,7 +1238,7 @@ GlobalNamespace::build(
 	{
 		sl::Iterator<Member> memberIt;
 
-		switch(compoundIt->m_compoundKind)
+		switch (compoundIt->m_compoundKind)
 		{
 		case CompoundKind_Undefined: // template base type or incomplete compound
 		case CompoundKind_Group:     // groups are added implicitly, via group members
@@ -1254,7 +1254,7 @@ GlobalNamespace::build(
 				if (memberIt->m_flags & MemberFlag_Duplicate)
 					continue;
 
-				switch(memberIt->m_memberKind)
+				switch (memberIt->m_memberKind)
 				{
 				case MemberKind_Interface:
 				case MemberKind_Service:

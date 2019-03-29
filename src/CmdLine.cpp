@@ -34,6 +34,10 @@ CmdLineParser::onSwitch(
 		m_cmdLine->m_flags |= CmdLineFlag_AllowMemberGroups;
 		break;
 
+	case CmdLineSwitchKind_ConfigFileName:
+		m_cmdLine->m_configFileName = value;
+		break;
+
 	case CmdLineSwitchKind_OutputFileName:
 		m_cmdLine->m_outputFileName = value;
 		break;

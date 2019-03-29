@@ -39,6 +39,7 @@ struct Define: sl::ListLink
 struct CmdLine
 {
 	uint_t m_flags;
+	sl::String m_configFileName;
 	sl::String m_inputFileName;
 	sl::String m_outputFileName;
 	sl::String m_frameFileName;
@@ -58,6 +59,7 @@ enum CmdLineSwitchKind
 	CmdLineSwitchKind_Undefined = 0,
 	CmdLineSwitchKind_Help,
 	CmdLineSwitchKind_Version,
+	CmdLineSwitchKind_ConfigFileName,
 	CmdLineSwitchKind_OutputFileName,
 	CmdLineSwitchKind_FrameFileName,
 	CmdLineSwitchKind_FrameDir,
@@ -77,6 +79,12 @@ AXL_SL_BEGIN_CMD_LINE_SWITCH_TABLE(CmdLineSwitchTable, CmdLineSwitchKind)
 		CmdLineSwitchKind_Version,
 		"v", "version", NULL,
 		"Display version of doxyrest"
+		)
+
+	AXL_SL_CMD_LINE_SWITCH_2(
+		CmdLineSwitchKind_ConfigFileName,
+		"c", "conf", "<file>",
+		"Set configuration file (default: doxyrest.conf)"
 		)
 
 	AXL_SL_CMD_LINE_SWITCH_2(

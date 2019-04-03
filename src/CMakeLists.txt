@@ -13,7 +13,7 @@
 # app folder
 #
 
-set (
+set(
 	APP_H_LIST
 	CmdLine.h
 	Module.h
@@ -24,7 +24,7 @@ set (
 	version.h.in
 	)
 
-set (
+set(
 	APP_CPP_LIST
 	main.cpp
 	CmdLine.cpp
@@ -35,7 +35,7 @@ set (
 	DoxyXmlParser.cpp
 	)
 
-source_group (
+source_group(
 	app
 	FILES
 	${APP_H_LIST}
@@ -47,12 +47,12 @@ source_group (
 # frame folder
 #
 
-file (
+file(
 	GLOB FRAME_LIST
 	${DOXYREST_ROOT_DIR}/frame/*.*
 	)
 
-source_group (
+source_group(
 	frame
 	FILES
 	${FRAME_LIST}
@@ -63,12 +63,12 @@ source_group (
 # res folder
 #
 
-set (
+set(
 	RES_RC_LIST
 	res.rc
 	)
 
-source_group (
+source_group(
 	res
 	FILES
 	${RES_RC_LIST}
@@ -79,24 +79,24 @@ source_group (
 # gen folder
 #
 
-set (GEN_DIR ${CMAKE_CURRENT_BINARY_DIR}/gen)
-file (MAKE_DIRECTORY ${GEN_DIR})
+set(GEN_DIR ${CMAKE_CURRENT_BINARY_DIR}/gen)
+file(MAKE_DIRECTORY ${GEN_DIR})
 
-axl_push_and_set (CMAKE_CURRENT_BINARY_DIR ${GEN_DIR})
+axl_push_and_set(CMAKE_CURRENT_BINARY_DIR ${GEN_DIR})
 
-configure_file (
+configure_file(
 	version.h.in
 	${GEN_DIR}/version.h
 	)
 
-set (
+set(
 	GEN_H_LIST
 	${GEN_DIR}/version.h
 	)
 
-axl_pop (CMAKE_CURRENT_BINARY_DIR)
+axl_pop(CMAKE_CURRENT_BINARY_DIR)
 
-source_group (
+source_group(
 	gen
 	FILES
 	${GEN_H_LIST}
@@ -107,10 +107,10 @@ source_group (
 # pch folder
 #
 
-set (PCH_H   pch.h)
-set (PCH_CPP pch.cpp)
+set(PCH_H   pch.h)
+set(PCH_CPP pch.cpp)
 
-source_group (
+source_group(
 	pch
 	FILES
 	${PCH_H}
@@ -122,20 +122,20 @@ source_group (
 # doxyrest doxygen-to-restructured-text conversion tool
 #
 
-include_directories (
+include_directories(
 	${EXPAT_INC_DIR}
 	${LUA_INC_DIR}
 	${AXL_INC_DIR}
 	${GEN_DIR}
 	)
 
-link_directories (
+link_directories(
 	${EXPAT_LIB_DIR}
 	${LUA_LIB_DIR}
 	${AXL_LIB_DIR}
 	)
 
-add_executable (
+add_executable(
 	doxyrest
 	${PCH_H}
 	${PCH_CPP}
@@ -146,13 +146,13 @@ add_executable (
 	${GEN_H_LIST}
 	)
 
-axl_set_pch (
+axl_set_pch(
 	doxyrest
 	${PCH_H}
 	${PCH_CPP}
 	)
 
-target_link_libraries (
+target_link_libraries(
 	doxyrest
 	axl_st
 	axl_lua
@@ -164,34 +164,34 @@ target_link_libraries (
 	${LUA_LIB_NAME}
 	)
 
-if (UNIX)
-	target_link_libraries (
+if(UNIX)
+	target_link_libraries(
 		doxyrest
 		pthread
 		dl
 		)
 
-	if (NOT APPLE)
-		target_link_libraries (
+	if(NOT APPLE)
+		target_link_libraries(
 			doxyrest
 			rt
 			)
-	endif ()
-endif ()
+	endif()
+endif()
 
-if (WIN32)
-	set (_DLL_LIST)
+if(WIN32)
+	set(_DLL_LIST)
 
-	if (EXPAT_DLL_DIR)
-		list (APPEND _DLL_LIST ${EXPAT_DLL_DIR}/expat.dll)
-	endif ()
+	if(EXPAT_DLL_DIR)
+		list(APPEND _DLL_LIST ${EXPAT_DLL_DIR}/expat.dll)
+	endif()
 
-	if (LUA_DLL_DIR)
-		list (APPEND _DLL_LIST ${LUA_DLL_DIR}/${LUA_LIB_NAME}.dll)
-	endif ()
+	if(LUA_DLL_DIR)
+		list(APPEND _DLL_LIST ${LUA_DLL_DIR}/${LUA_LIB_NAME}.dll)
+	endif()
 
-	if (_DLL_LIST)
-		add_custom_command (
+	if(_DLL_LIST)
+		add_custom_command(
 			TARGET doxyrest
 			POST_BUILD
 			COMMAND
@@ -202,16 +202,16 @@ if (WIN32)
 				${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CONFIGURATION}
 			)
 
-		install (
+		install(
 			FILES ${_DLL_LIST}
 			DESTINATION ${DOXYREST_INSTALL_BIN_SUBDIR}
 			)
-	endif ()
-endif ()
+	endif()
+endif()
 
 #. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-install (
+install(
 	TARGETS doxyrest
 	DESTINATION ${DOXYREST_INSTALL_BIN_SUBDIR}
 	)

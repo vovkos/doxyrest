@@ -22,6 +22,14 @@ function getNormalizedCppString (string)
 	return s
 end
 
+g_closingBracketChar =
+{
+	["("] = ")",
+	["["] = "]",
+	["<"] = ">",
+	["{"] = "}",
+}
+
 function getLinkedTextString (text, isRef)
 	if not text then
 		return ""

@@ -9,24 +9,24 @@
 #
 #...............................................................................
 
-include (jancy_version.cmake)
+include(jancy_version.cmake)
 
-set (DOC_NAME "Jancy Standard Library Reference")
+set(DOC_NAME "Jancy Standard Library Reference")
 
-set (XML_TAR_FILE     ${CMAKE_CURRENT_LIST_DIR}/xml.tar.xz)
-set (STATIC_RST_DIR   ${CMAKE_CURRENT_LIST_DIR}/rst)
-set (JANCY_SPHINX_DIR ${CMAKE_CURRENT_LIST_DIR}/sphinx)
+set(XML_TAR_FILE     ${CMAKE_CURRENT_LIST_DIR}/xml.tar.xz)
+set(STATIC_RST_DIR   ${CMAKE_CURRENT_LIST_DIR}/rst)
+set(JANCY_SPHINX_DIR ${CMAKE_CURRENT_LIST_DIR}/sphinx)
 
-set (XML_DIR  ${CMAKE_CURRENT_BINARY_DIR}/xml)
-set (RST_DIR  ${CMAKE_CURRENT_BINARY_DIR}/rst)
-set (TMP_DIR  ${CMAKE_CURRENT_BINARY_DIR}/tmp)
-set (HTML_DIR ${DOXYREST_DOC_DIR}/html/samples/jancy-stdlib)
+set(XML_DIR  ${CMAKE_CURRENT_BINARY_DIR}/xml)
+set(RST_DIR  ${CMAKE_CURRENT_BINARY_DIR}/rst)
+set(TMP_DIR  ${CMAKE_CURRENT_BINARY_DIR}/tmp)
+set(HTML_DIR ${DOXYREST_DOC_DIR}/html/samples/jancy-stdlib)
 
-set (SPHINX_HTML_THEME ${AXL_SPHINX_HTML_THEME})
+set(SPHINX_HTML_THEME ${AXL_SPHINX_HTML_THEME})
 
 #. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-set (
+set(
 	DOXYREST_CMD_LINE
 	${XML_DIR}/index.xml
 	-o ${RST_DIR}/index.rst
@@ -38,7 +38,7 @@ set (
 	-f c_index.rst.in
 	)
 
-set (
+set(
 	SPHINX_HTML_CMD_LINE
 	-b html
 	-d ${TMP_DIR}/sphinx-doctrees
@@ -49,59 +49,59 @@ set (
 
 #. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-set (
+set(
 	CMD_LINE_VAR_LIST
 
 	DOXYREST_CMD_LINE
 	SPHINX_HTML_CMD_LINE
 	)
 
-foreach (_VAR ${CMD_LINE_VAR_LIST})
-	string (
+foreach(_VAR ${CMD_LINE_VAR_LIST})
+	string(
 		REPLACE
 		";" " "
 		${_VAR}
 		"${${_VAR}}"
 		)
-endforeach ()
+endforeach()
 
 #. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-configure_file (
+configure_file(
 	conf.py.in
 	conf.py
 	)
 
-if (WIN32)
-	string (REPLACE "$(Configuration)" "%1" DOXYREST_EXE "${DOXYREST_EXE}")
+if(WIN32)
+	string(REPLACE "$(Configuration)" "%1" DOXYREST_EXE "${DOXYREST_EXE}")
 
-	configure_file (
+	configure_file(
 		${DOXYREST_SAMPLE_SH_DIR}/unpack-xml.bat.in
 		unpack-xml.bat
 		)
 
-	configure_file (
+	configure_file(
 		${DOXYREST_SAMPLE_SH_DIR}/test.bat.in
 		test.bat
 		)
 
-	configure_file (
+	configure_file(
 		${AXL_DOC_SHARE_DIR}/sh/build-rst.bat.in
 		build-rst.bat
 		)
 
-	configure_file (
+	configure_file(
 		${AXL_DOC_SHARE_DIR}/sh/build-html.bat.in
 		build-html.bat
 		)
 
-	add_test (
+	add_test(
 		NAME sample-jancy-stdlib
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 		COMMAND test.bat $<CONFIGURATION>
 		)
-else ()
-	axl_configure_file_w_permissions (
+else()
+	axl_configure_file_w_permissions(
 		${DOXYREST_SAMPLE_SH_DIR}/unpack-xml.sh.in
 		unpack-xml.sh
 		OWNER_READ OWNER_WRITE OWNER_EXECUTE
@@ -109,7 +109,7 @@ else ()
 		WORLD_READ WORLD_WRITE WORLD_EXECUTE
 		)
 
-	axl_configure_file_w_permissions (
+	axl_configure_file_w_permissions(
 		${DOXYREST_SAMPLE_SH_DIR}/test.sh.in
 		test.sh
 		OWNER_READ OWNER_WRITE OWNER_EXECUTE
@@ -117,7 +117,7 @@ else ()
 		WORLD_READ WORLD_WRITE WORLD_EXECUTE
 		)
 
-	axl_configure_file_w_permissions (
+	axl_configure_file_w_permissions(
 		${AXL_DOC_SHARE_DIR}/sh/build-rst.sh.in
 		build-rst.sh
 		OWNER_READ OWNER_WRITE OWNER_EXECUTE
@@ -125,7 +125,7 @@ else ()
 		WORLD_READ WORLD_WRITE WORLD_EXECUTE
 		)
 
-	axl_configure_file_w_permissions (
+	axl_configure_file_w_permissions(
 		${AXL_DOC_SHARE_DIR}/sh/build-html.sh.in
 		build-html.sh
 		OWNER_READ OWNER_WRITE OWNER_EXECUTE
@@ -133,11 +133,11 @@ else ()
 		WORLD_READ WORLD_WRITE WORLD_EXECUTE
 		)
 
-	add_test (
+	add_test(
 		NAME sample-jancy-stdlib
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 		COMMAND ./test.sh
 		)
-endif ()
+endif()
 
 #...............................................................................

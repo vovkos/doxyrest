@@ -9,10 +9,10 @@
 #
 #...............................................................................
 
-if (SPHINX_FOUND)
-	add_subdirectory (index)
-	add_subdirectory (manual)
-	add_subdirectory (build-guide)
-endif ()
+if(SPHINX_FOUND)
+	add_subdirectory(index)
+	add_subdirectory(manual)
+	add_subdirectory(build-guide)
+endif()
 
 #...............................................................................

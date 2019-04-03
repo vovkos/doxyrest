@@ -9,23 +9,23 @@
 #
 #...............................................................................
 
-option (
+option(
 	BUILD_DOXYREST_SAMPLES
-	"Build example documentation for a bunch of opensource projects (used for testing as well)"
+	"Build example documentation for a bunch of opensource projects(used for testing as well)"
 	ON
 	)
 
-if (BUILD_DOXYREST_SAMPLES)
-	set (DOXYREST_SAMPLE_SH_DIR "${CMAKE_CURRENT_LIST_DIR}/sh")
+if(BUILD_DOXYREST_SAMPLES)
+	set(DOXYREST_SAMPLE_SH_DIR "${CMAKE_CURRENT_LIST_DIR}/sh")
 
-	add_subdirectory (jancy-api)
-	add_subdirectory (jancy-stdlib)
-	add_subdirectory (libusb)
-	add_subdirectory (libssh)
-	add_subdirectory (alsa)
-	add_subdirectory (apr)
-	add_subdirectory (opencv)
-	add_subdirectory (poco)
-endif ()
+	add_subdirectory(jancy-api)
+	add_subdirectory(jancy-stdlib)
+	add_subdirectory(libusb)
+	add_subdirectory(libssh)
+	add_subdirectory(alsa)
+	add_subdirectory(apr)
+	add_subdirectory(opencv)
+	add_subdirectory(poco)
+endif()
 
 #...............................................................................

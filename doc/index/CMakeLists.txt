@@ -9,17 +9,17 @@
 #
 #...............................................................................
 
-set (DOC_NAME "Doxyrest Documentation Index")
+set(DOC_NAME "Doxyrest Documentation Index")
 
-set (RST_DIR  ${CMAKE_CURRENT_LIST_DIR})
-set (TMP_DIR  ${CMAKE_CURRENT_BINARY_DIR}/tmp)
-set (HTML_DIR ${DOXYREST_DOC_DIR}/html)
+set(RST_DIR  ${CMAKE_CURRENT_LIST_DIR})
+set(TMP_DIR  ${CMAKE_CURRENT_BINARY_DIR}/tmp)
+set(HTML_DIR ${DOXYREST_DOC_DIR}/html)
 
-set (SPHINX_HTML_THEME ${AXL_SPHINX_HTML_THEME})
+set(SPHINX_HTML_THEME ${AXL_SPHINX_HTML_THEME})
 
 #. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-set (
+set(
 	SPHINX_HTML_CMD_LINE
 	-b html
 	-d ${TMP_DIR}/sphinx-doctrees
@@ -28,7 +28,7 @@ set (
 	${HTML_DIR}
 	)
 
-string (
+string(
 	REPLACE
 	";" " "
 	SPHINX_HTML_CMD_LINE
@@ -37,24 +37,24 @@ string (
 
 #. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-configure_file (
+configure_file(
 	conf.py.in
 	conf.py
 	)
 
-if (WIN32)
-	configure_file (
+if(WIN32)
+	configure_file(
 		${AXL_DOC_SHARE_DIR}/sh/build-html.bat.in
 		build-html.bat
 		)
-else ()
-	axl_configure_file_w_permissions (
+else()
+	axl_configure_file_w_permissions(
 		${AXL_DOC_SHARE_DIR}/sh/build-html.sh.in
 		build-html.sh
 		OWNER_READ OWNER_WRITE OWNER_EXECUTE
 		GROUP_READ GROUP_WRITE GROUP_EXECUTE
 		WORLD_READ WORLD_WRITE WORLD_EXECUTE
 		)
-endif ()
+endif()
 
 #...............................................................................

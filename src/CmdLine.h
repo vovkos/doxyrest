@@ -17,9 +17,8 @@
 
 enum CmdLineFlag
 {
-	CmdLineFlag_Help              = 0x0001,
-	CmdLineFlag_Version           = 0x0002,
-	CmdLineFlag_AllowMemberGroups = 0x0004,
+	CmdLineFlag_Help    = 0x0001,
+	CmdLineFlag_Version = 0x0002,
 };
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -35,6 +34,8 @@ struct Define: sl::ListLink
 		m_hasValue = false;
 	}
 };
+
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 struct CmdLine
 {
@@ -52,6 +53,12 @@ struct CmdLine
 	}
 };
 
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+AXL_SELECT_ANY char g_defaultConfigFileName[] = "doxyrest-conf.lua";
+AXL_SELECT_ANY char g_defaultOutputFileName[] = "rst/index.rst";
+AXL_SELECT_ANY char g_defaultFrameFileName[]  = "index.rst.in";
+
 //..............................................................................
 
 enum CmdLineSwitchKind
@@ -64,7 +71,6 @@ enum CmdLineSwitchKind
 	CmdLineSwitchKind_FrameFileName,
 	CmdLineSwitchKind_FrameDir,
 	CmdLineSwitchKind_Define,
-	CmdLineSwitchKind_AllowMemberGroups,
 };
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -75,6 +81,7 @@ AXL_SL_BEGIN_CMD_LINE_SWITCH_TABLE(CmdLineSwitchTable, CmdLineSwitchKind)
 		"h", "help", NULL,
 		"Display this help"
 		)
+
 	AXL_SL_CMD_LINE_SWITCH_2(
 		CmdLineSwitchKind_Version,
 		"v", "version", NULL,
@@ -84,7 +91,7 @@ AXL_SL_BEGIN_CMD_LINE_SWITCH_TABLE(CmdLineSwitchTable, CmdLineSwitchKind)
 	AXL_SL_CMD_LINE_SWITCH_2(
 		CmdLineSwitchKind_ConfigFileName,
 		"c", "conf", "<file>",
-		"Set configuration file (default: doxyrest.conf)"
+		"Specify configuration file (default: doxyrest-conf.lua)"
 		)
 
 	AXL_SL_CMD_LINE_SWITCH_2(
@@ -110,13 +117,6 @@ AXL_SL_BEGIN_CMD_LINE_SWITCH_TABLE(CmdLineSwitchTable, CmdLineSwitchKind)
 		"D", "define", "<name>[=<value>]",
 		"Define a Lua variable"
 		)
-
-	AXL_SL_CMD_LINE_SWITCH(
-		CmdLineSwitchKind_AllowMemberGroups,
-		"allow-member-groups", NULL,
-		"Allow grouping for type members"
-		)
-
 AXL_SL_END_CMD_LINE_SWITCH_TABLE()
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .

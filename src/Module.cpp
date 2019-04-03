@@ -1049,8 +1049,6 @@ GlobalNamespace::build(
 
 	// loop #1 assign groups
 
-	bool isMemberGroupAllowed = (cmdLineFlags & CmdLineFlag_AllowMemberGroups) != 0;
-
 	size_t count = module->m_groupArray.getCount();
 	for (size_t i = 0; i < count; i++)
 	{
@@ -1065,7 +1063,7 @@ GlobalNamespace::build(
 			else
 			{
 				Member* member = module->m_memberMap.findValue(memberIt->m_id, NULL);
-				if (member && (isMemberGroupAllowed || member->m_parentCompound->isMemberGroupAllowed()))
+				if (member && member->m_parentCompound->isMemberGroupAllowed())
 					member->m_groupCompound = compound;
 			}
 		}
@@ -1156,7 +1154,7 @@ GlobalNamespace::build(
 
 			if (innerCompound->m_groupCompound)
 			{
-				if (isMemberGroupAllowed || compound->isMemberGroupAllowed())
+				if (compound->isMemberGroupAllowed())
 				{
 					Namespace* groupNspace = getGroupNamespace(module, innerCompound->m_groupCompound);
 					groupNspace->add(innerCompound);

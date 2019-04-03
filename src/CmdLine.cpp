@@ -30,10 +30,6 @@ CmdLineParser::onSwitch(
 		m_cmdLine->m_flags |= CmdLineFlag_Version;
 		break;
 
-	case CmdLineSwitchKind_AllowMemberGroups:
-		m_cmdLine->m_flags |= CmdLineFlag_AllowMemberGroups;
-		break;
-
 	case CmdLineSwitchKind_ConfigFileName:
 		m_cmdLine->m_configFileName = value;
 		break;
@@ -75,6 +71,10 @@ CmdLineParser::onSwitch(
 bool
 CmdLineParser::finalize()
 {
+	if (m_cmdLine->m_configFileName.isEmpty())
+		if (io::doesFileExist(g_defaultConfigFileName))
+			m_cmdLine->m_configFileName = g_defaultConfigFileName;
+
 	if (m_cmdLine->m_inputFileName.isEmpty())
 	{
 		if (!m_cmdLine->m_flags)
@@ -83,11 +83,14 @@ CmdLineParser::finalize()
 	else
 	{
 		if (m_cmdLine->m_outputFileName.isEmpty())
-			m_cmdLine->m_outputFileName = io::getFileName(m_cmdLine->m_inputFileName) + ".rst";
+			m_cmdLine->m_outputFileName = "rst/index.rst";
 
 		if (m_cmdLine->m_frameFileName.isEmpty())
+			m_cmdLine->m_frameFileName = "index.rst.in";
+
+		if (!io::findFilePath(m_cmdLine->m_frameFileName, &m_cmdLine->m_frameDirList))
 		{
-			err::setError("master frame file name missing\n");
+			err::setFormatStringError("master frame file %s name missing", m_cmdLine->m_frameFileName.sz());
 			return false;
 		}
 	}

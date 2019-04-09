@@ -80,7 +80,7 @@ Adds Lua frame directory, for example:
 	-F ./my-doxyrest-frame
 	--frame-dir ./my-doxyrest-frame
 
-It is allowed to use ``--frame-dir`` switch multiple times to add multiple directories.
+The ``--frame-dir`` switch may be used multiple times to add multiple directories.
 
 .. option:: -p, --protection
 

@@ -14,7 +14,7 @@ Lua Frames
 
 Lua frames are used as templates for reStructuredText generation.
 
-Default set of frames is located at: ``$DOXYREST_DIR/frame``. Currently this folder only contains frames for C-family languages (``c_*.rst.in`` and ``c_utils.lua``). These frames has been tested with C, C++ and Jancy. Minor tweaks may be necessary for other C-family languages like Java or D.
+Default set of frames is located at: ``$DOXYREST_DIR/frame``. Currently this folder only contains frames for C-family languages (``c_*.rst.in`` and ``c_utils.lua``). These frames have been tested with C, C++ and Jancy. Minor tweaks may be necessary for other C-family languages like Java or D.
 
 Frame Structure
 ---------------
@@ -55,7 +55,7 @@ Output:
 	* List item
 	* List item
 
-It is allowed to inject variables or expressions directly into the template reStructuredText. This can be achieved using ``$variable`` or ``$(expression)`` operators.
+Variables or expressions may be injected directly into the template reStructuredText using ``$variable`` or ``$(expression)`` operators.
 
 .. rubric:: Example:
 

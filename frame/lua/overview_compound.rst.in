@@ -1,0 +1,39 @@
+%{
+--------------------------------------------------------------------------------
+--
+--  This file is part of the Doxyrest toolkit.
+--
+--  Doxyrest is distributed under the MIT license.
+--  For details see accompanying license.txt file,
+--  the public copy of which is also available at:
+--  http://tibbo.com/downloads/archive/doxyrest/license.txt
+--
+--------------------------------------------------------------------------------
+
+local argArray = table.pack(...)
+local compound = argArray[1]
+local variableSectionName = string.lower(argArray[2])
+local functionSectionName = string.lower(argArray[3])
+
+emit(getItemArrayOverviewRefTargetString(compound.m_variableArray))
+emit(getItemArrayOverviewRefTargetString(compound.m_functionArray))
+}
+.. ref-code-block:: lua
+	:class: overview-code-block
+
+%{
+if #compound.m_structArray > 0 then
+	includeFile("overview_types.rst.in", compound, compound.m_structArray)
+	emit("\n")
+end -- if
+
+if #compound.m_variableArray > 0 then
+	includeFile("overview_variables.rst.in", compound, variableSectionName)
+	emit("\n")
+end -- if
+
+if #compound.m_functionArray > 0 then
+	includeFile("overview_functions.rst.in", compound, functionSectionName)
+	emit("\n")
+end
+}

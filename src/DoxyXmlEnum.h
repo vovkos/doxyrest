@@ -48,6 +48,8 @@ enum LanguageKind
 	LanguageKind_Xml,
 	LanguageKind_Tcl,
 	LanguageKind_Markdown,
+	LanguageKind_Lua,
+	LanguageKind_Perl,
 	LanguageKind_Jancy,
 };
 
@@ -67,6 +69,8 @@ AXL_SL_BEGIN_STRING_HASH_TABLE(LanguageKindMap, LanguageKind)
 	AXL_SL_HASH_TABLE_ENTRY("XML",         LanguageKind_Xml)
 	AXL_SL_HASH_TABLE_ENTRY("Tcl",         LanguageKind_Tcl)
 	AXL_SL_HASH_TABLE_ENTRY("Markdown",    LanguageKind_Markdown)
+	AXL_SL_HASH_TABLE_ENTRY("Lua",         LanguageKind_Lua)
+	AXL_SL_HASH_TABLE_ENTRY("Perl",        LanguageKind_Perl)
 	AXL_SL_HASH_TABLE_ENTRY("Jancy",       LanguageKind_Jancy)
 AXL_SL_END_HASH_TABLE()
 

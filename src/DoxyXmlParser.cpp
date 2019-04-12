@@ -20,7 +20,7 @@ DoxyXmlParser::DoxyXmlParser()
 	m_module = NULL;
 	m_fileKind = DoxyXmlFileKind_Index;
 
-#if _PRINT_XML
+#if (_PRINT_XML)
 	m_indent = 0;
 #endif
 }
@@ -72,7 +72,7 @@ DoxyXmlParser::onStartElement(
 	const char** attributes
 	)
 {
-#if _PRINT_XML
+#if (_PRINT_XML)
 	printElement(name, attributes);
 	m_indent++;
 #endif
@@ -111,7 +111,7 @@ DoxyXmlParser::onStartElement(
 void
 DoxyXmlParser::onEndElement(const char* name)
 {
-#if _PRINT_XML
+#if (_PRINT_XML)
 	m_indent--;
 	printIndent();
 	printf("</%s>\n", name);
@@ -139,7 +139,7 @@ DoxyXmlParser::onCharacterData(
 	size_t length
 	)
 {
-#if _PRINT_XML
+#if (_PRINT_XML)
 	printIndent();
 	printf("%s\n", sl::String(string, length).sz());
 #endif
@@ -153,7 +153,7 @@ DoxyXmlParser::onCharacterData(
 	}
 }
 
-#if _PRINT_XML
+#if (_PRINT_XML)
 void
 DoxyXmlParser::printIndent()
 {

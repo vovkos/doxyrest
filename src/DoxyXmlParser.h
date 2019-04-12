@@ -57,7 +57,7 @@ protected:
 	sl::Array<TypeStackEntry> m_typeStack;
 	sl::Array<Compound*> m_compoundStack;
 
-#if _PRINT_XML
+#if (_PRINT_XML)
 	size_t m_indent;
 #endif
 
@@ -176,7 +176,7 @@ protected:
 	popType();
 
 private:
-#if _PRINT_XML
+#if (_PRINT_XML)
 	void
 	printIndent();
 

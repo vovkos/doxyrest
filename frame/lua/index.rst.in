@@ -1,0 +1,153 @@
+%{
+--------------------------------------------------------------------------------
+--
+--  This file is part of the Doxyrest toolkit.
+--
+--  Doxyrest is distributed under the MIT license.
+--  For details see accompanying license.txt file,
+--  the public copy of which is also available at:
+--  http://tibbo.com/downloads/archive/doxyrest/license.txt
+--
+--------------------------------------------------------------------------------
+
+dofile(g_frameDir .. "/utils.lua")
+
+if not g_importUrlMap then
+	g_importUrlMap = {}
+end
+
+if VERBATIM_TO_CODE_BLOCK and type(VERBATIM_TO_CODE_BLOCK) ~= "string" then
+	VERBATIM_TO_CODE_BLOCK = "none" -- to support simple `-DVERBATIM_TO_CODE_BLOCK`
+end
+
+if GLOBAL_DEF_FILE then
+}
+.. include:: $GLOBAL_DEF_FILE
+%{
+end -- if
+
+if INTRO_FILE then
+}
+.. include:: $INTRO_FILE
+
+%{
+else
+	if not INDEX_TITLE then
+		INDEX_TITLE = "My Project Documentation"
+	end
+}
+$(getTitle(INDEX_TITLE, "="))
+
+%{
+end --if
+
+if #g_groupArray > 0 then
+}
+.. toctree::
+	:hidden:
+
+%{
+	table.sort(g_groupArray, cmpTitles) -- use cmpIds to sequence logically, not alphabetically
+	local groupTree = ""
+
+	for i = 1, #g_groupArray do
+		local group = g_groupArray[i]
+		local targetFileName = getItemFileName(group)
+
+		prepareCompound(group)
+		generateFile(targetFileName, "group.rst.in", group)
+		groupTree = groupTree .. getGroupTree(group)
+}
+	$(targetFileName)
+%{
+	end -- for
+}
+
+.. rubric:: Further Reading:
+
+$groupTree
+
+%{
+end -- if
+
+if #g_pageArray > 0 or g_extraPageList then
+}
+.. toctree::
+	:hidden:
+
+%{
+	table.sort(g_pageArray, cmpTitles)
+	local pageTree = ""
+
+	for i = 1, #g_pageArray do
+		local page = g_pageArray[i]
+		local targetFileName = getItemFileName(page)
+
+		generateFile(targetFileName, "page.rst.in", page)
+
+		if targetFileName ~= INTRO_FILE then
+			pageTree = pageTree .. getPageTree(page, targetFileName)
+}
+	$(targetFileName)
+%{
+		end -- if
+	end -- for
+
+	if g_extraPageList then
+		for fileName in string.gmatch(g_extraPageList, "[^,;]+") do
+			local docName = string.gsub(fileName, "%.rst$", "")
+			pageTree = pageTree .. "|\t:doc:`" .. docName .."`\n"
+}
+	$(fileName)
+%{
+		end
+	end
+}
+
+.. rubric:: Related Pages:
+
+$pageTree
+
+%{
+end -- if
+
+if #g_exampleArray > 0 then
+}
+.. toctree::
+	:hidden:
+
+%{
+	table.sort(g_exampleArray, cmpNames)
+	local exampleList = ""
+
+	for i = 1, #g_exampleArray do
+		local example = g_exampleArray[i]
+		local targetFileName = getItemFileName(example)
+		local docName = string.gsub(targetFileName, "%.rst$", "")
+
+		generateFile(targetFileName, "example.rst.in", example)
+		exampleList = exampleList .. "|\t:doc:`" .. docName .."`\n"
+}
+	$(targetFileName)
+%{
+	end -- for
+}
+
+.. rubric:: Examples:
+
+$exampleList
+
+%{
+end -- if
+
+generateFile("global.rst", "global.rst.in")
+}
+.. rubric:: Reference and Index:
+
+.. toctree::
+	:hidden:
+
+	global.rst
+
+|	:doc:`global`
+|	:ref:`genindex`

@@ -50,6 +50,8 @@ getLanguageKindString(LanguageKind languageKind)
 		"XML",         // LanguageKind_Xml
 		"Tcl",         // LanguageKind_Tcl
 		"Markdown",    // LanguageKind_Markdown
+		"Lua",         // LanguageKind_Lua
+		"Perl",        // LanguageKind_Perl
 		"Jancy",       // LanguageKind_Jancy
 	};
 

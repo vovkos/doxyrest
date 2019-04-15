@@ -700,28 +700,6 @@ function getTypedefDeclString(typedef, isRef, indent)
 	return s
 end
 
-function getClassDeclString(class, isRef, isQualifiedName, indent)
-	local s = ""
-
-	local name
-
-	if isQualifiedName then
-		name = getItemQualifiedName(class)
-	else
-		name = getItemName(class)
-	end
-
-	s = s .. class.m_compoundKind .. " "
-
-	if isRef then
-		s = s .. ":ref:`" .. name  .. "<doxid-" .. class.m_id .. ">` "
-	else
-		s = s .. name
-	end
-
-	return s
-end
-
 function getBaseClassString(class, protection)
 	local s = ""
 

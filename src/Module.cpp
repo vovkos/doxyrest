@@ -218,6 +218,18 @@ DocImageBlock::luaExport(lua::LuaState* luaState)
 //.............................................................................
 
 void
+DocUlinkBlock::luaExport(lua::LuaState* luaState)
+{
+	luaState->createTable();
+
+	DocBlock::luaExportMembers(luaState);
+
+	luaState->setMemberString("m_url", m_url);
+}
+
+//.............................................................................
+
+void
 DocSectionBlock::luaExport(lua::LuaState* luaState)
 {
 	luaState->createTable();

@@ -1152,6 +1152,8 @@ function getDocBlockContents (block, context)
 			else
 				s = text
 			end
+		elseif block.m_blockKind == "ulink" then
+			s = "`" .. block.m_text .. " <" .. block.m_url .. ">`_"
 		else
 			s = text
 		end

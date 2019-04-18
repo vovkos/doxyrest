@@ -1346,10 +1346,6 @@ DocImageType::create(
 			m_imageBlock->m_width = atoi(attributes[1]);
 			break;
 
-		case AttrKind_Url:
-			m_imageBlock->m_url = attributes[1];
-			break;
-
 		case AttrKind_Height:
 			m_imageBlock->m_height = atoi(attributes[1]);
 			break;

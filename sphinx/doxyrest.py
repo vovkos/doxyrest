@@ -212,15 +212,24 @@ class RefTransform(Transform):
 
 
 def on_builder_inited(app):
-    css_dir = os.path.dirname(os.path.realpath(__file__)) + '/css/'
-    app.config.html_static_path += [css_dir + 'doxyrest-pygments.css']
-    app.add_stylesheet('doxyrest-pygments.css')
+    this_dir = os.path.dirname(os.path.realpath(__file__))
 
-    supported_themes = {'sphinx_rtd_theme', 'sphinxdoc'}
+    app.config.html_static_path += [
+        this_dir + '/css/doxyrest-pygments.css',
+        this_dir + '/js/target-highlight.js'
+    ]
+
+    app.add_stylesheet('doxyrest-pygments.css')
+    app.add_javascript('target-highlight.js')
+
+    supported_themes = {
+        'sphinx_rtd_theme',
+        'sphinxdoc'
+    }
 
     if app.config.html_theme in supported_themes:
         css_file = 'doxyrest-' + app.config.html_theme + '.css'
-        app.config.html_static_path += [css_dir + css_file];
+        app.config.html_static_path += [this_dir + '/css/' + css_file];
         app.add_stylesheet(css_file);
 
 

@@ -33,14 +33,14 @@ set(SPHINX_HTML_THEME ${AXL_SPHINX_HTML_THEME})
 set(
 	DOXYREST_CMD_LINE
 	${XML_DIR}/index.xml
-	-D g_hasNewLineAfterReturnType
-	-D g_nameDelimiter=::
+	-D ML_SPECIFIER_MODIFIER_LIST
 	-D "\"g_indexTitle=Apache Portable Runtime Documentation\""
-	-D g_escapeAsterisks
-	-D g_verbatimToCodeBlock
+	-D ESCAPE_ASTERISKS
+	-D VERBATIM_TO_CODE_BLOCK=none
 	-o ${RST_DIR}/index.rst
-	-F ${DOXYREST_FRAME_DIR}
-	-f c_index.rst.in
+	-F ${DOXYREST_FRAME_DIR}/cfamily
+	-F ${DOXYREST_FRAME_DIR}/common
+	-f index.rst.in
 	)
 
 set(

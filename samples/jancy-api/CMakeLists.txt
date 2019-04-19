@@ -28,12 +28,12 @@ set(SPHINX_HTML_THEME ${AXL_SPHINX_HTML_THEME})
 set(
 	DOXYREST_CMD_LINE
 	${XML_DIR}/index.xml
-	-D g_hasNewLineAfterReturnType
-	-D g_nameDelimiter=::
-	-D g_introFile=intro.rst
+	-D ML_SPECIFIER_MODIFIER_LIST
+	-D INTRO_FILE=intro.rst
 	-o ${RST_DIR}/index.rst
-	-F ${DOXYREST_FRAME_DIR}
-	-f c_index.rst.in
+	-F ${DOXYREST_FRAME_DIR}/cfamily
+	-F ${DOXYREST_FRAME_DIR}/common
+	-f index.rst.in
 	)
 
 set(

@@ -33,15 +33,15 @@ set(SPHINX_HTML_THEME ${AXL_SPHINX_HTML_THEME})
 set(
 	DOXYREST_CMD_LINE
 	${XML_DIR}/index.xml
-	-D g_hasNewLineAfterReturnType
-	-D g_nameDelimiter=::
-	-D g_verbatimToCodeBlock=cpp
+	-D ML_SPECIFIER_MODIFIER_LIST
+	-D VERBATIM_TO_CODE_BLOCK=cpp
 	-D \"g_indexTitle=${DOC_NAME}\"
-	-D g_escapeAsterisks
-	-D g_protectionFilter=protected
+	-D ESCAPE_ASTERISKS
+	-D PROTECTION_FILTER=protected
 	-o ${RST_DIR}/index.rst
-	-F ${DOXYREST_FRAME_DIR}
-	-f c_index.rst.in
+	-F ${DOXYREST_FRAME_DIR}/cfamily
+	-F ${DOXYREST_FRAME_DIR}/common
+	-f index.rst.in
 	)
 
 set(

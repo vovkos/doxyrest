@@ -74,6 +74,14 @@ INDEX_TITLE = "My Project Documentation"
 INTRO_FILE = nil
 
 --!
+--! Specify the main language of your project; this string will be used for
+--! the reStructuredText ``.. code::`` sections and for conditional formatting
+--! of module item declarations.
+--!
+
+LANGUAGE = cpp
+
+--!
 --! Convert ``\verbatim`` sections in doxy-comments to ``.. code-block::``
 --! sections in the output reStructuredText. The string value of
 --! ``VERBATIM_TO_CODE_BLOCK`` will be used as the language of
@@ -82,6 +90,19 @@ INTRO_FILE = nil
 --!
 
 VERBATIM_TO_CODE_BLOCK = "none"
+
+--!
+--! Exclude items with higher protection level than ``PROTECTION_FILTER``:
+--!
+--!     1. public
+--!     2. protected
+--!     3. private
+--!     4. package
+--!
+--! By default, only public items are included into documentation.
+--!
+
+PROTECTION_FILTER = "public"
 
 --!
 --! Exclude items declared in specific locations. Use a regular expression to
@@ -99,17 +120,63 @@ EXCLUDE_LOCATION_PATTERN = nil
 EXCLUDE_UNDOCUMENTED_ITEMS = false
 
 --!
+--! Usually you don't want to include empty defines (include-guards,
+--! conditional compilation switches, etc) into the project documentation.
+--! Change this to ``false`` if empty defines *should* be included.
+--!
+
+EXCLUDE_EMPTY_DEFINES = true
+
+--!
+--! If non-``nil``, each define will be checked using this regular expression
+--! and if its name matches, this define will be excluded from the documentation.
+--!
+
+EXCLUDE_DEFINE_PATTERN = nil
+
+--!
+--! Usually providing documentation blocks for default constructors is
+--! not necessary (as to avoid redundant meaningless "Constructs a new object"
+--! paragraphs). Change this to ``false`` if default constructors *should* be
+--! included.
+--!
+
+EXCLUDE_DEFAULT_CONSTRUCTOR = true
+
+--!
+--! Usually providing documentation blocks for a destructors is
+--! not necessary (as to avoid redundant meaningless "Destructs an object"
+--! paragraphs). Change this to ``false`` if destructors *should* be
+--! included.
+--!
+
+EXCLUDE_DESTRUCTORS = true
+
+--!
+--! Usually providing documentation blocks for primitive C typedefs such as:
+--!
+--! .. code:: C
+--!
+--!     typedef struct S S;
+--!
+--! is not necessary. Change this to ``false`` if such typedefs *should* be
+--! included.
+--!
+
+EXCLUDE_PRIMITIVE_TYPEDEFS = true
+
+--!
 --! Insert space between function name and parameter list like this:
 --!
---! .. code:: lua
+--! .. code:: C
 --!
---!     function foo ()
+--!     void foo ();
 --!
 --! By default, ``PRE_PARAM_LIST_SPACE`` is ``false`` which yields:
 --!
---! .. code:: lua
+--! .. code:: C
 --!
---!     function foo()
+--!     void foo();
 --!
 
 PRE_PARAM_LIST_SPACE = false
@@ -129,3 +196,28 @@ ML_PARAM_LIST_COUNT_THRESHOLD = nil
 --!
 
 ML_PARAM_LIST_LENGTH_THRESHOLD = 80
+
+--!
+--! Use multi-line specifier-modifier lists in function declarations, i.e.
+--! allocate a dedicated line for each type specifier/morifier.
+--!
+
+ML_SPECIFIER_MODIFIER_LIST = false
+
+--!
+--! Sometimes, it's required to redirect a Doxygen link to some external location.
+--! In this case, add an entry to ``IMPORT_URL_MAP`` with the target URL, e.g.:
+--!
+--! .. code:: lua
+--!
+--!     IMPORT_URL_MAP =
+--!     {
+--!         [ "cfd9ea7a-35de-4090-a83b-3d214b3ff358/type_jnc_scheduler" ] = "https://vovkos.github.io/jancy/stdlib/class_jnc_Scheduler.html"
+--!     }
+--!
+--! The key of the map is an 'importid' attribute. This is a non-standard Doxygen
+--! attribute; Jancy compiler generates is when a referenced item is contained in an
+--! imported extensions library (``.jncx``)
+--!
+
+IMPORT_URL_MAP = {}

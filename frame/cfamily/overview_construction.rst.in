@@ -10,17 +10,25 @@
 --
 --------------------------------------------------------------------------------
 
-if FORCE_INCLUDE_FILE then
+local argArray = table.pack(...)
+local compound = argArray[1]
+
+includeFile(
+	"overview_common.rst.in",
+	compound,
+	compound.constructorArray,
+	getVoidFunctionDeclString,
+	"construction"
+	)
+
+if not EXCLUDE_DESTRUCTORS and compound.destructor then
+	local item = compound.destructor
+	local extraSep = ""
+	if isPrevMl then
+		extraSep = "\n"
+	end
 }
-.. include:: $FORCE_INCLUDE_FILE
+$extraSep	$(getVoidFunctionDeclString(item, hasItemRefTarget(item), "\t"))
 %{
 end -- if
-}
-.. _global:
-
-Global
-======
-
-%{
-includeFile("compound.rst.in", g_globalNamespace)
 }

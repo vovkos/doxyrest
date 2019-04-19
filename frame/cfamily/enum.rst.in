@@ -1,0 +1,129 @@
+%{
+--------------------------------------------------------------------------------
+--
+--  This file is part of the Doxyrest toolkit.
+--
+--  Doxyrest is distributed under the MIT license.
+--  For details see accompanying license.txt file,
+--  the public copy of which is also available at:
+--  http://tibbo.com/downloads/archive/doxyrest/license.txt
+--
+--------------------------------------------------------------------------------
+
+local argArray = table.pack(...)
+local enum = argArray[1]
+
+local enumKind = getItemKindString(enum, "enum")
+local enumStats = prepareEnum(enum)
+local prevGetItemName = getItemName
+
+getItemName = getItemSimpleName
+
+if FORCE_INCLUDE_FILE then
+}
+.. include:: $FORCE_INCLUDE_FILE
+%{
+end -- if
+}
+.. index:: pair: enum; $(getItemQualifiedName(enum))
+.. _doxid-$(enum.id):
+.. _cid-$(getItemCid(enum)):
+
+$(getTitle(enumKind .. " " .. getItemQualifiedName(enum), "="))
+
+%{
+local hasDetails =
+	enumStats.hasDocumentedEnumValues or
+	enumStats.hasBriefDocumentation and enumStats.hasDetailedDocumentation
+
+if hasDetails then
+}
+Overview
+~~~~~~~~
+
+$(getItemBriefDocumentation(enum, "details-"))
+
+%{
+else
+}
+$(getItemDetailedDocumentation(enum))
+
+%{
+end -- if
+
+emit(getEnumOverviewRefTargetString(enum))
+}
+.. ref-code-block:: $LANGUAGE
+	:class: overview-code-block
+
+	$(getItemImportString(enum), "\t")
+	$enumKind $(getItemQualifiedName(enum))
+	{
+%{
+for i = 1, #enum.enumValueArray do
+	local item = enum.enumValueArray[i]
+	local initializer = getLinkedTextString(item.initializer, true)
+	local comma = ","
+
+	if string.len(initializer) > 0 then
+		initializer = " " .. initializer
+	end
+
+	if i == #enum.enumValueArray then
+		comma = ""
+	end
+}
+	    $(getItemNameForOverview(item))$initializer$comma
+%{
+end -- for
+}
+	};
+
+%{
+if hasDetails then
+}
+.. _details-doxid-$(enum.id):
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+$(getItemDetailedDocumentation(enum))
+
+%{
+end -- if
+
+if enumStats.hasDocumentedEnumValues then
+}
+Enum Values
+-----------
+
+%{
+	for i = 1, #enum.enumValueArray do
+		local item = enum.enumValueArray[i]
+		if item.hasDocumentation then
+}
+$(getItemRefTargetString(item))
+.. ref-code-block:: $LANGUAGE
+	:class: title-code-block
+
+	$(item.name)
+%{
+		if item.isSubGroupHead then
+			for j = 1, #item.subGroupSlaveArray do
+				slaveItem = item.subGroupSlaveArray[j]
+}
+	$(slaveItem.name)
+%{
+			end -- for
+		end -- if
+}
+
+$(getItemDetailedDocumentation(item))
+
+%{
+		end -- if
+	end -- for
+end -- if
+
+getItemName = prevGetItemName
+}

@@ -12,13 +12,28 @@
 
 local argArray = table.pack(...)
 local compound = argArray[1]
-local sectionName = argArray[2]
+local itemArray = argArray[2]
+local getDeclString = argArray[3]
+local sectionName = argArray[4]
+}
+	// $sectionName
 
-includeFile(
-	"details.rst.in",
-	compound,
-	compound.functionArray,
-	getFunctionDeclString,
-	sectionName
-	)
+%{
+local isPrevMl = false
+
+for i = 1, #itemArray do
+	local item = itemArray[i]
+	local decl = getDeclString(item, hasItemRefTarget(item), "\t")
+	local isMl = string.find(decl, "\n")
+	local extraSep = ""
+
+	if i > 1 and isMl or isPrevMl then
+		extraSep = "\n"
+	end
+
+	isPrevMl = isMl
+}
+$extraSep	$decl;
+%{
+end -- for
 }

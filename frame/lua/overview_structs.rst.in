@@ -10,17 +10,19 @@
 --
 --------------------------------------------------------------------------------
 
-if FORCE_INCLUDE_FILE then
+local argArray = table.pack(...)
+local compound = argArray[1]
 }
-.. include:: $FORCE_INCLUDE_FILE
-%{
-end -- if
-}
-.. _global:
-
-Global
-======
+	-- table types
 
 %{
-includeFile("compound.rst.in", g_globalNamespace)
+for i = 1, #compound.structArray do
+	local item = compound.structArray[i]
+	local targetFileName = getItemFileName(item)
+
+	generateFile(targetFileName, "struct.rst.in", item)
+}
+	:ref:`$(item.name)<doxid-$(item.id)>`
+%{
+end -- for
 }

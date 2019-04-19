@@ -10,17 +10,20 @@
 --
 --------------------------------------------------------------------------------
 
-if FORCE_INCLUDE_FILE then
+local argArray = table.pack(...)
+local compound = argArray[1]
 }
-.. include:: $FORCE_INCLUDE_FILE
-%{
-end -- if
-}
-.. _global:
-
-Global
-======
+	// namespaces
 
 %{
-includeFile("compound.rst.in", g_globalNamespace)
+for i = 1, #compound.namespaceArray do
+	local item = compound.namespaceArray[i]
+	local targetFileName = getItemFileName(item)
+
+	if compound.compoundKind ~= "group" then
+		generateFile(targetFileName, "namespace.rst.in", item)
+	end
+
+	emit(getNamespaceTree(item))
+end -- for
 }

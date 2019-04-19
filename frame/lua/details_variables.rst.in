@@ -12,34 +12,15 @@
 
 local argArray = table.pack(...)
 local compound = argArray[1]
-local variableSectionName = argArray[2]
-}
-$(getTitle(variableSectionName, "-"))
+local sectionName = argArray[2]
 
-%{
-for i = 1, #compound.m_variableArray do
-	local item = compound.m_variableArray[i]
-	if isItemInCompoundDetails(item, compound) then
-		emit(getItemRefTargetString(item))
-}
-.. ref-code-block:: lua
-	:class: title-code-block
-
-	$(item.m_name)
-%{
-		if item.m_isSubGroupHead then
-			for j = 1, #item.m_subGroupSlaveArray do
-				slaveItem = item.m_subGroupSlaveArray[j]
-}
-	$(slaveItem.m_name)
-%{
-			end -- for
-		end -- if
-}
-
-$(getItemDetailedDocumentation(item))
-
-%{
-	end -- if
-end -- for
+includeFile(
+	"details.rst.in",
+	compound,
+	compound.variableArray,
+	function (item)
+		return item.name
+	end,
+	sectionName
+	)
 }

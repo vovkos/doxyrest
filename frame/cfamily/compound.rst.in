@@ -15,18 +15,27 @@ local compound = argArray[1]
 
 local variableSectionName
 local functionSectionName
+local prevGetItemName = getItemName
+local indent
 
 if compound.compoundKind == "namespace" or compound.compoundKind == "group" then
-	variableSectionName = "Variables"
-	functionSectionName = "Functions"
+	variableSectionName = "Global Variables"
+	functionSectionName = "Global Functions"
+	indent = ""
 else
 	variableSectionName = "Fields"
 	functionSectionName = "Methods"
+	indent = "\t"
+end
+
+if compound.compoundKind == "group" then
+	getItemName = getItemQualifiedName
+else
+	getItemName = getItemSimpleName
 end
 
 local compoundStats = prepareCompound(compound)
 }
-
 $(getCompoundTocTree(compound))
 
 %{
@@ -84,12 +93,40 @@ $(getItemDetailedDocumentation(compound))
 %{
 end -- if
 
+if compoundStats.hasDocumentedUnnamedEnumValues then
+	includeFile("details_unnamed_enum_values.rst.in", compound)
+end
+
+if compoundStats.hasDocumentedTypedefs then
+	includeFile("details_typedefs.rst.in", compound)
+end
+
 if compoundStats.hasDocumentedVariables then
 	includeFile("details_variables.rst.in", compound, variableSectionName)
 end
 
+if compoundStats.hasDocumentedProperties then
+	includeFile("details_properties.rst.in", compound)
+end
+
+if compoundStats.hasDocumentedEvents then
+	includeFile("details_events.rst.in", compound)
+end
+
+if compoundStats.hasDocumentedConstruction then
+	includeFile("details_construction.rst.in", compound)
+end
+
 if compoundStats.hasDocumentedFunctions then
 	includeFile("details_functions.rst.in", compound, functionSectionName)
+end
+
+if compoundStats.hasDocumentedAliases then
+	includeFile("details_aliases.rst.in", compound)
+end
+
+if compoundStats.hasDocumentedDefines then
+	includeFile("details_defines.rst.in", compound)
 end
 
 if #compound.footnoteArray > 0 then
@@ -111,4 +148,6 @@ $text
 %{
 	end -- for
 end -- if
+
+getItemName = prevGetItemName
 }

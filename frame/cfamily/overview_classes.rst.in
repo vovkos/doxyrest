@@ -12,26 +12,33 @@
 
 local argArray = table.pack(...)
 local compound = argArray[1]
-local sectionName = argArray[2]
+local itemArray = argArray[2]
+local sectionName = argArray[3]
 }
-	-- $sectionName
+	// $sectionName
 
 %{
 local isPrevMl = false
 
-for i = 1, #compound.functionArray do
-	local item = compound.functionArray[i]
-	local decl = getFunctionDeclString(item, hasItemRefTarget(item), "\t")
-	local isMl = string.find(decl, "\n")
-	local extraNl = ""
+for i = 1, #itemArray do
+	local item = itemArray[i]
+	local targetFileName = getItemFileName(item)
 
-	if i > 1 and (isMl or isPrevMl) then
-		extraNl = "\n"
+	if compound.compoundKind ~= "group" and not compound.isBaseCompound then
+		generateFile(targetFileName, "class.rst.in", item)
+	end
+
+	local decl = getClassDeclString(item, true, "\t")
+	local isMl = string.find(decl, "\n")
+	local extraSep = ""
+
+	if i > 1 and isMl or isPrevMl then
+		extraSep = "\n"
 	end
 
 	isPrevMl = isMl
 }
-$extraNl	$decl
+$extraSep	$decl
 %{
 end -- for
 }

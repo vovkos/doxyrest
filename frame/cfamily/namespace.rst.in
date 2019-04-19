@@ -10,17 +10,29 @@
 --
 --------------------------------------------------------------------------------
 
-if FORCE_INCLUDE_FILE then
+local argArray = table.pack(...)
+local namespace = argArray[1]
+
+if namespace.name then
+	if FORCE_INCLUDE_FILE then
 }
 .. include:: $FORCE_INCLUDE_FILE
 %{
-end -- if
+	end -- if
 }
-.. _global:
+.. index:: pair: namespace; $(getItemName(namespace))
+.. _doxid-$(namespace.id):
+.. _cid-$(getItemCid(namespace)):
 
-Global
-======
+$(getTitle("namespace " .. getItemName(namespace), "="))
 
 %{
-includeFile("compound.rst.in", g_globalNamespace)
+else
+}
+.. index:: pair: namespace; global
+
+%{
+end -- if
+
+includeFile("compound.rst.in", namespace)
 }

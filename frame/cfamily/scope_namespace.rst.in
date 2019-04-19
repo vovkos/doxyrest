@@ -10,17 +10,18 @@
 --
 --------------------------------------------------------------------------------
 
-if FORCE_INCLUDE_FILE then
+local argArray = table.pack(...)
+local compound = argArray[1]
+local isOpen = argArray[2]
+
+if isOpen then
 }
-.. include:: $FORCE_INCLUDE_FILE
+	namespace $(getItemQualifiedName(compound)) {
+
+%{
+else
+}
+	} // namespace $(getItemQualifiedName(compound))
 %{
 end -- if
-}
-.. _global:
-
-Global
-======
-
-%{
-includeFile("compound.rst.in", g_globalNamespace)
 }

@@ -10,17 +10,28 @@
 --
 --------------------------------------------------------------------------------
 
+local argArray = table.pack(...)
+local class = argArray[1]
+
+local templatePrefix = ""
+if #class.templateParamArray > 0 or #class.templateSpecParamArray > 0 then
+	templatePrefix = "template "
+end
+
+local titleName = getItemQualifiedName(class)
+
 if FORCE_INCLUDE_FILE then
 }
 .. include:: $FORCE_INCLUDE_FILE
 %{
 end -- if
 }
-.. _global:
+.. index:: pair: $(class.compoundKind); $titleName
+.. _doxid-$(class.id):
+.. _cid-$(getItemCid(class)):
 
-Global
-======
+$(getTitle(templatePrefix .. class.compoundKind .. " " .. titleName, "="))
 
 %{
-includeFile("compound.rst.in", g_globalNamespace)
+includeFile("compound.rst.in", class)
 }

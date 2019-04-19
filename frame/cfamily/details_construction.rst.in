@@ -12,13 +12,30 @@
 
 local argArray = table.pack(...)
 local compound = argArray[1]
-local sectionName = argArray[2]
+}
+Construction
+------------
 
+%{
 includeFile(
 	"details.rst.in",
 	compound,
-	compound.functionArray,
-	getFunctionDeclString,
-	sectionName
+	compound.constructorArray,
+	getVoidFunctionDeclString
 	)
+
+if not EXCLUDE_DESTRUCTORS and compound.destructor and compound.destructor.hasDocumentation then
+	item = compound.destructor
+}
+.. _doxid-$(item.id):
+.. _cid-$(getItemCid(item)):
+.. ref-code-block:: $LANGUAGE
+	:class: title-code-block
+
+	$(getVoidFunctionDeclString(item, false, "\t"))
+
+$(getItemDetailedDocumentation(item))
+
+%{
+end -- if
 }

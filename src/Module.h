@@ -535,10 +535,7 @@ public:
 	clear();
 
 	bool
-	build(
-		Module* module,
-		uint_t cmdLineFlags
-		);
+	build(Module* module);
 
 	void
 	luaExport(lua::LuaState* luaState);

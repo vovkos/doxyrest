@@ -11,7 +11,8 @@
 
 #pragma once
 
-struct CmdLine;
+#include "CmdLine.h"
+
 struct Module;
 class GlobalNamespace;
 
@@ -20,42 +21,41 @@ class GlobalNamespace;
 class Generator
 {
 protected:
-	const CmdLine* m_cmdLine;
-
 	st::LuaStringTemplate m_stringTemplate;
 	sl::String m_frameFilePath;
 	sl::String m_frameDir;
 	sl::String m_targetDir;
+	sl::BoxList<sl::String> m_frameDirList;
+	sl::String m_frameFileName;
+	sl::String m_outputFileName;
 
 public:
-	Generator(const CmdLine* cmdLine)
+	bool
+	create(const CmdLine* cmdLine);
+
+	sl::String
+	getConfigValue(const sl::StringRef& name)
 	{
-		m_cmdLine = cmdLine;
+		return m_stringTemplate.m_luaState.getGlobalString(name);
 	}
 
-	void
-	prepare(
+	bool
+	luaExport(
 		Module* module,
 		GlobalNamespace* globalNamespace
 		);
 
 	bool
+	generate()
+	{
+		return generate(m_outputFileName, m_frameFileName);
+	}
+
+	bool
 	generate(
 		const sl::StringRef& targetFileName,
 		const sl::StringRef& frameFileName
 		);
-
-	bool
-	generate(
-		Module* module,
-		GlobalNamespace* globalNamespace,
-		const sl::StringRef& targetFileName,
-		const sl::StringRef& frameFileName
-		)
-	{
-		prepare(module, globalNamespace);
-		return generate(targetFileName, frameFileName);
-	}
 
 protected:
 	static
@@ -64,10 +64,15 @@ protected:
 
 	static
 	int
+	includeFileWithIndent_lua(lua_State* h);
+
+	static
+	int
 	generateFile_lua(lua_State* h);
 
 	bool
 	processFile(
+		const sl::StringRef& indent,
 		const sl::StringRef& targetFileName,
 		const sl::StringRef& frameFileName,
 		size_t baseArgCount

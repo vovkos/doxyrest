@@ -97,11 +97,11 @@ RefText::luaExport(lua::LuaState* luaState)
 {
 	luaState->createTable();
 
-	luaState->setMemberString("m_refKind", getRefKindString(m_refKind));
-	luaState->setMemberString("m_text", m_text);
-	luaState->setMemberString("m_id", m_id);
-	luaState->setMemberString("m_external", m_external);
-	luaState->setMemberString("m_tooltip", m_tooltip);
+	luaState->setMemberString("refKind", getRefKindString(m_refKind));
+	luaState->setMemberString("text", m_text);
+	luaState->setMemberString("id", m_id);
+	luaState->setMemberString("external", m_external);
+	luaState->setMemberString("tooltip", m_tooltip);
 }
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -113,11 +113,11 @@ LinkedText::luaExport(lua::LuaState* luaState)
 
 	luaState->createTable();
 
-	luaState->setMemberBoolean("m_isEmpty", m_plainText.isEmpty ());
-	luaState->setMemberString("m_plainText", m_plainText);
+	luaState->setMemberBoolean("isEmpty", m_plainText.isEmpty ());
+	luaState->setMemberString("plainText", m_plainText);
 
 	luaExportList(luaState, m_refTextList);
-	luaState->setMember("m_refTextArray");
+	luaState->setMember("refTextArray");
 }
 
 void
@@ -147,12 +147,12 @@ LinkedText::normalize()
 void
 DocBlock::luaExportMembers(lua::LuaState* luaState)
 {
-	luaState->setMemberString("m_blockKind", m_blockKind);
-	luaState->setMemberString("m_title", m_title);
-	luaState->setMemberString("m_text", m_text);
+	luaState->setMemberString("blockKind", m_blockKind);
+	luaState->setMemberString("title", m_title);
+	luaState->setMemberString("text", m_text);
 
 	luaExportList(luaState, m_childBlockList);
-	luaState->setMember("m_childBlockList");
+	luaState->setMember("childBlockList");
 }
 
 void
@@ -183,9 +183,9 @@ DocRefBlock::luaExport(lua::LuaState* luaState)
 
 	DocBlock::luaExportMembers(luaState);
 
-	luaState->setMemberString("m_refKind", getRefKindString(m_refKind));
-	luaState->setMemberString("m_id", m_id);
-	luaState->setMemberString("m_external", m_external);
+	luaState->setMemberString("refKind", getRefKindString(m_refKind));
+	luaState->setMemberString("id", m_id);
+	luaState->setMemberString("external", m_external);
 }
 
 //.............................................................................
@@ -197,7 +197,7 @@ DocAnchorBlock::luaExport(lua::LuaState* luaState)
 
 	DocBlock::luaExportMembers(luaState);
 
-	luaState->setMemberString("m_id", m_id);
+	luaState->setMemberString("id", m_id);
 }
 
 //.............................................................................
@@ -209,10 +209,10 @@ DocImageBlock::luaExport(lua::LuaState* luaState)
 
 	DocBlock::luaExportMembers(luaState);
 
-	luaState->setMemberString("m_imageKind", getImageKindString(m_imageKind));
-	luaState->setMemberString("m_name", m_name);
-	luaState->setMemberInteger("m_width", m_width);
-	luaState->setMemberInteger("m_height", m_height);
+	luaState->setMemberString("imageKind", getImageKindString(m_imageKind));
+	luaState->setMemberString("name", m_name);
+	luaState->setMemberInteger("width", m_width);
+	luaState->setMemberInteger("height", m_height);
 }
 
 //.............................................................................
@@ -236,7 +236,7 @@ DocSectionBlock::luaExport(lua::LuaState* luaState)
 
 	DocBlock::luaExportMembers(luaState);
 
-	luaState->setMemberString("m_id", m_id);
+	luaState->setMemberString("id", m_id);
 }
 
 //.............................................................................
@@ -248,7 +248,7 @@ DocSimpleSectionBlock::luaExport(lua::LuaState* luaState)
 
 	DocBlock::luaExportMembers(luaState);
 
-	luaState->setMemberString("m_simpleSectionKind", m_simpleSectionKind);
+	luaState->setMemberString("simpleSectionKind", m_simpleSectionKind);
 }
 
 //.............................................................................
@@ -258,10 +258,10 @@ Description::luaExport(lua::LuaState* luaState)
 {
 	luaState->createTable();
 
-	luaState->setMemberBoolean("m_isEmpty", isEmpty ());
+	luaState->setMemberBoolean("isEmpty", isEmpty ());
 
 	luaExportList(luaState, m_docBlockList);
-	luaState->setMember("m_docBlockList");
+	luaState->setMember("docBlockList");
 }
 
 //.............................................................................
@@ -271,12 +271,12 @@ Location::luaExport(lua::LuaState* luaState)
 {
 	luaState->createTable();
 
-	luaState->setMemberString("m_file", m_file);
-	luaState->setMemberInteger("m_line", m_line);
-	luaState->setMemberInteger("m_column", m_column);
-	luaState->setMemberString("m_bodyFile", m_bodyFile);
-	luaState->setMemberInteger("m_bodyStartLine", m_bodyStartLine);
-	luaState->setMemberInteger("m_bodyEndLine", m_bodyEndLine);
+	luaState->setMemberString("file", m_file);
+	luaState->setMemberInteger("line", m_line);
+	luaState->setMemberInteger("column", m_column);
+	luaState->setMemberString("bodyFile", m_bodyFile);
+	luaState->setMemberInteger("bodyStartLine", m_bodyStartLine);
+	luaState->setMemberInteger("bodyEndLine", m_bodyEndLine);
 }
 
 //..............................................................................
@@ -286,21 +286,21 @@ Param::luaExport(lua::LuaState* luaState)
 {
 	luaState->createTable();
 
-	luaState->setMemberString("m_declarationName", m_declarationName);
-	luaState->setMemberString("m_definitionName", m_definitionName);
-	luaState->setMemberString("m_array", m_array);
+	luaState->setMemberString("declarationName", m_declarationName);
+	luaState->setMemberString("definitionName", m_definitionName);
+	luaState->setMemberString("array", m_array);
 
 	m_type.luaExport(luaState);
-	luaState->setMember("m_type");
+	luaState->setMember("type");
 
 	m_defaultValue.luaExport(luaState);
-	luaState->setMember("m_defaultValue");
+	luaState->setMember("defaultValue");
 
 	m_typeConstraint.luaExport(luaState);
-	luaState->setMember("m_typeConstraint");
+	luaState->setMember("typeConstraint");
 
 	m_briefDescription.luaExport(luaState);
-	luaState->setMember("m_briefDescription");
+	luaState->setMember("briefDescription");
 }
 
 //..............................................................................
@@ -310,9 +310,10 @@ EnumValue::luaExport(lua::LuaState* luaState)
 {
 	luaState->createTable();
 
-	luaState->setMemberString("m_protectionKind", getProtectionKindString(m_protectionKind));
-	luaState->setMemberString("m_id", m_id);
-	luaState->setMemberString("m_name", m_name);
+	luaState->setMemberString("protectionKind", getProtectionKindString(m_protectionKind));
+	luaState->setMemberString("id", m_id);
+	luaState->setMemberString("name", m_name);
+	luaState->setMemberString("memberKind", getMemberKindString(MemberKind_EnumValue));
 
 	m_parentEnum->preparePath();
 	sl::String path = m_parentEnum->m_path;
@@ -320,16 +321,16 @@ EnumValue::luaExport(lua::LuaState* luaState)
 		path += '/';
 
 	path += m_name;
-	luaState->setMemberString("m_path", path);
+	luaState->setMemberString("path", path);
 
 	m_initializer.luaExport(luaState);
-	luaState->setMember("m_initializer");
+	luaState->setMember("initializer");
 
 	m_briefDescription.luaExport(luaState);
-	luaState->setMember("m_briefDescription");
+	luaState->setMember("briefDescription");
 
 	m_detailedDescription.luaExport(luaState);
-	luaState->setMember("m_detailedDescription");
+	luaState->setMember("detailedDescription");
 }
 
 //..............................................................................
@@ -439,120 +440,120 @@ Member::luaExport(lua::LuaState* luaState)
 
 	// now fill the members
 
-	luaState->setMemberString("m_memberKind", getMemberKindString(m_memberKind));
-	luaState->setMemberString("m_protectionKind", getProtectionKindString(m_protectionKind));
-	luaState->setMemberString("m_virtualKind", getVirtualKindString(m_virtualKind));
-	luaState->setMemberString("m_flags", getMemberFlagString(m_flags));
-	luaState->setMemberString("m_id", m_id);
-	luaState->setMemberString("m_name", m_name);
-	luaState->setMemberString("m_modifiers", m_modifiers);
+	luaState->setMemberString("memberKind", getMemberKindString(m_memberKind));
+	luaState->setMemberString("protectionKind", getProtectionKindString(m_protectionKind));
+	luaState->setMemberString("virtualKind", getVirtualKindString(m_virtualKind));
+	luaState->setMemberString("flags", getMemberFlagString(m_flags));
+	luaState->setMemberString("id", m_id);
+	luaState->setMemberString("name", m_name);
+	luaState->setMemberString("modifiers", m_modifiers);
 
 	AXL_TODO("use g_exportCache to export group tables instead of IDs (more natural to use from the Lua frames)")
 
 	if (m_groupCompound)
-		luaState->setMemberString("m_groupId", m_groupCompound->m_id);
+		luaState->setMemberString("groupId", m_groupCompound->m_id);
 
 	luaExportStringList(luaState, m_importList);
-	luaState->setMember("m_importArray");
+	luaState->setMember("importArray");
 
 	preparePath();
-	luaState->setMemberString("m_path",  m_path);
+	luaState->setMemberString("path",  m_path);
 
 	switch (m_memberKind)
 	{
 	case MemberKind_Typedef:
 		m_type.luaExport(luaState);
-		luaState->setMember("m_type");
-		luaState->setMemberString("m_argString", m_argString);
+		luaState->setMember("type");
+		luaState->setMemberString("argString", m_argString);
 
 		luaExportList(luaState, m_paramList);
-		luaState->setMember("m_paramArray");
+		luaState->setMember("paramArray");
 		break;
 
 	case MemberKind_Enum:
 		removeDuplicates(&m_enumValueList);
 		luaExportList(luaState, m_enumValueList);
-		luaState->setMember("m_enumValueArray");
+		luaState->setMember("enumValueArray");
 		break;
 
 	case MemberKind_Variable:
 		m_type.luaExport(luaState);
-		luaState->setMember("m_type");
+		luaState->setMember("type");
 
-		luaState->setMemberString("m_argString", m_argString);
-		luaState->setMemberString("m_bitField", m_bitField);
+		luaState->setMemberString("argString", m_argString);
+		luaState->setMemberString("bitField", m_bitField);
 
 		luaExportList(luaState, m_paramList);
-		luaState->setMember("m_paramArray");
+		luaState->setMember("paramArray");
 
 		m_initializer.luaExport(luaState);
-		luaState->setMember("m_initializer");
+		luaState->setMember("initializer");
 		break;
 
 	case MemberKind_Function:
 		m_type.luaExport(luaState);
-		luaState->setMember("m_returnType");
+		luaState->setMember("returnType");
 
-		luaState->setMemberString("m_argString", m_argString);
+		luaState->setMemberString("argString", m_argString);
 
 		m_exceptions.luaExport(luaState);
-		luaState->setMember("m_exceptions");
+		luaState->setMember("exceptions");
 
 		luaExportList(luaState, m_templateParamList);
-		luaState->setMember("m_templateParamArray");
+		luaState->setMember("templateParamArray");
 
 		luaExportList(luaState, m_templateSpecParamList);
-		luaState->setMember("m_templateSpecParamArray");
+		luaState->setMember("templateSpecParamArray");
 
 		luaExportList(luaState, m_paramList);
-		luaState->setMember("m_paramArray");
+		luaState->setMember("paramArray");
 		break;
 
 	case MemberKind_Property:
 		m_type.luaExport(luaState);
-		luaState->setMember("m_returnType");
+		luaState->setMember("returnType");
 
-		luaState->setMemberString("m_argString", m_argString);
+		luaState->setMemberString("argString", m_argString);
 
 		luaExportList(luaState, m_paramList);
-		luaState->setMember("m_paramArray");
+		luaState->setMember("paramArray");
 		break;
 
 	case MemberKind_Event:
 		m_type.luaExport(luaState);
-		luaState->setMember("m_type");
+		luaState->setMember("type");
 
-		luaState->setMemberString("m_argString", m_argString);
+		luaState->setMemberString("argString", m_argString);
 
 		luaExportList(luaState, m_paramList);
-		luaState->setMember("m_paramArray");
+		luaState->setMember("paramArray");
 		break;
 
 	case MemberKind_Alias:
 		m_initializer.luaExport(luaState);
-		luaState->setMember("m_initializer");
+		luaState->setMember("initializer");
 		break;
 
 	case MemberKind_Define:
 		luaExportList(luaState, m_paramList);
-		luaState->setMember("m_paramArray");
+		luaState->setMember("paramArray");
 
 		m_initializer.luaExport(luaState);
-		luaState->setMember("m_initializer");
+		luaState->setMember("initializer");
 		break;
 	}
 
 	m_briefDescription.luaExport(luaState);
-	luaState->setMember("m_briefDescription");
+	luaState->setMember("briefDescription");
 
 	m_detailedDescription.luaExport(luaState);
-	luaState->setMember("m_detailedDescription");
+	luaState->setMember("detailedDescription");
 
 	m_inBodyDescription.luaExport(luaState);
-	luaState->setMember("m_inBodyDescription");
+	luaState->setMember("inBodyDescription");
 
 	m_location.luaExport(luaState);
-	luaState->setMember("m_location");
+	luaState->setMember("location");
 }
 
 //..............................................................................
@@ -592,19 +593,19 @@ Compound::luaExport(lua::LuaState* luaState)
 
 	// now fill the members
 
-	luaState->setMemberString("m_compoundKind", getCompoundKindString(m_compoundKind));
-	luaState->setMemberString("m_id", m_id);
-	luaState->setMemberString("m_name", m_name);
-	luaState->setMemberString("m_title", m_title);
+	luaState->setMemberString("compoundKind", getCompoundKindString(m_compoundKind));
+	luaState->setMemberString("id", m_id);
+	luaState->setMemberString("name", m_name);
+	luaState->setMemberString("title", m_title);
 
 	if (!m_importId.isEmpty())
-		luaState->setMemberString("m_importId", m_importId);
+		luaState->setMemberString("importId", m_importId);
 
 	if (m_groupCompound)
-		luaState->setMemberString("m_groupId", m_groupCompound->m_id);
+		luaState->setMemberString("groupId", m_groupCompound->m_id);
 
 	preparePath();
-	luaState->setMemberString("m_path", m_path);
+	luaState->setMemberString("path", m_path);
 
 	size_t count;
 
@@ -616,7 +617,7 @@ Compound::luaExport(lua::LuaState* luaState)
 
 	case CompoundKind_Page:
 		luaExportArray(luaState, m_subPageArray);
-		luaState->setMember("m_subPageArray");
+		luaState->setMember("subPageArray");
 		break;
 
 	case CompoundKind_Struct:
@@ -628,20 +629,20 @@ Compound::luaExport(lua::LuaState* luaState)
 	case CompoundKind_Service:
 	case CompoundKind_Singleton:
 		luaExportList(luaState, m_templateParamList);
-		luaState->setMember("m_templateParamArray");
+		luaState->setMember("templateParamArray");
 
 		luaExportList(luaState, m_templateSpecParamList);
-		luaState->setMember("m_templateSpecParamArray");
+		luaState->setMember("templateSpecParamArray");
 
 		luaExportArray(luaState, m_baseTypeArray);
-		luaState->setMember("m_baseTypeArray");
+		luaState->setMember("baseTypeArray");
 
 		count = m_baseTypeProtectionArray.getCount();
 		luaState->createTable(count);
 		for (size_t i = 0; i < count; i++)
 			luaState->setArrayElementString(i + 1, getProtectionKindString(m_baseTypeProtectionArray[i]));
 
-		luaState->setMember("m_baseTypeProtectionArray");
+		luaState->setMember("baseTypeProtectionArray");
 
 		// prefer explicitly specified derived type (fallback to auto-generated if absent)
 
@@ -652,21 +653,21 @@ Compound::luaExport(lua::LuaState* luaState)
 				m_derivedTypeArray_auto
 			);
 
-		luaState->setMember("m_derivedTypeArray");
+		luaState->setMember("derivedTypeArray");
 		break;
 	}
 
 	luaExportStringList(luaState, m_importList);
-	luaState->setMember("m_importArray");
+	luaState->setMember("importArray");
 
 	m_briefDescription.luaExport(luaState);
-	luaState->setMember("m_briefDescription");
+	luaState->setMember("briefDescription");
 
 	m_detailedDescription.luaExport(luaState);
-	luaState->setMember("m_detailedDescription");
+	luaState->setMember("detailedDescription");
 
 	m_location.luaExport(luaState);
-	luaState->setMember("m_location");
+	luaState->setMember("location");
 
 	if (m_selfNamespace) // pages don't have namespaces
 		m_selfNamespace->luaExportMembers(luaState);
@@ -953,70 +954,70 @@ void
 NamespaceContents::luaExportMembers(lua::LuaState* luaState)
 {
 	luaExportArray(luaState, m_groupArray);
-	luaState->setMember("m_groupArray");
+	luaState->setMember("groupArray");
 
 	luaExportArray(luaState, m_namespaceArray);
-	luaState->setMember("m_namespaceArray");
+	luaState->setMember("namespaceArray");
 
 	luaExportArray(luaState, m_enumArray);
-	luaState->setMember("m_enumArray");
+	luaState->setMember("enumArray");
 
 	luaExportArray(luaState, m_structArray);
-	luaState->setMember("m_structArray");
+	luaState->setMember("structArray");
 
 	luaExportArray(luaState, m_unionArray);
-	luaState->setMember("m_unionArray");
+	luaState->setMember("unionArray");
 
 	luaExportArray(luaState, m_classArray);
-	luaState->setMember("m_classArray");
+	luaState->setMember("classArray");
 
 	luaExportArray(luaState, m_interfaceArray);
-	luaState->setMember("m_interfaceArray");
+	luaState->setMember("interfaceArray");
 
 	luaExportArray(luaState, m_protocolArray);
-	luaState->setMember("m_protocolArray");
+	luaState->setMember("protocolArray");
 
 	luaExportArray(luaState, m_exceptionArray);
-	luaState->setMember("m_exceptionArray");
+	luaState->setMember("exceptionArray");
 
 	luaExportArray(luaState, m_serviceArray);
-	luaState->setMember("m_serviceArray");
+	luaState->setMember("serviceArray");
 
 	luaExportArray(luaState, m_singletonArray);
-	luaState->setMember("m_singletonArray");
+	luaState->setMember("singletonArray");
 
 	luaExportArray(luaState, m_typedefArray);
-	luaState->setMember("m_typedefArray");
+	luaState->setMember("typedefArray");
 
 	luaExportArray(luaState, m_variableArray);
-	luaState->setMember("m_variableArray");
+	luaState->setMember("variableArray");
 
 	luaExportArray(luaState, m_constructorArray);
-	luaState->setMember("m_constructorArray");
+	luaState->setMember("constructorArray");
 
 	if (m_destructor)
 	{
 		m_destructor->luaExport(luaState);
-		luaState->setMember("m_destructor");
+		luaState->setMember("destructor");
 	}
 
 	luaExportArray(luaState, m_functionArray);
-	luaState->setMember("m_functionArray");
+	luaState->setMember("functionArray");
 
 	luaExportArray(luaState, m_propertyArray);
-	luaState->setMember("m_propertyArray");
+	luaState->setMember("propertyArray");
 
 	luaExportArray(luaState, m_eventArray);
-	luaState->setMember("m_eventArray");
+	luaState->setMember("eventArray");
 
 	luaExportArray(luaState, m_aliasArray);
-	luaState->setMember("m_aliasArray");
+	luaState->setMember("aliasArray");
 
 	luaExportArray(luaState, m_defineArray);
-	luaState->setMember("m_defineArray");
+	luaState->setMember("defineArray");
 
 	luaExportArray(luaState, m_footnoteArray);
-	luaState->setMember("m_footnoteArray");
+	luaState->setMember("footnoteArray");
 }
 
 //..............................................................................
@@ -1040,10 +1041,7 @@ GlobalNamespace::clear()
 }
 
 bool
-GlobalNamespace::build(
-	Module* module,
-	uint_t cmdLineFlags
-	)
+GlobalNamespace::build(Module* module)
 {
 	clear();
 
@@ -1312,19 +1310,19 @@ GlobalNamespace::luaExport(lua::LuaState* luaState)
 	luaState->createTable();
 	luaExportMembers(luaState);
 
-	luaState->setMemberString("m_path", "");
-	luaState->setMemberString("m_id", "global");
-	luaState->setMemberString("m_compoundKind", "namespace");
+	luaState->setMemberString("path", "");
+	luaState->setMemberString("id", "global");
+	luaState->setMemberString("compoundKind", "namespace");
 
 	// global namespace has no description, but we still want valid m_briefDescription/m_detailedDescription
 
 	Description emptyDescription;
 
 	emptyDescription.luaExport(luaState);
-	luaState->setMember("m_briefDescription");
+	luaState->setMember("briefDescription");
 
 	emptyDescription.luaExport(luaState);
-	luaState->setMember("m_detailedDescription");
+	luaState->setMember("detailedDescription");
 }
 
 Namespace*

@@ -75,25 +75,10 @@ CmdLineParser::finalize()
 		if (io::doesFileExist(g_defaultConfigFileName))
 			m_cmdLine->m_configFileName = g_defaultConfigFileName;
 
-	if (m_cmdLine->m_inputFileName.isEmpty())
-	{
-		if (!m_cmdLine->m_flags)
-			m_cmdLine->m_flags = CmdLineFlag_Help;
-	}
-	else
-	{
-		if (m_cmdLine->m_outputFileName.isEmpty())
-			m_cmdLine->m_outputFileName = "rst/index.rst";
-
-		if (m_cmdLine->m_frameFileName.isEmpty())
-			m_cmdLine->m_frameFileName = "index.rst.in";
-
-		if (!io::findFilePath(m_cmdLine->m_frameFileName, &m_cmdLine->m_frameDirList))
-		{
-			err::setFormatStringError("master frame file %s name missing", m_cmdLine->m_frameFileName.sz());
-			return false;
-		}
-	}
+	if (m_cmdLine->m_inputFileName.isEmpty() &&
+		m_cmdLine->m_configFileName.isEmpty () &&
+		!m_cmdLine->m_flags)
+		m_cmdLine->m_flags = CmdLineFlag_Help;
 
 	return true;
 }

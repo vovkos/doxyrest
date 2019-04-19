@@ -55,9 +55,9 @@ struct CmdLine
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-AXL_SELECT_ANY char g_defaultConfigFileName[] = "doxyrest-conf.lua";
-AXL_SELECT_ANY char g_defaultOutputFileName[] = "rst/index.rst";
+AXL_SELECT_ANY char g_defaultConfigFileName[] = "doxyrest-config.lua";
 AXL_SELECT_ANY char g_defaultFrameFileName[]  = "index.rst.in";
+AXL_SELECT_ANY char g_defaultOutputFileName[] = "rst/index.rst";
 
 //..............................................................................
 
@@ -90,8 +90,8 @@ AXL_SL_BEGIN_CMD_LINE_SWITCH_TABLE(CmdLineSwitchTable, CmdLineSwitchKind)
 
 	AXL_SL_CMD_LINE_SWITCH_2(
 		CmdLineSwitchKind_ConfigFileName,
-		"c", "conf", "<file>",
-		"Specify configuration file (default: doxyrest-conf.lua)"
+		"c", "config", "<file>",
+		"Specify configuration file (default: doxyrest-config.lua)"
 		)
 
 	AXL_SL_CMD_LINE_SWITCH_2(

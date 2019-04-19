@@ -16,7 +16,6 @@
 #include "Generator.h"
 #include "version.h"
 
-#define _PRINT_USAGE_IF_NO_ARGUMENTS 1
 #define _PRINT_MODULE 0
 
 //..............................................................................
@@ -416,28 +415,30 @@ run(CmdLine* cmdLine)
 	Module module;
 	GlobalNamespace globalNamespace;
 	DoxyXmlParser parser;
-	Generator generator(cmdLine);
+	Generator generator;
 
-	printf("parsing...\n");
-
-	result =
-		parser.parseFile(&module, cmdLine->m_inputFileName) &&
-		globalNamespace.build(&module, cmdLine->m_flags);
-
+	result = generator.create(cmdLine);
 	if (!result)
 	{
 		printf("error: %s\n", err::getLastErrorDescription().sz());
 		return -1;
 	}
 
-	printf("generating...\n");
+	sl::String inputFileName = !cmdLine->m_inputFileName.isEmpty() ?
+		cmdLine->m_inputFileName :
+		generator.getConfigValue("INPUT_FILE");
 
-	result = generator.generate(
-		&module,
-		&globalNamespace,
-		cmdLine->m_outputFileName,
-		cmdLine->m_frameFileName
-		);
+	if (inputFileName.isEmpty())
+	{
+		printf("error: no input master XML file\n");
+		return 0;
+	}
+
+	result =
+		parser.parseFile(&module, inputFileName) &&
+		globalNamespace.build(&module) &&
+		generator.luaExport(&module, &globalNamespace) &&
+		generator.generate();
 
 	if (!result)
 	{
@@ -482,14 +483,6 @@ main(
 
 	CmdLine cmdLine;
 	CmdLineParser parser(&cmdLine);
-
-#if _PRINT_USAGE_IF_NO_ARGUMENTS
-	if (argc < 2)
-	{
-		printUsage();
-		return 0;
-	}
-#endif
 
 	result = parser.parse(argc, argv);
 	if (!result)

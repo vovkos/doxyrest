@@ -14,6 +14,8 @@ from docutils.parsers.rst import Directive, directives
 from docutils.transforms import Transform
 from docutils import nodes
 from sphinx import roles, addnodes, config
+from sphinx.io import SphinxBaseFileInput, SphinxRSTFileInput
+from docutils.statemachine import StringList, string2lines
 import os.path
 
 
@@ -233,6 +235,23 @@ def on_builder_inited(app):
         app.add_stylesheet(css_file);
 
 
+class TabAwareSphinxRSTFileInput(SphinxRSTFileInput):
+    def read(self):
+        # type: () -> StringList
+        inputstring = SphinxBaseFileInput.read(self)
+        lines = string2lines(inputstring, convert_whitespace=True, tab_width=self.env.config.doxyrest_tab_width)
+        content = StringList()
+        for lineno, line in enumerate(lines):
+            content.append(line, self.source_path, lineno)
+
+        if self.env.config.rst_prolog:
+            self.prepend_prolog(content, self.env.config.rst_prolog)
+        if self.env.config.rst_epilog:
+            self.append_epilog(content, self.env.config.rst_epilog)
+
+        return content
+
+
 def setup(app):
     app.add_node(
         HighlightedText,
@@ -242,6 +261,8 @@ def setup(app):
 
     app.add_role('cref', cref_role)
     app.add_role('target', target_role)
+    app.add_config_value('doxyrest_tab_width', default=4, rebuild=True)
+    app.registry.add_source_input(TabAwareSphinxRSTFileInput, override=True)
 
     directives.register_directive('ref-code-block', RefCodeBlock)
     directives.register_directive('code-block', RefCodeBlock) # replace

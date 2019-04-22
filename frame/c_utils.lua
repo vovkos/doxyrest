@@ -1296,7 +1296,7 @@ function getSimpleTableContents (blockList, context)
 			local row = {}
 			for rownum = 1, #rowblock do
 				if rowblock[rownum].m_blockKind == 'entry' then
-					local entryblock = rowblock[rownum].m_childBlockList 
+					local entryblock = rowblock[rownum].m_childBlockList
 					for entry = 1, #entryblock do
 						if entryblock[entry].m_blockKind == 'para' then
 							local t = trimWhitespace(entryblock[entry].m_childBlockList[1].m_text)

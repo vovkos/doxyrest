@@ -128,6 +128,17 @@ struct DocImageBlock: DocBlock
 
 //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
+struct DocUlinkBlock: DocBlock
+{
+	sl::String m_url;
+
+	virtual
+	void
+	luaExport(lua::LuaState* luaState);
+};
+
+//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
 struct DocSectionBlock: DocBlock
 {
 	sl::String m_id;

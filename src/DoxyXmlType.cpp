@@ -1221,6 +1221,10 @@ DocParaType::onStartElement(
 		m_parser->pushType<DocImageType> (&m_paragraphBlock->m_childBlockList, name, attributes);
 		break;
 
+	case ElemKind_Ulink:
+		m_parser->pushType<DocUlinkType> (&m_paragraphBlock->m_childBlockList, name, attributes);
+		break;
+
 	case ElemKind_SimpleSect:
 		m_parser->pushType<DocSimpleSectionType> (&m_paragraphBlock->m_childBlockList, name, attributes);
 		break;
@@ -1345,6 +1349,39 @@ DocImageType::create(
 		case AttrKind_Height:
 			m_imageBlock->m_height = atoi(attributes[1]);
 			break;
+		}
+
+		attributes += 2;
+	}
+
+	return true;
+}
+
+//..............................................................................
+
+bool
+DocUlinkType::create(
+		DoxyXmlParser* parser,
+		sl::List<DocBlock>* list,
+		const char* name,
+		const char** attributes
+		)
+{
+	m_parser = parser;
+	m_ulinkBlock = AXL_MEM_NEW(DocUlinkBlock);
+	m_ulinkBlock->m_blockKind = name;
+	list->insertTail(m_ulinkBlock);
+
+	while (*attributes)
+	{
+		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
+		switch (attrKind)
+		{
+			case AttrKind_Url:
+				m_ulinkBlock->m_url = attributes[1];
+				break;
+
+			// add as needed
 		}
 
 		attributes += 2;

@@ -150,20 +150,4 @@ function getPageTree(page, fileName, indent)
 	return s
 end
 
-function getNamespaceTree(nspace, indent)
-	local s = ""
-
-	if not indent then
-		indent = ""
-	end
-
-	s = "\t" .. indent .. "namespace :ref:`" .. getItemQualifiedName(nspace) .. "<doxid-" .. nspace.id ..">`\n"
-
-	for i = 1, #nspace.namespaceArray do
-		s = s .. getNamespaceTree(nspace.namespaceArray[i], indent .. "    ")
-	end
-
-	return s
-end
-
 --------------------------------------------------------------------------------

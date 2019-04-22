@@ -166,6 +166,8 @@ EXCLUDE_DESTRUCTORS = true
 EXCLUDE_PRIMITIVE_TYPEDEFS = true
 
 --!
+--! \subgroup
+--!
 --! Insert space between function name and parameter list like this:
 --!
 --! .. code:: C
@@ -180,6 +182,8 @@ EXCLUDE_PRIMITIVE_TYPEDEFS = true
 --!
 
 PRE_PARAM_LIST_SPACE = false
+PRE_OPERATOR_NAME_SPACE = true
+PRE_OPERATOR_PARAM_LIST_SPACE = true
 
 --!
 --! Use multi-line parameter lists in function declarations if parameter count is

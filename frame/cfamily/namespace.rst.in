@@ -13,26 +13,20 @@
 local argArray = table.pack(...)
 local namespace = argArray[1]
 
-if namespace.name then
-	if FORCE_INCLUDE_FILE then
+if FORCE_INCLUDE_FILE then
 }
 .. include:: $FORCE_INCLUDE_FILE
 %{
-	end -- if
+end -- if
+
+local name = getItemQualifiedName(namespace)
 }
-.. index:: pair: namespace; $(getItemName(namespace))
+.. index:: pair: namespace; $name
 .. _doxid-$(namespace.id):
 .. _cid-$(getItemCid(namespace)):
 
-$(getTitle("namespace " .. getItemName(namespace), "="))
+$(getTitle("namespace " .. name, "="))
 
 %{
-else
-}
-.. index:: pair: namespace; global
-
-%{
-end -- if
-
 includeFile("compound.rst.in", namespace)
 }

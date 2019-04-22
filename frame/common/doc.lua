@@ -89,20 +89,20 @@ function getDocBlockContents(block, context)
 			if not string.find(code, "\n") then
 				s = "``" .. trimWhitespace(code) .. "``"
 			else
-				code = replaceCommonSpacePrefix(code, "    ")
+				code = replaceCommonSpacePrefix(code, "\t")
 				code = trimTrailingWhitespace(code)
 				s = "\n\n.. code-block:: none\n\n" .. code
 			end
 		end
 	elseif block.blockKind == "programlisting" then
 		local code = getCodeDocBlockContents(block, context)
-		code = replaceCommonSpacePrefix(code, "    ")
+		code = replaceCommonSpacePrefix(code, "\t")
 		code = trimTrailingWhitespace(code)
 
 		s = "\n\n.. ref-code-block:: " .. LANGUAGE .. "\n\n" .. code .. "\n\n"
 	elseif block.blockKind == "preformatted" then
 		local code = getCodeDocBlockContents(block, context)
-		code = replaceCommonSpacePrefix(code, "    ")
+		code = replaceCommonSpacePrefix(code, "\t")
 		code = trimTrailingWhitespace(code)
 
 		-- raw seems like a better approach, but need to figure something out with indents
@@ -118,7 +118,7 @@ function getDocBlockContents(block, context)
 		if isInline then
 			s = ":math:`" .. code .. "`"
 		else
-			code = replaceCommonSpacePrefix(code, "    ")
+			code = replaceCommonSpacePrefix(code, "\t")
 			code = trimTrailingWhitespace(code)
 
 			-- raw seems like a better approach, but need to figure something out with indents
@@ -126,7 +126,7 @@ function getDocBlockContents(block, context)
 		end
 	elseif block.blockKind == "verbatim" and VERBATIM_TO_CODE_BLOCK then
 		local code = getCodeDocBlockContents(block, context)
-		code = replaceCommonSpacePrefix(code, "    ")
+		code = replaceCommonSpacePrefix(code, "\t")
 		code = trimTrailingWhitespace(code)
 
 		-- probably also need to assign some div class
@@ -340,7 +340,6 @@ function getDocBlockListContents(blockList)
 	end
 
 	s = trimTrailingWhitespace(s)
-	s = string.gsub(s, "\t", "    ") -- replace tabs with spaces
 
 	return replaceCommonSpacePrefix(s, "")
 end

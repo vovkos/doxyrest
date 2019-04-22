@@ -33,16 +33,29 @@ for i = 1, #compound.enumArray do
 	$enumKind
 	{
 %{
+		local enumStats = prepareEnum(item)
+
 		for j = 1, #item.enumValueArray do
 			local subItem = item.enumValueArray[j]
+			local initializer = getLinkedTextString(subItem.initializer, true)
+			local comma = ","
+
+			if string.len(initializer) > 0 then
+				local spaceCount = enumStats.maxEnumValueNameLength - string.len(item.name) + 1
+				initializer = string.rep(" ", spaceCount) .. initializer
+			end
+
+			if i == #item.enumValueArray then
+				comma = ""
+			end
 }
-	    $(getItemNameForOverview(subItem)) $(getLinkedTextString(subItem.initializer, true))
+	    $(getItemNameForOverview(subItem))$initializer$comma
 %{
 		end -- for
 
 		isLastUnnamed = true
 }
-	}
+	};
 %{
 	else
 		local targetFileName = getItemFileName(item)
@@ -56,7 +69,7 @@ for i = 1, #compound.enumArray do
 			isLastUnnamed = false
 		end
 }
-	$enumKind :ref:`$(getItemName(item))<doxid-$(item.id)>`
+	$enumKind :ref:`$(getItemName(item))<doxid-$(item.id)>`;
 %{
 	end -- if
 end -- for

@@ -34,22 +34,37 @@ $destructorRefTargetString
 .. ref-code-block:: $LANGUAGE
 	:class: overview-code-block
 
+	$(getItemImportString(compound), "\t")
 %{
 if compound.compoundKind == "group" then
 	-- no open scope snippet
 	includeFile("overview_members.rst.in", compound, variableSectionName, functionSectionName, "")
 elseif compound.compoundKind == "namespace" then
-	includeFile("scope_namespace.rst.in", compound, true)
-	includeFile("overview_members.rst.in", compound, variableSectionName, functionSectionName, "")
-	includeFile("scope_namespace.rst.in", compound, false)
+	if not compound.name then
+		-- no open scope snippet
+		includeFile("overview_members.rst.in", compound, variableSectionName, functionSectionName, "")
+	else
+		includeFile("scope_namespace.rst.in", compound, true)
+		includeFile("overview_members.rst.in", compound, variableSectionName, functionSectionName, "")
+		trimOutput()
+		emit("\n")
+		includeFile("scope_namespace.rst.in", compound, false)
+	end
 else
 	includeFile("scope_class.rst.in", compound, true)
 
+	local hasProtectionLabel = false
+	local defaultProtectionKind = getDefaultProtectionKind(compound)
+
 	for i = g_minProtectionValue, g_maxProtectionValue do
 		if compound.protectionCompoundArray[i] then
+			if hasProtectionLabel or i ~= defaultProtectionKind then
 }
 	$(g_protectionNameMap[i]):
 %{
+				hasProtectionLabel = true
+			end
+
 			includeFile(
 				"overview_members.rst.in",
 				compound.protectionCompoundArray[i],
@@ -60,6 +75,8 @@ else
 		end -- if
 	end -- for
 
+	trimOutput()
+	emit("\n")
 	includeFile("scope_class.rst.in", compound, false)
 
 	if compound.baseCompound and compound.baseCompound.hasItems then

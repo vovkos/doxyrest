@@ -45,27 +45,56 @@ else
 	g_nameDelimiter = "."
 end
 
+g_protectionKindMap = {
+	public    = 0,
+	protected = 1,
+	private   = 2,
+	package   = 3,
+}
+
+g_protectionNameMap = {
+	[0] = "public",
+	[1] = "protected",
+	[2] = "private",
+	[3] = "package",
+}
+
+g_minProtectionValue = 0
+g_maxProtectionValue = 3
+
 if PROTECTION_FILTER then
 	g_protectionFilterValue = g_protectionKindMap[PROTECTION_FILTER]
 else
 	g_protectionFilterValue = 0
 end
 
+if PRE_PARAM_LIST_SPACE then
+	g_preParamSpace = " "
+	g_preOperatorParamSpace = ""
+elseif PRE_OPERATOR_PARAM_LIST_SPACE then
+	g_preParamSpace = ""
+	g_preOperatorParamSpace = " "
+else
+	g_preParamSpace = ""
+	g_preOperatorParamSpace = ""
+end
+
+if PRE_OPERATOR_NAME_SPACE then
+	g_preOperatorNameSpace = " "
+else
+	g_preOperatorNameSpace = ""
+end
+
 -------------------------------------------------------------------------------
 
 function getNormalizedCppString(string)
 	local s = string
-	local space = ""
-
-	if PRE_PARAM_LIST_SPACE then
-		space = " "
-	end
 
 	s = string.gsub(s, "%s*%*", "*")
 	s = string.gsub(s, "%s*&", "&")
-	s = string.gsub(s, "<%s*", space .. "<")
+	s = string.gsub(s, "<%s*", g_preParamSpace .. "<")
 	s = string.gsub(s, "%s+>", ">")
-	s = string.gsub(s, "%(%s*", space .. "(")
+	s = string.gsub(s, "%(%s*", g_preParamSpace .. "(")
 	s = string.gsub(s, "%s+%)", ")")
 
 	return s
@@ -164,7 +193,7 @@ function getParamArrayString_ml(paramArray, isRef, lbrace, rbrace, indent, nl)
 	elseif count == 1  then
 		s = lbrace .. getParamString(paramArray[1], isRef) .. rbrace
 	else
-		s = lbrace .. nl .. indent .. "    "
+		s = lbrace .. nl .. indent .. "\t"
 
 		for i = 1, count do
 			s = s .. getParamString(paramArray[i], isRef)
@@ -173,7 +202,7 @@ function getParamArrayString_ml(paramArray, isRef, lbrace, rbrace, indent, nl)
 				s = s .. ","
 			end
 
-			s = s .. nl .. indent .. "    "
+			s = s .. nl .. indent .. "\t"
 		end
 		s = s .. rbrace
 	end
@@ -351,10 +380,25 @@ function getFunctionDeclStringImpl(item, returnType, isRef, indent)
 		s = s .. item.modifiers .. getFunctionModifierDelimiter(indent)
 	end
 
+	local name = getItemName(item)
+	local isOperator = string.find(name, "operator")
+
+	if isOperator then
+		name = string.gsub(
+			name,
+			"operator%s*([()[%]+%-*&=!<>]+)%s*",
+			"operator" .. g_preOperatorNameSpace .. "%1"
+			)
+	end
+
 	if isRef then
-		s = s .. ":ref:`" .. getItemName(item)  .. "<doxid-" .. item.id .. ">`"
+		s = s .. ":ref:`" .. name  .. "<doxid-" .. item.id .. ">`"
 	else
-		s = s .. getItemName(item)
+		s = s .. name
+	end
+
+	if isOperator then -- ensure spacce after operator
+		s = s .. g_preOperatorParamSpace
 	end
 
 	s = s .. getParamArrayString(s, item.paramArray, true, "(", ")", indent)
@@ -462,7 +506,7 @@ function getClassDeclString(class, isRef, indent)
 	s = s .. class.compoundKind .. " "
 
 	if isRef then
-		s = s .. ":ref:`" .. name  .. "<doxid-" .. class.id .. ">` "
+		s = s .. ":ref:`" .. name  .. "<doxid-" .. class.id .. ">`"
 	else
 		s = s .. name
 	end
@@ -533,7 +577,7 @@ function formatArgDeclString(decl, indent)
 		elseif level > 0 then
 			if c == ',' then
 				if not bracket[level].delimiter then
-					bracket[level].delimiter = "\n" .. indent .. string.rep("    ", level)
+					bracket[level].delimiter = "\n" .. indent .. string.rep("\t", level)
 					bracket[level].result = bracket[level].delimiter .. bracket[level].result
 				end
 
@@ -565,26 +609,33 @@ function formatArgDeclString(decl, indent)
 	return bracket[0].result
 end
 
+function getNamespaceTree(nspace, indent)
+	local s = ""
+
+	if not indent then
+		indent = ""
+	end
+
+	s = "\t" .. indent .. "namespace :ref:`" .. getItemQualifiedName(nspace) .. "<doxid-" .. nspace.id ..">`;\n"
+
+	for i = 1, #nspace.namespaceArray do
+		s = s .. getNamespaceTree(nspace.namespaceArray[i], indent .. "\t")
+	end
+
+	return s
+end
+
 -------------------------------------------------------------------------------
 
 -- item filtering utils
 
-g_protectionKindMap = {
-	public    = 0,
-	protected = 1,
-	private   = 2,
-	package   = 3,
-}
-
-g_protectionNameMap = {
-	[0] = "public",
-	[1] = "protected",
-	[2] = "private",
-	[3] = "package",
-}
-
-g_minProtectionValue = 0
-g_maxProtectionValue = 3
+function getDefaultProtectionKind(compound)
+	if compound.compoundKind ~= "class" or string.match(LANGUAGE, "^ja?ncy?$") then
+		return 0
+	else
+		return 2
+	end
+end
 
 function isItemExcludedByProtectionFilter(item)
 
@@ -1041,9 +1092,19 @@ end
 function prepareEnum(enum)
 	local stats = {}
 
+	local maxLength = 0
+	for i = 1, #enum.enumValueArray do
+		local item = enum.enumValueArray[i]
+		local length = string.len(item.name)
+		if length > maxLength then
+			maxLength = length
+		end
+	end
+
 	stats.hasDocumentedEnumValues = prepareItemArrayDocumentation(enum.enumValueArray)
 	stats.hasBriefDocumentation = not isDocumentationEmpty(enum.briefDescription)
 	stats.hasDetailedDocumentation = not isDocumentationEmpty(enum.detailedDescription)
+	stats.maxEnumValueNameLength = maxLength
 
 	return stats
 end

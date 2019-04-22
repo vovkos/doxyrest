@@ -23,6 +23,12 @@ if not EXTRA_PAGE_LIST then
 	EXTRA_PAGE_LIST = {}
 end
 
+if PRE_PARAM_LIST_SPACE then
+	g_preParamSpace = " "
+else
+	g_preParamSpace = ""
+end
+
 -------------------------------------------------------------------------------
 
 -- formatting of function declarations
@@ -60,7 +66,7 @@ function getParamArrayString_ml(paramArray, indent)
 		indent = ""
 	end
 
-	local nl = "\n" .. indent .. "    " -- rst code indent is 4 spaces
+	local nl = "\n" .. indent .. "\t"
 
 	local count = #paramArray
 	if count > 0 then
@@ -85,11 +91,6 @@ function getFunctionDeclString(func, isRef, indent)
 	end
 
 	local paramString
-	local space = ""
-
-	if PRE_PARAM_LIST_SPACE then
-		space = " "
-	end
 
 	if ML_PARAM_LIST_COUNT_THRESHOLD and
 		#func.paramArray > ML_PARAM_LIST_COUNT_THRESHOLD then
@@ -98,14 +99,14 @@ function getFunctionDeclString(func, isRef, indent)
 		paramString = getParamArrayString_sl(func.paramArray)
 
 		if ML_PARAM_LIST_LENGTH_THRESHOLD then
-			local decl = "function " .. func.name .. space .. paramString
+			local decl = "function " .. func.name .. g_preParamSpace .. paramString
 			if string.len(decl) > ML_PARAM_LIST_LENGTH_THRESHOLD then
 				paramString = getParamArrayString_ml(func.paramArray, indent)
 			end
 		end
 	end
 
-	s = s .. space .. paramString
+	s = s .. g_preParamSpace .. paramString
 	return s
 end
 

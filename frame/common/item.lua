@@ -83,6 +83,8 @@ function getItemImportString(item, indent)
 		importSuffix = "\n" .. indent
 	end
 
+	local s = ""
+
 	for i = 1, #importArray do
 		local import = importArray[i]
 		s = s .. importPrefix .. import .. importSuffix
@@ -208,7 +210,6 @@ function getItemBriefDocumentation(item, detailsRefPrefix)
 		end
 
 		s = trimTrailingWhitespace(s)
-		s = string.gsub(s, "\t", "    ") -- replace tabs with spaces
 	end
 
 	if detailsRefPrefix then

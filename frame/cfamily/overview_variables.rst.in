@@ -61,7 +61,7 @@ while i <= #compound.variableArray do
 				unnamed = string.sub(unnamed, string.len(m) + 1)
 				unnamedStackSize = unnamedStackSize + 1
 				unnamedStack[unnamedStackSize] = n
-				indent = indent .. "    "
+				indent = indent .. "\t"
 			end -- while
 
 			isLastUnnamed = false
@@ -77,7 +77,7 @@ while i <= #compound.variableArray do
 			static = "static "
 		end
 }
-	$indent$static$(getLinkedTextString(item.type, true))$modifiers $(getItemNameForOverview(item))$suffix
+	$indent$static$(getLinkedTextString(item.type, true))$modifiers $(getItemNameForOverview(item))$suffix;
 %{
 	else -- unnamed item
 		local j
@@ -103,7 +103,7 @@ while i <= #compound.variableArray do
 			break
 		end
 
-		indent = string.sub(indent, 5) -- remove 4 spaces
+		indent = string.sub(indent, 2) -- remove 1 tab
 		unnamedStackSize = unnamedStackSize - 1
 		isLastUnnamed = true
 
@@ -122,11 +122,11 @@ while i <= #compound.variableArray do
 
 			i = i + 1 -- skip next
 }
-	$indent}$modifiers $(getItemNameForOverview(nextItem))
+	$indent}$modifiers $(getItemNameForOverview(nextItem));
 %{
 		else
 }
-	$indent}
+	$indent};
 %{
 		end -- if
 	end -- while

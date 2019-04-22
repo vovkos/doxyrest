@@ -86,7 +86,7 @@ Holds a `Compound` table containing global namespace of the source tree.
 
 .. rubric:: Footnotes:
 
-.. [#f1] As always in Lua, you can pass extra arguments to frame processing functions in the addition to mandatory ones. This technique provides a convenient way of passing certain **context** to the frame (and is relied upon in standard ``c_*.rst.in`` files). Later you access these extra arguments from your frame like this:
+.. [#f1] As always in Lua, you can pass extra arguments to frame processing functions in addition to mandatory ones. This technique provides a convenient way of passing certain **context** to the frame (and is relied upon in standard ``c_*.rst.in`` files). Later you access these extra arguments from your frame like this:
 
 	.. code-block:: lua
 

@@ -33,11 +33,7 @@ set(SPHINX_HTML_THEME ${AXL_SPHINX_HTML_THEME})
 set(
 	DOXYREST_CMD_LINE
 	${XML_DIR}/index.xml
-	-D ML_SPECIFIER_MODIFIER_LIST
-	-D VERBATIM_TO_CODE_BLOCK=cpp
-	-D \"g_indexTitle=${DOC_NAME}\"
-	-D ESCAPE_ASTERISKS
-	-D PROTECTION_FILTER=protected
+	-c ${CMAKE_CURRENT_LIST_DIR}/doxyrest-config.lua
 	-o ${RST_DIR}/index.rst
 	-F ${DOXYREST_FRAME_DIR}/cfamily
 	-F ${DOXYREST_FRAME_DIR}/common

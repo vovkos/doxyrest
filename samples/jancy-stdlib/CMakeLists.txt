@@ -29,13 +29,10 @@ set(SPHINX_HTML_THEME ${AXL_SPHINX_HTML_THEME})
 set(
 	DOXYREST_CMD_LINE
 	${XML_DIR}/index.xml
+	-c ${CMAKE_CURRENT_LIST_DIR}/doxyrest-config.lua
 	-o ${RST_DIR}/index.rst
 	-F ${DOXYREST_FRAME_DIR}/cfamily
 	-F ${DOXYREST_FRAME_DIR}/common
-	-D INTRO_FILE=intro.rst
-	-D LANGUAGE=jancy
-	-D FORCE_INCLUDE_FILE=def.rst
-	-D EXTRA_PAGE_LIST={m_syncId.rst,disposable.rst,errorcode.rst}
 	-f index.rst.in
 	)
 

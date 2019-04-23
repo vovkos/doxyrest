@@ -239,7 +239,8 @@ class TabAwareSphinxRSTFileInput(SphinxRSTFileInput):
     def read(self):
         # type: () -> StringList
         inputstring = SphinxBaseFileInput.read(self)
-        lines = string2lines(inputstring, convert_whitespace=True, tab_width=self.env.config.doxyrest_tab_width)
+        tab_width = self.env.config.doxyrest_tab_width
+        lines = string2lines(inputstring, convert_whitespace=True, tab_width=tab_width)
         content = StringList()
         for lineno, line in enumerate(lines):
             content.append(line, self.source_path, lineno)
@@ -262,8 +263,7 @@ def setup(app):
     app.add_role('cref', cref_role)
     app.add_role('target', target_role)
     app.add_config_value('doxyrest_tab_width', default=4, rebuild=True)
-    app.registry.add_source_input(TabAwareSphinxRSTFileInput, override=True)
-
+    app.registry.source_inputs['restructuredtext'] = TabAwareSphinxRSTFileInput
     directives.register_directive('ref-code-block', RefCodeBlock)
     directives.register_directive('code-block', RefCodeBlock) # replace
 

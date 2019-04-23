@@ -224,7 +224,7 @@ DocUlinkBlock::luaExport(lua::LuaState* luaState)
 
 	DocBlock::luaExportMembers(luaState);
 
-	luaState->setMemberString("m_url", m_url);
+	luaState->setMemberString("url", m_url);
 }
 
 //.............................................................................

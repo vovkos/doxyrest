@@ -269,6 +269,68 @@ function getItemKindString(item, itemKindString)
 	return s
 end
 
+function getItemImportArray(item)
+	if item.importArray and next(item.importArray) ~= nil then
+		return item.importArray
+	end
+
+	local text = getItemInternalDocumentation(item)
+	local importArray = {}
+	local i = 1
+	for import in string.gmatch(text, ":import:([^:]+)") do
+		importArray[i] = import
+		i = i + 1
+	end
+
+	return importArray
+end
+
+function getItemImportString(item)
+	local importArray = getItemImportArray(item)
+	if next(importArray) == nil then
+		return ""
+	end
+
+	local indent = getLineText()
+	local importPrefix
+	local importSuffix
+
+	if string.match(LANGUAGE, "^c[px+]*$") or LANGUAGE == "idl" then
+		importPrefix = "#include <"
+		importSuffix = ">\n" .. indent
+	elseif string.match(LANGUAGE, "^ja?ncy?$") then
+		importPrefix = "import \""
+		importSuffix = "\"\n" .. indent
+	else
+		importPrefix = "import "
+		importSuffix = "\n" .. indent
+	end
+
+	local s = ""
+
+	for i = 1, #importArray do
+		local import = importArray[i]
+		s = s .. importPrefix .. import .. importSuffix
+	end
+
+	return s
+end
+
+function getEnumImportString(item)
+	local importArray = getItemImportArray(item)
+	if next(importArray) ~= nil then
+		return getItemImportArray(item)
+	end
+
+	local file = string.gsub(item.location.file, ".*[\\/]", "")
+
+	if string.match(LANGUAGE, "^c[px+]*$") and string.match(file, "%.h[px+]*$") then
+		return "#include <" .. file .. ">\n"
+	else
+		return ""
+	end
+end
+
 function getTemplateSpecSuffix(prefix, item)
 	if not item.templateSpecParamArray or #item.templateSpecParamArray == 0 then
 		return ""

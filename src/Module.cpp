@@ -448,10 +448,11 @@ Member::luaExport(lua::LuaState* luaState)
 	luaState->setMemberString("name", m_name);
 	luaState->setMemberString("modifiers", m_modifiers);
 
-	AXL_TODO("use g_exportCache to export group tables instead of IDs (more natural to use from the Lua frames)")
-
 	if (m_groupCompound)
-		luaState->setMemberString("groupId", m_groupCompound->m_id);
+	{
+		m_groupCompound->luaExport(luaState);
+		luaState->setMember("group");
+	}
 
 	luaExportStringList(luaState, m_importList);
 	luaState->setMember("importArray");

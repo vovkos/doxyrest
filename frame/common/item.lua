@@ -176,7 +176,7 @@ function hasItemRefTarget(item)
 end
 
 function isTocTreeItem(compound, item)
-	return not item.groupId or item.groupId == compound.id
+	return not item.group or item.group == compound
 end
 
 function getItemInternalDocumentation(item)
@@ -250,7 +250,7 @@ function prepareItemDocumentation(item, compound)
 		end
 	end
 
-	return not compound or not item.groupId or item.groupId == compound.id
+	return not compound or not item.group or item.group == compound
 end
 
 function prepareItemArrayDocumentation(itemArray, compound)
@@ -283,7 +283,7 @@ function isItemInCompoundDetails(item, compound)
 		return false
 	end
 
-	return not item.groupId or item.groupId == compound.id
+	return not item.group or item.group == compound
 end
 
 function cmpIds(i1, i2)

@@ -281,6 +281,10 @@ function getDocBlockContents(block, context)
 			else
 				s = text
 			end
+		elseif block.m_blockKind == "ulink" then
+			s = "`" .. block.m_text .. "<" .. block.m_url .. ">`_"
+		elseif block.m_blockKind == "table" then
+			s = getSimpleTableContents(block.m_childBlockList, context)
 		else
 			s = text
 		end
@@ -350,6 +354,58 @@ function getSimpleDocBlockListContents(blockList)
 	for i = 1, #blockList do
 		local block = blockList[i]
 		s = s .. block.text .. getSimpleDocBlockListContents(block.childBlockList)
+	end
+
+	return s
+end
+
+function getSimpleTableContents(blockList, context)
+	local tbl = {}
+	local maxwidths = {}
+
+	for i = 1, #blockList do
+		local block = blockList [i]
+		if block.m_blockKind == 'row' then
+			local rowblock = block.m_childBlockList
+			local row = {}
+			for rownum = 1, #rowblock do
+				if rowblock[rownum].m_blockKind == 'entry' then
+					local entryblock = rowblock[rownum].m_childBlockList
+					for entry = 1, #entryblock do
+						if entryblock[entry].m_blockKind == 'para' then
+							local t = trimWhitespace(entryblock[entry].m_childBlockList[1].m_text)
+							local tlen = string.len(t)
+							table.insert(row, t)
+							if maxwidths[#row] == nil or maxwidths[#row] < tlen then
+								maxwidths[#row] = tlen
+							end
+						end
+					end
+				end
+			end
+			table.insert(tbl, row)
+		end
+	end
+
+	if #tbl == 0 then
+		return ''
+	end
+
+	local headfoot = ''
+	for i = 1, #maxwidths do
+		headfoot = headfoot .. string.rep('=', maxwidths[i]) .. '  '
+	end
+
+	s = headfoot .. '\n'
+
+	for r = 1, #tbl do
+		for c = 1, #tbl[r] do
+			s = s .. tbl[r][c] .. string.rep(' ', 2 + maxwidths[c] - string.len(tbl[r][c]))
+		end
+		s = s .. '\n'
+		if r == 1 or r == #tbl then
+			s = s .. headfoot .. '\n'
+		end
 	end
 
 	return s

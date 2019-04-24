@@ -19,10 +19,7 @@ function concatDocBlockContents(s1, s2)
 		return s1
 	end
 
-	local last = string.sub(s1, -1, -1)
-	local first = string.sub(s2, 1, 1)
-
-	if string.match(last, "%s") or string.match(first, "%s") then
+	if string.match(s1, "[%s[{(<]$") or string.match(s2, "^[%s%]})>%.,;]") then
 		return s1 .. s2
 	else
 		return s1 .. " " .. s2
@@ -344,7 +341,6 @@ function formatDocBlock_simplesect(block, context)
 end
 
 function formatDocBlock_ulink(block, context)
-	return "`" .. block.text .. " <" .. block.url .. ">`_"
 	return "`" .. block.text .. " <" .. block.url .. ">`__"
 end
 

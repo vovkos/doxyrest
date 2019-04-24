@@ -92,6 +92,21 @@ LANGUAGE = cpp
 VERBATIM_TO_CODE_BLOCK = "none"
 
 --!
+--! If the original doxy comments contain asterisks, they have to be escaped
+--! in reStructuredText (asterisks are used to mark **bold** or *italic* blocks).
+--!
+
+ESCAPE_ASTERISKS = false
+
+--!
+--! If the original doxy comments contain trailingasterisks, they have to be
+--! escaped in reStructuredText (trailing underscores are used for internal
+--! links).
+--!
+
+ESCAPE_TRAILING_UNDERSCORES = false
+
+--!
 --! Exclude items with higher protection level than ``PROTECTION_FILTER``:
 --!
 --!     1. public

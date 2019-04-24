@@ -84,6 +84,21 @@ INTRO_FILE = nil
 VERBATIM_TO_CODE_BLOCK = "none"
 
 --!
+--! If the original doxy comments contain asterisks, they have to be escaped
+--! in reStructuredText (asterisks are used to mark **bold** or *italic* blocks).
+--!
+
+ESCAPE_ASTERISKS = false
+
+--!
+--! If the original doxy comments contain trailing underscores, they have to be
+--! escaped in reStructuredText (trailing underscores are used for internal
+--! links).
+--!
+
+ESCAPE_TRAILING_UNDERSCORES = false
+
+--!
 --! Exclude items declared in specific locations. Use a regular expression to
 --! define a mask of directories/source files to completely exclude from the
 --! final documentation. For example, ``.*/impl/.*lua$`` will exclude all

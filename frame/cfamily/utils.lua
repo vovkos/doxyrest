@@ -789,7 +789,7 @@ function filterConstructorArray(constructorArray)
 		local item = constructorArray[1]
 		local isExcluded =
 			isItemExcludedByProtectionFilter(item) or
-			EXCLUDE_DEFAULT_CONSTRUCTOR and #item.paramArray == 0
+			EXCLUDE_DEFAULT_CONSTRUCTORS and #item.paramArray == 0
 
 		if isExcluded then
 			table.remove(constructorArray, 1)

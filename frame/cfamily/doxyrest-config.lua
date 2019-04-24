@@ -156,7 +156,7 @@ EXCLUDE_DEFINE_PATTERN = nil
 --! included.
 --!
 
-EXCLUDE_DEFAULT_CONSTRUCTOR = true
+EXCLUDE_DEFAULT_CONSTRUCTORS = true
 
 --!
 --! Usually providing documentation blocks for a destructors is
@@ -179,6 +179,12 @@ EXCLUDE_DESTRUCTORS = true
 --!
 
 EXCLUDE_PRIMITIVE_TYPEDEFS = true
+
+--!
+--! For a base class/struct, show all the types directly derived from it.
+--!
+
+SHOW_DIRECT_DESCENDANTS = true
 
 --!
 --! \subgroup

@@ -189,8 +189,9 @@ end
 
 function formatDocBlock_font(block, context, token)
 	local text = getDocBlockText(block, context)
-	if not string.find(text, "\n") then -- single line only
-		text = token .. text .. token
+
+	if not string.match(text, "[\n`*]") then -- single line, no inline markup
+		return token .. text .. token
 	end
 
 	return text

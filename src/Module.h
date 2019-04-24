@@ -121,6 +121,8 @@ struct DocImageBlock: DocBlock
 	int m_width;
 	int m_height;
 
+	DocImageBlock();
+
 	virtual
 	void
 	luaExport(lua::LuaState* luaState);
@@ -187,6 +189,8 @@ struct Location
 	int m_bodyStartLine;
 	int m_bodyEndLine;
 
+	Location();
+
 	bool isEmpty()
 	{
 		return m_file.isEmpty();
@@ -229,11 +233,7 @@ struct EnumValue: sl::ListLink
 
 	bool m_isDuplicate;
 
-	EnumValue()
-	{
-		m_protectionKind = ProtectionKind_Undefined;
-		m_isDuplicate = false;
-	}
+	EnumValue();
 
 	void
 	luaExport(lua::LuaState* luaState);

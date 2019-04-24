@@ -202,6 +202,13 @@ DocAnchorBlock::luaExport(lua::LuaState* luaState)
 
 //.............................................................................
 
+DocImageBlock::DocImageBlock()
+{
+	m_imageKind = ImageKind_Undefined;
+	m_width = 0;
+	m_height = 0;
+}
+
 void
 DocImageBlock::luaExport(lua::LuaState* luaState)
 {
@@ -266,6 +273,14 @@ Description::luaExport(lua::LuaState* luaState)
 
 //.............................................................................
 
+Location::Location()
+{
+	m_line = 0;
+	m_column = 0;
+	m_bodyStartLine = 0;
+	m_bodyEndLine = 0;
+}
+
 void
 Location::luaExport(lua::LuaState* luaState)
 {
@@ -304,6 +319,13 @@ Param::luaExport(lua::LuaState* luaState)
 }
 
 //..............................................................................
+
+EnumValue::EnumValue()
+{
+	m_protectionKind = ProtectionKind_Undefined;
+	m_parentEnum = NULL;
+	m_isDuplicate = false;
+}
 
 void
 EnumValue::luaExport(lua::LuaState* luaState)

@@ -46,6 +46,10 @@ function getDocBlockText(block, context)
 			text = string.gsub(text, "%*", "\\*")
 		end
 
+		if ESCAPE_TRAILING_UNDERSCORES then
+			text = string.gsub(text .. " ", "_([%s%p%c])", "\\_%1")
+		end
+
 		text = trimWhitespace(text)
 		text = concatDocBlockContents(text, childContents)
 	else

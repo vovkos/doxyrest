@@ -345,6 +345,7 @@ end
 
 function formatDocBlock_ulink(block, context)
 	return "`" .. block.text .. " <" .. block.url .. ">`_"
+	return "`" .. block.text .. " <" .. block.url .. ">`__"
 end
 
 function formatDocBlock_table(b, context)

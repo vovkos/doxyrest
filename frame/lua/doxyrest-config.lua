@@ -91,6 +91,13 @@ VERBATIM_TO_CODE_BLOCK = "none"
 ESCAPE_ASTERISKS = false
 
 --!
+--! If the original doxy comments contain pipe characters ``|``, they have to be
+--! escaped in reStructuredText (pipes are used for substitution references).
+--!
+
+ESCAPE_PIPES = false
+
+--!
 --! If the original doxy comments contain trailing underscores, they have to be
 --! escaped in reStructuredText (trailing underscores are used for internal
 --! links).

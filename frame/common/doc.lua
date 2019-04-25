@@ -164,7 +164,7 @@ end
 
 function formatDocBlock_ref(block, context)
 	local text = getDocBlockText(block, context)
-	string.gsub(text, "<", "\\<") -- escape left chevron
+	text = string.gsub(text, "<", "\\<") -- escape left chevron
 	return ":ref:`" .. text .. " <doxid-" .. block.id .. ">`"
 end
 

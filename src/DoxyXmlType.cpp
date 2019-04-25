@@ -958,7 +958,7 @@ EnumValueType::create(
 
 				if (prevEnumValue->m_detailedDescription.isEmpty() && prevEnumValue->m_briefDescription.isEmpty())
 				{
-					printf("  replacing old enum value it has no documentation\n");
+					printf("  replacing old enum value as it has no documentation\n");
 					mapIt->m_value = m_enumValue;
 					prevEnumValue->m_isDuplicate = true;
 				}

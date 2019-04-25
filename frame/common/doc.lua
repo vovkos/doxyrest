@@ -19,7 +19,7 @@ function concatDocBlockContents(s1, s2)
 		return s1
 	end
 
-	if string.match(s1, "[%s[{(<]$") or string.match(s2, "^[%s%]})>%.,;]") then
+	if string.match(s1, "[%s[{(<]$") or string.match(s2, "^[%s%]})>%.,;!?]") then
 		return s1 .. s2
 	else
 		return s1 .. " " .. s2

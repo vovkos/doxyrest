@@ -331,21 +331,21 @@ function getEnumImportString(item)
 	end
 end
 
-function getTemplateSpecSuffix(prefix, item)
+function getTemplateSpecSuffix(item)
 	if not item.templateSpecParamArray or #item.templateSpecParamArray == 0 then
 		return ""
 	end
 
-	return getParamArrayString(prefix, item.templateSpecParamArray, false, "<", ">")
+	return getParamArrayString_sl(item.templateSpecParamArray, false, "<", ">")
 end
 
 function getItemSimpleName(item)
-	return item.name .. getTemplateSpecSuffix(item.name, item)
+	return item.name .. getTemplateSpecSuffix(item)
 end
 
 function getItemQualifiedName(item)
 	local name = string.gsub(item.path, "/", g_nameDelimiter)
-	return name .. getTemplateSpecSuffix(name, item)
+	return name .. getTemplateSpecSuffix(item)
 end
 
 getItemName = getItemQualifiedName

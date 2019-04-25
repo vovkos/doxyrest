@@ -43,6 +43,10 @@ function getDocBlockText(block, context)
 			text = string.gsub(text, "%*", "\\*")
 		end
 
+		if ESCAPE_PIPES then
+			text = string.gsub(text, "|", "\\|")
+		end
+
 		if ESCAPE_TRAILING_UNDERSCORES then
 			text = string.gsub(text .. " ", "_([%s%p%c])", "\\_%1")
 		end

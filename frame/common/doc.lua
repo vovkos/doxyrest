@@ -101,6 +101,7 @@ function formatDocBlock_formula(block, context)
 	code = string.gsub(code, "\\?[$%]]$", "")
 
 	if isInline then
+		code = trimWhitespace(code)
 		return ":math:`" .. code .. "`"
 	end
 

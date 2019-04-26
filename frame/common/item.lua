@@ -90,18 +90,23 @@ function getItemCid(item)
 end
 
 function getItemRefTargetString(item)
+	if string.match(item.name, ":$") then -- Objective C methods (simple handling for now)
+		return ".. _doxid-" .. item.id .. ":\n"
+	end
+
 	local s =
 		".. index:: pair: " .. item.memberKind .. "; " .. item.name .. "\n" ..
-		".. _cid-" .. getItemCid(item) .. ":\n" ..
-		".. _doxid-" .. item.id .. ":\n"
+		".. _doxid-" .. item.id .. ":\n" ..
+		".. _cid-" .. getItemCid(item) .. ":\n"
 
 	if item.isSubGroupHead then
 		for j = 1, #item.subGroupSlaveArray do
 			slaveItem = item.subGroupSlaveArray[j]
 
 			s = s ..
-				".. _cid-" .. getItemCid(slaveItem) .. ":\n" ..
-				".. _doxid-" .. slaveItem.id .. ":\n"
+				".. index:: pair: " .. slaveItem.memberKind .. "; " .. slaveItem.name .. "\n" ..
+				".. _doxid-" .. slaveItem.id .. ":\n" ..
+				".. _cid-" .. getItemCid(slaveItem) .. ":\n"
 		end
 	end
 

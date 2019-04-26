@@ -395,7 +395,7 @@ function formatDocBlock_table(b, context)
 		end
 		s = s .. '\n'
 		if r == 1 or r == #tbl then
-			s = s .. headfoot .. '\n'
+			s = s .. headfoot .. '\n\n'
 		end
 	end
 

@@ -41,6 +41,13 @@ function getTitle(title, underline)
 	return title .. "\n" .. string.rep(underline, #title)
 end
 
+function replaceAnySpacePrefix(source, replacement)
+	local s = "\n" .. source -- add leading '\n'
+	s = string.gsub(s, "\n[ \t]*", "\n" .. replacement)
+	s = string.sub(s, 2) -- remove leading '\n'
+	return s
+end
+
 function replaceCommonSpacePrefix(source, replacement)
 	local s = "\n" .. source -- add leading '\n'
 	local prefix = nil

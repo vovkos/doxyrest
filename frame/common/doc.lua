@@ -155,8 +155,8 @@ function formatDocBlock_variablelist(block, context)
 		s = s .. "\t*\n"
 
 		local entry = context.dlList[i]
-		local title = replaceAnySpacePrefix(entry.title, "\t\t  ")
-		local description = replaceAnySpacePrefix(entry.description, "\t\t  ")
+		local title = replaceCommonSpacePrefix(entry.title, "\t\t  ")
+		local description = replaceCommonSpacePrefix(entry.description, "\t\t  ")
 
 		s = s .. "\t\t- " .. trimLeadingWhitespace(title) .. "\n\n"
 		s = s .. "\t\t- " .. trimLeadingWhitespace(description) .. "\n\n"
@@ -246,7 +246,7 @@ function formatDocBlock_listitem(block, context)
 		s = context.listItemBullet .. " "
 		local indent = string.rep(' ', string.len(s))
 
-		text = replaceAnySpacePrefix(text, indent)
+		text = replaceCommonSpacePrefix(text, indent)
 		text = trimWhitespace(text)
 
 		s = s .. text .. "\n\n"
@@ -288,7 +288,7 @@ function formatDocBlock_parameterdescription(block, context)
 	text = trimWhitespace(text)
 
 	if string.find(text, "\n") then
-		text = "\n" .. replaceAnySpacePrefix(text, "\t\t  ") -- add paramter table offset "- "
+		text = "\n" .. replaceCommonSpacePrefix(text, "\t\t  ") -- add paramter table offset "- "
 	end
 
 	if context.paramSection then

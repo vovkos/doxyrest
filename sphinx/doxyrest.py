@@ -73,7 +73,13 @@ class RefCodeBlock(Directive):
 
     def __init__(self, *args, **kwargs):
         Directive.__init__(self, *args, **kwargs)
-        self.re_prog = re.compile('(:c?ref:)?`((.+?)(\s*<([^<>]*)>)?)`(_+)?')
+
+        re_src = '(:c?ref:)'
+        if self.state.document.settings.env.config.default_role == 'cref':
+            re_src += '?' # explicit role is optional
+
+        re_src += '`((.+?)(\s*<([^<>]*)>)?)`(_+)?'
+        self.re_prog = re.compile(re_src)
 
     def run(self):
         config = self.state.document.settings.env.config
@@ -172,7 +178,14 @@ class RefTransform(Transform):
 
     def __init__(self, document, startnode=None):
         Transform.__init__(self, document, startnode)
-        self.re_prog = re.compile('(:c?ref:)?`(.+?)(\s*<([^<>]*)>)?`')
+
+        re_src = '(:c?ref:)'
+        if document.settings.env.config.default_role == 'cref':
+            re_src += '?' # explicit role is optional
+
+        re_src += '`(.+?)(\s*<([^<>]*)>)?`'
+        self.re_prog = re.compile(re_src)
+        self
 
     @staticmethod
     def node_filter(node):
@@ -186,7 +199,6 @@ class RefTransform(Transform):
         for node in self.document.traverse(RefTransform.node_filter):
             code = node.astext()
             node.children = []
-
             pos = 0
 
             while True:

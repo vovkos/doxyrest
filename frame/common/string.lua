@@ -34,7 +34,9 @@ function getTitle(title, underline)
 		title = "<Untitled>"
 	end
 
-	title = string.gsub(title, "(_*)$", "\\%1") -- escape trailing underscores
+	-- escape trailing underscores
+	title = string.gsub(title, "(_+)(%s+)", "\\%1%2")
+	title = string.gsub(title, "(_+)$", "\\%1")
 
 	return title .. "\n" .. string.rep(underline, #title)
 end

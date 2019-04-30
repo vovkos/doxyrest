@@ -358,26 +358,13 @@ function getItemNameForOverview(item)
 	end
 end
 
-function getEnumOverviewRefTargetString(enum)
-	local s = ""
-
-	for i = 1, #enum.enumValueArray do
-		local enumValue = enum.enumValueArray[i]
-		if not hasItemRefTarget(enumValue) then
-			s = s .. getItemRefTargetString(enumValue)
-		end
-	end
-
-	return s
-end
-
 function getEnumArrayOverviewRefTargetString(enumArray)
 	local s = ""
 
 	for i = 1, #enumArray do
 		local enum = enumArray[i]
 		if isUnnamedItem(enum) then
-			s = s .. getEnumOverviewRefTargetString(enum)
+			s = s .. getItemArrayOverviewRefTargetString(enum.enumValueArray)
 		end
 	end
 
@@ -600,10 +587,6 @@ end
 function isMemberOfUnnamedType(item)
 	local text = getItemInternalDocumentation(item)
 	return string.match(text, ":unnamed:([%w/:]+)")
-end
-
-function isUnnamedItem(item)
-	return item.name == "" or string.sub(item.name, 1, 1) == "@"
 end
 
 g_closingBracketChar =

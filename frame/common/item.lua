@@ -67,9 +67,7 @@ function getItemFileName(item, suffix)
 		suffix = ".rst"
 	end
 
-	s = s .. suffix
-
-	return s
+	return s .. suffix
 end
 
 function getItemCid(item)
@@ -84,9 +82,8 @@ function getItemCid(item)
 	end
 
 	s = string.lower(s)
-	s = ensureUniqueItemName(item, s, g_itemCidMap, "-")
 
-	return s
+	return ensureUniqueItemName(item, s, g_itemCidMap, "-")
 end
 
 function getItemRefTargetString(item)
@@ -123,7 +120,7 @@ function getItemArrayOverviewRefTargetString(itemArray)
 		end
 	end
 
-	return  s
+	return s
 end
 
 function hasItemRefTarget(item)
@@ -132,6 +129,10 @@ end
 
 function isTocTreeItem(compound, item)
 	return not item.group or item.group == compound
+end
+
+function isUnnamedItem(item)
+	return item.name == "" or string.sub(item.name, 1, 1) == "@"
 end
 
 function getItemInternalDocumentation(item)

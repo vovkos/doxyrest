@@ -15,6 +15,8 @@ dofile(g_frameDir .. "/../common/item.lua")
 dofile(g_frameDir .. "/../common/doc.lua")
 dofile(g_frameDir .. "/../common/toc.lua")
 
+LANGUAGE = "lua"
+
 if not INDEX_TITLE then
 	INDEX_TITLE = "My Project Documentation"
 end
@@ -55,8 +57,7 @@ function getParamArrayString_sl(paramArray)
 		end
 	end
 
-	s = s .. ")"
-	return s
+	return s .. ")"
 end
 
 function getParamArrayString_ml(paramArray, indent)
@@ -77,8 +78,7 @@ function getParamArrayString_ml(paramArray, indent)
 		end
 	end
 
-	s = s .. nl .. ")"
-	return s
+	return s .. nl .. ")"
 end
 
 function getFunctionDeclString(func, isRef, indent)
@@ -106,8 +106,7 @@ function getFunctionDeclString(func, isRef, indent)
 		end
 	end
 
-	s = s .. g_preParamSpace .. paramString
-	return s
+	return s .. g_preParamSpace .. paramString
 end
 
 -------------------------------------------------------------------------------
@@ -153,6 +152,20 @@ function prepareCompound(compound)
 	compound.stats = stats
 
 	return stats
+end
+
+function prepareEnum(enum)
+	local stats = {}
+
+	stats.hasDocumentedEnumValues = prepareItemArrayDocumentation(enum.enumValueArray)
+	stats.hasBriefDocumentation = not isDocumentationEmpty(enum.briefDescription)
+	stats.hasDetailedDocumentation = not isDocumentationEmpty(enum.detailedDescription)
+
+	return stats
+end
+
+function getEnumValueString(enumValue)
+	return (string.gsub(enumValue.initializer.plainText, "^%s*=%s*", "")) -- remove leading =
 end
 
 -------------------------------------------------------------------------------

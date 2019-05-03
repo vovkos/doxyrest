@@ -77,22 +77,7 @@ DoxyXmlParser::onStartElement(
 	m_indent++;
 #endif
 
-	if (!m_typeStack.isEmpty())
-	{
-		TypeStackEntry* entry = &m_typeStack.getBack();
-
-		if (entry->m_depth != 0)
-		{
-			entry->m_depth++;
-		}
-		else
-		{
-			entry->m_type->onStartElement(name, attributes);
-			if (entry == &m_typeStack.getBack()) // no new types were added
-				entry->m_depth++;
-		}
-	}
-	else
+	if (m_typeStack.isEmpty())
 	{
 		ElemKind elemKind = ElemKindMap::findValue(name, ElemKind_Undefined);
 		switch (elemKind)
@@ -106,6 +91,24 @@ DoxyXmlParser::onStartElement(
 			break;
 		}
 	}
+	else
+	{
+		TypeStackEntry* entry = &m_typeStack.getBack();
+
+		if (entry->m_depth != 0)
+		{
+			entry->m_depth++;
+		}
+		else
+		{
+			bool result = entry->m_type->onStartElement(name, attributes);
+			if (!result)
+				printLastError();
+
+			if (entry == &m_typeStack.getBack()) // no new types were added
+				entry->m_depth++;
+		}
+	}
 }
 
 void
@@ -117,19 +120,21 @@ DoxyXmlParser::onEndElement(const char* name)
 	printf("</%s>\n", name);
 #endif
 
-	if (!m_typeStack.isEmpty())
-	{
-		TypeStackEntry* entry = &m_typeStack.getBack();
+	if (m_typeStack.isEmpty())
+		return;
 
-		if (entry->m_depth != 0)
-		{
-			entry->m_depth--;
-		}
-		else
-		{
-			entry->m_type->onEndElement(name);
-			popType();
-		}
+	TypeStackEntry* entry = &m_typeStack.getBack();
+	if (entry->m_depth != 0)
+	{
+		entry->m_depth--;
+	}
+	else
+	{
+		bool result = entry->m_type->onEndElement(name);
+		if (!result)
+			printLastError();
+
+		popType();
 	}
 }
 
@@ -144,12 +149,15 @@ DoxyXmlParser::onCharacterData(
 	printf("%s\n", sl::String(string, length).sz());
 #endif
 
-	if (!m_typeStack.isEmpty())
-	{
-		TypeStackEntry* entry = &m_typeStack.getBack();
+	if (m_typeStack.isEmpty())
+		return;
 
-		if (entry->m_depth == 0)
-			entry->m_type->onCharacterData(string, length);
+	TypeStackEntry* entry = &m_typeStack.getBack();
+	if (entry->m_depth == 0)
+	{
+		bool result = entry->m_type->onCharacterData(string, length);
+		if (!result)
+			printLastError();
 	}
 }
 

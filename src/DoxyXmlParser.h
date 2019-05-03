@@ -108,6 +108,12 @@ public:
 	void
 	clear();
 
+	sl::String
+	getLocationString() const
+	{
+		return sl::formatString("%s(%d)", m_filePath.sz(), getLineNumber());
+	}
+
 	template <typename T>
 	bool
 	pushType(
@@ -176,6 +182,12 @@ protected:
 	popType();
 
 private:
+	void
+	printLastError()
+	{
+		fprintf(stderr, "%s: warning: %s\n", getLocationString().sz(), err::getLastErrorDescription().sz());
+	}
+
 #if (_PRINT_XML)
 	void
 	printIndent();

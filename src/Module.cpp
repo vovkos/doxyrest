@@ -625,7 +625,10 @@ Compound::luaExport(lua::LuaState* luaState)
 		luaState->setMemberString("importId", m_importId);
 
 	if (m_groupCompound)
-		luaState->setMemberString("groupId", m_groupCompound->m_id);
+	{
+		m_groupCompound->luaExport(luaState);
+		luaState->setMember("group");
+	}
 
 	preparePath();
 	luaState->setMemberString("path", m_path);
@@ -1100,7 +1103,7 @@ GlobalNamespace::build(Module* module)
 
 	module->m_groupArray.clear(); // will contain non-empty root groups only
 
-	// loop #2 initializes namespaces (including classes, structs, unions)
+	// loop #2 initialize namespaces (including classes, structs, unions)
 
 	count = module->m_namespaceArray.getCount();
 	for (size_t i = 0; i < count; i++)
@@ -1113,7 +1116,7 @@ GlobalNamespace::build(Module* module)
 		compound->m_selfNamespace = nspace;
 	}
 
-	// loop #3 resolves inner, base and derived references and add members
+	// loop #3 resolve inner, base and derived references and add members
 
 	for (size_t i = 0; i < count; i++)
 	{
@@ -1166,7 +1169,7 @@ GlobalNamespace::build(Module* module)
 			Compound* innerCompound = module->m_compoundMap.findValue(refIt->m_id, NULL);
 			if (!innerCompound)
 			{
-				printf("warning: can't find inner compound refid: %s\n", refIt->m_id.sz());
+				fprintf(stderr, "warning: can't find inner compound refid: %s\n", refIt->m_id.sz());
 				continue;
 			}
 
@@ -1230,7 +1233,7 @@ GlobalNamespace::build(Module* module)
 			Compound* derivedCompound = module->m_compoundMap.findValue(refIt->m_id, NULL);
 			if (!derivedCompound)
 			{
-				printf("warning: can't find derived compound refid: %s\n", refIt->m_id.sz());
+				fprintf(stderr, "warning: can't find derived compound refid: %s\n", refIt->m_id.sz());
 				continue;
 			}
 
@@ -1238,7 +1241,7 @@ GlobalNamespace::build(Module* module)
 		}
 	}
 
-	// loop #4 resolves sub pages
+	// loop #4 resolve sub pages
 
 	count = module->m_pageArray.getCount();
 	for (size_t i = 0; i < count; i++)
@@ -1251,7 +1254,7 @@ GlobalNamespace::build(Module* module)
 			Compound* subPage = module->m_compoundMap.findValue(refIt->m_id, NULL);
 			if (!subPage)
 			{
-				printf("warning: can't find subpage refid: %s\n", refIt->m_id.sz());
+				fprintf(stderr, "warning: can't find subpage refid: %s\n", refIt->m_id.sz());
 				continue;
 			}
 
@@ -1262,7 +1265,7 @@ GlobalNamespace::build(Module* module)
 
 	removeSubPages(&module->m_pageArray);
 
-	// loop #5 adds leftovers to the global namespace
+	// loop #5 add leftovers to the global namespace
 
 	sl::Iterator<Compound> compoundIt = module->m_compoundList.getHead();
 	for (; compoundIt; compoundIt++)

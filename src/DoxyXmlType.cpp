@@ -52,8 +52,7 @@ DoxygenIndexType::onStartElement(
 	switch (elemKind)
 	{
 	case IndexElemKind_Compound:
-		onCompound(name, attributes);
-		break;
+		return onCompound(name, attributes);
 	}
 
 	return true;
@@ -87,8 +86,8 @@ DoxygenIndexType::onCompound(
 
 	if (refId.isEmpty())
 	{
-		// handle missing refid
-		return true;
+		err::setError("missing 'refid' attribute");
+		return false;
 	}
 
 	return parseCompound(refId);
@@ -193,8 +192,10 @@ CompoundDefType::create(
 			else
 			{
 				Compound* prevCompound = mapIt->m_value;
-				printf(
-					"warning: duplicate compoud id: %s (%s: %s)\n",
+				fprintf(
+					stderr,
+					"%s: warning: duplicate compoud id: %s (%s: %s)\n",
+					parser->getLocationString().sz(),
 					m_compound->m_id.sz(),
 					getCompoundKindString(prevCompound->m_compoundKind),
 					prevCompound->m_name.sz()
@@ -202,7 +203,7 @@ CompoundDefType::create(
 
 				if (prevCompound->m_detailedDescription.isEmpty() && prevCompound->m_briefDescription.isEmpty())
 				{
-					printf("  replacing old compound as it has no documentation\n");
+					fprintf(stderr, "  replacing old compound as it has no documentation\n");
 					mapIt->m_value = m_compound;
 					prevCompound->m_isDuplicate = true;
 				}
@@ -492,8 +493,10 @@ MemberDefType::create(
 			else
 			{
 				Member* prevMember = mapIt->m_value;
-				printf(
-					"warning: duplicate member id %s (%s: %s)\n",
+				fprintf(
+					stderr,
+					"%s: warning: duplicate member id %s (%s: %s)\n",
+					parser->getLocationString().sz(),
 					m_member->m_id.sz(),
 					getMemberKindString(prevMember->m_memberKind),
 					prevMember->m_name.sz()
@@ -501,7 +504,7 @@ MemberDefType::create(
 
 				if (prevMember->m_detailedDescription.isEmpty() && prevMember->m_briefDescription.isEmpty())
 				{
-					printf("  replacing old member as it has no documentation\n");
+					fprintf(stderr, "  replacing old member as it has no documentation\n");
 					mapIt->m_value = m_member;
 					prevMember->m_flags |= MemberFlag_Duplicate;
 				}
@@ -950,15 +953,17 @@ EnumValueType::create(
 			else
 			{
 				EnumValue* prevEnumValue = mapIt->m_value;
-				printf(
-					"warning: duplicate enum value id %s (%s)\n",
+				fprintf(
+					stderr,
+					"%s: warning: duplicate enum value id %s (%s)\n",
+					parser->getLocationString().sz(),
 					m_enumValue->m_id.sz(),
 					prevEnumValue->m_name.sz()
 					);
 
 				if (prevEnumValue->m_detailedDescription.isEmpty() && prevEnumValue->m_briefDescription.isEmpty())
 				{
-					printf("  replacing old enum value as it has no documentation\n");
+					fprintf(stderr, "  replacing old enum value as it has no documentation\n");
 					mapIt->m_value = m_enumValue;
 					prevEnumValue->m_isDuplicate = true;
 				}

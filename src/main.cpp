@@ -420,7 +420,7 @@ run(CmdLine* cmdLine)
 	result = generator.create(cmdLine);
 	if (!result)
 	{
-		printf("error: %s\n", err::getLastErrorDescription().sz());
+		fprintf(stderr, "error: %s\n", err::getLastErrorDescription().sz());
 		return -1;
 	}
 
@@ -430,7 +430,7 @@ run(CmdLine* cmdLine)
 
 	if (inputFileName.isEmpty())
 	{
-		printf("error: no input master XML file\n");
+		fprintf(stderr, "error: no input master XML file\n");
 		return 0;
 	}
 
@@ -442,7 +442,7 @@ run(CmdLine* cmdLine)
 
 	if (!result)
 	{
-		printf("error: %s\n", err::getLastErrorDescription().sz());
+		fprintf(stderr, "error: %s\n", err::getLastErrorDescription().sz());
 		return -1;
 	}
 

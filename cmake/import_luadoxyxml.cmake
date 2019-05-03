@@ -9,36 +9,14 @@
 #
 #...............................................................................
 
-set(
-	AXL_PATH_LIST
+if(NOT LUADOXYXML_EXE)
+	axl_find_executable(LUADOXYXML_EXE luadoxyxml)
 
-	LUA_INC_DIR
-	LUA_LIB_DIR
-	LUA_LIB_NAME
-	EXPAT_INC_DIR
-	EXPAT_LIB_DIR
-	AXL_CMAKE_DIR
-	LUADOXYXML_EXE
-	SPHINX_BUILD_EXE
-	PDFLATEX_EXE
-	)
+	if(LUADOXYXML_EXE)
+		axl_message("Luadoxyxml at:" "${LUADOXYXML_EXE}")
+	endif()
+endif()
 
-set(
-	AXL_IMPORT_LIST
-
-	REQUIRED
-		axl
-		expat
-		lua
-	OPTIONAL
-		luadoxyxml
-		sphinx
-		latex
-	)
-
-set(
-	AXL_IMPORT_DIR_LIST
-	${CMAKE_CURRENT_LIST_DIR}/cmake
-	)
+axl_does_file_exist_w_configuration(LUADOXYXML_FOUND ${LUADOXYXML_EXE})
 
 #...............................................................................

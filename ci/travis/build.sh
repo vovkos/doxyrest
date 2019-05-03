@@ -17,7 +17,23 @@ cmake .. -DTARGET_CPU=$TARGET_CPU -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION
 make
 popd
 
-echo "set (AXL_CMAKE_DIR $THIS_DIR/axl/cmake $THIS_DIR/axl/build/cmake)" >> paths.cmake
+echo "set(AXL_CMAKE_DIR $THIS_DIR/axl/cmake $THIS_DIR/axl/build/cmake)" >> paths.cmake
+
+if [ "$BUILD_DOC" != "" ]; then
+	mkdir graco/build
+	pushd graco/build
+	cmake .. -DTARGET_CPU=$TARGET_CPU -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION
+	make
+	popd
+
+	echo "set(GRACO_CMAKE_DIR $THIS_DIR/graco/cmake $THIS_DIR/axl/build/cmake)" >> paths.cmake
+
+	mkdir luadoxyxml/build
+	pushd luadoxyxml/build
+	cmake .. -DTARGET_CPU=$TARGET_CPU -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION
+	make
+	popd
+fi
 
 mkdir build
 pushd build
@@ -43,6 +59,8 @@ if [ "$BUILD_DOC" != "" ]; then
 	pushd build
 
 	source doc/index/build-html.sh
+	source doc/manual/build-xml.sh
+	source doc/manual/build-rst.sh
 	source doc/manual/build-html.sh
 	source doc/build-guide/build-html.sh
 

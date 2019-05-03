@@ -407,6 +407,8 @@ struct Compound: sl::ListLink
 	bool m_isDuplicate : 1;
 	bool m_isSubPage   : 1;
 
+	bool m_hasGlobalNamespace : 1;
+
 	Description m_briefDescription;
 	Description m_detailedDescription;
 	Location m_location;

@@ -594,6 +594,7 @@ Compound::Compound()
 	m_isAbstract = false;
 	m_isDuplicate = false;
 	m_isSubPage = false;
+	m_hasGlobalNamespace = false;
 	m_cacheIdx = -1;
 }
 
@@ -638,6 +639,9 @@ Compound::luaExport(lua::LuaState* luaState)
 	switch (m_compoundKind)
 	{
 	case CompoundKind_Group:
+		luaState->setMemberBoolean("hasGlobalNamespace", m_hasGlobalNamespace);
+		break;
+
 	case CompoundKind_Namespace:
 		break;
 
@@ -1074,9 +1078,6 @@ GlobalNamespace::build(
 {
 	clear();
 
-	if (!auxCompoundId.isEmpty())
-		m_auxCompound = module->m_compoundMap.findValue(auxCompoundId, NULL);
-
 	// loop #1 assign groups
 
 	size_t count = module->m_groupArray.getCount();
@@ -1106,6 +1107,13 @@ GlobalNamespace::build(
 			if (innerCompound)
 				innerCompound->m_groupCompound = compound;
 		}
+	}
+
+	if (!auxCompoundId.isEmpty())
+	{
+		m_auxCompound = module->m_compoundMap.findValue(auxCompoundId, NULL);
+		if (m_auxCompound && m_auxCompound->m_groupCompound)
+			m_auxCompound->m_groupCompound->m_hasGlobalNamespace = true;
 	}
 
 	module->m_groupArray.clear(); // will contain non-empty root groups only

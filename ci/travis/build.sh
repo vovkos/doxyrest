@@ -26,13 +26,15 @@ if [ "$BUILD_DOC" != "" ]; then
 	make
 	popd
 
-	echo "set(GRACO_CMAKE_DIR $THIS_DIR/graco/cmake $THIS_DIR/axl/build/cmake)" >> paths.cmake
+	echo "set(GRACO_CMAKE_DIR $THIS_DIR/graco/cmake $THIS_DIR/graco/build/cmake)" >> paths.cmake
 
 	mkdir luadoxyxml/build
 	pushd luadoxyxml/build
 	cmake .. -DTARGET_CPU=$TARGET_CPU -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION
 	make
 	popd
+
+	echo "set(LUADOXYXML_EXE $THIS_DIR/luadoxyxml/build/bin/$BUILD_CONFIGURATION/luadoxyxml)" >> paths.cmake
 fi
 
 mkdir build

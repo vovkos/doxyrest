@@ -529,13 +529,22 @@ class GlobalNamespace: public NamespaceContents
 {
 protected:
 	sl::List<Namespace> m_namespaceList;
+	Compound* m_auxCompound; // for title/brief/detailed
 
 public:
+	GlobalNamespace()
+	{
+		m_auxCompound = NULL;
+	}
+
 	void
 	clear();
 
 	bool
-	build(Module* module);
+	build(
+		Module* module,
+		const sl::StringRef& globalGroupId
+		);
 
 	void
 	luaExport(lua::LuaState* luaState);

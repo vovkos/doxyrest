@@ -1067,9 +1067,15 @@ GlobalNamespace::clear()
 }
 
 bool
-GlobalNamespace::build(Module* module)
+GlobalNamespace::build(
+	Module* module,
+	const sl::StringRef& auxCompoundId
+	)
 {
 	clear();
+
+	if (!auxCompoundId.isEmpty())
+		m_auxCompound = module->m_compoundMap.findValue(auxCompoundId, NULL);
 
 	// loop #1 assign groups
 
@@ -1077,6 +1083,7 @@ GlobalNamespace::build(Module* module)
 	for (size_t i = 0; i < count; i++)
 	{
 		Compound* compound = module->m_groupArray[i];
+
 		sl::Iterator<Member> memberIt = compound->m_memberList.getHead();
 		for (; memberIt; memberIt++)
 		{
@@ -1340,15 +1347,29 @@ GlobalNamespace::luaExport(lua::LuaState* luaState)
 	luaState->setMemberString("id", "global");
 	luaState->setMemberString("compoundKind", "namespace");
 
-	// global namespace has no description, but we still want valid m_briefDescription/m_detailedDescription
+	if (m_auxCompound)
+	{
+		if (!m_auxCompound->m_title.isEmpty())
+			luaState->setMemberString("title", m_auxCompound->m_title);
 
-	Description emptyDescription;
+		m_auxCompound->m_briefDescription.luaExport(luaState);
+		luaState->setMember("briefDescription");
 
-	emptyDescription.luaExport(luaState);
-	luaState->setMember("briefDescription");
+		m_auxCompound->m_detailedDescription.luaExport(luaState);
+		luaState->setMember("detailedDescription");
+	}
+	else
+	{
+		// we still want valid m_briefDescription/m_detailedDescription
 
-	emptyDescription.luaExport(luaState);
-	luaState->setMember("detailedDescription");
+		Description emptyDescription;
+
+		emptyDescription.luaExport(luaState);
+		luaState->setMember("briefDescription");
+
+		emptyDescription.luaExport(luaState);
+		luaState->setMember("detailedDescription");
+	}
 }
 
 Namespace*

@@ -434,9 +434,11 @@ run(CmdLine* cmdLine)
 		return 0;
 	}
 
+	sl::String globalAuxCompoundId = generator.getConfigValue("GLOBAL_AUX_COMPOUND_ID");
+
 	result =
 		parser.parseFile(&module, inputFileName) &&
-		globalNamespace.build(&module) &&
+		globalNamespace.build(&module, globalAuxCompoundId) &&
 		generator.luaExport(&module, &globalNamespace) &&
 		generator.generate();
 

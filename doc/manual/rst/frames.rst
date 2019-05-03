@@ -75,3 +75,10 @@ Output:
 
 	10 + 20 = 30
 
+Further Reading
+---------------
+
+.. toctree::
+	:titlesonly:
+
+	group_api.rst

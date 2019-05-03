@@ -82,25 +82,6 @@ Adds Lua frame directory, for example:
 
 The ``--frame-dir`` switch may be used multiple times to add multiple directories.
 
-.. option:: -p, --protection
-
-Sets the filter for non-public items, for example:
-
-.. code-block:: bash
-
-	-p protected
-	--protection protected
-
-Available protection levels:
-
-* ``public``
-* ``protected``
-* ``private``
-
-Doxyrest will ignore items with protection level *higher* than specified. For example, if you specify ``-p=protected``, then only ``public`` and ``protected`` members will be documented; ``private`` members will be excluded from documentation.
-
-By default, only ``public`` members are documented.
-
 .. option:: -D, --define
 
 Defines a Lua variable, for example:

@@ -98,6 +98,10 @@ function getCompoundTocTree(compound)
 		end
 	end
 
+	if compound.hasGlobalNamespace then
+		s = s .. "\t" .. "global.rst" .. "\n"
+	end
+
 	return trimTrailingWhitespace(s)
 end
 

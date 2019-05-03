@@ -74,6 +74,19 @@ INDEX_TITLE = "My Project Documentation"
 INTRO_FILE = nil
 
 --!
+--! By default, the page for the global namespace page will be called
+--! "Global Namespace" and will contain no description except that for the
+--! global compounds and members.
+--!
+--! It's possible to override this behaviour by defining an auxillary compound
+--! (page or group) with a special ``id``; this page/group may contain a
+--! user-defined title,  a brief description and a detailed description. Use
+--! ``GLOBAL_AUX_COMPOUND_ID`` to define this special name.
+--!
+
+GLOBAL_AUX_COMPOUND_ID = "group_global"
+
+--!
 --! Specify the main language of your project; this string will be used for
 --! the reStructuredText ``.. code::`` sections and for conditional formatting
 --! of module item declarations.

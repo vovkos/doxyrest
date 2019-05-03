@@ -9,6 +9,8 @@
 --
 --------------------------------------------------------------------------------
 
+g_luaUtilsIncluded = true
+
 dofile(g_frameDir .. "/../common/string.lua")
 dofile(g_frameDir .. "/../common/table.lua")
 dofile(g_frameDir .. "/../common/item.lua")
@@ -29,6 +31,10 @@ if PRE_PARAM_LIST_SPACE then
 	g_preParamSpace = " "
 else
 	g_preParamSpace = ""
+end
+
+if not g_globalNamespace.title then
+	g_globalNamespace.title = "Global Scope"
 end
 
 -------------------------------------------------------------------------------

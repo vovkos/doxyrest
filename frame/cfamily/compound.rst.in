@@ -58,7 +58,7 @@ $(getItemDetailedDocumentation(compound))
 %{
 end -- if
 
-if #compound.groupArray > 0 then
+if #compound.groupArray > 0 or compound.hasGlobalNamespace then
 	local groupTree = ""
 
 	for i = 1, #compound.groupArray do
@@ -68,6 +68,10 @@ if #compound.groupArray > 0 then
 		generateFile(targetFileName, "group.rst.in", item)
 		groupTree = groupTree .. getGroupTree(item)
 	end -- for
+
+	if compound.hasGlobalNamespace then
+		groupTree = groupTree .. getGroupTree(g_globalNamespace)
+	end
 }
 $groupTree
 

@@ -22,6 +22,20 @@ emit(getItemArrayOverviewRefTargetString(compound.functionArray))
 	:class: overview-code-block
 
 %{
+if compound.baseTypeArray and #compound.baseTypeArray > 0 then
+}
+	-- base types
+
+%{
+	for i = 1, #compound.baseTypeArray do
+		local baseType = compound.baseTypeArray[i]
+}
+	:ref:`$(baseType.name) <doxid-$(baseType.id)>`
+%{
+	end -- for
+	emit("\n")
+end -- if
+
 if #compound.enumArray > 0 then
 	includeFile("overview_enums.rst.in", compound)
 	emit("\n")
@@ -41,4 +55,26 @@ if #compound.functionArray > 0 then
 	includeFile("overview_functions.rst.in", compound, functionSectionName)
 	emit("\n")
 end
+
+if compound.baseTypeArray and #compound.baseTypeArray > 0 then
+
+	-- always link inherited members (even when no documentation)
+
+	local prevHasItemRefTarget = hasItemRefTarget
+	hasItemRefTarget = function(item)
+		return true
+	end
+
+	for i = 1, #compound.baseTypeArray do
+		local baseType = compound.baseTypeArray[i]
+}
+
+$(getTitle("Inherited from " .. baseType.name, "-"))
+
+%{
+		includeFile("overview_compound.rst.in", baseType, "fields", "methods")
+	end -- for
+
+	hasItemRefTarget = prevHasItemRefTarget
+end -- if
 }

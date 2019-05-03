@@ -9,6 +9,8 @@
 --
 --------------------------------------------------------------------------------
 
+g_cfamilyUtilsIncluded = true
+
 dofile(g_frameDir .. "/../common/string.lua")
 dofile(g_frameDir .. "/../common/table.lua")
 dofile(g_frameDir .. "/../common/item.lua")
@@ -83,6 +85,10 @@ if PRE_OPERATOR_NAME_SPACE then
 	g_preOperatorNameSpace = " "
 else
 	g_preOperatorNameSpace = ""
+end
+
+if not g_globalNamespace.title then
+	g_globalNamespace.title = "Global Namespace"
 end
 
 -------------------------------------------------------------------------------

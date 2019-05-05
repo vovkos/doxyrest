@@ -1,0 +1,110 @@
+%{
+--------------------------------------------------------------------------------
+--
+--  This file is part of the Doxyrest toolkit.
+--
+--  Doxyrest is distributed under the MIT license.
+--  For details see accompanying license.txt file,
+--  the public copy of which is also available at:
+--  http://tibbo.com/downloads/archive/doxyrest/license.txt
+--
+--------------------------------------------------------------------------------
+
+local argArray = table.pack(...)
+local compound = argArray[1]
+local compoundStats = prepareCompound(compound)
+}
+
+$(getCompoundTocTree(compound))
+
+%{
+local hasDetails =
+	compoundStats.hasDocumentedItems or
+	compoundStats.hasBriefDocumentation and compoundStats.hasDetailedDocumentation
+
+if hasDetails then
+}
+Overview
+~~~~~~~~
+
+$(getItemBriefDocumentation(compound, "details-"))
+
+%{
+else
+}
+$(getItemDetailedDocumentation(compound))
+
+%{
+end -- if
+
+if #compound.groupArray > 0 or compound.hasGlobalNamespace then
+	local groupTree = ""
+
+	for i = 1, #compound.groupArray do
+		local item = compound.groupArray[i]
+		local targetFileName = getItemFileName(item)
+
+		generateFile(targetFileName, "group.rst.in", item)
+		groupTree = groupTree .. getGroupTree(item)
+	end -- for
+
+	if compound.hasGlobalNamespace then
+		groupTree = groupTree .. getGroupTree(g_globalNamespace)
+	end
+}
+$groupTree
+
+%{
+end -- if
+
+if compoundStats.hasItems or
+	compound.baseCompound or
+	compound.derivedTypeArray and #compound.derivedTypeArray > 0 then
+
+	includeFile("overview_compound.rst.in", compound)
+end
+
+if hasDetails then
+}
+.. _details-doxid-$(compound.id):
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+$(getItemDetailedDocumentation(compound))
+
+%{
+end -- if
+
+if compoundStats.hasDocumentedVariables then
+	includeFile("details_variables.rst.in", compound, "Variables")
+end
+
+if compoundStats.hasDocumentedFunctions then
+	includeFile("details_functions.rst.in", compound, compound.functionArray, "Functions")
+end
+
+if compoundStats.hasDocumentedDefines then
+	includeFile("details_functions.rst.in", compound, compound.defineArray, "Macros")
+end
+
+if #compound.footnoteArray > 0 then
+}
+---------------------
+
+.. rubric:: Footnotes
+
+%{
+	for i = 1, #compound.footnoteArray do
+		local item = compound.footnoteArray[i]
+		local text = getItemDetailedDocumentation(item)
+		text = replaceCommonSpacePrefix(text, "\t")
+}
+.. [#$(item.name)]
+
+$text
+
+%{
+	end -- for
+end -- if
+}

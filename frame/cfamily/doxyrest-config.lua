@@ -10,6 +10,21 @@
 --------------------------------------------------------------------------------
 
 --!
+--! \defgroup global
+--! \title All Settings
+--! This section lists *all the settings* affecting the output of the
+--! Doxyrest C-family frames.
+--!
+
+--!
+--! \defgroup config1-common
+--! \title Common Settings
+--! This section describes common settings controlling input and output paths,
+--! titles, force-includes, etc.
+--! @{
+--!
+
+--!
 --! Table containing a list of frame directories. All frame files will be
 --! searched in directories -- and in the sequence -- specified here.
 --!
@@ -74,21 +89,38 @@ INDEX_TITLE = "My Project Documentation"
 INTRO_FILE = nil
 
 --!
---! By default, the page for the global namespace page will be called
---! "Global Namespace" and will contain no description except that for the
---! global compounds and members.
+--! Specify whether to sort groups lexicographically (by ``title``) or
+--! logically (by ``id``).
 --!
---! It's possible to override this behaviour by defining an auxillary compound
---! (page or group) with a special ``id``; this page/group may contain a
---! user-defined title,  a brief description and a detailed description. Use
---! ``GLOBAL_AUX_COMPOUND_ID`` to define this special name.
---!
+
+SORT_GROUPS_BY = "title"
+
+--[[!
+	By default, the page for the global namespace page will be called
+	"Global Namespace" and will contain no description except that for the
+	global compounds and members.
+
+	It's possible to override this behaviour by defining an auxillary compound
+	(page or group) with a special ``id``; this page/group may contain a
+	user-defined title,  a brief description and a detailed description. Use
+	``GLOBAL_AUX_COMPOUND_ID`` to define this special id.
+
+	.. note::
+
+		To make sure you use the correct **Doxygen** XML ID of the group/page,
+		find the definition of the group in one of ``.xml`` files and copy
+		the value of ``id`` attribute.
+
+		For example, if the group was declared as ``\defgroup global`` then
+		the its ``id`` will probably be either ``group_<your-group-name>`` or
+		``group__<your-group-name>``.
+]]
 
 GLOBAL_AUX_COMPOUND_ID = "group_global"
 
 --!
 --! Specify the main language of your project; this string will be used for
---! the reStructuredText ``.. code::`` sections and for conditional formatting
+--! the reStructuredText ``.. code-block::`` sections and for conditional formatting
 --! of module item declarations.
 --!
 
@@ -127,19 +159,6 @@ ESCAPE_PIPES = false
 ESCAPE_TRAILING_UNDERSCORES = false
 
 --!
---! Exclude items with higher protection level than ``PROTECTION_FILTER``:
---!
---!     1. public
---!     2. protected
---!     3. private
---!     4. package
---!
---! By default, only public items are included into documentation.
---!
-
-PROTECTION_FILTER = "public"
-
---!
 --! Exclude items declared in specific locations. Use a regular expression to
 --! define a mask of directories/source files to completely exclude from the
 --! final documentation. For example, ``.*/impl/.*lua$`` will exclude all
@@ -158,6 +177,35 @@ EXCLUDE_UNDOCUMENTED_ITEMS = false
 --! Usually you don't want to include empty defines (include-guards,
 --! conditional compilation switches, etc) into the project documentation.
 --! Change this to ``false`` if empty defines *should* be included.
+--!
+
+--! @}
+
+--!
+--! \defgroup config2-cfamily
+--! \title C-family-specific Settings
+--! This section describes settings specific for C-family frames.
+--! @{
+--!
+
+--[[!
+	Exclude items with higher protection level than ``PROTECTION_FILTER``:
+
+		1. ``public``
+		2. ``protected``
+		3. ``private``
+		4. ``package``
+
+	By default, only public items are included into documentation.
+]]
+
+PROTECTION_FILTER = "public"
+
+--!
+--! In many projects empty defines are *only* used as include-guards (and as
+--! such, should be excluded from the documentation). If this is not the case
+--! and empty defines should be kept in the final documentation, change this
+--! setting to ``false``.
 --!
 
 EXCLUDE_EMPTY_DEFINES = true
@@ -187,16 +235,16 @@ EXCLUDE_DEFAULT_CONSTRUCTORS = true
 
 EXCLUDE_DESTRUCTORS = true
 
---!
---! Usually providing documentation blocks for primitive C typedefs such as:
---!
---! .. code:: C
---!
---!     typedef struct S S;
---!
---! is not necessary. Change this to ``false`` if such typedefs *should* be
---! included.
---!
+--[[!
+	Usually providing documentation blocks for primitive C typedefs such as:
+
+	.. code-block:: C
+
+		typedef struct S S;
+
+	is not necessary. Change this to ``false`` if such typedefs *should* be
+	included.
+]]
 
 EXCLUDE_PRIMITIVE_TYPEDEFS = true
 
@@ -206,21 +254,21 @@ EXCLUDE_PRIMITIVE_TYPEDEFS = true
 
 SHOW_DIRECT_DESCENDANTS = true
 
---!
---! \subgroup
---!
---! Insert space between function name and parameter list like this:
---!
---! .. code:: C
---!
---!     void foo ();
---!
---! By default, ``PRE_PARAM_LIST_SPACE`` is ``false`` which yields:
---!
---! .. code:: C
---!
---!     void foo();
---!
+--[[!
+	\subgroup
+
+	Insert space between function name and parameter list like this:
+
+	.. code-block:: C
+
+		void foo ();
+
+	By default, ``PRE_PARAM_LIST_SPACE`` is ``false`` which yields:
+
+	.. code-block:: C
+
+		void foo();
+]]
 
 PRE_PARAM_LIST_SPACE = false
 PRE_OPERATOR_NAME_SPACE = true
@@ -249,20 +297,23 @@ ML_PARAM_LIST_LENGTH_THRESHOLD = 80
 
 ML_SPECIFIER_MODIFIER_LIST = false
 
---!
---! Sometimes, it's required to redirect a Doxygen link to some external location.
---! In this case, add an entry to ``IMPORT_URL_MAP`` with the target URL, e.g.:
---!
---! .. code:: lua
---!
---!     IMPORT_URL_MAP =
---!     {
---!         [ "cfd9ea7a-35de-4090-a83b-3d214b3ff358/type_jnc_scheduler" ] = "https://vovkos.github.io/jancy/stdlib/class_jnc_Scheduler.html"
---!     }
---!
---! The key of the map is an 'importid' attribute. This is a non-standard Doxygen
---! attribute; Jancy compiler generates is when a referenced item is contained in an
---! imported extensions library (``.jncx``)
---!
+--[[!
+	Sometimes, it's required to redirect a Doxygen link to some external location.
+	In this case, add an entry to ``IMPORT_URL_MAP`` with the target URL, e.g.:
+
+	.. code-block:: lua
+
+		IMPORT_URL_MAP =
+		{
+			[ "cfd9ea7a-35de-4090-a83b-3d214b3ff358/type_jnc_scheduler" ] =
+			"https://vovkos.github.io/jancy/stdlib/class_jnc_Scheduler.html"
+		}
+
+	The key of the map is an ``importid`` attribute. This is a non-standard Doxygen
+	attribute; Jancy compiler generates is when a referenced item is contained in an
+	imported extensions library (``.jncx``)
+]]
 
 IMPORT_URL_MAP = {}
+
+--! @}

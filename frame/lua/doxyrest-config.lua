@@ -10,8 +10,18 @@
 --------------------------------------------------------------------------------
 
 --!
---! Table containing a list of frame directories. All frame files will be
---! searched in directories -- and in the sequence -- specified here.
+--! \defgroup global
+--! \title Lua Frames Configuration
+--! This section describes all the settings affecting the output of the
+--! Doxyrest Lua frames.
+--!
+
+--!
+--! \defgroup config1-common
+--! \title Common Settings
+--! This section describes common settings controlling input and output paths,
+--! titles, force-includes, etc`.
+--! @{
 --!
 
 FRAME_DIR_LIST = {}
@@ -63,7 +73,7 @@ EXTRA_PAGE_LIST = {}
 --! The title of the main (index) page.
 --!
 
-INDEX_TITLE = "My Project Documentation"
+INDEX_TITLE = "My Lua Project Documentation"
 
 --!
 --! File with project introduction (reStructuredText). When non-nil, this file
@@ -74,15 +84,40 @@ INDEX_TITLE = "My Project Documentation"
 INTRO_FILE = nil
 
 --!
---! By default, the page for the global namespace page will be called
---! "Global Namespace" and will contain no description except that for the
---! global compounds and members.
+--! Specify whether to sort groups lexicographically (by ``title``) or
+--! logically (by ``id``).
 --!
---! It's possible to override this behaviour by defining an auxillary compound
---! (page or group) with a special ``id``; this page/group may contain a
---! user-defined title,  a brief description and a detailed description. Use
---! ``GLOBAL_AUX_COMPOUND_ID`` to define this special name.
+
+SORT_GROUPS_BY = "title"
+
 --!
+--! Specify whether to sort global members (variables and functions) by
+--! ``name``.
+--!
+
+SORT_GLOBAL_MEMBERS = true
+
+--[[!
+	By default, the page for the global namespace page will be called
+	"Global Scope" and will contain no description except that for the
+	global compounds and members.
+
+	It's possible to override this behaviour by defining an auxillary compound
+	(page or group) with a special ``id``; this page/group may contain a
+	user-defined title,  a brief description and a detailed description. Use
+	``GLOBAL_AUX_COMPOUND_ID`` to define this special id.
+
+	.. note::
+
+		To make sure you use the correct **Doxygen** XML ID of the group/page,
+		find the definition of the group in one of ``.xml`` files and copy
+		the value of ``id`` attribute.
+
+		For example, if the group was declared as ``\defgroup global`` then
+		the its ``id`` will probably be either ``group_<your-group-name>`` or
+		``group__<your-group-name>``.
+]]
+
 
 GLOBAL_AUX_COMPOUND_ID = "group_global"
 
@@ -133,19 +168,29 @@ EXCLUDE_LOCATION_PATTERN = nil
 
 EXCLUDE_UNDOCUMENTED_ITEMS = false
 
+--! @}
+
 --!
---! Insert space between function name and parameter list like this:
+--! \defgroup config2-cmake
+--! \title Lua-specific Settings
+--! This section describes settings specific for Lua frames.
+--! @{
 --!
---! .. code:: lua
---!
---!     function foo ()
---!
---! By default, ``PRE_PARAM_LIST_SPACE`` is ``false`` which yields:
---!
---! .. code:: lua
---!
---!     function foo()
---!
+
+--[[!
+	Insert space between function name and parameter list like this:
+
+	.. code-block:: lua
+
+		function foo ()
+
+	By default, ``PRE_PARAM_LIST_SPACE`` is ``false`` which yields:
+
+	.. code-block:: lua
+
+		function foo()
+]]
+
 
 PRE_PARAM_LIST_SPACE = false
 
@@ -164,3 +209,5 @@ ML_PARAM_LIST_COUNT_THRESHOLD = nil
 --!
 
 ML_PARAM_LIST_LENGTH_THRESHOLD = 80
+
+--! @}

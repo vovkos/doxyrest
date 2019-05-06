@@ -39,10 +39,10 @@ set(
 set(
 	DOXYREST_CMD_LINE
 	${XML_DIR}/index.xml
+	-c ${CMAKE_CURRENT_LIST_DIR}/doxyrest-config.lua
 	-o ${RST_DIR}/_unused
 	-F ${DOXYREST_FRAME_DIR}/lua
 	-F ${DOXYREST_FRAME_DIR}/common
-	-D GLOBAL_AUX_COMPOUND_ID=group_api_99_global
 	-f index.rst.in
 	)
 

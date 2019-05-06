@@ -16,5 +16,9 @@ Doxyrest is a compiler from **Doxygen** XML to **reStructuredText** -- hence, th
 
 Follow the links below for additional information.
 
-* `Doxyrest Manual <manual/index.html>`_
 * `Doxyrest Build Guide <build-guide/index.html>`_
+* `Doxyrest Manual <manual/index.html>`_
+* Doxyrest Language-specific Frame Configuration
+	* `C-family <frame/cfamily/index.html>`_
+	* `CMake <frame/cmake/index.html>`_
+	* `Lua <frame/lua/index.html>`_

@@ -174,7 +174,13 @@ function prepareCompound(compound)
 		filterArray(compound.defineArray, hasItemRefTarget)
 	end
 
-	table.sort(compound.groupArray, cmpIds)
+	table.sort(compound.groupArray, cmpGroups)
+
+	if SORT_GLOBAL_MEMBERS then
+		table.sort(compound.variableArray, cmpNames)
+		table.sort(compound.functionArray, cmpNames)
+		table.sort(compound.defineArray, cmpNames)
+	end
 
 	compound.stats = stats
 

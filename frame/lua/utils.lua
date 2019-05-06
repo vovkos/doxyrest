@@ -152,8 +152,13 @@ function prepareCompound(compound)
 		filterArray(compound.functionArray, hasItemRefTarget)
 	end
 
-	table.sort(compound.groupArray, cmpIds)
+	table.sort(compound.groupArray, cmpGroups)
 	table.sort(compound.structArray, cmpNames)
+
+	if SORT_GLOBAL_MEMBERS and compound.compoundKind ~= "struct" then
+		table.sort(compound.variableArray, cmpNames)
+		table.sort(compound.functionArray, cmpNames)
+	end
 
 	compound.stats = stats
 

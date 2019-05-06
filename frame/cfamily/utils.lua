@@ -1117,7 +1117,7 @@ function prepareCompound(compound)
 	-- sort items -- only the ones producing separate pages;
 	-- also, defines, which always go to the global namespace
 
-	table.sort(compound.groupArray, cmpIds)
+	table.sort(compound.groupArray, cmpGroups)
 	table.sort(compound.namespaceArray, cmpNames)
 	table.sort(compound.enumArray, cmpNames)
 	table.sort(compound.structArray, cmpNames)

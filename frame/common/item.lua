@@ -254,4 +254,12 @@ function cmpTitles(i1, i2)
 	return i1.title < i2.title
 end
 
+if not SORT_GROUPS_BY then
+	SORT_GROUPS_BY = "title"
+end
+
+function cmpGroups(g1, g2)
+	return g1[SORT_GROUPS_BY] < g2[SORT_GROUPS_BY]
+end
+
 -------------------------------------------------------------------------------

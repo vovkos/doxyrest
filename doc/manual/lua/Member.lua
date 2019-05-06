@@ -14,7 +14,7 @@
 --! \ingroup api
 --! \title Doxygen Members
 --!
---! This section describes types (enumerations and tables) used to describe
+--! This section describes types (enumerations and tables) used to represent
 --! Doxygen members (variables, functions, properties, etc).
 --!
 --! @{

@@ -14,7 +14,7 @@
 --! \ingroup api
 --! \title Doxygen Compounds
 --!
---! This section describes types (enumerations and tables) used to describe
+--! This section describes types (enumerations and tables) used to represent
 --! Doxygen compounds (classes, namespaces, groups, etc).
 --!
 --! @{

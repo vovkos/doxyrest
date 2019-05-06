@@ -14,7 +14,7 @@
 --! \ingroup api
 --! \title Doxygen Documentation Blocks
 --!
---! This section describes types (enumerations and tables) used to describe
+--! This section describes types (enumerations and tables) used to represent
 --! Doxygen documentation blocks -- atoms of Doxygen documentation comments.
 --!
 --! @{

@@ -304,7 +304,7 @@ Follow the links below for additional information:
 * `Doxyrest Manual <https://vovkos.github.io/doxyrest/manual>`__
 * `Doxyrest Build Guide <https://vovkos.github.io/doxyrest/build-guide>`__
 
-	Of course, you can also follow the build logs on `Travis CI <https://travis-ci.org/vovkos/doxyrest>`__ or `AppVeyor CI <https://ci.appveyor.com/project/vovkos/doxyrest>`__-- always a great way to reproduce the build steps.
+	Of course, you can also follow the build logs on `Travis CI <https://travis-ci.org/vovkos/doxyrest>`__ or `AppVeyor CI <https://ci.appveyor.com/project/vovkos/doxyrest>`__ -- always a great way to reproduce the build steps.
 
 Language-specific Frames Settings
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

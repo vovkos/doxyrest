@@ -22,59 +22,59 @@ emit(getItemArrayOverviewRefTargetString(compound.functionArray))
 	:class: overview-code-block
 
 %{
-if compound.baseTypeArray and #compound.baseTypeArray > 0 then
-}
-	-- base types
+if compound.compoundKind ~= "struct" then
+	if #compound.enumArray > 0 then
+		includeFile("overview_enums.rst.in", compound)
+		emit("\n")
+	end -- if
 
-%{
-	for i = 1, #compound.baseTypeArray do
-		local baseType = compound.baseTypeArray[i]
-}
-	:ref:`$(baseType.name) <doxid-$(baseType.id)>`
-%{
-	end -- for
-	emit("\n")
-end -- if
+	if #compound.structArray > 0 then
+		includeFile("overview_structs.rst.in", compound)
+		emit("\n")
+	end -- if
 
-if #compound.enumArray > 0 then
-	includeFile("overview_enums.rst.in", compound)
-	emit("\n")
-end -- if
+	if #compound.variableArray > 0 then
+		includeFile("overview_variables.rst.in", compound, variableSectionName)
+		emit("\n")
+	end -- if
 
-if #compound.structArray > 0 then
-	includeFile("overview_structs.rst.in", compound)
-	emit("\n")
-end -- if
-
-if #compound.variableArray > 0 then
-	includeFile("overview_variables.rst.in", compound, variableSectionName)
-	emit("\n")
-end -- if
-
-if #compound.functionArray > 0 then
-	includeFile("overview_functions.rst.in", compound, functionSectionName)
-	emit("\n")
-end
-
-if compound.baseTypeArray and #compound.baseTypeArray > 0 then
-
-	-- always link inherited members (even when no documentation)
-
-	local prevHasItemRefTarget = hasItemRefTarget
-	hasItemRefTarget = function(item)
-		return true
+	if #compound.functionArray > 0 then
+		includeFile("overview_functions.rst.in", compound, functionSectionName)
+		emit("\n")
 	end
-
-	for i = 1, #compound.baseTypeArray do
-		local baseType = compound.baseTypeArray[i]
+else
 }
-
-$(getTitle("Inherited from " .. baseType.name, "-"))
+	$(compound.name) =
+	{
+		-- fields
 
 %{
-		includeFile("overview_compound.rst.in", baseType, "fields", "methods")
-	end -- for
+	includeFileWithIndent("\t", "overview_variables.rst.in", compound, nil, ",")
 
-	hasItemRefTarget = prevHasItemRefTarget
+	if compound.baseTypeArray and #compound.baseTypeArray > 0 then
+
+		-- always link inherited members (even when no documentation)
+
+		local prevHasItemRefTarget = hasItemRefTarget
+		hasItemRefTarget = function(item)
+			return true
+		end
+
+		for i = 1, #compound.baseTypeArray do
+			local baseType = compound.baseTypeArray[i]
+}
+
+		-- inherited from :ref:`$(baseType.name)<doxid-$(baseType.id)>`
+
+%{
+			includeFileWithIndent("\t", "overview_variables.rst.in", baseType, nil, ",")
+		end -- for
+
+		hasItemRefTarget = prevHasItemRefTarget
+	end -- if
+}
+	}
+
+%{
 end -- if
 }

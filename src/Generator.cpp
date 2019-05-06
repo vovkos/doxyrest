@@ -184,11 +184,16 @@ Generator::processFile(
 			return false;
 
 		size_t offset = 0;
-		do
+
+		for (;;)
 		{
 			contents.insert(offset, indent);
-			offset = contents.find('\n', offset + indent.getLength()) + 1;
-		} while (offset != 0); // means find() returned -1
+			offset = contents.find('\n', offset + indent.getLength());
+			if (offset >= contents.getLength() - 1) // don't indent pre-eof
+				break;
+
+			offset++; // skip \n
+		}
 
 		m_stringTemplate.append(contents);
 	}

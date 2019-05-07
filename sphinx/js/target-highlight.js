@@ -13,7 +13,7 @@
 
 var g_oldTarget = $([]);
 
-function getPreFromSpan(span) {
+function getTargetFromSpan(span) {
 	var parent = span.parent();
 
 	// ascend to the top-level <span>
@@ -35,7 +35,7 @@ function getPreFromSpan(span) {
 	while (next.is("span"))
 		next = next.next();
 
-	if (next.is("pre"))
+	if (next.is("pre, :header"))
 		return next;
 
 	return null;
@@ -47,9 +47,9 @@ function updateTarget() {
 	// sphinx uses spans to inject multiple ids
 
 	if (target.is("span")) {
-		pre = getPreFromSpan(target);
-		if (pre)
-			target = pre;
+		element = getTargetFromSpan(target);
+		if (element)
+			target = element;
 	}
 
 	g_oldTarget.removeClass("target-highlight");

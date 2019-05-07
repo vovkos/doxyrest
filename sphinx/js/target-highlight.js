@@ -13,11 +13,44 @@
 
 var g_oldTarget = $([]);
 
+function getPreFromSpan(span) {
+	var parent = span.parent();
+
+	// ascend to the top-level <span>
+
+	while (parent.is("span"))
+	{
+		span = parent;
+		parent = parent.parent();
+	}
+
+	// check the direct parent of the top-level <span>
+
+	if (parent.is("pre"))
+		return parent;
+
+	// nope, skip all sibling spans
+
+	var next = span.next();
+	while (next.is("span"))
+		next = next.next();
+
+	if (next.is("pre"))
+		return next;
+
+	return null;
+}
+
 function updateTarget() {
 	var target = $(":target");
 
-	if (target.is("span")) // sphinx uses spans to inject multiple ids
-		target = target.parent();
+	// sphinx uses spans to inject multiple ids
+
+	if (target.is("span")) {
+		pre = getPreFromSpan(target);
+		if (pre)
+			target = pre;
+	}
 
 	g_oldTarget.removeClass("target-highlight");
 	target.addClass("target-highlight");

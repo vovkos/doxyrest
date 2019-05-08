@@ -260,9 +260,9 @@ Now open ``html-dir/index.html`` and enjoy the new awesome look of your document
 4. Play With The Styles (optional)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Alright, you were able to generate HTML documentation, but you would like to tweak some styles (colors, fonts, margins, etc). With Sphinx, you can easily adjust both the theme and CSS stylesheets.
+Alright, you were able to generate HTML documentation, but you would like to tweak some styles (colors, fonts, margins, etc). With Sphinx, you can easily adjust both the theme and CSS stylesheets. Doxyrest extensions for Sphinx also allow you setting the tab-width (tab-width being hardcoded to ``8`` is a longtime issue with Sphinx).
 
-To do so, edit your ``conf.py``:
+To do all that, edit your ``conf.py``:
 
 .. code-block:: python
 
@@ -277,6 +277,10 @@ To do so, edit your ``conf.py``:
 	# Then ask Sphinx to write it over the standard '_static' folder:
 
 	html_static_path = ['static/']
+
+	# Specify the size of tab indentation:
+
+	doxyrest_tab_width = 2
 
 If you use a theme other than ``sphinxdoc`` or ``sphinx_rtd_theme`` (natively supported by Doxyrest), make sure your stylesheets properly define the following Doxyrest-specific ``.css`` classes:
 

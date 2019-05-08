@@ -94,7 +94,7 @@ Doxyrest generates a decent overview even if a project has no Doxygen documentat
 	* 	- AXL
 		- `sphinx_rtd_theme <https://vovkos.github.io/axl/manual/global.html>`__
 
-Another great strength of the Doxyrest design is that you can replace Doxygen with your own generator of Doxygen-compatible XML database and then apply the same pipeline for documenting APIs in other languages:
+Replace Doxygen with your own generator of Doxygen-compatible XML database and apply the same pipeline for documenting APIs in other languages:
 
 Lua libraries
 ~~~~~~~~~~~~~
@@ -126,7 +126,7 @@ Jancy libraries
 	*	- IO Ninja Jancy API
 		- `sphinx_rtd_theme <http://ioninja.com/doc/api>`__
 
-The best part about the Doxyrest approach is that it's modular and 100% customizable. You can replace the **XML-generator** to support new languages; you can change **Sphinx themes** or **CSS styles** to tweak the visual appearance (fonts, colors, page layout, etc), and if that doesn't cut it, you can modify the **Lua frames** for more drastic effects -- from tweaking the declaration coding style to changing the whole structure of documentation.
+To reiterate, the strongest point of the Doxyrest approach is that it's *modular and 100% customizable*. You can replace the **XML-generator** to support new languages; you can change **Sphinx themes** or **CSS styles** to tweak the visual appearance (fonts, colors, page layout, etc), and if that doesn't cut it, you can modify the **Lua frames** for more drastic effects -- from tweaking the declaration coding style to changing the whole structure of documentation.
 
 Quick HOWTO
 -----------
@@ -152,7 +152,7 @@ Adjust the following settings in your Doxygen configuration file ``Doxyfile``:
 
 	GENERATE_XML = YES
 
-	# You may also want to turn the generation of HTML off by setting:
+	# You may also want to turn the generation of HTML off:
 	# GENERATE_HTML = NO
 
 	# Next, choose the location of the resulting XML database:
@@ -218,11 +218,11 @@ For detailed documentation on all settings please read `C-family Frame Settings 
 2.3. ``conf.py`` for Sphinx
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Finally, prepare a Sphinx configuration file ``conf.py`` (either take an existing one and fine tune it to your liking, or generate a new one with ``sphinx-quickstart``):
+Finally, prepare a Sphinx configuration file ``conf.py``. A good approach would be generating one using ``sphinx-quickstart`` and then adding the following:
 
 .. code-block:: python
 
-	# Specify the Add Doxyrest extensions ``doxyrest`` and ``cpplexer``:
+	# Specify the path to Doxyrest extensions for Sphinx:
 
 	sys.path.insert(1, os.path.abspath('doxyrest-sphinx-dir'))
 
@@ -238,6 +238,8 @@ Finally, prepare a Sphinx configuration file ``conf.py`` (either take an existin
 
 3. Run The Doxyrest Pipeline
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+After the configuration files are ready, it's time to build:
 
 .. code-block:: bash
 
@@ -258,9 +260,9 @@ Now open ``html-dir/index.html`` and enjoy the new awesome look of your document
 4. Play With The Styles (optional)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-OK, the pipeline is configured and you were able to generate HTML documentation; now you can fine-tune the styles to your liking. The two things which can be *easily* adjusted are: the Sphinx theme and CSS stylesheets.
+Alright, you were able to generate HTML documentation, but you would like to tweak some styles (colors, fonts, margins, etc). With Sphinx, you can easily adjust both the theme and CSS stylesheets.
 
-Inside your ``conf.py``:
+To do so, edit your ``conf.py``:
 
 .. code-block:: python
 
@@ -276,7 +278,7 @@ Inside your ``conf.py``:
 
 	html_static_path = ['static/']
 
-If you use a theme other than ``sphinxdoc`` or ``sphinx_rtd_theme``, make sure you have properly defined the following Doxyrest-specific ``.css`` classes:
+If you use a theme other than ``sphinxdoc`` or ``sphinx_rtd_theme`` (natively supported by Doxyrest), make sure your stylesheets properly define the following Doxyrest-specific ``.css`` classes:
 
 .. code-block:: css
 
@@ -296,6 +298,8 @@ If you use a theme other than ``sphinxdoc`` or ``sphinx_rtd_theme``, make sure y
 		...
 	}
 
+Use ``doxyrest-sphinx-dir/css/doxyrest-sphinxdoc.css`` and ``doxyrest-sphinx-dir/css/doxyrest-sphinx_rtd_theme.css`` as examples for how to do that.
+
 Documentation
 -------------
 
@@ -308,6 +312,8 @@ Follow the links below for additional information:
 
 Language-specific Frames Settings
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Should you decide to tweak the frames, you will need to know *what* is being exported into the scope of Lua code inside frames. The following documents provide a reference just for that. And of course, they were generated using Doxyrest itself:
 
 * `C-family <https://vovkos.github.io/doxyrest/frame/cfamily>`__
 * `CMake <https://vovkos.github.io/doxyrest/frame/cmake>`__

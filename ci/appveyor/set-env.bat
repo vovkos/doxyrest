@@ -11,8 +11,6 @@
 
 @echo off
 
-set
-
 :loop
 
 if "%1" == "" goto :finalize

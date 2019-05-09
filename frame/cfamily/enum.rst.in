@@ -15,9 +15,6 @@ local enum = argArray[1]
 
 local enumKind = getItemKindString(enum, "enum")
 local enumStats = prepareEnum(enum)
-local prevGetItemName = getItemName
-
-getItemName = getItemSimpleName
 
 if FORCE_INCLUDE_FILE then
 }
@@ -25,7 +22,7 @@ if FORCE_INCLUDE_FILE then
 %{
 end -- if
 }
-.. index:: pair: enum; $(getItemName(enum))
+.. index:: pair: enum; $(enum.name))
 .. _doxid-$(enum.id):
 .. _cid-$(getItemCid(enum)):
 
@@ -57,7 +54,7 @@ emit(getItemArrayOverviewRefTargetString(enum.enumValueArray))
 	:class: overview-code-block
 
 	$(getEnumImportString(enum))
-	$enumKind $(getItemQualifiedName(enum))
+	$enumKind $(enum.name)
 	{
 %{
 for i = 1, #enum.enumValueArray do
@@ -120,6 +117,4 @@ $(getItemDetailedDocumentation(item))
 		end -- if
 	end -- for
 end -- if
-
-getItemName = prevGetItemName
 }

@@ -259,7 +259,17 @@ if not SORT_GROUPS_BY then
 end
 
 function cmpGroups(g1, g2)
-	return g1[SORT_GROUPS_BY] < g2[SORT_GROUPS_BY]
+	s1 = getItemInternalDocumentation(g1)
+	s2 = getItemInternalDocumentation(g2)
+
+	o1 = string.match(s1, ":grouporder%(([^)]*)%):")
+	o2 = string.match(s2, ":grouporder%(([^)]*)%):")
+
+	if o1 and o2 then
+		return o1 < o2
+	else
+		return g1[SORT_GROUPS_BY] < g2[SORT_GROUPS_BY]
+	end
 end
 
 -------------------------------------------------------------------------------

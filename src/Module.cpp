@@ -1290,7 +1290,13 @@ GlobalNamespace::build(
 		switch (compoundIt->m_compoundKind)
 		{
 		case CompoundKind_Undefined: // template base type or incomplete compound
-		case CompoundKind_Group:     // groups are added implicitly, via group members
+			break;
+
+		case CompoundKind_Group:
+			if (!compoundIt->m_briefDescription.isEmpty() ||
+				!compoundIt->m_detailedDescription.isEmpty())
+				getGroupNamespace(module, *compoundIt); // ensure group is added to the tree
+
 			break;
 
 		case CompoundKind_File:

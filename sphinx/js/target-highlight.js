@@ -12,15 +12,24 @@
 (function () {
 
 var g_oldTarget = $([]);
+var g_suitableTargetClass = "pre, h2, h3, h4, h5, h6"; // don't highlight <h1>
 
-function getTargetFromSpan(span) {
-	var parent = span.parent();
+function adjustTarget(target) {
+	if (target.is("div"))
+		target = target.children(":first");
+
+	if (target.is(g_suitableTargetClass))
+		return target;
+
+	if (!target.is("span"))
+		return $([]);
 
 	// ascend to the top-level <span>
 
+	var parent = target.parent();
 	while (parent.is("span"))
 	{
-		span = parent;
+		target = parent;
 		parent = parent.parent();
 	}
 
@@ -31,27 +40,18 @@ function getTargetFromSpan(span) {
 
 	// nope, skip all sibling spans
 
-	var next = span.next();
-	while (next.is("span"))
-		next = next.next();
+	target = target.next();
+	while (target.is("span"))
+		target = target.next();
 
-	if (next.is("pre, :header"))
-		return next;
+	if (target.is(g_suitableTargetClass))
+		return target;
 
-	return null;
+	return $([]); // no target to highlight
 }
 
 function updateTarget() {
-	var target = $(":target");
-
-	// sphinx uses spans to inject multiple ids
-
-	if (target.is("span")) {
-		element = getTargetFromSpan(target);
-		if (element)
-			target = element;
-	}
-
+	var target = adjustTarget($(":target"));
 	g_oldTarget.removeClass("target-highlight");
 	target.addClass("target-highlight");
 	g_oldTarget = target;

@@ -70,7 +70,7 @@ function getItemFileName(item, suffix)
 	return s .. suffix
 end
 
-function getItemCid(item)
+function getItemCidTargetString(item)
 	local s
 
 	if item.compoundKind == "group" then
@@ -82,8 +82,13 @@ function getItemCid(item)
 	end
 
 	s = string.lower(s)
+	s = ensureUniqueItemName(item, s, g_itemCidMap, "-")
 
-	return ensureUniqueItemName(item, s, g_itemCidMap, "-")
+	return ".. _cid-" .. s ..":\n"
+end
+
+if not ITEM_CID_TARGETS then
+	getItemCidTargetString = function() return "" end
 end
 
 function getItemRefTargetString(item)
@@ -94,7 +99,7 @@ function getItemRefTargetString(item)
 	local s =
 		".. index:: pair: " .. item.memberKind .. "; " .. item.name .. "\n" ..
 		".. _doxid-" .. item.id .. ":\n" ..
-		".. _cid-" .. getItemCid(item) .. ":\n"
+		getItemCidTargetString(item)
 
 	if item.isSubGroupHead then
 		for j = 1, #item.subGroupSlaveArray do
@@ -103,7 +108,7 @@ function getItemRefTargetString(item)
 			s = s ..
 				".. index:: pair: " .. slaveItem.memberKind .. "; " .. slaveItem.name .. "\n" ..
 				".. _doxid-" .. slaveItem.id .. ":\n" ..
-				".. _cid-" .. getItemCid(slaveItem) .. ":\n"
+				getItemCidTargetString(slaveItem)
 		end
 	end
 

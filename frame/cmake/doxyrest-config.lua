@@ -173,6 +173,22 @@ EXCLUDE_LOCATION_PATTERN = nil
 
 EXCLUDE_UNDOCUMENTED_ITEMS = false
 
+--[[!
+	Add cids (code IDs) targets for items.
+
+	To make use of code IDs, set the Sphinx ``default_role`` setting to ``cref``
+	and then reference items from inside reStructuredText like this:
+
+	.. code-block::
+
+		`Point.x` will reference a field "x" inside "struct Point"
+
+	When Doxyrest is used with legacy Doxygen projects, ``ITEM_CID_TARGETS`` can
+	be set to ``false`` to reduce the overall number of targets.
+]]
+
+ITEM_CID_TARGETS = true
+
 --! @}
 
 --!

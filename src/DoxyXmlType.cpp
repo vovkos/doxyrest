@@ -153,7 +153,7 @@ DoxygenCompoundType::onStartElement(
 	switch (elemKind)
 	{
 	case ElemKind_CompoundDef:
-		return m_parser->pushType<CompoundDefType> (name, attributes);
+		return m_parser->pushType<CompoundDefType>(name, attributes);
 	}
 
 	return true;
@@ -285,24 +285,24 @@ CompoundDefType::onStartElement(
 	switch (elemKind)
 	{
 	case ElemKind_CompoundName:
-		m_parser->pushType<StringType> (&m_compound->m_name, name, attributes);
+		m_parser->pushType<StringType>(&m_compound->m_name, name, attributes);
 		break;
 
 	case ElemKind_Title:
-		m_parser->pushType<StringType> (&m_compound->m_title, name, attributes);
+		m_parser->pushType<StringType>(&m_compound->m_title, name, attributes);
 		break;
 
 	case ElemKind_BaseCompoundRef:
-		m_parser->pushType<RefType> (&m_compound->m_baseRefList, name, attributes);
+		m_parser->pushType<RefType>(&m_compound->m_baseRefList, name, attributes);
 		break;
 
 	case ElemKind_DerivedCompoundRef:
-		m_parser->pushType<RefType> (&m_compound->m_derivedRefList, name, attributes);
+		m_parser->pushType<RefType>(&m_compound->m_derivedRefList, name, attributes);
 		break;
 
 	case ElemKind_Includes:
 		stringIt = m_compound->m_importList.insertTail();
-		m_parser->pushType<StringType> (stringIt.p(), name, attributes);
+		m_parser->pushType<StringType>(stringIt.p(), name, attributes);
 		break;
 
 	case ElemKind_IncludedBy:
@@ -316,27 +316,27 @@ CompoundDefType::onStartElement(
 	case ElemKind_InnerNamespace:
 	case ElemKind_InnerPage:
 	case ElemKind_InnerGroup:
-		m_parser->pushType<RefType> (&m_compound->m_innerRefList, name, attributes);
+		m_parser->pushType<RefType>(&m_compound->m_innerRefList, name, attributes);
 		break;
 
 	case ElemKind_TemplateParamList:
-		m_parser->pushType<TemplateParamListType> (&m_compound->m_templateParamList, name, attributes);
+		m_parser->pushType<TemplateParamListType>(&m_compound->m_templateParamList, name, attributes);
 		break;
 
 	case ElemKind_SectionDef:
-		m_parser->pushType<SectionDefType> (m_compound, name, attributes);
+		m_parser->pushType<SectionDefType>(m_compound, name, attributes);
 		break;
 
 	case ElemKind_BriefDescription:
-		m_parser->pushType<DescriptionType> (&m_compound->m_briefDescription, name, attributes);
+		m_parser->pushType<DescriptionType>(&m_compound->m_briefDescription, name, attributes);
 		break;
 
 	case ElemKind_DetailedDescription:
-		m_parser->pushType<DescriptionType> (&m_compound->m_detailedDescription, name, attributes);
+		m_parser->pushType<DescriptionType>(&m_compound->m_detailedDescription, name, attributes);
 		break;
 
 	case ElemKind_Location:
-		m_parser->pushType<LocationType> (&m_compound->m_location, name, attributes);
+		m_parser->pushType<LocationType>(&m_compound->m_location, name, attributes);
 		break;
 
 	case ElemKind_InheritanceGraph:
@@ -447,7 +447,7 @@ SectionDefType::onStartElement(
 		break;
 
 	case ElemKind_MemberDef:
-		return m_parser->pushType<MemberDefType> (m_parent, name, attributes);
+		return m_parser->pushType<MemberDefType>(m_parent, name, attributes);
 	}
 
 	return true;
@@ -689,27 +689,27 @@ MemberDefType::onStartElement(
 	{
 	case ElemKind_Includes:
 		stringIt = m_member->m_importList.insertTail();
-		m_parser->pushType<StringType> (stringIt.p(), name, attributes);
+		m_parser->pushType<StringType>(stringIt.p(), name, attributes);
 		break;
 
 	case ElemKind_TemplateParamList:
-		m_parser->pushType<TemplateParamListType> (&m_member->m_templateParamList, name, attributes);
+		m_parser->pushType<TemplateParamListType>(&m_member->m_templateParamList, name, attributes);
 		break;
 
 	case ElemKind_Type:
-		m_parser->pushType<LinkedTextType> (&m_member->m_type, name, attributes);
+		m_parser->pushType<LinkedTextType>(&m_member->m_type, name, attributes);
 		break;
 
 	case ElemKind_Definition:
-		m_parser->pushType<StringType> (&m_member->m_definition, name, attributes);
+		m_parser->pushType<StringType>(&m_member->m_definition, name, attributes);
 		break;
 
 	case ElemKind_ArgString:
-		m_parser->pushType<StringType> (&m_member->m_argString, name, attributes);
+		m_parser->pushType<StringType>(&m_member->m_argString, name, attributes);
 		break;
 
 	case ElemKind_Name:
-		m_parser->pushType<StringType> (&m_member->m_name, name, attributes);
+		m_parser->pushType<StringType>(&m_member->m_name, name, attributes);
 		break;
 
 	case ElemKind_Read:
@@ -717,15 +717,15 @@ MemberDefType::onStartElement(
 		break;
 
 	case ElemKind_BitField:
-		m_parser->pushType<StringType> (&m_member->m_bitField, name, attributes);
+		m_parser->pushType<StringType>(&m_member->m_bitField, name, attributes);
 		break;
 
 	case ElemKind_Initializer:
-		m_parser->pushType<LinkedTextType> (&m_member->m_initializer, name, attributes);
+		m_parser->pushType<LinkedTextType>(&m_member->m_initializer, name, attributes);
 		break;
 
 	case ElemKind_Exceptions:
-		m_parser->pushType<LinkedTextType> (&m_member->m_exceptions, name, attributes);
+		m_parser->pushType<LinkedTextType>(&m_member->m_exceptions, name, attributes);
 		break;
 
 	case ElemKind_Reimplements:
@@ -733,27 +733,27 @@ MemberDefType::onStartElement(
 		break;
 
 	case ElemKind_Param:
-		m_parser->pushType<ParamType> (&m_member->m_paramList, name, attributes);
+		m_parser->pushType<ParamType>(&m_member->m_paramList, name, attributes);
 		break;
 
 	case ElemKind_EnumValue:
-		m_parser->pushType<EnumValueType> (m_member, name, attributes);
+		m_parser->pushType<EnumValueType>(m_member, name, attributes);
 		break;
 
 	case ElemKind_BriefDescription:
-		m_parser->pushType<DescriptionType> (&m_member->m_briefDescription, name, attributes);
+		m_parser->pushType<DescriptionType>(&m_member->m_briefDescription, name, attributes);
 		break;
 
 	case ElemKind_DetailedDescription:
-		m_parser->pushType<DescriptionType> (&m_member->m_detailedDescription, name, attributes);
+		m_parser->pushType<DescriptionType>(&m_member->m_detailedDescription, name, attributes);
 		break;
 
 	case ElemKind_InBodyDescription:
-		m_parser->pushType<DescriptionType> (&m_member->m_inBodyDescription, name, attributes);
+		m_parser->pushType<DescriptionType>(&m_member->m_inBodyDescription, name, attributes);
 		break;
 
 	case ElemKind_Location:
-		m_parser->pushType<LocationType> (&m_member->m_location, name, attributes);
+		m_parser->pushType<LocationType>(&m_member->m_location, name, attributes);
 		break;
 
 	case ElemKind_References:
@@ -761,7 +761,7 @@ MemberDefType::onStartElement(
 		break;
 
 	case ElemKind_Modifiers:
-		m_parser->pushType<StringType> (&m_member->m_modifiers, name, attributes);
+		m_parser->pushType<StringType>(&m_member->m_modifiers, name, attributes);
 		break;
 	}
 
@@ -793,16 +793,16 @@ DescriptionType::onStartElement(
 	switch (elemKind)
 	{
 	case ElemKind_Title:
-		m_parser->pushType<StringType> (&m_description->m_title, name, attributes);
+		m_parser->pushType<StringType>(&m_description->m_title, name, attributes);
 		break;
 
 	case ElemKind_Para:
-		m_parser->pushType<DocParaType> (&m_description->m_docBlockList, name, attributes);
+		m_parser->pushType<DocParaType>(&m_description->m_docBlockList, name, attributes);
 		break;
 
 	case ElemKind_Sect1:
 	case ElemKind_Internal:
-		m_parser->pushType<DocSectionBlockType> (&m_description->m_docBlockList, name, attributes);
+		m_parser->pushType<DocSectionBlockType>(&m_description->m_docBlockList, name, attributes);
 		break;
 	}
 
@@ -897,11 +897,11 @@ DocSectionBlockType::onStartElement(
 	switch (elemKind)
 	{
 	case ElemKind_Title:
-		m_parser->pushType<StringType> (&m_sectionBlock->m_title, name, attributes);
+		m_parser->pushType<StringType>(&m_sectionBlock->m_title, name, attributes);
 		break;
 
 	case ElemKind_Para:
-		m_parser->pushType<DocParaType> (&m_sectionBlock->m_childBlockList, name, attributes);
+		m_parser->pushType<DocParaType>(&m_sectionBlock->m_childBlockList, name, attributes);
 		break;
 
 	case ElemKind_Sect1:
@@ -909,7 +909,7 @@ DocSectionBlockType::onStartElement(
 	case ElemKind_Sect3:
 	case ElemKind_Sect4:
 	case ElemKind_Internal:
-		m_parser->pushType<DocSectionBlockType> (&m_sectionBlock->m_childBlockList, name, attributes);
+		m_parser->pushType<DocSectionBlockType>(&m_sectionBlock->m_childBlockList, name, attributes);
 		break;
 	}
 
@@ -996,19 +996,19 @@ EnumValueType::onStartElement(
 	switch (elemKind)
 	{
 	case ElemKind_Name:
-		m_parser->pushType<StringType> (&m_enumValue->m_name, name, attributes);
+		m_parser->pushType<StringType>(&m_enumValue->m_name, name, attributes);
 		break;
 
 	case ElemKind_Initializer:
-		m_parser->pushType<LinkedTextType> (&m_enumValue->m_initializer, name, attributes);
+		m_parser->pushType<LinkedTextType>(&m_enumValue->m_initializer, name, attributes);
 		break;
 
 	case ElemKind_BriefDescription:
-		m_parser->pushType<DescriptionType> (&m_enumValue->m_briefDescription, name, attributes);
+		m_parser->pushType<DescriptionType>(&m_enumValue->m_briefDescription, name, attributes);
 		break;
 
 	case ElemKind_DetailedDescription:
-		m_parser->pushType<DescriptionType> (&m_enumValue->m_detailedDescription, name, attributes);
+		m_parser->pushType<DescriptionType>(&m_enumValue->m_detailedDescription, name, attributes);
 		break;
 	}
 
@@ -1040,7 +1040,7 @@ TemplateParamListType::onStartElement(
 	switch (elemKind)
 	{
 	case ElemKind_Param:
-		m_parser->pushType<ParamType> (m_list, name, attributes);
+		m_parser->pushType<ParamType>(m_list, name, attributes);
 		break;
 	}
 
@@ -1074,31 +1074,31 @@ ParamType::onStartElement(
 	switch (elemKind)
 	{
 	case ElemKind_Type:
-		m_parser->pushType<LinkedTextType> (&m_param->m_type, name, attributes);
+		m_parser->pushType<LinkedTextType>(&m_param->m_type, name, attributes);
 		break;
 
 	case ElemKind_DeclName:
-		m_parser->pushType<StringType> (&m_param->m_declarationName, name, attributes);
+		m_parser->pushType<StringType>(&m_param->m_declarationName, name, attributes);
 		break;
 
 	case ElemKind_DefName:
-		m_parser->pushType<StringType> (&m_param->m_definitionName, name, attributes);
+		m_parser->pushType<StringType>(&m_param->m_definitionName, name, attributes);
 		break;
 
 	case ElemKind_Array:
-		m_parser->pushType<StringType> (&m_param->m_array, name, attributes);
+		m_parser->pushType<StringType>(&m_param->m_array, name, attributes);
 		break;
 
 	case ElemKind_DefVal:
-		m_parser->pushType<LinkedTextType> (&m_param->m_defaultValue, name, attributes);
+		m_parser->pushType<LinkedTextType>(&m_param->m_defaultValue, name, attributes);
 		break;
 
 	case ElemKind_TypeConstraint:
-		m_parser->pushType<LinkedTextType> (&m_param->m_typeConstraint, name, attributes);
+		m_parser->pushType<LinkedTextType>(&m_param->m_typeConstraint, name, attributes);
 		break;
 
 	case ElemKind_BriefDescription:
-		m_parser->pushType<DescriptionType> (&m_param->m_briefDescription, name, attributes);
+		m_parser->pushType<DescriptionType>(&m_param->m_briefDescription, name, attributes);
 		break;
 	}
 
@@ -1133,7 +1133,7 @@ LinkedTextType::onStartElement(
 	switch (elemKind)
 	{
 	case ElemKind_Ref:
-		m_parser->pushType<RefTextType> (m_linkedText, name, attributes);
+		m_parser->pushType<RefTextType>(m_linkedText, name, attributes);
 		break;
 	}
 
@@ -1215,27 +1215,31 @@ DocParaType::onStartElement(
 	switch (elemKind)
 	{
 	case ElemKind_Ref:
-		m_parser->pushType<DocRefTextType> (&m_paragraphBlock->m_childBlockList, name, attributes);
+		m_parser->pushType<DocRefTextType>(&m_paragraphBlock->m_childBlockList, name, attributes);
 		break;
 
 	case ElemKind_Anchor:
-		m_parser->pushType<DocAnchorType> (&m_paragraphBlock->m_childBlockList, name, attributes);
+		m_parser->pushType<DocAnchorType>(&m_paragraphBlock->m_childBlockList, name, attributes);
 		break;
 
 	case ElemKind_Image:
-		m_parser->pushType<DocImageType> (&m_paragraphBlock->m_childBlockList, name, attributes);
+		m_parser->pushType<DocImageType>(&m_paragraphBlock->m_childBlockList, name, attributes);
 		break;
 
 	case ElemKind_Ulink:
-		m_parser->pushType<DocUlinkType> (&m_paragraphBlock->m_childBlockList, name, attributes);
+		m_parser->pushType<DocUlinkType>(&m_paragraphBlock->m_childBlockList, name, attributes);
+		break;
+
+	case ElemKind_Heading:
+		m_parser->pushType<DocHeadingType>(&m_paragraphBlock->m_childBlockList, name, attributes);
 		break;
 
 	case ElemKind_SimpleSect:
-		m_parser->pushType<DocSimpleSectionType> (&m_paragraphBlock->m_childBlockList, name, attributes);
+		m_parser->pushType<DocSimpleSectionType>(&m_paragraphBlock->m_childBlockList, name, attributes);
 		break;
 
 	default:
-		m_parser->pushType<DocParaType> (&m_paragraphBlock->m_childBlockList, name, attributes);
+		m_parser->pushType<DocParaType>(&m_paragraphBlock->m_childBlockList, name, attributes);
 	}
 
 	m_textBlock = AXL_MEM_NEW(DocBlock);
@@ -1398,6 +1402,38 @@ DocUlinkType::create(
 //..............................................................................
 
 bool
+DocHeadingType::create(
+		DoxyXmlParser* parser,
+		sl::List<DocBlock>* list,
+		const char* name,
+		const char** attributes
+		)
+{
+	m_parser = parser;
+	m_headingBlock = AXL_MEM_NEW(DocHeadingBlock);
+	m_headingBlock->m_blockKind = name;
+	list->insertTail(m_headingBlock);
+
+	while (*attributes)
+	{
+		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
+		switch (attrKind)
+		{
+			case AttrKind_Level:
+				m_headingBlock->m_level = atoi(attributes[1]);
+				break;
+
+			// add as needed
+		}
+
+		attributes += 2;
+	}
+
+	return true;
+}
+//..............................................................................
+
+bool
 DocSimpleSectionType::create(
 	DoxyXmlParser* parser,
 	sl::List<DocBlock>* list,
@@ -1436,7 +1472,7 @@ DocSimpleSectionType::onStartElement(
 	switch (elemKind)
 	{
 	case ElemKind_Para:
-		m_parser->pushType<DocParaType> (&m_sectionBlock->m_childBlockList, name, attributes);
+		m_parser->pushType<DocParaType>(&m_sectionBlock->m_childBlockList, name, attributes);
 		break;
 	}
 

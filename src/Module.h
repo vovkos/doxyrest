@@ -141,6 +141,22 @@ struct DocUlinkBlock: DocBlock
 
 //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
+struct DocHeadingBlock: DocBlock
+{
+	int m_level;
+
+	DocHeadingBlock()
+	{
+		m_level = 0;
+	}
+
+	virtual
+	void
+	luaExport(lua::LuaState* luaState);
+};
+
+//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
 struct DocSectionBlock: DocBlock
 {
 	sl::String m_id;

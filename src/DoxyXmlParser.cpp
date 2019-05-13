@@ -83,11 +83,11 @@ DoxyXmlParser::onStartElement(
 		switch (elemKind)
 		{
 		case ElemKind_DoxygenIndex:
-			pushType<DoxygenIndexType> (name, attributes);
+			pushType<DoxygenIndexType>(name, attributes);
 			break;
 
 		case ElemKind_DoxygenCompound:
-			pushType<DoxygenCompoundType> (name, attributes);
+			pushType<DoxygenCompoundType>(name, attributes);
 			break;
 		}
 	}

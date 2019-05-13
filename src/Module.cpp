@@ -53,7 +53,7 @@ removeDuplicates(sl::List<T>* list)
 
 template <>
 void
-removeDuplicates<EnumValue> (sl::List<EnumValue>* list)
+removeDuplicates<EnumValue>(sl::List<EnumValue>* list)
 {
 	sl::Iterator<EnumValue> it = list->getHead();
 	while (it)
@@ -232,6 +232,18 @@ DocUlinkBlock::luaExport(lua::LuaState* luaState)
 	DocBlock::luaExportMembers(luaState);
 
 	luaState->setMemberString("url", m_url);
+}
+
+//.............................................................................
+
+void
+DocHeadingBlock::luaExport(lua::LuaState* luaState)
+{
+	luaState->createTable();
+
+	DocBlock::luaExportMembers(luaState);
+
+	luaState->setMemberInteger("level", m_level);
 }
 
 //.............................................................................

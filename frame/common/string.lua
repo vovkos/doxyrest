@@ -29,7 +29,12 @@ function trimWhitespace(string)
 	return trimTrailingWhitespace(s)
 end
 
-function getTitle(title, underline)
+g_titleUnderlineCharMap =
+{
+	"=", "~", "-", "+", "*", "^" -- 1 to 6
+}
+
+function getTitle(title, level)
 	if not title or title == "" then
 		title = "<Untitled>"
 	end
@@ -37,6 +42,11 @@ function getTitle(title, underline)
 	-- escape trailing underscores
 	title = string.gsub(title, "(_+)(%s+)", "\\%1%2")
 	title = string.gsub(title, "(_+)$", "\\%1")
+
+	local underline = g_titleUnderlineCharMap[level]
+	if not underline then
+		underline = "^"
+	end
 
 	return title .. "\n" .. string.rep(underline, #title)
 end

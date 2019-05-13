@@ -205,12 +205,7 @@ end
 
 function formatDocBlock_heading(block, context)
 	local text = getDocBlockText(block, context)
-	return ".. rubric:: " .. text .. "\n\n"
-end
-
-function formatDocBlock_heading(block, context)
-	local text = getDocBlockText(block, context)
-	return ".. rubric:: " .. text .. "\n\n"
+	return getTitle(text, block.level) .. "\n"
 end
 
 function formatDocBlock_varlistentry(block, context)
@@ -423,6 +418,7 @@ g_blockKindFormatMap =
 	["sp"]                   = function(b, c) return " " end,
 	["varlistentry"]         = formatDocBlock_varlistentry,
 	["listitem"]             = formatDocBlock_listitem,
+	["heading"]              = formatDocBlock_heading,
 	["para"]                 = formatDocBlock_para,
 	["parametername"]        = formatDocBlock_parametername,
 	["parameterdescription"] = formatDocBlock_parameterdescription,

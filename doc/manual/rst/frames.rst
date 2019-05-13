@@ -82,3 +82,4 @@ Further Reading
 	:titlesonly:
 
 	group_api.rst
+	frame-config.rst

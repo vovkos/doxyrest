@@ -53,6 +53,17 @@ Prints help screen.
 
 Prints version of Doxyrest.
 
+.. option:: -c, --config
+
+Overrides the name of configuration file (defaults to ``doxyrest-config.lua``), for example:
+
+.. code-block:: bash
+
+	-c myconfig.lua
+	--config myconfig.lua
+
+This file should contains a Lua script which sets up all the necessary language-specific frame settings. See :ref:`frame-config` for more details.
+
 .. option:: -o, --output
 
 Specifies master (index) output file, for example:

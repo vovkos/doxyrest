@@ -12,7 +12,7 @@
 (function () {
 
 var g_oldTarget = $([]);
-var g_suitableTargetClass = "pre, h2, h3, h4, h5, h6"; // don't highlight <h1>
+var g_suitableTargetClass = "pre, table, a, h2, h3, h4, h5, h6"; // don't highlight <h1>
 
 function adjustTarget(target) {
 	if (target.is("div"))

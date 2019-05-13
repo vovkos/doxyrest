@@ -12,3 +12,4 @@
 GLOBAL_AUX_COMPOUND_ID = "group_api_99_global"
 SORT_GROUPS_BY         = "id"
 SORT_GLOBAL_MEMBERS    = true
+ITEM_CID_TARGETS       = true

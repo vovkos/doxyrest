@@ -265,6 +265,19 @@ class TabAwareSphinxRSTFileInput(SphinxRSTFileInput):
         return content
 
 
+def register_docutils_conf(file_name):
+    prevConfig = None
+
+    if 'DOCUTILSCONFIG' in os.environ:
+        prevConfig = os.environ['DOCUTILSCONFIG']
+
+    os.environ['DOCUTILSCONFIG'] = file_name
+
+    if prevConfig:
+        os.environ['DOCUTILSCONFIG'] += os.pathsep
+        os.environ['DOCUTILSCONFIG'] += prevConfig
+
+
 def setup(app):
     app.add_node(
         HighlightedText,
@@ -281,10 +294,4 @@ def setup(app):
     directives.register_directive('code-block', RefCodeBlock) # replace
     app.add_transform(RefTransform)
     app.connect('builder-inited', on_builder_inited)
-
-    prevConfig = os.environ['DOCUTILSCONFIG']
-    os.environ['DOCUTILSCONFIG'] = this_dir + '/conf/docutils.conf'
-
-    if prevConfig:
-        os.environ['DOCUTILSCONFIG'] += os.pathsep
-        os.environ['DOCUTILSCONFIG'] += prevConfig
+    register_docutils_conf(this_dir + '/conf/docutils.conf')

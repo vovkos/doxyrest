@@ -16,7 +16,10 @@ from docutils import nodes
 from sphinx import roles, addnodes, config
 from sphinx.io import SphinxBaseFileInput, SphinxRSTFileInput
 from docutils.statemachine import StringList, string2lines
-import os.path
+import os
+
+
+this_dir = os.path.dirname(os.path.realpath(__file__))
 
 
 class HighlightedText(nodes.General, nodes.TextElement):
@@ -185,7 +188,6 @@ class RefTransform(Transform):
 
         re_src += '`(.+?)(\s*<([^<>]*)>)?`'
         self.re_prog = re.compile(re_src)
-        self
 
     @staticmethod
     def node_filter(node):
@@ -226,8 +228,6 @@ class RefTransform(Transform):
 
 
 def on_builder_inited(app):
-    this_dir = os.path.dirname(os.path.realpath(__file__))
-
     app.config.html_static_path += [
         this_dir + '/css/doxyrest-pygments.css',
         this_dir + '/js/target-highlight.js'
@@ -275,10 +275,16 @@ def setup(app):
     app.add_role('cref', cref_role)
     app.add_role('target', target_role)
     app.add_config_value('doxyrest_tab_width', default=4, rebuild=True)
+    app.add_config_value('doxyrest_footnote_backlinks', default=False, rebuild=True)
     app.registry.source_inputs['restructuredtext'] = TabAwareSphinxRSTFileInput
     directives.register_directive('ref-code-block', RefCodeBlock)
     directives.register_directive('code-block', RefCodeBlock) # replace
-
     app.add_transform(RefTransform)
-
     app.connect('builder-inited', on_builder_inited)
+
+    prevConfig = os.environ['DOCUTILSCONFIG']
+    os.environ['DOCUTILSCONFIG'] = this_dir + '/conf/docutils.conf'
+
+    if prevConfig:
+        os.environ['DOCUTILSCONFIG'] += os.pathsep
+        os.environ['DOCUTILSCONFIG'] += prevConfig

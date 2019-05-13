@@ -205,7 +205,12 @@ end
 
 function formatDocBlock_heading(block, context)
 	local text = getDocBlockText(block, context)
-	return getTitle(text, block.level) .. "\n"
+
+	if HEADING_TO_RUBRIC then
+		return "\n\n.. rubric:: " .. text .. "\n\n"
+	else
+		return "\n\n" .. getTitle(text, block.level) .. "\n\n"
+	end
 end
 
 function formatDocBlock_varlistentry(block, context)
@@ -294,25 +299,23 @@ function formatDocBlock_parameterdescription(block, context)
 	return ""
 end
 
-function formatDocBlock_sect(block, context)
-	local s = ""
+function formatDocBlock_sect(block, context, level)
+	local s = "\n\n"
 	local text = getDocBlockText(block, context)
 
 	if block.id and block.id ~= "" then
-		s = ".. _doxid-" .. block.id .. ":\n"
+		s = s .. ".. _doxid-" .. block.id .. ":\n\n"
 	end
 
 	if block.title and block.title ~= "" then
-		s = s .. ".. rubric:: " .. block.title .. ":\n"
+		if SECTION_TO_RUBRIC then
+			s = s .. ".. rubric:: " .. block.title .. ":"
+		else
+			s = s .. getTitle(block.title, level + 1)
+		end
 	end
 
-	if s ~= "" then
-		s = s .. "\n" .. text
-	else
-		s = text
-	end
-
-	return s
+	return s .. "\n\n" .. text .. "\n\n"
 end
 
 function formatDocBlock_simplesect(block, context)
@@ -422,10 +425,10 @@ g_blockKindFormatMap =
 	["para"]                 = formatDocBlock_para,
 	["parametername"]        = formatDocBlock_parametername,
 	["parameterdescription"] = formatDocBlock_parameterdescription,
-	["sect1"]                = formatDocBlock_sect,
-	["sect2"]                = formatDocBlock_sect,
-	["sect3"]                = formatDocBlock_sect,
-	["sect4"]                = formatDocBlock_sect,
+	["sect1"]                = function(b, c) return formatDocBlock_sect(b, c, 1) end,
+	["sect2"]                = function(b, c) return formatDocBlock_sect(b, c, 2) end,
+	["sect3"]                = function(b, c) return formatDocBlock_sect(b, c, 3) end,
+	["sect4"]                = function(b, c) return formatDocBlock_sect(b, c, 4) end,
 	["simplesect"]           = formatDocBlock_simplesect,
 	["ulink"]                = formatDocBlock_ulink,
 	["table"]                = formatDocBlock_table,

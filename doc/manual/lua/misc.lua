@@ -10,8 +10,9 @@
 --------------------------------------------------------------------------------
 
 --!
---! \defgroup api-4-aux-types
+--! \defgroup api-aux-types
 --! \ingroup api
+--! \grouporder 4
 --! \title Doxygen Auxillary Types
 --!
 --! This section describes auxillary types (enumerations and tables) used in

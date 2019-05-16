@@ -10,8 +10,9 @@
 --------------------------------------------------------------------------------
 
 --!
---! \defgroup api-0-stapi
+--! \defgroup api-stapi
 --! \ingroup api
+--! \grouporder 1
 --! \title String templating API functions
 --!
 --! This section describes functions exported to the namespace of Lua frames

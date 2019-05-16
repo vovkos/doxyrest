@@ -126,6 +126,8 @@ Jancy libraries
 	*	- IO Ninja Jancy API
 		- `sphinx_rtd_theme <http://ioninja.com/doc/api>`__
 
+The above manuals were generated from Doxy-comments inside ``.jnc`` files by using the official Jancy compiler instead of Doxygen at the first stage of the pipeline.
+
 To reiterate, the strongest point of the Doxyrest approach is that it's *modular and 100% customizable*. You can replace the **XML-generator** to support new languages; you can change **Sphinx themes** or **CSS styles** to tweak the visual appearance (fonts, colors, page layout, etc), and if that doesn't cut it, you can modify the **Lua frames** for more drastic effects -- from tweaking the declaration coding style to changing the whole structure of documentation.
 
 Quick HOWTO

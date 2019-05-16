@@ -34,6 +34,7 @@ set(
 	XMLGEN_CMD_LINE
 	-o ${XML_DIR}/index.xml
 	-S ${CMAKE_CURRENT_LIST_DIR}/lua
+	${DOXYREST_FRAME_DIR}/doxyrest-config.lua
 	)
 
 set(

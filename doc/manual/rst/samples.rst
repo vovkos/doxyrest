@@ -14,30 +14,87 @@ Samples
 
 A picture is worth a thousand words. Take a look at the results of Doxyrest usage and see for yourself.
 
-Jancy Standard Library Reference
---------------------------------
+C libraries
+~~~~~~~~~~~
 
-This is a reference to Jancy standard library (Jancy language).
+.. list-table::
 
-http://docs.tibbo.com/jancy/stdlib
+	*	- LibUSB
+		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/samples/libusb>`__
+		- `sphinxdoc <https://vovkos.github.io/doxyrest/samples/libusb-sphinxdoc>`__
+		- vs
+		- `original <http://libusb.sourceforge.net/api-1.0>`__
 
-Jancy API Reference
--------------------
+	*	- LibSSH
+		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/samples/libssh>`__
+		- `sphinxdoc <https://vovkos.github.io/doxyrest/samples/libssh-sphinxdoc>`__
+		- vs
+		- `original <http://api.libssh.org/stable>`__
 
-This is a reference to Jancy C API (C language).
+	*	- ALSA Library
+		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/samples/alsa>`__
+		- `sphinxdoc <https://vovkos.github.io/doxyrest/samples/alsa-sphinxdoc>`__
+		- vs
+		- `original <http://www.alsa-project.org/alsa-doc/alsa-lib>`__
 
-http://docs.tibbo.com/jancy/api
+	*	- Apache Portable Runtime
+		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/samples/apr>`__
+		- `sphinxdoc <https://vovkos.github.io/doxyrest/samples/apr-sphinxdoc>`__
+		- vs
+		- `original <https://apr.apache.org/docs/apr/1.5>`_
 
-IO Ninja API Reference
-----------------------
+C++ libraries
+~~~~~~~~~~~~~
 
-This is a reference to Jancy API for `IO Ninja <http://tibbo.com/ninja>`_ (Jancy language).
+.. list-table::
 
-http://docs.tibbo.com/ioninja/api
+	*	- OpenCV
+		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest-showcase/opencv/sphinx_rtd_theme>`__
+		- `sphinxdoc <https://vovkos.github.io/doxyrest-showcase/opencv/sphinxdoc>`__
+		- vs
+		- `original <http://docs.opencv.org/trunk>`__
 
-AXL Reference
--------------
+	*	- POCO Libraries
+		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest-showcase/poco/sphinx_rtd_theme>`__
+		- `sphinxdoc <https://vovkos.github.io/doxyrest-showcase/poco/sphinxdoc>`__
+		- vs
+		- `original <https://pocoproject.org/docs>`__
 
-This is a reference to AXL C++ library (C++ language).
+Doxyrest generates a decent overview even if a project has no Doxygen documentation comments at all:
 
-http://docs.tibbo.com/axl/manual
+.. list-table::
+
+	* 	- AXL
+		- `sphinx_rtd_theme <https://vovkos.github.io/axl/manual/global.html>`__
+
+Replace Doxygen with your own generator of Doxygen-compatible XML database and apply the same pipeline for documenting APIs in other languages:
+
+Lua libraries
+~~~~~~~~~~~~~
+
+.. list-table::
+
+	*	- Doxyrest Lua API
+		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/manual/group_api.html>`__
+
+	*	- C-family Frame Settings
+		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/frame/cfamily>`__
+
+	*	- CMake Frame Settings
+		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/frame/cmake>`__
+
+	*	- Lua Frame Settings
+		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/frame/lua>`__
+
+The above manuals were generated from Doxy-comments inside ``.lua`` files by using `LuaDoxyXML <https://github.com/vovkos/luadoxyxml>`__ instead of Doxygen at the first stage of the pipeline.
+
+Jancy libraries
+~~~~~~~~~~~~~~~
+
+.. list-table::
+
+	*	- Jancy Standard Library
+		- `sphinx_rtd_theme <https://vovkos.github.io/jancy/stdlib>`__
+
+	*	- IO Ninja Jancy API
+		- `sphinx_rtd_theme <http://ioninja.com/doc/api>`__

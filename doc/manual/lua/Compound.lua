@@ -10,8 +10,9 @@
 --------------------------------------------------------------------------------
 
 --!
---! \defgroup api-1-compounds
+--! \defgroup api-compounds
 --! \ingroup api
+--! \grouporder 2
 --! \title Doxygen Compounds
 --!
 --! This section describes types (enumerations and tables) used to represent

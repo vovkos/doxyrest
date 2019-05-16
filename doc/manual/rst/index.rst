@@ -30,4 +30,7 @@ Further Reading
 	architecture.rst
 	frames.rst
 	cmd-line.rst
+	unnamed-structs.rst
+	group-order.rst
+	footnotes.rst
 	samples.rst

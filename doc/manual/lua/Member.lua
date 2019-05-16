@@ -10,8 +10,9 @@
 --------------------------------------------------------------------------------
 
 --!
---! \defgroup api-2-members
+--! \defgroup api-members
 --! \ingroup api
+--! \grouporder 3
 --! \title Doxygen Members
 --!
 --! This section describes types (enumerations and tables) used to represent

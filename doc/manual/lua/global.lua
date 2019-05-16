@@ -10,30 +10,32 @@
 --------------------------------------------------------------------------------
 
 --!
---! \defgroup api
---! \title Lua Frame API
---!
---! This section provides a reference to the API exposed by Doxyrest to the
---! code running inside Lua frames.
---!
-
---------------------------------------------------------------------------------
-
---!
---! \defgroup api-99-global
---! \ingroup api
+--! \defgroup global
+--! \grouporder 99
 --! \title Global Scope of Lua Frames
 --!
 --! This is a list of everything what's exported by Doxyrest into the scope of
 --! Lua frames.
 --!
 
---------------------------------------------------------------------------------
+-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 --!
---! \defgroup api-5-global-dir
+--! \defgroup api
+--! \grouporder 1
+--! \title Lua Frame API
+--!
+--! This section provides a reference to the API exposed by Doxyrest to the
+--! code running inside Lua frames.
+--!
+
+-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+--!
+--! \defgroup api-global-vars
 --! \ingroup api
---! \title Doxygen Tree Root
+--! \grouporder 5
+--! \title Doxyrest Global Variables
 --!
 --! These global variables represent the root of the Doxygen tree. Lua frames
 --! use them to walk around the tree in a specific order and generate

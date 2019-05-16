@@ -10,8 +10,9 @@
 --------------------------------------------------------------------------------
 
 --!
---! \defgroup api-3-docblocks
+--! \defgroup api-docblocks
 --! \ingroup api
+--! \grouporder 4
 --! \title Doxygen Documentation Blocks
 --!
 --! This section describes types (enumerations and tables) used to represent

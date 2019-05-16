@@ -291,7 +291,6 @@ def setup(app):
     app.add_config_value('doxyrest_footnote_backlinks', default=False, rebuild=True)
     app.registry.source_inputs['restructuredtext'] = TabAwareSphinxRSTFileInput
     directives.register_directive('ref-code-block', RefCodeBlock)
-    directives.register_directive('code-block', RefCodeBlock) # replace
     app.add_transform(RefTransform)
     app.connect('builder-inited', on_builder_inited)
     register_docutils_conf(this_dir + '/conf/docutils.conf')

@@ -12,7 +12,6 @@
 if(SPHINX_FOUND)
 	add_subdirectory(index)
 	add_subdirectory(manual)
-	add_subdirectory(frame)
 	add_subdirectory(build-guide)
 endif()
 

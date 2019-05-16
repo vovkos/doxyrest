@@ -435,10 +435,11 @@ run(CmdLine* cmdLine)
 	}
 
 	sl::String globalAuxCompoundId = generator.getConfigValue("GLOBAL_AUX_COMPOUND_ID");
+	sl::String footnoteMemberPrefix = generator.getConfigValue("FOOTNOTE_MEMBER_PREFIX");
 
 	result =
 		parser.parseFile(&module, inputFileName) &&
-		globalNamespace.build(&module, globalAuxCompoundId) &&
+		globalNamespace.build(&module, globalAuxCompoundId, footnoteMemberPrefix) &&
 		generator.luaExport(&module, &globalNamespace) &&
 		generator.generate();
 

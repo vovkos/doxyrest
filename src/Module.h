@@ -561,7 +561,8 @@ public:
 	bool
 	build(
 		Module* module,
-		const sl::StringRef& globalGroupId
+		const sl::StringRef& globalGroupId,
+		const sl::StringRef& footnoteMemberPrefix
 		);
 
 	void

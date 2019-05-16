@@ -1085,12 +1085,32 @@ GlobalNamespace::clear()
 bool
 GlobalNamespace::build(
 	Module* module,
-	const sl::StringRef& auxCompoundId
+	const sl::StringRef& auxCompoundId,
+	const sl::StringRef& footnoteMemberPrefix
 	)
 {
 	clear();
 
-	// loop #1 assign groups
+	// convert footnote members
+
+	if (!footnoteMemberPrefix.isEmpty())
+	{
+		sl::Iterator<Compound> compoundIt = module->m_compoundList.getHead();
+		for (; compoundIt; compoundIt++)
+		{
+			sl::Iterator<Member> memberIt = compoundIt->m_memberList.getHead();
+			for (; memberIt; memberIt++)
+			{
+				if (memberIt->m_name.isPrefix(footnoteMemberPrefix))
+				{
+					memberIt->m_memberKind = MemberKind_Footnote;
+					memberIt->m_name.remove(0, footnoteMemberPrefix.getLength());
+				}
+			}
+		}
+	}
+
+	// assign groups
 
 	size_t count = module->m_groupArray.getCount();
 	for (size_t i = 0; i < count; i++)
@@ -1130,7 +1150,7 @@ GlobalNamespace::build(
 
 	module->m_groupArray.clear(); // will contain non-empty root groups only
 
-	// loop #2 initialize namespaces (including classes, structs, unions)
+	// initialize namespaces (including classes, structs, unions)
 
 	count = module->m_namespaceArray.getCount();
 	for (size_t i = 0; i < count; i++)
@@ -1143,7 +1163,7 @@ GlobalNamespace::build(
 		compound->m_selfNamespace = nspace;
 	}
 
-	// loop #3 resolve inner, base and derived references and add members
+	// resolve inner, base and derived references and add members
 
 	for (size_t i = 0; i < count; i++)
 	{
@@ -1268,7 +1288,7 @@ GlobalNamespace::build(
 		}
 	}
 
-	// loop #4 resolve sub pages
+	// resolve sub pages
 
 	count = module->m_pageArray.getCount();
 	for (size_t i = 0; i < count; i++)
@@ -1292,7 +1312,7 @@ GlobalNamespace::build(
 
 	removeSubPages(&module->m_pageArray);
 
-	// loop #5 add leftovers to the global namespace
+	// add leftovers to the global namespace
 
 	sl::Iterator<Compound> compoundIt = module->m_compoundList.getHead();
 	for (; compoundIt; compoundIt++)
@@ -1305,9 +1325,10 @@ GlobalNamespace::build(
 			break;
 
 		case CompoundKind_Group:
-			if (!compoundIt->m_briefDescription.isEmpty() ||
-				!compoundIt->m_detailedDescription.isEmpty())
-				getGroupNamespace(module, *compoundIt); // ensure group is added to the tree
+			if (*compoundIt != m_auxCompound &&
+				(!compoundIt->m_briefDescription.isEmpty() ||
+				!compoundIt->m_detailedDescription.isEmpty())) // ensure documented group is added to the tree
+				getGroupNamespace(module, *compoundIt);
 
 			break;
 

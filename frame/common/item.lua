@@ -205,7 +205,7 @@ function prepareItemDocumentation(item, compound)
 	if hasDetailedDocuemtnation then
 		local text = getItemInternalDocumentation(item)
 
-		item.isSubGroupHead = string.match(text, ":subgroup:") ~= nil
+		item.isSubGroupHead = string.match(text, "%%subgroup%%") ~= nil
 		if item.isSubGroupHead then
 			item.subGroupSlaveArray = {}
 		end
@@ -267,8 +267,8 @@ function cmpGroups(g1, g2)
 	s1 = getItemInternalDocumentation(g1)
 	s2 = getItemInternalDocumentation(g2)
 
-	o1 = string.match(s1, ":grouporder%(([^)]*)%):")
-	o2 = string.match(s2, ":grouporder%(([^)]*)%):")
+	o1 = string.match(s1, "%%grouporder%(([^)]*)%)")
+	o2 = string.match(s2, "%%grouporder%(([^)]*)%)")
 
 	if o1 and o2 then
 		return o1 < o2

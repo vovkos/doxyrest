@@ -283,7 +283,7 @@ function getItemImportArray(item)
 	local text = getItemInternalDocumentation(item)
 	local importArray = {}
 	local i = 1
-	for import in string.gmatch(text, ":import:([^:]+)") do
+	for import in string.gmatch(text, "%%import%(([^:]+)%)") do
 		importArray[i] = import
 		i = i + 1
 	end
@@ -592,7 +592,7 @@ end
 
 function isMemberOfUnnamedType(item)
 	local text = getItemInternalDocumentation(item)
-	return string.match(text, ":unnamed:([%w/:]+)")
+	return string.match(text, "%%unnamed%(([%w/:]+)%)")
 end
 
 g_closingBracketChar =

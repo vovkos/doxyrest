@@ -10,17 +10,12 @@
 --------------------------------------------------------------------------------
 
 --!
---! \defgroup global
---! \title All Settings
---! This section lists *all the settings* affecting the output of the
---! Doxyrest C-family frames.
+--! \defgroup frame-config
+--! \grouporder 2
+--! \title Frame Settings
 --!
-
---!
---! \defgroup config1-common
---! \title Common Settings
---! This section describes common settings controlling input and output paths,
---! titles, force-includes, etc.
+--! This section describes frame settings controlling input and output paths,
+--! titles, force-includes, declaration coding style, etc.
 --! @{
 --!
 
@@ -118,6 +113,20 @@ SORT_GROUPS_BY = "title"
 
 GLOBAL_AUX_COMPOUND_ID = "group_global"
 
+--[[!
+	Doxyrest offers a workaround for the lack of footnotes in Doxygen by
+	getting documentation blocks for specially named pseudo-members and
+	converting those into footnotes.
+
+	``FOOTNOTE_MEMBER_PREFIX`` specifies the name prefix for such
+	pseudo-members. If it is set to ``nil`` or an empty string, Doxyrest
+	will not attempt to convert any members to footnotes.
+
+	\sa :ref:`footnotes`
+]]
+
+FOOTNOTE_MEMBER_PREFIX = nil
+
 --!
 --! Specify the main language of your project; this string will be used for
 --! the reStructuredText ``.. code-block::`` sections and for conditional formatting
@@ -179,7 +188,7 @@ EXCLUDE_UNDOCUMENTED_ITEMS = false
 	To make use of code IDs, set the Sphinx ``default_role`` setting to ``cref``
 	and then reference items from inside reStructuredText like this:
 
-	.. code-block::
+	.. code-block:: none
 
 		`Point.x` will reference a field "x" inside "struct Point"
 
@@ -225,21 +234,6 @@ HEADING_TO_RUBRIC = false
 --! Thie yields uni-level headings, but solves both aforementioned problems.
 --!
 
-
---!
---! Usually you don't want to include empty defines (include-guards,
---! conditional compilation switches, etc) into the project documentation.
---! Change this to ``false`` if empty defines *should* be included.
---!
-
---! @}
-
---!
---! \defgroup config2-cfamily
---! \title C-family-specific Settings
---! This section describes settings specific for C-family frames.
---! @{
---!
 
 --[[!
 	Exclude items with higher protection level than ``PROTECTION_FILTER``:

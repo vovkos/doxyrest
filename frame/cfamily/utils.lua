@@ -518,7 +518,12 @@ function getTypedefDeclString(typedef, isRef, indent)
 	local s = "typedef"
 
 	if next(typedef.paramArray) == nil then
-		s = s .. " " .. getLinkedTextString(typedef.type, true) .. " "
+		local type = getLinkedTextString(typedef.type, true)
+		if string.match(type, "%(%*$") then -- quickfix for function pointers
+			s = s .. " " .. string.sub(type, 1, -3) ..  " (*"
+		else
+			s = s .. " " .. type .. " "
+		end
 
 		if isRef then
 			s = s .. ":ref:`" .. getItemName(typedef)  .. "<doxid-" .. typedef.id .. ">`"

@@ -62,7 +62,9 @@ Overrides the name of configuration file (defaults to ``doxyrest-config.lua``), 
 	-c myconfig.lua
 	--config myconfig.lua
 
-This file should contains a Lua script which sets up all the necessary language-specific frame settings. See :ref:`doxid-group_frame_config` for more details.
+This file should contains a Lua script which sets up all the necessary language-specific frame settings.
+
+**See also:** :ref:`doxyrest-config`
 
 .. option:: -o, --output
 

@@ -77,14 +77,8 @@ Lua libraries
 	*	- Doxyrest Lua API
 		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/manual/group_api.html>`__
 
-	*	- C-family Frame Settings
-		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/frame/cfamily>`__
-
-	*	- CMake Frame Settings
-		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/frame/cmake>`__
-
-	*	- Lua Frame Settings
-		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/frame/lua>`__
+	*	- Doxyrest Frame Settings
+		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/frame/group_frame-config.html>`__
 
 The above manuals were generated from Doxy-comments inside ``.lua`` files by using `LuaDoxyXML <https://github.com/vovkos/luadoxyxml>`__ instead of Doxygen at the first stage of the pipeline.
 
@@ -98,3 +92,5 @@ Jancy libraries
 
 	*	- IO Ninja Jancy API
 		- `sphinx_rtd_theme <http://ioninja.com/doc/api>`__
+
+The above manuals were generated from Doxy-comments inside ``.jnc`` files by using the official Jancy compiler instead of Doxygen at the first stage of the pipeline.

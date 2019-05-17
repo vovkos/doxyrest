@@ -33,8 +33,7 @@ This elaborate pipeline allows building beautiful documentation for C/C++ APIs w
 Downloads
 ---------
 
-* `Doxyrest 1.1.1-a <https://github.com/vovkos/doxyrest/releases/tag/doxyrest-1.1.1-a>`__
-* `Doxyrest 1.1.0 <https://github.com/vovkos/doxyrest/releases/tag/doxyrest-1.1.0>`__
+* `Doxyrest 2.0.0 <https://github.com/vovkos/doxyrest/releases/tag/doxyrest-2.0.0>`__
 
 Samples
 -------
@@ -104,14 +103,8 @@ Lua libraries
 	*	- Doxyrest Lua API
 		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/manual/group_api.html>`__
 
-	*	- C-family Frame Settings
-		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/frame/cfamily>`__
-
-	*	- CMake Frame Settings
-		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/frame/cmake>`__
-
-	*	- Lua Frame Settings
-		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/frame/lua>`__
+	*	- Doxyrest Frame Settings
+		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/frame/group_frame-config.html>`__
 
 The above manuals were generated from Doxy-comments inside ``.lua`` files by using `LuaDoxyXML <https://github.com/vovkos/luadoxyxml>`__ instead of Doxygen at the first stage of the pipeline.
 
@@ -288,19 +281,19 @@ If you use a theme other than ``sphinxdoc`` or ``sphinx_rtd_theme`` (natively su
 
 .. code-block:: css
 
-	pre.overview-code-block {
+	pre.doxyrest-overview-code-block {
 		...
 	}
 
-	pre.overview-inherited-code-block {
+	pre.doxyrest-overview-inherited-code-block {
 		...
 	}
 
-	pre.title-code-block {
+	pre.doxyrest-title-code-block {
 		...
 	}
 
-	.target-highlight {
+	.doxyrest-target-highlight {
 		...
 	}
 
@@ -315,12 +308,3 @@ Follow the links below for additional information:
 * `Doxyrest Build Guide <https://vovkos.github.io/doxyrest/build-guide>`__
 
 	Of course, you can also follow the build logs on `Travis CI <https://travis-ci.org/vovkos/doxyrest>`__ or `AppVeyor CI <https://ci.appveyor.com/project/vovkos/doxyrest>`__ -- always a great way to reproduce the build steps.
-
-Language-specific Frames Settings
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Should you decide to tweak the frames, you will need to know *what* is being exported into the scope of Lua code inside frames. The following documents provide a reference just for that. And of course, they were generated using Doxyrest itself:
-
-* `C-family <https://vovkos.github.io/doxyrest/frame/cfamily>`__
-* `CMake <https://vovkos.github.io/doxyrest/frame/cmake>`__
-* `Lua <https://vovkos.github.io/doxyrest/frame/lua>`__

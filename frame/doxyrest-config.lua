@@ -16,6 +16,11 @@
 --!
 --! This section describes frame settings controlling input and output paths,
 --! titles, force-includes, declaration coding style, etc.
+--!
+--! A default ``doxyrest-config.lua`` file for standard frames can be found at
+--! ``$DOXYREST_FRAME_DIR/doxyrest-config.lua``. Copy it to your project
+--! directory and then adjust all the necessary parameters.
+--!
 --! @{
 --!
 
@@ -70,7 +75,8 @@ FORCE_INCLUDE_FILE = nil
 EXTRA_PAGE_LIST = {}
 
 --!
---! The title of the main (index) page.
+--! The title of the main (index) page. This only is used when ``INTRO_FILE``
+--! is not set (otherwise, the title of intro file will be used).
 --!
 
 INDEX_TITLE = "My Project Documentation"
@@ -139,7 +145,7 @@ LANGUAGE = cpp
 --! Convert ``\verbatim`` sections in doxy-comments to ``.. code-block::``
 --! sections in the output reStructuredText. The string value of
 --! ``VERBATIM_TO_CODE_BLOCK`` will be used as the language of
---! ``.. code-block::`` section. By default, it's ``none`` which results in
+--! ``.. code-block::`` section. By default, it's ``"none"`` which results in
 --! no syntax highlighting. To disable conversion at all, use ``nil``.
 --!
 
@@ -183,7 +189,7 @@ EXCLUDE_LOCATION_PATTERN = nil
 EXCLUDE_UNDOCUMENTED_ITEMS = false
 
 --[[!
-	Add cids (code IDs) targets for items.
+	Add CIDs (code IDs) targets for items.
 
 	To make use of code IDs, set the Sphinx ``default_role`` setting to ``cref``
 	and then reference items from inside reStructuredText like this:
@@ -192,8 +198,9 @@ EXCLUDE_UNDOCUMENTED_ITEMS = false
 
 		`Point.x` will reference a field "x" inside "struct Point"
 
-	When Doxyrest is used with legacy Doxygen projects, ``ITEM_CID_TARGETS`` can
-	be set to ``false`` to reduce the overall number of targets.
+	When Doxyrest is used with legacy Doxygen projects, ``ITEM_CID_TARGETS`` should
+	be set to ``false`` to reduce the overall number of targets (CIDs are not
+	used in Doxygen, anyway).
 ]]
 
 ITEM_CID_TARGETS = true
@@ -321,26 +328,69 @@ PRE_PARAM_LIST_SPACE = false
 PRE_OPERATOR_NAME_SPACE = true
 PRE_OPERATOR_PARAM_LIST_SPACE = true
 
---!
---! Use multi-line parameter lists in function declarations if parameter count is
---! greater than this threshold. ``nil`` means don't use parameter count
---! threshold.
---!
+--[[!
+	Use multi-line parameter lists in function declarations if parameter count is
+	greater than this threshold. ``nil`` means don't use parameter count
+	threshold.
+
+	For example, when ``ML_PARAM_LIST_COUNT_THRESHOLD`` is ``2``, the function
+	declarations will look as such:
+
+	.. code-block:: C
+
+		void fn0();
+		void fn1(int a);
+		void fn2(int a, int b);
+
+		void fn3(
+			int a,
+			int b
+			int c
+			);
+]]
 
 ML_PARAM_LIST_COUNT_THRESHOLD = nil
 
---!
---! Use multi-line parameter lists in function declarations if single-line
---! declaration length parameter count is greater than this threshold.
---! ``nil`` means don't use length threshold.
---!
+--[[!
+	Use multi-line parameter lists in function declarations if single-line
+	declaration length parameter count is greater than this threshold.
+	``nil`` means don't use length threshold.
+
+	Similar to ``ML_PARAM_LIST_COUNT_THRESHOLD``, but the threshold parameter
+	here is *declaration length* and not *declaration parameter count*.
+
+	Example:
+
+	.. code-block:: C
+
+		void foo(int a, int b, int c);
+
+		void bar(
+			int veryLongParameterName,
+			int anotherVeryLongParameterName
+			);
+
+]]
 
 ML_PARAM_LIST_LENGTH_THRESHOLD = 80
 
---!
---! Use multi-line specifier-modifier lists in function declarations, i.e.
---! allocate a dedicated line for each type specifier/morifier.
---!
+--[[!
+	Use multi-line specifier-modifier lists in function declarations, i.e
+	allocate a dedicated line for each type specifier/morifier.
+
+	For example, when ``ML_SPECIFIER_MODIFIER_LIST`` is ``true``, the function
+	declarations will look as such:
+
+	.. code-block:: C
+
+		void
+		foo();
+
+		static
+		bool
+		__cdecl
+		bar(int a);
+]]
 
 ML_SPECIFIER_MODIFIER_LIST = false
 

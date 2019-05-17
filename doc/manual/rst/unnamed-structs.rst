@@ -67,27 +67,29 @@ For example, the following snippet:
 	  	</memberdef>
 
     	<memberdef>
+    		<!-- int m_field3 -->
+	  	</memberdef>
+
+    	<memberdef>
     		<!-- unnamed member of type Parent::@0 -->
 	  	</memberdef>
 
     	<memberdef>
-    		<!-- int m_field3 -->
+    		<!-- int m_field4 -->
 	  	</memberdef>
-
-  		<!-- ... -->
   	</compounddef>
 
 I have omitted the gory details of the Doxygen XML, but it should be enough to demonstrate the point -- Doxygen XML alone is simply ambiguous!
 
-We have to inject some extra information, but we don't want a reader of our documentation to see that. Solution -- ``\\internal`` sections!
+We have to somehow add extra information, but we don't want a reader of our documentation to see that. Solution -- ``\internal`` sections!
 
-In your ``doxyrest-config``:
+In your ``Doxyfile``, add this alias:
 
 .. code-block:: none
 
 	ALIASES += "unnamed{1}=\internal %unnamed(\1) \endinternal"
 
-In your code you add this special comment to the very first field of the unnamed struct:
+In your C/C++ code, add this special comment to the very first field of the unnamed struct:
 
 .. code-block:: cpp
 
@@ -132,3 +134,11 @@ In case of nested unnamed structs, you have to also provide:
 
 		int m_field5;
 	};
+
+.. note::
+
+	It's OK to inject ``\unnamed`` anywhere into a documentation block for the first member, for example:
+
+	.. code-block:: cpp
+
+		//! This is documentation \unnamed{union} for m_field1

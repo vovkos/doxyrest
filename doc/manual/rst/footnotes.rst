@@ -28,7 +28,7 @@ Doxyrest offers a workaround by getting documentation blocks for specially named
 		//! Documentation for foo [#f1]_
 		void foo();
 
-		//! Documentation for bar [#f1]_
+		//! Documentation for bar [#f2]_
 		void bar();
 
 	#ifdef _DOXYGEN
@@ -57,3 +57,27 @@ In your ``doxyrest-config``:
 	FOOTNOTE_MEMBER_PREFIX = "_footnote_"
 
 If ``FOOTNOTE_MEMBER_PREFIX`` is ``nil`` or an empty string, Doxyrest will not attempt to convert any members to footnotes.
+
+After running the Doxyrest pipeline for the above example, you should see something like that:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void foo()
+
+Documentation for foo [#f1]_
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void bar()
+
+Documentation for bar [#f2]_
+
+----------------------
+
+.. rubric:: Footnotes:
+
+.. [#f1] Documentation for footnote f1
+
+.. [#f2] Documentation for footnote f2

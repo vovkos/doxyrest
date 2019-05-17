@@ -52,8 +52,8 @@ function adjustTarget(target) {
 
 function updateTarget() {
 	var target = adjustTarget($(":target"));
-	g_oldTarget.removeClass("target-highlight");
-	target.addClass("target-highlight");
+	g_oldTarget.removeClass("doxyrest-target-highlight");
+	target.addClass("doxyrest-target-highlight");
 	g_oldTarget = target;
 }
 

@@ -65,15 +65,6 @@ if [ "$BUILD_DOC" != "" ]; then
 	source doc/manual/build-xml.sh
 	source doc/manual/build-rst.sh
 	source doc/manual/build-html.sh
-	source doc/frame/cfamily/build-xml.sh
-	source doc/frame/cfamily/build-rst.sh
-	source doc/frame/cfamily/build-html.sh
-	source doc/frame/cmake/build-xml.sh
-	source doc/frame/cmake/build-rst.sh
-	source doc/frame/cmake/build-html.sh
-	source doc/frame/lua/build-xml.sh
-	source doc/frame/lua/build-rst.sh
-	source doc/frame/lua/build-html.sh
 
 	source samples/libusb/build-rst.sh
 	source samples/libusb/build-html.sh -D html_theme=sphinxdoc

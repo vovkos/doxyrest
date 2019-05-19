@@ -116,6 +116,9 @@ class RefCodeBlock(Directive):
             target = match.group(5)
             underscore = match.group(6)
 
+            if text:
+                text = text.replace('\\<', '<') # restore escaped left-chevron
+
             if underscore:
                 ref_node = nodes.reference(raw_text, text, refuri=target if target else text)
             elif not role or role == ':cref:':

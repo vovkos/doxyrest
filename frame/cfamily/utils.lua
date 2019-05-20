@@ -357,24 +357,12 @@ end
 getItemName = getItemQualifiedName
 
 function getItemNameForOverview(item)
-	if hasItemRefTarget(item) then
-		return ":ref:`" .. getItemName(item) .. "<doxid-" .. item.id .. ">`"
+	local name = getItemName(item)
+	if hasItemDocumentation(item) then
+		return ":ref:`" .. name .. "<doxid-" .. item.id .. ">`"
 	else
-		return getItemName(item)
+		return ":target:`" .. item.id .. "`" .. name
 	end
-end
-
-function getEnumArrayOverviewRefTargetString(enumArray)
-	local s = ""
-
-	for i = 1, #enumArray do
-		local enum = enumArray[i]
-		if isUnnamedItem(enum) then
-			s = s .. getItemArrayOverviewRefTargetString(enum.enumValueArray)
-		end
-	end
-
-	return  s
 end
 
 function getFunctionModifierDelimiter(indent)

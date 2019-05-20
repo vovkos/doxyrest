@@ -14,9 +14,6 @@ local argArray = table.pack(...)
 local compound = argArray[1]
 local variableSectionName = string.lower(argArray[2])
 local functionSectionName = string.lower(argArray[3])
-
-emit(getItemArrayOverviewRefTargetString(compound.variableArray))
-emit(getItemArrayOverviewRefTargetString(compound.functionArray))
 }
 .. ref-code-block:: lua
 	:class: doxyrest-overview-code-block
@@ -55,8 +52,8 @@ else
 
 		-- always link inherited members (even when no documentation)
 
-		local prevHasItemRefTarget = hasItemRefTarget
-		hasItemRefTarget = function(item)
+		local prevHasItemDocumentation = hasItemDocumentation
+		hasItemDocumentation = function(item)
 			return true
 		end
 
@@ -70,7 +67,7 @@ else
 			includeFileWithIndent("\t", "overview_variables.rst.in", baseType, nil, ",")
 		end -- for
 
-		hasItemRefTarget = prevHasItemRefTarget
+		hasItemDocumentation = prevHasItemDocumentation
 	end -- if
 }
 	}

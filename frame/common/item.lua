@@ -115,21 +115,16 @@ function getItemRefTargetString(item)
 	return s
 end
 
-function getItemArrayOverviewRefTargetString(itemArray)
-	local s = ""
-
-	for i = 1, #itemArray do
-		local item = itemArray[i]
-		if not hasItemRefTarget(item) then
-			s = s .. getItemRefTargetString(item)
-		end
-	end
-
-	return s
+function hasItemDocumentation(item)
+	return item.hasDocumentation or item.subGroupHead -- in which case subgroup head has doc
 end
 
-function hasItemRefTarget(item)
-	return item.hasDocumentation or item.subGroupHead
+function getItemOverviewNameTemplate(item)
+	if hasItemDocumentation(item) then
+		return ":ref:`$n<$i>`"
+	else
+		return ":target:`$i`$n"
+	end
 end
 
 function isTocTreeItem(compound, item)

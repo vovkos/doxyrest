@@ -169,9 +169,9 @@ function prepareCompound(compound)
 	stats.hasDocumentedItems = stats.hasDocumentedVariables or stats.hasDocumentedFunctions
 
 	if EXCLUDE_UNDOCUMENTED_ITEMS then
-		filterArray(compound.variableArray, hasItemRefTarget)
-		filterArray(compound.functionArray, hasItemRefTarget)
-		filterArray(compound.defineArray, hasItemRefTarget)
+		filterArray(compound.variableArray, hasItemDocumentation)
+		filterArray(compound.functionArray, hasItemDocumentation)
+		filterArray(compound.defineArray, hasItemDocumentation)
 	end
 
 	table.sort(compound.groupArray, cmpGroups)

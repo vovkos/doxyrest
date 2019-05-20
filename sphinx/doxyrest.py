@@ -9,15 +9,16 @@
 #
 #...............................................................................
 
+import os
 import re
+
+from docutils import nodes
 from docutils.parsers.rst import Directive, directives
 from docutils.transforms import Transform
-from docutils import nodes
+from docutils.statemachine import StringList, string2lines
 from sphinx import roles, addnodes, config
 from sphinx.io import SphinxBaseFileInput, SphinxRSTFileInput
-from docutils.statemachine import StringList, string2lines
-import os
-
+from sphinx.directives.other import Include
 
 this_dir = os.path.dirname(os.path.realpath(__file__))
 
@@ -77,12 +78,13 @@ class RefCodeBlock(Directive):
     def __init__(self, *args, **kwargs):
         Directive.__init__(self, *args, **kwargs)
 
-        re_src = '(:c?ref:)'
+        role_re_src = '(:[a-z]+:)'
         if self.state.document.settings.env.config.default_role == 'cref':
-            re_src += '?' # explicit role is optional
+            role_re_src += '?' # explicit role is optional
 
-        re_src += '`((.+?)(\s*<([^<>]*)>)?)`(_+)?'
-        self.re_prog = re.compile(re_src)
+        role_re_src += '`((.+?)(\s*<([^<>]*)>)?)`(_+)?'
+        self.role_re_prog = re.compile(role_re_src)
+        self.ws_re_prog = re.compile('\s+')
 
     def run(self):
         config = self.state.document.settings.env.config
@@ -98,7 +100,7 @@ class RefCodeBlock(Directive):
             language = config.highlight_language
 
         while True:
-            match = self.re_prog.search(code, pos)
+            match = self.role_re_prog.search(code, pos)
             if match is None:
                 plain_text = code[pos:]
                 if plain_text != "":
@@ -116,22 +118,28 @@ class RefCodeBlock(Directive):
             target = match.group(5)
             underscore = match.group(6)
 
+            pos = match.end()
+
             if text:
                 text = text.replace('\\<', '<') # restore escaped left-chevron
 
-            if underscore:
-                ref_node = nodes.reference(raw_text, text, refuri=target if target else text)
+            if role == ':target:':
+                new_node = create_target_node(raw_text, text, None, self.state.document)
+
+                # drop whitespace right after target
+                ws_match = self.ws_re_prog.match(code, pos)
+                if ws_match:
+                    pos = ws_match.end()
+
             elif not role or role == ':cref:':
                 target = 'cid-' + contents.lower ()
-                ref_node = create_xref_node(raw_text, contents, target)
+                new_node = create_xref_node(raw_text, contents, target)
             else:
-                ref_node = create_xref_node(raw_text, text, target)
+                new_node = create_xref_node(raw_text, text, target)
 
-            node += ref_node
-            pos = match.end()
+            node += new_node
 
         self.add_name(node)
-
         return [node]
 
 
@@ -142,9 +150,15 @@ def create_xref_node(raw_text, text, target):
     node['reftarget'] = target
     node['refwarn'] = True
     node['refexplicit'] = True
-
     node += nodes.Text(text, text)
+    return node
 
+def create_target_node(raw_text, text, lineno, document):
+    node = nodes.target(raw_text, '')
+    node.line = lineno
+    node['names'] += [text]
+    node['classes'] += ['doxyrest-code-target']
+    document.note_explicit_target(node)
     return node
 
 
@@ -158,18 +172,12 @@ def cref_role(typ, raw_text, text, lineno, inliner, options={}, content=[]):
         target = target.replace(' ', '-')
 
     node['classes'] += ['cref']
-
     node += create_xref_node(raw_text, text, target)
-
     return [node], []
 
 
 def target_role(typ, raw_text, text, lineno, inliner, options={}, content=[]):
-    node = nodes.target(raw_text, '')
-    node.line = lineno
-    node['names'] += [text]
-
-    inliner.document.note_explicit_target(node)
+    node = create_target_node(raw_text, text, lineno, inliner.document)
     return [node], []
 
 
@@ -256,6 +264,7 @@ class TabAwareSphinxRSTFileInput(SphinxRSTFileInput):
         inputstring = SphinxBaseFileInput.read(self)
         tab_width = self.env.config.doxyrest_tab_width
         lines = string2lines(inputstring, convert_whitespace=True, tab_width=tab_width)
+
         content = StringList()
         for lineno, line in enumerate(lines):
             content.append(line, self.source_path, lineno)
@@ -266,6 +275,14 @@ class TabAwareSphinxRSTFileInput(SphinxRSTFileInput):
             self.append_epilog(content, self.env.config.rst_epilog)
 
         return content
+
+
+class TabAwareInclude(Include):
+    def run(self):
+        # update tab_width setting
+        self.state.document.settings.tab_width = \
+        self.state.document.settings.env.config.doxyrest_tab_width
+        return Include.run(self)
 
 
 def register_docutils_conf(file_name):
@@ -294,6 +311,7 @@ def setup(app):
     app.add_config_value('doxyrest_footnote_backlinks', default=False, rebuild=True)
     app.registry.source_inputs['restructuredtext'] = TabAwareSphinxRSTFileInput
     directives.register_directive('ref-code-block', RefCodeBlock)
+    directives.register_directive('include', TabAwareInclude)
     app.add_transform(RefTransform)
     app.connect('builder-inited', on_builder_inited)
     register_docutils_conf(this_dir + '/conf/docutils.conf')

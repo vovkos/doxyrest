@@ -24,11 +24,14 @@ function adjustTarget(target) {
 	if (!target.is("span"))
 		return $([]);
 
+	if (target.hasClass("doxyrest-code-target")) {
+		return target;
+	}
+
 	// ascend to the top-level <span>
 
 	var parent = target.parent();
-	while (parent.is("span"))
-	{
+	while (parent.is("span")) {
 		target = parent;
 		parent = parent.parent();
 	}

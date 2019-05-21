@@ -11,4 +11,4 @@
 
 GLOBAL_AUX_COMPOUND_ID = "group_global"
 SORT_GLOBAL_MEMBERS    = true
-ITEM_CID_TARGETS       = true
+CREF_DB       = true

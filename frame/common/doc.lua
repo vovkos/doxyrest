@@ -170,12 +170,12 @@ end
 function formatDocBlock_ref(block, context)
 	local text = getDocBlockText(block, context)
 	text = string.gsub(text, "<", "\\<") -- escape left chevron
-	return ":ref:`" .. text .. " <doxid-" .. block.id .. ">`"
+	return ":ref:`" .. text .. " <" .. block.id .. ">`"
 end
 
 function formatDocBlock_anchor(block, context)
 	local text = getDocBlockText(block, context)
-	return ":target:`doxid-" .. block.id .. "`" .. text
+	return ":target:`" .. block.id .. "`" .. text
 end
 
 function formatDocBlock_image(block, context)
@@ -304,7 +304,7 @@ function formatDocBlock_sect(block, context, level)
 	local text = getDocBlockText(block, context)
 
 	if block.id and block.id ~= "" then
-		s = s .. ".. _doxid-" .. block.id .. ":\n\n"
+		s = s .. ".. _" .. block.id .. ":\n\n"
 	end
 
 	if block.title and block.title ~= "" then

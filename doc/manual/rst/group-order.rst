@@ -18,7 +18,7 @@ Doxyrest provides a much more elegant approach by (optionally) assigning each gr
 
 .. code-block:: none
 
-	ALIASES += "grouporder{1}=\internal %grouporder(\1) \endinternal"
+	ALIASES += "grouporder{1}=\internal :grouporder(\1) \endinternal"
 
 In your C/C++ code, you can now add this extra command to the documentation of your groups:
 

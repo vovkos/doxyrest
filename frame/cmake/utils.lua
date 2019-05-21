@@ -95,7 +95,7 @@ function getFunctionDeclString(func, nameTemplate, indent)
 	end
 
 	local s = functionKind .. g_preParamSpace .. "("
-	local name = getItemNameFromTemplate(nameTemplate, func.name, func.id)
+	local name = fillItemNameTemplate(nameTemplate, func.name, func.id)
 	local paramString
 
 	if ML_PARAM_LIST_COUNT_THRESHOLD and
@@ -115,12 +115,6 @@ function getFunctionDeclString(func, nameTemplate, indent)
 	end
 
 	return s .. name .. paramString
-end
-
-function getVariableDeclString(var, nameTemplate, indent)
-	local s = "set" .. g_preParamSpace .. "("
-	s = s .. getItemNameFromTemplate(nameTemplate, var.name, var.id)
-	return s .. ")"
 end
 
 -------------------------------------------------------------------------------

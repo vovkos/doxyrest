@@ -188,23 +188,6 @@ EXCLUDE_LOCATION_PATTERN = nil
 
 EXCLUDE_UNDOCUMENTED_ITEMS = false
 
---[[!
-	Add CIDs (code IDs) targets for items.
-
-	To make use of code IDs, set the Sphinx ``default_role`` setting to ``cref``
-	and then reference items from inside reStructuredText like this:
-
-	.. code-block:: none
-
-		`Point.x` will reference a field "x" inside "struct Point"
-
-	When Doxyrest is used with legacy Doxygen projects, ``ITEM_CID_TARGETS`` should
-	be set to ``false`` to reduce the overall number of targets (CIDs are not
-	used in Doxygen, anyway).
-]]
-
-ITEM_CID_TARGETS = true
-
 --!
 --! \subgroup
 --!
@@ -228,19 +211,24 @@ ITEM_CID_TARGETS = true
 SECTION_TO_RUBRIC = false
 HEADING_TO_RUBRIC = false
 
---!
---! By default,
---!
---! This may leads to problems if Doxygen section appear outside of the
---! global scope (e.g. inside lists). Another issue is Doxygen headings
---! may yield inconsistent title structure (e.g. a title level 1 followed by
---! level 3).
---!
---! If this is the case, use ``HEADING_TO_RUBRIC`` to always convert
---! ``<heading>`` blocks into reStructuredText ``.. rubric::`` directives.
---! Thie yields uni-level headings, but solves both aforementioned problems.
---!
+--[[!
+	By default, Doxyrest frames build a Python dictionary to be used later on by
+	the ``:cref:`` (code-reference) role. This database maps language-specific
+	qualified names of items to their IDs.
 
+	This, together with setting the Sphinx ``default_role`` to ``cref``, allows
+	to conveniently reference items from Doxy-comments or regular ``.rst`` files
+	as such:
+
+	.. code-block:: none
+
+		The `ui::Dialog` class is a base to the `ui::FileDialog` class.
+
+	However, if this facility is not used, building (and loading) of the
+	cref-database can be omitted to save both space and time.
+]]
+
+CREF_DB = false
 
 --[[!
 	Exclude items with higher protection level than ``PROTECTION_FILTER``:

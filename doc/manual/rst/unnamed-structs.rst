@@ -87,7 +87,7 @@ In your ``Doxyfile``, add this alias:
 
 .. code-block:: none
 
-	ALIASES += "unnamed{1}=\internal %unnamed(\1) \endinternal"
+	ALIASES += "unnamed{1}=\internal :unnamed(\1) \endinternal"
 
 In your C/C++ code, add this special comment to the very first field of the unnamed struct:
 

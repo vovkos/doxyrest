@@ -123,7 +123,7 @@ function getLinkedTextString(text, isRef)
 
 		if refText.id ~= "" then
 			text = string.gsub(text, "<", "\\<") -- escape left chevron
-			s = s .. ":ref:`" .. text .. "<doxid-" .. refText.id .. ">`"
+			s = s .. ":ref:`" .. text .. "<" .. refText.id .. ">`"
 		else
 			s = s .. text
 		end
@@ -283,7 +283,7 @@ function getItemImportArray(item)
 	local text = getItemInternalDocumentation(item)
 	local importArray = {}
 	local i = 1
-	for import in string.gmatch(text, "%%import%(([^:]+)%)") do
+	for import in string.gmatch(text, ":import%(([^:]+)%)") do
 		importArray[i] = import
 		i = i + 1
 	end
@@ -356,22 +356,10 @@ end
 
 getItemName = getItemQualifiedName
 
-function getItemNameFromTemplate(template, name, id)
-	if not template then
-		return name
-	end
-
-	local s = string.gsub(template, "$n", name)
-	return (string.gsub(s, "$i", id))
-end
-
 function getItemNameForOverview(item)
+	local template = getItemNameTemplate(item)
 	local name = getItemName(item)
-	if hasItemDocumentation(item) then
-		return ":ref:`" .. name .. "<doxid-" .. item.id .. ">`"
-	else
-		return ":target:`doxid-" .. item.id .. "`" .. name
-	end
+	return fillItemNameTemplate(template, name, item.id)
 end
 
 function getFunctionModifierDelimiter(indent)
@@ -390,7 +378,7 @@ function getPropertyDeclString(item, nameTemplate, indent)
 	end
 
 	s = s .. getFunctionModifierDelimiter(indent)
-	s = s .. getItemNameFromTemplate(nameTemplate, getItemName(item), item.id)
+	s = s .. fillItemNameTemplate(nameTemplate, getItemName(item), item.id)
 
 	if #item.paramArray > 0 then
 		s = s .. getParamArrayString(s, item.paramArray, true, "(", ")", indent)
@@ -438,7 +426,7 @@ function getFunctionDeclStringImpl(item, returnType, nameTemplate, indent)
 			)
 	end
 
-	s = s .. getItemNameFromTemplate(nameTemplate, name, item.id)
+	s = s .. fillItemNameTemplate(nameTemplate, name, item.id)
 
 	if isOperator then -- ensure spacce after operator
 		s = s .. g_preOperatorParamSpace
@@ -487,7 +475,7 @@ end
 function getDefineDeclString(define, nameTemplate, indent)
 	local s = "#define "
 
-	s = s .. getItemNameFromTemplate(nameTemplate, define.name, define.id)
+	s = s .. fillItemNameTemplate(nameTemplate, define.name, define.id)
 
 	if #define.paramArray > 0 then
 		-- no space between name and params!
@@ -500,7 +488,7 @@ end
 
 function getTypedefDeclString(typedef, nameTemplate, indent)
 	local s = "typedef"
-	local name = getItemNameFromTemplate(nameTemplate, getItemName(typedef), typedef.id)
+	local name = fillItemNameTemplate(nameTemplate, getItemName(typedef), typedef.id)
 
 	if next(typedef.paramArray) == nil then
 		local type = getLinkedTextString(typedef.type, true)
@@ -538,7 +526,7 @@ function getClassDeclString(class, nameTemplate, indent)
 	end
 
 	s = s .. class.compoundKind .. " "
-	s = s .. getItemNameFromTemplate(nameTemplate, getItemName(class), class.id)
+	s = s .. fillItemNameTemplate(nameTemplate, getItemName(class), class.id)
 
 	return s
 end
@@ -551,13 +539,15 @@ function getBaseClassString(class, protection)
 	end
 
 	if class.id ~= "" then
-		s = s .. ":ref:`" .. getItemQualifiedName(class) .. "<doxid-" .. class.id .. ">`"
+		s = s .. ":ref:`" .. getItemQualifiedName(class) .. "<" .. class.id .. ">`"
 	else
+		-- class without id (imported)
+
 		local url = IMPORT_URL_MAP[class.importId]
 		if url then
-			s = s .. "`" .. getItemName(class) .. "<" .. url .. ">`__"
+			s = s .. ":ref:`" .. class.name .. "<" .. url .. ">`"
 		else
-			s = s .. getItemName(class)
+			s = s .. class.name
 		end
 	end
 
@@ -566,7 +556,7 @@ end
 
 function isMemberOfUnnamedType(item)
 	local text = getItemInternalDocumentation(item)
-	return string.match(text, "%%unnamed%(([%w/:]+)%)")
+	return string.match(text, ":unnamed%(([%w/:]+)%)")
 end
 
 g_closingBracketChar =
@@ -641,7 +631,7 @@ function getNamespaceTree(nspace, indent)
 		indent = ""
 	end
 
-	s = "\t" .. indent .. "namespace :ref:`" .. getItemQualifiedName(nspace) .. "<doxid-" .. nspace.id ..">`;\n"
+	s = "\t" .. indent .. "namespace :ref:`" .. getItemQualifiedName(nspace) .. "<" .. nspace.id ..">`;\n"
 
 	for i = 1, #nspace.namespaceArray do
 		s = s .. getNamespaceTree(nspace.namespaceArray[i], indent .. "\t")

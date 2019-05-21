@@ -77,7 +77,7 @@ A default ``doxyrest-config.lua`` file for standard frames can be found at
 ``$DOXYREST_FRAME_DIR/doxyrest-config.lua``. Copy it to your project
 directory and then adjust all the necessary parameters.
 
-Refer to :ref:`doxid-group_frame_config` for more details.
+Refer to :ref:`group_frame_config` for more details.
 
 1.3 Preparing ``conf.py``
 ~~~~~~~~~~~~~~~~~~~~~~~~~

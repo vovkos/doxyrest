@@ -9,7 +9,6 @@
 --
 --------------------------------------------------------------------------------
 
-g_itemCidMap = {}
 g_itemFileNameMap = {}
 
 function ensureUniqueItemName(item, name, map, sep)
@@ -70,36 +69,14 @@ function getItemFileName(item, suffix)
 	return s .. suffix
 end
 
-function getItemCidTargetString(item)
-	local s
-
-	if item.compoundKind == "group" then
-		s = item.name
-	else
-		s = string.gsub(item.path, "/operator[%s%p]+$", "/operator")
-		s = string.gsub(s, "@[0-9]+/", "")
-		s = string.gsub(s, "/", ".")
-	end
-
-	s = string.lower(s)
-	s = ensureUniqueItemName(item, s, g_itemCidMap, "-")
-
-	return ".. _cid-" .. s ..":\n"
-end
-
-if not ITEM_CID_TARGETS then
-	getItemCidTargetString = function() return "" end
-end
-
 function getItemRefTargetString(item)
 	if string.match(item.name, ":$") then -- Objective C methods (simple handling for now)
-		return ".. _doxid-" .. item.id .. ":\n"
+		return ".. _" .. item.id .. ":\n"
 	end
 
 	local s =
 		".. index:: pair: " .. item.memberKind .. "; " .. item.name .. "\n" ..
-		".. _doxid-" .. item.id .. ":\n" ..
-		getItemCidTargetString(item)
+		".. _" .. item.id .. ":\n"
 
 	if item.isSubGroupHead then
 		for j = 1, #item.subGroupSlaveArray do
@@ -107,8 +84,7 @@ function getItemRefTargetString(item)
 
 			s = s ..
 				".. index:: pair: " .. slaveItem.memberKind .. "; " .. slaveItem.name .. "\n" ..
-				".. _doxid-" .. slaveItem.id .. ":\n" ..
-				getItemCidTargetString(slaveItem)
+				".. _" .. slaveItem.id .. ":\n"
 		end
 	end
 
@@ -119,8 +95,9 @@ function hasItemDocumentation(item)
 	return item.hasDocumentation or item.subGroupHead -- in which case subgroup head has doc
 end
 
-g_refItemNameTemplate = ":ref:`$n<doxid-$i>`"
-g_targetItemNameTemplate = ":target:`doxid-$i`$n"
+g_simpleItemNameTemplate = "$n"
+g_refItemNameTemplate = ":ref:`$n<$i>`"
+g_targetItemNameTemplate = ":target:`$n<$i>`"
 
 function getItemNameTemplate(item)
 	if hasItemDocumentation(item) then
@@ -128,6 +105,12 @@ function getItemNameTemplate(item)
 	else
 		return g_targetItemNameTemplate
 	end
+end
+
+function fillItemNameTemplate(template, name, id)
+	local s = string.gsub(template, "$n", name)
+	s = string.gsub(s, "$i", id)
+	return s
 end
 
 function isTocTreeItem(compound, item)
@@ -172,7 +155,7 @@ function getItemBriefDocumentation(item, detailsRefPrefix)
 	end
 
 	if detailsRefPrefix then
-		s = s .. " :ref:`More...<" .. detailsRefPrefix .. "doxid-" .. item.id .. ">`"
+		s = s .. " :ref:`More...<" .. detailsRefPrefix .. "" .. item.id .. ">`"
 	end
 
 	return s
@@ -203,7 +186,7 @@ function prepareItemDocumentation(item, compound)
 	if hasDetailedDocuemtnation then
 		local text = getItemInternalDocumentation(item)
 
-		item.isSubGroupHead = string.match(text, "%%subgroup%%") ~= nil
+		item.isSubGroupHead = string.match(text, ":subgroup:") ~= nil
 		if item.isSubGroupHead then
 			item.subGroupSlaveArray = {}
 		end
@@ -265,8 +248,8 @@ function cmpGroups(g1, g2)
 	s1 = getItemInternalDocumentation(g1)
 	s2 = getItemInternalDocumentation(g2)
 
-	o1 = string.match(s1, "%%grouporder%(([^)]*)%)")
-	o2 = string.match(s2, "%%grouporder%(([^)]*)%)")
+	o1 = string.match(s1, ":grouporder%(([^)]*)%)")
+	o2 = string.match(s2, ":grouporder%(([^)]*)%)")
 
 	if o1 and o2 then
 		return o1 < o2

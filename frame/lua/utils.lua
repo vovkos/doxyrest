@@ -88,8 +88,7 @@ function getParamArrayString_ml(paramArray, indent)
 end
 
 function getFunctionDeclString(func, nameTemplate, indent)
-	local s = "function " .. getItemNameFromTemplate(nameTemplate, func.name, func.id)
-
+	local s = "function " .. fillItemNameTemplate(nameTemplate, func.name, func.id)
 	local paramString
 
 	if ML_PARAM_LIST_COUNT_THRESHOLD and

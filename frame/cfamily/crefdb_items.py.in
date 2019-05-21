@@ -10,7 +10,19 @@
 --
 --------------------------------------------------------------------------------
 
-dofile(g_frameDir .. "/utils.lua")
-includeFile("index_main.rst.in")
-generateFile("crefdb.py", "crefdb.py.in")
+local argArray = table.pack(...)
+local itemArray = argArray[1]
+
+for i = 1, #itemArray do
+	local item = itemArray[i]
+	if not isUnnamedItem(item) then
+}
+	'$(getItemQualifiedName(item))' : '$(item.id)',
+%{
+	end
+
+	if item.compoundKind then
+		includeFile("crefdb_members.py.in", item)
+	end
+end -- for
 }

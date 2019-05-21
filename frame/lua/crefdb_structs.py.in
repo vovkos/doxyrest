@@ -10,7 +10,16 @@
 --
 --------------------------------------------------------------------------------
 
-dofile(g_frameDir .. "/utils.lua")
-includeFile("index_main.rst.in")
-generateFile("crefdb.py", "crefdb.py.in")
+local argArray = table.pack(...)
+local itemArray = argArray[1]
+
+for i = 1, #itemArray do
+	local item = itemArray[i]
+}
+	'$(item.name)' : '$(item.id)',
+%{
+	local prefix = item.name .. "."
+	includeFile("crefdb_items.py.in", item.variableArray, prefix)
+	includeFile("crefdb_items.py.in", item.functionArray, prefix)
+end -- for
 }

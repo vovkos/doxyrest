@@ -158,6 +158,7 @@ def create_target_node(raw_text, text, lineno, document):
     node.line = lineno
     node['names'] += [text]
     node['classes'] += ['doxyrest-code-target']
+    node += nodes.Text("target", "target")
     document.note_explicit_target(node)
     return node
 

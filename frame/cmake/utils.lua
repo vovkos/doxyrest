@@ -86,7 +86,7 @@ function getParamArrayString_ml(paramArray, indent)
 	return s .. nl .. ")"
 end
 
-function getFunctionDeclString(func, isRef, indent)
+function getFunctionDeclString(func, nameTemplate, indent)
 	local functionKind
 	if func.memberKind == "define" then
 		functionKind = "macro"
@@ -95,14 +95,8 @@ function getFunctionDeclString(func, isRef, indent)
 	end
 
 	local s = functionKind .. g_preParamSpace .. "("
-	local name
+	local name = getItemNameFromTemplate(nameTemplate, func.name, func.id)
 	local paramString
-
-	if isRef then
-		name = ":ref:`" .. func.name  .. "<doxid-" .. func.id .. ">`"
-	else
-		name = func.name
-	end
 
 	if ML_PARAM_LIST_COUNT_THRESHOLD and
 		#func.paramArray > ML_PARAM_LIST_COUNT_THRESHOLD then
@@ -123,15 +117,9 @@ function getFunctionDeclString(func, isRef, indent)
 	return s .. name .. paramString
 end
 
-function getVariableDeclString(var, isRef, indent)
+function getVariableDeclString(var, nameTemplate, indent)
 	local s = "set" .. g_preParamSpace .. "("
-
-	if isRef then
-		s = s .. ":ref:`" .. var.name  .. "<doxid-" .. var.id .. ">`"
-	else
-		s = s .. var.name
-	end
-
+	s = s .. getItemNameFromTemplate(nameTemplate, var.name, var.id)
 	return s .. ")"
 end
 

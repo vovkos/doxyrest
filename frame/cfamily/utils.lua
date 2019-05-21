@@ -356,12 +356,21 @@ end
 
 getItemName = getItemQualifiedName
 
+function getItemNameFromTemplate(template, name, id)
+	if not template then
+		return name
+	end
+
+	local s = string.gsub(template, "$n", name)
+	return (string.gsub(s, "$i", id))
+end
+
 function getItemNameForOverview(item)
 	local name = getItemName(item)
 	if hasItemDocumentation(item) then
 		return ":ref:`" .. name .. "<doxid-" .. item.id .. ">`"
 	else
-		return ":target:`" .. item.id .. "`" .. name
+		return ":target:`doxid-" .. item.id .. "`" .. name
 	end
 end
 
@@ -373,7 +382,7 @@ function getFunctionModifierDelimiter(indent)
 	end
 end
 
-function getPropertyDeclString(item, isRef, indent)
+function getPropertyDeclString(item, nameTemplate, indent)
 	local s = getLinkedTextString(item.returnType, true)
 
 	if item.modifiers ~= "" then
@@ -381,12 +390,7 @@ function getPropertyDeclString(item, isRef, indent)
 	end
 
 	s = s .. getFunctionModifierDelimiter(indent)
-
-	if isRef then
-		s = s .. ":ref:`" .. getItemName(item)  .. "<doxid-" .. item.id .. ">`"
-	else
-		s = s .. getItemName(item)
-	end
+	s = s .. getItemNameFromTemplate(nameTemplate, getItemName(item), item.id)
 
 	if #item.paramArray > 0 then
 		s = s .. getParamArrayString(s, item.paramArray, true, "(", ")", indent)
@@ -395,7 +399,7 @@ function getPropertyDeclString(item, isRef, indent)
 	return s
 end
 
-function getFunctionDeclStringImpl(item, returnType, isRef, indent)
+function getFunctionDeclStringImpl(item, returnType, nameTemplate, indent)
 	local s = ""
 
 	if item.templateParamArray and #item.templateParamArray > 0 or
@@ -434,11 +438,7 @@ function getFunctionDeclStringImpl(item, returnType, isRef, indent)
 			)
 	end
 
-	if isRef then
-		s = s .. ":ref:`" .. name  .. "<doxid-" .. item.id .. ">`"
-	else
-		s = s .. name
-	end
+	s = s .. getItemNameFromTemplate(nameTemplate, name, item.id)
 
 	if isOperator then -- ensure spacce after operator
 		s = s .. g_preOperatorParamSpace
@@ -457,41 +457,37 @@ function getFunctionDeclStringImpl(item, returnType, isRef, indent)
 	return s
 end
 
-function getFunctionDeclString(func, isRef, indent)
+function getFunctionDeclString(func, nameTemplate, indent)
 	return getFunctionDeclStringImpl(
 		func,
 		getLinkedTextString(func.returnType, true),
-		isRef,
+		nameTemplate,
 		indent
 		)
 end
 
-function getVoidFunctionDeclString(func, isRef, indent)
+function getVoidFunctionDeclString(func, nameTemplate, indent)
 	return getFunctionDeclStringImpl(
 		func,
 		nil,
-		isRef,
+		nameTemplate,
 		indent
 		)
 end
 
-function getEventDeclString(event, isRef, indent)
+function getEventDeclString(event, nameTemplate, indent)
 	return getFunctionDeclStringImpl(
 		event,
 		"event",
-		isRef,
+		nameTemplate,
 		indent
 		)
 end
 
-function getDefineDeclString(define, isRef, indent)
+function getDefineDeclString(define, nameTemplate, indent)
 	local s = "#define "
 
-	if isRef then
-		s = s .. ":ref:`" .. define.name  .. "<doxid-" .. define.id .. ">`"
-	else
-		s = s .. define.name
-	end
+	s = s .. getItemNameFromTemplate(nameTemplate, define.name, define.id)
 
 	if #define.paramArray > 0 then
 		-- no space between name and params!
@@ -502,8 +498,9 @@ function getDefineDeclString(define, isRef, indent)
 	return s
 end
 
-function getTypedefDeclString(typedef, isRef, indent)
+function getTypedefDeclString(typedef, nameTemplate, indent)
 	local s = "typedef"
+	local name = getItemNameFromTemplate(nameTemplate, getItemName(typedef), typedef.id)
 
 	if next(typedef.paramArray) == nil then
 		local type = getLinkedTextString(typedef.type, true)
@@ -513,11 +510,7 @@ function getTypedefDeclString(typedef, isRef, indent)
 			s = s .. " " .. type .. " "
 		end
 
-		if isRef then
-			s = s .. ":ref:`" .. getItemName(typedef)  .. "<doxid-" .. typedef.id .. ">`"
-		else
-			s = s .. getItemName(typedef)
-		end
+		s = s .. name
 
 		if typedef.argString ~= "" then
 			s = s .. formatArgDeclString(typedef.argString, indent)
@@ -527,18 +520,13 @@ function getTypedefDeclString(typedef, isRef, indent)
 	end
 
  	s = s .. getFunctionModifierDelimiter(indent) .. getLinkedTextString(typedef.type, true) .. getFunctionModifierDelimiter(indent)
-
-	if isRef then
-		s = s .. ":ref:`" .. getItemName(typedef)  .. "<doxid-" .. typedef.id .. ">`"
-	else
-		s = s .. getItemName(typedef)
-	end
-
+	s = s .. name
 	s = s .. getParamArrayString(s, typedef.paramArray, true, "(", ")", indent)
+
 	return s
 end
 
-function getClassDeclString(class, isRef, indent)
+function getClassDeclString(class, nameTemplate, indent)
 	local s = ""
 
 	if #class.templateParamArray > 0 or #class.templateSpecParamArray > 0 then
@@ -549,15 +537,8 @@ function getClassDeclString(class, isRef, indent)
 		s = s .. getParamArrayString(s, class.templateParamArray, false, "<", ">", indent) .. "\n" .. indent
 	end
 
-	local name = getItemName(class)
-
 	s = s .. class.compoundKind .. " "
-
-	if isRef then
-		s = s .. ":ref:`" .. name  .. "<doxid-" .. class.id .. ">`"
-	else
-		s = s .. name
-	end
+	s = s .. getItemNameFromTemplate(nameTemplate, getItemName(class), class.id)
 
 	return s
 end

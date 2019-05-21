@@ -87,14 +87,8 @@ function getParamArrayString_ml(paramArray, indent)
 	return s .. nl .. ")"
 end
 
-function getFunctionDeclString(func, isRef, indent)
-	local s = "function "
-
-	if isRef then
-		s = s .. ":ref:`" .. func.name  .. "<doxid-" .. func.id .. ">`"
-	else
-		s = s .. func.name
-	end
+function getFunctionDeclString(func, nameTemplate, indent)
+	local s = "function " .. getItemNameFromTemplate(nameTemplate, func.name, func.id)
 
 	local paramString
 

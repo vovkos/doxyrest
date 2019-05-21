@@ -119,11 +119,14 @@ function hasItemDocumentation(item)
 	return item.hasDocumentation or item.subGroupHead -- in which case subgroup head has doc
 end
 
-function getItemOverviewNameTemplate(item)
+g_refItemNameTemplate = ":ref:`$n<doxid-$i>`"
+g_targetItemNameTemplate = ":target:`doxid-$i`$n"
+
+function getItemNameTemplate(item)
 	if hasItemDocumentation(item) then
-		return ":ref:`$n<$i>`"
+		return g_refItemNameTemplate
 	else
-		return ":target:`$i`$n"
+		return g_targetItemNameTemplate
 	end
 end
 

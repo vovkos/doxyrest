@@ -16,6 +16,7 @@ local compound = argArray[1]
 local variableSectionName
 local functionSectionName
 local prevGetItemName = getItemName
+local prevCompoundId = g_currentCompoundId
 local indent
 
 if compound.compoundKind == "namespace" or compound.compoundKind == "group" then
@@ -32,6 +33,7 @@ if compound.compoundKind == "group" then
 	getItemName = getItemQualifiedName
 else
 	getItemName = getItemSimpleName
+	g_currentCompoundId = compound.id
 end
 
 local compoundStats = prepareCompound(compound)
@@ -138,4 +140,5 @@ if #compound.footnoteArray > 0 then
 end
 
 getItemName = prevGetItemName
+g_currentCompoundId = prevCompoundId
 }

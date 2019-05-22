@@ -91,6 +91,8 @@ if not g_globalNamespace.title then
 	g_globalNamespace.title = "Global Namespace"
 end
 
+g_currentCompoundId = nil
+
 -------------------------------------------------------------------------------
 
 function getNormalizedCppString(string)
@@ -121,7 +123,7 @@ function getLinkedTextString(text, isRef)
 		local refText = text.refTextArray[i]
 		local text = getNormalizedCppString(refText.text)
 
-		if refText.id ~= "" then
+		if refText.id ~= "" and refText.id ~= g_currentCompoundId then
 			text = string.gsub(text, "<", "\\<") -- escape left chevron
 			s = s .. ":ref:`" .. text .. "<doxid-" .. refText.id .. ">`"
 		else

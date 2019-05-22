@@ -424,6 +424,8 @@ function getFunctionDeclStringImpl(item, returnType, nameTemplate, indent)
 			"operator%s*([()[%]+%-*&=!<>]+)%s*",
 			"operator" .. g_preOperatorNameSpace .. "%1"
 			)
+
+		name = string.gsub(name, "%%", "%%%%")
 	end
 
 	s = s .. fillItemNameTemplate(nameTemplate, name, item.id)

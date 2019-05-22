@@ -86,7 +86,7 @@ if "%TARGET_CPU%" == "" goto :amd64
 if "%CONFIGURATION%" == "" (set CONFIGURATION=Release)
 if not "%APPVEYOR_REPO_TAG_NAME%" == "" if "%TOOLCHAIN%" == "msvc10" if "%CONFIGURATION%" == "Release" (set BUILD_PACKAGE=ON)
 
-set LUA_VERSION=5.3.3
+set LUA_VERSION=5.3.5
 set LUA_LIB_NAME=lua53
 set LUA_DOWNLOAD_FILE=lua-%LUA_VERSION%_%LUA_PLATFORM%_%LUA_TOOLCHAIN%_lib.zip
 set LUA_DOWNLOAD_URL=https://sourceforge.net/projects/luabinaries/files/%LUA_VERSION%/Windows%%20Libraries/Dynamic/%LUA_DOWNLOAD_FILE%/download

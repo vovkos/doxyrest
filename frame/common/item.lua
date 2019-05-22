@@ -71,12 +71,12 @@ end
 
 function getItemRefTargetString(item)
 	if string.match(item.name, ":$") then -- Objective C methods (simple handling for now)
-		return ".. _" .. item.id .. ":\n"
+		return ".. _doxid-" .. item.id .. ":\n"
 	end
 
 	local s =
 		".. index:: pair: " .. item.memberKind .. "; " .. item.name .. "\n" ..
-		".. _" .. item.id .. ":\n"
+		".. _doxid-" .. item.id .. ":\n"
 
 	if item.isSubGroupHead then
 		for j = 1, #item.subGroupSlaveArray do
@@ -84,7 +84,7 @@ function getItemRefTargetString(item)
 
 			s = s ..
 				".. index:: pair: " .. slaveItem.memberKind .. "; " .. slaveItem.name .. "\n" ..
-				".. _" .. slaveItem.id .. ":\n"
+				".. _doxid-" .. slaveItem.id .. ":\n"
 		end
 	end
 
@@ -96,8 +96,8 @@ function hasItemDocumentation(item)
 end
 
 g_simpleItemNameTemplate = "$n"
-g_refItemNameTemplate = ":ref:`$n<$i>`"
-g_targetItemNameTemplate = ":target:`$n<$i>`"
+g_refItemNameTemplate = ":ref:`$n<doxid-$i>`"
+g_targetItemNameTemplate = ":target:`$n<doxid-$i>`"
 
 function getItemNameTemplate(item)
 	if hasItemDocumentation(item) then
@@ -134,7 +134,7 @@ function getItemInternalDocumentation(item)
 	return s
 end
 
-function getItemBriefDocumentation(item, detailsRefPrefix)
+function getItemBriefDocumentation(item)
 	local s = getDocBlockListContents(item.briefDescription.docBlockList)
 
 	if string.len(s) == 0 then
@@ -154,11 +154,7 @@ function getItemBriefDocumentation(item, detailsRefPrefix)
 		s = trimTrailingWhitespace(s)
 	end
 
-	if detailsRefPrefix then
-		s = s .. " :ref:`More...<" .. detailsRefPrefix .. "" .. item.id .. ">`"
-	end
-
-	return s
+	return s .. " :ref:`More...<details-" .. item.id .. ">`"
 end
 
 function getItemDetailedDocumentation(item)

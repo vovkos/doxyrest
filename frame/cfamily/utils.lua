@@ -123,7 +123,7 @@ function getLinkedTextString(text, isRef)
 
 		if refText.id ~= "" then
 			text = string.gsub(text, "<", "\\<") -- escape left chevron
-			s = s .. ":ref:`" .. text .. "<" .. refText.id .. ">`"
+			s = s .. ":ref:`" .. text .. "<doxid-" .. refText.id .. ">`"
 		else
 			s = s .. text
 		end
@@ -541,7 +541,7 @@ function getBaseClassString(class, protection)
 	end
 
 	if class.id ~= "" then
-		s = s .. ":ref:`" .. getItemQualifiedName(class) .. "<" .. class.id .. ">`"
+		s = s .. ":ref:`" .. getItemQualifiedName(class) .. "<doxid-" .. class.id .. ">`"
 	else
 		-- class without id (imported)
 
@@ -633,7 +633,7 @@ function getNamespaceTree(nspace, indent)
 		indent = ""
 	end
 
-	s = "\t" .. indent .. "namespace :ref:`" .. getItemQualifiedName(nspace) .. "<" .. nspace.id ..">`;\n"
+	s = "\t" .. indent .. "namespace :ref:`" .. getItemQualifiedName(nspace) .. "<doxid-" .. nspace.id ..">`;\n"
 
 	for i = 1, #nspace.namespaceArray do
 		s = s .. getNamespaceTree(nspace.namespaceArray[i], indent .. "\t")

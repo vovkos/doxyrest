@@ -126,7 +126,7 @@ function getGroupTree(group, indent)
 	local name = getGroupName(group)
 	name = string.gsub(name, "<", "\\<") -- escape left chevron
 
-	s = "|\t" .. indent .. ":ref:`" .. name .. "<" ..group.id .. ">`\n"
+	s = "|\t" .. indent .. ":ref:`" .. name .. "<doxid-" ..group.id .. ">`\n"
 
 	for i = 1, #group.groupArray do
 		s = s .. getGroupTree(group.groupArray[i], indent .. "\t")

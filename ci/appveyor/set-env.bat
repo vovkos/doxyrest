@@ -14,17 +14,36 @@
 :loop
 
 if "%1" == "" goto :finalize
-if /i "%1" == "msvc10" goto :msvc10
-if /i "%1" == "msvc12" goto :msvc12
-if /i "%1" == "msvc14" goto :msvc14
 if /i "%1" == "x86" goto :x86
 if /i "%1" == "i386" goto :x86
 if /i "%1" == "amd64" goto :amd64
 if /i "%1" == "x86_64" goto :amd64
 if /i "%1" == "x64" goto :amd64
+if /i "%1" == "msvc10" goto :msvc10
+if /i "%1" == "msvc12" goto :msvc12
+if /i "%1" == "msvc14" goto :msvc14
+if /i "%1" == "msvc15" goto :msvc15
 
 echo Invalid argument: '%1'
 exit -1
+
+:: . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+:: Platform
+
+:x86
+set TARGET_CPU=x86
+set CMAKE_GENERATOR_SUFFIX=
+set LUA_PLATFORM=Win32
+shift
+goto :loop
+
+:amd64
+set TARGET_CPU=amd64
+set CMAKE_GENERATOR_SUFFIX= Win64
+set LUA_PLATFORM=Win64
+shift
+goto :loop
 
 :: . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
@@ -51,21 +70,9 @@ set LUA_TOOLCHAIN=dll14
 shift
 goto :loop
 
-:: . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-
-:: Platform
-
-:x86
-set TARGET_CPU=x86
-set CMAKE_GENERATOR_SUFFIX=
-set LUA_PLATFORM=Win32
-shift
-goto :loop
-
-:amd64
-set TARGET_CPU=amd64
-set CMAKE_GENERATOR_SUFFIX= Win64
-set LUA_PLATFORM=Win64
+:msvc15
+set TOOLCHAIN=msvc15
+set CMAKE_GENERATOR=Visual Studio 15 2017
 shift
 goto :loop
 

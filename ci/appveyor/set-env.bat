@@ -73,6 +73,7 @@ goto :loop
 :msvc15
 set TOOLCHAIN=msvc15
 set CMAKE_GENERATOR=Visual Studio 15 2017
+set LUA_TOOLCHAIN=dll15
 shift
 goto :loop
 

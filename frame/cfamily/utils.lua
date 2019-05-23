@@ -87,6 +87,12 @@ else
 	g_preOperatorNameSpace = ""
 end
 
+if PRE_BODY_NL then
+	g_preBodySpace = "\n\t"
+else
+	g_preBodySpace = " "
+end
+
 if not g_globalNamespace.title then
 	g_globalNamespace.title = "Global Namespace"
 end
@@ -394,11 +400,7 @@ function getFunctionDeclStringImpl(item, returnType, nameTemplate, indent)
 
 	if item.templateParamArray and #item.templateParamArray > 0 or
 		item.templateSpecParamArray and #item.templateSpecParamArray > 0 then
-		s = "template "
-		if not PRE_PARAM_LIST_SPACE then
-			s = s .. " "
-		end
-		s = s .. getParamArrayString(s, item.templateParamArray, false, "<", ">") .. "\n" .. indent
+		s = "template " .. getParamArrayString(s, item.templateParamArray, false, "<", ">") .. "\n" .. indent
 	end
 
 	if string.find(item.flags, "static") then

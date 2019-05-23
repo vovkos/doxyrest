@@ -33,6 +33,12 @@ else
 	g_preParamSpace = ""
 end
 
+if PRE_BODY_NL then
+	g_preBodySpace = "\n\t"
+else
+	g_preBodySpace = " "
+end
+
 if not g_globalNamespace.title then
 	g_globalNamespace.title = "Global Scope"
 end

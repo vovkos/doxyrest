@@ -317,6 +317,29 @@ PRE_OPERATOR_NAME_SPACE = true
 PRE_OPERATOR_PARAM_LIST_SPACE = true
 
 --[[!
+	Insert a new line before the body of a enum, struct, class, etc.
+
+	When ``PRE_BODY_NL`` is ``false``:
+
+	.. code-block:: cpp
+
+		class MyClass {
+			...
+		}
+
+	When ``PRE_BODY_NL`` is ``true``:
+
+	.. code-block:: cpp
+
+		class MyClass
+		{
+			...
+		}
+]]
+
+PRE_BODY_NL = true
+
+--[[!
 	Use multi-line parameter lists in function declarations if parameter count is
 	greater than this threshold. ``nil`` means don't use parameter count
 	threshold.

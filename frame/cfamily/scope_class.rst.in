@@ -19,13 +19,13 @@ if isOpen then
 
 	if #compound.baseTypeArray == 0 then
 }
-	$decl
+	$decl$g_preBodySpace{
 %{
 	elseif #compound.baseTypeArray == 1 then
 		local item = compound.baseTypeArray[1]
 		local protection = compound.baseTypeProtectionArray[1]
 }
-	$decl: $(getBaseClassString(item, protection))
+	$decl: $(getBaseClassString(item, protection))$g_preBodySpace{
 %{
 	else
 }
@@ -34,19 +34,18 @@ if isOpen then
 		for i = 1, #compound.baseTypeArray do
 			local item = compound.baseTypeArray[i]
 			local protection = compound.baseTypeProtectionArray[i]
-			local comma = ""
+			local suffix = ""
 
 			if i < #compound.baseTypeArray then
-				comma = ","
+				suffix = ","
+			else
+				suffix = g_preBodySpace .. "{"
 			end
 }
-	    $(getBaseClassString(item, protection))
+	    $(getBaseClassString(item, protection))$suffix
 %{
 		end -- for
 	end -- if
-}
-	{
-%{
 else
 }
 	};

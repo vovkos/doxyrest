@@ -167,7 +167,7 @@ Lua libraries
 		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/manual/group_api.html>`__
 
 	*	- Doxyrest Frame Settings
-		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/frame/group_frame-config.html>`__
+		- `sphinx_rtd_theme <https://vovkos.github.io/doxyrest/manual/group_frame-config.html>`__
 
 The above manuals were generated from Doxy-comments inside ``.lua`` files by using `LuaDoxyXML <https://github.com/vovkos/luadoxyxml>`__ instead of Doxygen at the first stage of the pipeline.
 

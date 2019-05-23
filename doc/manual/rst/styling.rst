@@ -63,7 +63,7 @@ Use ``doxyrest-sphinx-dir/css/doxyrest-sphinxdoc.css`` and ``doxyrest-sphinx-dir
 
 Doxyrest extensions for Sphinx also allow you setting the tab-width to your liking.
 
-..note::
+.. note::
 
 	The tab-width being hardcoded to ``8`` was a longtime issue with Docutils and Sphinx. There is a setting called ``tab_width`` which should be placed into ``docutils.conf``, but it's not respected by Docutils implementation.
 

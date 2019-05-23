@@ -29,7 +29,7 @@ this_dir = os.path.dirname(os.path.realpath(__file__))
 crefdb = None
 
 def get_cref_target(text):
-    if text in crefdb:
+    if crefdb and text in crefdb:
         return crefdb[text]
 
     warnings.warn('target not found for cref: ' + text, Warning, 2)

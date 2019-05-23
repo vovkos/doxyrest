@@ -35,7 +35,7 @@ Latest Release
 
 `Doxyrest 2.0.0 <https://github.com/vovkos/doxyrest/releases/tag/doxyrest-2.0.0>`__
 
-This is a *major update* featuring:
+This is a **major update** featuring:
 
 * Multiple sets of language-specific frames:
 
@@ -61,6 +61,7 @@ This is a *major update* featuring:
 
 		//--------------
 		// Brace style:
+		//--------------
 
 		class MyClass {
 			...
@@ -75,6 +76,7 @@ This is a *major update* featuring:
 
 		//--------------------------------
 		// Specifier-modifier list style:
+		//--------------------------------
 
 		static bool foo();
 
@@ -86,6 +88,7 @@ This is a *major update* featuring:
 
 		//----------------------------------
 		// Multi-line parameter list style:
+		//----------------------------------
 
 		void foo(int a, int b);
 

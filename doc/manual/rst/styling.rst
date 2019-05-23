@@ -16,7 +16,7 @@ Styling
 
 With Sphinx, you can easily change the look-and-feel of your documentation by switching between *themes* and by tweaking CSS stylesheets.
 
-You do all that by edit your ``conf.py``.
+You do all that by editing your ``conf.py``.
 
 Choose a Sphinx theme:
 
@@ -61,12 +61,13 @@ If you use a theme other than ``sphinxdoc`` or ``sphinx_rtd_theme`` (natively su
 
 Use ``doxyrest-sphinx-dir/css/doxyrest-sphinxdoc.css`` and ``doxyrest-sphinx-dir/css/doxyrest-sphinx_rtd_theme.css`` as examples for how to do that.
 
-Doxyrest extensions for Sphinx also allow you setting the tab-width to your liking.
-
-.. note::
-
-	The tab-width being hardcoded to ``8`` was a longtime issue with Docutils and Sphinx. There is a setting called ``tab_width`` which should be placed into ``docutils.conf``, but it's not respected by Docutils implementation.
+Doxyrest extensions for Sphinx also allow you setting the tab-width to your liking with:
 
 .. code-block:: python
 
 	doxyrest_tab_width = 2
+
+.. note::
+
+	The tab-width being hardcoded to ``8`` was a longtime issue with Docutils and Sphinx. There is a setting called ``tab_width`` which should be placed into ``docutils.conf``, but it's not respected by Sphinx.
+

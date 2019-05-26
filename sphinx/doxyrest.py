@@ -346,10 +346,11 @@ def on_builder_inited(app):
         app.config.html_static_path += [this_dir + '/css/' + css_file];
         app.add_stylesheet(css_file);
 
-    cref_file = app.srcdir + '/crefdb.py'
-    if os.path.isfile(cref_file):
+    crefdb_path = app.srcdir + '/crefdb.py'
+    if os.path.isfile(crefdb_path):
         ns = {}
-        execfile(cref_file, ns)
+        src = open(crefdb_path).read()
+        exec(src, ns)
         global crefdb
         crefdb = ns['crefdb']
 

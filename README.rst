@@ -59,7 +59,7 @@ This is a **major update** featuring:
 
 	.. list-table::
 
-		*	-	`PRE_BODY_NL <https://vovkos.github.io/doxyrest/manual/group_frame-config.html#doxid-variable-pre-body-nl>`__
+		*	-	`Brace placement <https://vovkos.github.io/doxyrest/manual/group_frame-config.html#doxid-variable-pre-body-nl>`__
 
 			-	.. code-block:: cpp
 
@@ -76,7 +76,7 @@ This is a **major update** featuring:
 						...
 					}
 
-		*	-	`ML_SPECIFIER_MODIFIER_LIST <https://vovkos.github.io/doxyrest/manual/group_frame-config.html#doxid-variable-ml-specifier-modifier-list>`__
+		*	-	`Type specifiers <https://vovkos.github.io/doxyrest/manual/group_frame-config.html#doxid-variable-ml-specifier-modifier-list>`__
 
 			-	.. code-block:: cpp
 
@@ -90,7 +90,7 @@ This is a **major update** featuring:
 					bool
 					bar();
 
-		*	-	`ML_PARAM_LIST_COUNT_THRESHOLD <https://vovkos.github.io/doxyrest/manual/group_frame-config.html#doxid-variable-ml-param-list-count-threshold>`__:
+		*	-	`Parameter list <https://vovkos.github.io/doxyrest/manual/group_frame-config.html#doxid-variable-ml-param-list-count-threshold>`__
 
 			-	.. code-block:: cpp
 
@@ -105,7 +105,7 @@ This is a **major update** featuring:
 						int b
 						);
 
-	... and `many others <https://vovkos.github.io/doxyrest/manual/group_frame-config.html>`__. Or -- create a *completely custom* style by editing frames!
+\... and many `other settings <https://vovkos.github.io/doxyrest/manual/group_frame-config.html>`__. Or -- create a *completely custom* style by editing frames!
 
 Samples
 -------

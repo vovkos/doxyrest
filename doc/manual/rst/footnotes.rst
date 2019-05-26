@@ -52,11 +52,11 @@ Make sure ``_DOXYGEN`` is only defined when you are building documentation (or e
 
 In your ``doxyrest-config``:
 
-.. code-block:: lua
+.. ref-code-block:: lua
 
-	FOOTNOTE_MEMBER_PREFIX = "_footnote_"
+	`FOOTNOTE_MEMBER_PREFIX` = "_footnote_"
 
-If ``FOOTNOTE_MEMBER_PREFIX`` is ``nil`` or an empty string, Doxyrest will not attempt to convert any members to footnotes.
+If `FOOTNOTE_MEMBER_PREFIX` is ``nil`` or an empty string, Doxyrest will not attempt to convert any members to footnotes.
 
 After running the Doxyrest pipeline for the above example, you should see something like that:
 

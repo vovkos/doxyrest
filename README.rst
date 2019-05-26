@@ -53,53 +53,59 @@ This is a **major update** featuring:
 
 * Target highlights:
 
-	Often times you click a link, and you jump somewhere, but you can't immediately see your target. With Doxyrest it's not an issue -- both documented *and* undocumented items get properly highlighted when jumped to!
+	Often times you click a link, and you jump somewhere, but... where exactly?! With Doxyrest it's not an issue -- both documented *and* undocumented items get properly highlighted when jumped to!
 
 * Configurable declaration style:
 
-	.. code-block:: cpp
+	.. list-table::
 
-		//--------------
-		// Brace style:
-		//--------------
+		*	-	`PRE_BODY_NL <https://vovkos.github.io/doxyrest/manual/group_frame-config.html#doxid-variable-pre-body-nl>`__
 
-		class MyClass {
-			...
-		}
+			-	.. code-block:: cpp
 
-		// vs
+					class MyClass {
+						...
+					}
 
-		class MyClass
-		{
-			...
-		}
+			- vs
 
-		//--------------------------------
-		// Specifier-modifier list style:
-		//--------------------------------
+			-	.. code-block:: cpp
 
-		static bool foo();
+					class MyClass
+					{
+						...
+					}
 
-		// vs
+		*	-	`ML_SPECIFIER_MODIFIER_LIST <https://vovkos.github.io/doxyrest/manual/group_frame-config.html#doxid-variable-ml-specifier-modifier-list>`__
 
-		static
-		bool
-		bar();
+			-	.. code-block:: cpp
 
-		//----------------------------------
-		// Multi-line parameter list style:
-		//----------------------------------
+					static bool foo();
 
-		void foo(int a, int b);
+			- vs
 
-		// vs
+			-	.. code-block:: cpp
 
-		void bar(
-			int a,
-			int b
-			);
+					static
+					bool
+					bar();
 
-		// ... or create a completely custom style by editing frames
+		*	-	`ML_PARAM_LIST_COUNT_THRESHOLD <https://vovkos.github.io/doxyrest/manual/group_frame-config.html#doxid-variable-ml-param-list-count-threshold>`__:
+
+			-	.. code-block:: cpp
+
+					void foo(int a, int b);
+
+			- vs
+
+			-	.. code-block:: cpp
+
+					void bar(
+						int a,
+						int b
+						);
+
+	... and `many others <https://vovkos.github.io/doxyrest/manual/group_frame-config.html>`__. Or -- create a *completely custom* style by editing frames!
 
 Samples
 -------

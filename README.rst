@@ -59,7 +59,7 @@ This is a **major update** featuring:
 
 	.. list-table::
 
-		*	-	`Brace placement <https://vovkos.github.io/doxyrest/manual/group_frame-config.html#doxid-variable-pre-body-nl>`__
+		*	-	`Opening braces <https://vovkos.github.io/doxyrest/manual/group_frame-config.html#doxid-variable-pre-body-nl>`__
 
 			-	.. code-block:: cpp
 
@@ -90,7 +90,7 @@ This is a **major update** featuring:
 					bool
 					bar();
 
-		*	-	`Parameter list <https://vovkos.github.io/doxyrest/manual/group_frame-config.html#doxid-variable-ml-param-list-count-threshold>`__
+		*	-	`Parameter lists <https://vovkos.github.io/doxyrest/manual/group_frame-config.html#doxid-variable-ml-param-list-count-threshold>`__
 
 			-	.. code-block:: cpp
 
@@ -250,7 +250,7 @@ Adjust the following settings in your Doxygen configuration file ``Doxyfile``:
 2.2. ``doxyrest-config.lua`` for Doxyrest
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Copy the default configuration file from ``doxyrest-frame-dir/cfamily/doxyrest-config.lua`` and adjust  the necessary settings. Here's what may need adjustment for existing Doxygen-based C/C++ projects:
+Copy the default configuration file from ``doxyrest-frame-dir/doxyrest-config.lua`` and adjust  the necessary settings. Here's what may need adjustment for existing Doxygen-based C/C++ projects:
 
 .. code-block:: lua
 
@@ -280,7 +280,7 @@ Copy the default configuration file from ``doxyrest-frame-dir/cfamily/doxyrest-c
 	ESCAPE_PIPES = true
 	ESCAPE_TRAILING_UNDERSCORES = true
 
-For detailed documentation on all settings please read `C-family Frame Settings Reference <https://vovkos.github.io/doxyrest/frame/cfamily>`__.
+For detailed documentation on all settings please read the `Frame Settings Reference <https://vovkos.github.io/doxyrest/manual/group_frame-config.html>`__.
 
 2.3. ``conf.py`` for Sphinx
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^

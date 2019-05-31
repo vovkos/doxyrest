@@ -43,12 +43,17 @@ for i = 1, #compound.variableArray do
 		if string.find(item.flags, "static") then
 			static = "static "
 		end
+
+		local initializer = getLinkedTextString(item.initializer, true)
+		if string.len(initializer) > 0 then
+			initializer = " " .. initializer
+		end
 }
 $(getItemRefTargetString(item))
 .. ref-code-block:: $LANGUAGE
 	:class: doxyrest-title-code-block
 
-	$static$type$modifiers $(getItemName(item))$suffix
+	$static$type$modifiers $(getItemName(item))$suffix$initializer
 %{
 		if item.isSubGroupHead then
 			for j = 1, #item.subGroupSlaveArray do

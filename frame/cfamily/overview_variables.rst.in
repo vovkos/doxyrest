@@ -78,8 +78,13 @@ while i <= #compound.variableArray do
 		if string.find(item.flags, "static") then
 			static = "static "
 		end
+
+		local initializer = getLinkedTextString(item.initializer, true)
+		if string.len(initializer) > 0 then
+			initializer = " " .. initializer
+		end
 }
-	$indent$static$(getLinkedTextString(item.type, true))$modifiers $(getItemNameForOverview(item))$suffix;
+	$indent$static$(getLinkedTextString(item.type, true))$modifiers $(getItemNameForOverview(item))$suffix$initializer;
 %{
 	else -- unnamed item
 		local j

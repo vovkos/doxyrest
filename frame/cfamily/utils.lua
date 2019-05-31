@@ -106,9 +106,9 @@ function getNormalizedCppString(string)
 
 	s = string.gsub(s, "%s*%*", "*")
 	s = string.gsub(s, "%s*&", "&")
-	s = string.gsub(s, "<%s*", g_preParamSpace .. "<")
+	s = string.gsub(s, "%s*<%s*", g_preParamSpace .. "<")
 	s = string.gsub(s, "%s+>", ">")
-	s = string.gsub(s, "%(%s*", g_preParamSpace .. "(")
+	s = string.gsub(s, "%s*%(%s*", g_preParamSpace .. "(")
 	s = string.gsub(s, "%s+%)", ")")
 
 	return s
@@ -120,7 +120,7 @@ function getLinkedTextString(text, isRef)
 	end
 
 	if not isRef then
-		return text.plainText
+		return getNormalizedCppString(text.plainText)
 	end
 
 	local s = ""

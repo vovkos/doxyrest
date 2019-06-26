@@ -406,6 +406,28 @@ ML_PARAM_LIST_LENGTH_THRESHOLD = 80
 ML_SPECIFIER_MODIFIER_LIST = false
 
 --[[!
+	Use the new C++11 syntax for ``typedef``-s:
+
+	When ``TYPEDEF_TO_USING`` is ``false``:
+
+	.. code-block:: cpp
+
+		typedef unsigned int uint_t;
+		typedef void Foo(int);
+		typedef void (*FooPtr)(int);
+
+	When ``TYPEDEF_TO_USING`` is ``true``:
+
+	.. code-block:: cpp
+
+		using uint_t = unsigned int;
+		using Foo typedef void (int);
+		using FooPtr typedef void (*)(int);
+]]
+
+TYPEDEF_TO_USING = false
+
+--[[!
 	Sometimes, it's required to redirect a Doxygen link to some external location.
 	In this case, add an entry to ``IMPORT_URL_MAP`` with the target URL, e.g.:
 

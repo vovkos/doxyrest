@@ -493,8 +493,17 @@ function getDefineDeclString(define, nameTemplate, indent)
 end
 
 function getTypedefDeclString(typedef, nameTemplate, indent)
-	local s = "typedef"
+	local s
 	local name = fillItemNameTemplate(nameTemplate, getItemName(typedef), typedef.id)
+	local declName
+
+	if TYPEDEF_TO_USING then
+		s = "using " .. name .. " ="
+		declName = ""
+	else
+		s = "typedef"
+		declName = name
+	end
 
 	if next(typedef.paramArray) == nil then
 		local type = getLinkedTextString(typedef.type, true)
@@ -504,7 +513,7 @@ function getTypedefDeclString(typedef, nameTemplate, indent)
 			s = s .. " " .. type .. " "
 		end
 
-		s = s .. name
+		s = s .. declName
 
 		if typedef.argString ~= "" then
 			s = s .. formatArgDeclString(typedef.argString, indent)
@@ -514,7 +523,7 @@ function getTypedefDeclString(typedef, nameTemplate, indent)
 	end
 
  	s = s .. getFunctionModifierDelimiter(indent) .. getLinkedTextString(typedef.type, true) .. getFunctionModifierDelimiter(indent)
-	s = s .. name
+	s = s .. declName
 	s = s .. getParamArrayString(s, typedef.paramArray, true, "(", ")", indent)
 
 	return s

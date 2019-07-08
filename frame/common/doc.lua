@@ -384,18 +384,20 @@ function formatDocBlock_table(b, context)
 	for i = 1, #maxwidths do
 		headfoot = headfoot .. string.rep('=', maxwidths[i]) .. '  '
 	end
+	headfoot = headfoot .. '\n'
 
-	local s = headfoot .. '\n'
-
+	local s = headfoot
 	for r = 1, #tbl do
 		for c = 1, #tbl[r] do
 			s = s .. tbl[r][c] .. string.rep(' ', 2 + maxwidths[c] - string.len(tbl[r][c]))
 		end
 		s = s .. '\n'
-		if r == 1 or r == #tbl then
-			s = s .. headfoot .. '\n\n'
+
+		if r == 1 then
+			s = s .. headfoot
 		end
 	end
+	s = s .. headfoot
 
 	return s
 end

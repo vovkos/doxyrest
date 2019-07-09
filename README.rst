@@ -200,10 +200,14 @@ Quick HOWTO
 
 Here is a list of steps required to apply Doxyrest to existing Doxygen-based projects:
 
-1. Get Doxyrest Binaries
-~~~~~~~~~~~~~~~~~~~~~~~~
+1. Get Tool Binaries
+~~~~~~~~~~~~~~~~~~~~
 
 You can either download precompiled packages from the latest `GitHub release <https://github.com/vovkos/doxyrest/releases/latest>`__ or build Doxyrest yourself. If you've chosen the latter, it's recommended to build using the auxillary bundle repo `doxyrest_b <https://github.com/vovkos/doxyrest_b>`__. Refer to the `Doxyrest Build Guide <https://vovkos.github.io/doxyrest/build-guide>`__ for more details.
+
+.. note::
+
+  	Note that Doxyrest requires Sphinx ``v1.7.0`` or above. If the Sphinx version from the official repos of your Linux distro is below that, please use ``pip`` to install a newer one.
 
 2. Prepare Configuration Files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -202,8 +202,10 @@ if(WIN32)
 				${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CONFIGURATION}
 			)
 
+		axl_replace_configuration_for_install(_INSTALL_DLL_LIST ${_DLL_LIST})
+
 		install(
-			FILES ${_DLL_LIST}
+			FILES ${_INSTALL_DLL_LIST}
 			DESTINATION ${DOXYREST_INSTALL_BIN_SUBDIR}
 			)
 	endif()

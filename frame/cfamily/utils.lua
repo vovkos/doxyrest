@@ -667,6 +667,16 @@ function getDefaultProtectionKind(compound)
 	end
 end
 
+function getProtectionValue(protectionKind)
+	local protectionValue = g_protectionKindMap[protectionKind]
+
+	if not protectionValue then
+		protectionValue = 0 -- assume public
+	end
+
+	return protectionValue
+end
+
 function isItemExcludedByProtectionFilter(item)
 
 	local protectionValue = g_protectionKindMap[item.protectionKind]
@@ -902,12 +912,7 @@ function sortByProtection(array)
 
 	for i = 1, #array do
 		local item = array[i]
-		local protectionValue = g_protectionKindMap[item.protectionKind]
-
-		if not protectionValue then
-			protectionValue = 0 -- assume public
-		end
-
+		local protectionValue = getProtectionValue(item.protectionKind)
 		table.insert(bucketArray[protectionValue], item)
 	end
 
@@ -937,17 +942,12 @@ function addToProtectionCompounds(compound, arrayName)
 
 	for i = 1, #array do
 		local item = array[i]
-		local protectionValue = g_protectionKindMap[item.protectionKind]
-
-		if not protectionValue then
-			protectionValue = 0 -- assume public
-		end
-
+		local protectionValue = getProtectionValue(item.protectionKind)
 		local protectionCompound = compound.protectionCompoundArray[protectionValue]
 		local targetArray = protectionCompound[arrayName]
 
 		table.insert(targetArray, item)
-		protectionCompound.isEmpty = nil
+		protectionCompound.isEmpty = false
 	end
 end
 
@@ -980,6 +980,13 @@ function handleCompoundProtection(compound)
 	addToProtectionCompounds(compound, "functionArray")
 	addToProtectionCompounds(compound, "aliasArray")
 	addToProtectionCompounds(compound, "defineArray")
+
+	if compound.destructor then
+		local protectionValue = getProtectionValue(compound.destructor.protectionKind)
+		local protectionCompound = compound.protectionCompoundArray[protectionValue]
+		protectionCompound.destructor = compound.destructor
+		protectionCompound.isEmpty = false
+	end
 
 	-- eliminate empty protection compounds
 
@@ -1074,10 +1081,12 @@ function prepareCompound(compound)
 	stats.hasDocumentedFunctions = prepareItemArrayDocumentation(compound.functionArray, compound)
 	stats.hasDocumentedAliases = prepareItemArrayDocumentation(compound.aliasArray, compound)
 	stats.hasDocumentedDefines = prepareItemArrayDocumentation(compound.defineArray, compound)
+	stats.hasDocumentedConstruction = prepareItemArrayDocumentation(compound.constructorArray, compound)
 
-	stats.hasDocumentedConstruction =
-		prepareItemArrayDocumentation(compound.constructorArray, compound) or
-		not EXCLUDE_DESTRUCTORS and compound.destructor and prepareItemDocumentation(compound.destructor, compound)
+	if not EXCLUDE_DESTRUCTORS and compound.destructor then
+		prepareItemDocumentation(compound.destructor, compound)
+		stats.hasDocumentedConstruction = stats.hasDocumentedConstruction or compound.destructor.hasDocumentation
+	end
 
 	stats.hasDocumentedItems =
 		stats.hasDocumentedUnnamedEnumValues or

@@ -26,10 +26,10 @@ from sphinx.directives.other import Include
 #
 
 this_dir = os.path.dirname(os.path.realpath(__file__))
-crefdb = None
+crefdb = {}
 
 def get_cref_target(text):
-    if crefdb and text in crefdb:
+    if text in crefdb:
         return crefdb[text]
 
     warnings.warn('target not found for cref: ' + text, Warning, 2)
@@ -346,13 +346,16 @@ def on_builder_inited(app):
         app.config.html_static_path += [this_dir + '/css/' + css_file];
         app.add_stylesheet(css_file);
 
-    crefdb_path = app.srcdir + '/crefdb.py'
-    if os.path.isfile(crefdb_path):
-        ns = {}
-        src = open(crefdb_path).read()
-        exec(src, ns)
-        global crefdb
-        crefdb = ns['crefdb']
+    for basedir, dirnames, filenames in os.walk(app.srcdir):
+        if 'crefdb.py' in filenames:
+            crefdb_path = os.path.join(basedir, 'crefdb.py')
+            src = open(crefdb_path).read()
+            ns = {}
+            exec(src, ns)
+            new_crefdb = ns['crefdb']
+            if isinstance(new_crefdb, dict):
+                global crefdb
+                crefdb.update(new_crefdb)
 
 #...............................................................................
 #

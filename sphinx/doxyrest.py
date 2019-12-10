@@ -89,14 +89,17 @@ def create_xref_node(raw_text, text, target):
     node += nodes.Text(text, text)
     return node
 
-def create_target_node(raw_text, text, target, lineno, document, extra_classes=[]):
+def create_target_node(raw_text, text, target, highlight_language, lineno, document, extra_classes=[]):
     node = nodes.target(raw_text, '')
     node['names'] += [target]
     node['classes'] += extra_classes
     node.line = lineno
 
     if text:
-        node += nodes.Text(text, text)
+        if highlight_language:
+            node += HighlightedText(text, text, language=highlight_language)
+        else:
+            node += nodes.Text(text, text)
 
     document.note_explicit_target(node)
     return node
@@ -182,6 +185,7 @@ class RefCodeBlock(Directive):
                     raw_text,
                     text,
                     target,
+                    language,
                     None,
                     self.state.document,
                     ['doxyrest-code-target']
@@ -294,7 +298,7 @@ def cref_role(typ, raw_text, text, lineno, inliner, options={}, content=[]):
     return [node], []
 
 def target_role(typ, raw_text, text, lineno, inliner, options={}, content=[]):
-    node = create_target_node(raw_text, None, text, lineno, inliner.document)
+    node = create_target_node(raw_text, None, text, None, lineno, inliner.document)
     return [node], []
 
 

@@ -248,7 +248,7 @@ function cmpGroups(g1, g2)
 	o2 = string.match(s2, ":grouporder%(([^)]*)%)")
 
 	if o1 and o2 then
-		return o1 < o2
+		return tonumber(o1) < tonumber(o2)
 	else
 		return g1[SORT_GROUPS_BY] < g2[SORT_GROUPS_BY]
 	end

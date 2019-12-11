@@ -169,7 +169,7 @@ function getParamString(param, isRef)
 	end
 
 	if param.array ~= "" then
-		s = s .. " " .. param.array
+		s = s .. g_preParamSpace .. param.array
 	end
 
 	if not param.defaultValue.isEmpty then

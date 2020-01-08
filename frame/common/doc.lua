@@ -402,6 +402,14 @@ function formatDocBlock_table(b, context)
 	return s
 end
 
+function formatDocBlock_graph(block, context, graphtype)
+	local code = getCodeDocBlockContents(block, context)
+	code = replaceCommonSpacePrefix(code, "\t")
+	code = trimTrailingWhitespace(code)
+
+	return "\n\n.. " .. graphtype .. "::\n\n" .. code .. "\n\n"
+end
+
 -- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 g_blockKindFormatMap =
@@ -434,6 +442,9 @@ g_blockKindFormatMap =
 	["simplesect"]           = formatDocBlock_simplesect,
 	["ulink"]                = formatDocBlock_ulink,
 	["table"]                = formatDocBlock_table,
+	["dot"]                  = function(b, c) return formatDocBlock_graph(b, c, "graphviz") end,
+	["plantuml"]             = function(b, c) return formatDocBlock_graph(b, c, "uml") end,
+	["msc"]                  = function(b, c) return formatDocBlock_graph(b, c, "msc") end,
 }
 
 function getDocBlockContents(block, context)

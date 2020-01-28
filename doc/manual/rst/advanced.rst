@@ -20,3 +20,4 @@ Advanced Topics
 	subgroups.rst
 	footnotes.rst
 	styling.rst
+	graphs.rst

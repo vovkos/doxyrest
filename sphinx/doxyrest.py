@@ -395,3 +395,9 @@ def setup(app):
     if prevConfig:
         os.environ['DOCUTILSCONFIG'] += os.pathsep
         os.environ['DOCUTILSCONFIG'] += prevConfig
+
+    return {
+        'version': 'builtin',
+        'parallel_read_safe': True,
+        'parallel_write_safe': True,
+    }

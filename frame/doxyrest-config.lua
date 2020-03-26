@@ -91,7 +91,11 @@ INTRO_FILE = nil
 
 --!
 --! Specify whether to sort groups lexicographically (by ``title``) or
---! logically (by ``id``).
+--! logically (by ``id``). To maintain the original order (in which a group has
+--! been seen in the XML database), use ``originalIdx``.
+--!
+--! Omitting ``SORT_GROUPS_BY`` (or setting it to ``nil``) results in groups
+--! being sorted by ``title``.
 --!
 
 SORT_GROUPS_BY = "title"
@@ -135,8 +139,8 @@ FOOTNOTE_MEMBER_PREFIX = nil
 
 --!
 --! Specify the main language of your project; this string will be used for
---! the reStructuredText ``.. code-block::`` sections and for conditional formatting
---! of module item declarations.
+--! the reStructuredText ``.. code-block::`` sections and for conditional
+--! formatting of module item declarations.
 --!
 
 LANGUAGE = cpp
@@ -152,8 +156,8 @@ LANGUAGE = cpp
 VERBATIM_TO_CODE_BLOCK = "none"
 
 --!
---! If the original doxy comments contain asterisks, they have to be escaped
---! in reStructuredText (asterisks are used to mark **bold** or *italic* blocks).
+--! If the original doxy comments contain asterisks, they have to be escaped in
+--! reStructuredText (asterisks are used to mark **bold** or *italic* blocks).
 --!
 
 ESCAPE_ASTERISKS = false

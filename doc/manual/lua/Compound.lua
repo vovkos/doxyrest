@@ -119,6 +119,20 @@ Compound =
 --! \luabasetype Compound
 --!
 
+Group =
+{
+	--! Holds the group index in the ``innerRef`` array in the original XML
+	--! database.
+
+	originalIdx,
+}
+
+
+--!
+--! \luastruct
+--! \luabasetype Compound
+--!
+
 Page =
 {
 	subPageArray,

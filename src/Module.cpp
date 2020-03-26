@@ -607,6 +607,7 @@ Compound::Compound()
 	m_isDuplicate = false;
 	m_isSubPage = false;
 	m_hasGlobalNamespace = false;
+	m_groupOriginalIdx = -1;
 	m_cacheIdx = -1;
 }
 
@@ -641,6 +642,9 @@ Compound::luaExport(lua::LuaState* luaState)
 	{
 		m_groupCompound->luaExport(luaState);
 		luaState->setMember("group");
+
+		if (m_groupOriginalIdx != -1)
+			luaState->setMemberInteger("originalIdx", m_groupOriginalIdx);
 	}
 
 	preparePath();
@@ -1116,6 +1120,8 @@ GlobalNamespace::build(
 	for (size_t i = 0; i < count; i++)
 	{
 		Compound* compound = module->m_groupArray[i];
+		if (compound->m_groupOriginalIdx == -1)
+			compound->m_groupOriginalIdx = i;
 
 		sl::Iterator<Member> memberIt = compound->m_memberList.getHead();
 		for (; memberIt; memberIt++)
@@ -1133,11 +1139,14 @@ GlobalNamespace::build(
 		}
 
 		sl::Iterator<Ref> refIt = compound->m_innerRefList.getHead();
-		for (; refIt; refIt++)
+		for (size_t j = 0; refIt; refIt++)
 		{
 			Compound* innerCompound = module->m_compoundMap.findValue(refIt->m_id, NULL);
 			if (innerCompound)
+			{
 				innerCompound->m_groupCompound = compound;
+				innerCompound->m_groupOriginalIdx = j++;
+			}
 		}
 	}
 

@@ -429,6 +429,7 @@ struct Compound: sl::ListLink
 	Description m_detailedDescription;
 	Location m_location;
 
+	size_t m_groupOriginalIdx;
 	size_t m_cacheIdx;
 
 	Compound();

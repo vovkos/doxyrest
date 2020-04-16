@@ -396,7 +396,9 @@ def on_config_inited(app, config):
     contents = contents.replace('%tab_width%', str(config.doxyrest_tab_width))
     src_file.close()
 
-    os.makedirs(app.doctreedir, exist_ok=True)
+    if not os.path.exists(app.doctreedir):
+        os.makedirs(app.doctreedir)
+
     dst_file = open(docutils_conf_path, 'w')
     dst_file.write(contents)
     dst_file.close()

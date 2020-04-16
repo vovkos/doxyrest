@@ -42,7 +42,7 @@ if [ "$GET_COVERAGE" != "" ]; then
 fi
 
 if [ "$BUILD_DOC" != "" ]; then
-	sudo pip install sphinx==1.7.9 sphinx_rtd_theme
+	sudo pip install sphinx sphinx_rtd_theme
 fi
 
 if [ "$BUILD_PACKAGE" != "" ]; then

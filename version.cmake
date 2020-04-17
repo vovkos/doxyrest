@@ -10,7 +10,7 @@
 #...............................................................................
 
 set(DOXYREST_VERSION_MAJOR     2)
-set(DOXYREST_VERSION_MINOR     0)
+set(DOXYREST_VERSION_MINOR     1)
 set(DOXYREST_VERSION_REVISION  0)
 set(DOXYREST_VERSION_TAG       )
 

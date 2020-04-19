@@ -105,6 +105,8 @@ function getFunctionDeclString(func, nameTemplate, indent)
 
 		if ML_PARAM_LIST_LENGTH_THRESHOLD then
 			local decl = "function " .. func.name .. g_preParamSpace .. paramString
+			decl = replaceRolesWithPlainText(decl)
+
 			if string.len(decl) > ML_PARAM_LIST_LENGTH_THRESHOLD then
 				paramString = getParamArrayString_ml(func.paramArray, indent)
 			end

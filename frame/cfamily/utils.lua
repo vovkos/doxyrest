@@ -256,9 +256,7 @@ function getParamArrayString(prefix, paramArray, isRef, lbrace, rbrace, indent, 
 
 		if ML_PARAM_LIST_LENGTH_THRESHOLD then
 			local decl = prefix .. space .. s
-			if isRef then
-				decl = string.gsub(decl, ":ref:`[^`]*`", "")
-			end
+			decl = replaceRolesWithPlainText(decl)
 
 			if string.len(decl) > ML_PARAM_LIST_LENGTH_THRESHOLD then
 				s = getParamArrayString_ml(paramArray, isRef, lbrace, rbrace, indent, nl)

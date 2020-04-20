@@ -642,10 +642,10 @@ Compound::luaExport(lua::LuaState* luaState)
 	{
 		m_groupCompound->luaExport(luaState);
 		luaState->setMember("group");
-
-		if (m_groupOriginalIdx != -1)
-			luaState->setMemberInteger("originalIdx", m_groupOriginalIdx);
 	}
+
+	if (m_groupOriginalIdx != -1)
+		luaState->setMemberInteger("originalIdx", m_groupOriginalIdx);
 
 	preparePath();
 	luaState->setMemberString("path", m_path);

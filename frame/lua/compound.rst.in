@@ -15,13 +15,14 @@ local compound = argArray[1]
 
 local variableSectionName
 local functionSectionName
+local isClass = compound.compoundKind == "class" or compound.compoundKind == "struct"
 
-if compound.compoundKind == "namespace" or compound.compoundKind == "group" then
-	variableSectionName = "Variables"
-	functionSectionName = "Functions"
-else
+if isClass then
 	variableSectionName = "Fields"
 	functionSectionName = "Methods"
+else
+	variableSectionName = "Variables"
+	functionSectionName = "Functions"
 end
 
 local compoundStats = prepareCompound(compound)
@@ -69,10 +70,7 @@ $groupTree
 %{
 end -- if
 
-if compoundStats.hasItems or
-	compound.baseCompound or
-	compound.derivedTypeArray and #compound.derivedTypeArray > 0 then
-
+if compoundStats.hasItems or isClass then
 	includeFile("overview_compound.rst.in", compound, variableSectionName, functionSectionName)
 end
 

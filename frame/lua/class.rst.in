@@ -12,21 +12,19 @@
 
 local argArray = table.pack(...)
 local compound = argArray[1]
-local sectionName = argArray[2]
-local comma = argArray[3]
+local compoundKind = argArray[2]
 
-if sectionName then
+if FORCE_INCLUDE_FILE then
 }
-	-- $sectionName
-
+.. include:: $FORCE_INCLUDE_FILE
 %{
 end -- if
-
-for i = 1, #compound.variableArray do
-	local item = compound.variableArray[i]
-	local nameTemplate = getItemNameTemplate(item)
 }
-	$(getItemLocalPrefix(item))$(fillItemNameTemplate(nameTemplate, item.name, item.id))$comma
+.. index:: pair: $compoundKind; $(compound.name)
+.. _doxid-$(compound.id):
+
+$(getTitle(compoundKind .. " " .. compound.name, 1))
+
 %{
-end -- for
+includeFile("compound.rst.in", compound)
 }

@@ -11,19 +11,17 @@
 --------------------------------------------------------------------------------
 
 local argArray = table.pack(...)
-local type = argArray[1]
-
-if FORCE_INCLUDE_FILE then
+local compound = argArray[1]
 }
-.. include:: $FORCE_INCLUDE_FILE
-%{
-end -- if
-}
-.. index:: pair: table; $(type.name)
-.. _doxid-$(type.id):
-
-$(getTitle("table " .. type.name, 1))
+	-- modules
 
 %{
-includeFile("compound.rst.in", type)
+for i = 1, #compound.namespaceArray do
+	local item = compound.namespaceArray[i]
+	local targetFileName = getItemFileName(item)
+	generateFile(targetFileName, "class.rst.in", item, "module")
+}
+	:ref:`$(item.name)<doxid-$(item.id)>`
+%{
+end -- for
 }

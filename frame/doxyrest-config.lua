@@ -450,4 +450,12 @@ TYPEDEF_TO_USING = false
 
 IMPORT_URL_MAP = {}
 
+--[[!
+	Usually providing documentation blocks for Lua ``local`` variables or
+	functions is not desired. Change this to ``false`` if local items
+	*should* be included in the final documentation.
+]]
+
+EXCLUDE_LUA_LOCALS = true
+
 --! @}

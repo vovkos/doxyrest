@@ -12,21 +12,16 @@
 
 local argArray = table.pack(...)
 local compound = argArray[1]
-local sectionName = argArray[2]
-local comma = argArray[3]
-
-if sectionName then
 }
-	-- $sectionName
+	-- classes
 
 %{
-end -- if
-
-for i = 1, #compound.variableArray do
-	local item = compound.variableArray[i]
-	local nameTemplate = getItemNameTemplate(item)
+for i = 1, #compound.classArray do
+	local item = compound.classArray[i]
+	local targetFileName = getItemFileName(item)
+	generateFile(targetFileName, "class.rst.in", item, "class")
 }
-	$(getItemLocalPrefix(item))$(fillItemNameTemplate(nameTemplate, item.name, item.id))$comma
+	:ref:`$(item.name)<doxid-$(item.id)>`
 %{
 end -- for
 }

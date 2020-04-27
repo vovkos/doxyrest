@@ -94,7 +94,18 @@ function getParamArrayString_ml(paramArray, indent)
 end
 
 function getFunctionDeclString(func, nameTemplate, indent)
-	local s = "function " .. fillItemNameTemplate(nameTemplate, func.name, func.id)
+	local funcName
+	if func.virtualKind == "non-virtual" then
+		funcName = string.gsub(func.path, "/", ".")
+	else
+		local count
+		funcName, count = string.gsub(func.path, "/", ":")
+		if count > 1 then
+			funcName = string.gsub(funcName, ":", ".", count - 1)
+		end
+	end
+
+	local s = getItemLocalPrefix(func) .. "function " .. fillItemNameTemplate(nameTemplate, funcName, func.id)
 	local paramString
 
 	if ML_PARAM_LIST_COUNT_THRESHOLD and
@@ -116,12 +127,28 @@ function getFunctionDeclString(func, nameTemplate, indent)
 	return s .. g_preParamSpace .. paramString
 end
 
+function getItemLocalPrefix(item)
+	-- lua 'local' translates to C/C++ 'static'
+
+	if string.find(item.flags, "static") then
+		return "local "
+	else
+		return ""
+	end
+end
+
 -------------------------------------------------------------------------------
 
 -- compound prep
 
 function itemLocationFilter(item)
 	return not (item.location and string.match(item.location.file, EXCLUDE_LOCATION_PATTERN))
+end
+
+function itemLocalFilter(item)
+	-- lua 'local' translates to C/C++ 'static'
+
+	return not string.find(item.flags, "static")
 end
 
 function prepareCompound(compound)
@@ -132,13 +159,24 @@ function prepareCompound(compound)
 	local stats = {}
 
 	if EXCLUDE_LOCATION_PATTERN then
+		filterArray(compound.namespaceArray, itemLocationFilter)
+		filterArray(compound.enumArray, itemLocationFilter)
 		filterArray(compound.structArray, itemLocationFilter)
+		filterArray(compound.classArray, itemLocationFilter)
 		filterArray(compound.variableArray, itemLocationFilter)
 		filterArray(compound.functionArray, itemLocationFilter)
 	end
 
+	if EXCLUDE_LUA_LOCALS then
+		filterArray(compound.variableArray, itemLocalFilter)
+		filterArray(compound.functionArray, itemLocalFilter)
+	end
+
 	stats.hasItems =
+		#compound.namespaceArray ~= 0 or
+		#compound.enumArray ~= 0 or
 		#compound.structArray ~= 0 or
+		#compound.classArray ~= 0 or
 		#compound.variableArray ~= 0 or
 		#compound.functionArray ~= 0
 
@@ -154,9 +192,12 @@ function prepareCompound(compound)
 	end
 
 	table.sort(compound.groupArray, cmpGroups)
+	table.sort(compound.namespaceArray, cmpNames)
+	table.sort(compound.enumArray, cmpNames)
 	table.sort(compound.structArray, cmpNames)
+	table.sort(compound.classArray, cmpNames)
 
-	if SORT_GLOBAL_MEMBERS and compound.compoundKind ~= "struct" then
+	if SORT_GLOBAL_MEMBERS and compound.compoundKind ~= "struct" and compound.compoundKind ~= "class" then
 		table.sort(compound.variableArray, cmpNames)
 		table.sort(compound.functionArray, cmpNames)
 	end

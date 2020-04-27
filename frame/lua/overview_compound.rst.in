@@ -19,58 +19,71 @@ local functionSectionName = string.lower(argArray[3])
 	:class: doxyrest-overview-code-block
 
 %{
-if compound.compoundKind ~= "struct" then
-	if #compound.enumArray > 0 then
-		includeFile("overview_enums.rst.in", compound)
-		emit("\n")
-	end -- if
+if #compound.namespaceArray > 0 then
+	includeFile("overview_modules.rst.in", compound)
+	emit("\n")
+end
 
-	if #compound.structArray > 0 then
-		includeFile("overview_structs.rst.in", compound)
-		emit("\n")
-	end -- if
+if #compound.enumArray > 0 then
+	includeFile("overview_enums.rst.in", compound)
+	emit("\n")
+end
 
+if #compound.classArray > 0 then
+	includeFile("overview_classes.rst.in", compound)
+	emit("\n")
+end
+
+if #compound.structArray > 0 then
+	includeFile("overview_structs.rst.in", compound)
+	emit("\n")
+end
+
+if compound.compoundKind == "class" or compound.compoundKind == "struct" then
 	if #compound.variableArray > 0 then
-		includeFile("overview_variables.rst.in", compound, variableSectionName)
-		emit("\n")
-	end -- if
-
-	if #compound.functionArray > 0 then
-		includeFile("overview_functions.rst.in", compound, functionSectionName)
-		emit("\n")
-	end
-else
 }
 	$(compound.name) =$g_preBodySpace{
-		-- fields
-
 %{
-	includeFileWithIndent("\t", "overview_variables.rst.in", compound, nil, ",")
+		includeFileWithIndent("\t", "overview_variables.rst.in", compound, variableSectionName, ",")
 
-	if compound.baseTypeArray and #compound.baseTypeArray > 0 then
+		if compound.baseTypeArray and #compound.baseTypeArray then
 
-		-- always link inherited members (even when no documentation)
+			-- always link inherited members (even when no documentation)
 
-		local prevHasItemDocumentation = hasItemDocumentation
-		hasItemDocumentation = function(item)
-			return true
-		end
+			local prevHasItemDocumentation = hasItemDocumentation
+			hasItemDocumentation = function(item)
+				return true
+			end
 
-		for i = 1, #compound.baseTypeArray do
-			local baseType = compound.baseTypeArray[i]
+			for i = 1, #compound.baseTypeArray do
+				local baseType = compound.baseTypeArray[i]
 }
 
 		-- inherited from :ref:`$(baseType.name)<doxid-$(baseType.id)>`
 
 %{
-			includeFileWithIndent("\t", "overview_variables.rst.in", baseType, nil, ",")
-		end -- for
+				includeFileWithIndent("\t", "overview_variables.rst.in", baseType, null, ",")
+			end -- for
 
-		hasItemDocumentation = prevHasItemDocumentation
-	end -- if
+			hasItemDocumentation = prevHasItemDocumentation
+		end --if
 }
 	}
 
 %{
-end -- if
+	else
+}
+	$(compound.name) = {}
+
+%{
+	end -- if
+elseif #compound.variableArray > 0 then
+		includeFile("overview_variables.rst.in", compound, variableSectionName)
+		emit("\n")
+end
+
+if #compound.functionArray > 0 then
+	includeFile("overview_functions.rst.in", compound, functionSectionName)
+	emit("\n")
+end
 }

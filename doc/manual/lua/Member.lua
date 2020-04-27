@@ -424,7 +424,7 @@ Alias =
 --!
 --! \luastruct
 --! \luabasetype Member
---!en
+--!
 
 Define =
 {

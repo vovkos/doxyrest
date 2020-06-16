@@ -311,6 +311,17 @@ Finally, prepare a Sphinx configuration file ``conf.py``. A good approach would 
 
 	exclude_patterns += ['page_index.rst']
 
+Standard install locations for the Doxyrest Sphinx extensions (``doxyrest`` and ``cpplexer``):
+
+.. list-table::
+
+	*	- Windows
+		- ``%DOXYREST_DIR%\sphinx``
+	*	- Linux, macOS
+		- ``$DOXYREST_DIR/share/doxyrest/sphinx``
+
+If in doubt, please navigate to the Doxyrest Sphinx extension directory and make sure ``doxyrest.py`` and ``cpplexer.py`` are there.
+
 3. Run The Doxyrest Pipeline
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

@@ -380,7 +380,7 @@ function getPropertyDeclString(item, nameTemplate, indent)
 	local s = getLinkedTextString(item.returnType, true)
 
 	if item.modifiers ~= "" then
-		s = string.gsub(s, "property", item.modifiers .. " property")
+		s = string.gsub(s, "property$", item.modifiers .. " property")
 	end
 
 	s = s .. getFunctionModifierDelimiter(indent)

@@ -26,6 +26,7 @@ from sphinx.directives.other import Include
 
 sphinx_version = version.parse(sphinx_version_string)
 this_dir = os.path.dirname(os.path.realpath(__file__))
+url_re_prog = re.compile('(ftp|https?)://')
 crefdb = {}
 
 def get_cref_target(text):
@@ -91,9 +92,12 @@ def visit_highlighted_text_node(self, node):
 
     raise nodes.SkipNode
 
-def create_xref_node(raw_text, text, target):
+def create_ref_node(raw_text, text, target):
     if not target:
         return nodes.Text(text, text)
+
+    if url_re_prog.match(target):
+        return nodes.reference(raw_text, text, refuri=target)
 
     node = addnodes.pending_xref(raw_text)
     node['reftype'] = 'ref'
@@ -151,7 +155,6 @@ class RefCodeBlock(Directive):
         role_re_src += '`(.+?)(\s*<([^<>]*)>)?`'
         self.role_re_prog = re.compile(role_re_src)
         self.ws_re_prog = re.compile('\s+')
-        self.url_re_prog = re.compile('(ftp|https?)://')
 
     def run(self):
         config = self.state.document.settings.env.config
@@ -206,18 +209,13 @@ class RefCodeBlock(Directive):
                     ['doxyrest-code-target']
                     )
 
-            elif not role or role == ':cref:':
-                target = get_cref_target(target if target else text)
-                new_node = create_xref_node(raw_text, text, target)
-
-            else: # :ref:
-                if not target:
+            else:
+                if not role or role == ':cref:':
+                    target = get_cref_target(target if target else text)
+                elif not target:
                     target = text
 
-                if self.url_re_prog.match(target):
-                    new_node = nodes.reference(raw_text, text, refuri=target)
-                else:
-                    new_node = create_xref_node(raw_text, text, target)
+                new_node = create_ref_node(raw_text, text, target)
 
             node += new_node
 
@@ -282,7 +280,7 @@ class RefTransform(Transform):
                 if not role or role == ':cref:':
                     target = get_cref_target(text)
 
-                node += create_xref_node(raw_text, text, target)
+                node += create_ref_node(raw_text, text, target)
                 pos = match.end()
 
 
@@ -300,7 +298,7 @@ def cref_role(typ, raw_text, text, lineno, inliner, options={}, content=[]):
         node = nodes.inline(raw_text, '')
 
     node['classes'] += ['doxyrest-cref']
-    node += create_xref_node(raw_text, text, target)
+    node += create_ref_node(raw_text, text, target)
     return [node], []
 
 def target_role(typ, raw_text, text, lineno, inliner, options={}, content=[]):

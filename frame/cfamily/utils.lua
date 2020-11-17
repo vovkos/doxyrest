@@ -29,8 +29,8 @@ if not EXTRA_PAGE_LIST then
 	EXTRA_PAGE_LIST = {}
 end
 
-if not IMPORT_URL_MAP then
-	IMPORT_URL_MAP = {}
+if not EXTERNAL_CREF_DB then
+	EXTERNAL_CREF_DB = {}
 end
 
 if ML_PARAM_LIST_COUNT_THRESHOLD then
@@ -556,7 +556,7 @@ function getBaseClassString(class, protection)
 	else
 		-- class without id (imported)
 
-		local url = IMPORT_URL_MAP[class.importId]
+		local url = EXTERNAL_CREF_DB[class.name]
 		if url then
 			s = s .. ":ref:`" .. class.name .. "<" .. url .. ">`"
 		else

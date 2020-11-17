@@ -433,14 +433,16 @@ TYPEDEF_TO_USING = false
 
 --[[!
 	Sometimes, it's required to redirect a Doxygen link to some external location.
-	In this case, add an entry to ``IMPORT_URL_MAP`` with the target URL, e.g.:
+	In this case, add an entry to ``EXTERNAL_CREF_DB`` with the target URL, e.g.:
 
 	.. code-block:: lua
 
-		IMPORT_URL_MAP =
+		EXTERNAL_CREF_DB =
 		{
-			[ "cfd9ea7a-35de-4090-a83b-3d214b3ff358/type_jnc_scheduler" ] =
-			"https://vovkos.github.io/jancy/stdlib/class_jnc_Scheduler.html"
+			[ "jnc.Scheduler" ] = "https://vovkos.github.io/jancy/stdlib/class_jnc_Scheduler.html",
+			[ "strlen"] = "https://vovkos.github.io/jancy/stdlib/group_crt.html#doxid-function-strlen"
+
+			-- ...
 		}
 
 	The key of the map is an ``importid`` attribute. This is a non-standard Doxygen
@@ -448,7 +450,7 @@ TYPEDEF_TO_USING = false
 	imported extensions library (``.jncx``)
 ]]
 
-IMPORT_URL_MAP = {}
+EXTERNAL_CREF_DB = {}
 
 --[[!
 	Usually providing documentation blocks for Lua ``local`` variables or

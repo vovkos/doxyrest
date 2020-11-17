@@ -27,6 +27,10 @@ if not EXTRA_PAGE_LIST then
 	EXTRA_PAGE_LIST = {}
 end
 
+if not EXTERNAL_CREF_DB then
+	EXTERNAL_CREF_DB = {}
+end
+
 if PRE_PARAM_LIST_SPACE then
 	g_preParamSpace = " "
 else

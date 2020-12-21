@@ -18,6 +18,7 @@ from docutils.parsers.rst import Directive, directives
 from docutils.transforms import Transform
 from sphinx import __version__ as sphinx_version_string, roles, addnodes, config
 from sphinx.directives.other import Include
+from sphinx.domains import Domain
 
 #...............................................................................
 #
@@ -305,6 +306,32 @@ def target_role(typ, raw_text, text, lineno, inliner, options={}, content=[]):
     node = create_target_node(raw_text, None, text, None, lineno, inliner.document)
     return [node], []
 
+
+#...............................................................................
+#
+#  Doxyrest domain -- so that the cref-database is checked for :any: refs
+#
+
+class DoxyrestDomain(Domain):
+    name = 'doxyrest'
+    label = 'Doxyrest'
+
+    def resolve_any_xref(self, env, fromdocname, builder, target, node, contnode):
+        cref_target = get_cref_target(target)
+        if not cref_target:
+            return []
+
+        std = env.get_domain('std')
+        node['refexplicit'] = True
+        resolved_node = std.resolve_xref(env, fromdocname, builder, 'ref', cref_target, node, contnode)
+        if not resolved_node: # shouldn't really happen
+            return []
+
+        result_node = nodes.literal(target, '')
+        result_node += resolved_node
+        return [('std:ref', result_node)]
+
+
 #...............................................................................
 #
 #  Sphinx source inputs --  a workaround for sphinx-2.0.1 (and below)
@@ -413,6 +440,8 @@ def on_config_inited(app, config):
 #
 
 def setup(app):
+    app.add_domain(DoxyrestDomain)
+
     app.add_node(
         HighlightedText,
         html=(visit_highlighted_text_node, None),

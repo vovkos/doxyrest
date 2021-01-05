@@ -316,6 +316,9 @@ class DoxyrestDomain(Domain):
     name = 'doxyrest'
     label = 'Doxyrest'
 
+    def merge_domaindata(self, docnames, otherdata):
+        pass # as to avoid errors on parallel builds
+
     def resolve_any_xref(self, env, fromdocname, builder, target, node, contnode):
         cref_target = get_cref_target(target)
         if not cref_target:

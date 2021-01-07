@@ -33,9 +33,7 @@ This elaborate pipeline allows building beautiful documentation for C/C++ APIs w
 Latest Release
 --------------
 
-`Doxyrest 2.1.0 <https://github.com/vovkos/doxyrest/releases/tag/doxyrest-2.1.0>`__
-
-This release addresses Sphinx 3 compatibity issues and contains all the recent bugfixes, updates and contributions (remarkably, added graph support by `Daniel Löber <https://github.com/loebl>`__ and improved table support by `Aditya Dalmia <https://github.com/ghochee>`__).
+`Doxyrest 2.1.2 <https://github.com/vovkos/doxyrest/releases/tag/doxyrest-2.1.2>`__
 
 New in Doxyrest 2
 -----------------

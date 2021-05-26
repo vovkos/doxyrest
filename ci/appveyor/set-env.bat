@@ -91,7 +91,7 @@ set LUA_LIB_NAME=lua53
 set LUA_DOWNLOAD_FILE=lua-%LUA_VERSION%_%LUA_PLATFORM%_%LUA_TOOLCHAIN%_lib.zip
 set LUA_DOWNLOAD_URL=https://sourceforge.net/projects/luabinaries/files/%LUA_VERSION%/Windows%%20Libraries/Dynamic/%LUA_DOWNLOAD_FILE%/download
 
-set EXPAT_VERSION=2.1.0
+set EXPAT_VERSION=2.3.0
 set EXPAT_DOWNLOAD_FILE=expat-%EXPAT_VERSION%.tar.gz
 set EXPAT_DOWNLOAD_URL=https://sourceforge.net/projects/expat/files/expat/%EXPAT_VERSION%/%EXPAT_DOWNLOAD_FILE%/download
 

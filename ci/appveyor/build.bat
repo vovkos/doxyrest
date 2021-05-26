@@ -17,6 +17,9 @@ cd %DOWNLOAD_DIR%\expat\build
 cmake .. %CMAKE_CONFIGURE_FLAGS% %EXPAT_CMAKE_FLAGS%
 cmake --build . %CMAKE_BUILD_FLAGS%
 
+cd %CONFIGURATION%
+mklink expat.lib libexpat.lib
+
 cd %THIS_DIR%
 echo set (EXPAT_INC_DIR %DOWNLOAD_DIR_CMAKE%/expat/lib) >> paths.cmake
 echo set (EXPAT_LIB_DIR %DOWNLOAD_DIR_CMAKE%/expat/build/%CONFIGURATION%) >> paths.cmake

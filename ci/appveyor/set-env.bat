@@ -91,15 +91,19 @@ set LUA_LIB_NAME=lua53
 set LUA_DOWNLOAD_FILE=lua-%LUA_VERSION%_%LUA_PLATFORM%_%LUA_TOOLCHAIN%_lib.zip
 set LUA_DOWNLOAD_URL=https://sourceforge.net/projects/luabinaries/files/%LUA_VERSION%/Windows%%20Libraries/Dynamic/%LUA_DOWNLOAD_FILE%/download
 
-set EXPAT_VERSION=2.3.0
+set EXPAT_VERSION=2.2.9
 set EXPAT_DOWNLOAD_FILE=expat-%EXPAT_VERSION%.tar.gz
 set EXPAT_DOWNLOAD_URL=https://sourceforge.net/projects/expat/files/expat/%EXPAT_VERSION%/%EXPAT_DOWNLOAD_FILE%/download
 
 set EXPAT_CMAKE_FLAGS= ^
-	-DBUILD_shared=OFF ^
-	-DBUILD_examples=OFF ^
-	-DBUILD_tests=OFF ^
-	-DBUILD_tools=OFF
+	-DEXPAT_SHARED_LIBS=OFF ^
+	-DEXPAT_BUILD_EXAMPLES=OFF ^
+	-DEXPAT_BUILD_TESTS=OFF ^
+	-DEXPAT_BUILD_TOOLS=OFF ^
+	-DCMAKE_DEBUG_POSTFIX= ^
+	-DCMAKE_RELEASE_POSTFIX= ^
+	-DCMAKE_MINSIZEREL_POSTFIX= ^
+	-DCMAKE_RELWITHDEBINFO_POSTFIX=
 
 set RAGEL_DOWNLOAD_URL=https://github.com/eloraiby/ragel-windows/raw/master/ragel.exe
 

@@ -1,0 +1,888 @@
+.. index:: pair: group; Hash Tables
+.. _doxid-group__apr__hash:
+
+Hash Tables
+===========
+
+.. toctree::
+	:hidden:
+
+Overview
+~~~~~~~~
+
+
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef struct :ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>` :ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`;
+	typedef struct :ref:`apr_hash_index_t<doxid-group__apr__hash_1ga3b3d353989f6cea4535630634be147f7>` :ref:`apr_hash_index_t<doxid-group__apr__hash_1ga3b3d353989f6cea4535630634be147f7>`;
+
+	typedef unsigned int (*:ref:`apr_hashfunc_t<doxid-group__apr__hash_1ga0bf5622266af13a2489c907a101cb156>`)(
+		const char *key,
+		apr_ssize_t *klen
+		);
+
+	typedef int() :ref:`apr_hash_do_callback_fn_t<doxid-group__apr__hash_1gafaf9b4435ab207b7708533cb8544face>`(
+		void *rec,
+		const void *key,
+		apr_ssize_t klen,
+		const void *value
+		);
+
+	// global functions
+
+	unsigned int
+	:ref:`apr_hashfunc_default<doxid-group__apr__hash_1ga8baa6e9d9d6c2c496d2a0ff1a5c53abe>`(
+		const char* key,
+		apr_ssize_t* klen
+		);
+
+	:ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`*
+	:ref:`apr_hash_make<doxid-group__apr__hash_1ga5f4b424d6761de4d32aa16ff6803bac9>`(:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool);
+
+	:ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`*
+	:ref:`apr_hash_make_custom<doxid-group__apr__hash_1ga27f40acb206f1821a783ddcb71bc8971>`(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool,
+		:ref:`apr_hashfunc_t<doxid-group__apr__hash_1ga0bf5622266af13a2489c907a101cb156>` hash_func
+		);
+
+	:ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`*
+	:ref:`apr_hash_copy<doxid-group__apr__hash_1gafa0b1b9fb91b2249ee3bcb645d93e148>`(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool,
+		const :ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`* h
+		);
+
+	void
+	:ref:`apr_hash_set<doxid-group__apr__hash_1ga456beb139bc548728b49c09c2f89b93c>`(
+		:ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`* ht,
+		const void* key,
+		apr_ssize_t klen,
+		const void* val
+		);
+
+	void*
+	:ref:`apr_hash_get<doxid-group__apr__hash_1ga05e526dad8afaebe14caea90d906d6ec>`(
+		:ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`* ht,
+		const void* key,
+		apr_ssize_t klen
+		);
+
+	:ref:`apr_hash_index_t<doxid-group__apr__hash_1ga3b3d353989f6cea4535630634be147f7>`*
+	:ref:`apr_hash_first<doxid-group__apr__hash_1ga640005a4ba64a5db039b0b43a8ad4898>`(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		:ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`* ht
+		);
+
+	:ref:`apr_hash_index_t<doxid-group__apr__hash_1ga3b3d353989f6cea4535630634be147f7>`*
+	:ref:`apr_hash_next<doxid-group__apr__hash_1ga9d7b9198555659e9abac4e3028ccce00>`(:ref:`apr_hash_index_t<doxid-group__apr__hash_1ga3b3d353989f6cea4535630634be147f7>`* hi);
+
+	void
+	:ref:`apr_hash_this<doxid-group__apr__hash_1gad90e5b895397c2c535e32b3e44a75b3f>`(
+		:ref:`apr_hash_index_t<doxid-group__apr__hash_1ga3b3d353989f6cea4535630634be147f7>`* hi,
+		const void** key,
+		apr_ssize_t* klen,
+		void** val
+		);
+
+	const void*
+	:ref:`apr_hash_this_key<doxid-group__apr__hash_1ga835bd602131de7d40cbf8abd4e0f9f6c>`(:ref:`apr_hash_index_t<doxid-group__apr__hash_1ga3b3d353989f6cea4535630634be147f7>`* hi);
+
+	apr_ssize_t
+	:ref:`apr_hash_this_key_len<doxid-group__apr__hash_1gae49a862095e9a3ca96603faa69493736>`(:ref:`apr_hash_index_t<doxid-group__apr__hash_1ga3b3d353989f6cea4535630634be147f7>`* hi);
+
+	void*
+	:ref:`apr_hash_this_val<doxid-group__apr__hash_1gaebf56aa7585e6fa18b6ff9563c71914b>`(:ref:`apr_hash_index_t<doxid-group__apr__hash_1ga3b3d353989f6cea4535630634be147f7>`* hi);
+
+	unsigned int
+	:ref:`apr_hash_count<doxid-group__apr__hash_1ga4e44efa9ef043c1bb8a4abc5edcfda2c>`(:ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`* ht);
+
+	void
+	:ref:`apr_hash_clear<doxid-group__apr__hash_1ga06fb1b9ecff1a15ee41ff02db74264e4>`(:ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`* ht);
+
+	:ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`*
+	:ref:`apr_hash_overlay<doxid-group__apr__hash_1ga2f68646a64bad44efcbf3457af581fdb>`(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		const :ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`* overlay,
+		const :ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`* base
+		);
+
+	:ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`*
+	:ref:`apr_hash_merge<doxid-group__apr__hash_1gaa954266cd16a55f7f384ab0a9c4ff9f1>`(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		const :ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`* h1,
+		const :ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`* h2,
+		void*(*)(:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`*p, const void*key, apr_ssize_t klen, const void*h1_val, const void*h2_val, const void*data) merger,
+		const void* data
+		);
+
+	int
+	:ref:`apr_hash_do<doxid-group__apr__hash_1ga3f3bac64e281d9e7eb9fed6101031394>`(
+		:ref:`apr_hash_do_callback_fn_t<doxid-group__apr__hash_1gafaf9b4435ab207b7708533cb8544face>`* comp,
+		void* rec,
+		const :ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`* ht
+		);
+
+	:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`*
+	:ref:`apr_hash_pool_get<doxid-group__apr__hash_1ga6c170fee4d679928d381cd61c559c105>`(const :ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`* thehash);
+
+	// macros
+
+	#define :ref:`APR_HASH_KEY_STRING<doxid-group__apr__hash_1ga3ba32541f2717b394000f87f38c7e12d>`
+
+.. _details-group__apr__hash:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+Typedefs
+--------
+
+.. index:: pair: typedef; apr_hash_t
+.. _doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>` apr_hash_t
+
+Abstract type for hash tables.
+
+.. index:: pair: typedef; apr_hash_index_t
+.. _doxid-group__apr__hash_1ga3b3d353989f6cea4535630634be147f7:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_hash_index_t<doxid-group__apr__hash_1ga3b3d353989f6cea4535630634be147f7>` apr_hash_index_t
+
+Abstract type for scanning hash tables.
+
+.. index:: pair: typedef; apr_hashfunc_t
+.. _doxid-group__apr__hash_1ga0bf5622266af13a2489c907a101cb156:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef unsigned int (*apr_hashfunc_t)(
+		const char *key,
+		apr_ssize_t *klen
+		)
+
+Callback functions for calculating hash values.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- key
+
+		- The key.
+
+	*
+		- klen
+
+		- The length of the key, or APR_HASH_KEY_STRING to use the string length. If APR_HASH_KEY_STRING then returns the actual key length.
+
+.. index:: pair: typedef; apr_hash_do_callback_fn_t
+.. _doxid-group__apr__hash_1gafaf9b4435ab207b7708533cb8544face:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef int() apr_hash_do_callback_fn_t(
+		void *rec,
+		const void *key,
+		apr_ssize_t klen,
+		const void *value
+		)
+
+Declaration prototype for the iterator callback function of :ref:`apr_hash_do() <doxid-group__apr__hash_1ga3f3bac64e281d9e7eb9fed6101031394>`.
+
+Iteration continues while this callback function returns non-zero. To export the callback function for :ref:`apr_hash_do() <doxid-group__apr__hash_1ga3f3bac64e281d9e7eb9fed6101031394>` it must be declared in the _NONSTD convention.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rec
+
+		- The data passed as the first argument to apr_hash\_[v]do()
+
+	*
+		- key
+
+		- The key from this iteration of the hash table
+
+	*
+		- klen
+
+		- The key length from this iteration of the hash table
+
+	*
+		- value
+
+		- The value from this iteration of the hash table
+
+Global Functions
+----------------
+
+.. index:: pair: function; apr_hashfunc_default
+.. _doxid-group__apr__hash_1ga8baa6e9d9d6c2c496d2a0ff1a5c53abe:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	unsigned int
+	apr_hashfunc_default(
+		const char* key,
+		apr_ssize_t* klen
+		)
+
+The default hash function.
+
+.. index:: pair: function; apr_hash_make
+.. _doxid-group__apr__hash_1ga5f4b424d6761de4d32aa16ff6803bac9:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`*
+	apr_hash_make(:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool)
+
+Create a hash table.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pool
+
+		- The pool to allocate the hash table out of
+
+
+
+.. rubric:: Returns:
+
+The hash table just created
+
+.. index:: pair: function; apr_hash_make_custom
+.. _doxid-group__apr__hash_1ga27f40acb206f1821a783ddcb71bc8971:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`*
+	apr_hash_make_custom(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool,
+		:ref:`apr_hashfunc_t<doxid-group__apr__hash_1ga0bf5622266af13a2489c907a101cb156>` hash_func
+		)
+
+Create a hash table with a custom hash function
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pool
+
+		- The pool to allocate the hash table out of
+
+	*
+		- hash_func
+
+		- A custom hash function.
+
+
+
+.. rubric:: Returns:
+
+The hash table just created
+
+.. index:: pair: function; apr_hash_copy
+.. _doxid-group__apr__hash_1gafa0b1b9fb91b2249ee3bcb645d93e148:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`*
+	apr_hash_copy(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool,
+		const :ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`* h
+		)
+
+Make a copy of a hash table Makes a shallow copy
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pool
+
+		- The pool from which to allocate the new hash table
+
+	*
+		- h
+
+		- The hash table to clone
+
+
+
+.. rubric:: Returns:
+
+The hash table just created
+
+.. index:: pair: function; apr_hash_set
+.. _doxid-group__apr__hash_1ga456beb139bc548728b49c09c2f89b93c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_hash_set(
+		:ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`* ht,
+		const void* key,
+		apr_ssize_t klen,
+		const void* val
+		)
+
+Associate a value with a key in a hash table. If the value is NULL the hash entry is deleted.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ht
+
+		- The hash table
+
+	*
+		- key
+
+		- Pointer to the key
+
+	*
+		- klen
+
+		- Length of the key. Can be APR_HASH_KEY_STRING to use the string length.
+
+	*
+		- val
+
+		- Value to associate with the key
+
+.. index:: pair: function; apr_hash_get
+.. _doxid-group__apr__hash_1ga05e526dad8afaebe14caea90d906d6ec:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void*
+	apr_hash_get(
+		:ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`* ht,
+		const void* key,
+		apr_ssize_t klen
+		)
+
+Look up the value associated with a key in a hash table.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ht
+
+		- The hash table
+
+	*
+		- key
+
+		- Pointer to the key
+
+	*
+		- klen
+
+		- Length of the key. Can be APR_HASH_KEY_STRING to use the string length.
+
+
+
+.. rubric:: Returns:
+
+Returns NULL if the key is not present.
+
+.. index:: pair: function; apr_hash_first
+.. _doxid-group__apr__hash_1ga640005a4ba64a5db039b0b43a8ad4898:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_hash_index_t<doxid-group__apr__hash_1ga3b3d353989f6cea4535630634be147f7>`*
+	apr_hash_first(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		:ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`* ht
+		)
+
+Start iterating over the entries in a hash table. There is no restriction on adding or deleting hash entries during an iteration (although the results may be unpredictable unless all you do is delete the current entry) and multiple iterations can be in progress at the same time.
+
+
+
+.. ref-code-block:: cpp
+
+	int sum_values(apr_pool_t *p, apr_hash_t *ht)
+	{
+	    apr_hash_index_t *hi;
+	    void *val;
+	    int sum = 0;
+	    for (hi = apr_hash_first(p, ht); hi; hi = apr_hash_next(hi)) {
+	        apr_hash_this(hi, NULL, NULL, &val);
+	        sum += *(int *)val;
+	    }
+	    return sum;
+	}
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- The pool to allocate the apr_hash_index_t iterator. If this pool is NULL, then an internal, non-thread-safe iterator is used.
+
+	*
+		- ht
+
+		- The hash table
+
+
+
+.. rubric:: Returns:
+
+The iteration state
+
+.. index:: pair: function; apr_hash_next
+.. _doxid-group__apr__hash_1ga9d7b9198555659e9abac4e3028ccce00:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_hash_index_t<doxid-group__apr__hash_1ga3b3d353989f6cea4535630634be147f7>`*
+	apr_hash_next(:ref:`apr_hash_index_t<doxid-group__apr__hash_1ga3b3d353989f6cea4535630634be147f7>`* hi)
+
+Continue iterating over the entries in a hash table.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hi
+
+		- The iteration state
+
+
+
+.. rubric:: Returns:
+
+a pointer to the updated iteration state. NULL if there are no more entries.
+
+.. index:: pair: function; apr_hash_this
+.. _doxid-group__apr__hash_1gad90e5b895397c2c535e32b3e44a75b3f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_hash_this(
+		:ref:`apr_hash_index_t<doxid-group__apr__hash_1ga3b3d353989f6cea4535630634be147f7>`* hi,
+		const void** key,
+		apr_ssize_t* klen,
+		void** val
+		)
+
+Get the current entry's details from the iteration state. The return pointers should point to a variable that will be set to the corresponding data, or they may be NULL if the data isn't interesting.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hi
+
+		- The iteration state
+
+	*
+		- key
+
+		- Return pointer for the pointer to the key.
+
+	*
+		- klen
+
+		- Return pointer for the key length.
+
+	*
+		- val
+
+		- Return pointer for the associated value.
+
+.. index:: pair: function; apr_hash_this_key
+.. _doxid-group__apr__hash_1ga835bd602131de7d40cbf8abd4e0f9f6c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const void*
+	apr_hash_this_key(:ref:`apr_hash_index_t<doxid-group__apr__hash_1ga3b3d353989f6cea4535630634be147f7>`* hi)
+
+Get the current entry's key from the iteration state.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hi
+
+		- The iteration state
+
+
+
+.. rubric:: Returns:
+
+The pointer to the key
+
+.. index:: pair: function; apr_hash_this_key_len
+.. _doxid-group__apr__hash_1gae49a862095e9a3ca96603faa69493736:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	apr_ssize_t
+	apr_hash_this_key_len(:ref:`apr_hash_index_t<doxid-group__apr__hash_1ga3b3d353989f6cea4535630634be147f7>`* hi)
+
+Get the current entry's key length from the iteration state.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hi
+
+		- The iteration state
+
+
+
+.. rubric:: Returns:
+
+The key length
+
+.. index:: pair: function; apr_hash_this_val
+.. _doxid-group__apr__hash_1gaebf56aa7585e6fa18b6ff9563c71914b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void*
+	apr_hash_this_val(:ref:`apr_hash_index_t<doxid-group__apr__hash_1ga3b3d353989f6cea4535630634be147f7>`* hi)
+
+Get the current entry's value from the iteration state.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hi
+
+		- The iteration state
+
+
+
+.. rubric:: Returns:
+
+The pointer to the value
+
+.. index:: pair: function; apr_hash_count
+.. _doxid-group__apr__hash_1ga4e44efa9ef043c1bb8a4abc5edcfda2c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	unsigned int
+	apr_hash_count(:ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`* ht)
+
+Get the number of key/value pairs in the hash table.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ht
+
+		- The hash table
+
+
+
+.. rubric:: Returns:
+
+The number of key/value pairs in the hash table.
+
+.. index:: pair: function; apr_hash_clear
+.. _doxid-group__apr__hash_1ga06fb1b9ecff1a15ee41ff02db74264e4:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_hash_clear(:ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`* ht)
+
+Clear any key/value pairs in the hash table.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ht
+
+		- The hash table
+
+.. index:: pair: function; apr_hash_overlay
+.. _doxid-group__apr__hash_1ga2f68646a64bad44efcbf3457af581fdb:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`*
+	apr_hash_overlay(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		const :ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`* overlay,
+		const :ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`* base
+		)
+
+Merge two hash tables into one new hash table. The values of the overlay hash override the values of the base if both have the same key. Both hash tables must use the same hash function.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- The pool to use for the new hash table
+
+	*
+		- overlay
+
+		- The table to add to the initial table
+
+	*
+		- base
+
+		- The table that represents the initial values of the new table
+
+
+
+.. rubric:: Returns:
+
+A new hash table containing all of the data from the two passed in
+
+.. index:: pair: function; apr_hash_merge
+.. _doxid-group__apr__hash_1gaa954266cd16a55f7f384ab0a9c4ff9f1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`*
+	apr_hash_merge(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		const :ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`* h1,
+		const :ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`* h2,
+		void*(*)(:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`*p, const void*key, apr_ssize_t klen, const void*h1_val, const void*h2_val, const void*data) merger,
+		const void* data
+		)
+
+Merge two hash tables into one new hash table. If the same key is present in both tables, call the supplied merge function to produce a merged value for the key in the new table. Both hash tables must use the same hash function.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- The pool to use for the new hash table
+
+	*
+		- h1
+
+		- The first of the tables to merge
+
+	*
+		- h2
+
+		- The second of the tables to merge
+
+	*
+		- merger
+
+		- A callback function to merge values, or NULL to make values from h1 override values from h2 (same semantics as :ref:`apr_hash_overlay() <doxid-group__apr__hash_1ga2f68646a64bad44efcbf3457af581fdb>`)
+
+	*
+		- data
+
+		- Client data to pass to the merger function
+
+
+
+.. rubric:: Returns:
+
+A new hash table containing all of the data from the two passed in
+
+.. index:: pair: function; apr_hash_do
+.. _doxid-group__apr__hash_1ga3f3bac64e281d9e7eb9fed6101031394:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	apr_hash_do(
+		:ref:`apr_hash_do_callback_fn_t<doxid-group__apr__hash_1gafaf9b4435ab207b7708533cb8544face>`* comp,
+		void* rec,
+		const :ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`* ht
+		)
+
+Iterate over a hash table running the provided function once for every element in the hash table. The
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- comp
+
+		- function will be invoked for every element in the hash table.
+
+	*
+		- comp
+
+		- The function to run
+
+	*
+		- rec
+
+		- The data to pass as the first argument to the function
+
+	*
+		- ht
+
+		- The hash table to iterate over
+
+
+
+.. rubric:: Returns:
+
+FALSE if one of the comp() iterations returned zero; TRUE if all iterations returned non-zero
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_hash_do_callback_fn_t <doxid-group__apr__hash_1gafaf9b4435ab207b7708533cb8544face>`
+
+.. index:: pair: function; apr_hash_pool_get
+.. _doxid-group__apr__hash_1ga6c170fee4d679928d381cd61c559c105:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`*
+	apr_hash_pool_get(const :ref:`apr_hash_t<doxid-group__apr__hash_1ga72ec09b8bde6d874c36bd49df915fff6>`* thehash)
+
+Get a pointer to the pool which the hash table was created in
+
+Macros
+------
+
+.. index:: pair: define; APR_HASH_KEY_STRING
+.. _doxid-group__apr__hash_1ga3ba32541f2717b394000f87f38c7e12d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_HASH_KEY_STRING
+
+When passing a key to apr_hash_set or apr_hash_get, this value can be passed to indicate a string-valued key, and have apr_hash compute the length automatically.
+
+apr_hash will use strlen(key) for the length. The NUL terminator is not included in the hash value (why throw a constant in?). Since the hash table merely references the provided key (rather than copying it), :ref:`apr_hash_this() <doxid-group__apr__hash_1gad90e5b895397c2c535e32b3e44a75b3f>` will return the NUL-term'd key.
+

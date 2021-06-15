@@ -1,0 +1,3088 @@
+.. index:: pair: group; PCM Interface
+.. _doxid-group___p_c_m:
+
+PCM Interface
+=============
+
+.. toctree::
+	:hidden:
+
+	group_PCM_Access.rst
+	group_PCM_Dump.rst
+	group_PCM_Deprecated.rst
+	group_PCM_Description.rst
+	group_PCM_Direct.rst
+	group_PCM_Format.rst
+	group_PCM_HW_Params.rst
+	group_PCM_Helpers.rst
+	group_PCM_Hook.rst
+	group_PCM_Scope.rst
+	group_PCM_Simple.rst
+	group_PCM_SW_Params.rst
+	group_PCM_Status.rst
+	group_PCM_Info.rst
+	group_PCM_SubFormat.rst
+	enum__snd_pcm_type.rst
+	enum_snd_pcm_access_t.rst
+	enum_snd_pcm_chmap_position.rst
+	enum_snd_pcm_chmap_type.rst
+	enum_snd_pcm_class_t.rst
+	enum_snd_pcm_format_t.rst
+	enum_snd_pcm_start_t.rst
+	enum_snd_pcm_state_t.rst
+	enum_snd_pcm_stream_t.rst
+	enum_snd_pcm_subclass_t.rst
+	enum_snd_pcm_subformat_t.rst
+	enum_snd_pcm_tstamp_t.rst
+	enum_snd_pcm_tstamp_type_t.rst
+	enum_snd_pcm_xrun_t.rst
+	struct_snd_pcm_audio_tstamp_config_t.rst
+	struct_snd_pcm_audio_tstamp_report_t.rst
+	struct_snd_pcm_channel_area_t.rst
+	struct_snd_pcm_chmap_query_t.rst
+	struct_snd_pcm_chmap_t.rst
+	union_snd_pcm_sync_id_t.rst
+
+Overview
+~~~~~~~~
+
+See the :ref:`PCM (digital audio) interface <doxid-pcm>` page for more details. :ref:`More...<details-group___p_c_m>`
+
+|	:ref:`Access Mask Functions<doxid-group___p_c_m___access>`
+|	:ref:`Debug Functions<doxid-group___p_c_m___dump>`
+|	:ref:`Deprecated Functions<doxid-group___p_c_m___deprecated>`
+|	:ref:`Description Functions<doxid-group___p_c_m___description>`
+|	:ref:`Direct Access (MMAP) Functions<doxid-group___p_c_m___direct>`
+|	:ref:`Format Mask Functions<doxid-group___p_c_m___format>`
+|	:ref:`Hardware Parameters<doxid-group___p_c_m___h_w___params>`
+|	:ref:`Helper Functions<doxid-group___p_c_m___helpers>`
+|	:ref:`Hook Extension<doxid-group___p_c_m___hook>`
+|	:ref:`Scope Plugin Extension<doxid-group___p_c_m___scope>`
+|	:ref:`Simple setup functions<doxid-group___p_c_m___simple>`
+|	:ref:`Software Parameters<doxid-group___p_c_m___s_w___params>`
+|	:ref:`Status Functions<doxid-group___p_c_m___status>`
+|	:ref:`Stream Information<doxid-group___p_c_m___info>`
+|	:ref:`Subformat Mask Functions<doxid-group___p_c_m___sub_format>`
+
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef struct _snd_pcm_info :ref:`snd_pcm_info_t<doxid-group___p_c_m_1ga7dae86a468480ce8eb1c485446c51664>`;
+	typedef struct _snd_pcm_hw_params :ref:`snd_pcm_hw_params_t<doxid-group___p_c_m_1ga65c737127994f0a980edad744e36dc40>`;
+	typedef struct _snd_pcm_sw_params :ref:`snd_pcm_sw_params_t<doxid-group___p_c_m_1ga7e082d9ea701709270b0674a0be23b09>`;
+	typedef struct _snd_pcm_status :ref:`snd_pcm_status_t<doxid-group___p_c_m_1ga902b87281c46910b469d5f7aaafc1890>`;
+	typedef struct _snd_pcm_access_mask :ref:`snd_pcm_access_mask_t<doxid-group___p_c_m_1ga7f9575bcc94c7c2cf5d688a45c16ffba>`;
+	typedef struct _snd_pcm_format_mask :ref:`snd_pcm_format_mask_t<doxid-group___p_c_m_1ga0936aa9ac0051a3611583a2740915545>`;
+	typedef struct _snd_pcm_subformat_mask :ref:`snd_pcm_subformat_mask_t<doxid-group___p_c_m_1ga891b054202089747199bc3348b9d9630>`;
+	typedef unsigned long :ref:`snd_pcm_uframes_t<doxid-group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a>`;
+	typedef long :ref:`snd_pcm_sframes_t<doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c>`;
+	typedef struct _snd_pcm :ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`;
+	typedef enum :ref:`_snd_pcm_type<doxid-group___p_c_m_1ga060d5b81f2fc8efcc35ff3e1de6e9fa4>` :ref:`snd_pcm_type_t<doxid-group___p_c_m_1gaca6314f46f54a0b62536c403bbb62601>`;
+	typedef struct _snd_pcm_scope :ref:`snd_pcm_scope_t<doxid-group___p_c_m_1ga3cd150b8aa57e634e1e1dd914940c765>`;
+
+	// enums
+
+	enum :ref:`_snd_pcm_type<doxid-group___p_c_m_1ga060d5b81f2fc8efcc35ff3e1de6e9fa4>`;
+	enum :ref:`snd_pcm_access_t<doxid-group___p_c_m_1ga661221ba5e8f1d6eaf4ab8e2da57cc1a>`;
+	enum :ref:`snd_pcm_chmap_position<doxid-group___p_c_m_1ga07f09c302588b9758946fedf97772975>`;
+	enum :ref:`snd_pcm_chmap_type<doxid-group___p_c_m_1gad77f16d07431203bacc8694d28814506>`;
+	enum :ref:`snd_pcm_class_t<doxid-group___p_c_m_1gad0e95dc8a590d8f9915fec237d7a28a5>`;
+	enum :ref:`snd_pcm_format_t<doxid-group___p_c_m_1gaa14b7f26877a812acbb39811364177f8>`;
+	enum :ref:`snd_pcm_start_t<doxid-group___p_c_m_1ga0eae9150f4f207ed05cb629cc3a3673f>`;
+	enum :ref:`snd_pcm_state_t<doxid-group___p_c_m_1ga61ac499cb3701ce536d4d83725908860>`;
+	enum :ref:`snd_pcm_stream_t<doxid-group___p_c_m_1gac23b43ff55add78638e503b9cc892c24>`;
+	enum :ref:`snd_pcm_subclass_t<doxid-group___p_c_m_1ga6a164917c35e2216f6e76beff4e4d0cb>`;
+	enum :ref:`snd_pcm_subformat_t<doxid-group___p_c_m_1ga1e5fe73a6bdf881e2f91921d5e5327c7>`;
+	enum :ref:`snd_pcm_tstamp_t<doxid-group___p_c_m_1ga695a9755880cf886c13d07938f92ea77>`;
+	enum :ref:`snd_pcm_tstamp_type_t<doxid-group___p_c_m_1ga6e7869809e23ed1a3595e94fbd9a275c>`;
+	enum :ref:`snd_pcm_xrun_t<doxid-group___p_c_m_1ga67c10983b5cadd8b3eb3163489655784>`;
+
+	// structs
+
+	struct :ref:`snd_pcm_audio_tstamp_config_t<doxid-structsnd__pcm__audio__tstamp__config__t>`;
+	struct :ref:`snd_pcm_audio_tstamp_report_t<doxid-structsnd__pcm__audio__tstamp__report__t>`;
+	struct :ref:`snd_pcm_channel_area_t<doxid-structsnd__pcm__channel__area__t>`;
+	struct :ref:`snd_pcm_chmap_query_t<doxid-structsnd__pcm__chmap__query__t>`;
+	struct :ref:`snd_pcm_chmap_t<doxid-structsnd__pcm__chmap__t>`;
+
+	// unions
+
+	union :ref:`snd_pcm_sync_id_t<doxid-unionsnd__pcm__sync__id__t>`;
+
+	// global functions
+
+	int
+	:ref:`snd_pcm_open<doxid-group___p_c_m_1ga8340c7dc0ac37f37afe5e7c21d6c528b>`(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`** pcm,
+		const char* name,
+		:ref:`snd_pcm_stream_t<doxid-group___p_c_m_1gac23b43ff55add78638e503b9cc892c24>` stream,
+		int mode
+		);
+
+	int
+	:ref:`snd_pcm_open_lconf<doxid-group___p_c_m_1ga88164d313d8ff9dc33c94815869cb677>`(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`** pcm,
+		const char* name,
+		:ref:`snd_pcm_stream_t<doxid-group___p_c_m_1gac23b43ff55add78638e503b9cc892c24>` stream,
+		int mode,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* lconf
+		);
+
+	int
+	:ref:`snd_pcm_open_fallback<doxid-group___p_c_m_1ga189a69e31cec0aefa8c124764e99e0bf>`(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`** pcm,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* root,
+		const char* name,
+		const char* orig_name,
+		:ref:`snd_pcm_stream_t<doxid-group___p_c_m_1gac23b43ff55add78638e503b9cc892c24>` stream,
+		int mode
+		);
+
+	int
+	:ref:`snd_pcm_close<doxid-group___p_c_m_1ga042aba7262a4cbb4d444b6fc08cb7124>`(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm);
+
+	const char*
+	:ref:`snd_pcm_name<doxid-group___p_c_m_1ga5031edc0422df8db1f70af056a12dd77>`(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm);
+
+	:ref:`snd_pcm_type_t<doxid-group___p_c_m_1gaca6314f46f54a0b62536c403bbb62601>`
+	:ref:`snd_pcm_type<doxid-group___p_c_m_1gaa7cf89c3f83d83aaa0248055a783b632>`(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm);
+
+	:ref:`snd_pcm_stream_t<doxid-group___p_c_m_1gac23b43ff55add78638e503b9cc892c24>`
+	:ref:`snd_pcm_stream<doxid-group___p_c_m_1ga8eea4a021a114ecc3e8f6d80901faf46>`(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm);
+
+	int
+	:ref:`snd_pcm_poll_descriptors_count<doxid-group___p_c_m_1gac7f4cdb1c930b8d343714f60afa02fc4>`(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm);
+
+	int
+	:ref:`snd_pcm_poll_descriptors<doxid-group___p_c_m_1ga742e8705f6992fd0e36efc868e574f01>`(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		struct pollfd* pfds,
+		unsigned int space
+		);
+
+	int
+	:ref:`snd_pcm_poll_descriptors_revents<doxid-group___p_c_m_1ga7e561f305702c6f52dab49b6c84f7df7>`(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		struct pollfd* pfds,
+		unsigned int nfds,
+		unsigned short* revents
+		);
+
+	int
+	:ref:`snd_pcm_nonblock<doxid-group___p_c_m_1ga8d9ed4a62c17402de0389fd31fc7dc1f>`(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		int nonblock
+		);
+
+	static
+	__inline__ int
+	:target:`snd_pcm_abort<doxid-group___p_c_m_1gacbee826525609f07c5245b1d7d9db9ac>`(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm);
+
+	int
+	:ref:`snd_async_add_pcm_handler<doxid-group___p_c_m_1ga5a0c0da6d0d35a3ac9f6a97567ac3b63>`(
+		:ref:`snd_async_handler_t<doxid-group___global_1ga8cd9a1d441e9219ca5f2ff04094c7c6d>`** handler,
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		:ref:`snd_async_callback_t<doxid-group___global_1gaf8937eadd968df14b64e54f49c29821c>` callback,
+		void* private_data
+		);
+
+	:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`*
+	:ref:`snd_async_handler_get_pcm<doxid-group___p_c_m_1gace4920d5943820c395dab8d9cd4fed0a>`(:ref:`snd_async_handler_t<doxid-group___global_1ga8cd9a1d441e9219ca5f2ff04094c7c6d>`* handler);
+
+	int
+	:ref:`snd_pcm_info<doxid-group___p_c_m_1gadd9467ca75884292234e4986b329a17f>`(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		:ref:`snd_pcm_info_t<doxid-group___p_c_m_1ga7dae86a468480ce8eb1c485446c51664>`* info
+		);
+
+	int
+	:ref:`snd_pcm_hw_params_current<doxid-group___p_c_m_1gaf8cd01c4c6b79c4a45a2c816fb8fbc5f>`(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		:ref:`snd_pcm_hw_params_t<doxid-group___p_c_m_1ga65c737127994f0a980edad744e36dc40>`* params
+		);
+
+	int
+	:ref:`snd_pcm_hw_params<doxid-group___p_c_m_1ga1ca0dc120a484965e26cabf966502330>`(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		:ref:`snd_pcm_hw_params_t<doxid-group___p_c_m_1ga65c737127994f0a980edad744e36dc40>`* params
+		);
+
+	int
+	:ref:`snd_pcm_hw_free<doxid-group___p_c_m_1ga242ad0a269c272830d30666220edbc2a>`(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm);
+
+	int
+	:ref:`snd_pcm_sw_params_current<doxid-group___p_c_m_1ga61c5495ffb44c75aaa595e85512d28de>`(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		:ref:`snd_pcm_sw_params_t<doxid-group___p_c_m_1ga7e082d9ea701709270b0674a0be23b09>`* params
+		);
+
+	int
+	:ref:`snd_pcm_sw_params<doxid-group___p_c_m_1ga891ccaeea2c685a533b61b5fa0493974>`(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		:ref:`snd_pcm_sw_params_t<doxid-group___p_c_m_1ga7e082d9ea701709270b0674a0be23b09>`* params
+		);
+
+	int
+	:ref:`snd_pcm_prepare<doxid-group___p_c_m_1ga788d05de75f2d536f8443cb0306754d0>`(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm);
+
+	int
+	:ref:`snd_pcm_reset<doxid-group___p_c_m_1ga390e084f13d24244196aca64262ce3fc>`(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm);
+
+	int
+	:ref:`snd_pcm_status<doxid-group___p_c_m_1ga32891eaac37741728a9b23027012c892>`(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		:ref:`snd_pcm_status_t<doxid-group___p_c_m_1ga902b87281c46910b469d5f7aaafc1890>`* status
+		);
+
+	int
+	:ref:`snd_pcm_start<doxid-group___p_c_m_1ga6bdb88b68a9d9e66015d770f600c6aea>`(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm);
+
+	int
+	:ref:`snd_pcm_drop<doxid-group___p_c_m_1ga7000ca6010a1a2739daddff8e2fbb440>`(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm);
+
+	int
+	:ref:`snd_pcm_drain<doxid-group___p_c_m_1ga49afc5b8527f30c33fafa476533c9f86>`(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm);
+
+	int
+	:ref:`snd_pcm_pause<doxid-group___p_c_m_1gad711b582c7066bd4fffa1d08a04316b5>`(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		int enable
+		);
+
+	:ref:`snd_pcm_state_t<doxid-group___p_c_m_1ga61ac499cb3701ce536d4d83725908860>`
+	:ref:`snd_pcm_state<doxid-group___p_c_m_1ga87896f6f17020fc19835790369e7ce75>`(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm);
+
+	int
+	:ref:`snd_pcm_hwsync<doxid-group___p_c_m_1ga3b71a41f6b300bf63ad374013f19d8d7>`(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm);
+
+	int
+	:ref:`snd_pcm_delay<doxid-group___p_c_m_1ga012e8b999070e72ab23514f25e7d6482>`(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		:ref:`snd_pcm_sframes_t<doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c>`* delayp
+		);
+
+	int
+	:ref:`snd_pcm_resume<doxid-group___p_c_m_1ga13083ce2209aab9ea73831610bc61ab1>`(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm);
+
+	int
+	:ref:`snd_pcm_htimestamp<doxid-group___p_c_m_1ga3946abd34178b3de60fd5329b71c189b>`(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		:ref:`snd_pcm_uframes_t<doxid-group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a>`* avail,
+		:ref:`snd_htimestamp_t<doxid-group___global_1ga3a3f5b65c40f498cdbc26944bd9855cf>`* tstamp
+		);
+
+	:ref:`snd_pcm_sframes_t<doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c>`
+	:ref:`snd_pcm_avail<doxid-group___p_c_m_1ga577b4d51e08d94930a05bbe73291ed2a>`(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm);
+
+	:ref:`snd_pcm_sframes_t<doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c>`
+	:ref:`snd_pcm_avail_update<doxid-group___p_c_m_1ga8bb836bd0c414b59789d51a5f5379c08>`(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm);
+
+	int
+	:ref:`snd_pcm_avail_delay<doxid-group___p_c_m_1ga170bc44da2607b5583cff5ab5a985d98>`(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		:ref:`snd_pcm_sframes_t<doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c>`* availp,
+		:ref:`snd_pcm_sframes_t<doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c>`* delayp
+		);
+
+	:ref:`snd_pcm_sframes_t<doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c>`
+	:ref:`snd_pcm_rewindable<doxid-group___p_c_m_1ga0ea7a8aade4e6e76f2cdfd8c85f37bd0>`(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm);
+
+	:ref:`snd_pcm_sframes_t<doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c>`
+	:ref:`snd_pcm_rewind<doxid-group___p_c_m_1ga6c66040dbe01797379436fdf36268fec>`(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		:ref:`snd_pcm_uframes_t<doxid-group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a>` frames
+		);
+
+	:ref:`snd_pcm_sframes_t<doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c>`
+	:ref:`snd_pcm_forwardable<doxid-group___p_c_m_1gaa2f506e03630a074130443d7b9c1a27e>`(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm);
+
+	:ref:`snd_pcm_sframes_t<doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c>`
+	:ref:`snd_pcm_forward<doxid-group___p_c_m_1gad0774fa8991248c6f1c264aaeb0b4207>`(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		:ref:`snd_pcm_uframes_t<doxid-group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a>` frames
+		);
+
+	:ref:`snd_pcm_sframes_t<doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c>`
+	:ref:`snd_pcm_writei<doxid-group___p_c_m_1gabc748a500743713eafa960c7d104ca6f>`(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		const void* buffer,
+		:ref:`snd_pcm_uframes_t<doxid-group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a>` size
+		);
+
+	:ref:`snd_pcm_sframes_t<doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c>`
+	:ref:`snd_pcm_readi<doxid-group___p_c_m_1ga4c2c7bd26cf221268d59dc3bbeb9c048>`(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		void* buffer,
+		:ref:`snd_pcm_uframes_t<doxid-group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a>` size
+		);
+
+	:ref:`snd_pcm_sframes_t<doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c>`
+	:ref:`snd_pcm_writen<doxid-group___p_c_m_1gae599772ce3d0aa6a70de143abcf145e7>`(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		void** bufs,
+		:ref:`snd_pcm_uframes_t<doxid-group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a>` size
+		);
+
+	:ref:`snd_pcm_sframes_t<doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c>`
+	:ref:`snd_pcm_readn<doxid-group___p_c_m_1gafea175455f1a405f633a43484ded3d8a>`(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		void** bufs,
+		:ref:`snd_pcm_uframes_t<doxid-group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a>` size
+		);
+
+	int
+	:ref:`snd_pcm_wait<doxid-group___p_c_m_1gad4d53d58b996a7cd9a5cbf1710b90375>`(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		int timeout
+		);
+
+	int
+	:ref:`snd_pcm_link<doxid-group___p_c_m_1gac6c33091b049985baa6466e8fe93917e>`(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm1,
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm2
+		);
+
+	int
+	:ref:`snd_pcm_unlink<doxid-group___p_c_m_1ga0d3af5e30593dae857b4308aab5035cd>`(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm);
+
+	:ref:`snd_pcm_chmap_query_t<doxid-structsnd__pcm__chmap__query__t>`**
+	:ref:`snd_pcm_query_chmaps<doxid-group___p_c_m_1ga675cb6a0fd5470345105574216a652c2>`(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm);
+
+	:ref:`snd_pcm_chmap_query_t<doxid-structsnd__pcm__chmap__query__t>`**
+	:ref:`snd_pcm_query_chmaps_from_hw<doxid-group___p_c_m_1gae766a086ec64ec1189a87da3e54b8441>`(
+		int card,
+		int dev,
+		int subdev,
+		:ref:`snd_pcm_stream_t<doxid-group___p_c_m_1gac23b43ff55add78638e503b9cc892c24>` stream
+		);
+
+	void
+	:ref:`snd_pcm_free_chmaps<doxid-group___p_c_m_1ga0a131c274594f6266b9a3f980e479e49>`(:ref:`snd_pcm_chmap_query_t<doxid-structsnd__pcm__chmap__query__t>`** maps);
+
+	:ref:`snd_pcm_chmap_t<doxid-structsnd__pcm__chmap__t>`*
+	:ref:`snd_pcm_get_chmap<doxid-group___p_c_m_1gac3150e89164f6cb1276abda84b399c72>`(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm);
+
+	int
+	:ref:`snd_pcm_set_chmap<doxid-group___p_c_m_1ga60ee7d2c2555e21dbc844a1b73839085>`(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		const :ref:`snd_pcm_chmap_t<doxid-structsnd__pcm__chmap__t>`* map
+		);
+
+	const char*
+	:ref:`snd_pcm_chmap_type_name<doxid-group___p_c_m_1ga2c559ecbc8f79457c1d7be5d08365739>`(enum :ref:`snd_pcm_chmap_type<doxid-group___p_c_m_1gad77f16d07431203bacc8694d28814506>` val);
+
+	const char*
+	:ref:`snd_pcm_chmap_name<doxid-group___p_c_m_1gac13f471d76d025798a25f3b422a07b91>`(enum :ref:`snd_pcm_chmap_position<doxid-group___p_c_m_1ga07f09c302588b9758946fedf97772975>` val);
+
+	const char*
+	:ref:`snd_pcm_chmap_long_name<doxid-group___p_c_m_1ga5dc94582c2356ad6f214761de888bf43>`(enum :ref:`snd_pcm_chmap_position<doxid-group___p_c_m_1ga07f09c302588b9758946fedf97772975>` val);
+
+	int
+	:ref:`snd_pcm_chmap_print<doxid-group___p_c_m_1ga1e10b4d6db07a3ef3a1105e703a38629>`(
+		const :ref:`snd_pcm_chmap_t<doxid-structsnd__pcm__chmap__t>`* map,
+		size_t maxlen,
+		char* buf
+		);
+
+	unsigned int
+	:ref:`snd_pcm_chmap_from_string<doxid-group___p_c_m_1gad3e0c4157e5f491ba448bfd4d4dc0177>`(const char* str);
+
+	:ref:`snd_pcm_chmap_t<doxid-structsnd__pcm__chmap__t>`*
+	:ref:`snd_pcm_chmap_parse_string<doxid-group___p_c_m_1ga77973afbe7ab02bfde38d574d4879355>`(const char* str);
+
+	int
+	:ref:`snd_pcm_recover<doxid-group___p_c_m_1ga2157aaeb6fc14da3f040d76591f9d3b1>`(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		int err,
+		int silent
+		);
+
+	int
+	:ref:`snd_pcm_set_params<doxid-group___p_c_m_1ga45d50841b307f2156fce1857bfac228c>`(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		:ref:`snd_pcm_format_t<doxid-group___p_c_m_1gaa14b7f26877a812acbb39811364177f8>` format,
+		:ref:`snd_pcm_access_t<doxid-group___p_c_m_1ga661221ba5e8f1d6eaf4ab8e2da57cc1a>` access,
+		unsigned int channels,
+		unsigned int rate,
+		int soft_resample,
+		unsigned int latency
+		);
+
+	int
+	:ref:`snd_pcm_get_params<doxid-group___p_c_m_1ga2827b8fa77ca05717df9b0447b99d1cd>`(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		:ref:`snd_pcm_uframes_t<doxid-group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a>`* buffer_size,
+		:ref:`snd_pcm_uframes_t<doxid-group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a>`* period_size
+		);
+
+	// macros
+
+	#define :ref:`SND_CHMAP_API_VERSION<doxid-group___p_c_m_1gaf79d447b5f5c0936cfbc769eee03078b>`
+	#define :ref:`SND_CHMAP_DRIVER_SPEC<doxid-group___p_c_m_1gaf3d1c438269afa0206fb9f2151c4fc6a>`
+	#define :ref:`SND_CHMAP_PHASE_INVERSE<doxid-group___p_c_m_1gad98b225c79dd92fc387b2e7884ef97da>`
+	#define :ref:`SND_CHMAP_POSITION_MASK<doxid-group___p_c_m_1gad6713109477a592274f92f85670fcc1a>`
+	#define :ref:`SND_PCM_ABORT<doxid-group___p_c_m_1ga06aa6da1ebeff70c83d9f6e18a91a3d7>`
+	#define :ref:`SND_PCM_ASYNC<doxid-group___p_c_m_1ga9b22351abf6c85ced128e2088f6f6a5c>`
+	#define :ref:`SND_PCM_DLSYM_VERSION<doxid-group___p_c_m_1ga32ccf47736036e86b0d787dc43e64d4a>`
+	#define :ref:`SND_PCM_NONBLOCK<doxid-group___p_c_m_1ga6bd90de1d1527b5804090dcce51079ad>`
+	#define :ref:`SND_PCM_NO_AUTO_CHANNELS<doxid-group___p_c_m_1ga64fa40b556374dabe40d4874242fee19>`
+	#define :ref:`SND_PCM_NO_AUTO_FORMAT<doxid-group___p_c_m_1gacb997a23fbba62232101f730e9ae1e96>`
+	#define :ref:`SND_PCM_NO_AUTO_RESAMPLE<doxid-group___p_c_m_1gaba352dfac44ef1681f91d476ed781005>`
+	#define :ref:`SND_PCM_NO_SOFTVOL<doxid-group___p_c_m_1ga1f67b4e05749f0d3dafe7c17e448518a>`
+
+.. _details-group___p_c_m:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+See the :ref:`PCM (digital audio) interface <doxid-pcm>` page for more details.
+
+Typedefs
+--------
+
+.. index:: pair: typedef; snd_pcm_info_t
+.. _doxid-group___p_c_m_1ga7dae86a468480ce8eb1c485446c51664:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct _snd_pcm_info snd_pcm_info_t
+
+PCM generic info container
+
+.. index:: pair: typedef; snd_pcm_hw_params_t
+.. _doxid-group___p_c_m_1ga65c737127994f0a980edad744e36dc40:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct _snd_pcm_hw_params snd_pcm_hw_params_t
+
+PCM hardware configuration space container
+
+snd_pcm_hw_params_t is an opaque structure which contains a set of possible PCM hardware configurations. For example, a given instance might include a range of buffer sizes, a range of period sizes, and a set of several sample formats. Some subset of all possible combinations these sets may be valid, but not necessarily any combination will be valid.
+
+When a parameter is set or restricted using a snd_pcm_hw_params_set\* function, all of the other ranges will be updated to exclude as many impossible configurations as possible. Attempting to set a parameter outside of its acceptable range will result in the function failing and an error code being returned.
+
+.. index:: pair: typedef; snd_pcm_sw_params_t
+.. _doxid-group___p_c_m_1ga7e082d9ea701709270b0674a0be23b09:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct _snd_pcm_sw_params snd_pcm_sw_params_t
+
+PCM software configuration container
+
+.. index:: pair: typedef; snd_pcm_status_t
+.. _doxid-group___p_c_m_1ga902b87281c46910b469d5f7aaafc1890:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct _snd_pcm_status snd_pcm_status_t
+
+PCM status container
+
+.. index:: pair: typedef; snd_pcm_access_mask_t
+.. _doxid-group___p_c_m_1ga7f9575bcc94c7c2cf5d688a45c16ffba:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct _snd_pcm_access_mask snd_pcm_access_mask_t
+
+PCM access types mask
+
+.. index:: pair: typedef; snd_pcm_format_mask_t
+.. _doxid-group___p_c_m_1ga0936aa9ac0051a3611583a2740915545:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct _snd_pcm_format_mask snd_pcm_format_mask_t
+
+PCM formats mask
+
+.. index:: pair: typedef; snd_pcm_subformat_mask_t
+.. _doxid-group___p_c_m_1ga891b054202089747199bc3348b9d9630:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct _snd_pcm_subformat_mask snd_pcm_subformat_mask_t
+
+PCM subformats mask
+
+.. index:: pair: typedef; snd_pcm_uframes_t
+.. _doxid-group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef unsigned long snd_pcm_uframes_t
+
+Unsigned frames quantity
+
+.. index:: pair: typedef; snd_pcm_sframes_t
+.. _doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef long snd_pcm_sframes_t
+
+Signed frames quantity
+
+.. index:: pair: typedef; snd_pcm_t
+.. _doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct _snd_pcm snd_pcm_t
+
+PCM handle
+
+.. index:: pair: typedef; snd_pcm_type_t
+.. _doxid-group___p_c_m_1gaca6314f46f54a0b62536c403bbb62601:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef enum :ref:`_snd_pcm_type<doxid-group___p_c_m_1ga060d5b81f2fc8efcc35ff3e1de6e9fa4>` snd_pcm_type_t
+
+PCM type
+
+.. index:: pair: typedef; snd_pcm_scope_t
+.. _doxid-group___p_c_m_1ga3cd150b8aa57e634e1e1dd914940c765:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct _snd_pcm_scope snd_pcm_scope_t
+
+:ref:`SND_PCM_TYPE_METER <doxid-group___p_c_m_1gga060d5b81f2fc8efcc35ff3e1de6e9fa4a415afb5482d35b38837035a6dd82b39d>` scope handle
+
+Global Functions
+----------------
+
+.. index:: pair: function; snd_pcm_open
+.. _doxid-group___p_c_m_1ga8340c7dc0ac37f37afe5e7c21d6c528b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_open(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`** pcm,
+		const char* name,
+		:ref:`snd_pcm_stream_t<doxid-group___p_c_m_1gac23b43ff55add78638e503b9cc892c24>` stream,
+		int mode
+		)
+
+Opens a PCM.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcmp
+
+		- Returned PCM handle
+
+	*
+		- name
+
+		- ASCII identifier of the PCM handle
+
+	*
+		- stream
+
+		- Wanted stream
+
+	*
+		- mode
+
+		- Open mode (see :ref:`SND_PCM_NONBLOCK <doxid-group___p_c_m_1ga6bd90de1d1527b5804090dcce51079ad>`, :ref:`SND_PCM_ASYNC <doxid-group___p_c_m_1ga9b22351abf6c85ced128e2088f6f6a5c>`)
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_open_lconf
+.. _doxid-group___p_c_m_1ga88164d313d8ff9dc33c94815869cb677:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_open_lconf(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`** pcm,
+		const char* name,
+		:ref:`snd_pcm_stream_t<doxid-group___p_c_m_1gac23b43ff55add78638e503b9cc892c24>` stream,
+		int mode,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* lconf
+		)
+
+Opens a PCM using local configuration.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcmp
+
+		- Returned PCM handle
+
+	*
+		- name
+
+		- ASCII identifier of the PCM handle
+
+	*
+		- stream
+
+		- Wanted stream
+
+	*
+		- mode
+
+		- Open mode (see :ref:`SND_PCM_NONBLOCK <doxid-group___p_c_m_1ga6bd90de1d1527b5804090dcce51079ad>`, :ref:`SND_PCM_ASYNC <doxid-group___p_c_m_1ga9b22351abf6c85ced128e2088f6f6a5c>`)
+
+	*
+		- lconf
+
+		- Local configuration
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_open_fallback
+.. _doxid-group___p_c_m_1ga189a69e31cec0aefa8c124764e99e0bf:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_open_fallback(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`** pcm,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* root,
+		const char* name,
+		const char* orig_name,
+		:ref:`snd_pcm_stream_t<doxid-group___p_c_m_1gac23b43ff55add78638e503b9cc892c24>` stream,
+		int mode
+		)
+
+Opens a fallback PCM.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcmp
+
+		- Returned PCM handle
+
+	*
+		- root
+
+		- Configuration root
+
+	*
+		- name
+
+		- ASCII identifier of the PCM handle
+
+	*
+		- orig_name
+
+		- The original ASCII name
+
+	*
+		- stream
+
+		- Wanted stream
+
+	*
+		- mode
+
+		- Open mode (see :ref:`SND_PCM_NONBLOCK <doxid-group___p_c_m_1ga6bd90de1d1527b5804090dcce51079ad>`, :ref:`SND_PCM_ASYNC <doxid-group___p_c_m_1ga9b22351abf6c85ced128e2088f6f6a5c>`)
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_close
+.. _doxid-group___p_c_m_1ga042aba7262a4cbb4d444b6fc08cb7124:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_close(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm)
+
+close PCM handle
+
+Closes the specified PCM handle and frees all associated resources.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_name
+.. _doxid-group___p_c_m_1ga5031edc0422df8db1f70af056a12dd77:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	snd_pcm_name(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm)
+
+get identifier of PCM handle
+
+Returns the ASCII identifier of given PCM handle. It's the same identifier specified in :ref:`snd_pcm_open() <doxid-group___p_c_m_1ga8340c7dc0ac37f37afe5e7c21d6c528b>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+
+
+.. rubric:: Returns:
+
+ascii identifier of PCM handle
+
+.. index:: pair: function; snd_pcm_type
+.. _doxid-group___p_c_m_1gaa7cf89c3f83d83aaa0248055a783b632:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_pcm_type_t<doxid-group___p_c_m_1gaca6314f46f54a0b62536c403bbb62601>`
+	snd_pcm_type(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm)
+
+get type of PCM handle
+
+Returns the type :ref:`snd_pcm_type_t <doxid-group___p_c_m_1gaca6314f46f54a0b62536c403bbb62601>` of given PCM handle.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+
+
+.. rubric:: Returns:
+
+type of PCM handle
+
+.. index:: pair: function; snd_pcm_stream
+.. _doxid-group___p_c_m_1ga8eea4a021a114ecc3e8f6d80901faf46:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_pcm_stream_t<doxid-group___p_c_m_1gac23b43ff55add78638e503b9cc892c24>`
+	snd_pcm_stream(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm)
+
+get stream for a PCM handle
+
+Returns the type :ref:`snd_pcm_stream_t <doxid-group___p_c_m_1gac23b43ff55add78638e503b9cc892c24>` of given PCM handle.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+
+
+.. rubric:: Returns:
+
+stream of PCM handle
+
+.. index:: pair: function; snd_pcm_poll_descriptors_count
+.. _doxid-group___p_c_m_1gac7f4cdb1c930b8d343714f60afa02fc4:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_poll_descriptors_count(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm)
+
+get count of poll descriptors for PCM handle
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+
+
+.. rubric:: Returns:
+
+count of poll descriptors
+
+.. index:: pair: function; snd_pcm_poll_descriptors
+.. _doxid-group___p_c_m_1ga742e8705f6992fd0e36efc868e574f01:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_poll_descriptors(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		struct pollfd* pfds,
+		unsigned int space
+		)
+
+get poll descriptors
+
+This function fills the given poll descriptor structs for the specified PCM handle. The poll desctiptor array should have the size returned by :ref:`::snd_pcm_poll_descriptors_count() <doxid-group___p_c_m_1gac7f4cdb1c930b8d343714f60afa02fc4>` function.
+
+The result is intended for direct use with the poll() syscall.
+
+For reading the returned events of poll descriptor after poll() system call, use :ref:`::snd_pcm_poll_descriptors_revents() <doxid-group___p_c_m_1ga7e561f305702c6f52dab49b6c84f7df7>` function. The field values in pollfd structs may be bogus regarding the stream direction from the application perspective (POLLIN might not imply read direction and POLLOUT might not imply write), but the :ref:`::snd_pcm_poll_descriptors_revents() <doxid-group___p_c_m_1ga7e561f305702c6f52dab49b6c84f7df7>` function does the right "demangling".
+
+You can use output from this function as arguments for the select() syscall, too. Do not forget to translate POLLIN and POLLOUT events to corresponding FD_SET arrays and demangle events using :ref:`::snd_pcm_poll_descriptors_revents() <doxid-group___p_c_m_1ga7e561f305702c6f52dab49b6c84f7df7>`.
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+	*
+		- pfds
+
+		- array of poll descriptors
+
+	*
+		- space
+
+		- space in the poll descriptor array
+
+
+
+.. rubric:: Returns:
+
+count of filled descriptors
+
+.. index:: pair: function; snd_pcm_poll_descriptors_revents
+.. _doxid-group___p_c_m_1ga7e561f305702c6f52dab49b6c84f7df7:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_poll_descriptors_revents(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		struct pollfd* pfds,
+		unsigned int nfds,
+		unsigned short* revents
+		)
+
+get returned events from poll descriptors
+
+This function does "demangling" of the revents mask returned from the poll() syscall to correct semantics (POLLIN = read, POLLOUT = write).
+
+Note: The null event also exists. Even if poll() or select() syscall returned that some events are waiting, this function might return empty set of events. In this case, application should do next event waiting using poll() or select().
+
+Note: Even if multiple poll descriptors are used (i.e. pfds > 1), this function returns only a single event.
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+	*
+		- pfds
+
+		- array of poll descriptors
+
+	*
+		- nfds
+
+		- count of poll descriptors
+
+	*
+		- revents
+
+		- pointer to the returned (single) event
+
+
+
+.. rubric:: Returns:
+
+zero if success, otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_nonblock
+.. _doxid-group___p_c_m_1ga8d9ed4a62c17402de0389fd31fc7dc1f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_nonblock(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		int nonblock
+		)
+
+set nonblock mode
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+	*
+		- nonblock
+
+		- 0 = block, 1 = nonblock mode, 2 = abort
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_async_add_pcm_handler
+.. _doxid-group___p_c_m_1ga5a0c0da6d0d35a3ac9f6a97567ac3b63:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_async_add_pcm_handler(
+		:ref:`snd_async_handler_t<doxid-group___global_1ga8cd9a1d441e9219ca5f2ff04094c7c6d>`** handler,
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		:ref:`snd_async_callback_t<doxid-group___global_1gaf8937eadd968df14b64e54f49c29821c>` callback,
+		void* private_data
+		)
+
+Add an async handler for a PCM.
+
+The asynchronous callback is called when period boundary elapses.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- handler
+
+		- Returned handler handle
+
+	*
+		- pcm
+
+		- PCM handle
+
+	*
+		- callback
+
+		- Callback function
+
+	*
+		- private_data
+
+		- Callback private data
+
+
+
+.. rubric:: Returns:
+
+0 otherwise a negative error code on failure
+
+.. index:: pair: function; snd_async_handler_get_pcm
+.. _doxid-group___p_c_m_1gace4920d5943820c395dab8d9cd4fed0a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`*
+	snd_async_handler_get_pcm(:ref:`snd_async_handler_t<doxid-group___global_1ga8cd9a1d441e9219ca5f2ff04094c7c6d>`* handler)
+
+Return PCM handle related to an async handler.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- handler
+
+		- Async handler handle
+
+
+
+.. rubric:: Returns:
+
+PCM handle
+
+.. index:: pair: function; snd_pcm_info
+.. _doxid-group___p_c_m_1gadd9467ca75884292234e4986b329a17f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_info(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		:ref:`snd_pcm_info_t<doxid-group___p_c_m_1ga7dae86a468480ce8eb1c485446c51664>`* info
+		)
+
+Obtain general (static) information for PCM handle.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+	*
+		- info
+
+		- Information container
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_hw_params_current
+.. _doxid-group___p_c_m_1gaf8cd01c4c6b79c4a45a2c816fb8fbc5f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_hw_params_current(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		:ref:`snd_pcm_hw_params_t<doxid-group___p_c_m_1ga65c737127994f0a980edad744e36dc40>`* params
+		)
+
+Retreive current PCM hardware configuration chosen with :ref:`snd_pcm_hw_params <doxid-group___p_c_m_1ga1ca0dc120a484965e26cabf966502330>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+	*
+		- params
+
+		- Configuration space definition container
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_hw_params
+.. _doxid-group___p_c_m_1ga1ca0dc120a484965e26cabf966502330:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_hw_params(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		:ref:`snd_pcm_hw_params_t<doxid-group___p_c_m_1ga65c737127994f0a980edad744e36dc40>`* params
+		)
+
+Install one PCM hardware configuration chosen from a configuration space and :ref:`snd_pcm_prepare <doxid-group___p_c_m_1ga788d05de75f2d536f8443cb0306754d0>` it.
+
+The configuration is chosen fixing single parameters in this order: first access, first format, first subformat, min channels, min rate, min period time, max buffer size, min tick time. If no mutually compatible set of parameters can be chosen, a negative error code will be returned.
+
+After this call, :ref:`snd_pcm_prepare() <doxid-group___p_c_m_1ga788d05de75f2d536f8443cb0306754d0>` is called automatically and the stream is brought to ``:ref:`SND_PCM_STATE_PREPARED <doxid-group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a3eb4a3b75c7d2adb22f1829f3f738b27>``` state.
+
+The hardware parameters cannot be changed when the stream is running (active). The software parameters can be changed at any time.
+
+The configuration space will be updated to reflect the chosen parameters.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+	*
+		- params
+
+		- Configuration space definition container
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_hw_free
+.. _doxid-group___p_c_m_1ga242ad0a269c272830d30666220edbc2a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_hw_free(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm)
+
+Remove PCM hardware configuration and free associated resources.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_sw_params_current
+.. _doxid-group___p_c_m_1ga61c5495ffb44c75aaa595e85512d28de:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_sw_params_current(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		:ref:`snd_pcm_sw_params_t<doxid-group___p_c_m_1ga7e082d9ea701709270b0674a0be23b09>`* params
+		)
+
+Return current software configuration for a PCM.
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+	*
+		- params
+
+		- Software configuration container
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_sw_params
+.. _doxid-group___p_c_m_1ga891ccaeea2c685a533b61b5fa0493974:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_sw_params(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		:ref:`snd_pcm_sw_params_t<doxid-group___p_c_m_1ga7e082d9ea701709270b0674a0be23b09>`* params
+		)
+
+Install PCM software configuration defined by params.
+
+The software parameters can be changed at any time. The hardware parameters cannot be changed when the stream is running (active).
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+	*
+		- params
+
+		- Configuration container
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_prepare
+.. _doxid-group___p_c_m_1ga788d05de75f2d536f8443cb0306754d0:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_prepare(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm)
+
+Prepare PCM for use.
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_reset
+.. _doxid-group___p_c_m_1ga390e084f13d24244196aca64262ce3fc:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_reset(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm)
+
+Reset PCM position.
+
+Reduce PCM delay to 0.
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_status
+.. _doxid-group___p_c_m_1ga32891eaac37741728a9b23027012c892:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_status(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		:ref:`snd_pcm_status_t<doxid-group___p_c_m_1ga902b87281c46910b469d5f7aaafc1890>`* status
+		)
+
+Obtain status (runtime) information for PCM handle.
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+	*
+		- status
+
+		- Status container
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_start
+.. _doxid-group___p_c_m_1ga6bdb88b68a9d9e66015d770f600c6aea:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_start(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm)
+
+Start a PCM.
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_drop
+.. _doxid-group___p_c_m_1ga7000ca6010a1a2739daddff8e2fbb440:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_drop(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm)
+
+Stop a PCM dropping pending frames.
+
+This function stops the PCM *immediately*. The pending samples on the buffer are ignored.
+
+For processing all pending samples, use :ref:`::snd_pcm_drain() <doxid-group___p_c_m_1ga49afc5b8527f30c33fafa476533c9f86>` instead.
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_drain
+.. _doxid-group___p_c_m_1ga49afc5b8527f30c33fafa476533c9f86:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_drain(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm)
+
+Stop a PCM preserving pending frames.
+
+For playback wait for all pending frames to be played and then stop the PCM. For capture stop PCM permitting to retrieve residual frames.
+
+For stopping the PCM stream immediately, use :ref:`::snd_pcm_drop() <doxid-group___p_c_m_1ga7000ca6010a1a2739daddff8e2fbb440>` instead.
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+	*
+		- -ESTRPIPE
+
+		- a suspend event occurred
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_pause
+.. _doxid-group___p_c_m_1gad711b582c7066bd4fffa1d08a04316b5:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_pause(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		int enable
+		)
+
+Pause/resume PCM.
+
+Note that this function works only on the hardware which supports pause feature. You can check it via :ref:`::snd_pcm_hw_params_can_pause() <doxid-group___p_c_m___h_w___params_1gaad4ba98b2f66baa5360b9a85f064a3e9>` function.
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+	*
+		- enable
+
+		- 0 = resume, 1 = pause
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_state
+.. _doxid-group___p_c_m_1ga87896f6f17020fc19835790369e7ce75:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_pcm_state_t<doxid-group___p_c_m_1ga61ac499cb3701ce536d4d83725908860>`
+	snd_pcm_state(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm)
+
+Return PCM state.
+
+This is a faster way to obtain only the PCM state without calling :ref:`::snd_pcm_status() <doxid-group___p_c_m_1ga32891eaac37741728a9b23027012c892>`.
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+
+
+.. rubric:: Returns:
+
+PCM state :ref:`snd_pcm_state_t <doxid-group___p_c_m_1ga61ac499cb3701ce536d4d83725908860>` of given PCM handle
+
+.. index:: pair: function; snd_pcm_hwsync
+.. _doxid-group___p_c_m_1ga3b71a41f6b300bf63ad374013f19d8d7:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_hwsync(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm)
+
+(DEPRECATED) Synchronize stream position with hardware
+
+Note this function does not update the actual r/w pointer for applications. The function :ref:`snd_pcm_avail_update() <doxid-group___p_c_m_1ga8bb836bd0c414b59789d51a5f5379c08>` have to be called before any mmap begin+commit operation.
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_delay
+.. _doxid-group___p_c_m_1ga012e8b999070e72ab23514f25e7d6482:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_delay(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		:ref:`snd_pcm_sframes_t<doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c>`* delayp
+		)
+
+Obtain delay for a running PCM handle.
+
+For playback the delay is defined as the time that a frame that is written to the PCM stream shortly after this call will take to be actually audible. It is as such the overall latency from the write call to the final DAC.
+
+For capture the delay is defined as the time that a frame that was digitized by the audio device takes until it can be read from the PCM stream shortly after this call returns. It is as such the overall latency from the initial ADC to the read call.
+
+Please note that hence in case of a playback underrun this value will not necessarily got down to 0.
+
+If the application is interested in the fill level of the playback buffer of the device, it should use :ref:`snd_pcm_avail <doxid-group___p_c_m_1ga577b4d51e08d94930a05bbe73291ed2a>` \*() functions. The value returned by that call is not directly related to the delay, since the latter might include some additional, fixed latencies the former does not.
+
+Note this function does not update the actual r/w pointer for applications. The function :ref:`snd_pcm_avail_update() <doxid-group___p_c_m_1ga8bb836bd0c414b59789d51a5f5379c08>` have to be called before any begin+commit operation.
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+	*
+		- delayp
+
+		- Returned delay in frames
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_resume
+.. _doxid-group___p_c_m_1ga13083ce2209aab9ea73831610bc61ab1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_resume(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm)
+
+Resume from suspend, no samples are lost.
+
+This function can be used when the stream is in the suspend state to do the fine resume from this state. Not all hardware supports this feature, when an -ENOSYS error is returned, use the :ref:`::snd_pcm_prepare() <doxid-group___p_c_m_1ga788d05de75f2d536f8443cb0306754d0>` function to recovery.
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+	*
+		- -EAGAIN
+
+		- resume can't be proceed immediately (audio hardware is probably still suspended)
+
+	*
+		- -ENOSYS
+
+		- hardware doesn't support this feature
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_htimestamp
+.. _doxid-group___p_c_m_1ga3946abd34178b3de60fd5329b71c189b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_htimestamp(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		:ref:`snd_pcm_uframes_t<doxid-group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a>`* avail,
+		:ref:`snd_htimestamp_t<doxid-group___global_1ga3a3f5b65c40f498cdbc26944bd9855cf>`* tstamp
+		)
+
+Obtain last position update hi-res timestamp.
+
+Note this function does not update the actual r/w pointer for applications.
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+	*
+		- avail
+
+		- Number of available frames when timestamp was grabbed
+
+	*
+		- tstamp
+
+		- Hi-res timestamp
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_avail
+.. _doxid-group___p_c_m_1ga577b4d51e08d94930a05bbe73291ed2a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_pcm_sframes_t<doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c>`
+	snd_pcm_avail(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm)
+
+Return number of frames ready to be read (capture) / written (playback)
+
+On capture does all the actions needed to transport to application level all the ready frames across underlying layers.
+
+The position is synced with hardware (driver) position in the sound ring buffer in this functions.
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+
+
+.. rubric:: Returns:
+
+a positive number of frames ready otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_avail_update
+.. _doxid-group___p_c_m_1ga8bb836bd0c414b59789d51a5f5379c08:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_pcm_sframes_t<doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c>`
+	snd_pcm_avail_update(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm)
+
+Return number of frames ready to be read (capture) / written (playback)
+
+On capture does all the actions needed to transport to application level all the ready frames across underlying layers.
+
+The position is not synced with hardware (driver) position in the sound ring buffer in this function. This function is a light version of :ref:`snd_pcm_avail() <doxid-group___p_c_m_1ga577b4d51e08d94930a05bbe73291ed2a>`.
+
+Using this function is ideal after poll() or select() when audio file descriptor made the event and when application expects just period timing.
+
+Also this function might be called after :ref:`snd_pcm_delay() <doxid-group___p_c_m_1ga012e8b999070e72ab23514f25e7d6482>` or :ref:`snd_pcm_hwsync() <doxid-group___p_c_m_1ga3b71a41f6b300bf63ad374013f19d8d7>` functions to move private ring buffer pointers in alsa-lib (the internal plugin chain).
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+
+
+.. rubric:: Returns:
+
+a positive number of frames ready otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_avail_delay
+.. _doxid-group___p_c_m_1ga170bc44da2607b5583cff5ab5a985d98:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_avail_delay(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		:ref:`snd_pcm_sframes_t<doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c>`* availp,
+		:ref:`snd_pcm_sframes_t<doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c>`* delayp
+		)
+
+Combine snd_pcm_avail and snd_pcm_delay functions.
+
+The avail and delay values retuned are in sync.
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+	*
+		- availp
+
+		- Number of available frames in the ring buffer
+
+	*
+		- delayp
+
+		- Total I/O latency in frames
+
+
+
+.. rubric:: Returns:
+
+zero on success otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_rewindable
+.. _doxid-group___p_c_m_1ga0ea7a8aade4e6e76f2cdfd8c85f37bd0:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_pcm_sframes_t<doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c>`
+	snd_pcm_rewindable(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm)
+
+Get safe count of frames which can be rewinded.
+
+Note: The :ref:`snd_pcm_rewind() <doxid-group___p_c_m_1ga6c66040dbe01797379436fdf36268fec>` can accept bigger value than returned by this function. But it is not guaranteed that output stream will be consistent with bigger value.
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+
+
+.. rubric:: Returns:
+
+a positive number of frames or negative error code
+
+.. index:: pair: function; snd_pcm_rewind
+.. _doxid-group___p_c_m_1ga6c66040dbe01797379436fdf36268fec:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_pcm_sframes_t<doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c>`
+	snd_pcm_rewind(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		:ref:`snd_pcm_uframes_t<doxid-group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a>` frames
+		)
+
+Move application frame position backward.
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+	*
+		- frames
+
+		- wanted displacement in frames
+
+
+
+.. rubric:: Returns:
+
+a positive number for actual displacement otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_forwardable
+.. _doxid-group___p_c_m_1gaa2f506e03630a074130443d7b9c1a27e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_pcm_sframes_t<doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c>`
+	snd_pcm_forwardable(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm)
+
+Get safe count of frames which can be forwarded.
+
+Note: The :ref:`snd_pcm_forward() <doxid-group___p_c_m_1gad0774fa8991248c6f1c264aaeb0b4207>` can accept bigger value than returned by this function. But it is not guaranteed that output stream will be consistent with bigger value.
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+
+
+.. rubric:: Returns:
+
+a positive number of frames or negative error code
+
+.. index:: pair: function; snd_pcm_forward
+.. _doxid-group___p_c_m_1gad0774fa8991248c6f1c264aaeb0b4207:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_pcm_sframes_t<doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c>`
+	snd_pcm_forward(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		:ref:`snd_pcm_uframes_t<doxid-group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a>` frames
+		)
+
+Move application frame position forward.
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+	*
+		- frames
+
+		- wanted skip in frames
+
+	*
+		- 0
+
+		- means no action
+
+
+
+.. rubric:: Returns:
+
+a positive number for actual skip otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_writei
+.. _doxid-group___p_c_m_1gabc748a500743713eafa960c7d104ca6f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_pcm_sframes_t<doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c>`
+	snd_pcm_writei(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		const void* buffer,
+		:ref:`snd_pcm_uframes_t<doxid-group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a>` size
+		)
+
+Write interleaved frames to a PCM.
+
+If the blocking behaviour is selected and it is running, then routine waits until all requested frames are played or put to the playback ring buffer. The returned number of frames can be less only if a signal or underrun occurred.
+
+If the non-blocking behaviour is selected, then routine doesn't wait at all.
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+	*
+		- buffer
+
+		- frames containing buffer
+
+	*
+		- size
+
+		- frames to be written
+
+	*
+		- -EBADFD
+
+		- PCM is not in the right state (:ref:`SND_PCM_STATE_PREPARED <doxid-group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a3eb4a3b75c7d2adb22f1829f3f738b27>` or :ref:`SND_PCM_STATE_RUNNING <doxid-group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a86f6fbc796881f19fde0e1957f878147>`)
+
+	*
+		- -EPIPE
+
+		- an underrun occurred
+
+	*
+		- -ESTRPIPE
+
+		- a suspend event occurred (stream is suspended and waiting for an application recovery)
+
+
+
+.. rubric:: Returns:
+
+a positive number of frames actually written otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_readi
+.. _doxid-group___p_c_m_1ga4c2c7bd26cf221268d59dc3bbeb9c048:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_pcm_sframes_t<doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c>`
+	snd_pcm_readi(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		void* buffer,
+		:ref:`snd_pcm_uframes_t<doxid-group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a>` size
+		)
+
+Read interleaved frames from a PCM.
+
+If the blocking behaviour was selected and it is running, then routine waits until all requested frames are filled. The returned number of frames can be less only if a signal or underrun occurred.
+
+If the non-blocking behaviour is selected, then routine doesn't wait at all.
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+	*
+		- buffer
+
+		- frames containing buffer
+
+	*
+		- size
+
+		- frames to be read
+
+	*
+		- -EBADFD
+
+		- PCM is not in the right state (:ref:`SND_PCM_STATE_PREPARED <doxid-group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a3eb4a3b75c7d2adb22f1829f3f738b27>` or :ref:`SND_PCM_STATE_RUNNING <doxid-group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a86f6fbc796881f19fde0e1957f878147>`)
+
+	*
+		- -EPIPE
+
+		- an overrun occurred
+
+	*
+		- -ESTRPIPE
+
+		- a suspend event occurred (stream is suspended and waiting for an application recovery)
+
+
+
+.. rubric:: Returns:
+
+a positive number of frames actually read otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_writen
+.. _doxid-group___p_c_m_1gae599772ce3d0aa6a70de143abcf145e7:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_pcm_sframes_t<doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c>`
+	snd_pcm_writen(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		void** bufs,
+		:ref:`snd_pcm_uframes_t<doxid-group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a>` size
+		)
+
+Write non interleaved frames to a PCM.
+
+If the blocking behaviour is selected and it is running, then routine waits until all requested frames are played or put to the playback ring buffer. The returned number of frames can be less only if a signal or underrun occurred.
+
+If the non-blocking behaviour is selected, then routine doesn't wait at all.
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+	*
+		- bufs
+
+		- frames containing buffers (one for each channel)
+
+	*
+		- size
+
+		- frames to be written
+
+	*
+		- -EBADFD
+
+		- PCM is not in the right state (:ref:`SND_PCM_STATE_PREPARED <doxid-group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a3eb4a3b75c7d2adb22f1829f3f738b27>` or :ref:`SND_PCM_STATE_RUNNING <doxid-group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a86f6fbc796881f19fde0e1957f878147>`)
+
+	*
+		- -EPIPE
+
+		- an underrun occurred
+
+	*
+		- -ESTRPIPE
+
+		- a suspend event occurred (stream is suspended and waiting for an application recovery)
+
+
+
+.. rubric:: Returns:
+
+a positive number of frames actually written otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_readn
+.. _doxid-group___p_c_m_1gafea175455f1a405f633a43484ded3d8a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_pcm_sframes_t<doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c>`
+	snd_pcm_readn(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		void** bufs,
+		:ref:`snd_pcm_uframes_t<doxid-group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a>` size
+		)
+
+Read non interleaved frames to a PCM.
+
+If the blocking behaviour was selected and it is running, then routine waits until all requested frames are filled. The returned number of frames can be less only if a signal or underrun occurred.
+
+If the non-blocking behaviour is selected, then routine doesn't wait at all.
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+	*
+		- bufs
+
+		- frames containing buffers (one for each channel)
+
+	*
+		- size
+
+		- frames to be read
+
+	*
+		- -EBADFD
+
+		- PCM is not in the right state (:ref:`SND_PCM_STATE_PREPARED <doxid-group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a3eb4a3b75c7d2adb22f1829f3f738b27>` or :ref:`SND_PCM_STATE_RUNNING <doxid-group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a86f6fbc796881f19fde0e1957f878147>`)
+
+	*
+		- -EPIPE
+
+		- an overrun occurred
+
+	*
+		- -ESTRPIPE
+
+		- a suspend event occurred (stream is suspended and waiting for an application recovery)
+
+
+
+.. rubric:: Returns:
+
+a positive number of frames actually read otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_wait
+.. _doxid-group___p_c_m_1gad4d53d58b996a7cd9a5cbf1710b90375:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_wait(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		int timeout
+		)
+
+Wait for a PCM to become ready.
+
+The function is thread-safe when built with the proper option.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+	*
+		- timeout
+
+		- maximum time in milliseconds to wait, a negative value means infinity
+
+	*
+		- 0
+
+		- timeout occurred
+
+	*
+		- 1
+
+		- PCM stream is ready for I/O
+
+
+
+.. rubric:: Returns:
+
+a positive value on success otherwise a negative error code (-EPIPE for the xrun and -ESTRPIPE for the suspended status, others for general errors)
+
+.. index:: pair: function; snd_pcm_link
+.. _doxid-group___p_c_m_1gac6c33091b049985baa6466e8fe93917e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_link(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm1,
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm2
+		)
+
+Link two PCMs.
+
+The two PCMs will start/stop/prepare in sync.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm1
+
+		- first PCM handle
+
+	*
+		- pcm2
+
+		- first PCM handle
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_unlink
+.. _doxid-group___p_c_m_1ga0d3af5e30593dae857b4308aab5035cd:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_unlink(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm)
+
+Remove a PCM from a linked group.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_query_chmaps
+.. _doxid-group___p_c_m_1ga675cb6a0fd5470345105574216a652c2:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_pcm_chmap_query_t<doxid-structsnd__pcm__chmap__query__t>`**
+	snd_pcm_query_chmaps(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm)
+
+!brief Query the available channel maps Note: the caller is requested to release the returned value via :ref:`snd_pcm_free_chmaps() <doxid-group___p_c_m_1ga0a131c274594f6266b9a3f980e479e49>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle to query
+
+
+
+.. rubric:: Returns:
+
+the NULL-terminated array of integer pointers, each of which contains the channel map. A channel map is represented by an integer array, beginning with the channel map type, followed by the number of channels, and the position of each channel.
+
+.. index:: pair: function; snd_pcm_query_chmaps_from_hw
+.. _doxid-group___p_c_m_1gae766a086ec64ec1189a87da3e54b8441:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_pcm_chmap_query_t<doxid-structsnd__pcm__chmap__query__t>`**
+	snd_pcm_query_chmaps_from_hw(
+		int card,
+		int dev,
+		int subdev,
+		:ref:`snd_pcm_stream_t<doxid-group___p_c_m_1gac23b43ff55add78638e503b9cc892c24>` stream
+		)
+
+!brief Query the available channel maps This function works like :ref:`snd_pcm_query_chmaps() <doxid-group___p_c_m_1ga675cb6a0fd5470345105574216a652c2>` but it takes the card, device, substream and stream numbers instead of the already opened snd_pcm_t instance, so that you can query available channel maps of a PCM before actually opening it.
+
+As the parameters stand, the query is performed only to the hw PCM devices, not the abstracted PCM object in alsa-lib.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- card
+
+		- the card number
+
+	*
+		- dev
+
+		- the PCM device number
+
+	*
+		- subdev
+
+		- the PCM substream index
+
+	*
+		- stream
+
+		- the direction of PCM stream
+
+
+
+.. rubric:: Returns:
+
+the NULL-terminated array of integer pointers, or NULL at error.
+
+.. index:: pair: function; snd_pcm_free_chmaps
+.. _doxid-group___p_c_m_1ga0a131c274594f6266b9a3f980e479e49:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_pcm_free_chmaps(:ref:`snd_pcm_chmap_query_t<doxid-structsnd__pcm__chmap__query__t>`** maps)
+
+!brief Release the channel map array allocated via :ref:`snd_pcm_query_chmaps <doxid-group___p_c_m_1ga675cb6a0fd5470345105574216a652c2>`
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- maps
+
+		- the array pointer to release
+
+.. index:: pair: function; snd_pcm_get_chmap
+.. _doxid-group___p_c_m_1gac3150e89164f6cb1276abda84b399c72:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_pcm_chmap_t<doxid-structsnd__pcm__chmap__t>`*
+	snd_pcm_get_chmap(:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm)
+
+!brief Get the current channel map Note: the caller is requested to release the returned value via free()
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM instance
+
+
+
+.. rubric:: Returns:
+
+the current channel map, or NULL if error
+
+.. index:: pair: function; snd_pcm_set_chmap
+.. _doxid-group___p_c_m_1ga60ee7d2c2555e21dbc844a1b73839085:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_set_chmap(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		const :ref:`snd_pcm_chmap_t<doxid-structsnd__pcm__chmap__t>`* map
+		)
+
+!brief Configure the current channel map
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM instance
+
+	*
+		- map
+
+		- the channel map to write
+
+
+
+.. rubric:: Returns:
+
+zero if succeeded, or a negative error code
+
+.. index:: pair: function; snd_pcm_chmap_type_name
+.. _doxid-group___p_c_m_1ga2c559ecbc8f79457c1d7be5d08365739:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	snd_pcm_chmap_type_name(enum :ref:`snd_pcm_chmap_type<doxid-group___p_c_m_1gad77f16d07431203bacc8694d28814506>` val)
+
+!brief Get a name string for a channel map type as query results
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- val
+
+		- Channel position
+
+
+
+.. rubric:: Returns:
+
+The string corresponding to the given type, or NULL
+
+.. index:: pair: function; snd_pcm_chmap_name
+.. _doxid-group___p_c_m_1gac13f471d76d025798a25f3b422a07b91:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	snd_pcm_chmap_name(enum :ref:`snd_pcm_chmap_position<doxid-group___p_c_m_1ga07f09c302588b9758946fedf97772975>` val)
+
+!brief Get a name string for a standard channel map position
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- val
+
+		- Channel position
+
+
+
+.. rubric:: Returns:
+
+The string corresponding to the given position, or NULL
+
+.. index:: pair: function; snd_pcm_chmap_long_name
+.. _doxid-group___p_c_m_1ga5dc94582c2356ad6f214761de888bf43:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	snd_pcm_chmap_long_name(enum :ref:`snd_pcm_chmap_position<doxid-group___p_c_m_1ga07f09c302588b9758946fedf97772975>` val)
+
+!brief Get a longer name string for a standard channel map position
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- val
+
+		- Channel position
+
+
+
+.. rubric:: Returns:
+
+The string corresponding to the given position, or NULL
+
+.. index:: pair: function; snd_pcm_chmap_print
+.. _doxid-group___p_c_m_1ga1e10b4d6db07a3ef3a1105e703a38629:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_chmap_print(
+		const :ref:`snd_pcm_chmap_t<doxid-structsnd__pcm__chmap__t>`* map,
+		size_t maxlen,
+		char* buf
+		)
+
+!brief Print the channels in chmap on the buffer
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- map
+
+		- The channel map to print
+
+	*
+		- maxlen
+
+		- The maximal length to write (including NUL letter)
+
+	*
+		- buf
+
+		- The buffer to write
+
+
+
+.. rubric:: Returns:
+
+The actual string length or a negative error code
+
+.. index:: pair: function; snd_pcm_chmap_from_string
+.. _doxid-group___p_c_m_1gad3e0c4157e5f491ba448bfd4d4dc0177:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	unsigned int
+	snd_pcm_chmap_from_string(const char* str)
+
+!brief Convert from string to channel position
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- str
+
+		- The string to parse
+
+
+
+.. rubric:: Returns:
+
+The channel position value or -1 as an error
+
+.. index:: pair: function; snd_pcm_chmap_parse_string
+.. _doxid-group___p_c_m_1ga77973afbe7ab02bfde38d574d4879355:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_pcm_chmap_t<doxid-structsnd__pcm__chmap__t>`*
+	snd_pcm_chmap_parse_string(const char* str)
+
+!brief Convert from string to channel map Note: the caller is requested to release the returned value via free()
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- str
+
+		- The string to parse
+
+
+
+.. rubric:: Returns:
+
+The channel map
+
+.. index:: pair: function; snd_pcm_recover
+.. _doxid-group___p_c_m_1ga2157aaeb6fc14da3f040d76591f9d3b1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_recover(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		int err,
+		int silent
+		)
+
+Recover the stream state from an error or suspend.
+
+This a high-level helper function building on other functions.
+
+This functions handles -EINTR (interrupted system call), -EPIPE (overrun or underrun) and -ESTRPIPE (stream is suspended) error codes trying to prepare given stream for next I/O.
+
+Note that this function returs the original error code when it is not handled inside this function (for example -EAGAIN is returned back).
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+	*
+		- err
+
+		- error number
+
+	*
+		- silent
+
+		- do not print error reason
+
+
+
+.. rubric:: Returns:
+
+0 when error code was handled successfuly, otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_set_params
+.. _doxid-group___p_c_m_1ga45d50841b307f2156fce1857bfac228c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_set_params(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		:ref:`snd_pcm_format_t<doxid-group___p_c_m_1gaa14b7f26877a812acbb39811364177f8>` format,
+		:ref:`snd_pcm_access_t<doxid-group___p_c_m_1ga661221ba5e8f1d6eaf4ab8e2da57cc1a>` access,
+		unsigned int channels,
+		unsigned int rate,
+		int soft_resample,
+		unsigned int latency
+		)
+
+Set the hardware and software parameters in a simple way.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+	*
+		- format
+
+		- required PCM format
+
+	*
+		- access
+
+		- required PCM access
+
+	*
+		- channels
+
+		- required PCM channels
+
+	*
+		- rate
+
+		- required sample rate in Hz
+
+	*
+		- soft_resample
+
+		- 0 = disallow alsa-lib resample stream, 1 = allow resampling
+
+	*
+		- latency
+
+		- required overall latency in us
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_pcm_get_params
+.. _doxid-group___p_c_m_1ga2827b8fa77ca05717df9b0447b99d1cd:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_pcm_get_params(
+		:ref:`snd_pcm_t<doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>`* pcm,
+		:ref:`snd_pcm_uframes_t<doxid-group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a>`* buffer_size,
+		:ref:`snd_pcm_uframes_t<doxid-group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a>`* period_size
+		)
+
+Get the transfer size parameters in a simple way.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pcm
+
+		- PCM handle
+
+	*
+		- buffer_size
+
+		- PCM ring buffer size in frames
+
+	*
+		- period_size
+
+		- PCM period size in frames
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+Macros
+------
+
+.. index:: pair: define; SND_CHMAP_API_VERSION
+.. _doxid-group___p_c_m_1gaf79d447b5f5c0936cfbc769eee03078b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_CHMAP_API_VERSION
+
+channel mapping API version number
+
+.. index:: pair: define; SND_CHMAP_DRIVER_SPEC
+.. _doxid-group___p_c_m_1gaf3d1c438269afa0206fb9f2151c4fc6a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_CHMAP_DRIVER_SPEC
+
+bit flag indicating the non-standard channel value
+
+.. index:: pair: define; SND_CHMAP_PHASE_INVERSE
+.. _doxid-group___p_c_m_1gad98b225c79dd92fc387b2e7884ef97da:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_CHMAP_PHASE_INVERSE
+
+bit flag indicating the channel is phase inverted
+
+.. index:: pair: define; SND_CHMAP_POSITION_MASK
+.. _doxid-group___p_c_m_1gad6713109477a592274f92f85670fcc1a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_CHMAP_POSITION_MASK
+
+bitmask for channel position
+
+.. index:: pair: define; SND_PCM_ABORT
+.. _doxid-group___p_c_m_1ga06aa6da1ebeff70c83d9f6e18a91a3d7:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_PCM_ABORT
+
+In an abort state (internal, not allowed for open)
+
+.. index:: pair: define; SND_PCM_ASYNC
+.. _doxid-group___p_c_m_1ga9b22351abf6c85ced128e2088f6f6a5c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_PCM_ASYNC
+
+Async notification (flag for open mode)
+
+.. index:: pair: define; SND_PCM_DLSYM_VERSION
+.. _doxid-group___p_c_m_1ga32ccf47736036e86b0d787dc43e64d4a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_PCM_DLSYM_VERSION
+
+dlsym version for interface entry callback
+
+.. index:: pair: define; SND_PCM_NONBLOCK
+.. _doxid-group___p_c_m_1ga6bd90de1d1527b5804090dcce51079ad:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_PCM_NONBLOCK
+
+Non blocking mode (flag for open mode)
+
+.. index:: pair: define; SND_PCM_NO_AUTO_CHANNELS
+.. _doxid-group___p_c_m_1ga64fa40b556374dabe40d4874242fee19:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_PCM_NO_AUTO_CHANNELS
+
+Disable automatic (but not forced!) channel conversion
+
+.. index:: pair: define; SND_PCM_NO_AUTO_FORMAT
+.. _doxid-group___p_c_m_1gacb997a23fbba62232101f730e9ae1e96:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_PCM_NO_AUTO_FORMAT
+
+Disable automatic (but not forced!) format conversion
+
+.. index:: pair: define; SND_PCM_NO_AUTO_RESAMPLE
+.. _doxid-group___p_c_m_1gaba352dfac44ef1681f91d476ed781005:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_PCM_NO_AUTO_RESAMPLE
+
+Disable automatic (but not forced!) rate resamplinig
+
+.. index:: pair: define; SND_PCM_NO_SOFTVOL
+.. _doxid-group___p_c_m_1ga1f67b4e05749f0d3dafe7c17e448518a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_PCM_NO_SOFTVOL
+
+Disable soft volume control
+

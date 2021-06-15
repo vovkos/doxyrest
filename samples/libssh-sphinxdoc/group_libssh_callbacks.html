@@ -1,0 +1,1386 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>The libssh callbacks &#8212; LibSSH Documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/target-highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="struct ssh_callbacks_struct" href="struct_ssh_callbacks_struct.html" />
+    <link rel="prev" title="The SSH threading functions." href="group_libssh_threads.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="struct_ssh_callbacks_struct.html" title="struct ssh_callbacks_struct"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="group_libssh_threads.html" title="The SSH threading functions."
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LibSSH Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="group_libssh.html" accesskey="U">The libssh API</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">The libssh callbacks</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li><a class="reference internal" href="#global-functions">Global Functions</a></li>
+<li><a class="reference internal" href="#macros">Macros</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="group_libssh_threads.html"
+                        title="previous chapter">The SSH threading functions.</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="struct_ssh_callbacks_struct.html"
+                        title="next chapter">struct ssh_callbacks_struct</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="the-libssh-callbacks">
+<span id="doxid-group-libssh-callbacks"></span><span id="index-0"></span><h1>The libssh callbacks</h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="overview">
+<h2>Overview</h2>
+<p>Callback which can be replaced in libssh. <a class="reference internal" href="#details-group-libssh-callbacks"><span class="std std-ref">More…</span></a></p>
+<pre class="highlight doxyrest-overview-code-block literal-block">
+<span></span><span class="c1">// typedefs</span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-libssh-callbacks-1gaadd49614879c70e0aaab096fd52cf2ab"><span class="std std-ref">ssh_auth_gssapi_mic_callback</span></a><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">user</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">principal</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-libssh-callbacks-1ga8d98e68f8a2362bbcb5490211a4a62de"><span class="std std-ref">ssh_auth_none_callback</span></a><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">user</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-libssh-callbacks-1gad32c421f392ad47275446378339f59c6"><span class="std std-ref">ssh_auth_password_callback</span></a><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">user</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">password</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-libssh-callbacks-1ga68f74aa25d6a193c5fcf016d6d1bdc51"><span class="std std-ref">ssh_auth_pubkey_callback</span></a><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">user</span><span class="p">,</span>
+    <span class="k">struct</span> <span class="n">ssh_key_struct</span> <span class="o">*</span><span class="n">pubkey</span><span class="p">,</span>
+    <span class="kt">char</span> <span class="n">signature_state</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="doxyrest-code-target target" id="doxid-group-libssh-callbacks-1gaf06fe7d0b8cd8a5aab0a19ad7c6140b9"><span></span><span class="n">ssh_callback_data</span></span><span></span><span class="p">)(</span>
+    <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">len</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">user</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="doxyrest-code-target target" id="doxid-group-libssh-callbacks-1ga47b833f21a2b7145e421e63cad14b3d4"><span></span><span class="n">ssh_callback_int</span></span><span></span><span class="p">)(</span>
+    <span class="kt">int</span> <span class="n">code</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">user</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="doxyrest-code-target target" id="doxid-group-libssh-callbacks-1gaec19974b49541c787f7825e523849436"><span></span><span class="n">ssh_callback_int_int</span></span><span></span><span class="p">)(</span>
+    <span class="kt">int</span> <span class="n">code</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">errno_code</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">user</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-libssh-callbacks-1gafbbd34a8b28db875055485e24d2149d0"><span class="std std-ref">ssh_channel_auth_agent_req_callback</span></a><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="doxyrest-code-target target" id="doxid-group-libssh-callbacks-1gaa1b8a1768e5bb4904c74e9a0ba0b6874"><span></span><span class="n">ssh_channel_callback_data</span></span><span></span><span class="p">)(</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">code</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">len</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">user</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="doxyrest-code-target target" id="doxid-group-libssh-callbacks-1gabb4a1fe7cde149c5064f3b36d0a3a94f"><span></span><span class="n">ssh_channel_callback_int</span></span><span></span><span class="p">)(</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">code</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">user</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-libssh-callbacks-1ga58672dfbf52812e72946a3d6d8c74279"><span class="std std-ref">ssh_channel_close_callback</span></a><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-libssh-callbacks-1ga4f34cc77aa9d47e506cbae679ddd54a5"><span class="std std-ref">ssh_channel_data_callback</span></a><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span>
+    <span class="kt">uint32_t</span> <span class="n">len</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">is_stderr</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-libssh-callbacks-1gae816543864b633ab89d20cdf39d69225"><span class="std std-ref">ssh_channel_env_request_callback</span></a><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">env_name</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">env_value</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-libssh-callbacks-1ga54351aff7adba9f84621069aff982c27"><span class="std std-ref">ssh_channel_eof_callback</span></a><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-libssh-callbacks-1ga41ccf4a20d30e7c5ccd87ac25f580f9d"><span class="std std-ref">ssh_channel_exec_request_callback</span></a><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">command</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-libssh-callbacks-1gace982803d01abe445379b9c360a1a43d"><span class="std std-ref">ssh_channel_exit_signal_callback</span></a><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">signal</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">core</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">errmsg</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">lang</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-libssh-callbacks-1ga6f834b43c812f871c7252bfbbb4ef6f4"><span class="std std-ref">ssh_channel_exit_status_callback</span></a><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">exit_status</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="n">ssh_channel</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-libssh-callbacks-1gac63a4cc91d8c2a1465770ca5f6c0a436"><span class="std std-ref">ssh_channel_open_request_session_callback</span></a><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="n">ssh_channel</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-libssh-callbacks-1ga6fc88f06d2eaa263d3336621edea0dcc"><span class="std std-ref">ssh_channel_open_request_x11_callback</span></a><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">originator_address</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">originator_port</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-libssh-callbacks-1ga2c740320a613c207ee4032f8ee93fde8"><span class="std std-ref">ssh_channel_pty_request_callback</span></a><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">term</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">width</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">height</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">pxwidth</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">pwheight</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-libssh-callbacks-1ga3614f21f6afbe6f498cdaa9b28c0f003"><span class="std std-ref">ssh_channel_pty_window_change_callback</span></a><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">width</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">height</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">pxwidth</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">pwheight</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-libssh-callbacks-1ga4d93fd06cb58478c40c9d1d1627881d9"><span class="std std-ref">ssh_channel_shell_request_callback</span></a><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-libssh-callbacks-1ga62cc19678bef2caa53808ef5776e08fa"><span class="std std-ref">ssh_channel_signal_callback</span></a><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">signal</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-libssh-callbacks-1gafeee5298cbdb0ed0b607560322448bfd"><span class="std std-ref">ssh_channel_subsystem_request_callback</span></a><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">subsystem</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-libssh-callbacks-1ga4a0df3bb8a201fc52925595356806852"><span class="std std-ref">ssh_channel_x11_req_callback</span></a><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">single_connection</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">auth_protocol</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">auth_cookie</span><span class="p">,</span>
+    <span class="kt">uint32_t</span> <span class="n">screen_number</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-libssh-callbacks-1gaeeb75ac372db669157bba96c22e6df85"><span class="std std-ref">ssh_global_request_callback</span></a><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_message</span> <span class="n">message</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="doxyrest-code-target target" id="doxid-group-libssh-callbacks-1gaacc4a1270f919717917e8960dabd1af3"><span></span><span class="n">ssh_gssapi_accept_sec_ctx_callback</span></span><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_string</span> <span class="n">input_token</span><span class="p">,</span>
+    <span class="n">ssh_string</span> <span class="o">*</span><span class="n">output_token</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="n">ssh_string</span> <span class="p">(</span><span class="o">*</span><span class="doxyrest-code-target target" id="doxid-group-libssh-callbacks-1gaf5fa4522517284e010b4e3624356e4a4"><span></span><span class="n">ssh_gssapi_select_oid_callback</span></span><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">user</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">n_oid</span><span class="p">,</span>
+    <span class="n">ssh_string</span> <span class="o">*</span><span class="n">oids</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="doxyrest-code-target target" id="doxid-group-libssh-callbacks-1ga043d34d7436d150a9b8cd5ceb70ec19e"><span></span><span class="n">ssh_gssapi_verify_mic_callback</span></span><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_string</span> <span class="n">mic</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">mic_buffer</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">mic_buffer_size</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-libssh-callbacks-1ga9057cbb0dc4ad1939cf6e03f36eaae9f"><span class="std std-ref">ssh_log_callback</span></a><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">priority</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">message</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-libssh-callbacks-1gab6eedc77c07dde0c6baf9c29e7700a99"><span class="std std-ref">ssh_logging_callback</span></a><span></span><span class="p">)(</span>
+    <span class="kt">int</span> <span class="n">priority</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">function</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">buffer</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="doxyrest-code-target target" id="doxid-group-libssh-callbacks-1gaf6fd77dd8566d8bd0d87be9d4b7c4243"><span></span><span class="n">ssh_message_callback</span></span><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span><span class="p">,</span>
+    <span class="n">ssh_message</span> <span class="n">message</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">user</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-libssh-callbacks-1ga6b8722467c98b73a7d78c0ec055e740d"><span class="std std-ref">ssh_packet_callback</span></a><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">uint8_t</span> <span class="n">type</span><span class="p">,</span>
+    <span class="n">ssh_buffer</span> <span class="n">packet</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">user</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-libssh-callbacks-1gaa1866ffc041b50c341f9cba866a8055c"><span class="std std-ref">ssh_service_request_callback</span></a><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">service</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-libssh-callbacks-1gabd1e46f073ad992ae8642d8ebcde45a3"><span class="std std-ref">ssh_status_callback</span></a><span></span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">float</span> <span class="n">status</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="c1">// structs</span>
+
+<span class="k">struct</span> <a class="reference internal" href="struct_ssh_callbacks_struct.html#doxid-structssh-callbacks-struct"><span class="std std-ref">ssh_callbacks_struct</span></a><span></span><span class="p">;</span>
+<span class="k">struct</span> <a class="reference internal" href="struct_ssh_channel_callbacks_struct.html#doxid-structssh-channel-callbacks-struct"><span class="std std-ref">ssh_channel_callbacks_struct</span></a><span></span><span class="p">;</span>
+<span class="k">struct</span> <a class="reference internal" href="struct_ssh_packet_callbacks_struct.html#doxid-structssh-packet-callbacks-struct"><span class="std std-ref">ssh_packet_callbacks_struct</span></a><span></span><span class="p">;</span>
+<span class="k">struct</span> <a class="reference internal" href="struct_ssh_server_callbacks_struct.html#doxid-structssh-server-callbacks-struct"><span class="std std-ref">ssh_server_callbacks_struct</span></a><span></span><span class="p">;</span>
+<span class="k">struct</span> <a class="reference internal" href="struct_ssh_socket_callbacks_struct.html#doxid-structssh-socket-callbacks-struct"><span class="std std-ref">ssh_socket_callbacks_struct</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// global functions</span>
+
+<a class="reference internal" href="global.html#doxid-libssh-8h-1a2ba7f29ac0f2b5ef7134243d24888ac5"><span class="std std-ref">LIBSSH_API</span></a><span></span> <span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-callbacks-1ga2e4b0507c738748a3f10e43fe201fe09"><span class="std std-ref">ssh_set_callbacks</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_callbacks</span> <span class="n">cb</span>
+    <span class="p">);</span>
+
+<a class="reference internal" href="global.html#doxid-libssh-8h-1a2ba7f29ac0f2b5ef7134243d24888ac5"><span class="std std-ref">LIBSSH_API</span></a><span></span> <span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-callbacks-1gacea52d1373970a4922bf60e6b1680919"><span class="std std-ref">ssh_set_channel_callbacks</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="n">ssh_channel_callbacks</span> <span class="n">cb</span>
+    <span class="p">);</span>
+
+<a class="reference internal" href="global.html#doxid-libssh-8h-1a2ba7f29ac0f2b5ef7134243d24888ac5"><span class="std std-ref">LIBSSH_API</span></a><span></span> <span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-callbacks-1gaa321f33172cfa54eb50baaa963457a17"><span class="std std-ref">ssh_set_server_callbacks</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_server_callbacks</span> <span class="n">cb</span>
+    <span class="p">);</span>
+
+<span class="c1">// macros</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-libssh-callbacks-1ga8fd26956f4e2b9bc57cfef26c50e321b"><span class="std std-ref">SSH_PACKET_CALLBACK</span></a><span></span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-libssh-callbacks-1ga4766917128a12b646a8aee7ebc019f8c"><span class="std std-ref">SSH_PACKET_NOT_USED</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-libssh-callbacks-1gac29df803aa1295d6a498c1b081f3b494"><span class="std std-ref">SSH_PACKET_USED</span></a><span></span>
+<span class="cp">#define </span><span class="doxyrest-code-target target" id="doxid-group-libssh-callbacks-1ga3121a6449b4f59f96dd1196e8fd87b2b"><span></span><span class="n">SSH_SOCKET_CONNECTED_ERROR</span></span><span></span>
+<span class="cp">#define </span><span class="doxyrest-code-target target" id="doxid-group-libssh-callbacks-1ga777321b241841b09620e4c948520b753"><span></span><span class="n">SSH_SOCKET_CONNECTED_OK</span></span><span></span>
+<span class="cp">#define </span><span class="doxyrest-code-target target" id="doxid-group-libssh-callbacks-1ga17ef78f0410af7b1c4d52e4bfacffcfa"><span></span><span class="n">SSH_SOCKET_CONNECTED_TIMEOUT</span></span><span></span>
+<span class="cp">#define </span><span class="doxyrest-code-target target" id="doxid-group-libssh-callbacks-1gadc333c5dedfa61e2a0725428bd3aab89"><span></span><span class="n">SSH_SOCKET_EXCEPTION_EOF</span></span><span></span>
+<span class="cp">#define </span><span class="doxyrest-code-target target" id="doxid-group-libssh-callbacks-1ga37ab1ae01d34ff9b5a2b1b4ae334fd6f"><span></span><span class="n">SSH_SOCKET_EXCEPTION_ERROR</span></span><span></span>
+<span class="cp">#define </span><span class="doxyrest-code-target target" id="doxid-group-libssh-callbacks-1ga1f68a25a8da56bb1b930cec98d539f4d"><span></span><span class="n">SSH_SOCKET_FLOW_WRITEWILLBLOCK</span></span><span></span>
+<span class="cp">#define </span><span class="doxyrest-code-target target" id="doxid-group-libssh-callbacks-1gab50359ff09370deb71808b135af21961"><span></span><span class="n">SSH_SOCKET_FLOW_WRITEWONTBLOCK</span></span><span></span>
+
+<span class="cp">#define </span><span class="doxyrest-code-target target" id="doxid-group-libssh-callbacks-1ga60a6fe85408a17ce8ef24c31a76d4a46"><span></span><span class="n">ssh_callbacks_exists</span></span><span></span><span class="p">(</span> \
+    <span class="n">p</span><span class="p">,</span> \
+    <span class="n">c</span> \
+    <span class="p">)</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-libssh-callbacks-1gafe09b81e5346f0babe288dc38113d289"><span class="std std-ref">ssh_callbacks_init</span></a><span></span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</pre>
+</div>
+<div class="section" id="detailed-documentation">
+<span id="details-group-libssh-callbacks"></span><h2>Detailed Documentation</h2>
+<p>Callback which can be replaced in libssh.</p>
+<div class="section" id="typedefs">
+<h3>Typedefs</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1gaadd49614879c70e0aaab096fd52cf2ab">
+<span id="index-1"></span><span></span><span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">ssh_auth_gssapi_mic_callback</span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">user</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">principal</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">)</span>
+</pre>
+<p>SSH authentication callback.</p>
+<p>Tries to authenticates user with the “gssapi-with-mic” method Implementations should verify that parameter user matches in some way the principal. user and principal can be different. Only the latter is guaranteed to be safe.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>Current session handler</td>
+</tr>
+<tr class="row-even"><td>user</td>
+<td>Username of the user (can be spoofed)</td>
+</tr>
+<tr class="row-odd"><td>principal</td>
+<td>Authenticated principal of the user, including realm.</td>
+</tr>
+<tr class="row-even"><td>userdata</td>
+<td>Userdata to be passed to the callback function.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_AUTH_SUCCESS Authentication is accepted.</p>
+<p>SSH_AUTH_PARTIAL Partial authentication, more authentication means are needed.</p>
+<p>SSH_AUTH_DENIED Authentication failed.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1ga8d98e68f8a2362bbcb5490211a4a62de">
+<span id="index-2"></span><span></span><span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">ssh_auth_none_callback</span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">user</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">)</span>
+</pre>
+<p>SSH authentication callback.</p>
+<p>Tries to authenticates user with the “none” method which is anonymous or passwordless.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>Current session handler</td>
+</tr>
+<tr class="row-even"><td>user</td>
+<td>User that wants to authenticate</td>
+</tr>
+<tr class="row-odd"><td>userdata</td>
+<td>Userdata to be passed to the callback function.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_AUTH_SUCCESS Authentication is accepted.</p>
+<p>SSH_AUTH_PARTIAL Partial authentication, more authentication means are needed.</p>
+<p>SSH_AUTH_DENIED Authentication failed.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1gad32c421f392ad47275446378339f59c6">
+<span id="index-3"></span><span></span><span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">ssh_auth_password_callback</span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">user</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">password</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">)</span>
+</pre>
+<p>These are callbacks used specifically in SSH servers.</p>
+<p>SSH authentication callback.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>Current session handler</td>
+</tr>
+<tr class="row-even"><td>user</td>
+<td>User that wants to authenticate</td>
+</tr>
+<tr class="row-odd"><td>password</td>
+<td>Password used for authentication</td>
+</tr>
+<tr class="row-even"><td>userdata</td>
+<td>Userdata to be passed to the callback function.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_AUTH_SUCCESS Authentication is accepted.</p>
+<p>SSH_AUTH_PARTIAL Partial authentication, more authentication means are needed.</p>
+<p>SSH_AUTH_DENIED Authentication failed.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1ga68f74aa25d6a193c5fcf016d6d1bdc51">
+<span id="index-4"></span><span></span><span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">ssh_auth_pubkey_callback</span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">user</span><span class="p">,</span>
+    <span class="k">struct</span> <span class="n">ssh_key_struct</span> <span class="o">*</span><span class="n">pubkey</span><span class="p">,</span>
+    <span class="kt">char</span> <span class="n">signature_state</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">)</span>
+</pre>
+<p>SSH authentication callback.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>Current session handler</td>
+</tr>
+<tr class="row-even"><td>user</td>
+<td>User that wants to authenticate</td>
+</tr>
+<tr class="row-odd"><td>pubkey</td>
+<td>public key used for authentication</td>
+</tr>
+<tr class="row-even"><td>signature_state</td>
+<td>SSH_PUBLICKEY_STATE_NONE if the key is not signed (simple public key probe), SSH_PUBLICKEY_STATE_VALID if the signature is valid. Others values should be replied with a SSH_AUTH_DENIED.</td>
+</tr>
+<tr class="row-odd"><td>userdata</td>
+<td>Userdata to be passed to the callback function.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_AUTH_SUCCESS Authentication is accepted.</p>
+<p>SSH_AUTH_PARTIAL Partial authentication, more authentication means are needed.</p>
+<p>SSH_AUTH_DENIED Authentication failed.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1gafbbd34a8b28db875055485e24d2149d0">
+<span id="index-5"></span><span></span><span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">ssh_channel_auth_agent_req_callback</span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">)</span>
+</pre>
+<p>SSH auth-agent-request from the client.</p>
+<p>This request is sent by a client when agent forwarding is available. Server is free to ignore this callback, no answer is expected.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>channel</td>
+<td>the channel</td>
+</tr>
+<tr class="row-even"><td>userdata</td>
+<td>Userdata to be passed to the callback function.</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1ga58672dfbf52812e72946a3d6d8c74279">
+<span id="index-6"></span><span></span><span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">ssh_channel_close_callback</span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">)</span>
+</pre>
+<p>SSH channel close callback.</p>
+<p>Called when a channel is closed by remote peer</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>Current session handler</td>
+</tr>
+<tr class="row-even"><td>channel</td>
+<td>the actual channel</td>
+</tr>
+<tr class="row-odd"><td>userdata</td>
+<td>Userdata to be passed to the callback function.</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1ga4f34cc77aa9d47e506cbae679ddd54a5">
+<span id="index-7"></span><span></span><span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">ssh_channel_data_callback</span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span>
+    <span class="kt">uint32_t</span> <span class="n">len</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">is_stderr</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">)</span>
+</pre>
+<p>SSH channel data callback.</p>
+<p>Called when data is available on a channel</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>Current session handler</td>
+</tr>
+<tr class="row-even"><td>channel</td>
+<td>the actual channel</td>
+</tr>
+<tr class="row-odd"><td>data</td>
+<td>the data that has been read on the channel</td>
+</tr>
+<tr class="row-even"><td>len</td>
+<td>the length of the data</td>
+</tr>
+<tr class="row-odd"><td>is_stderr</td>
+<td>is 0 for stdout or 1 for stderr</td>
+</tr>
+<tr class="row-even"><td>userdata</td>
+<td>Userdata to be passed to the callback function.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>number of bytes processed by the callee. The remaining bytes will be sent in the next callback message, when more data is available.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1gae816543864b633ab89d20cdf39d69225">
+<span id="index-8"></span><span></span><span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">ssh_channel_env_request_callback</span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">env_name</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">env_value</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">)</span>
+</pre>
+<p>SSH channel environment request from a client.</p>
+<p>some environment variables can be dangerous if changed (e.g. LD_PRELOAD) and should not be fulfilled.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>channel</td>
+<td>the channel</td>
+</tr>
+<tr class="row-even"><td>env_name</td>
+<td>name of the environment value to be set</td>
+</tr>
+<tr class="row-odd"><td>env_value</td>
+<td>value of the environment value to be set</td>
+</tr>
+<tr class="row-even"><td>userdata</td>
+<td>Userdata to be passed to the callback function.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if the env request is accepted</p>
+<p>1 if the request is denied</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1ga54351aff7adba9f84621069aff982c27">
+<span id="index-9"></span><span></span><span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">ssh_channel_eof_callback</span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">)</span>
+</pre>
+<p>SSH channel eof callback.</p>
+<p>Called when a channel receives EOF</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>Current session handler</td>
+</tr>
+<tr class="row-even"><td>channel</td>
+<td>the actual channel</td>
+</tr>
+<tr class="row-odd"><td>userdata</td>
+<td>Userdata to be passed to the callback function.</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1ga41ccf4a20d30e7c5ccd87ac25f580f9d">
+<span id="index-10"></span><span></span><span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">ssh_channel_exec_request_callback</span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">command</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">)</span>
+</pre>
+<p>SSH channel Exec request from a client.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>channel</td>
+<td>the channel</td>
+</tr>
+<tr class="row-even"><td>command</td>
+<td>the shell command to be executed</td>
+</tr>
+<tr class="row-odd"><td>userdata</td>
+<td>Userdata to be passed to the callback function.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if the exec request is accepted</p>
+<p>1 if the request is denied</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1gace982803d01abe445379b9c360a1a43d">
+<span id="index-11"></span><span></span><span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">ssh_channel_exit_signal_callback</span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">signal</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">core</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">errmsg</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">lang</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">)</span>
+</pre>
+<p>SSH channel exit signal callback.</p>
+<p>Called when a channel has received an exit signal</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>Current session handler</td>
+</tr>
+<tr class="row-even"><td>channel</td>
+<td>the actual channel</td>
+</tr>
+<tr class="row-odd"><td>signal</td>
+<td>the signal name (without the SIG prefix)</td>
+</tr>
+<tr class="row-even"><td>core</td>
+<td>a boolean telling wether a core has been dumped or not</td>
+</tr>
+<tr class="row-odd"><td>errmsg</td>
+<td>the description of the exception</td>
+</tr>
+<tr class="row-even"><td>lang</td>
+<td>the language of the description (format: RFC 3066)</td>
+</tr>
+<tr class="row-odd"><td>userdata</td>
+<td>Userdata to be passed to the callback function.</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1ga6f834b43c812f871c7252bfbbb4ef6f4">
+<span id="index-12"></span><span></span><span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">ssh_channel_exit_status_callback</span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">exit_status</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">)</span>
+</pre>
+<p>SSH channel exit status callback.</p>
+<p>Called when a channel has received an exit status</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>Current session handler</td>
+</tr>
+<tr class="row-even"><td>channel</td>
+<td>the actual channel</td>
+</tr>
+<tr class="row-odd"><td>userdata</td>
+<td>Userdata to be passed to the callback function.</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1gac63a4cc91d8c2a1465770ca5f6c0a436">
+<span id="index-13"></span><span></span><span class="k">typedef</span> <span class="n">ssh_channel</span> <span class="p">(</span><span class="o">*</span><span class="n">ssh_channel_open_request_session_callback</span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">)</span>
+</pre>
+<p>Handles an SSH new channel open session request.</p>
+<p>The channel pointer returned by this callback must be closed by the application.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>current session handler</td>
+</tr>
+<tr class="row-even"><td>userdata</td>
+<td>Userdata to be passed to the callback function.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>a valid ssh_channel handle if the request is to be allowed</p>
+<p>NULL if the request should not be allowed</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1ga6fc88f06d2eaa263d3336621edea0dcc">
+<span id="index-14"></span><span></span><span class="k">typedef</span> <span class="n">ssh_channel</span> <span class="p">(</span><span class="o">*</span><span class="n">ssh_channel_open_request_x11_callback</span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">originator_address</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">originator_port</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">)</span>
+</pre>
+<p>Handles an SSH new channel open X11 request.</p>
+<p>This happens when the server sends back an X11 connection attempt. This is a client-side API The channel pointer returned by this callback must be closed by the application.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>current session handler</td>
+</tr>
+<tr class="row-even"><td>userdata</td>
+<td>Userdata to be passed to the callback function.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>a valid ssh_channel handle if the request is to be allowed</p>
+<p>NULL if the request should not be allowed</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1ga2c740320a613c207ee4032f8ee93fde8">
+<span id="index-15"></span><span></span><span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">ssh_channel_pty_request_callback</span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">term</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">width</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">height</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">pxwidth</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">pwheight</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">)</span>
+</pre>
+<p>SSH channel PTY request from a client.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>channel</td>
+<td>the channel</td>
+</tr>
+<tr class="row-even"><td>term</td>
+<td>The type of terminal emulation</td>
+</tr>
+<tr class="row-odd"><td>width</td>
+<td>width of the terminal, in characters</td>
+</tr>
+<tr class="row-even"><td>height</td>
+<td>height of the terminal, in characters</td>
+</tr>
+<tr class="row-odd"><td>pxwidth</td>
+<td>width of the terminal, in pixels</td>
+</tr>
+<tr class="row-even"><td>pxheight</td>
+<td>height of the terminal, in pixels</td>
+</tr>
+<tr class="row-odd"><td>userdata</td>
+<td>Userdata to be passed to the callback function.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if the pty request is accepted</p>
+<p>-1 if the request is denied</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1ga3614f21f6afbe6f498cdaa9b28c0f003">
+<span id="index-16"></span><span></span><span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">ssh_channel_pty_window_change_callback</span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">width</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">height</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">pxwidth</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">pwheight</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">)</span>
+</pre>
+<p>SSH channel PTY windows change (terminal size) from a client.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>channel</td>
+<td>the channel</td>
+</tr>
+<tr class="row-even"><td>width</td>
+<td>width of the terminal, in characters</td>
+</tr>
+<tr class="row-odd"><td>height</td>
+<td>height of the terminal, in characters</td>
+</tr>
+<tr class="row-even"><td>pxwidth</td>
+<td>width of the terminal, in pixels</td>
+</tr>
+<tr class="row-odd"><td>pxheight</td>
+<td>height of the terminal, in pixels</td>
+</tr>
+<tr class="row-even"><td>userdata</td>
+<td>Userdata to be passed to the callback function.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if the pty request is accepted</p>
+<p>-1 if the request is denied</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1ga4d93fd06cb58478c40c9d1d1627881d9">
+<span id="index-17"></span><span></span><span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">ssh_channel_shell_request_callback</span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">)</span>
+</pre>
+<p>SSH channel Shell request from a client.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>channel</td>
+<td>the channel</td>
+</tr>
+<tr class="row-even"><td>userdata</td>
+<td>Userdata to be passed to the callback function.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if the shell request is accepted</p>
+<p>1 if the request is denied</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1ga62cc19678bef2caa53808ef5776e08fa">
+<span id="index-18"></span><span></span><span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">ssh_channel_signal_callback</span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">signal</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">)</span>
+</pre>
+<p>SSH channel signal callback.</p>
+<p>Called when a channel has received a signal</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>Current session handler</td>
+</tr>
+<tr class="row-even"><td>channel</td>
+<td>the actual channel</td>
+</tr>
+<tr class="row-odd"><td>signal</td>
+<td>the signal name (without the SIG prefix)</td>
+</tr>
+<tr class="row-even"><td>userdata</td>
+<td>Userdata to be passed to the callback function.</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1gafeee5298cbdb0ed0b607560322448bfd">
+<span id="index-19"></span><span></span><span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">ssh_channel_subsystem_request_callback</span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">subsystem</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">)</span>
+</pre>
+<p>SSH channel subsystem request from a client.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>channel</td>
+<td>the channel</td>
+</tr>
+<tr class="row-even"><td>subsystem</td>
+<td>the subsystem required</td>
+</tr>
+<tr class="row-odd"><td>userdata</td>
+<td>Userdata to be passed to the callback function.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if the subsystem request is accepted</p>
+<p>1 if the request is denied</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1ga4a0df3bb8a201fc52925595356806852">
+<span id="index-20"></span><span></span><span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">ssh_channel_x11_req_callback</span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">single_connection</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">auth_protocol</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">auth_cookie</span><span class="p">,</span>
+    <span class="kt">uint32_t</span> <span class="n">screen_number</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">)</span>
+</pre>
+<p>SSH X11 request from the client.</p>
+<p>This request is sent by a client when X11 forwarding is requested(and available). Server is free to ignore this callback, no answer is expected.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>channel</td>
+<td>the channel</td>
+</tr>
+<tr class="row-even"><td>userdata</td>
+<td>Userdata to be passed to the callback function.</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1gaeeb75ac372db669157bba96c22e6df85">
+<span id="index-21"></span><span></span><span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">ssh_global_request_callback</span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_message</span> <span class="n">message</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">)</span>
+</pre>
+<p>SSH global request callback.</p>
+<p>All global request will go through this callback.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>Current session handler</td>
+</tr>
+<tr class="row-even"><td>message</td>
+<td>the actual message</td>
+</tr>
+<tr class="row-odd"><td>userdata</td>
+<td>Userdata to be passed to the callback function.</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1ga9057cbb0dc4ad1939cf6e03f36eaae9f">
+<span id="index-22"></span><span></span><span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">ssh_log_callback</span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">priority</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">message</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">)</span>
+</pre>
+<p>SSH log callback.</p>
+<p>All logging messages will go through this callback</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>Current session handler</td>
+</tr>
+<tr class="row-even"><td>priority</td>
+<td>Priority of the log, the smaller being the more important</td>
+</tr>
+<tr class="row-odd"><td>message</td>
+<td>the actual message</td>
+</tr>
+<tr class="row-even"><td>userdata</td>
+<td>Userdata to be passed to the callback function.</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1gab6eedc77c07dde0c6baf9c29e7700a99">
+<span id="index-23"></span><span></span><span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">ssh_logging_callback</span><span class="p">)(</span>
+    <span class="kt">int</span> <span class="n">priority</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">function</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">buffer</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">)</span>
+</pre>
+<p>SSH log callback.</p>
+<p>All logging messages will go through this callback.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>priority</td>
+<td>Priority of the log, the smaller being the more important.</td>
+</tr>
+<tr class="row-even"><td>function</td>
+<td>The function name calling the the logging fucntions.</td>
+</tr>
+<tr class="row-odd"><td>message</td>
+<td>The actual message</td>
+</tr>
+<tr class="row-even"><td>userdata</td>
+<td>Userdata to be passed to the callback function.</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1ga6b8722467c98b73a7d78c0ec055e740d">
+<span id="index-24"></span><span></span><span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">ssh_packet_callback</span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">uint8_t</span> <span class="n">type</span><span class="p">,</span>
+    <span class="n">ssh_buffer</span> <span class="n">packet</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">user</span>
+    <span class="p">)</span>
+</pre>
+<p>Prototype for a packet callback, to be called when a new packet arrives.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The current session of the packet</td>
+</tr>
+<tr class="row-even"><td>type</td>
+<td>packet type (see <code class="docutils literal notranslate"><span class="pre">ssh2.h</span></code>)</td>
+</tr>
+<tr class="row-odd"><td>packet</td>
+<td>buffer containing the packet, excluding size, type and padding fields</td>
+</tr>
+<tr class="row-even"><td>user</td>
+<td>user argument to the callback and are called each time a packet shows up</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_PACKET_USED Packet was parsed and used</p>
+<p>SSH_PACKET_NOT_USED Packet was not used or understood, processing must continue</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1gaa1866ffc041b50c341f9cba866a8055c">
+<span id="index-25"></span><span></span><span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">ssh_service_request_callback</span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">service</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">)</span>
+</pre>
+<p>Handles an SSH service request.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>current session handler</td>
+</tr>
+<tr class="row-even"><td>service</td>
+<td>name of the service (e.g. “ssh-userauth”) requested</td>
+</tr>
+<tr class="row-odd"><td>userdata</td>
+<td>Userdata to be passed to the callback function.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if the request is to be allowed</p>
+<p>-1 if the request should not be allowed</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1gabd1e46f073ad992ae8642d8ebcde45a3">
+<span id="index-26"></span><span></span><span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">ssh_status_callback</span><span class="p">)(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">float</span> <span class="n">status</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">userdata</span>
+    <span class="p">)</span>
+</pre>
+<p>SSH Connection status callback.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>Current session handler</td>
+</tr>
+<tr class="row-even"><td>status</td>
+<td>Percentage of connection status, going from 0.0 to 1.0 once connection is done.</td>
+</tr>
+<tr class="row-odd"><td>userdata</td>
+<td>Userdata to be passed to the callback function.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1ga2e4b0507c738748a3f10e43fe201fe09">
+<span id="index-27"></span><a class="reference internal" href="global.html#doxid-libssh-8h-1a2ba7f29ac0f2b5ef7134243d24888ac5"><span class="std std-ref">LIBSSH_API</span></a><span></span> <span class="kt">int</span>
+<span class="n">ssh_set_callbacks</span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_callbacks</span> <span class="n">cb</span>
+    <span class="p">)</span>
+</pre>
+<p>Set the session callback functions.</p>
+<p>This functions sets the callback structure to use your own callback functions for auth, logging and status.</p>
+<pre class="highlight literal-block">
+<span></span><span class="k">struct</span> <span class="n">ssh_callbacks_struct</span> <span class="n">cb</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="p">.</span><span class="n">userdata</span> <span class="o">=</span> <span class="n">data</span><span class="p">,</span>
+  <span class="p">.</span><span class="n">auth_function</span> <span class="o">=</span> <span class="n">my_auth_function</span>
+<span class="p">};</span>
+<span class="n">ssh_callbacks_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cb</span><span class="p">);</span>
+<span class="n">ssh_set_callbacks</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">cb</span><span class="p">);</span>
+</pre>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The session to set the callback structure.</td>
+</tr>
+<tr class="row-even"><td>cb</td>
+<td>The callback structure itself.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK on success, SSH_ERROR on error.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1gacea52d1373970a4922bf60e6b1680919">
+<span id="index-28"></span><a class="reference internal" href="global.html#doxid-libssh-8h-1a2ba7f29ac0f2b5ef7134243d24888ac5"><span class="std std-ref">LIBSSH_API</span></a><span></span> <span class="kt">int</span>
+<span class="n">ssh_set_channel_callbacks</span><span class="p">(</span>
+    <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">,</span>
+    <span class="n">ssh_channel_callbacks</span> <span class="n">cb</span>
+    <span class="p">)</span>
+</pre>
+<p>Set the channel callback functions.</p>
+<p>This functions sets the callback structure to use your own callback functions for channel data and exceptions</p>
+<pre class="highlight literal-block">
+<span></span><span class="k">struct</span> <span class="n">ssh_channel_callbacks_struct</span> <span class="n">cb</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="p">.</span><span class="n">userdata</span> <span class="o">=</span> <span class="n">data</span><span class="p">,</span>
+  <span class="p">.</span><span class="n">channel_data</span> <span class="o">=</span> <span class="n">my_channel_data_function</span>
+<span class="p">};</span>
+<span class="n">ssh_callbacks_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cb</span><span class="p">);</span>
+<span class="n">ssh_set_channel_callbacks</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">cb</span><span class="p">);</span>
+</pre>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>channel</td>
+<td>The channel to set the callback structure.</td>
+</tr>
+<tr class="row-even"><td>cb</td>
+<td>The callback structure itself.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK on success, SSH_ERROR on error.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1gaa321f33172cfa54eb50baaa963457a17">
+<span id="index-29"></span><a class="reference internal" href="global.html#doxid-libssh-8h-1a2ba7f29ac0f2b5ef7134243d24888ac5"><span class="std std-ref">LIBSSH_API</span></a><span></span> <span class="kt">int</span>
+<span class="n">ssh_set_server_callbacks</span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_server_callbacks</span> <span class="n">cb</span>
+    <span class="p">)</span>
+</pre>
+<p>Set the session server callback functions.</p>
+<p>This functions sets the callback structure to use your own callback functions for user authentication, new channels and requests.</p>
+<pre class="highlight literal-block">
+<span></span><span class="k">struct</span> <span class="n">ssh_server_callbacks_struct</span> <span class="n">cb</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="p">.</span><span class="n">userdata</span> <span class="o">=</span> <span class="n">data</span><span class="p">,</span>
+  <span class="p">.</span><span class="n">auth_password_function</span> <span class="o">=</span> <span class="n">my_auth_function</span>
+<span class="p">};</span>
+<span class="n">ssh_callbacks_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cb</span><span class="p">);</span>
+<span class="n">ssh_set_server_callbacks</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">cb</span><span class="p">);</span>
+</pre>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The session to set the callback structure.</td>
+</tr>
+<tr class="row-even"><td>cb</td>
+<td>The callback structure itself.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK on success, SSH_ERROR on error.</p>
+</div>
+<div class="section" id="macros">
+<h3>Macros</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1ga8fd26956f4e2b9bc57cfef26c50e321b">
+<span id="index-30"></span><span></span><span class="cp">#define SSH_PACKET_CALLBACK(name)</span>
+</pre>
+<p>This macro declares a packet callback handler.</p>
+<pre class="highlight literal-block">
+<span></span><span class="n">SSH_PACKET_CALLBACK</span><span class="p">(</span><span class="n">mycallback</span><span class="p">){</span>
+<span class="p">...</span>
+<span class="p">}</span>
+</pre>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1ga4766917128a12b646a8aee7ebc019f8c">
+<span id="index-31"></span><span></span><span class="cp">#define SSH_PACKET_NOT_USED</span>
+</pre>
+<p>Packet was not used and should be passed to any other callback available.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1gac29df803aa1295d6a498c1b081f3b494">
+<span id="index-32"></span><span></span><span class="cp">#define SSH_PACKET_USED</span>
+</pre>
+<p>return values for a ssh_packet_callback</p>
+<p>Packet was used and should not be parsed by another callback</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-callbacks-1gafe09b81e5346f0babe288dc38113d289">
+<span id="index-33"></span><span></span><span class="cp">#define ssh_callbacks_init(p)</span>
+</pre>
+<p>Initializes an <a class="reference internal" href="struct_ssh_callbacks_struct.html#doxid-structssh-callbacks-struct"><span class="std std-ref">ssh_callbacks_struct</span></a> A call to this macro is mandatory when you have set a new ssh_callback_struct structure.</p>
+<p>Its goal is to maintain the binary compatibility with future versions of libssh as the structure evolves with time.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="struct_ssh_callbacks_struct.html" title="struct ssh_callbacks_struct"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="group_libssh_threads.html" title="The SSH threading functions."
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LibSSH Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="group_libssh.html" >The libssh API</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2003-2017, LibSSH Maintainers.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    </div>
+  </body>
+</html>

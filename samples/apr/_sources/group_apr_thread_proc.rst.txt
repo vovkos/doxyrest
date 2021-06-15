@@ -1,0 +1,2445 @@
+.. index:: pair: group; Threads and Process Functions
+.. _doxid-group__apr__thread__proc:
+
+Threads and Process Functions
+=============================
+
+.. toctree::
+	:hidden:
+
+	group_APR_OC.rst
+	enum_apr_cmdtype_e.rst
+	enum_apr_exit_why_e.rst
+	enum_apr_kill_conditions_e.rst
+	enum_apr_wait_how_e.rst
+	struct_apr_proc_t.rst
+
+Overview
+~~~~~~~~
+
+
+
+|	:ref:`Other Child Flags<doxid-group___a_p_r___o_c>`
+
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef struct :ref:`apr_proc_t<doxid-structapr__proc__t>` :ref:`apr_proc_t<doxid-group__apr__thread__proc_1gada60ec0f833048291d98e66f21f4c4c4>`;
+
+	typedef void() :ref:`apr_child_errfn_t<doxid-group__apr__thread__proc_1ga1feae4cf7ed6f156a0db10172e228e2d>`(
+		apr_pool_t *proc,
+		apr_status_t err,
+		const char *description
+		);
+
+	typedef struct :ref:`apr_thread_t<doxid-group__apr__thread__proc_1ga646c71351e723d84f8cc8c8d1d5937be>` :ref:`apr_thread_t<doxid-group__apr__thread__proc_1ga646c71351e723d84f8cc8c8d1d5937be>`;
+	typedef struct :ref:`apr_threadattr_t<doxid-group__apr__thread__proc_1ga35de571e9944871c10b38d8feef885ac>` :ref:`apr_threadattr_t<doxid-group__apr__thread__proc_1ga35de571e9944871c10b38d8feef885ac>`;
+	typedef struct :ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>` :ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`;
+	typedef struct :ref:`apr_thread_once_t<doxid-group__apr__thread__proc_1ga91841bcf20d0579e8e6acc6d3c220ac1>` :ref:`apr_thread_once_t<doxid-group__apr__thread__proc_1ga91841bcf20d0579e8e6acc6d3c220ac1>`;
+	typedef struct :ref:`apr_threadkey_t<doxid-group__apr__thread__proc_1ga337c9c1bd2d47740022071a5c41f2edb>` :ref:`apr_threadkey_t<doxid-group__apr__thread__proc_1ga337c9c1bd2d47740022071a5c41f2edb>`;
+	typedef struct :ref:`apr_other_child_rec_t<doxid-group__apr__thread__proc_1gafc52ee8b19a7b222278d31ebb3f11a71>` :ref:`apr_other_child_rec_t<doxid-group__apr__thread__proc_1gafc52ee8b19a7b222278d31ebb3f11a71>`;
+
+	typedef void*(:ref:`APR_THREAD_FUNC<doxid-group__apr__platform_1gade8f829f9bd98fd4386894acf72edd7c>`* :ref:`apr_thread_start_t<doxid-group__apr__thread__proc_1gaa1f88d2a6fe971ac200e466cae5f63e0>`)(
+		apr_thread_t *,
+		void *
+		);
+
+	// enums
+
+	enum :ref:`apr_cmdtype_e<doxid-group__apr__thread__proc_1gadcb981d7748c580eb69ac11dbf709060>`;
+	enum :ref:`apr_exit_why_e<doxid-group__apr__thread__proc_1gac097b4fa41e67024711c5983446d0951>`;
+	enum :ref:`apr_kill_conditions_e<doxid-group__apr__thread__proc_1ga3eaec78633742e7e0cb9480a21477aff>`;
+	enum :ref:`apr_wait_how_e<doxid-group__apr__thread__proc_1ga5e52d786644f3b66d6180571e68c7260>`;
+
+	// structs
+
+	struct :ref:`apr_proc_t<doxid-structapr__proc__t>`;
+
+	// global functions
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_threadattr_create<doxid-group__apr__thread__proc_1ga66c2f55e5dff9ac37bd32e9febd38da5>`(
+		:ref:`apr_threadattr_t<doxid-group__apr__thread__proc_1ga35de571e9944871c10b38d8feef885ac>`** new_attr,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_threadattr_detach_set<doxid-group__apr__thread__proc_1ga85d44b3b021f28116122d5e40e024648>`(
+		:ref:`apr_threadattr_t<doxid-group__apr__thread__proc_1ga35de571e9944871c10b38d8feef885ac>`* attr,
+		apr_int32_t on
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_threadattr_detach_get<doxid-group__apr__thread__proc_1gae5b7cdb3de542d1b7b52fe5d9d8cb00b>`(:ref:`apr_threadattr_t<doxid-group__apr__thread__proc_1ga35de571e9944871c10b38d8feef885ac>`* attr);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_threadattr_stacksize_set<doxid-group__apr__thread__proc_1ga7849e0d637338a18cb44f66f11f28ed1>`(
+		:ref:`apr_threadattr_t<doxid-group__apr__thread__proc_1ga35de571e9944871c10b38d8feef885ac>`* attr,
+		apr_size_t stacksize
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_threadattr_guardsize_set<doxid-group__apr__thread__proc_1ga2e732f2913291180c0c484f57d727140>`(
+		:ref:`apr_threadattr_t<doxid-group__apr__thread__proc_1ga35de571e9944871c10b38d8feef885ac>`* attr,
+		apr_size_t guardsize
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_thread_create<doxid-group__apr__thread__proc_1gaeba6593f43f1de94c2b4495dd72b0e9f>`(
+		:ref:`apr_thread_t<doxid-group__apr__thread__proc_1ga646c71351e723d84f8cc8c8d1d5937be>`** new_thread,
+		:ref:`apr_threadattr_t<doxid-group__apr__thread__proc_1ga35de571e9944871c10b38d8feef885ac>`* attr,
+		:ref:`apr_thread_start_t<doxid-group__apr__thread__proc_1gaa1f88d2a6fe971ac200e466cae5f63e0>` func,
+		void* data,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_thread_exit<doxid-group__apr__thread__proc_1ga0e35365e530578bca1b4bea522ac8c85>`(
+		:ref:`apr_thread_t<doxid-group__apr__thread__proc_1ga646c71351e723d84f8cc8c8d1d5937be>`* thd,
+		:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>` retval
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_thread_join<doxid-group__apr__thread__proc_1ga1b950f36fa5bcd5a64887073f46f6d13>`(
+		:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`* retval,
+		:ref:`apr_thread_t<doxid-group__apr__thread__proc_1ga646c71351e723d84f8cc8c8d1d5937be>`* thd
+		);
+
+	void
+	:ref:`apr_thread_yield<doxid-group__apr__thread__proc_1gacd69fb862c069cb6f297f65d64b5c102>`(void);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_thread_once_init<doxid-group__apr__thread__proc_1ga63f3bf667151053e45d5a2029daeda0d>`(
+		:ref:`apr_thread_once_t<doxid-group__apr__thread__proc_1ga91841bcf20d0579e8e6acc6d3c220ac1>`** control,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_thread_once<doxid-group__apr__thread__proc_1ga8f3645ee52ff07566c92181b4ce732d8>`(
+		:ref:`apr_thread_once_t<doxid-group__apr__thread__proc_1ga91841bcf20d0579e8e6acc6d3c220ac1>`* control,
+		void(*)(void) func
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_thread_detach<doxid-group__apr__thread__proc_1gadbd186912d5f6f2a19a175e1e02ba10e>`(:ref:`apr_thread_t<doxid-group__apr__thread__proc_1ga646c71351e723d84f8cc8c8d1d5937be>`* thd);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_thread_data_get<doxid-group__apr__thread__proc_1gad799c8140ed068a12f1dbe134423eae7>`(
+		void** data,
+		const char* key,
+		:ref:`apr_thread_t<doxid-group__apr__thread__proc_1ga646c71351e723d84f8cc8c8d1d5937be>`* thread
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_thread_data_set<doxid-group__apr__thread__proc_1gaa90d79c9935692db4f27a6573f437221>`(
+		void* data,
+		const char* key,
+		:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`(*)(void*) cleanup,
+		:ref:`apr_thread_t<doxid-group__apr__thread__proc_1ga646c71351e723d84f8cc8c8d1d5937be>`* thread
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_threadkey_private_create<doxid-group__apr__thread__proc_1gacb9553b2b3165388bfc0a54b1148804a>`(
+		:ref:`apr_threadkey_t<doxid-group__apr__thread__proc_1ga337c9c1bd2d47740022071a5c41f2edb>`** key,
+		void(*)(void*) dest,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_threadkey_private_get<doxid-group__apr__thread__proc_1ga371c87c122cc3df0b7ad0031f6e11167>`(
+		void** new_mem,
+		:ref:`apr_threadkey_t<doxid-group__apr__thread__proc_1ga337c9c1bd2d47740022071a5c41f2edb>`* key
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_threadkey_private_set<doxid-group__apr__thread__proc_1ga63501a064ca7f1818aa056b40146aa0b>`(
+		void* priv,
+		:ref:`apr_threadkey_t<doxid-group__apr__thread__proc_1ga337c9c1bd2d47740022071a5c41f2edb>`* key
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_threadkey_private_delete<doxid-group__apr__thread__proc_1ga20b9b79892a6532784fff023a4ebd8cf>`(:ref:`apr_threadkey_t<doxid-group__apr__thread__proc_1ga337c9c1bd2d47740022071a5c41f2edb>`* key);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_threadkey_data_get<doxid-group__apr__thread__proc_1gae203664972dfc5c555620ae1788f5b48>`(
+		void** data,
+		const char* key,
+		:ref:`apr_threadkey_t<doxid-group__apr__thread__proc_1ga337c9c1bd2d47740022071a5c41f2edb>`* threadkey
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_threadkey_data_set<doxid-group__apr__thread__proc_1ga1059158f34dded87f21ba82af1211951>`(
+		void* data,
+		const char* key,
+		:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`(*)(void*) cleanup,
+		:ref:`apr_threadkey_t<doxid-group__apr__thread__proc_1ga337c9c1bd2d47740022071a5c41f2edb>`* threadkey
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_procattr_create<doxid-group__apr__thread__proc_1ga90f8ef684e601c110daad9b63da53cf3>`(
+		:ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`** new_attr,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_procattr_io_set<doxid-group__apr__thread__proc_1ga2b1598bc6f5ab0bfcf2e55096d563c98>`(
+		:ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`* attr,
+		apr_int32_t in,
+		apr_int32_t out,
+		apr_int32_t err
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_procattr_child_in_set<doxid-group__apr__thread__proc_1ga24f40119b1aa07dd45a681a44915cb1b>`(
+		struct :ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`* attr,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* child_in,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* parent_in
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_procattr_child_out_set<doxid-group__apr__thread__proc_1gabb97e9a49021ab4452ae3f1a281c977f>`(
+		struct :ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`* attr,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* child_out,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* parent_out
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_procattr_child_err_set<doxid-group__apr__thread__proc_1ga6fad364c6c820e37c0915435cfb3921f>`(
+		struct :ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`* attr,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* child_err,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* parent_err
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_procattr_dir_set<doxid-group__apr__thread__proc_1ga97766f50b0ae083a2f8a28e698a59baa>`(
+		:ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`* attr,
+		const char* dir
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_procattr_cmdtype_set<doxid-group__apr__thread__proc_1ga1426acc5bdd96385769e7b42bfa6ebbd>`(
+		:ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`* attr,
+		:ref:`apr_cmdtype_e<doxid-group__apr__thread__proc_1gadcb981d7748c580eb69ac11dbf709060>` cmd
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_procattr_detach_set<doxid-group__apr__thread__proc_1ga3ccca55041f648f00f0605673d4e0fdc>`(
+		:ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`* attr,
+		apr_int32_t detach
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_procattr_limit_set<doxid-group__apr__thread__proc_1ga4de85cfd54d27476dbb943955c1b0a2a>`(
+		:ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`* attr,
+		apr_int32_t what,
+		struct rlimit* limit
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_procattr_child_errfn_set<doxid-group__apr__thread__proc_1gaa39deba0837e0772754ad41589b733cf>`(
+		:ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`* attr,
+		:ref:`apr_child_errfn_t<doxid-group__apr__thread__proc_1ga1feae4cf7ed6f156a0db10172e228e2d>`* errfn
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_procattr_error_check_set<doxid-group__apr__thread__proc_1ga24076f050e9385af09ad8c3931d8dc43>`(
+		:ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`* attr,
+		apr_int32_t chk
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_procattr_addrspace_set<doxid-group__apr__thread__proc_1ga0f1dd02408995767efcb9c0d9c775620>`(
+		:ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`* attr,
+		apr_int32_t addrspace
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_procattr_user_set<doxid-group__apr__thread__proc_1ga741ed3dc047b935b091a21528c49bb19>`(
+		:ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`* attr,
+		const char* username,
+		const char* password
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_procattr_group_set<doxid-group__apr__thread__proc_1ga391f0d3831a5894ea2118762789a395d>`(
+		:ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`* attr,
+		const char* groupname
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_proc_fork<doxid-group__apr__thread__proc_1ga3d0415bf69b0a629a929833e82758b85>`(
+		:ref:`apr_proc_t<doxid-structapr__proc__t>`* proc,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_proc_create<doxid-group__apr__thread__proc_1gab51dd90b98d365a969f0ec5c7bef4e14>`(
+		:ref:`apr_proc_t<doxid-structapr__proc__t>`* new_proc,
+		const char* progname,
+		const char*const* args,
+		const char*const* env,
+		:ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`* attr,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_proc_wait<doxid-group__apr__thread__proc_1ga0936f7a7fe7e2d5e08979c9f343a5a1b>`(
+		:ref:`apr_proc_t<doxid-structapr__proc__t>`* proc,
+		int* exitcode,
+		:ref:`apr_exit_why_e<doxid-group__apr__thread__proc_1gac097b4fa41e67024711c5983446d0951>`* exitwhy,
+		:ref:`apr_wait_how_e<doxid-group__apr__thread__proc_1ga5e52d786644f3b66d6180571e68c7260>` waithow
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_proc_wait_all_procs<doxid-group__apr__thread__proc_1ga506183074e8413c3ff597539e4768ea4>`(
+		:ref:`apr_proc_t<doxid-structapr__proc__t>`* proc,
+		int* exitcode,
+		:ref:`apr_exit_why_e<doxid-group__apr__thread__proc_1gac097b4fa41e67024711c5983446d0951>`* exitwhy,
+		:ref:`apr_wait_how_e<doxid-group__apr__thread__proc_1ga5e52d786644f3b66d6180571e68c7260>` waithow,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_proc_detach<doxid-group__apr__thread__proc_1ga56c2b005792752b63d804f2021596406>`(int daemonize);
+
+	void
+	:ref:`apr_proc_other_child_register<doxid-group__apr__thread__proc_1gaf8d2be452a819161aa4cd6205a17761e>`(
+		:ref:`apr_proc_t<doxid-structapr__proc__t>`* proc,
+		void(*)(int reason, void*, int status) maintenance,
+		void* data,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* write_fd,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		);
+
+	void
+	:ref:`apr_proc_other_child_unregister<doxid-group__apr__thread__proc_1ga10b1a4b224566c03c97f100ac8a2c830>`(void* data);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_proc_other_child_alert<doxid-group__apr__thread__proc_1ga88701979c4e5ac4b94966c73e0159efd>`(
+		:ref:`apr_proc_t<doxid-structapr__proc__t>`* proc,
+		int reason,
+		int status
+		);
+
+	void
+	:ref:`apr_proc_other_child_refresh<doxid-group__apr__thread__proc_1ga74a905d90a3476a611adeeb304931a6c>`(
+		:ref:`apr_other_child_rec_t<doxid-group__apr__thread__proc_1gafc52ee8b19a7b222278d31ebb3f11a71>`* ocr,
+		int reason
+		);
+
+	void
+	:ref:`apr_proc_other_child_refresh_all<doxid-group__apr__thread__proc_1gacff5e867a92619d30c4e78f9ad2a58e3>`(int reason);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_proc_kill<doxid-group__apr__thread__proc_1ga4a5ff2fce2c68460281b0cb3ee0365d5>`(
+		:ref:`apr_proc_t<doxid-structapr__proc__t>`* proc,
+		int sig
+		);
+
+	void
+	:ref:`apr_pool_note_subprocess<doxid-group__apr__thread__proc_1gacbe3fd9491fa35149de28cebcae22f87>`(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* a,
+		:ref:`apr_proc_t<doxid-structapr__proc__t>`* proc,
+		:ref:`apr_kill_conditions_e<doxid-group__apr__thread__proc_1ga3eaec78633742e7e0cb9480a21477aff>` how
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_setup_signal_thread<doxid-group__apr__thread__proc_1ga7adc09cd24568666266edce81cfffbed>`(void);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_signal_thread<doxid-group__apr__thread__proc_1ga2e53fa76ff725749c7affe6c81faa9e5>`(int(*)(int signum) signal_handler);
+
+	:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`*
+	:ref:`apr_thread_pool_get<doxid-group__apr__thread__proc_1ga089b70ae9d6c64d2675a1fd1e9cd0d0d>`(const :ref:`apr_thread_t<doxid-group__apr__thread__proc_1ga646c71351e723d84f8cc8c8d1d5937be>`* thethread);
+
+	// macros
+
+	#define :ref:`APR_CHILD_BLOCK<doxid-group__apr__thread__proc_1gacad9da4db7a22f46715e50fb8ec1c939>`
+	#define :ref:`APR_FULL_BLOCK<doxid-group__apr__thread__proc_1ga646af57314e71f4647243f36dd03e5ea>`
+	#define :ref:`APR_FULL_NONBLOCK<doxid-group__apr__thread__proc_1gae0707f76da785490830fc3491093767c>`
+	#define :ref:`APR_LIMIT_CPU<doxid-group__apr__thread__proc_1gaad8a94c7ac2be58fe035b2fd6efec84f>`
+	#define :ref:`APR_LIMIT_MEM<doxid-group__apr__thread__proc_1ga6dbb01bb357b078acff8fd87e9c494e8>`
+	#define :ref:`APR_LIMIT_NOFILE<doxid-group__apr__thread__proc_1ga18d73099d66988698a9ad2aebdce2c9f>`
+	#define :ref:`APR_LIMIT_NPROC<doxid-group__apr__thread__proc_1ga72e9be453a20f4e78bc6d7bd95d7c333>`
+	#define :ref:`APR_NO_FILE<doxid-group__apr__thread__proc_1ga597fb6a501c20cc3a597fe6c613f4310>`
+	#define :ref:`APR_NO_PIPE<doxid-group__apr__thread__proc_1gab7cfcb8ed24e6c0a76cd41b5b113ae95>`
+	#define :ref:`APR_PARENT_BLOCK<doxid-group__apr__thread__proc_1ga8653bab028b1c2b98754babc2547f988>`
+	#define :ref:`APR_PROC_CHECK_CORE_DUMP<doxid-group__apr__thread__proc_1ga2249e96191b5d98d33fb7875bce49410>`(x)
+	#define :ref:`APR_PROC_CHECK_EXIT<doxid-group__apr__thread__proc_1ga689b0f3953cde83a4092931bad8b7183>`(x)
+	#define :ref:`APR_PROC_CHECK_SIGNALED<doxid-group__apr__thread__proc_1gaa0a8a0b8785cc9392059c7accd71f5f6>`(x)
+	#define :ref:`APR_PROC_DETACH_DAEMONIZE<doxid-group__apr__thread__proc_1gab4de7134fcc66c4127ae65b68631f846>`
+	#define :ref:`APR_PROC_DETACH_FOREGROUND<doxid-group__apr__thread__proc_1gab57b448a464ac299c03d6127781df152>`
+	#define :ref:`APR_READ_BLOCK<doxid-group__apr__thread__proc_1gaf8295548cb0821ee02249d6de8336bcb>`
+	#define :ref:`APR_WRITE_BLOCK<doxid-group__apr__thread__proc_1ga36ff2de9664ad6995bd488b4ac715c9c>`
+
+.. _details-group__apr__thread__proc:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+Typedefs
+--------
+
+.. index:: pair: typedef; apr_proc_t
+.. _doxid-group__apr__thread__proc_1gada60ec0f833048291d98e66f21f4c4c4:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_proc_t<doxid-structapr__proc__t>` apr_proc_t
+
+The APR process type
+
+.. index:: pair: typedef; apr_child_errfn_t
+.. _doxid-group__apr__thread__proc_1ga1feae4cf7ed6f156a0db10172e228e2d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef void() apr_child_errfn_t(
+		apr_pool_t *proc,
+		apr_status_t err,
+		const char *description
+		)
+
+The prototype for APR child errfn functions. (See the description of :ref:`apr_procattr_child_errfn_set() <doxid-group__apr__thread__proc_1gaa39deba0837e0772754ad41589b733cf>` for more information.) It is passed the following parameters:
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pool
+
+		- Pool associated with the :ref:`apr_proc_t <doxid-structapr__proc__t>`. If your child error function needs user data, associate it with this pool.
+
+	*
+		- err
+
+		- APR error code describing the error
+
+	*
+		- description
+
+		- Text description of type of processing which failed
+
+.. index:: pair: typedef; apr_thread_t
+.. _doxid-group__apr__thread__proc_1ga646c71351e723d84f8cc8c8d1d5937be:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_thread_t<doxid-group__apr__thread__proc_1ga646c71351e723d84f8cc8c8d1d5937be>` apr_thread_t
+
+Opaque Thread structure.
+
+.. index:: pair: typedef; apr_threadattr_t
+.. _doxid-group__apr__thread__proc_1ga35de571e9944871c10b38d8feef885ac:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_threadattr_t<doxid-group__apr__thread__proc_1ga35de571e9944871c10b38d8feef885ac>` apr_threadattr_t
+
+Opaque Thread attributes structure.
+
+.. index:: pair: typedef; apr_procattr_t
+.. _doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>` apr_procattr_t
+
+Opaque Process attributes structure.
+
+.. index:: pair: typedef; apr_thread_once_t
+.. _doxid-group__apr__thread__proc_1ga91841bcf20d0579e8e6acc6d3c220ac1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_thread_once_t<doxid-group__apr__thread__proc_1ga91841bcf20d0579e8e6acc6d3c220ac1>` apr_thread_once_t
+
+Opaque control variable for one-time atomic variables.
+
+.. index:: pair: typedef; apr_threadkey_t
+.. _doxid-group__apr__thread__proc_1ga337c9c1bd2d47740022071a5c41f2edb:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_threadkey_t<doxid-group__apr__thread__proc_1ga337c9c1bd2d47740022071a5c41f2edb>` apr_threadkey_t
+
+Opaque thread private address space.
+
+.. index:: pair: typedef; apr_other_child_rec_t
+.. _doxid-group__apr__thread__proc_1gafc52ee8b19a7b222278d31ebb3f11a71:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_other_child_rec_t<doxid-group__apr__thread__proc_1gafc52ee8b19a7b222278d31ebb3f11a71>` apr_other_child_rec_t
+
+Opaque record of child process.
+
+.. index:: pair: typedef; apr_thread_start_t
+.. _doxid-group__apr__thread__proc_1gaa1f88d2a6fe971ac200e466cae5f63e0:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef void*(:ref:`APR_THREAD_FUNC<doxid-group__apr__platform_1gade8f829f9bd98fd4386894acf72edd7c>`* apr_thread_start_t)(
+		apr_thread_t *,
+		void *
+		)
+
+The prototype for any APR thread worker functions.
+
+Global Functions
+----------------
+
+.. index:: pair: function; apr_threadattr_create
+.. _doxid-group__apr__thread__proc_1ga66c2f55e5dff9ac37bd32e9febd38da5:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_threadattr_create(
+		:ref:`apr_threadattr_t<doxid-group__apr__thread__proc_1ga35de571e9944871c10b38d8feef885ac>`** new_attr,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		)
+
+Create and initialize a new threadattr variable
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- new_attr
+
+		- The newly created threadattr.
+
+	*
+		- cont
+
+		- The pool to use
+
+.. index:: pair: function; apr_threadattr_detach_set
+.. _doxid-group__apr__thread__proc_1ga85d44b3b021f28116122d5e40e024648:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_threadattr_detach_set(
+		:ref:`apr_threadattr_t<doxid-group__apr__thread__proc_1ga35de571e9944871c10b38d8feef885ac>`* attr,
+		apr_int32_t on
+		)
+
+Set if newly created threads should be created in detached state.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- attr
+
+		- The threadattr to affect
+
+	*
+		- on
+
+		- Non-zero if detached threads should be created.
+
+.. index:: pair: function; apr_threadattr_detach_get
+.. _doxid-group__apr__thread__proc_1gae5b7cdb3de542d1b7b52fe5d9d8cb00b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_threadattr_detach_get(:ref:`apr_threadattr_t<doxid-group__apr__thread__proc_1ga35de571e9944871c10b38d8feef885ac>`* attr)
+
+Get the detach state for this threadattr.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- attr
+
+		- The threadattr to reference
+
+
+
+.. rubric:: Returns:
+
+APR_DETACH if threads are to be detached, or APR_NOTDETACH if threads are to be joinable.
+
+.. index:: pair: function; apr_threadattr_stacksize_set
+.. _doxid-group__apr__thread__proc_1ga7849e0d637338a18cb44f66f11f28ed1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_threadattr_stacksize_set(
+		:ref:`apr_threadattr_t<doxid-group__apr__thread__proc_1ga35de571e9944871c10b38d8feef885ac>`* attr,
+		apr_size_t stacksize
+		)
+
+Set the stack size of newly created threads.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- attr
+
+		- The threadattr to affect
+
+	*
+		- stacksize
+
+		- The stack size in bytes
+
+.. index:: pair: function; apr_threadattr_guardsize_set
+.. _doxid-group__apr__thread__proc_1ga2e732f2913291180c0c484f57d727140:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_threadattr_guardsize_set(
+		:ref:`apr_threadattr_t<doxid-group__apr__thread__proc_1ga35de571e9944871c10b38d8feef885ac>`* attr,
+		apr_size_t guardsize
+		)
+
+Set the stack guard area size of newly created threads. Thread library implementations commonly use a "guard area" after each thread's stack which is not readable or writable such that stack overflows cause a segfault; this consumes e.g. 4K of memory and increases memory management overhead. Setting the guard area size to zero hence trades off reliable behaviour on stack overflow for performance.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- attr
+
+		- The threadattr to affect
+
+	*
+		- guardsize
+
+		- The stack guard area size in bytes
+
+.. index:: pair: function; apr_thread_create
+.. _doxid-group__apr__thread__proc_1gaeba6593f43f1de94c2b4495dd72b0e9f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_thread_create(
+		:ref:`apr_thread_t<doxid-group__apr__thread__proc_1ga646c71351e723d84f8cc8c8d1d5937be>`** new_thread,
+		:ref:`apr_threadattr_t<doxid-group__apr__thread__proc_1ga35de571e9944871c10b38d8feef885ac>`* attr,
+		:ref:`apr_thread_start_t<doxid-group__apr__thread__proc_1gaa1f88d2a6fe971ac200e466cae5f63e0>` func,
+		void* data,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		)
+
+Create a new thread of execution
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- new_thread
+
+		- The newly created thread handle.
+
+	*
+		- attr
+
+		- The threadattr to use to determine how to create the thread
+
+	*
+		- func
+
+		- The function to start the new thread in
+
+	*
+		- data
+
+		- Any data to be passed to the starting function
+
+	*
+		- cont
+
+		- The pool to use
+
+.. index:: pair: function; apr_thread_exit
+.. _doxid-group__apr__thread__proc_1ga0e35365e530578bca1b4bea522ac8c85:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_thread_exit(
+		:ref:`apr_thread_t<doxid-group__apr__thread__proc_1ga646c71351e723d84f8cc8c8d1d5937be>`* thd,
+		:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>` retval
+		)
+
+stop the current thread
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thd
+
+		- The thread to stop
+
+	*
+		- retval
+
+		- The return value to pass back to any thread that cares
+
+.. index:: pair: function; apr_thread_join
+.. _doxid-group__apr__thread__proc_1ga1b950f36fa5bcd5a64887073f46f6d13:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_thread_join(
+		:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`* retval,
+		:ref:`apr_thread_t<doxid-group__apr__thread__proc_1ga646c71351e723d84f8cc8c8d1d5937be>`* thd
+		)
+
+block until the desired thread stops executing.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- retval
+
+		- The return value from the dead thread.
+
+	*
+		- thd
+
+		- The thread to join
+
+.. index:: pair: function; apr_thread_yield
+.. _doxid-group__apr__thread__proc_1gacd69fb862c069cb6f297f65d64b5c102:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_thread_yield(void)
+
+force the current thread to yield the processor
+
+.. index:: pair: function; apr_thread_once_init
+.. _doxid-group__apr__thread__proc_1ga63f3bf667151053e45d5a2029daeda0d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_thread_once_init(
+		:ref:`apr_thread_once_t<doxid-group__apr__thread__proc_1ga91841bcf20d0579e8e6acc6d3c220ac1>`** control,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		)
+
+Initialize the control variable for apr_thread_once. If this isn't called, apr_initialize won't work.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- control
+
+		- The control variable to initialize
+
+	*
+		- p
+
+		- The pool to allocate data from.
+
+.. index:: pair: function; apr_thread_once
+.. _doxid-group__apr__thread__proc_1ga8f3645ee52ff07566c92181b4ce732d8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_thread_once(
+		:ref:`apr_thread_once_t<doxid-group__apr__thread__proc_1ga91841bcf20d0579e8e6acc6d3c220ac1>`* control,
+		void(*)(void) func
+		)
+
+Run the specified function one time, regardless of how many threads call it.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- control
+
+		- The control variable. The same variable should be passed in each time the function is tried to be called. This is how the underlying functions determine if the function has ever been called before.
+
+	*
+		- func
+
+		- The function to call.
+
+.. index:: pair: function; apr_thread_detach
+.. _doxid-group__apr__thread__proc_1gadbd186912d5f6f2a19a175e1e02ba10e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_thread_detach(:ref:`apr_thread_t<doxid-group__apr__thread__proc_1ga646c71351e723d84f8cc8c8d1d5937be>`* thd)
+
+detach a thread
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thd
+
+		- The thread to detach
+
+.. index:: pair: function; apr_thread_data_get
+.. _doxid-group__apr__thread__proc_1gad799c8140ed068a12f1dbe134423eae7:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_thread_data_get(
+		void** data,
+		const char* key,
+		:ref:`apr_thread_t<doxid-group__apr__thread__proc_1ga646c71351e723d84f8cc8c8d1d5937be>`* thread
+		)
+
+Return user data associated with the current thread.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- data
+
+		- The user data associated with the thread.
+
+	*
+		- key
+
+		- The key to associate with the data
+
+	*
+		- thread
+
+		- The currently open thread.
+
+.. index:: pair: function; apr_thread_data_set
+.. _doxid-group__apr__thread__proc_1gaa90d79c9935692db4f27a6573f437221:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_thread_data_set(
+		void* data,
+		const char* key,
+		:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`(*)(void*) cleanup,
+		:ref:`apr_thread_t<doxid-group__apr__thread__proc_1ga646c71351e723d84f8cc8c8d1d5937be>`* thread
+		)
+
+Set user data associated with the current thread.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- data
+
+		- The user data to associate with the thread.
+
+	*
+		- key
+
+		- The key to use for associating the data with the thread
+
+	*
+		- cleanup
+
+		- The cleanup routine to use when the thread is destroyed.
+
+	*
+		- thread
+
+		- The currently open thread.
+
+.. index:: pair: function; apr_threadkey_private_create
+.. _doxid-group__apr__thread__proc_1gacb9553b2b3165388bfc0a54b1148804a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_threadkey_private_create(
+		:ref:`apr_threadkey_t<doxid-group__apr__thread__proc_1ga337c9c1bd2d47740022071a5c41f2edb>`** key,
+		void(*)(void*) dest,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		)
+
+Create and initialize a new thread private address space
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- key
+
+		- The thread private handle.
+
+	*
+		- dest
+
+		- The destructor to use when freeing the private memory.
+
+	*
+		- cont
+
+		- The pool to use
+
+.. index:: pair: function; apr_threadkey_private_get
+.. _doxid-group__apr__thread__proc_1ga371c87c122cc3df0b7ad0031f6e11167:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_threadkey_private_get(
+		void** new_mem,
+		:ref:`apr_threadkey_t<doxid-group__apr__thread__proc_1ga337c9c1bd2d47740022071a5c41f2edb>`* key
+		)
+
+Get a pointer to the thread private memory
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- new_mem
+
+		- The data stored in private memory
+
+	*
+		- key
+
+		- The handle for the desired thread private memory
+
+.. index:: pair: function; apr_threadkey_private_set
+.. _doxid-group__apr__thread__proc_1ga63501a064ca7f1818aa056b40146aa0b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_threadkey_private_set(
+		void* priv,
+		:ref:`apr_threadkey_t<doxid-group__apr__thread__proc_1ga337c9c1bd2d47740022071a5c41f2edb>`* key
+		)
+
+Set the data to be stored in thread private memory
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- priv
+
+		- The data to be stored in private memory
+
+	*
+		- key
+
+		- The handle for the desired thread private memory
+
+.. index:: pair: function; apr_threadkey_private_delete
+.. _doxid-group__apr__thread__proc_1ga20b9b79892a6532784fff023a4ebd8cf:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_threadkey_private_delete(:ref:`apr_threadkey_t<doxid-group__apr__thread__proc_1ga337c9c1bd2d47740022071a5c41f2edb>`* key)
+
+Free the thread private memory
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- key
+
+		- The handle for the desired thread private memory
+
+.. index:: pair: function; apr_threadkey_data_get
+.. _doxid-group__apr__thread__proc_1gae203664972dfc5c555620ae1788f5b48:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_threadkey_data_get(
+		void** data,
+		const char* key,
+		:ref:`apr_threadkey_t<doxid-group__apr__thread__proc_1ga337c9c1bd2d47740022071a5c41f2edb>`* threadkey
+		)
+
+Return the pool associated with the current threadkey.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- data
+
+		- The user data associated with the threadkey.
+
+	*
+		- key
+
+		- The key associated with the data
+
+	*
+		- threadkey
+
+		- The currently open threadkey.
+
+.. index:: pair: function; apr_threadkey_data_set
+.. _doxid-group__apr__thread__proc_1ga1059158f34dded87f21ba82af1211951:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_threadkey_data_set(
+		void* data,
+		const char* key,
+		:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`(*)(void*) cleanup,
+		:ref:`apr_threadkey_t<doxid-group__apr__thread__proc_1ga337c9c1bd2d47740022071a5c41f2edb>`* threadkey
+		)
+
+Return the pool associated with the current threadkey.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- data
+
+		- The data to set.
+
+	*
+		- key
+
+		- The key to associate with the data.
+
+	*
+		- cleanup
+
+		- The cleanup routine to use when the file is destroyed.
+
+	*
+		- threadkey
+
+		- The currently open threadkey.
+
+.. index:: pair: function; apr_procattr_create
+.. _doxid-group__apr__thread__proc_1ga90f8ef684e601c110daad9b63da53cf3:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_procattr_create(
+		:ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`** new_attr,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		)
+
+Create and initialize a new procattr variable
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- new_attr
+
+		- The newly created procattr.
+
+	*
+		- cont
+
+		- The pool to use
+
+.. index:: pair: function; apr_procattr_io_set
+.. _doxid-group__apr__thread__proc_1ga2b1598bc6f5ab0bfcf2e55096d563c98:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_procattr_io_set(
+		:ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`* attr,
+		apr_int32_t in,
+		apr_int32_t out,
+		apr_int32_t err
+		)
+
+Determine if any of stdin, stdout, or stderr should be linked to pipes when starting a child process. If APR_NO_PIPE, there will be no special channel, the child inherits the parent's corresponding stdio stream. If APR_NO_FILE is specified, that corresponding stream is closed in the child (and will be INVALID_HANDLE_VALUE when inspected on Win32). This can have ugly side effects, as the next file opened in the child on Unix will fall into the stdio stream fd slot!
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- attr
+
+		- The procattr we care about.
+
+	*
+		- in
+
+		- Should stdin be a pipe back to the parent?
+
+	*
+		- out
+
+		- Should stdout be a pipe back to the parent?
+
+	*
+		- err
+
+		- Should stderr be a pipe back to the parent?
+
+.. index:: pair: function; apr_procattr_child_in_set
+.. _doxid-group__apr__thread__proc_1ga24f40119b1aa07dd45a681a44915cb1b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_procattr_child_in_set(
+		struct :ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`* attr,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* child_in,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* parent_in
+		)
+
+Set the child_in and/or parent_in values to existing apr_file_t values. This is NOT a required initializer function. This is useful if you have already opened a pipe (or multiple files) that you wish to use, perhaps persistently across multiple process invocations - such as a log file. You can save some extra function calls by not creating your own pipe since this creates one in the process space for you.
+
+Bug Note that calling this function with two NULL files on some platforms creates an APR_FULL_BLOCK pipe, but this behavior is neither portable nor is it supported.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- attr
+
+		- The procattr we care about.
+
+	*
+		- child_in
+
+		- apr_file_t value to use as child_in. Must be a valid file.
+
+	*
+		- parent_in
+
+		- apr_file_t value to use as parent_in. Must be a valid file.
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_procattr_io_set <doxid-group__apr__thread__proc_1ga2b1598bc6f5ab0bfcf2e55096d563c98>` instead for simple pipes.
+
+.. index:: pair: function; apr_procattr_child_out_set
+.. _doxid-group__apr__thread__proc_1gabb97e9a49021ab4452ae3f1a281c977f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_procattr_child_out_set(
+		struct :ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`* attr,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* child_out,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* parent_out
+		)
+
+Set the child_out and parent_out values to existing apr_file_t values. This is NOT a required initializer function. This is useful if you have already opened a pipe (or multiple files) that you wish to use, perhaps persistently across multiple process invocations - such as a log file.
+
+Bug Note that calling this function with two NULL files on some platforms creates an APR_FULL_BLOCK pipe, but this behavior is neither portable nor is it supported.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- attr
+
+		- The procattr we care about.
+
+	*
+		- child_out
+
+		- apr_file_t value to use as child_out. Must be a valid file.
+
+	*
+		- parent_out
+
+		- apr_file_t value to use as parent_out. Must be a valid file.
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_procattr_io_set <doxid-group__apr__thread__proc_1ga2b1598bc6f5ab0bfcf2e55096d563c98>` instead for simple pipes.
+
+.. index:: pair: function; apr_procattr_child_err_set
+.. _doxid-group__apr__thread__proc_1ga6fad364c6c820e37c0915435cfb3921f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_procattr_child_err_set(
+		struct :ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`* attr,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* child_err,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* parent_err
+		)
+
+Set the child_err and parent_err values to existing apr_file_t values. This is NOT a required initializer function. This is useful if you have already opened a pipe (or multiple files) that you wish to use, perhaps persistently across multiple process invocations - such as a log file.
+
+Bug Note that calling this function with two NULL files on some platforms creates an APR_FULL_BLOCK pipe, but this behavior is neither portable nor is it supported.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- attr
+
+		- The procattr we care about.
+
+	*
+		- child_err
+
+		- apr_file_t value to use as child_err. Must be a valid file.
+
+	*
+		- parent_err
+
+		- apr_file_t value to use as parent_err. Must be a valid file.
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_procattr_io_set <doxid-group__apr__thread__proc_1ga2b1598bc6f5ab0bfcf2e55096d563c98>` instead for simple pipes.
+
+.. index:: pair: function; apr_procattr_dir_set
+.. _doxid-group__apr__thread__proc_1ga97766f50b0ae083a2f8a28e698a59baa:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_procattr_dir_set(
+		:ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`* attr,
+		const char* dir
+		)
+
+Set which directory the child process should start executing in.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- attr
+
+		- The procattr we care about.
+
+	*
+		- dir
+
+		- Which dir to start in. By default, this is the same dir as the parent currently resides in, when the createprocess call is made.
+
+.. index:: pair: function; apr_procattr_cmdtype_set
+.. _doxid-group__apr__thread__proc_1ga1426acc5bdd96385769e7b42bfa6ebbd:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_procattr_cmdtype_set(
+		:ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`* attr,
+		:ref:`apr_cmdtype_e<doxid-group__apr__thread__proc_1gadcb981d7748c580eb69ac11dbf709060>` cmd
+		)
+
+Set what type of command the child process will call.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- attr
+
+		- The procattr we care about.
+
+	*
+		- cmd
+
+		- 
+		  The type of command. One of:
+		  
+		  .. code-block:: none
+		  
+		  
+		  	APR_SHELLCMD       Anything that the shell can handle
+		  	APR_PROGRAM        Executable program   (default) 
+		  	APR_PROGRAM_ENV    Executable program, copy environment
+		  	APR_PROGRAM_PATH   Executable program on PATH, copy env
+
+.. index:: pair: function; apr_procattr_detach_set
+.. _doxid-group__apr__thread__proc_1ga3ccca55041f648f00f0605673d4e0fdc:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_procattr_detach_set(
+		:ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`* attr,
+		apr_int32_t detach
+		)
+
+Determine if the child should start in detached state.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- attr
+
+		- The procattr we care about.
+
+	*
+		- detach
+
+		- Should the child start in detached state? Default is no.
+
+.. index:: pair: function; apr_procattr_limit_set
+.. _doxid-group__apr__thread__proc_1ga4de85cfd54d27476dbb943955c1b0a2a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_procattr_limit_set(
+		:ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`* attr,
+		apr_int32_t what,
+		struct rlimit* limit
+		)
+
+Set the Resource Utilization limits when starting a new process.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- attr
+
+		- The procattr we care about.
+
+	*
+		- what
+
+		- 
+		  Which limit to set, one of:
+		  
+		  .. code-block:: none
+		  
+		  
+		  	APR_LIMIT_CPU
+		  	APR_LIMIT_MEM
+		  	APR_LIMIT_NPROC
+		  	APR_LIMIT_NOFILE
+
+	*
+		- limit
+
+		- Value to set the limit to.
+
+.. index:: pair: function; apr_procattr_child_errfn_set
+.. _doxid-group__apr__thread__proc_1gaa39deba0837e0772754ad41589b733cf:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_procattr_child_errfn_set(
+		:ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`* attr,
+		:ref:`apr_child_errfn_t<doxid-group__apr__thread__proc_1ga1feae4cf7ed6f156a0db10172e228e2d>`* errfn
+		)
+
+Specify an error function to be called in the child process if APR encounters an error in the child prior to running the specified program. At the present time, it will only be called from :ref:`apr_proc_create() <doxid-group__apr__thread__proc_1gab51dd90b98d365a969f0ec5c7bef4e14>` on platforms where fork() is used. It will never be called on other platforms, on those platforms :ref:`apr_proc_create() <doxid-group__apr__thread__proc_1gab51dd90b98d365a969f0ec5c7bef4e14>` will return the error in the parent process rather than invoke the callback in the now-forked child process.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- attr
+
+		- The procattr describing the child process to be created.
+
+	*
+		- errfn
+
+		- The function to call in the child process.
+
+.. index:: pair: function; apr_procattr_error_check_set
+.. _doxid-group__apr__thread__proc_1ga24076f050e9385af09ad8c3931d8dc43:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_procattr_error_check_set(
+		:ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`* attr,
+		apr_int32_t chk
+		)
+
+Specify that :ref:`apr_proc_create() <doxid-group__apr__thread__proc_1gab51dd90b98d365a969f0ec5c7bef4e14>` should do whatever it can to report failures to the caller of :ref:`apr_proc_create() <doxid-group__apr__thread__proc_1gab51dd90b98d365a969f0ec5c7bef4e14>`, rather than find out in the child. This flag only affects :ref:`apr_proc_create() <doxid-group__apr__thread__proc_1gab51dd90b98d365a969f0ec5c7bef4e14>` on platforms where fork() is used. This leads to extra overhead in the calling process, but that may help the application handle such errors more gracefully.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- attr
+
+		- The procattr describing the child process to be created.
+
+	*
+		- chk
+
+		- Flag to indicate whether or not extra work should be done to try to report failures to the caller.
+
+.. index:: pair: function; apr_procattr_addrspace_set
+.. _doxid-group__apr__thread__proc_1ga0f1dd02408995767efcb9c0d9c775620:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_procattr_addrspace_set(
+		:ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`* attr,
+		apr_int32_t addrspace
+		)
+
+Determine if the child should start in its own address space or using the current one from its parent
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- attr
+
+		- The procattr we care about.
+
+	*
+		- addrspace
+
+		- Should the child start in its own address space? Default is no on NetWare and yes on other platforms.
+
+.. index:: pair: function; apr_procattr_user_set
+.. _doxid-group__apr__thread__proc_1ga741ed3dc047b935b091a21528c49bb19:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_procattr_user_set(
+		:ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`* attr,
+		const char* username,
+		const char* password
+		)
+
+Set the username used for running process
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- attr
+
+		- The procattr we care about.
+
+	*
+		- username
+
+		- The username used
+
+	*
+		- password
+
+		- User password if needed. Password is needed on WIN32 or any other platform having APR_PROCATTR_USER_SET_REQUIRES_PASSWORD set.
+
+.. index:: pair: function; apr_procattr_group_set
+.. _doxid-group__apr__thread__proc_1ga391f0d3831a5894ea2118762789a395d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_procattr_group_set(
+		:ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`* attr,
+		const char* groupname
+		)
+
+Set the group used for running process
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- attr
+
+		- The procattr we care about.
+
+	*
+		- groupname
+
+		- The group name used
+
+.. index:: pair: function; apr_proc_fork
+.. _doxid-group__apr__thread__proc_1ga3d0415bf69b0a629a929833e82758b85:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_proc_fork(
+		:ref:`apr_proc_t<doxid-structapr__proc__t>`* proc,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		)
+
+This is currently the only non-portable call in APR. This executes a standard unix fork. returns APR_INCHILD for the child, and APR_INPARENT for the parent or an error.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- proc
+
+		- The resulting process handle.
+
+	*
+		- cont
+
+		- The pool to use.
+
+.. index:: pair: function; apr_proc_create
+.. _doxid-group__apr__thread__proc_1gab51dd90b98d365a969f0ec5c7bef4e14:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_proc_create(
+		:ref:`apr_proc_t<doxid-structapr__proc__t>`* new_proc,
+		const char* progname,
+		const char*const* args,
+		const char*const* env,
+		:ref:`apr_procattr_t<doxid-group__apr__thread__proc_1ga0d83919a6a0dd609598a864917f8b339>`* attr,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		)
+
+Create a new process and execute a new program within that process. This function returns without waiting for the new process to terminate; use apr_proc_wait for that.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- new_proc
+
+		- The resulting process handle.
+
+	*
+		- progname
+
+		- The program to run
+
+	*
+		- args
+
+		- the arguments to pass to the new program. The first one should be the program name.
+
+	*
+		- env
+
+		- The new environment table for the new process. This should be a list of NULL-terminated strings. This argument is ignored for APR_PROGRAM_ENV, APR_PROGRAM_PATH, and APR_SHELLCMD_ENV types of commands.
+
+	*
+		- attr
+
+		- the procattr we should use to determine how to create the new process
+
+	*
+		- pool
+
+		- The pool to use.
+
+.. index:: pair: function; apr_proc_wait
+.. _doxid-group__apr__thread__proc_1ga0936f7a7fe7e2d5e08979c9f343a5a1b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_proc_wait(
+		:ref:`apr_proc_t<doxid-structapr__proc__t>`* proc,
+		int* exitcode,
+		:ref:`apr_exit_why_e<doxid-group__apr__thread__proc_1gac097b4fa41e67024711c5983446d0951>`* exitwhy,
+		:ref:`apr_wait_how_e<doxid-group__apr__thread__proc_1ga5e52d786644f3b66d6180571e68c7260>` waithow
+		)
+
+Wait for a child process to die The child's status is in the return code to this process. It is one of:
+
+.. code-block:: none
+
+
+	APR_CHILD_DONE      child is no longer running.
+	APR_CHILD_NOTDONE   child is still running.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- proc
+
+		- The process handle that corresponds to the desired child process
+
+	*
+		- exitcode
+
+		- The returned exit status of the child, if a child process dies, or the signal that caused the child to die. On platforms that don't support obtaining this information, the status parameter will be returned as APR_ENOTIMPL.
+
+	*
+		- exitwhy
+
+		- 
+		  Why the child died, the bitwise or of:
+		  
+		  .. code-block:: none
+		  
+		  
+		  	APR_PROC_EXIT         -- process terminated normally
+		  	APR_PROC_SIGNAL       -- process was killed by a signal
+		  	APR_PROC_SIGNAL_CORE  -- process was killed by a signal, and
+		  	                         generated a core dump.
+
+	*
+		- waithow
+
+		- 
+		  How should we wait. One of:
+		  
+		  .. code-block:: none
+		  
+		  
+		  	APR_WAIT   -- block until the child process dies.
+		  	APR_NOWAIT -- return immediately regardless of if the 
+		  	              child is dead or not.
+
+.. index:: pair: function; apr_proc_wait_all_procs
+.. _doxid-group__apr__thread__proc_1ga506183074e8413c3ff597539e4768ea4:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_proc_wait_all_procs(
+		:ref:`apr_proc_t<doxid-structapr__proc__t>`* proc,
+		int* exitcode,
+		:ref:`apr_exit_why_e<doxid-group__apr__thread__proc_1gac097b4fa41e67024711c5983446d0951>`* exitwhy,
+		:ref:`apr_wait_how_e<doxid-group__apr__thread__proc_1ga5e52d786644f3b66d6180571e68c7260>` waithow,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		)
+
+Wait for any current child process to die and return information about that child. Bug Passing proc as a \*proc rather than \*\*proc was an odd choice for some platforms... this should be revisited in 1.0
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- proc
+
+		- Pointer to NULL on entry, will be filled out with child's information
+
+	*
+		- exitcode
+
+		- The returned exit status of the child, if a child process dies, or the signal that caused the child to die. On platforms that don't support obtaining this information, the status parameter will be returned as APR_ENOTIMPL.
+
+	*
+		- exitwhy
+
+		- 
+		  Why the child died, the bitwise or of:
+		  
+		  .. code-block:: none
+		  
+		  
+		  	APR_PROC_EXIT         -- process terminated normally
+		  	APR_PROC_SIGNAL       -- process was killed by a signal
+		  	APR_PROC_SIGNAL_CORE  -- process was killed by a signal, and
+		  	                         generated a core dump.
+
+	*
+		- waithow
+
+		- 
+		  How should we wait. One of:
+		  
+		  .. code-block:: none
+		  
+		  
+		  	APR_WAIT   -- block until the child process dies.
+		  	APR_NOWAIT -- return immediately regardless of if the 
+		  	              child is dead or not.
+
+	*
+		- p
+
+		- Pool to allocate child information out of.
+
+.. index:: pair: function; apr_proc_detach
+.. _doxid-group__apr__thread__proc_1ga56c2b005792752b63d804f2021596406:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_proc_detach(int daemonize)
+
+Detach the process from the controlling terminal.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- daemonize
+
+		- set to non-zero if the process should daemonize and become a background process, else it will stay in the foreground.
+
+.. index:: pair: function; apr_proc_other_child_register
+.. _doxid-group__apr__thread__proc_1gaf8d2be452a819161aa4cd6205a17761e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_proc_other_child_register(
+		:ref:`apr_proc_t<doxid-structapr__proc__t>`* proc,
+		void(*)(int reason, void*, int status) maintenance,
+		void* data,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* write_fd,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		)
+
+Register an other_child a child associated to its registered maintence callback. This callback is invoked when the process dies, is disconnected or disappears. Bug write_fd duplicates the proc->out stream, it's really redundant and should be replaced in the APR 1.0 API with a bitflag of which proc->in/out/err handles should be health checked.
+
+no platform currently tests the pipes health.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- proc
+
+		- The child process to register.
+
+	*
+		- maintenance
+
+		- maintenance is a function that is invoked with a reason and the data pointer passed here.
+
+	*
+		- data
+
+		- Opaque context data passed to the maintenance function.
+
+	*
+		- write_fd
+
+		- An fd that is probed for writing. If it is ever unwritable then the maintenance is invoked with reason OC_REASON_UNWRITABLE.
+
+	*
+		- p
+
+		- The pool to use for allocating memory.
+
+.. index:: pair: function; apr_proc_other_child_unregister
+.. _doxid-group__apr__thread__proc_1ga10b1a4b224566c03c97f100ac8a2c830:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_proc_other_child_unregister(void* data)
+
+Stop watching the specified other child. Since this can be called by a maintenance function while we're scanning the other_children list, all scanners should protect themself by loading ocr->next before calling any maintenance function.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- data
+
+		- The data to pass to the maintenance function. This is used to find the process to unregister.
+
+.. index:: pair: function; apr_proc_other_child_alert
+.. _doxid-group__apr__thread__proc_1ga88701979c4e5ac4b94966c73e0159efd:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_proc_other_child_alert(
+		:ref:`apr_proc_t<doxid-structapr__proc__t>`* proc,
+		int reason,
+		int status
+		)
+
+Notify the maintenance callback of a registered other child process that application has detected an event, such as death. An example of code using this behavior;
+
+.. code-block:: none
+
+	
+	rv = apr_proc_wait_all_procs(&proc, &exitcode, &status, APR_WAIT, p);
+	if (:ref:`APR_STATUS_IS_CHILD_DONE(rv) <doxid-group___a_p_r___s_t_a_t_u_s___i_s_1ga1e6539dfa172cef4026105ca33b2b208>`) {
+	#if APR_HAS_OTHER_CHILD
+	    if (apr_proc_other_child_alert(&proc, APR_OC_REASON_DEATH, status)
+	            == APR_SUCCESS) {
+	        ;  (already handled)
+	    }
+	    else
+	#endif
+	        [... handling non-otherchild processes death ...]
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- proc
+
+		- The process to check
+
+	*
+		- reason
+
+		- The reason code to pass to the maintenance function
+
+	*
+		- status
+
+		- The status to pass to the maintenance function
+
+.. index:: pair: function; apr_proc_other_child_refresh
+.. _doxid-group__apr__thread__proc_1ga74a905d90a3476a611adeeb304931a6c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_proc_other_child_refresh(
+		:ref:`apr_other_child_rec_t<doxid-group__apr__thread__proc_1gafc52ee8b19a7b222278d31ebb3f11a71>`* ocr,
+		int reason
+		)
+
+Test one specific other child processes and invoke the maintenance callback with the appropriate reason code, if still running, or the appropriate reason code if the process is no longer healthy.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ocr
+
+		- The registered other child
+
+	*
+		- reason
+
+		- The reason code (e.g. APR_OC_REASON_RESTART) if still running
+
+.. index:: pair: function; apr_proc_other_child_refresh_all
+.. _doxid-group__apr__thread__proc_1gacff5e867a92619d30c4e78f9ad2a58e3:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_proc_other_child_refresh_all(int reason)
+
+Test all registered other child processes and invoke the maintenance callback with the appropriate reason code, if still running, or the appropriate reason code if the process is no longer healthy.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- reason
+
+		- The reason code (e.g. APR_OC_REASON_RESTART) to running processes
+
+.. index:: pair: function; apr_proc_kill
+.. _doxid-group__apr__thread__proc_1ga4a5ff2fce2c68460281b0cb3ee0365d5:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_proc_kill(
+		:ref:`apr_proc_t<doxid-structapr__proc__t>`* proc,
+		int sig
+		)
+
+Terminate a process.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- proc
+
+		- The process to terminate.
+
+	*
+		- sig
+
+		- How to kill the process.
+
+.. index:: pair: function; apr_pool_note_subprocess
+.. _doxid-group__apr__thread__proc_1gacbe3fd9491fa35149de28cebcae22f87:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_pool_note_subprocess(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* a,
+		:ref:`apr_proc_t<doxid-structapr__proc__t>`* proc,
+		:ref:`apr_kill_conditions_e<doxid-group__apr__thread__proc_1ga3eaec78633742e7e0cb9480a21477aff>` how
+		)
+
+Register a process to be killed when a pool dies.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- a
+
+		- The pool to use to define the processes lifetime
+
+	*
+		- proc
+
+		- The process to register
+
+	*
+		- how
+
+		- 
+		  How to kill the process, one of:
+		  
+		  .. code-block:: none
+		  
+		  
+		  	APR_KILL_NEVER          process is never sent any signals
+		  	APR_KILL_ALWAYS         process is sent SIGKILL on apr_pool_t cleanup
+		  	APR_KILL_AFTER_TIMEOUT  SIGTERM, wait 3 seconds, SIGKILL
+		  	APR_JUST_WAIT           wait forever for the process to complete
+		  	APR_KILL_ONLY_ONCE      send SIGTERM and then wait
+
+.. index:: pair: function; apr_setup_signal_thread
+.. _doxid-group__apr__thread__proc_1ga7adc09cd24568666266edce81cfffbed:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_setup_signal_thread(void)
+
+Setup the process for a single thread to be used for all signal handling. This must be called before any threads are created
+
+.. index:: pair: function; apr_signal_thread
+.. _doxid-group__apr__thread__proc_1ga2e53fa76ff725749c7affe6c81faa9e5:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_signal_thread(int(*)(int signum) signal_handler)
+
+Make the current thread listen for signals. This thread will loop forever, calling a provided function whenever it receives a signal. That functions should return 1 if the signal has been handled, 0 otherwise.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- signal_handler
+
+		- The function to call when a signal is received apr_status_t apr_signal_thread((int)(\*signal_handler)(int signum))
+
+.. index:: pair: function; apr_thread_pool_get
+.. _doxid-group__apr__thread__proc_1ga089b70ae9d6c64d2675a1fd1e9cd0d0d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`*
+	apr_thread_pool_get(const :ref:`apr_thread_t<doxid-group__apr__thread__proc_1ga646c71351e723d84f8cc8c8d1d5937be>`* thethread)
+
+Get the child-pool used by the thread from the thread info.
+
+
+
+.. rubric:: Returns:
+
+apr_pool_t the pool
+
+Macros
+------
+
+.. index:: pair: define; APR_CHILD_BLOCK
+.. _doxid-group__apr__thread__proc_1gacad9da4db7a22f46715e50fb8ec1c939:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_CHILD_BLOCK
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_procattr_io_set <doxid-group__apr__thread__proc_1ga2b1598bc6f5ab0bfcf2e55096d563c98>`
+
+.. index:: pair: define; APR_FULL_BLOCK
+.. _doxid-group__apr__thread__proc_1ga646af57314e71f4647243f36dd03e5ea:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_FULL_BLOCK
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_procattr_io_set <doxid-group__apr__thread__proc_1ga2b1598bc6f5ab0bfcf2e55096d563c98>` and :ref:`apr_file_pipe_create_ex <doxid-group__apr__file__io_1ga2fbbae715bee0e0ca9adadd66ac65e96>`
+
+.. index:: pair: define; APR_FULL_NONBLOCK
+.. _doxid-group__apr__thread__proc_1gae0707f76da785490830fc3491093767c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_FULL_NONBLOCK
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_procattr_io_set <doxid-group__apr__thread__proc_1ga2b1598bc6f5ab0bfcf2e55096d563c98>` and :ref:`apr_file_pipe_create_ex <doxid-group__apr__file__io_1ga2fbbae715bee0e0ca9adadd66ac65e96>`
+
+.. index:: pair: define; APR_LIMIT_CPU
+.. _doxid-group__apr__thread__proc_1gaad8a94c7ac2be58fe035b2fd6efec84f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_LIMIT_CPU
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_procattr_limit_set <doxid-group__apr__thread__proc_1ga4de85cfd54d27476dbb943955c1b0a2a>`
+
+.. index:: pair: define; APR_LIMIT_MEM
+.. _doxid-group__apr__thread__proc_1ga6dbb01bb357b078acff8fd87e9c494e8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_LIMIT_MEM
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_procattr_limit_set <doxid-group__apr__thread__proc_1ga4de85cfd54d27476dbb943955c1b0a2a>`
+
+.. index:: pair: define; APR_LIMIT_NOFILE
+.. _doxid-group__apr__thread__proc_1ga18d73099d66988698a9ad2aebdce2c9f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_LIMIT_NOFILE
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_procattr_limit_set <doxid-group__apr__thread__proc_1ga4de85cfd54d27476dbb943955c1b0a2a>`
+
+.. index:: pair: define; APR_LIMIT_NPROC
+.. _doxid-group__apr__thread__proc_1ga72e9be453a20f4e78bc6d7bd95d7c333:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_LIMIT_NPROC
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_procattr_limit_set <doxid-group__apr__thread__proc_1ga4de85cfd54d27476dbb943955c1b0a2a>`
+
+.. index:: pair: define; APR_NO_FILE
+.. _doxid-group__apr__thread__proc_1ga597fb6a501c20cc3a597fe6c613f4310:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_NO_FILE
+
+Win32 only effective with version 1.2.12, portably introduced in 1.3.0
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_procattr_io_set <doxid-group__apr__thread__proc_1ga2b1598bc6f5ab0bfcf2e55096d563c98>`
+
+:ref:`apr_procattr_io_set <doxid-group__apr__thread__proc_1ga2b1598bc6f5ab0bfcf2e55096d563c98>`
+
+.. index:: pair: define; APR_NO_PIPE
+.. _doxid-group__apr__thread__proc_1gab7cfcb8ed24e6c0a76cd41b5b113ae95:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_NO_PIPE
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_procattr_io_set <doxid-group__apr__thread__proc_1ga2b1598bc6f5ab0bfcf2e55096d563c98>`
+
+.. index:: pair: define; APR_PARENT_BLOCK
+.. _doxid-group__apr__thread__proc_1ga8653bab028b1c2b98754babc2547f988:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_PARENT_BLOCK
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_procattr_io_set <doxid-group__apr__thread__proc_1ga2b1598bc6f5ab0bfcf2e55096d563c98>`
+
+.. index:: pair: define; APR_PROC_CHECK_CORE_DUMP
+.. _doxid-group__apr__thread__proc_1ga2249e96191b5d98d33fb7875bce49410:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_PROC_CHECK_CORE_DUMP(x)
+
+did we get core
+
+.. index:: pair: define; APR_PROC_CHECK_EXIT
+.. _doxid-group__apr__thread__proc_1ga689b0f3953cde83a4092931bad8b7183:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_PROC_CHECK_EXIT(x)
+
+did we exit the process
+
+.. index:: pair: define; APR_PROC_CHECK_SIGNALED
+.. _doxid-group__apr__thread__proc_1gaa0a8a0b8785cc9392059c7accd71f5f6:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_PROC_CHECK_SIGNALED(x)
+
+did we get a signal
+
+.. index:: pair: define; APR_PROC_DETACH_DAEMONIZE
+.. _doxid-group__apr__thread__proc_1gab4de7134fcc66c4127ae65b68631f846:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_PROC_DETACH_DAEMONIZE
+
+Detach
+
+.. index:: pair: define; APR_PROC_DETACH_FOREGROUND
+.. _doxid-group__apr__thread__proc_1gab57b448a464ac299c03d6127781df152:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_PROC_DETACH_FOREGROUND
+
+Do not detach
+
+.. index:: pair: define; APR_READ_BLOCK
+.. _doxid-group__apr__thread__proc_1gaf8295548cb0821ee02249d6de8336bcb:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_READ_BLOCK
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_file_pipe_create_ex <doxid-group__apr__file__io_1ga2fbbae715bee0e0ca9adadd66ac65e96>`
+
+.. index:: pair: define; APR_WRITE_BLOCK
+.. _doxid-group__apr__thread__proc_1ga36ff2de9664ad6995bd488b4ac715c9c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_WRITE_BLOCK
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_file_pipe_create_ex <doxid-group__apr__file__io_1ga2fbbae715bee0e0ca9adadd66ac65e96>`
+

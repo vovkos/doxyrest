@@ -1,0 +1,190 @@
+.. index:: pair: group; Pool Debugging functions.
+.. _doxid-group___pool_debug:
+
+Pool Debugging functions.
+=========================
+
+.. toctree::
+	:hidden:
+
+Overview
+~~~~~~~~
+
+pools have nested lifetimes sub_pools are destroyed when the parent pool is cleared. :ref:`More...<details-group___pool_debug>`
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// global functions
+
+	void
+	:ref:`apr_pool_join<doxid-group___pool_debug_1gaecd956092f81c70117507ad8cbca8ea7>`(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* sub
+		);
+
+	:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`*
+	:ref:`apr_pool_find<doxid-group___pool_debug_1ga0bc40d9069709020e3643492dae2ccb0>`(const void* mem);
+
+	apr_size_t
+	:ref:`apr_pool_num_bytes<doxid-group___pool_debug_1ga22462da23d70dfde389a370b131cd351>`(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		int recurse
+		);
+
+	void
+	:ref:`apr_pool_lock<doxid-group___pool_debug_1ga24f8f0287478fa71f77d0ce4ec035e4a>`(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool,
+		int flag
+		);
+
+.. _details-group___pool_debug:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+pools have nested lifetimes sub_pools are destroyed when the parent pool is cleared. We allow certain liberties with operations on things such as tables (and on other structures in a more general sense) where we allow the caller to insert values into a table which were not allocated from the table's pool. The table's data will remain valid as long as all the pools from which its values are allocated remain valid.
+
+For example, if B is a sub pool of A, and you build a table T in pool B, then it's safe to insert data allocated in A or B into T (because B lives at most as long as A does, and T is destroyed when B is cleared/destroyed). On the other hand, if S is a table in pool A, it is safe to insert data allocated in A into S, but it is *not safe* to insert data allocated from B into S... because B can be cleared/destroyed before A is (which would leave dangling pointers in T's data structures).
+
+In general we say that it is safe to insert data into a table T if the data is allocated in any ancestor of T's pool. This is the basis on which the APR_POOL_DEBUG code works it tests these ancestor relationships for all data inserted into tables. APR_POOL_DEBUG also provides tools (apr_pool_find, and apr_pool_is_ancestor) for other folks to implement similar restrictions for their own data structures.
+
+However, sometimes this ancestor requirement is inconvenient sometimes it's necessary to create a sub pool where the sub pool is guaranteed to have the same lifetime as the parent pool. This is a guarantee implemented by the *caller*, not by the pool code. That is, the caller guarantees they won't destroy the sub pool individually prior to destroying the parent pool.
+
+In this case the caller must call :ref:`apr_pool_join() <doxid-group___pool_debug_1gaecd956092f81c70117507ad8cbca8ea7>` to indicate this guarantee to the APR_POOL_DEBUG code.
+
+These functions are only implemented when #APR_POOL_DEBUG is set.
+
+Global Functions
+----------------
+
+.. index:: pair: function; apr_pool_join
+.. _doxid-group___pool_debug_1gaecd956092f81c70117507ad8cbca8ea7:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_pool_join(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* sub
+		)
+
+Guarantee that a subpool has the same lifetime as the parent.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- The parent pool
+
+	*
+		- sub
+
+		- The subpool
+
+.. index:: pair: function; apr_pool_find
+.. _doxid-group___pool_debug_1ga0bc40d9069709020e3643492dae2ccb0:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`*
+	apr_pool_find(const void* mem)
+
+Find a pool from something allocated in it.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mem
+
+		- The thing allocated in the pool
+
+
+
+.. rubric:: Returns:
+
+The pool it is allocated in
+
+.. index:: pair: function; apr_pool_num_bytes
+.. _doxid-group___pool_debug_1ga22462da23d70dfde389a370b131cd351:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	apr_size_t
+	apr_pool_num_bytes(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		int recurse
+		)
+
+Report the number of bytes currently in the pool
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- The pool to inspect
+
+	*
+		- recurse
+
+		- Recurse/include the subpools' sizes
+
+
+
+.. rubric:: Returns:
+
+The number of bytes
+
+.. index:: pair: function; apr_pool_lock
+.. _doxid-group___pool_debug_1ga24f8f0287478fa71f77d0ce4ec035e4a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_pool_lock(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool,
+		int flag
+		)
+
+Lock a pool
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pool
+
+		- The pool to lock
+
+	*
+		- flag
+
+		- The flag
+

@@ -1,0 +1,2213 @@
+.. index:: pair: group; Mixer Interface
+.. _doxid-group___mixer:
+
+Mixer Interface
+===============
+
+.. toctree::
+	:hidden:
+
+	group_SimpleMixer.rst
+	enum_snd_mixer_elem_type_t.rst
+
+Overview
+~~~~~~~~
+
+The mixer interface. :ref:`More...<details-group___mixer>`
+
+|	:ref:`Simple Mixer Interface<doxid-group___simple_mixer>`
+
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef struct _snd_mixer :ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`;
+	typedef struct _snd_mixer_class :ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`;
+	typedef struct _snd_mixer_elem :ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`;
+
+	typedef int (*:ref:`snd_mixer_callback_t<doxid-group___mixer_1ga8dc213e4c7156e1a0dad485700dcdce8>`)(
+		snd_mixer_t *ctl,
+		unsigned int mask,
+		snd_mixer_elem_t *elem
+		);
+
+	typedef int (*:ref:`snd_mixer_elem_callback_t<doxid-group___mixer_1ga667c25f9cbf052f9eaa867a5af271007>`)(
+		snd_mixer_elem_t *elem,
+		unsigned int mask
+		);
+
+	typedef int (*:ref:`snd_mixer_compare_t<doxid-group___mixer_1gaf4cc71d58faf35cb8f62006e467b21e8>`)(
+		const snd_mixer_elem_t *e1,
+		const snd_mixer_elem_t *e2
+		);
+
+	typedef int (*:ref:`snd_mixer_event_t<doxid-group___mixer_1gaa121b4c6c77665a9482b7a8d2128dd8c>`)(
+		snd_mixer_class_t *class_,
+		unsigned int mask,
+		snd_hctl_elem_t *helem,
+		snd_mixer_elem_t *melem
+		);
+
+	// enums
+
+	enum :ref:`snd_mixer_elem_type_t<doxid-group___mixer_1ga18a15493e66cc90ab851e49161d28b4c>`;
+
+	// global functions
+
+	int
+	:ref:`snd_mixer_open<doxid-group___mixer_1ga240cfebce7d68f22875d76e99cf19394>`(
+		:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`** mixer,
+		int mode
+		);
+
+	int
+	:ref:`snd_mixer_close<doxid-group___mixer_1ga9deea3f628bf737001d968620cfd3b1a>`(:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer);
+
+	:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`*
+	:ref:`snd_mixer_first_elem<doxid-group___mixer_1gaffccf51ddf8ecdc357b216cb979a2318>`(:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer);
+
+	:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`*
+	:ref:`snd_mixer_last_elem<doxid-group___mixer_1ga51121b263ea3d3ee9367aabfd338ef11>`(:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer);
+
+	int
+	:ref:`snd_mixer_handle_events<doxid-group___mixer_1gae0cfb6b50ec2493281107b0649f87cb8>`(:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer);
+
+	int
+	:ref:`snd_mixer_attach<doxid-group___mixer_1ga8c36e99e3d2ab0cb76a5acd203face45>`(
+		:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer,
+		const char* name
+		);
+
+	int
+	:ref:`snd_mixer_attach_hctl<doxid-group___mixer_1ga01e5feeb925addfc245ce81c037b1397>`(
+		:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer,
+		:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl
+		);
+
+	int
+	:ref:`snd_mixer_detach<doxid-group___mixer_1ga99ca1c15d46d5f194a216d5e0a8e9229>`(
+		:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer,
+		const char* name
+		);
+
+	int
+	:ref:`snd_mixer_detach_hctl<doxid-group___mixer_1ga63b6f8183e08a2b3e6bb83638828e8df>`(
+		:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer,
+		:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl
+		);
+
+	int
+	:ref:`snd_mixer_get_hctl<doxid-group___mixer_1gafbbaedd662ea57e573e09f39ca8b247c>`(
+		:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer,
+		const char* name,
+		:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`** hctl
+		);
+
+	int
+	:ref:`snd_mixer_poll_descriptors_count<doxid-group___mixer_1gab3ee14782a19e6d62acbdcdb5f9f7786>`(:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer);
+
+	int
+	:ref:`snd_mixer_poll_descriptors<doxid-group___mixer_1ga07f7bc33587907988aaffc03ce72367e>`(
+		:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer,
+		struct pollfd* pfds,
+		unsigned int space
+		);
+
+	int
+	:ref:`snd_mixer_poll_descriptors_revents<doxid-group___mixer_1gab26686311756ee3c66e05766227df818>`(
+		:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer,
+		struct pollfd* pfds,
+		unsigned int nfds,
+		unsigned short* revents
+		);
+
+	int
+	:ref:`snd_mixer_load<doxid-group___mixer_1ga24b6077528d04cb9fca072b3ae109aef>`(:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer);
+
+	void
+	:ref:`snd_mixer_free<doxid-group___mixer_1ga93a71c28e82c04e4c732703e309910fd>`(:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer);
+
+	int
+	:ref:`snd_mixer_wait<doxid-group___mixer_1ga072846849f4bc2058336fd6601f18a15>`(
+		:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer,
+		int timeout
+		);
+
+	int
+	:ref:`snd_mixer_set_compare<doxid-group___mixer_1gac7e1bbe5d5b69a6ee67d5bced6325a67>`(
+		:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer,
+		:ref:`snd_mixer_compare_t<doxid-group___mixer_1gaf4cc71d58faf35cb8f62006e467b21e8>` msort
+		);
+
+	void
+	:ref:`snd_mixer_set_callback<doxid-group___mixer_1ga691a593ea0a32f9535fff83b00a0a574>`(
+		:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* obj,
+		:ref:`snd_mixer_callback_t<doxid-group___mixer_1ga8dc213e4c7156e1a0dad485700dcdce8>` val
+		);
+
+	void*
+	:ref:`snd_mixer_get_callback_private<doxid-group___mixer_1ga9cfc303fa34eb234efeb52151838f88b>`(const :ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* obj);
+
+	void
+	:ref:`snd_mixer_set_callback_private<doxid-group___mixer_1gab91fc99ac65c866e660d4d8be0cb3e17>`(
+		:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* obj,
+		void* val
+		);
+
+	unsigned int
+	:ref:`snd_mixer_get_count<doxid-group___mixer_1ga3447c190c69cfce4c52df4ad3300e319>`(const :ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* obj);
+
+	int
+	:ref:`snd_mixer_class_unregister<doxid-group___mixer_1ga6a7bf3805fbbfc3f6f8243e91fbce5f6>`(:ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`* clss);
+
+	:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`*
+	:ref:`snd_mixer_elem_next<doxid-group___mixer_1ga68254228ef108122b8178087ea0fcc16>`(:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* elem);
+
+	:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`*
+	:ref:`snd_mixer_elem_prev<doxid-group___mixer_1gaaf9a9dfe1d52f40df2be517621f9474a>`(:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* elem);
+
+	void
+	:ref:`snd_mixer_elem_set_callback<doxid-group___mixer_1ga01e1fd766a313ce513f561bd03c98317>`(
+		:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* obj,
+		:ref:`snd_mixer_elem_callback_t<doxid-group___mixer_1ga667c25f9cbf052f9eaa867a5af271007>` val
+		);
+
+	void*
+	:ref:`snd_mixer_elem_get_callback_private<doxid-group___mixer_1ga78c51ad2e60617137e47ad1d58b45916>`(const :ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* obj);
+
+	void
+	:ref:`snd_mixer_elem_set_callback_private<doxid-group___mixer_1ga4fb4ea11326c1cb1fdbf5dac0444507e>`(
+		:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* obj,
+		void* val
+		);
+
+	:ref:`snd_mixer_elem_type_t<doxid-group___mixer_1ga18a15493e66cc90ab851e49161d28b4c>`
+	:ref:`snd_mixer_elem_get_type<doxid-group___mixer_1ga1083ba441bb93da13f79bc0cda226ea3>`(const :ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* obj);
+
+	int
+	:ref:`snd_mixer_class_register<doxid-group___mixer_1ga595cbd9394f85f9af4a6b30e748e3930>`(
+		:ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`* class_,
+		:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer
+		);
+
+	int
+	:ref:`snd_mixer_elem_new<doxid-group___mixer_1ga226cf962e72b6132fd61cbd434b28941>`(
+		:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`** elem,
+		:ref:`snd_mixer_elem_type_t<doxid-group___mixer_1ga18a15493e66cc90ab851e49161d28b4c>` type,
+		int compare_weight,
+		void* private_data,
+		void(*)(:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`*elem) private_free
+		);
+
+	int
+	:ref:`snd_mixer_elem_add<doxid-group___mixer_1ga3b0e73914256f2125d2b7bb48d602457>`(
+		:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* elem,
+		:ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`* class_
+		);
+
+	int
+	:ref:`snd_mixer_elem_remove<doxid-group___mixer_1gacad36ead935e96f75fe44cf8dd4afa2a>`(:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* elem);
+
+	void
+	:ref:`snd_mixer_elem_free<doxid-group___mixer_1ga40d8bf56621085d5ed5a7e92ad067e03>`(:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* elem);
+
+	int
+	:ref:`snd_mixer_elem_info<doxid-group___mixer_1gae4a32f9d571201a2bf33a65340dc9afd>`(:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* elem);
+
+	int
+	:ref:`snd_mixer_elem_value<doxid-group___mixer_1ga0d23278769e37532f810cecf2ffffacb>`(:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* elem);
+
+	int
+	:ref:`snd_mixer_elem_attach<doxid-group___mixer_1gabe7f0255c9a981a6c73a8edf359781cc>`(
+		:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* melem,
+		:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* helem
+		);
+
+	int
+	:ref:`snd_mixer_elem_detach<doxid-group___mixer_1ga7413e8f80e2e556c75c6b9fc7d0598f9>`(
+		:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* melem,
+		:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* helem
+		);
+
+	int
+	:ref:`snd_mixer_elem_empty<doxid-group___mixer_1gae0541b86ecfc094a172b4cd29bb70fd0>`(:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* melem);
+
+	void*
+	:ref:`snd_mixer_elem_get_private<doxid-group___mixer_1ga4cfddf235c06ae83765ecfd45c5a95d0>`(const :ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* melem);
+
+	size_t
+	:ref:`snd_mixer_class_sizeof<doxid-group___mixer_1gaa61b83017a92b67ea27a18777dcd141d>`(void);
+
+	int
+	:ref:`snd_mixer_class_malloc<doxid-group___mixer_1gadc36fd49fdeccc37c41fc700d29adf39>`(:ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`** ptr);
+
+	void
+	:ref:`snd_mixer_class_free<doxid-group___mixer_1gafef7028555b5c50b9bb072ba6d441ddb>`(:ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`* obj);
+
+	void
+	:ref:`snd_mixer_class_copy<doxid-group___mixer_1gabaaa35c5538fec113fffdaff4cbed2fc>`(
+		:ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`* dst,
+		const :ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`* src
+		);
+
+	:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`*
+	:ref:`snd_mixer_class_get_mixer<doxid-group___mixer_1ga07e5edf36e361b3c1293ed14d2ef5b76>`(const :ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`* class_);
+
+	:ref:`snd_mixer_event_t<doxid-group___mixer_1gaa121b4c6c77665a9482b7a8d2128dd8c>`
+	:ref:`snd_mixer_class_get_event<doxid-group___mixer_1ga5744823b495ae331e7dd60f2abdf3589>`(const :ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`* class_);
+
+	void*
+	:ref:`snd_mixer_class_get_private<doxid-group___mixer_1ga95b50447f32262756143cd7d9e76997c>`(const :ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`* class_);
+
+	:ref:`snd_mixer_compare_t<doxid-group___mixer_1gaf4cc71d58faf35cb8f62006e467b21e8>`
+	:ref:`snd_mixer_class_get_compare<doxid-group___mixer_1gad7182d1d18653709bf26fc53a8b1a94f>`(const :ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`* class_);
+
+	int
+	:ref:`snd_mixer_class_set_event<doxid-group___mixer_1gad0162769035880347ea9af0dbc518e79>`(
+		:ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`* class_,
+		:ref:`snd_mixer_event_t<doxid-group___mixer_1gaa121b4c6c77665a9482b7a8d2128dd8c>` event
+		);
+
+	int
+	:ref:`snd_mixer_class_set_private<doxid-group___mixer_1gaf3b845bb0637fc59cacfe59ef29398d2>`(
+		:ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`* class_,
+		void* private_data
+		);
+
+	int
+	:ref:`snd_mixer_class_set_private_free<doxid-group___mixer_1gafe066ab71d568f7a616a587da7e3c1a5>`(
+		:ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`* class_,
+		void(*)(:ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`*) private_free
+		);
+
+	int
+	:ref:`snd_mixer_class_set_compare<doxid-group___mixer_1gab389fb10998a950207001e3f8abead26>`(
+		:ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`* class_,
+		:ref:`snd_mixer_compare_t<doxid-group___mixer_1gaf4cc71d58faf35cb8f62006e467b21e8>` compare
+		);
+
+	// macros
+
+	#define :ref:`snd_mixer_class_alloca<doxid-group___mixer_1ga040501051e4e4f8667caf0e89328702b>`(ptr)
+
+.. _details-group___mixer:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+The mixer interface.
+
+Typedefs
+--------
+
+.. index:: pair: typedef; snd_mixer_t
+.. _doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct _snd_mixer snd_mixer_t
+
+Mixer handle
+
+.. index:: pair: typedef; snd_mixer_class_t
+.. _doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct _snd_mixer_class snd_mixer_class_t
+
+Mixer elements class handle
+
+.. index:: pair: typedef; snd_mixer_elem_t
+.. _doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct _snd_mixer_elem snd_mixer_elem_t
+
+Mixer element handle
+
+.. index:: pair: typedef; snd_mixer_callback_t
+.. _doxid-group___mixer_1ga8dc213e4c7156e1a0dad485700dcdce8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef int (*snd_mixer_callback_t)(
+		snd_mixer_t *ctl,
+		unsigned int mask,
+		snd_mixer_elem_t *elem
+		)
+
+Mixer callback function.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mixer
+
+		- Mixer handle
+
+	*
+		- mask
+
+		- event mask
+
+	*
+		- elem
+
+		- related mixer element (if any)
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: typedef; snd_mixer_elem_callback_t
+.. _doxid-group___mixer_1ga667c25f9cbf052f9eaa867a5af271007:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef int (*snd_mixer_elem_callback_t)(
+		snd_mixer_elem_t *elem,
+		unsigned int mask
+		)
+
+Mixer element callback function.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- elem
+
+		- Mixer element
+
+	*
+		- mask
+
+		- event mask
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: typedef; snd_mixer_compare_t
+.. _doxid-group___mixer_1gaf4cc71d58faf35cb8f62006e467b21e8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef int (*snd_mixer_compare_t)(
+		const snd_mixer_elem_t *e1,
+		const snd_mixer_elem_t *e2
+		)
+
+Compare function for sorting mixer elements.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- e1
+
+		- First element
+
+	*
+		- e2
+
+		- Second element
+
+
+
+.. rubric:: Returns:
+
+-1 if e1 < e2, 0 if e1 == e2, 1 if e1 > e2
+
+.. index:: pair: typedef; snd_mixer_event_t
+.. _doxid-group___mixer_1gaa121b4c6c77665a9482b7a8d2128dd8c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef int (*snd_mixer_event_t)(
+		snd_mixer_class_t *class_,
+		unsigned int mask,
+		snd_hctl_elem_t *helem,
+		snd_mixer_elem_t *melem
+		)
+
+Event callback for the mixer class.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- class\_
+
+		- Mixer class
+
+	*
+		- mask
+
+		- Event mask (SND_CTL_EVENT\_\*)
+
+	*
+		- helem
+
+		- HCTL element which invoked the event
+
+	*
+		- melem
+
+		- Mixer element associated to HCTL element
+
+
+
+.. rubric:: Returns:
+
+zero if success, otherwise a negative error value
+
+Global Functions
+----------------
+
+.. index:: pair: function; snd_mixer_open
+.. _doxid-group___mixer_1ga240cfebce7d68f22875d76e99cf19394:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_open(
+		:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`** mixer,
+		int mode
+		)
+
+Opens an empty mixer.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mixerp
+
+		- Returned mixer handle
+
+	*
+		- mode
+
+		- Open mode
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_mixer_close
+.. _doxid-group___mixer_1ga9deea3f628bf737001d968620cfd3b1a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_close(:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer)
+
+Close a mixer and free all related resources.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mixer
+
+		- Mixer handle
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_mixer_first_elem
+.. _doxid-group___mixer_1gaffccf51ddf8ecdc357b216cb979a2318:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`*
+	snd_mixer_first_elem(:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer)
+
+get first element for a mixer
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mixer
+
+		- Mixer handle
+
+
+
+.. rubric:: Returns:
+
+pointer to first element
+
+.. index:: pair: function; snd_mixer_last_elem
+.. _doxid-group___mixer_1ga51121b263ea3d3ee9367aabfd338ef11:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`*
+	snd_mixer_last_elem(:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer)
+
+get last element for a mixer
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mixer
+
+		- Mixer handle
+
+
+
+.. rubric:: Returns:
+
+pointer to last element
+
+.. index:: pair: function; snd_mixer_handle_events
+.. _doxid-group___mixer_1gae0cfb6b50ec2493281107b0649f87cb8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_handle_events(:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer)
+
+Handle pending mixer events invoking callbacks.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mixer
+
+		- Mixer handle
+
+
+
+.. rubric:: Returns:
+
+Number of events that occured on success, otherwise a negative error code on failure
+
+.. index:: pair: function; snd_mixer_attach
+.. _doxid-group___mixer_1ga8c36e99e3d2ab0cb76a5acd203face45:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_attach(
+		:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer,
+		const char* name
+		)
+
+Attach an HCTL specified with the CTL device name to an opened mixer.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mixer
+
+		- Mixer handle
+
+	*
+		- name
+
+		- HCTL name (see :ref:`snd_hctl_open <doxid-group___h_control_1ga2a86455eaad4f2730a936d06c62cca29>`)
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_mixer_attach_hctl
+.. _doxid-group___mixer_1ga01e5feeb925addfc245ce81c037b1397:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_attach_hctl(
+		:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer,
+		:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl
+		)
+
+Attach an HCTL to an opened mixer.
+
+Upon error, this function closes the given hctl handle automatically.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mixer
+
+		- Mixer handle
+
+	*
+		- hctl
+
+		- the HCTL to be attached
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_mixer_detach
+.. _doxid-group___mixer_1ga99ca1c15d46d5f194a216d5e0a8e9229:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_detach(
+		:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer,
+		const char* name
+		)
+
+Detach a previously attached HCTL to an opened mixer freeing all related resources.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mixer
+
+		- Mixer handle
+
+	*
+		- name
+
+		- HCTL previously attached
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_mixer_detach_hctl
+.. _doxid-group___mixer_1ga63b6f8183e08a2b3e6bb83638828e8df:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_detach_hctl(
+		:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer,
+		:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl
+		)
+
+Detach a previously attached HCTL to an opened mixer freeing all related resources.
+
+Note: The hctl handle is not closed!
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mixer
+
+		- Mixer handle
+
+	*
+		- hctl
+
+		- HCTL previously attached
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_mixer_get_hctl
+.. _doxid-group___mixer_1gafbbaedd662ea57e573e09f39ca8b247c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_get_hctl(
+		:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer,
+		const char* name,
+		:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`** hctl
+		)
+
+Obtain a HCTL pointer associated to given name.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mixer
+
+		- Mixer handle
+
+	*
+		- name
+
+		- HCTL previously attached
+
+	*
+		- hctl
+
+		- HCTL pointer
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_mixer_poll_descriptors_count
+.. _doxid-group___mixer_1gab3ee14782a19e6d62acbdcdb5f9f7786:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_poll_descriptors_count(:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer)
+
+get count of poll descriptors for mixer handle
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mixer
+
+		- Mixer handle
+
+
+
+.. rubric:: Returns:
+
+count of poll descriptors
+
+.. index:: pair: function; snd_mixer_poll_descriptors
+.. _doxid-group___mixer_1ga07f7bc33587907988aaffc03ce72367e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_poll_descriptors(
+		:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer,
+		struct pollfd* pfds,
+		unsigned int space
+		)
+
+get poll descriptors
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mixer
+
+		- Mixer handle
+
+	*
+		- pfds
+
+		- array of poll descriptors
+
+	*
+		- space
+
+		- space in the poll descriptor array
+
+
+
+.. rubric:: Returns:
+
+count of filled descriptors
+
+.. index:: pair: function; snd_mixer_poll_descriptors_revents
+.. _doxid-group___mixer_1gab26686311756ee3c66e05766227df818:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_poll_descriptors_revents(
+		:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer,
+		struct pollfd* pfds,
+		unsigned int nfds,
+		unsigned short* revents
+		)
+
+get returned events from poll descriptors
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mixer
+
+		- Mixer handle
+
+	*
+		- pfds
+
+		- array of poll descriptors
+
+	*
+		- nfds
+
+		- count of poll descriptors
+
+	*
+		- revents
+
+		- returned events
+
+
+
+.. rubric:: Returns:
+
+zero if success, otherwise a negative error code
+
+.. index:: pair: function; snd_mixer_load
+.. _doxid-group___mixer_1ga24b6077528d04cb9fca072b3ae109aef:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_load(:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer)
+
+Load a mixer elements.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mixer
+
+		- Mixer handle
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_mixer_free
+.. _doxid-group___mixer_1ga93a71c28e82c04e4c732703e309910fd:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_mixer_free(:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer)
+
+Unload all mixer elements and free all related resources.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mixer
+
+		- Mixer handle
+
+.. index:: pair: function; snd_mixer_wait
+.. _doxid-group___mixer_1ga072846849f4bc2058336fd6601f18a15:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_wait(
+		:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer,
+		int timeout
+		)
+
+Wait for a mixer to become ready (i.e. at least one event pending)
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mixer
+
+		- Mixer handle
+
+	*
+		- timeout
+
+		- maximum time in milliseconds to wait
+
+
+
+.. rubric:: Returns:
+
+0 otherwise a negative error code on failure
+
+.. index:: pair: function; snd_mixer_set_compare
+.. _doxid-group___mixer_1gac7e1bbe5d5b69a6ee67d5bced6325a67:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_set_compare(
+		:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer,
+		:ref:`snd_mixer_compare_t<doxid-group___mixer_1gaf4cc71d58faf35cb8f62006e467b21e8>` msort
+		)
+
+Change mixer compare function and reorder elements.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mixer
+
+		- Mixer handle
+
+	*
+		- compare
+
+		- Element compare function
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_mixer_set_callback
+.. _doxid-group___mixer_1ga691a593ea0a32f9535fff83b00a0a574:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_mixer_set_callback(
+		:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* obj,
+		:ref:`snd_mixer_callback_t<doxid-group___mixer_1ga8dc213e4c7156e1a0dad485700dcdce8>` val
+		)
+
+Set callback function for a mixer.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- obj
+
+		- mixer handle
+
+	*
+		- val
+
+		- callback function
+
+.. index:: pair: function; snd_mixer_get_callback_private
+.. _doxid-group___mixer_1ga9cfc303fa34eb234efeb52151838f88b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void*
+	snd_mixer_get_callback_private(const :ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* obj)
+
+Get callback private value for a mixer.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mixer
+
+		- mixer handle
+
+
+
+.. rubric:: Returns:
+
+callback private value
+
+.. index:: pair: function; snd_mixer_set_callback_private
+.. _doxid-group___mixer_1gab91fc99ac65c866e660d4d8be0cb3e17:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_mixer_set_callback_private(
+		:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* obj,
+		void* val
+		)
+
+Set callback private value for a mixer.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mixer
+
+		- mixer handle
+
+	*
+		- val
+
+		- callback private value
+
+.. index:: pair: function; snd_mixer_get_count
+.. _doxid-group___mixer_1ga3447c190c69cfce4c52df4ad3300e319:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	unsigned int
+	snd_mixer_get_count(const :ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* obj)
+
+Get elements count for a mixer.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mixer
+
+		- mixer handle
+
+
+
+.. rubric:: Returns:
+
+elements count
+
+.. index:: pair: function; snd_mixer_class_unregister
+.. _doxid-group___mixer_1ga6a7bf3805fbbfc3f6f8243e91fbce5f6:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_class_unregister(:ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`* clss)
+
+Unregister mixer element class and remove all its elements.
+
+Note that the class structure is also deallocated!
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- class
+
+		- Mixer element class
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_mixer_elem_next
+.. _doxid-group___mixer_1ga68254228ef108122b8178087ea0fcc16:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`*
+	snd_mixer_elem_next(:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* elem)
+
+get next mixer element
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- elem
+
+		- mixer element
+
+
+
+.. rubric:: Returns:
+
+pointer to next element
+
+.. index:: pair: function; snd_mixer_elem_prev
+.. _doxid-group___mixer_1gaaf9a9dfe1d52f40df2be517621f9474a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`*
+	snd_mixer_elem_prev(:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* elem)
+
+get previous mixer element
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- elem
+
+		- mixer element
+
+
+
+.. rubric:: Returns:
+
+pointer to previous element
+
+.. index:: pair: function; snd_mixer_elem_set_callback
+.. _doxid-group___mixer_1ga01e1fd766a313ce513f561bd03c98317:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_mixer_elem_set_callback(
+		:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* obj,
+		:ref:`snd_mixer_elem_callback_t<doxid-group___mixer_1ga667c25f9cbf052f9eaa867a5af271007>` val
+		)
+
+Set callback function for a mixer element.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mixer
+
+		- mixer element
+
+	*
+		- val
+
+		- callback function
+
+.. index:: pair: function; snd_mixer_elem_get_callback_private
+.. _doxid-group___mixer_1ga78c51ad2e60617137e47ad1d58b45916:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void*
+	snd_mixer_elem_get_callback_private(const :ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* obj)
+
+Get callback private value for a mixer element.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mixer
+
+		- mixer element
+
+
+
+.. rubric:: Returns:
+
+callback private value
+
+.. index:: pair: function; snd_mixer_elem_set_callback_private
+.. _doxid-group___mixer_1ga4fb4ea11326c1cb1fdbf5dac0444507e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_mixer_elem_set_callback_private(
+		:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* obj,
+		void* val
+		)
+
+Set callback private value for a mixer element.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mixer
+
+		- mixer element
+
+	*
+		- val
+
+		- callback private value
+
+.. index:: pair: function; snd_mixer_elem_get_type
+.. _doxid-group___mixer_1ga1083ba441bb93da13f79bc0cda226ea3:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_mixer_elem_type_t<doxid-group___mixer_1ga18a15493e66cc90ab851e49161d28b4c>`
+	snd_mixer_elem_get_type(const :ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* obj)
+
+Get type for a mixer element.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mixer
+
+		- mixer element
+
+
+
+.. rubric:: Returns:
+
+mixer element type
+
+.. index:: pair: function; snd_mixer_class_register
+.. _doxid-group___mixer_1ga595cbd9394f85f9af4a6b30e748e3930:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_class_register(
+		:ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`* class_,
+		:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`* mixer
+		)
+
+Register mixer element class.
+
+For use by mixer element class specific code.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- class
+
+		- Mixer element class
+
+	*
+		- mixer
+
+		- Mixer handle
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_mixer_elem_new
+.. _doxid-group___mixer_1ga226cf962e72b6132fd61cbd434b28941:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_elem_new(
+		:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`** elem,
+		:ref:`snd_mixer_elem_type_t<doxid-group___mixer_1ga18a15493e66cc90ab851e49161d28b4c>` type,
+		int compare_weight,
+		void* private_data,
+		void(*)(:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`*elem) private_free
+		)
+
+Allocate a new mixer element.
+
+For use by mixer element class specific code.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- elem
+
+		- Returned mixer element
+
+	*
+		- type
+
+		- Mixer element type
+
+	*
+		- compare_weight
+
+		- Mixer element compare weight
+
+	*
+		- private_data
+
+		- Private data
+
+	*
+		- private_free
+
+		- Private data free callback
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_mixer_elem_add
+.. _doxid-group___mixer_1ga3b0e73914256f2125d2b7bb48d602457:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_elem_add(
+		:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* elem,
+		:ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`* class_
+		)
+
+Add an element for a registered mixer element class.
+
+For use by mixer element class specific code.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- elem
+
+		- Mixer element
+
+	*
+		- class
+
+		- Mixer element class
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_mixer_elem_remove
+.. _doxid-group___mixer_1gacad36ead935e96f75fe44cf8dd4afa2a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_elem_remove(:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* elem)
+
+Remove a mixer element.
+
+For use by mixer element class specific code.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- elem
+
+		- Mixer element
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_mixer_elem_free
+.. _doxid-group___mixer_1ga40d8bf56621085d5ed5a7e92ad067e03:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_mixer_elem_free(:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* elem)
+
+Free a mixer element.
+
+For use by mixer element class specific code.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- elem
+
+		- Mixer element
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_mixer_elem_info
+.. _doxid-group___mixer_1gae4a32f9d571201a2bf33a65340dc9afd:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_elem_info(:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* elem)
+
+Mixer element informations are changed.
+
+For use by mixer element class specific code.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- elem
+
+		- Mixer element
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_mixer_elem_value
+.. _doxid-group___mixer_1ga0d23278769e37532f810cecf2ffffacb:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_elem_value(:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* elem)
+
+Mixer element values is changed.
+
+For use by mixer element class specific code.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- elem
+
+		- Mixer element
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_mixer_elem_attach
+.. _doxid-group___mixer_1gabe7f0255c9a981a6c73a8edf359781cc:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_elem_attach(
+		:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* melem,
+		:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* helem
+		)
+
+Attach an HCTL element to a mixer element.
+
+For use by mixer element class specific code.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- melem
+
+		- Mixer element
+
+	*
+		- helem
+
+		- HCTL element
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_mixer_elem_detach
+.. _doxid-group___mixer_1ga7413e8f80e2e556c75c6b9fc7d0598f9:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_elem_detach(
+		:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* melem,
+		:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* helem
+		)
+
+Detach an HCTL element from a mixer element.
+
+For use by mixer element class specific code.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- melem
+
+		- Mixer element
+
+	*
+		- helem
+
+		- HCTL element
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_mixer_elem_empty
+.. _doxid-group___mixer_1gae0541b86ecfc094a172b4cd29bb70fd0:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_elem_empty(:ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* melem)
+
+Return true if a mixer element does not contain any HCTL elements.
+
+For use by mixer element class specific code.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- melem
+
+		- Mixer element
+
+
+
+.. rubric:: Returns:
+
+0 if not empty, 1 if empty
+
+.. index:: pair: function; snd_mixer_elem_get_private
+.. _doxid-group___mixer_1ga4cfddf235c06ae83765ecfd45c5a95d0:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void*
+	snd_mixer_elem_get_private(const :ref:`snd_mixer_elem_t<doxid-group___mixer_1ga9bb5eb24e4feea6c1a04c79b77938ef9>`* melem)
+
+Get private data associated to give mixer element.
+
+For use by mixer element class specific code.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- elem
+
+		- Mixer element
+
+
+
+.. rubric:: Returns:
+
+private data
+
+.. index:: pair: function; snd_mixer_class_sizeof
+.. _doxid-group___mixer_1gaa61b83017a92b67ea27a18777dcd141d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	size_t
+	snd_mixer_class_sizeof(void)
+
+get size of :ref:`snd_mixer_class_t <doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`
+
+
+
+.. rubric:: Returns:
+
+size in bytes
+
+.. index:: pair: function; snd_mixer_class_malloc
+.. _doxid-group___mixer_1gadc36fd49fdeccc37c41fc700d29adf39:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_class_malloc(:ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`** ptr)
+
+allocate an invalid :ref:`snd_mixer_class_t <doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>` using standard malloc
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ptr
+
+		- returned pointer
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise negative error code
+
+.. index:: pair: function; snd_mixer_class_free
+.. _doxid-group___mixer_1gafef7028555b5c50b9bb072ba6d441ddb:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_mixer_class_free(:ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`* obj)
+
+frees a previously allocated :ref:`snd_mixer_class_t <doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- obj
+
+		- pointer to object to free
+
+.. index:: pair: function; snd_mixer_class_copy
+.. _doxid-group___mixer_1gabaaa35c5538fec113fffdaff4cbed2fc:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_mixer_class_copy(
+		:ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`* dst,
+		const :ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`* src
+		)
+
+copy one :ref:`snd_mixer_class_t <doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>` to another
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dst
+
+		- pointer to destination
+
+	*
+		- src
+
+		- pointer to source
+
+.. index:: pair: function; snd_mixer_class_get_mixer
+.. _doxid-group___mixer_1ga07e5edf36e361b3c1293ed14d2ef5b76:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_mixer_t<doxid-group___mixer_1ga34161447bc01a64f578456ed13d57e33>`*
+	snd_mixer_class_get_mixer(const :ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`* class_)
+
+Get a mixer associated to given mixer class.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- obj
+
+		- Mixer simple class identifier
+
+
+
+.. rubric:: Returns:
+
+mixer pointer
+
+.. index:: pair: function; snd_mixer_class_get_event
+.. _doxid-group___mixer_1ga5744823b495ae331e7dd60f2abdf3589:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_mixer_event_t<doxid-group___mixer_1gaa121b4c6c77665a9482b7a8d2128dd8c>`
+	snd_mixer_class_get_event(const :ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`* class_)
+
+Get mixer event callback associated to given mixer class.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- obj
+
+		- Mixer simple class identifier
+
+
+
+.. rubric:: Returns:
+
+event callback pointer
+
+.. index:: pair: function; snd_mixer_class_get_private
+.. _doxid-group___mixer_1ga95b50447f32262756143cd7d9e76997c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void*
+	snd_mixer_class_get_private(const :ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`* class_)
+
+Get mixer private data associated to given mixer class.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- obj
+
+		- Mixer simple class identifier
+
+
+
+.. rubric:: Returns:
+
+event callback pointer
+
+.. index:: pair: function; snd_mixer_class_get_compare
+.. _doxid-group___mixer_1gad7182d1d18653709bf26fc53a8b1a94f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_mixer_compare_t<doxid-group___mixer_1gaf4cc71d58faf35cb8f62006e467b21e8>`
+	snd_mixer_class_get_compare(const :ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`* class_)
+
+Get mixer compare callback associated to given mixer class.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- obj
+
+		- Mixer simple class identifier
+
+
+
+.. rubric:: Returns:
+
+event callback pointer
+
+.. index:: pair: function; snd_mixer_class_set_event
+.. _doxid-group___mixer_1gad0162769035880347ea9af0dbc518e79:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_class_set_event(
+		:ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`* class_,
+		:ref:`snd_mixer_event_t<doxid-group___mixer_1gaa121b4c6c77665a9482b7a8d2128dd8c>` event
+		)
+
+Set mixer event callback to given mixer class.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- obj
+
+		- Mixer simple class identifier
+
+	*
+		- event
+
+		- Event callback
+
+
+
+.. rubric:: Returns:
+
+zero if success, otherwise a negative error code
+
+.. index:: pair: function; snd_mixer_class_set_private
+.. _doxid-group___mixer_1gaf3b845bb0637fc59cacfe59ef29398d2:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_class_set_private(
+		:ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`* class_,
+		void* private_data
+		)
+
+Set mixer private data to given mixer class.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- obj
+
+		- Mixer simple class identifier
+
+	*
+		- private_data
+
+		- class private data
+
+
+
+.. rubric:: Returns:
+
+zero if success, otherwise a negative error code
+
+.. index:: pair: function; snd_mixer_class_set_private_free
+.. _doxid-group___mixer_1gafe066ab71d568f7a616a587da7e3c1a5:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_class_set_private_free(
+		:ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`* class_,
+		void(*)(:ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`*) private_free
+		)
+
+Set mixer private data free callback to given mixer class.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- obj
+
+		- Mixer simple class identifier
+
+	*
+		- private_free
+
+		- Mixer class private data free callback
+
+
+
+.. rubric:: Returns:
+
+zero if success, otherwise a negative error code
+
+.. index:: pair: function; snd_mixer_class_set_compare
+.. _doxid-group___mixer_1gab389fb10998a950207001e3f8abead26:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_mixer_class_set_compare(
+		:ref:`snd_mixer_class_t<doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>`* class_,
+		:ref:`snd_mixer_compare_t<doxid-group___mixer_1gaf4cc71d58faf35cb8f62006e467b21e8>` compare
+		)
+
+Set mixer compare callback to given mixer class.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- obj
+
+		- Mixer simple class identifier
+
+	*
+		- compare
+
+		- the compare callback to be used
+
+
+
+.. rubric:: Returns:
+
+zero if success, otherwise a negative error code
+
+Macros
+------
+
+.. index:: pair: define; snd_mixer_class_alloca
+.. _doxid-group___mixer_1ga040501051e4e4f8667caf0e89328702b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define snd_mixer_class_alloca(ptr)
+
+allocate an invalid :ref:`snd_mixer_class_t <doxid-group___mixer_1ga51c7b205d5afc62342d9dec3ce54d11f>` using standard alloca
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ptr
+
+		- returned pointer
+

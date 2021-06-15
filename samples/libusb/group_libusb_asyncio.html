@@ -1,0 +1,1338 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Asynchronous device I/O &mdash; LibUSB Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/doxyrest-pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/doxyrest-sphinx_rtd_theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/target-highlight.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="enum libusb_transfer_flags" href="enum_libusb_transfer_flags.html" />
+    <link rel="prev" title="libusb-1.0 API Reference" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> LibUSB Documentation
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Asynchronous device I/O</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="enum_libusb_transfer_flags.html">enum libusb_transfer_flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_libusb_transfer_status.html">enum libusb_transfer_status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="struct_libusb_control_setup.html">struct libusb_control_setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="struct_libusb_iso_packet_descriptor.html">struct libusb_iso_packet_descriptor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="struct_libusb_transfer.html">struct libusb_transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#transfer-abstraction">Transfer abstraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#asynchronous-transfers">Asynchronous transfers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#allocation">Allocation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#filling">Filling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#submission">Submission</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#completion-handling">Completion handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deallocation">Deallocation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#resubmission">Resubmission</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cancellation">Cancellation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#overflows-on-device-to-host-bulk-interrupt-endpoints">Overflows on device-to-host bulk/interrupt endpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#considerations-for-control-transfers">Considerations for control transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#considerations-for-interrupt-transfers">Considerations for interrupt transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#considerations-for-isochronous-transfers">Considerations for isochronous transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#memory-caveats">Memory caveats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fine-control">Fine control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#event-handling">Event handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-an-event-handling-thread">Using an event handling thread</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#global-functions">Global Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_dev.html">Device handling and enumeration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_hotplug.html">Device hotplug event notification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_lib.html">Library initialization/deinitialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_misc.html">Miscellaneous</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_poll.html">Polling and timing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_syncio.html">Synchronous device I/O</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_desc.html">USB descriptors</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="page_libusb_api.html">Application Programming Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_libusb_caveats.html">Caveats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_libusb_contexts.html">Contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_libusb_hotplug.html">Device hotplug event notification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_libusb_mtasync.html">Multi-threaded applications and asynchronous I/O</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_libusb_packetoverflow.html">Packets and overflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_libusb_io.html">Synchronous and asynchronous device I/O</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LibUSB Documentation</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Asynchronous device I/O</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="asynchronous-device-i-o">
+<span id="doxid-group-libusb-asyncio"></span><span id="index-0"></span><h1>Asynchronous device I/O</h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="overview">
+<h2>Overview</h2>
+<p>This page details libusb’s asynchronous (non-blocking) API for USB device I/O. <a class="reference internal" href="#details-group-libusb-asyncio"><span class="std std-ref">More…</span></a></p>
+<pre class="highlight doxyrest-overview-code-block literal-block">
+<span></span><span class="c1">// typedefs</span>
+
+<span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-libusb-asyncio-1gac74874519794cd7aa40c0814702b0c88"><span class="std std-ref">libusb_transfer_cb_fn</span></a><span></span><span class="p">)(</span><span class="k">struct</span> <span class="n">libusb_transfer</span> <span class="o">*</span><span class="n">transfer</span><span class="p">);</span>
+
+<span class="c1">// enums</span>
+
+<span class="k">enum</span> <a class="reference internal" href="enum_libusb_transfer_flags.html#doxid-group-libusb-asyncio-1ga1fb47dd0f7c209b60a3609ff0c03d56d"><span class="std std-ref">libusb_transfer_flags</span></a><span></span><span class="p">;</span>
+<span class="k">enum</span> <a class="reference internal" href="enum_libusb_transfer_status.html#doxid-group-libusb-asyncio-1ga9fcb2aa23d342060ebda1d0cf7478856"><span class="std std-ref">libusb_transfer_status</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// structs</span>
+
+<span class="k">struct</span> <a class="reference internal" href="struct_libusb_control_setup.html#doxid-structlibusb-control-setup"><span class="std std-ref">libusb_control_setup</span></a><span></span><span class="p">;</span>
+<span class="k">struct</span> <a class="reference internal" href="struct_libusb_iso_packet_descriptor.html#doxid-structlibusb-iso-packet-descriptor"><span class="std std-ref">libusb_iso_packet_descriptor</span></a><span></span><span class="p">;</span>
+<span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// global functions</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libusb-asyncio-1gad7e786c1bedd4a668887564465101981"><span class="std std-ref">libusb_alloc_streams</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga7df95821d20d27b5597f1d783749d6a4"><span class="std std-ref">libusb_device_handle</span></a><span></span><span class="o">*</span> <span class="n">dev_handle</span><span class="p">,</span>
+    <span class="kt">uint32_t</span> <span class="n">num_streams</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">endpoints</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">num_endpoints</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libusb-asyncio-1gab068de0fd203ccef5c620a8143526acb"><span class="std std-ref">libusb_free_streams</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga7df95821d20d27b5597f1d783749d6a4"><span class="std std-ref">libusb_device_handle</span></a><span></span><span class="o">*</span> <span class="n">dev_handle</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">endpoints</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">num_endpoints</span>
+    <span class="p">);</span>
+
+<span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libusb-asyncio-1ga47c492e750197f1a28874c7a0dee40e3"><span class="std std-ref">libusb_dev_mem_alloc</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga7df95821d20d27b5597f1d783749d6a4"><span class="std std-ref">libusb_device_handle</span></a><span></span><span class="o">*</span> <span class="n">dev_handle</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">length</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libusb-asyncio-1gad7575ff325f0159a5b74b7c0ee64eb62"><span class="std std-ref">libusb_dev_mem_free</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga7df95821d20d27b5597f1d783749d6a4"><span class="std std-ref">libusb_device_handle</span></a><span></span><span class="o">*</span> <span class="n">dev_handle</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">length</span>
+    <span class="p">);</span>
+
+<span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libusb-asyncio-1ga13cc69ea40c702181c430c950121c000"><span class="std std-ref">libusb_alloc_transfer</span></a><span></span><span class="p">(</span><span class="kt">int</span> <span class="n">iso_packets</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libusb-asyncio-1ga6ab8b2cff4de9091298a06b2f4b86cd6"><span class="std std-ref">libusb_free_transfer</span></a><span></span><span class="p">(</span><span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libusb-asyncio-1gabb0932601f2c7dad2fee4b27962848ce"><span class="std std-ref">libusb_submit_transfer</span></a><span></span><span class="p">(</span><span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libusb-asyncio-1ga685eb7731f9a0593f75beb99727bbe54"><span class="std std-ref">libusb_cancel_transfer</span></a><span></span><span class="p">(</span><span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libusb-asyncio-1gaeae2db23b9de811af317483afdeb230f"><span class="std std-ref">libusb_transfer_set_stream_id</span></a><span></span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">,</span>
+    <span class="kt">uint32_t</span> <span class="n">stream_id</span>
+    <span class="p">);</span>
+
+<span class="kt">uint32_t</span>
+<a class="reference internal" href="#doxid-group-libusb-asyncio-1ga631653487273f3306925131cdc0a3ffc"><span class="std std-ref">libusb_transfer_get_stream_id</span></a><span></span><span class="p">(</span><span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libusb-asyncio-1gadf9c633586dde54ce62a3d66a4d7554c"><span class="std std-ref">libusb_control_transfer_get_data</span></a><span></span><span class="p">(</span><span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">);</span>
+
+<span class="k">static</span>
+<span class="k">struct</span> <a class="reference internal" href="struct_libusb_control_setup.html#doxid-structlibusb-control-setup"><span class="std std-ref">libusb_control_setup</span></a><span></span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libusb-asyncio-1ga6ab02f15e11b5b03b1174fbd7c3bc061"><span class="std std-ref">libusb_control_transfer_get_setup</span></a><span></span><span class="p">(</span><span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libusb-asyncio-1ga5447311149ec2bd954b5f1a640a8e231"><span class="std std-ref">libusb_fill_control_setup</span></a><span></span><span class="p">(</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span>
+    <span class="kt">uint8_t</span> <span class="n">bmRequestType</span><span class="p">,</span>
+    <span class="kt">uint8_t</span> <span class="n">bRequest</span><span class="p">,</span>
+    <span class="kt">uint16_t</span> <span class="n">wValue</span><span class="p">,</span>
+    <span class="kt">uint16_t</span> <span class="n">wIndex</span><span class="p">,</span>
+    <span class="kt">uint16_t</span> <span class="n">wLength</span>
+    <span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libusb-asyncio-1ga3a8513ed87229fe2c9771ef0bf17206e"><span class="std std-ref">libusb_fill_control_transfer</span></a><span></span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">,</span>
+    <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga7df95821d20d27b5597f1d783749d6a4"><span class="std std-ref">libusb_device_handle</span></a><span></span><span class="o">*</span> <span class="n">dev_handle</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-libusb-asyncio-1gac74874519794cd7aa40c0814702b0c88"><span class="std std-ref">libusb_transfer_cb_fn</span></a><span></span> <span class="n">callback</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">user_data</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">timeout</span>
+    <span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libusb-asyncio-1gad4ddb1a5c6c7fefc979a44d7300b95d7"><span class="std std-ref">libusb_fill_bulk_transfer</span></a><span></span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">,</span>
+    <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga7df95821d20d27b5597f1d783749d6a4"><span class="std std-ref">libusb_device_handle</span></a><span></span><span class="o">*</span> <span class="n">dev_handle</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">endpoint</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">length</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-libusb-asyncio-1gac74874519794cd7aa40c0814702b0c88"><span class="std std-ref">libusb_transfer_cb_fn</span></a><span></span> <span class="n">callback</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">user_data</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">timeout</span>
+    <span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libusb-asyncio-1gac2e84d8fb9218d3c67e6a4fd4ade5b10"><span class="std std-ref">libusb_fill_bulk_stream_transfer</span></a><span></span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">,</span>
+    <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga7df95821d20d27b5597f1d783749d6a4"><span class="std std-ref">libusb_device_handle</span></a><span></span><span class="o">*</span> <span class="n">dev_handle</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">endpoint</span><span class="p">,</span>
+    <span class="kt">uint32_t</span> <span class="n">stream_id</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">length</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-libusb-asyncio-1gac74874519794cd7aa40c0814702b0c88"><span class="std std-ref">libusb_transfer_cb_fn</span></a><span></span> <span class="n">callback</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">user_data</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">timeout</span>
+    <span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libusb-asyncio-1ga90f53cea1124a7566df1aa1202b77510"><span class="std std-ref">libusb_fill_interrupt_transfer</span></a><span></span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">,</span>
+    <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga7df95821d20d27b5597f1d783749d6a4"><span class="std std-ref">libusb_device_handle</span></a><span></span><span class="o">*</span> <span class="n">dev_handle</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">endpoint</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">length</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-libusb-asyncio-1gac74874519794cd7aa40c0814702b0c88"><span class="std std-ref">libusb_transfer_cb_fn</span></a><span></span> <span class="n">callback</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">user_data</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">timeout</span>
+    <span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libusb-asyncio-1ga30fdce8c461e851f0aa4c851014e1aa7"><span class="std std-ref">libusb_fill_iso_transfer</span></a><span></span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">,</span>
+    <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga7df95821d20d27b5597f1d783749d6a4"><span class="std std-ref">libusb_device_handle</span></a><span></span><span class="o">*</span> <span class="n">dev_handle</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">endpoint</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">length</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">num_iso_packets</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-libusb-asyncio-1gac74874519794cd7aa40c0814702b0c88"><span class="std std-ref">libusb_transfer_cb_fn</span></a><span></span> <span class="n">callback</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">user_data</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">timeout</span>
+    <span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libusb-asyncio-1gacbdecd6f50093f0c1d0e72ee35ace274"><span class="std std-ref">libusb_set_iso_packet_lengths</span></a><span></span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">length</span>
+    <span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libusb-asyncio-1ga7f6ea0eb35a216d19d984977e454a7b3"><span class="std std-ref">libusb_get_iso_packet_buffer</span></a><span></span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">packet</span>
+    <span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libusb-asyncio-1ga3df9a28c4f5c8f1850181ddb5efd12fd"><span class="std std-ref">libusb_get_iso_packet_buffer_simple</span></a><span></span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">packet</span>
+    <span class="p">);</span>
+</pre>
+</div>
+<div class="section" id="detailed-documentation">
+<span id="details-group-libusb-asyncio"></span><h2>Detailed Documentation</h2>
+<p>This page details libusb’s asynchronous (non-blocking) API for USB device I/O.</p>
+<p>This interface is very powerful but is also quite complex - you will need to read this page carefully to understand the necessary considerations and issues surrounding use of this interface. Simplistic applications may wish to consider the <a class="reference internal" href="group_libusb_syncio.html#doxid-group-libusb-syncio"><span class="std std-ref">synchronous I/O API</span></a> instead.</p>
+<p>The asynchronous interface is built around the idea of separating transfer submission and handling of transfer completion (the synchronous model combines both of these into one). There may be a long delay between submission and completion, however the asynchronous submission function is non-blocking so will return control to your application during that potentially long delay.</p>
+</div>
+<div class="section" id="transfer-abstraction">
+<span id="doxid-group-libusb-asyncio-1asyncabstraction"></span><h2>Transfer abstraction</h2>
+<p>For the asynchronous I/O, libusb implements the concept of a generic transfer entity for all types of I/O (control, bulk, interrupt, isochronous). The generic transfer object must be treated slightly differently depending on which type of I/O you are performing with it.</p>
+<p>This is represented by the public <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a> structure type.</p>
+</div>
+<div class="section" id="asynchronous-transfers">
+<span id="doxid-group-libusb-asyncio-1asynctrf"></span><h2>Asynchronous transfers</h2>
+<p>We can view asynchronous I/O as a 5 step process:</p>
+<ol class="arabic simple">
+<li><strong>Allocation</strong> : allocate a <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a></li>
+<li><strong>Filling</strong> : populate the <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a> instance with information about the transfer you wish to perform</li>
+<li><strong>Submission</strong> : ask libusb to submit the transfer</li>
+<li><strong>Completion handling</strong> : examine transfer results in the <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a> structure</li>
+<li><strong>Deallocation</strong> : clean up resources</li>
+</ol>
+<div class="section" id="allocation">
+<span id="doxid-group-libusb-asyncio-1asyncalloc"></span><h3>Allocation</h3>
+<p>This step involves allocating memory for a USB transfer. This is the generic transfer object mentioned above. At this stage, the transfer is “blank” with no details about what type of I/O it will be used for.</p>
+<p>Allocation is done with the <a class="reference internal" href="#doxid-group-libusb-asyncio-1ga13cc69ea40c702181c430c950121c000"><span class="std std-ref">libusb_alloc_transfer()</span></a> function. You must use this function rather than allocating your own transfers.</p>
+</div>
+<div class="section" id="filling">
+<span id="doxid-group-libusb-asyncio-1asyncfill"></span><h3>Filling</h3>
+<p>This step is where you take a previously allocated transfer and fill it with information to determine the message type and direction, data buffer, callback function, etc.</p>
+<p>You can either fill the required fields yourself or you can use the helper functions: <a class="reference internal" href="#doxid-group-libusb-asyncio-1ga3a8513ed87229fe2c9771ef0bf17206e"><span class="std std-ref">libusb_fill_control_transfer()</span></a>, <a class="reference internal" href="#doxid-group-libusb-asyncio-1gad4ddb1a5c6c7fefc979a44d7300b95d7"><span class="std std-ref">libusb_fill_bulk_transfer()</span></a> and <a class="reference internal" href="#doxid-group-libusb-asyncio-1ga90f53cea1124a7566df1aa1202b77510"><span class="std std-ref">libusb_fill_interrupt_transfer()</span></a>.</p>
+</div>
+<div class="section" id="submission">
+<span id="doxid-group-libusb-asyncio-1asyncsubmit"></span><h3>Submission</h3>
+<p>When you have allocated a transfer and filled it, you can submit it using <a class="reference internal" href="#doxid-group-libusb-asyncio-1gabb0932601f2c7dad2fee4b27962848ce"><span class="std std-ref">libusb_submit_transfer()</span></a>. This function returns immediately but can be regarded as firing off the I/O request in the background.</p>
+</div>
+<div class="section" id="completion-handling">
+<span id="doxid-group-libusb-asyncio-1asynccomplete"></span><h3>Completion handling</h3>
+<p>After a transfer has been submitted, one of four things can happen to it:</p>
+<ul class="simple">
+<li>The transfer completes (i.e. some data was transferred)</li>
+<li>The transfer has a timeout and the timeout expires before all data is transferred</li>
+<li>The transfer fails due to an error</li>
+<li>The transfer is cancelled</li>
+</ul>
+<p>Each of these will cause the user-specified transfer callback function to be invoked. It is up to the callback function to determine which of the above actually happened and to act accordingly.</p>
+<p>The user-specified callback is passed a pointer to the <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a> structure which was used to setup and submit the transfer. At completion time, libusb has populated this structure with results of the transfer: success or failure reason, number of bytes of data transferred, etc. See the <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a> structure documentation for more information.</p>
+<p><strong>Important Note</strong> : The user-specified callback is called from an event handling context. It is therefore important that no calls are made into libusb that will attempt to perform any event handling. Examples of such functions are any listed in the <a class="reference internal" href="group_libusb_syncio.html#doxid-group-libusb-syncio"><span class="std std-ref">synchronous API</span></a> and any of the blocking functions that retrieve <a class="reference internal" href="group_libusb_desc.html#doxid-group-libusb-desc"><span class="std std-ref">USB descriptors</span></a>.</p>
+</div>
+<div class="section" id="deallocation">
+<span id="doxid-group-libusb-asyncio-1deallocation"></span><h3>Deallocation</h3>
+<p>When a transfer has completed (i.e. the callback function has been invoked), you are advised to free the transfer (unless you wish to resubmit it, see below). Transfers are deallocated with <a class="reference internal" href="#doxid-group-libusb-asyncio-1ga6ab8b2cff4de9091298a06b2f4b86cd6"><span class="std std-ref">libusb_free_transfer()</span></a>.</p>
+<p>It is undefined behaviour to free a transfer which has not completed.</p>
+</div>
+</div>
+<div class="section" id="resubmission">
+<span id="doxid-group-libusb-asyncio-1asyncresubmit"></span><h2>Resubmission</h2>
+<p>You may be wondering why allocation, filling, and submission are all separated above where they could reasonably be combined into a single operation.</p>
+<p>The reason for separation is to allow you to resubmit transfers without having to allocate new ones every time. This is especially useful for common situations dealing with interrupt endpoints - you allocate one transfer, fill and submit it, and when it returns with results you just resubmit it for the next interrupt.</p>
+</div>
+<div class="section" id="cancellation">
+<span id="doxid-group-libusb-asyncio-1asynccancel"></span><h2>Cancellation</h2>
+<p>Another advantage of using the asynchronous interface is that you have the ability to cancel transfers which have not yet completed. This is done by calling the <a class="reference internal" href="#doxid-group-libusb-asyncio-1ga685eb7731f9a0593f75beb99727bbe54"><span class="std std-ref">libusb_cancel_transfer()</span></a> function.</p>
+<p><a class="reference internal" href="#doxid-group-libusb-asyncio-1ga685eb7731f9a0593f75beb99727bbe54"><span class="std std-ref">libusb_cancel_transfer()</span></a> is asynchronous/non-blocking in itself. When the cancellation actually completes, the transfer’s callback function will be invoked, and the callback function should check the transfer status to determine that it was cancelled.</p>
+<p>Freeing the transfer after it has been cancelled but before cancellation has completed will result in undefined behaviour.</p>
+<p>When a transfer is cancelled, some of the data may have been transferred. libusb will communicate this to you in the transfer callback. Do not assume that no data was transferred.</p>
+</div>
+<div class="section" id="overflows-on-device-to-host-bulk-interrupt-endpoints">
+<span id="doxid-group-libusb-asyncio-1bulk-overflows"></span><h2>Overflows on device-to-host bulk/interrupt endpoints</h2>
+<p>If your device does not have predictable transfer sizes (or it misbehaves), your application may submit a request for data on an IN endpoint which is smaller than the data that the device wishes to send. In some circumstances this will cause an overflow, which is a nasty condition to deal with. See the <a class="reference internal" href="page_libusb_packetoverflow.html#doxid-libusb-packetoverflow"><span class="std std-ref">Packets and overflows</span></a> page for discussion.</p>
+</div>
+<div class="section" id="considerations-for-control-transfers">
+<span id="doxid-group-libusb-asyncio-1asyncctrl"></span><h2>Considerations for control transfers</h2>
+<p>The <code class="docutils literal notranslate"><a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref"><span class="pre">libusb_transfer</span></span></a></code> structure is generic and hence does not include specific fields for the control-specific setup packet structure.</p>
+<p>In order to perform a control transfer, you must place the 8-byte setup packet at the start of the data buffer. To simplify this, you could cast the buffer pointer to type struct <a class="reference internal" href="struct_libusb_control_setup.html#doxid-structlibusb-control-setup"><span class="std std-ref">libusb_control_setup</span></a>, or you can use the helper function <a class="reference internal" href="#doxid-group-libusb-asyncio-1ga5447311149ec2bd954b5f1a640a8e231"><span class="std std-ref">libusb_fill_control_setup()</span></a>.</p>
+<p>The wLength field placed in the setup packet must be the length you would expect to be sent in the setup packet: the length of the payload that follows (or the expected maximum number of bytes to receive). However, the length field of the <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a> object must be the length of the data buffer - i.e. it should be wLength <em>plus</em> the size of the setup packet (LIBUSB_CONTROL_SETUP_SIZE).</p>
+<p>If you use the helper functions, this is simplified for you:</p>
+<ol class="arabic simple">
+<li>Allocate a buffer of size LIBUSB_CONTROL_SETUP_SIZE plus the size of the data you are sending/requesting.</li>
+<li>Call <a class="reference internal" href="#doxid-group-libusb-asyncio-1ga5447311149ec2bd954b5f1a640a8e231"><span class="std std-ref">libusb_fill_control_setup()</span></a> on the data buffer, using the transfer request size as the wLength value (i.e. do not include the extra space you allocated for the control setup).</li>
+<li>If this is a host-to-device transfer, place the data to be transferred in the data buffer, starting at offset LIBUSB_CONTROL_SETUP_SIZE.</li>
+<li>Call <a class="reference internal" href="#doxid-group-libusb-asyncio-1ga3a8513ed87229fe2c9771ef0bf17206e"><span class="std std-ref">libusb_fill_control_transfer()</span></a> to associate the data buffer with the transfer (and to set the remaining details such as callback and timeout).<ul>
+<li>Note that there is no parameter to set the length field of the transfer. The length is automatically inferred from the wLength field of the setup packet.</li>
+</ul>
+</li>
+<li>Submit the transfer.</li>
+</ol>
+<p>The multi-byte control setup fields (wValue, wIndex and wLength) must be given in little-endian byte order (the endianness of the USB bus). Endianness conversion is transparently handled by <a class="reference internal" href="#doxid-group-libusb-asyncio-1ga5447311149ec2bd954b5f1a640a8e231"><span class="std std-ref">libusb_fill_control_setup()</span></a> which is documented to accept host-endian values.</p>
+<p>Further considerations are needed when handling transfer completion in your callback function:</p>
+<ul class="simple">
+<li>As you might expect, the setup packet will still be sitting at the start of the data buffer.</li>
+<li>If this was a device-to-host transfer, the received data will be sitting at offset LIBUSB_CONTROL_SETUP_SIZE into the buffer.</li>
+<li>The actual_length field of the transfer structure is relative to the wLength of the setup packet, rather than the size of the data buffer. So, if your wLength was 4, your transfer’s <code class="docutils literal notranslate"><span class="pre">length</span></code> was 12, then you should expect an <code class="docutils literal notranslate"><span class="pre">actual_length</span></code> of 4 to indicate that the data was transferred in entirity.</li>
+</ul>
+<p>To simplify parsing of setup packets and obtaining the data from the correct offset, you may wish to use the <a class="reference internal" href="#doxid-group-libusb-asyncio-1gadf9c633586dde54ce62a3d66a4d7554c"><span class="std std-ref">libusb_control_transfer_get_data()</span></a> and <a class="reference internal" href="#doxid-group-libusb-asyncio-1ga6ab02f15e11b5b03b1174fbd7c3bc061"><span class="std std-ref">libusb_control_transfer_get_setup()</span></a> functions within your transfer callback.</p>
+<p>Even though control endpoints do not halt, a completed control transfer may have a LIBUSB_TRANSFER_STALL status code. This indicates the control request was not supported.</p>
+</div>
+<div class="section" id="considerations-for-interrupt-transfers">
+<span id="doxid-group-libusb-asyncio-1asyncintr"></span><h2>Considerations for interrupt transfers</h2>
+<p>All interrupt transfers are performed using the polling interval presented by the bInterval value of the endpoint descriptor.</p>
+</div>
+<div class="section" id="considerations-for-isochronous-transfers">
+<span id="doxid-group-libusb-asyncio-1asynciso"></span><h2>Considerations for isochronous transfers</h2>
+<p>Isochronous transfers are more complicated than transfers to non-isochronous endpoints.</p>
+<p>To perform I/O to an isochronous endpoint, allocate the transfer by calling <a class="reference internal" href="#doxid-group-libusb-asyncio-1ga13cc69ea40c702181c430c950121c000"><span class="std std-ref">libusb_alloc_transfer()</span></a> with an appropriate number of isochronous packets.</p>
+<p>During filling, set <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer-1a7c9fa575986fe9f23bbecb26b766dff1"><span class="std std-ref">type</span></a> to <a class="reference internal" href="enum_libusb_transfer_type.html#doxid-group-libusb-desc-1ggacb52027036a07de6ecc6c2bf07d07c71a40de9889554fc1785d784b3c31333300"><span class="std std-ref">LIBUSB_TRANSFER_TYPE_ISOCHRONOUS</span></a>, and set <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer-1a87d725a5521c26832fdc13611220014d"><span class="std std-ref">num_iso_packets</span></a> to a value less than or equal to the number of packets you requested during allocation. <a class="reference internal" href="#doxid-group-libusb-asyncio-1ga13cc69ea40c702181c430c950121c000"><span class="std std-ref">libusb_alloc_transfer()</span></a> does not set either of these fields for you, given that you might not even use the transfer on an isochronous endpoint.</p>
+<p>Next, populate the length field for the first num_iso_packets entries in the <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer-1a0de0b13dfae411fc36217d35eb89b138"><span class="std std-ref">iso_packet_desc</span></a> array. Section 5.6.3 of the USB2 specifications describe how the maximum isochronous packet length is determined by the wMaxPacketSize field in the endpoint descriptor. Two functions can help you here:</p>
+<ul class="simple">
+<li><a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1gaec10b71c7209760db55ee0f8768bb4f0"><span class="std std-ref">libusb_get_max_iso_packet_size()</span></a> is an easy way to determine the max packet size for an isochronous endpoint. Note that the maximum packet size is actually the maximum number of bytes that can be transmitted in a single microframe, therefore this function multiplies the maximum number of bytes per transaction by the number of transaction opportunities per microframe.</li>
+<li><a class="reference internal" href="#doxid-group-libusb-asyncio-1gacbdecd6f50093f0c1d0e72ee35ace274"><span class="std std-ref">libusb_set_iso_packet_lengths()</span></a> assigns the same length to all packets within a transfer, which is usually what you want.</li>
+</ul>
+<p>For outgoing transfers, you’ll obviously fill the buffer and populate the packet descriptors in hope that all the data gets transferred. For incoming transfers, you must ensure the buffer has sufficient capacity for the situation where all packets transfer the full amount of requested data.</p>
+<p>Completion handling requires some extra consideration. The <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer-1a7e858f07c48a271a62209d11376ae607"><span class="std std-ref">actual_length</span></a> field of the transfer is meaningless and should not be examined; instead you must refer to the <a class="reference internal" href="struct_libusb_iso_packet_descriptor.html#doxid-structlibusb-iso-packet-descriptor-1a03fa4f4eaf8a8b4e5c05931809581a32"><span class="std std-ref">actual_length</span></a> field of each individual packet.</p>
+<p>The <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer-1a64b2e70e76d52a7cd23daa3cd4fb397e"><span class="std std-ref">status</span></a> field of the transfer is also a little misleading:</p>
+<ul class="simple">
+<li>If the packets were submitted and the isochronous data microframes completed normally, status will have value <a class="reference internal" href="enum_libusb_transfer_status.html#doxid-group-libusb-asyncio-1gga9fcb2aa23d342060ebda1d0cf7478856a4595f6532aab12352a58a0fd4ce48363"><span class="std std-ref">LIBUSB_TRANSFER_COMPLETED</span></a>. Note that bus errors and software-incurred delays are not counted as transfer errors; the transfer.status field may indicate COMPLETED even if some or all of the packets failed. Refer to the <a class="reference internal" href="struct_libusb_iso_packet_descriptor.html#doxid-structlibusb-iso-packet-descriptor-1aab21ee2a5835a0e53d7ac5844ee34371"><span class="std std-ref">status</span></a> field of each individual packet to determine packet failures.</li>
+<li>The status field will have value <a class="reference internal" href="enum_libusb_transfer_status.html#doxid-group-libusb-asyncio-1gga9fcb2aa23d342060ebda1d0cf7478856aa8852ed719d03c2a3cc6f0312d919398"><span class="std std-ref">LIBUSB_TRANSFER_ERROR</span></a> only when serious errors were encountered.</li>
+<li>Other transfer status codes occur with normal behaviour.</li>
+</ul>
+<p>The data for each packet will be found at an offset into the buffer that can be calculated as if each prior packet completed in full. The <a class="reference internal" href="#doxid-group-libusb-asyncio-1ga7f6ea0eb35a216d19d984977e454a7b3"><span class="std std-ref">libusb_get_iso_packet_buffer()</span></a> and <a class="reference internal" href="#doxid-group-libusb-asyncio-1ga3df9a28c4f5c8f1850181ddb5efd12fd"><span class="std std-ref">libusb_get_iso_packet_buffer_simple()</span></a> functions may help you here.</p>
+<p><strong>Note</strong> : Some operating systems (e.g. Linux) may impose limits on the length of individual isochronous packets and/or the total length of the isochronous transfer. Such limits can be difficult for libusb to detect, so the library will simply try and submit the transfer as set up by you. If the transfer fails to submit because it is too large, <a class="reference internal" href="#doxid-group-libusb-asyncio-1gabb0932601f2c7dad2fee4b27962848ce"><span class="std std-ref">libusb_submit_transfer()</span></a> will return <a class="reference internal" href="enum_libusb_error.html#doxid-group-libusb-misc-1ggab2323aa0f04bc22038e7e1740b2f29efa680e4bf39b66a36be3182be3ebf58062"><span class="std std-ref">LIBUSB_ERROR_INVALID_PARAM</span></a>.</p>
+</div>
+<div class="section" id="memory-caveats">
+<span id="doxid-group-libusb-asyncio-1asyncmem"></span><h2>Memory caveats</h2>
+<p>In most circumstances, it is not safe to use stack memory for transfer buffers. This is because the function that fired off the asynchronous transfer may return before libusb has finished using the buffer, and when the function returns it’s stack gets destroyed. This is true for both host-to-device and device-to-host transfers.</p>
+<p>The only case in which it is safe to use stack memory is where you can guarantee that the function owning the stack space for the buffer does not return until after the transfer’s callback function has completed. In every other case, you need to use heap memory instead.</p>
+</div>
+<div class="section" id="fine-control">
+<span id="doxid-group-libusb-asyncio-1asyncflags"></span><h2>Fine control</h2>
+<p>Through using this asynchronous interface, you may find yourself repeating a few simple operations many times. You can apply a bitwise OR of certain flags to a transfer to simplify certain things:</p>
+<ul class="simple">
+<li><a class="reference internal" href="enum_libusb_transfer_flags.html#doxid-group-libusb-asyncio-1gga1fb47dd0f7c209b60a3609ff0c03d56dae4c0697c266819c51c1734b3456e7276"><span class="std std-ref">LIBUSB_TRANSFER_SHORT_NOT_OK</span></a> results in transfers which transferred less than the requested amount of data being marked with status <a class="reference internal" href="enum_libusb_transfer_status.html#doxid-group-libusb-asyncio-1gga9fcb2aa23d342060ebda1d0cf7478856aa8852ed719d03c2a3cc6f0312d919398"><span class="std std-ref">LIBUSB_TRANSFER_ERROR</span></a> (they would normally be regarded as COMPLETED)</li>
+<li><a class="reference internal" href="enum_libusb_transfer_flags.html#doxid-group-libusb-asyncio-1gga1fb47dd0f7c209b60a3609ff0c03d56dae993a26f495ac9949118e23eafa19e86"><span class="std std-ref">LIBUSB_TRANSFER_FREE_BUFFER</span></a> allows you to ask libusb to free the transfer buffer when freeing the transfer.</li>
+<li><a class="reference internal" href="enum_libusb_transfer_flags.html#doxid-group-libusb-asyncio-1gga1fb47dd0f7c209b60a3609ff0c03d56dacf3f064997b283a14097c9f4d6f8ccc1"><span class="std std-ref">LIBUSB_TRANSFER_FREE_TRANSFER</span></a> causes libusb to automatically free the transfer after the transfer callback returns.</li>
+</ul>
+</div>
+<div class="section" id="event-handling">
+<span id="doxid-group-libusb-asyncio-1asyncevent"></span><h2>Event handling</h2>
+<p>An asynchronous model requires that libusb perform work at various points in time - namely processing the results of previously-submitted transfers and invoking the user-supplied callback function.</p>
+<p>This gives rise to the <a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1ga4989086e3f0327f3886a4c474ec7c327"><span class="std std-ref">libusb_handle_events()</span></a> function which your application must call into when libusb has work do to. This gives libusb the opportunity to reap pending transfers, invoke callbacks, etc.</p>
+<p>There are 2 different approaches to dealing with libusb_handle_events:</p>
+<ol class="arabic simple">
+<li>Repeatedly call <a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1ga4989086e3f0327f3886a4c474ec7c327"><span class="std std-ref">libusb_handle_events()</span></a> in blocking mode from a dedicated thread.</li>
+<li>Integrate libusb with your application’s main event loop. libusb exposes a set of file descriptors which allow you to do this.</li>
+</ol>
+<p>The first approach has the big advantage that it will also work on Windows were libusb’ poll API for select / poll integration is not available. So if you want to support Windows and use the async API, you must use this approach, see the <a class="reference internal" href="#doxid-group-libusb-asyncio-1eventthread"><span class="std std-ref">Using an event handling thread</span></a> section below for details.</p>
+<p>If you prefer a single threaded approach with a single central event loop, see the <a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll"><span class="std std-ref">polling and timing</span></a> section for how to integrate libusb into your application’s main event loop.</p>
+</div>
+<div class="section" id="using-an-event-handling-thread">
+<span id="doxid-group-libusb-asyncio-1eventthread"></span><h2>Using an event handling thread</h2>
+<p>Lets begin with stating the obvious: If you’re going to use a separate thread for libusb event handling, your callback functions MUST be threadsafe.</p>
+<p>Other then that doing event handling from a separate thread, is mostly simple. You can use an event thread function as follows:</p>
+<pre class="highlight literal-block">
+<span></span><span class="kt">void</span> <span class="o">*</span><span class="nf">event_thread_func</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">ctx</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">event_thread_run</span><span class="p">)</span>
+        <span class="n">libusb_handle_events</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+<p>There is one caveat though, stopping this thread requires setting the event_thread_run variable to 0, and after that <a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1ga4989086e3f0327f3886a4c474ec7c327"><span class="std std-ref">libusb_handle_events()</span></a> needs to return control to event_thread_func. But unless some event happens, <a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1ga4989086e3f0327f3886a4c474ec7c327"><span class="std std-ref">libusb_handle_events()</span></a> will not return.</p>
+<p>There are 2 different ways of dealing with this, depending on if your application uses libusb’ <a class="reference internal" href="page_libusb_hotplug.html#doxid-libusb-hotplug"><span class="std std-ref">hotplug</span></a> support or not.</p>
+<p>Applications which do not use hotplug support, should not start the event thread until after their first call to <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga3f184a8be4488a767b2e0ae07e76d1b0"><span class="std std-ref">libusb_open()</span></a>, and should stop the thread when closing the last open device as follows:</p>
+<pre class="highlight literal-block">
+<span></span><span class="kt">void</span> <span class="nf">my_close_handle</span><span class="p">(</span><span class="n">libusb_device_handle</span> <span class="o">*</span><span class="n">dev_handle</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">open_devs</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">event_thread_run</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="n">libusb_close</span><span class="p">(</span><span class="n">dev_handle</span><span class="p">);</span> <span class="c1">// This wakes up libusb_handle_events()</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">open_devs</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">pthread_join</span><span class="p">(</span><span class="n">event_thread</span><span class="p">);</span>
+
+    <span class="n">open_devs</span><span class="o">--</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+<p>Applications using hotplug support should start the thread at program init, after having successfully called <a class="reference internal" href="group_libusb_hotplug.html#doxid-group-libusb-hotplug-1ga00e0c69ddf1fb1b6774dc918192e8dc7"><span class="std std-ref">libusb_hotplug_register_callback()</span></a>, and should stop the thread at program exit as follows:</p>
+<pre class="highlight literal-block">
+<span></span><span class="kt">void</span> <span class="nf">my_libusb_exit</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">event_thread_run</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">libusb_hotplug_deregister_callback</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">hotplug_cb_handle</span><span class="p">);</span> <span class="c1">// This wakes up libusb_handle_events()</span>
+    <span class="n">pthread_join</span><span class="p">(</span><span class="n">event_thread</span><span class="p">);</span>
+    <span class="n">libusb_exit</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
+<div class="section" id="typedefs">
+<h3>Typedefs</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libusb-asyncio-1gac74874519794cd7aa40c0814702b0c88">
+<span id="index-1"></span><span></span><span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">libusb_transfer_cb_fn</span><span class="p">)(</span><span class="k">struct</span> <span class="n">libusb_transfer</span> <span class="o">*</span><span class="n">transfer</span><span class="p">)</span>
+</pre>
+<p>Asynchronous transfer callback function type.</p>
+<p>When submitting asynchronous transfers, you pass a pointer to a callback function of this type via the <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer-1a69c6df011ec23ff3e481cc98bfff0623"><span class="std std-ref">callback</span></a> member of the <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a> structure. libusb will call this function later, when the transfer has completed or failed. See <a class="reference internal" href="#doxid-group-libusb-asyncio"><span class="std std-ref">Asynchronous device I/O</span></a> for more information.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>transfer</td>
+<td>The <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a> struct the callback function is being notified about.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libusb-asyncio-1gad7e786c1bedd4a668887564465101981">
+<span id="index-2"></span><span></span><span class="kt">int</span>
+<span class="n">libusb_alloc_streams</span><span class="p">(</span>
+    <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga7df95821d20d27b5597f1d783749d6a4"><span class="std std-ref">libusb_device_handle</span></a><span></span><span class="o">*</span> <span class="n">dev_handle</span><span class="p">,</span>
+    <span class="kt">uint32_t</span> <span class="n">num_streams</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">endpoints</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">num_endpoints</span>
+    <span class="p">)</span>
+</pre>
+<p>Allocate up to num_streams usb bulk streams on the specified endpoints.</p>
+<p>This function takes an array of endpoints rather then a single endpoint because some protocols require that endpoints are setup with similar stream ids. All endpoints passed in must belong to the same interface.</p>
+<p>Note this function may return less streams then requested. Also note that the same number of streams are allocated for each endpoint in the endpoint array.</p>
+<p>Stream id 0 is reserved, and should not be used to communicate with devices. If <a class="reference internal" href="#doxid-group-libusb-asyncio-1gad7e786c1bedd4a668887564465101981"><span class="std std-ref">libusb_alloc_streams()</span></a> returns with a value of N, you may use stream ids 1 to N.</p>
+<p>Since version 1.0.19, <a class="reference internal" href="group_libusb_misc.html#doxid-group-libusb-misc-1gaabe4bc36a83358685d36a6c853cbb4de"><span class="std std-ref">LIBUSB_API_VERSION</span></a>&gt;= 0x01000103</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>dev_handle</td>
+<td>a device handle</td>
+</tr>
+<tr class="row-even"><td>num_streams</td>
+<td>number of streams to try to allocate</td>
+</tr>
+<tr class="row-odd"><td>endpoints</td>
+<td>array of endpoints to allocate streams on</td>
+</tr>
+<tr class="row-even"><td>num_endpoints</td>
+<td>length of the endpoints array</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>number of streams allocated, or a LIBUSB_ERROR code on failure</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libusb-asyncio-1gab068de0fd203ccef5c620a8143526acb">
+<span id="index-3"></span><span></span><span class="kt">int</span>
+<span class="n">libusb_free_streams</span><span class="p">(</span>
+    <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga7df95821d20d27b5597f1d783749d6a4"><span class="std std-ref">libusb_device_handle</span></a><span></span><span class="o">*</span> <span class="n">dev_handle</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">endpoints</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">num_endpoints</span>
+    <span class="p">)</span>
+</pre>
+<p>Free usb bulk streams allocated with <a class="reference internal" href="#doxid-group-libusb-asyncio-1gad7e786c1bedd4a668887564465101981"><span class="std std-ref">libusb_alloc_streams()</span></a>.</p>
+<p>Note streams are automatically free-ed when releasing an interface.</p>
+<p>Since version 1.0.19, <a class="reference internal" href="group_libusb_misc.html#doxid-group-libusb-misc-1gaabe4bc36a83358685d36a6c853cbb4de"><span class="std std-ref">LIBUSB_API_VERSION</span></a>&gt;= 0x01000103</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>dev_handle</td>
+<td>a device handle</td>
+</tr>
+<tr class="row-even"><td>endpoints</td>
+<td>array of endpoints to free streams on</td>
+</tr>
+<tr class="row-odd"><td>num_endpoints</td>
+<td>length of the endpoints array</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>LIBUSB_SUCCESS, or a LIBUSB_ERROR code on failure</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libusb-asyncio-1ga47c492e750197f1a28874c7a0dee40e3">
+<span id="index-4"></span><span></span><span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">libusb_dev_mem_alloc</span><span class="p">(</span>
+    <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga7df95821d20d27b5597f1d783749d6a4"><span class="std std-ref">libusb_device_handle</span></a><span></span><span class="o">*</span> <span class="n">dev_handle</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">length</span>
+    <span class="p">)</span>
+</pre>
+<p>Attempts to allocate a block of persistent DMA memory suitable for transfers against the given device.</p>
+<p>If successful, will return a block of memory that is suitable for use as “buffer” in <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a> against this device. Using this memory instead of regular memory means that the host controller can use DMA directly into the buffer to increase performance, and also that transfers can no longer fail due to kernel memory fragmentation.</p>
+<p>Note that this means you should not modify this memory (or even data on the same cache lines) when a transfer is in progress, although it is legal to have several transfers going on within the same memory block.</p>
+<p>Will return NULL on failure. Many systems do not support such zerocopy and will always return NULL. Memory allocated with this function must be freed with <a class="reference internal" href="#doxid-group-libusb-asyncio-1gad7575ff325f0159a5b74b7c0ee64eb62"><span class="std std-ref">libusb_dev_mem_free</span></a>. Specifically, this means that the flag <a class="reference internal" href="enum_libusb_transfer_flags.html#doxid-group-libusb-asyncio-1gga1fb47dd0f7c209b60a3609ff0c03d56dae993a26f495ac9949118e23eafa19e86"><span class="std std-ref">LIBUSB_TRANSFER_FREE_BUFFER</span></a> cannot be used to free memory allocated with this function.</p>
+<p>Since version 1.0.21, <a class="reference internal" href="group_libusb_misc.html#doxid-group-libusb-misc-1gaabe4bc36a83358685d36a6c853cbb4de"><span class="std std-ref">LIBUSB_API_VERSION</span></a>&gt;= 0x01000105</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>dev_handle</td>
+<td>a device handle</td>
+</tr>
+<tr class="row-even"><td>length</td>
+<td>size of desired data buffer</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>a pointer to the newly allocated memory, or NULL on failure</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libusb-asyncio-1gad7575ff325f0159a5b74b7c0ee64eb62">
+<span id="index-5"></span><span></span><span class="kt">int</span>
+<span class="n">libusb_dev_mem_free</span><span class="p">(</span>
+    <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga7df95821d20d27b5597f1d783749d6a4"><span class="std std-ref">libusb_device_handle</span></a><span></span><span class="o">*</span> <span class="n">dev_handle</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">length</span>
+    <span class="p">)</span>
+</pre>
+<p>Free device memory allocated with <a class="reference internal" href="#doxid-group-libusb-asyncio-1ga47c492e750197f1a28874c7a0dee40e3"><span class="std std-ref">libusb_dev_mem_alloc()</span></a>.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>dev_handle</td>
+<td>a device handle</td>
+</tr>
+<tr class="row-even"><td>buffer</td>
+<td>pointer to the previously allocated memory</td>
+</tr>
+<tr class="row-odd"><td>length</td>
+<td>size of previously allocated memory</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>LIBUSB_SUCCESS, or a LIBUSB_ERROR code on failure</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libusb-asyncio-1ga13cc69ea40c702181c430c950121c000">
+<span id="index-6"></span><span></span><span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span>
+<span class="n">libusb_alloc_transfer</span><span class="p">(</span><span class="kt">int</span> <span class="n">iso_packets</span><span class="p">)</span>
+</pre>
+<p>Allocate a libusb transfer with a specified number of isochronous packet descriptors.</p>
+<p>The returned transfer is pre-initialized for you. When the new transfer is no longer needed, it should be freed with <a class="reference internal" href="#doxid-group-libusb-asyncio-1ga6ab8b2cff4de9091298a06b2f4b86cd6"><span class="std std-ref">libusb_free_transfer()</span></a>.</p>
+<p>Transfers intended for non-isochronous endpoints (e.g. control, bulk, interrupt) should specify an iso_packets count of zero.</p>
+<p>For transfers intended for isochronous endpoints, specify an appropriate number of packet descriptors to be allocated as part of the transfer. The returned transfer is not specially initialized for isochronous I/O; you are still required to set the <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer-1a87d725a5521c26832fdc13611220014d"><span class="std std-ref">num_iso_packets</span></a> and <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer-1a7c9fa575986fe9f23bbecb26b766dff1"><span class="std std-ref">type</span></a> fields accordingly.</p>
+<p>It is safe to allocate a transfer with some isochronous packets and then use it on a non-isochronous endpoint. If you do this, ensure that at time of submission, num_iso_packets is 0 and that type is set appropriately.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>iso_packets</td>
+<td>number of isochronous packet descriptors to allocate</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>a newly allocated transfer, or NULL on error</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libusb-asyncio-1ga6ab8b2cff4de9091298a06b2f4b86cd6">
+<span id="index-7"></span><span></span><span class="kt">void</span>
+<span class="n">libusb_free_transfer</span><span class="p">(</span><span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">)</span>
+</pre>
+<p>Free a transfer structure.</p>
+<p>This should be called for all transfers allocated with <a class="reference internal" href="#doxid-group-libusb-asyncio-1ga13cc69ea40c702181c430c950121c000"><span class="std std-ref">libusb_alloc_transfer()</span></a>.</p>
+<p>If the <a class="reference internal" href="enum_libusb_transfer_flags.html#doxid-group-libusb-asyncio-1gga1fb47dd0f7c209b60a3609ff0c03d56dae993a26f495ac9949118e23eafa19e86"><span class="std std-ref">LIBUSB_TRANSFER_FREE_BUFFER</span></a> flag is set and the transfer buffer is non-NULL, this function will also free the transfer buffer using the standard system memory allocator (e.g. free()).</p>
+<p>It is legal to call this function with a NULL transfer. In this case, the function will simply return safely.</p>
+<p>It is not legal to free an active transfer (one which has been submitted and has not yet completed).</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>transfer</td>
+<td>the transfer to free</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libusb-asyncio-1gabb0932601f2c7dad2fee4b27962848ce">
+<span id="index-8"></span><span></span><span class="kt">int</span>
+<span class="n">libusb_submit_transfer</span><span class="p">(</span><span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">)</span>
+</pre>
+<p>Submit a transfer.</p>
+<p>This function will fire off the USB transfer and then return immediately.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>transfer</td>
+<td>the transfer to submit</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success</p>
+<p>LIBUSB_ERROR_NO_DEVICE if the device has been disconnected</p>
+<p>LIBUSB_ERROR_BUSY if the transfer has already been submitted.</p>
+<p>LIBUSB_ERROR_NOT_SUPPORTED if the transfer flags are not supported by the operating system.</p>
+<p>LIBUSB_ERROR_INVALID_PARAM if the transfer size is larger than the operating system and/or hardware can support</p>
+<p>another LIBUSB_ERROR code on other failure</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libusb-asyncio-1ga685eb7731f9a0593f75beb99727bbe54">
+<span id="index-9"></span><span></span><span class="kt">int</span>
+<span class="n">libusb_cancel_transfer</span><span class="p">(</span><span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">)</span>
+</pre>
+<p>Asynchronously cancel a previously submitted transfer.</p>
+<p>This function returns immediately, but this does not indicate cancellation is complete. Your callback function will be invoked at some later time with a transfer status of <a class="reference internal" href="enum_libusb_transfer_status.html#doxid-group-libusb-asyncio-1gga9fcb2aa23d342060ebda1d0cf7478856a8af1f19e46cccafdcf3feadce47e880b"><span class="std std-ref">LIBUSB_TRANSFER_CANCELLED.</span></a></p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>transfer</td>
+<td>the transfer to cancel</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success</p>
+<p>LIBUSB_ERROR_NOT_FOUND if the transfer is not in progress, already complete, or already cancelled.</p>
+<p>a LIBUSB_ERROR code on failure</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libusb-asyncio-1gaeae2db23b9de811af317483afdeb230f">
+<span id="index-10"></span><span></span><span class="kt">void</span>
+<span class="n">libusb_transfer_set_stream_id</span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">,</span>
+    <span class="kt">uint32_t</span> <span class="n">stream_id</span>
+    <span class="p">)</span>
+</pre>
+<p>Set a transfers bulk stream id.</p>
+<p>Note users are advised to use <a class="reference internal" href="#doxid-group-libusb-asyncio-1gac2e84d8fb9218d3c67e6a4fd4ade5b10"><span class="std std-ref">libusb_fill_bulk_stream_transfer()</span></a> instead of calling this function directly.</p>
+<p>Since version 1.0.19, <a class="reference internal" href="group_libusb_misc.html#doxid-group-libusb-misc-1gaabe4bc36a83358685d36a6c853cbb4de"><span class="std std-ref">LIBUSB_API_VERSION</span></a>&gt;= 0x01000103</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>transfer</td>
+<td>the transfer to set the stream id for</td>
+</tr>
+<tr class="row-even"><td>stream_id</td>
+<td>the stream id to set</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-libusb-asyncio-1gad7e786c1bedd4a668887564465101981"><span class="std std-ref">libusb_alloc_streams()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libusb-asyncio-1ga631653487273f3306925131cdc0a3ffc">
+<span id="index-11"></span><span></span><span class="kt">uint32_t</span>
+<span class="n">libusb_transfer_get_stream_id</span><span class="p">(</span><span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">)</span>
+</pre>
+<p>Get a transfers bulk stream id.</p>
+<p>Since version 1.0.19, <a class="reference internal" href="group_libusb_misc.html#doxid-group-libusb-misc-1gaabe4bc36a83358685d36a6c853cbb4de"><span class="std std-ref">LIBUSB_API_VERSION</span></a>&gt;= 0x01000103</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>transfer</td>
+<td>the transfer to get the stream id for</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>the stream id for the transfer</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libusb-asyncio-1gadf9c633586dde54ce62a3d66a4d7554c">
+<span id="index-12"></span><span></span><span class="k">static</span>
+<span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">libusb_control_transfer_get_data</span><span class="p">(</span><span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">)</span>
+</pre>
+<p>Get the data section of a control transfer.</p>
+<p>This convenience function is here to remind you that the data does not start until 8 bytes into the actual buffer, as the setup packet comes first.</p>
+<p>Calling this function only makes sense from a transfer callback function, or situations where you have already allocated a suitably sized buffer at transfer-&gt;buffer.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>transfer</td>
+<td>a transfer</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>pointer to the first byte of the data section</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libusb-asyncio-1ga6ab02f15e11b5b03b1174fbd7c3bc061">
+<span id="index-13"></span><span></span><span class="k">static</span>
+<span class="k">struct</span> <a class="reference internal" href="struct_libusb_control_setup.html#doxid-structlibusb-control-setup"><span class="std std-ref">libusb_control_setup</span></a><span></span><span class="o">*</span>
+<span class="n">libusb_control_transfer_get_setup</span><span class="p">(</span><span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">)</span>
+</pre>
+<p>Get the control setup packet of a control transfer.</p>
+<p>This convenience function is here to remind you that the control setup occupies the first 8 bytes of the transfer data buffer.</p>
+<p>Calling this function only makes sense from a transfer callback function, or situations where you have already allocated a suitably sized buffer at transfer-&gt;buffer.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>transfer</td>
+<td>a transfer</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>a casted pointer to the start of the transfer data buffer</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libusb-asyncio-1ga5447311149ec2bd954b5f1a640a8e231">
+<span id="index-14"></span><span></span><span class="k">static</span>
+<span class="kt">void</span>
+<span class="n">libusb_fill_control_setup</span><span class="p">(</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span>
+    <span class="kt">uint8_t</span> <span class="n">bmRequestType</span><span class="p">,</span>
+    <span class="kt">uint8_t</span> <span class="n">bRequest</span><span class="p">,</span>
+    <span class="kt">uint16_t</span> <span class="n">wValue</span><span class="p">,</span>
+    <span class="kt">uint16_t</span> <span class="n">wIndex</span><span class="p">,</span>
+    <span class="kt">uint16_t</span> <span class="n">wLength</span>
+    <span class="p">)</span>
+</pre>
+<p>Helper function to populate the setup packet (first 8 bytes of the data buffer) for a control transfer.</p>
+<p>The wIndex, wValue and wLength values should be given in host-endian byte order.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>buffer</td>
+<td>buffer to output the setup packet into This pointer must be aligned to at least 2 bytes boundary.</td>
+</tr>
+<tr class="row-even"><td>bmRequestType</td>
+<td>see the <a class="reference internal" href="struct_libusb_control_setup.html#doxid-structlibusb-control-setup-1a39b148c231d675492ccd2383196926bf"><span class="std std-ref">bmRequestType</span></a> field of <a class="reference internal" href="struct_libusb_control_setup.html#doxid-structlibusb-control-setup"><span class="std std-ref">libusb_control_setup</span></a></td>
+</tr>
+<tr class="row-odd"><td>bRequest</td>
+<td>see the <a class="reference internal" href="struct_libusb_control_setup.html#doxid-structlibusb-control-setup-1a1b80a28b8d4e8586fc54358194e70087"><span class="std std-ref">bRequest</span></a> field of <a class="reference internal" href="struct_libusb_control_setup.html#doxid-structlibusb-control-setup"><span class="std std-ref">libusb_control_setup</span></a></td>
+</tr>
+<tr class="row-even"><td>wValue</td>
+<td>see the <a class="reference internal" href="struct_libusb_control_setup.html#doxid-structlibusb-control-setup-1abbb6daa01fe4b6a05dc43492e4e53a7d"><span class="std std-ref">wValue</span></a> field of <a class="reference internal" href="struct_libusb_control_setup.html#doxid-structlibusb-control-setup"><span class="std std-ref">libusb_control_setup</span></a></td>
+</tr>
+<tr class="row-odd"><td>wIndex</td>
+<td>see the <a class="reference internal" href="struct_libusb_control_setup.html#doxid-structlibusb-control-setup-1a70c2ae456344b200a19d434ace85ae2b"><span class="std std-ref">wIndex</span></a> field of <a class="reference internal" href="struct_libusb_control_setup.html#doxid-structlibusb-control-setup"><span class="std std-ref">libusb_control_setup</span></a></td>
+</tr>
+<tr class="row-even"><td>wLength</td>
+<td>see the <a class="reference internal" href="struct_libusb_control_setup.html#doxid-structlibusb-control-setup-1a3c442c64fd7619b43b782367235766cc"><span class="std std-ref">wLength</span></a> field of <a class="reference internal" href="struct_libusb_control_setup.html#doxid-structlibusb-control-setup"><span class="std std-ref">libusb_control_setup</span></a></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libusb-asyncio-1ga3a8513ed87229fe2c9771ef0bf17206e">
+<span id="index-15"></span><span></span><span class="k">static</span>
+<span class="kt">void</span>
+<span class="n">libusb_fill_control_transfer</span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">,</span>
+    <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga7df95821d20d27b5597f1d783749d6a4"><span class="std std-ref">libusb_device_handle</span></a><span></span><span class="o">*</span> <span class="n">dev_handle</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-libusb-asyncio-1gac74874519794cd7aa40c0814702b0c88"><span class="std std-ref">libusb_transfer_cb_fn</span></a><span></span> <span class="n">callback</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">user_data</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">timeout</span>
+    <span class="p">)</span>
+</pre>
+<p>Helper function to populate the required <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a> fields for a control transfer.</p>
+<p>If you pass a transfer buffer to this function, the first 8 bytes will be interpreted as a control setup packet, and the wLength field will be used to automatically populate the <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer-1a68c023e1f40b50aa8604a2495b6a391e"><span class="std std-ref">length</span></a> field of the transfer. Therefore the recommended approach is:</p>
+<ol class="arabic simple">
+<li>Allocate a suitably sized data buffer (including space for control setup)</li>
+<li>Call <a class="reference internal" href="#doxid-group-libusb-asyncio-1ga5447311149ec2bd954b5f1a640a8e231"><span class="std std-ref">libusb_fill_control_setup()</span></a></li>
+<li>If this is a host-to-device transfer with a data stage, put the data in place after the setup packet</li>
+<li>Call this function</li>
+<li>Call <a class="reference internal" href="#doxid-group-libusb-asyncio-1gabb0932601f2c7dad2fee4b27962848ce"><span class="std std-ref">libusb_submit_transfer()</span></a></li>
+</ol>
+<p>It is also legal to pass a NULL buffer to this function, in which case this function will not attempt to populate the length field. Remember that you must then populate the buffer and length fields later.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>transfer</td>
+<td>the transfer to populate</td>
+</tr>
+<tr class="row-even"><td>dev_handle</td>
+<td>handle of the device that will handle the transfer</td>
+</tr>
+<tr class="row-odd"><td>buffer</td>
+<td>data buffer. If provided, this function will interpret the first 8 bytes as a setup packet and infer the transfer length from that. This pointer must be aligned to at least 2 bytes boundary.</td>
+</tr>
+<tr class="row-even"><td>callback</td>
+<td>callback function to be invoked on transfer completion</td>
+</tr>
+<tr class="row-odd"><td>user_data</td>
+<td>user data to pass to callback function</td>
+</tr>
+<tr class="row-even"><td>timeout</td>
+<td>timeout for the transfer in milliseconds</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libusb-asyncio-1gad4ddb1a5c6c7fefc979a44d7300b95d7">
+<span id="index-16"></span><span></span><span class="k">static</span>
+<span class="kt">void</span>
+<span class="n">libusb_fill_bulk_transfer</span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">,</span>
+    <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga7df95821d20d27b5597f1d783749d6a4"><span class="std std-ref">libusb_device_handle</span></a><span></span><span class="o">*</span> <span class="n">dev_handle</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">endpoint</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">length</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-libusb-asyncio-1gac74874519794cd7aa40c0814702b0c88"><span class="std std-ref">libusb_transfer_cb_fn</span></a><span></span> <span class="n">callback</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">user_data</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">timeout</span>
+    <span class="p">)</span>
+</pre>
+<p>Helper function to populate the required <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a> fields for a bulk transfer.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>transfer</td>
+<td>the transfer to populate</td>
+</tr>
+<tr class="row-even"><td>dev_handle</td>
+<td>handle of the device that will handle the transfer</td>
+</tr>
+<tr class="row-odd"><td>endpoint</td>
+<td>address of the endpoint where this transfer will be sent</td>
+</tr>
+<tr class="row-even"><td>buffer</td>
+<td>data buffer</td>
+</tr>
+<tr class="row-odd"><td>length</td>
+<td>length of data buffer</td>
+</tr>
+<tr class="row-even"><td>callback</td>
+<td>callback function to be invoked on transfer completion</td>
+</tr>
+<tr class="row-odd"><td>user_data</td>
+<td>user data to pass to callback function</td>
+</tr>
+<tr class="row-even"><td>timeout</td>
+<td>timeout for the transfer in milliseconds</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libusb-asyncio-1gac2e84d8fb9218d3c67e6a4fd4ade5b10">
+<span id="index-17"></span><span></span><span class="k">static</span>
+<span class="kt">void</span>
+<span class="n">libusb_fill_bulk_stream_transfer</span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">,</span>
+    <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga7df95821d20d27b5597f1d783749d6a4"><span class="std std-ref">libusb_device_handle</span></a><span></span><span class="o">*</span> <span class="n">dev_handle</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">endpoint</span><span class="p">,</span>
+    <span class="kt">uint32_t</span> <span class="n">stream_id</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">length</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-libusb-asyncio-1gac74874519794cd7aa40c0814702b0c88"><span class="std std-ref">libusb_transfer_cb_fn</span></a><span></span> <span class="n">callback</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">user_data</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">timeout</span>
+    <span class="p">)</span>
+</pre>
+<p>Helper function to populate the required <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a> fields for a bulk transfer using bulk streams.</p>
+<p>Since version 1.0.19, <a class="reference internal" href="group_libusb_misc.html#doxid-group-libusb-misc-1gaabe4bc36a83358685d36a6c853cbb4de"><span class="std std-ref">LIBUSB_API_VERSION</span></a>&gt;= 0x01000103</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>transfer</td>
+<td>the transfer to populate</td>
+</tr>
+<tr class="row-even"><td>dev_handle</td>
+<td>handle of the device that will handle the transfer</td>
+</tr>
+<tr class="row-odd"><td>endpoint</td>
+<td>address of the endpoint where this transfer will be sent</td>
+</tr>
+<tr class="row-even"><td>stream_id</td>
+<td>bulk stream id for this transfer</td>
+</tr>
+<tr class="row-odd"><td>buffer</td>
+<td>data buffer</td>
+</tr>
+<tr class="row-even"><td>length</td>
+<td>length of data buffer</td>
+</tr>
+<tr class="row-odd"><td>callback</td>
+<td>callback function to be invoked on transfer completion</td>
+</tr>
+<tr class="row-even"><td>user_data</td>
+<td>user data to pass to callback function</td>
+</tr>
+<tr class="row-odd"><td>timeout</td>
+<td>timeout for the transfer in milliseconds</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libusb-asyncio-1ga90f53cea1124a7566df1aa1202b77510">
+<span id="index-18"></span><span></span><span class="k">static</span>
+<span class="kt">void</span>
+<span class="n">libusb_fill_interrupt_transfer</span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">,</span>
+    <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga7df95821d20d27b5597f1d783749d6a4"><span class="std std-ref">libusb_device_handle</span></a><span></span><span class="o">*</span> <span class="n">dev_handle</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">endpoint</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">length</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-libusb-asyncio-1gac74874519794cd7aa40c0814702b0c88"><span class="std std-ref">libusb_transfer_cb_fn</span></a><span></span> <span class="n">callback</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">user_data</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">timeout</span>
+    <span class="p">)</span>
+</pre>
+<p>Helper function to populate the required <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a> fields for an interrupt transfer.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>transfer</td>
+<td>the transfer to populate</td>
+</tr>
+<tr class="row-even"><td>dev_handle</td>
+<td>handle of the device that will handle the transfer</td>
+</tr>
+<tr class="row-odd"><td>endpoint</td>
+<td>address of the endpoint where this transfer will be sent</td>
+</tr>
+<tr class="row-even"><td>buffer</td>
+<td>data buffer</td>
+</tr>
+<tr class="row-odd"><td>length</td>
+<td>length of data buffer</td>
+</tr>
+<tr class="row-even"><td>callback</td>
+<td>callback function to be invoked on transfer completion</td>
+</tr>
+<tr class="row-odd"><td>user_data</td>
+<td>user data to pass to callback function</td>
+</tr>
+<tr class="row-even"><td>timeout</td>
+<td>timeout for the transfer in milliseconds</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libusb-asyncio-1ga30fdce8c461e851f0aa4c851014e1aa7">
+<span id="index-19"></span><span></span><span class="k">static</span>
+<span class="kt">void</span>
+<span class="n">libusb_fill_iso_transfer</span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">,</span>
+    <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga7df95821d20d27b5597f1d783749d6a4"><span class="std std-ref">libusb_device_handle</span></a><span></span><span class="o">*</span> <span class="n">dev_handle</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">endpoint</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">length</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">num_iso_packets</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-libusb-asyncio-1gac74874519794cd7aa40c0814702b0c88"><span class="std std-ref">libusb_transfer_cb_fn</span></a><span></span> <span class="n">callback</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">user_data</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">timeout</span>
+    <span class="p">)</span>
+</pre>
+<p>Helper function to populate the required <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a> fields for an isochronous transfer.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>transfer</td>
+<td>the transfer to populate</td>
+</tr>
+<tr class="row-even"><td>dev_handle</td>
+<td>handle of the device that will handle the transfer</td>
+</tr>
+<tr class="row-odd"><td>endpoint</td>
+<td>address of the endpoint where this transfer will be sent</td>
+</tr>
+<tr class="row-even"><td>buffer</td>
+<td>data buffer</td>
+</tr>
+<tr class="row-odd"><td>length</td>
+<td>length of data buffer</td>
+</tr>
+<tr class="row-even"><td>num_iso_packets</td>
+<td>the number of isochronous packets</td>
+</tr>
+<tr class="row-odd"><td>callback</td>
+<td>callback function to be invoked on transfer completion</td>
+</tr>
+<tr class="row-even"><td>user_data</td>
+<td>user data to pass to callback function</td>
+</tr>
+<tr class="row-odd"><td>timeout</td>
+<td>timeout for the transfer in milliseconds</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libusb-asyncio-1gacbdecd6f50093f0c1d0e72ee35ace274">
+<span id="index-20"></span><span></span><span class="k">static</span>
+<span class="kt">void</span>
+<span class="n">libusb_set_iso_packet_lengths</span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">length</span>
+    <span class="p">)</span>
+</pre>
+<p>Convenience function to set the length of all packets in an isochronous transfer, based on the num_iso_packets field in the transfer structure.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>transfer</td>
+<td>a transfer</td>
+</tr>
+<tr class="row-even"><td>length</td>
+<td>the length to set in each isochronous packet descriptor</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1gac81968047e262409e78f3fe24321b604"><span class="std std-ref">libusb_get_max_packet_size()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libusb-asyncio-1ga7f6ea0eb35a216d19d984977e454a7b3">
+<span id="index-21"></span><span></span><span class="k">static</span>
+<span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">libusb_get_iso_packet_buffer</span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">packet</span>
+    <span class="p">)</span>
+</pre>
+<p>Convenience function to locate the position of an isochronous packet within the buffer of an isochronous transfer.</p>
+<p>This is a thorough function which loops through all preceding packets, accumulating their lengths to find the position of the specified packet. Typically you will assign equal lengths to each packet in the transfer, and hence the above method is sub-optimal. You may wish to use <a class="reference internal" href="#doxid-group-libusb-asyncio-1ga3df9a28c4f5c8f1850181ddb5efd12fd"><span class="std std-ref">libusb_get_iso_packet_buffer_simple()</span></a> instead.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>transfer</td>
+<td>a transfer</td>
+</tr>
+<tr class="row-even"><td>packet</td>
+<td>the packet to return the address of</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>the base address of the packet buffer inside the transfer buffer, or NULL if the packet does not exist.</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-libusb-asyncio-1ga3df9a28c4f5c8f1850181ddb5efd12fd"><span class="std std-ref">libusb_get_iso_packet_buffer_simple()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libusb-asyncio-1ga3df9a28c4f5c8f1850181ddb5efd12fd">
+<span id="index-22"></span><span></span><span class="k">static</span>
+<span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">libusb_get_iso_packet_buffer_simple</span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer"><span class="std std-ref">libusb_transfer</span></a><span></span><span class="o">*</span> <span class="n">transfer</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">packet</span>
+    <span class="p">)</span>
+</pre>
+<p>Convenience function to locate the position of an isochronous packet within the buffer of an isochronous transfer, for transfers where each packet is of identical size.</p>
+<p>This function relies on the assumption that every packet within the transfer is of identical size to the first packet. Calculating the location of the packet buffer is then just a simple calculation: <code class="docutils literal notranslate"><span class="pre">buffer</span> <span class="pre">+</span> <span class="pre">(packet_size</span> <span class="pre">*</span> <span class="pre">packet)</span></code></p>
+<p>Do not use this function on transfers other than those that have identical packet lengths for each packet.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>transfer</td>
+<td>a transfer</td>
+</tr>
+<tr class="row-even"><td>packet</td>
+<td>the packet to return the address of</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>the base address of the packet buffer inside the transfer buffer, or NULL if the packet does not exist.</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-libusb-asyncio-1ga7f6ea0eb35a216d19d984977e454a7b3"><span class="std std-ref">libusb_get_iso_packet_buffer()</span></a></p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="enum_libusb_transfer_flags.html" class="btn btn-neutral float-right" title="enum libusb_transfer_flags" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="libusb-1.0 API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2007-2017, LibUSB Maintainers.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

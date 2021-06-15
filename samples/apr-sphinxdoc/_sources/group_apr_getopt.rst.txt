@@ -1,0 +1,280 @@
+.. index:: pair: group; Command Argument Parsing
+.. _doxid-group__apr__getopt:
+
+Command Argument Parsing
+========================
+
+.. toctree::
+	:hidden:
+
+	struct_apr_getopt_option_t.rst
+	struct_apr_getopt_t.rst
+
+Overview
+~~~~~~~~
+
+
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef void() :ref:`apr_getopt_err_fn_t<doxid-group__apr__getopt_1gad0f6c9baec81bc84293e0f1e2262656e>`(
+		void *arg,
+		const char *err,
+		...
+		);
+
+	typedef struct :ref:`apr_getopt_t<doxid-structapr__getopt__t>` :ref:`apr_getopt_t<doxid-group__apr__getopt_1gaed49565eab64803e93f76d0c40d6873d>`;
+	typedef struct :ref:`apr_getopt_option_t<doxid-structapr__getopt__option__t>` :ref:`apr_getopt_option_t<doxid-group__apr__getopt_1ga114d2af52f3573eaeee2ffa73b2c4ff5>`;
+
+	// structs
+
+	struct :ref:`apr_getopt_option_t<doxid-structapr__getopt__option__t>`;
+	struct :ref:`apr_getopt_t<doxid-structapr__getopt__t>`;
+
+	// global functions
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_getopt_init<doxid-group__apr__getopt_1gaaab2b4bfb62361af7a2d427f5f29a3d4>`(
+		:ref:`apr_getopt_t<doxid-structapr__getopt__t>`** os,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont,
+		int argc,
+		const char*const* argv
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_getopt<doxid-group__apr__getopt_1ga289cdcf7eacc997eb91fea7c02d08934>`(
+		:ref:`apr_getopt_t<doxid-structapr__getopt__t>`* os,
+		const char* opts,
+		char* option_ch,
+		const char** option_arg
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_getopt_long<doxid-group__apr__getopt_1ga80d6ff2213da4e25406b3f179fa13989>`(
+		:ref:`apr_getopt_t<doxid-structapr__getopt__t>`* os,
+		const :ref:`apr_getopt_option_t<doxid-structapr__getopt__option__t>`* opts,
+		int* option_ch,
+		const char** option_arg
+		);
+
+.. _details-group__apr__getopt:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+Typedefs
+--------
+
+.. index:: pair: typedef; apr_getopt_err_fn_t
+.. _doxid-group__apr__getopt_1gad0f6c9baec81bc84293e0f1e2262656e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef void() apr_getopt_err_fn_t(
+		void *arg,
+		const char *err,
+		...
+		)
+
+An ``:ref:`apr_getopt_t <doxid-structapr__getopt__t>``` error callback function.
+
+*arg* is this ``:ref:`apr_getopt_t <doxid-structapr__getopt__t>`'s`` ``errarg`` member.
+
+.. index:: pair: typedef; apr_getopt_t
+.. _doxid-group__apr__getopt_1gaed49565eab64803e93f76d0c40d6873d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_getopt_t<doxid-structapr__getopt__t>` apr_getopt_t
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_getopt_t <doxid-structapr__getopt__t>`
+
+.. index:: pair: typedef; apr_getopt_option_t
+.. _doxid-group__apr__getopt_1ga114d2af52f3573eaeee2ffa73b2c4ff5:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_getopt_option_t<doxid-structapr__getopt__option__t>` apr_getopt_option_t
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_getopt_option_t <doxid-structapr__getopt__option__t>`
+
+Global Functions
+----------------
+
+.. index:: pair: function; apr_getopt_init
+.. _doxid-group__apr__getopt_1gaaab2b4bfb62361af7a2d427f5f29a3d4:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_getopt_init(
+		:ref:`apr_getopt_t<doxid-structapr__getopt__t>`** os,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont,
+		int argc,
+		const char*const* argv
+		)
+
+Initialize the arguments for parsing by :ref:`apr_getopt() <doxid-group__apr__getopt_1ga289cdcf7eacc997eb91fea7c02d08934>`. Arguments 3 and 4 are most commonly argc and argv from main(argc, argv) The (\*os)->errfn is initialized to fprintf(stderr... but may be overridden.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- os
+
+		- The options structure created for :ref:`apr_getopt() <doxid-group__apr__getopt_1ga289cdcf7eacc997eb91fea7c02d08934>`
+
+	*
+		- cont
+
+		- The pool to operate on
+
+	*
+		- argc
+
+		- The number of arguments to parse
+
+	*
+		- argv
+
+		- The array of arguments to parse
+
+.. index:: pair: function; apr_getopt
+.. _doxid-group__apr__getopt_1ga289cdcf7eacc997eb91fea7c02d08934:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_getopt(
+		:ref:`apr_getopt_t<doxid-structapr__getopt__t>`* os,
+		const char* opts,
+		char* option_ch,
+		const char** option_arg
+		)
+
+Parse the options initialized by :ref:`apr_getopt_init() <doxid-group__apr__getopt_1gaaab2b4bfb62361af7a2d427f5f29a3d4>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- os
+
+		- The apr_opt_t structure returned by :ref:`apr_getopt_init() <doxid-group__apr__getopt_1gaaab2b4bfb62361af7a2d427f5f29a3d4>`
+
+	*
+		- opts
+
+		- A string of characters that are acceptable options to the program. Characters followed by ":" are required to have an option associated
+
+	*
+		- option_ch
+
+		- The next option character parsed
+
+	*
+		- option_arg
+
+		- The argument following the option character:
+
+
+
+.. rubric:: Returns:
+
+There are four potential status values on exit. They are:
+
+.. code-block:: none
+
+
+	APR_EOF        No more options to parse
+	APR_BADCH      Found a bad option character
+	APR_BADARG     No argument followed the option flag
+	APR_SUCCESS    The next option was found.
+
+.. index:: pair: function; apr_getopt_long
+.. _doxid-group__apr__getopt_1ga80d6ff2213da4e25406b3f179fa13989:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_getopt_long(
+		:ref:`apr_getopt_t<doxid-structapr__getopt__t>`* os,
+		const :ref:`apr_getopt_option_t<doxid-structapr__getopt__option__t>`* opts,
+		int* option_ch,
+		const char** option_arg
+		)
+
+Parse the options initialized by :ref:`apr_getopt_init() <doxid-group__apr__getopt_1gaaab2b4bfb62361af7a2d427f5f29a3d4>`, accepting long options beginning with "--" in addition to single-character options beginning with "-".
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- os
+
+		- The :ref:`apr_getopt_t <doxid-structapr__getopt__t>` structure created by :ref:`apr_getopt_init() <doxid-group__apr__getopt_1gaaab2b4bfb62361af7a2d427f5f29a3d4>`
+
+	*
+		- opts
+
+		- A pointer to a list of :ref:`apr_getopt_option_t <doxid-structapr__getopt__option__t>` structures, which can be initialized with { "name", optch, has_args }. has_args is nonzero if the option requires an argument. A structure with an optch value of 0 terminates the list.
+
+	*
+		- option_ch
+
+		- Receives the value of "optch" from the :ref:`apr_getopt_option_t <doxid-structapr__getopt__option__t>` structure corresponding to the next option matched.
+
+	*
+		- option_arg
+
+		- Receives the argument following the option, if any.
+
+
+
+.. rubric:: Returns:
+
+There are four potential status values on exit. They are:
+
+.. code-block:: none
+
+
+	APR_EOF      --  No more options to parse
+	APR_BADCH    --  Found a bad option character
+	APR_BADARG   --  No argument followed the option flag
+	APR_SUCCESS  --  The next option was found.
+
+When APR_SUCCESS is returned, os->ind gives the index of the first non-option argument. On error, a message will be printed to stdout unless os->err is set to 0. If os->interleave is set to nonzero, options can come after arguments, and os->argv will be permuted to leave non-option arguments at the end (the original argv is unaffected).
+

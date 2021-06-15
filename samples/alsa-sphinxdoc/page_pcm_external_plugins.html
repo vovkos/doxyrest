@@ -1,0 +1,216 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>PCM External Plugin SDK &#8212; ALSA Library Documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/target-highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="RawMidi interface" href="page_rawmidi.html" />
+    <link rel="prev" title="PCM (digital audio) plugins" href="page_pcm_plugins.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="page_rawmidi.html" title="RawMidi interface"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="page_pcm_plugins.html" title="PCM (digital audio) plugins"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ALSA Library Documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">PCM External Plugin SDK</a><ul>
+<li><a class="reference internal" href="#external-plugins">External Plugins</a></li>
+<li><a class="reference internal" href="#external-plugin-filter-type-plugin">External Plugin: Filter-Type Plugin</a></li>
+<li><a class="reference internal" href="#external-plugin-i-o-plugin">External Plugin: I/O Plugin</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="page_pcm_plugins.html"
+                        title="previous chapter">PCM (digital audio) plugins</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="page_rawmidi.html"
+                        title="next chapter">RawMidi interface</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pcm-external-plugin-sdk">
+<span id="doxid-pcm-external-plugins"></span><span id="index-0"></span><h1>PCM External Plugin SDK</h1>
+<div class="section" id="external-plugins">
+<span id="doxid-pcm-external-plugins-1pcm-externals"></span><h2>External Plugins</h2>
+<p>The external plugins are implemented in a shared object file located at /usr/lib/alsa-lib (the exact location depends on the build option and asoundrc configuration). It has to be the file like libasound_module_pcm_MYPLUGIN.so, where MYPLUGIN corresponds to your own plugin name.</p>
+<p>The entry point of the plugin is defined via <a class="reference internal" href="group_Plugin_SDK.html#doxid-group-plugin-s-d-k-1ga3fd72ea47a7a921943b26c580b9d6c41"><span class="std std-ref">SND_PCM_PLUGIN_DEFINE_FUNC()</span></a> macro. This macro defines the function with a proper name to be referred from alsa-lib. The function takes the following 6 arguments:</p>
+<pre class="highlight literal-block">
+<span></span><span class="kt">int</span> <span class="p">(</span><span class="n">snd_pcm_t</span> <span class="o">**</span><span class="n">pcmp</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">,</span> <span class="n">snd_config_t</span> <span class="o">*</span><span class="n">root</span><span class="p">,</span>
+    <span class="n">snd_config_t</span> <span class="o">*</span><span class="n">conf</span><span class="p">,</span> <span class="n">snd_pcm_stream_t</span> <span class="n">stream</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mode</span><span class="p">)</span>
+</pre>
+<p>The first argument, pcmp, is the pointer to store the resultant PCM handle. The arguments name, root, stream and mode are the parameters to be passed to the plugin constructor. The conf is the configuration tree for the plugin. The arguments above are defined in the macro itself, so don’t use variables with the same names to shadow parameters.</p>
+<p>After parsing the configuration parameters in the given conf tree, usually you will call the external plugin API function, <a class="reference internal" href="group_PCM_ExtPlug.html#doxid-group-p-c-m-ext-plug-1gab0b27889f74c83cd033062981320fd62"><span class="std std-ref">snd_pcm_extplug_create()</span></a> or <a class="reference internal" href="group_PCM_IOPlug.html#doxid-group-p-c-m-i-o-plug-1ga7fb5213a5e776246e2b4dc53ec8d7604"><span class="std std-ref">snd_pcm_ioplug_create()</span></a>, depending on the plugin type. The PCM handle must be filled *pcmp in return. Then this function must return either a value 0 when succeeded, or a negative value as the error code.</p>
+<p>Finally, add <a class="reference internal" href="group_Plugin_SDK.html#doxid-group-plugin-s-d-k-1ga73a613cc5b7b3642f53bbd5a1d78004b"><span class="std std-ref">SND_PCM_PLUGIN_SYMBOL()</span></a> with the name of your plugin as the argument at the end. This defines the proper versioned symbol as the reference.</p>
+<p>The typical code would look like below:</p>
+<pre class="highlight literal-block">
+<span></span><span class="k">struct</span> <span class="n">myplug_info</span> <span class="p">{</span>
+    <span class="n">snd_pcm_extplug_t</span> <span class="n">ext</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">my_own_data</span><span class="p">;</span>
+    <span class="p">...</span>
+<span class="p">};</span>
+
+<span class="n">SND_PCM_PLUGIN_DEFINE_FUNC</span><span class="p">(</span><span class="n">myplug</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">snd_config_iterator_t</span> <span class="n">i</span><span class="p">,</span> <span class="n">next</span><span class="p">;</span>
+    <span class="n">snd_config_t</span> <span class="o">*</span><span class="n">slave</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">myplug_info</span> <span class="o">*</span><span class="n">myplug</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">err</span><span class="p">;</span>
+
+    <span class="n">snd_config_for_each</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">next</span><span class="p">,</span> <span class="n">conf</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">snd_config_t</span> <span class="o">*</span><span class="n">n</span> <span class="o">=</span> <span class="n">snd_config_iterator_entry</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+        <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">id</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">snd_config_get_id</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">id</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="s">&quot;comment&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">strcmp</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="s">&quot;type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="s">&quot;slave&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">slave</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="s">&quot;my_own_parameter&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="p">....</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">SNDERR</span><span class="p">(</span><span class="s">&quot;Unknown field %s&quot;</span><span class="p">,</span> <span class="n">id</span><span class="p">);</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">EINVAL</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="n">slave</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">SNDERR</span><span class="p">(</span><span class="s">&quot;No slave defined for myplug&quot;</span><span class="p">);</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">EINVAL</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">myplug</span> <span class="o">=</span> <span class="n">calloc</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">myplug</span><span class="p">));</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">myplug</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">ENOMEM</span><span class="p">;</span>
+
+    <span class="n">myplug</span><span class="o">-&gt;</span><span class="n">ext</span><span class="p">.</span><span class="n">version</span> <span class="o">=</span> <span class="n">SND_PCM_EXTPLUG_VERSION</span><span class="p">;</span>
+    <span class="n">myplug</span><span class="o">-&gt;</span><span class="n">ext</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;My Own Plugin&quot;</span><span class="p">;</span>
+    <span class="n">myplug</span><span class="o">-&gt;</span><span class="n">ext</span><span class="p">.</span><span class="n">callback</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">my_own_callback</span><span class="p">;</span>
+    <span class="n">myplug</span><span class="o">-&gt;</span><span class="n">ext</span><span class="p">.</span><span class="n">private_data</span> <span class="o">=</span> <span class="n">myplug</span><span class="p">;</span>
+    <span class="p">....</span>
+
+    <span class="n">err</span> <span class="o">=</span> <span class="n">snd_pcm_extplug_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">myplug</span><span class="o">-&gt;</span><span class="n">ext</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">conf</span><span class="p">,</span> <span class="n">stream</span><span class="p">,</span> <span class="n">mode</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">err</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">myplug_free</span><span class="p">(</span><span class="n">myplug</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">err</span><span class="p">;</span>
+    <span class="p">}</span>
+
+     <span class="o">*</span><span class="n">pcmp</span> <span class="o">=</span> <span class="n">myplug</span><span class="o">-&gt;</span><span class="n">ext</span><span class="p">.</span><span class="n">pcm</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">SND_PCM_PLUGIN_SYMBOL</span><span class="p">(</span><span class="n">myplug</span><span class="p">);</span>
+</pre>
+<p>Read the codes in alsa-plugins package for the real examples.</p>
+</div>
+<div class="section" id="external-plugin-filter-type-plugin">
+<span id="doxid-pcm-external-plugins-1pcm-extplug"></span><h2>External Plugin: Filter-Type Plugin</h2>
+<p>The filter-type plugin is a plugin to convert the PCM signals from the input and feeds to the output. Thus, this plugin always needs a slave PCM as its output.</p>
+<p>The plugin can modify the format and the channels of the input/output PCM. It can <em>not</em> modify the sample rate (because of simplicity reason).</p>
+<p>The following fields have to be filled in extplug record before calling <a class="reference internal" href="group_PCM_ExtPlug.html#doxid-group-p-c-m-ext-plug-1gab0b27889f74c83cd033062981320fd62"><span class="std std-ref">snd_pcm_extplug_create()</span></a> : version, name, callback. Otherfields are optional and should be initialized with zero.</p>
+<p>The constant <a class="reference internal" href="group_PCM_ExtPlug.html#doxid-group-p-c-m-ext-plug-1ga24d0ae71d106f08685d9ba8c6cf5fe78"><span class="std std-ref">SND_PCM_EXTPLUG_VERSION</span></a> must be passed to the version field for the version check in alsa-lib. A non-NULL ASCII string has to be passed to the name field. The callback field contains the table of callback functions for this plugin (defined as <a class="reference internal" href="group_PCM_ExtPlug.html#doxid-group-p-c-m-ext-plug-1ga0c554fce3192586b7a5ff51d45272f44"><span class="std std-ref">snd_pcm_extplug_callback_t</span></a>).</p>
+<p>The driver can set an arbitrary value (pointer) to private_data field to refer its own data in the callbacks.</p>
+<p>The rest fields are filled by <a class="reference internal" href="group_PCM_ExtPlug.html#doxid-group-p-c-m-ext-plug-1gab0b27889f74c83cd033062981320fd62"><span class="std std-ref">snd_pcm_extplug_create()</span></a>. The pcm field is the resultant PCM handle. The others are the current status of the PCM.</p>
+<p>The callback functions in <a class="reference internal" href="group_PCM_ExtPlug.html#doxid-group-p-c-m-ext-plug-1ga0c554fce3192586b7a5ff51d45272f44"><span class="std std-ref">snd_pcm_extplug_callback_t</span></a> define the real behavior of the driver. At least, transfer callback must be given. This callback is called at each time certain size of data block is transfered to the slave PCM. Other callbacks are optional.</p>
+<p>The close callback is called when the PCM is closed. If the plugin allocates private resources, this is the place to release them again. The hw_params and hw_free callbacks are called at <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga1ca0dc120a484965e26cabf966502330"><span class="std std-ref">snd_pcm_hw_params()</span></a> and <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga242ad0a269c272830d30666220edbc2a"><span class="std std-ref">snd_pcm_hw_free()</span></a> API calls, respectively. The last, dump callback, is called for printing the information of the given plugin.</p>
+<p>The init callback is called when the PCM is at prepare state or any initialization is issued. Use this callback to reset the PCM instance to a sane initial state.</p>
+<p>The hw_params constraints can be defined via either <a class="reference internal" href="group_PCM_ExtPlug.html#doxid-group-p-c-m-ext-plug-1gabef139bbe5db265433fd5310d0faad4d"><span class="std std-ref">snd_pcm_extplug_set_param_minmax()</span></a> and <a class="reference internal" href="group_PCM_ExtPlug.html#doxid-group-p-c-m-ext-plug-1gadbf27adba1a7cd0195b6ac750bb11bf7"><span class="std std-ref">snd_pcm_extplug_set_param_list()</span></a> functions after calling <a class="reference internal" href="group_PCM_ExtPlug.html#doxid-group-p-c-m-ext-plug-1gab0b27889f74c83cd033062981320fd62"><span class="std std-ref">snd_pcm_extplug_create()</span></a>. The former defines the minimal and maximal acceptable values for the given hw_params parameter (SND_PCM_EXTPLUG_HW_XXX). This function can’t be used for the format parameter. The latter function specifies the available parameter values as the list. As mentioned above, the rate can’t be changed. Only changeable parameters are sample format and channels.</p>
+<p>To define the constraints of the slave PCM configuration, use either <a class="reference internal" href="group_PCM_ExtPlug.html#doxid-group-p-c-m-ext-plug-1gad3cac0ee15293f349220a75cce69a51e"><span class="std std-ref">snd_pcm_extplug_set_slave_param_minmax()</span></a> and <a class="reference internal" href="group_PCM_ExtPlug.html#doxid-group-p-c-m-ext-plug-1gad14f6746e36d556c7a7937633b965ca7"><span class="std std-ref">snd_pcm_extplug_set_slave_param_list()</span></a>. The arguments are as same as former functions.</p>
+<p>To clear the parameter constraints, call <a class="reference internal" href="group_PCM_ExtPlug.html#doxid-group-p-c-m-ext-plug-1gacef181565eb697397ce41c1aab381777"><span class="std std-ref">snd_pcm_extplug_params_reset()</span></a> function.</p>
+</div>
+<div class="section" id="external-plugin-i-o-plugin">
+<span id="doxid-pcm-external-plugins-1pcm-ioplug"></span><h2>External Plugin: I/O Plugin</h2>
+<p>The I/O-type plugin is a PCM plugin to work as the input or output terminal point, i.e. as a user-space PCM driver.</p>
+<p>The new plugin is created via <a class="reference internal" href="group_PCM_IOPlug.html#doxid-group-p-c-m-i-o-plug-1ga7fb5213a5e776246e2b4dc53ec8d7604"><span class="std std-ref">snd_pcm_ioplug_create()</span></a> function. The first argument is a pointer of the pluging information. Some of this struct must be initialized in prior to call <a class="reference internal" href="group_PCM_IOPlug.html#doxid-group-p-c-m-i-o-plug-1ga7fb5213a5e776246e2b4dc53ec8d7604"><span class="std std-ref">snd_pcm_ioplug_create()</span></a>. Then the function fills other fields in return. The rest arguments, name, stream and mode, are usually identical with the values passed from the ALSA plugin constructor.</p>
+<p>The following fields are mandatory: version, name, callback. Otherfields are optional and should be initialized with zero.</p>
+<p>The constant <a class="reference internal" href="group_PCM_IOPlug.html#doxid-group-p-c-m-i-o-plug-1ga81a2273c4df9be29d91e6e2a0860d991"><span class="std std-ref">SND_PCM_IOPLUG_VERSION</span></a> must be passed to the version field for the version check in alsa-lib. A non-NULL ASCII string has to be passed to the name field. The callback field contains the table of callback functions for this plugin (defined as <a class="reference internal" href="group_PCM_IOPlug.html#doxid-group-p-c-m-i-o-plug-1ga9bbf2927f689c96faa7b6c5c89286355"><span class="std std-ref">snd_pcm_ioplug_callback_t</span></a>).</p>
+<p>flags field specifies the optional bit-flags. poll_fd and poll_events specify the poll file descriptor and the corresponding poll events (POLLIN, POLLOUT) for the plugin. If the plugin requires multiple poll descriptors or poll descriptor(s) dynamically varying, set poll_descriptors and poll_descriptors_count callbacks to the callback table. Then the poll_fd and poll_events field are ignored.</p>
+<p>mmap_rw specifies whether the plugin behaves in the pseudo mmap mode. When this value is set to 1, the plugin creates always a local buffer and performs read/write calls using this buffer as if it’s mmapped. The address of local buffer can be obtained via <a class="reference internal" href="group_PCM_IOPlug.html#doxid-group-p-c-m-i-o-plug-1gac3b666ff286745c9eb24de3e3930970a"><span class="std std-ref">snd_pcm_ioplug_mmap_areas()</span></a> function. When poll_fd, poll_events and mmap_rw fields are changed after <a class="reference internal" href="group_PCM_IOPlug.html#doxid-group-p-c-m-i-o-plug-1ga7fb5213a5e776246e2b4dc53ec8d7604"><span class="std std-ref">snd_pcm_ioplug_create()</span></a>, call <a class="reference internal" href="group_PCM_IOPlug.html#doxid-group-p-c-m-i-o-plug-1gab223893226ecf78f675c89959a8c421a"><span class="std std-ref">snd_pcm_ioplug_reinit_status()</span></a> to reflect the changes.</p>
+<p>The driver can set an arbitrary value (pointer) to private_data field to refer its own data in the callbacks.</p>
+<p>The rest fields are filled by <a class="reference internal" href="group_PCM_IOPlug.html#doxid-group-p-c-m-i-o-plug-1ga7fb5213a5e776246e2b4dc53ec8d7604"><span class="std std-ref">snd_pcm_ioplug_create()</span></a>. The pcm field is the resultant PCM handle. The others are the current status of the PCM.</p>
+<p>The callback functions in <a class="reference internal" href="group_PCM_IOPlug.html#doxid-group-p-c-m-i-o-plug-1ga9bbf2927f689c96faa7b6c5c89286355"><span class="std std-ref">snd_pcm_ioplug_callback_t</span></a> define the real behavior of the driver. At least, start, stop and pointer callbacks must be given. Other callbacks are optional. The start and stop callbacks are called when the PCM stream is started and stopped, repsectively. The pointer callback returns the current DMA position, which may be called at any time.</p>
+<p>The transfer callback is called when any data transfer happens. It receives the area array, offset and the size to transfer. The area array contains the array of <a class="reference internal" href="struct_snd_pcm_channel_area_t.html#doxid-structsnd-pcm-channel-area-t"><span class="std std-ref">snd_pcm_channel_area_t</span></a> with the elements of number of channels.</p>
+<p>When the PCM is closed, close callback is called. If the driver allocates any internal buffers, they should be released in this callback. The hw_params and hw_free callbacks are called when hw_params are set and reset, respectively. Note that they may be called multiple times according to the application. Similarly, sw_params callback is called when sw_params is set or changed.</p>
+<p>The prepare, drain, pause and resume callbacks are called when <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga788d05de75f2d536f8443cb0306754d0"><span class="std std-ref">snd_pcm_prepare()</span></a>, <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga49afc5b8527f30c33fafa476533c9f86"><span class="std std-ref">snd_pcm_drain()</span></a>, <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gad711b582c7066bd4fffa1d08a04316b5"><span class="std std-ref">snd_pcm_pause()</span></a>, and <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga13083ce2209aab9ea73831610bc61ab1"><span class="std std-ref">snd_pcm_resume()</span></a> are called. The poll_descriptors_count and poll_descriptors callbacks are used to return the multiple or dynamic poll descriptors as mentioned above. The poll_revents callback is used to modify poll events. If the driver needs to mangle the native poll events to proper poll events for PCM, you can do it in this callback.</p>
+<p>Finally, the dump callback is used to print the status of the plugin.</p>
+<p>Note that some callbacks (start, stop, pointer, transfer and pause) may be called inside the internal pthread mutex, and they shouldn’t call the PCM functions again unnecessarily from the callback itself; otherwise it may lead to a deadlock.</p>
+<p>The hw_params constraints can be defined via either <a class="reference internal" href="group_PCM_IOPlug.html#doxid-group-p-c-m-i-o-plug-1gab62d470b02661214319196394b55fb37"><span class="std std-ref">snd_pcm_ioplug_set_param_minmax()</span></a> and <a class="reference internal" href="group_PCM_IOPlug.html#doxid-group-p-c-m-i-o-plug-1ga7d713552fb846ccdf4b7ec6a9fc1b562"><span class="std std-ref">snd_pcm_ioplug_set_param_list()</span></a> functions after calling <a class="reference internal" href="group_PCM_IOPlug.html#doxid-group-p-c-m-i-o-plug-1ga7fb5213a5e776246e2b4dc53ec8d7604"><span class="std std-ref">snd_pcm_ioplug_create()</span></a>. The former defines the minimal and maximal acceptable values for the given hw_params parameter (SND_PCM_IOPLUG_HW_XXX). This function can’t be used for the format parameter. The latter function specifies the available parameter values as the list.</p>
+<p>To clear the parameter constraints, call <a class="reference internal" href="group_PCM_IOPlug.html#doxid-group-p-c-m-i-o-plug-1gad74355dfaa56fae80d49181c83eeecc4"><span class="std std-ref">snd_pcm_ioplug_params_reset()</span></a> function.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="page_rawmidi.html" title="RawMidi interface"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="page_pcm_plugins.html" title="PCM (digital audio) plugins"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ALSA Library Documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 1998-2017, ALSA Library Maintainers.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    </div>
+  </body>
+</html>

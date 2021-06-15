@@ -1,0 +1,298 @@
+.. index:: pair: group; The SSH logging functions.
+.. _doxid-group__libssh__log:
+
+The SSH logging functions.
+==========================
+
+.. toctree::
+	:hidden:
+
+Overview
+~~~~~~~~
+
+Logging functions for debugging and problem resolving. :ref:`More...<details-group__libssh__log>`
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// enums
+
+	enum {
+	    :ref:`@0::SSH_LOG_NOLOG<doxid-group__libssh__log_1gga06fc87d81c62e9abb8790b6e5713c55ba95c5ce872b66ec03f3336970c1e0a774>`     =0,
+	    :ref:`@0::SSH_LOG_WARNING<doxid-group__libssh__log_1gga06fc87d81c62e9abb8790b6e5713c55ba12e6bbab0c5a667e259e2f9599a72550>`,
+	    :ref:`@0::SSH_LOG_PROTOCOL<doxid-group__libssh__log_1gga06fc87d81c62e9abb8790b6e5713c55ba75fa79e63947b66462db977d9b5ae27c>`,
+	    :ref:`@0::SSH_LOG_PACKET<doxid-group__libssh__log_1gga06fc87d81c62e9abb8790b6e5713c55ba6445dfe21592d69d9741d319538b6673>`,
+	    :ref:`@0::SSH_LOG_FUNCTIONS<doxid-group__libssh__log_1gga06fc87d81c62e9abb8790b6e5713c55ba926c933f61d1afa64003c1cc66f6a01c>`,
+	};
+
+	// global functions
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:ref:`ssh_set_log_callback<doxid-group__libssh__log_1ga6accdc08b7d8c4234750ef30c4854b9e>`(:ref:`ssh_logging_callback<doxid-group__libssh__callbacks_1gab6eedc77c07dde0c6baf9c29e7700a99>` cb);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` :ref:`ssh_logging_callback<doxid-group__libssh__callbacks_1gab6eedc77c07dde0c6baf9c29e7700a99>`
+	:ref:`ssh_get_log_callback<doxid-group__libssh__log_1ga0f795c820547d058dbbfa80cd4fe9a4e>`(void);
+
+	int
+	:ref:`ssh_get_log_level<doxid-group__libssh__log_1gad6a0b7b581b12be4e34a110b7312614b>`(void);
+
+	void*
+	:ref:`ssh_get_log_userdata<doxid-group__libssh__log_1ga887a1e754cd935b55fea1afb1f718761>`(void);
+
+	int
+	:ref:`ssh_set_log_level<doxid-group__libssh__log_1ga9719dabb8fab8a3ebeb4dc2ebcd2dd45>`(int level);
+
+	int
+	:ref:`ssh_set_log_userdata<doxid-group__libssh__log_1ga0addd5c29922f40e9f842a43e0cb0b27>`(void* data);
+
+	void
+	:target:`_ssh_log<doxid-group__libssh__log_1gac8bd5378e8af9c6af0ebc198ae6dd2ed>`(
+		int verbosity,
+		const char* function,
+		const char* format,
+		...
+		);
+
+	static
+	int
+	:target:`current_timestring<doxid-group__libssh__log_1ga04e485696de6a4eb9ba303ef190f6a93>`(
+		int hires,
+		char* buf,
+		size_t len
+		);
+
+	void
+	:target:`ssh_log<doxid-group__libssh__log_1ga0bb252b81e0c497fc559c9e4007cf6c5>`(
+		ssh_session session,
+		int verbosity,
+		const char* format,
+		...
+		);
+
+	void
+	:target:`ssh_log_common<doxid-group__libssh__log_1gacfb35fd4c7d3dafdbbfaa2c255022ddc>`(
+		struct :ref:`ssh_common_struct<doxid-structssh__common__struct>`* common,
+		int verbosity,
+		const char* function,
+		const char* format,
+		...
+		);
+
+	void
+	:target:`ssh_log_function<doxid-group__libssh__log_1ga28de9ecb422e9b2ffcd5dcb5b7ec13e1>`(
+		int verbosity,
+		const char* function,
+		const char* buffer
+		);
+
+	static
+	void
+	:target:`ssh_log_stderr<doxid-group__libssh__log_1ga04874b7c2777229ef8ec669886ee10bd>`(
+		int verbosity,
+		const char* function,
+		const char* buffer
+		);
+
+.. _details-group__libssh__log:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+Logging functions for debugging and problem resolving.
+
+Enum Values
+-----------
+
+.. index:: pair: enumvalue; SSH_LOG_NOLOG
+.. _doxid-group__libssh__log_1gga06fc87d81c62e9abb8790b6e5713c55ba95c5ce872b66ec03f3336970c1e0a774:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	SSH_LOG_NOLOG
+
+No logging at all.
+
+.. index:: pair: enumvalue; SSH_LOG_WARNING
+.. _doxid-group__libssh__log_1gga06fc87d81c62e9abb8790b6e5713c55ba12e6bbab0c5a667e259e2f9599a72550:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	SSH_LOG_WARNING
+
+Only warnings.
+
+.. index:: pair: enumvalue; SSH_LOG_PROTOCOL
+.. _doxid-group__libssh__log_1gga06fc87d81c62e9abb8790b6e5713c55ba75fa79e63947b66462db977d9b5ae27c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	SSH_LOG_PROTOCOL
+
+High level protocol information.
+
+.. index:: pair: enumvalue; SSH_LOG_PACKET
+.. _doxid-group__libssh__log_1gga06fc87d81c62e9abb8790b6e5713c55ba6445dfe21592d69d9741d319538b6673:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	SSH_LOG_PACKET
+
+Lower level protocol infomations, packet level.
+
+.. index:: pair: enumvalue; SSH_LOG_FUNCTIONS
+.. _doxid-group__libssh__log_1gga06fc87d81c62e9abb8790b6e5713c55ba926c933f61d1afa64003c1cc66f6a01c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	SSH_LOG_FUNCTIONS
+
+Every function path.
+
+Global Functions
+----------------
+
+.. index:: pair: function; ssh_set_log_callback
+.. _doxid-group__libssh__log_1ga6accdc08b7d8c4234750ef30c4854b9e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	ssh_set_log_callback(:ref:`ssh_logging_callback<doxid-group__libssh__callbacks_1gab6eedc77c07dde0c6baf9c29e7700a99>` cb)
+
+Set the logging callback function.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- cb
+
+		- The callback to set.
+
+
+
+.. rubric:: Returns:
+
+0 on success, < 0 on errror.
+
+.. index:: pair: function; ssh_get_log_callback
+.. _doxid-group__libssh__log_1ga0f795c820547d058dbbfa80cd4fe9a4e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` :ref:`ssh_logging_callback<doxid-group__libssh__callbacks_1gab6eedc77c07dde0c6baf9c29e7700a99>`
+	ssh_get_log_callback(void)
+
+Get the pointer to the logging callback function.
+
+
+
+.. rubric:: Returns:
+
+The pointer the the callback or NULL if none set.
+
+.. index:: pair: function; ssh_get_log_level
+.. _doxid-group__libssh__log_1gad6a0b7b581b12be4e34a110b7312614b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_get_log_level(void)
+
+Get the log level of the library.
+
+
+
+.. rubric:: Returns:
+
+The value of the log level.
+
+.. index:: pair: function; ssh_get_log_userdata
+.. _doxid-group__libssh__log_1ga887a1e754cd935b55fea1afb1f718761:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void*
+	ssh_get_log_userdata(void)
+
+Get the userdata of the logging function.
+
+
+
+.. rubric:: Returns:
+
+The userdata if set or NULL.
+
+.. index:: pair: function; ssh_set_log_level
+.. _doxid-group__libssh__log_1ga9719dabb8fab8a3ebeb4dc2ebcd2dd45:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_set_log_level(int level)
+
+Set the log level of the library.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- level
+
+		- The level to set.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR on error.
+
+.. index:: pair: function; ssh_set_log_userdata
+.. _doxid-group__libssh__log_1ga0addd5c29922f40e9f842a43e0cb0b27:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_set_log_userdata(void* data)
+
+Set the userdata for the logging function.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- data
+
+		- The userdata to set.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success.
+

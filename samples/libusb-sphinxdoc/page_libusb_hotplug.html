@@ -1,0 +1,185 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Device hotplug event notification &#8212; LibUSB Documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/target-highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Multi-threaded applications and asynchronous I/O" href="page_libusb_mtasync.html" />
+    <link rel="prev" title="Contexts" href="page_libusb_contexts.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="page_libusb_mtasync.html" title="Multi-threaded applications and asynchronous I/O"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="page_libusb_contexts.html" title="Contexts"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LibUSB Documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Device hotplug event notification</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="page_libusb_contexts.html"
+                        title="previous chapter">Contexts</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="page_libusb_mtasync.html"
+                        title="next chapter">Multi-threaded applications and asynchronous I/O</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="device-hotplug-event-notification">
+<span id="doxid-libusb-hotplug"></span><span id="index-0"></span><h1>Device hotplug event notification</h1>
+<div class="section" id="introduction">
+<span id="doxid-libusb-hotplug-1hotplug-intro"></span><h2>Introduction</h2>
+<p>Version 1.0.16, <a class="reference internal" href="group_libusb_misc.html#doxid-group-libusb-misc-1gaabe4bc36a83358685d36a6c853cbb4de"><span class="std std-ref">LIBUSB_API_VERSION</span></a>&gt;= 0x01000102, has added support for hotplug events on <strong>some</strong> platforms (you should test if your platform supports hotplug notification by calling <a class="reference internal" href="group_libusb_misc.html#doxid-group-libusb-misc-1ga9b8e324d28c624cd0b8e7ba21607b8db"><span class="std std-ref">libusb_has_capability()</span></a> with parameter <a class="reference internal" href="enum_libusb_capability.html#doxid-group-libusb-misc-1ggaab1b3fa0728c06fafbee897795889bd5a8b1bbccc648a6677cb9030a6ba827438"><span class="std std-ref">LIBUSB_CAP_HAS_HOTPLUG</span></a>).</p>
+<p>This interface allows you to request notification for the arrival and departure of matching USB devices.</p>
+<p>To receive hotplug notification you register a callback by calling <a class="reference internal" href="group_libusb_hotplug.html#doxid-group-libusb-hotplug-1ga00e0c69ddf1fb1b6774dc918192e8dc7"><span class="std std-ref">libusb_hotplug_register_callback()</span></a>. This function will optionally return a callback handle that can be passed to <a class="reference internal" href="group_libusb_hotplug.html#doxid-group-libusb-hotplug-1ga8110f57eab2064375934f1449b2602bc"><span class="std std-ref">libusb_hotplug_deregister_callback()</span></a>.</p>
+<p>A callback function must return an int (0 or 1) indicating whether the callback is expecting additional events. Returning 0 will rearm the callback and 1 will cause the callback to be deregistered. Note that when callbacks are called from <a class="reference internal" href="group_libusb_hotplug.html#doxid-group-libusb-hotplug-1ga00e0c69ddf1fb1b6774dc918192e8dc7"><span class="std std-ref">libusb_hotplug_register_callback()</span></a> because of the <a class="reference internal" href="enum_libusb_hotplug_flag.html#doxid-group-libusb-hotplug-1gga95ce2ec85dec177854c423cea2853c52a01a1c0c9f4e6852cb6df713f2e8a7f6b"><span class="std std-ref">LIBUSB_HOTPLUG_ENUMERATE</span></a> flag, the callback return value is ignored, iow you cannot cause a callback to be deregistered by returning 1 when it is called from <a class="reference internal" href="group_libusb_hotplug.html#doxid-group-libusb-hotplug-1ga00e0c69ddf1fb1b6774dc918192e8dc7"><span class="std std-ref">libusb_hotplug_register_callback()</span></a>.</p>
+<p>Callbacks for a particular context are automatically deregistered by <a class="reference internal" href="group_libusb_lib.html#doxid-group-libusb-lib-1ga86532f222d4f1332a5f8f5eef9a92da9"><span class="std std-ref">libusb_exit()</span></a>.</p>
+<p>As of 1.0.16 there are two supported hotplug events:</p>
+<ul class="simple">
+<li>LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED: A device has arrived and is ready to use</li>
+<li>LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT: A device has left and is no longer available</li>
+</ul>
+<p>A hotplug event can listen for either or both of these events.</p>
+<p>Note: If you receive notification that a device has left and you have any a libusb_device_handles for the device it is up to you to call <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga779bc4f1316bdb0ac383bddbd538620e"><span class="std std-ref">libusb_close()</span></a> on each device handle to free up any remaining resources associated with the device. Once a device has left any libusb_device_handle associated with the device are invalid and will remain so even if the device comes back.</p>
+<p>When handling a LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED event it is considered safe to call any libusb function that takes a libusb_device. It also safe to open a device and submit asynchronous transfers. However, most other functions that take a libusb_device_handle are <strong>not</strong> safe to call. Examples of such functions are any of the <a class="reference internal" href="group_libusb_syncio.html#doxid-group-libusb-syncio"><span class="std std-ref">synchronous API</span></a> functions or the blocking functions that retrieve various <a class="reference internal" href="group_libusb_desc.html#doxid-group-libusb-desc"><span class="std std-ref">USB descriptors</span></a>. These functions must be used outside of the context of the hotplug callback.</p>
+<p>When handling a LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT event the only safe function is <a class="reference internal" href="group_libusb_desc.html#doxid-group-libusb-desc-1ga5e9ab08d490a7704cf3a9b0439f16f00"><span class="std std-ref">libusb_get_device_descriptor()</span></a>.</p>
+<p>The following code provides an example of the usage of the hotplug interface:</p>
+<pre class="highlight literal-block">
+<span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;time.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;libusb.h&gt;</span><span class="cp"></span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">hotplug_callback</span><span class="p">(</span><span class="k">struct</span> <span class="n">libusb_context</span> <span class="o">*</span><span class="n">ctx</span><span class="p">,</span> <span class="k">struct</span> <span class="n">libusb_device</span> <span class="o">*</span><span class="n">dev</span><span class="p">,</span>
+                     <span class="n">libusb_hotplug_event</span> <span class="n">event</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">user_data</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">static</span> <span class="n">libusb_device_handle</span> <span class="o">*</span><span class="n">dev_handle</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+  <span class="k">struct</span> <span class="n">libusb_device_descriptor</span> <span class="n">desc</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">rc</span><span class="p">;</span>
+
+  <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">libusb_get_device_descriptor</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">desc</span><span class="p">);</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED</span> <span class="o">==</span> <span class="n">event</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">rc</span> <span class="o">=</span> <span class="n">libusb_open</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">dev_handle</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">LIBUSB_SUCCESS</span> <span class="o">!=</span> <span class="n">rc</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Could not open USB device</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT</span> <span class="o">==</span> <span class="n">event</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">dev_handle</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">libusb_close</span><span class="p">(</span><span class="n">dev_handle</span><span class="p">);</span>
+      <span class="n">dev_handle</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Unhandled event %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">event</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">libusb_hotplug_callback_handle</span> <span class="n">callback_handle</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">rc</span><span class="p">;</span>
+
+  <span class="n">libusb_init</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">libusb_hotplug_register_callback</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED</span> <span class="o">|</span>
+                                        <span class="n">LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mh">0x045a</span><span class="p">,</span> <span class="mh">0x5005</span><span class="p">,</span>
+                                        <span class="n">LIBUSB_HOTPLUG_MATCH_ANY</span><span class="p">,</span> <span class="n">hotplug_callback</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span>
+                                        <span class="o">&amp;</span><span class="n">callback_handle</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">LIBUSB_SUCCESS</span> <span class="o">!=</span> <span class="n">rc</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Error creating a hotplug callback</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+    <span class="n">libusb_exit</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">EXIT_FAILURE</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">while</span> <span class="p">(</span><span class="n">count</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">libusb_handle_events_completed</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">nanosleep</span><span class="p">(</span><span class="o">&amp;</span><span class="p">(</span><span class="k">struct</span> <span class="n">timespec</span><span class="p">){</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10000000UL</span><span class="p">},</span> <span class="nb">NULL</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="n">libusb_hotplug_deregister_callback</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">callback_handle</span><span class="p">);</span>
+  <span class="n">libusb_exit</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="page_libusb_mtasync.html" title="Multi-threaded applications and asynchronous I/O"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="page_libusb_contexts.html" title="Contexts"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LibUSB Documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2007-2017, LibUSB Maintainers.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    </div>
+  </body>
+</html>

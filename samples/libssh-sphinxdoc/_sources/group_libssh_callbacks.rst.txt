@@ -1,0 +1,1753 @@
+.. index:: pair: group; The libssh callbacks
+.. _doxid-group__libssh__callbacks:
+
+The libssh callbacks
+====================
+
+.. toctree::
+	:hidden:
+
+	struct_ssh_callbacks_struct.rst
+	struct_ssh_channel_callbacks_struct.rst
+	struct_ssh_packet_callbacks_struct.rst
+	struct_ssh_server_callbacks_struct.rst
+	struct_ssh_socket_callbacks_struct.rst
+
+Overview
+~~~~~~~~
+
+Callback which can be replaced in libssh. :ref:`More...<details-group__libssh__callbacks>`
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef int (*:ref:`ssh_auth_gssapi_mic_callback<doxid-group__libssh__callbacks_1gaadd49614879c70e0aaab096fd52cf2ab>`)(
+		ssh_session session,
+		const char *user,
+		const char *principal,
+		void *userdata
+		);
+
+	typedef int (*:ref:`ssh_auth_none_callback<doxid-group__libssh__callbacks_1ga8d98e68f8a2362bbcb5490211a4a62de>`)(
+		ssh_session session,
+		const char *user,
+		void *userdata
+		);
+
+	typedef int (*:ref:`ssh_auth_password_callback<doxid-group__libssh__callbacks_1gad32c421f392ad47275446378339f59c6>`)(
+		ssh_session session,
+		const char *user,
+		const char *password,
+		void *userdata
+		);
+
+	typedef int (*:ref:`ssh_auth_pubkey_callback<doxid-group__libssh__callbacks_1ga68f74aa25d6a193c5fcf016d6d1bdc51>`)(
+		ssh_session session,
+		const char *user,
+		struct ssh_key_struct *pubkey,
+		char signature_state,
+		void *userdata
+		);
+
+	typedef int (*:target:`ssh_callback_data<doxid-group__libssh__callbacks_1gaf06fe7d0b8cd8a5aab0a19ad7c6140b9>`)(
+		const void *data,
+		size_t len,
+		void *user
+		);
+
+	typedef void (*:target:`ssh_callback_int<doxid-group__libssh__callbacks_1ga47b833f21a2b7145e421e63cad14b3d4>`)(
+		int code,
+		void *user
+		);
+
+	typedef void (*:target:`ssh_callback_int_int<doxid-group__libssh__callbacks_1gaec19974b49541c787f7825e523849436>`)(
+		int code,
+		int errno_code,
+		void *user
+		);
+
+	typedef void (*:ref:`ssh_channel_auth_agent_req_callback<doxid-group__libssh__callbacks_1gafbbd34a8b28db875055485e24d2149d0>`)(
+		ssh_session session,
+		ssh_channel channel,
+		void *userdata
+		);
+
+	typedef int (*:target:`ssh_channel_callback_data<doxid-group__libssh__callbacks_1gaa1b8a1768e5bb4904c74e9a0ba0b6874>`)(
+		ssh_channel channel,
+		int code,
+		void *data,
+		size_t len,
+		void *user
+		);
+
+	typedef int (*:target:`ssh_channel_callback_int<doxid-group__libssh__callbacks_1gabb4a1fe7cde149c5064f3b36d0a3a94f>`)(
+		ssh_channel channel,
+		int code,
+		void *user
+		);
+
+	typedef void (*:ref:`ssh_channel_close_callback<doxid-group__libssh__callbacks_1ga58672dfbf52812e72946a3d6d8c74279>`)(
+		ssh_session session,
+		ssh_channel channel,
+		void *userdata
+		);
+
+	typedef int (*:ref:`ssh_channel_data_callback<doxid-group__libssh__callbacks_1ga4f34cc77aa9d47e506cbae679ddd54a5>`)(
+		ssh_session session,
+		ssh_channel channel,
+		void *data,
+		uint32_t len,
+		int is_stderr,
+		void *userdata
+		);
+
+	typedef int (*:ref:`ssh_channel_env_request_callback<doxid-group__libssh__callbacks_1gae816543864b633ab89d20cdf39d69225>`)(
+		ssh_session session,
+		ssh_channel channel,
+		const char *env_name,
+		const char *env_value,
+		void *userdata
+		);
+
+	typedef void (*:ref:`ssh_channel_eof_callback<doxid-group__libssh__callbacks_1ga54351aff7adba9f84621069aff982c27>`)(
+		ssh_session session,
+		ssh_channel channel,
+		void *userdata
+		);
+
+	typedef int (*:ref:`ssh_channel_exec_request_callback<doxid-group__libssh__callbacks_1ga41ccf4a20d30e7c5ccd87ac25f580f9d>`)(
+		ssh_session session,
+		ssh_channel channel,
+		const char *command,
+		void *userdata
+		);
+
+	typedef void (*:ref:`ssh_channel_exit_signal_callback<doxid-group__libssh__callbacks_1gace982803d01abe445379b9c360a1a43d>`)(
+		ssh_session session,
+		ssh_channel channel,
+		const char *signal,
+		int core,
+		const char *errmsg,
+		const char *lang,
+		void *userdata
+		);
+
+	typedef void (*:ref:`ssh_channel_exit_status_callback<doxid-group__libssh__callbacks_1ga6f834b43c812f871c7252bfbbb4ef6f4>`)(
+		ssh_session session,
+		ssh_channel channel,
+		int exit_status,
+		void *userdata
+		);
+
+	typedef ssh_channel (*:ref:`ssh_channel_open_request_session_callback<doxid-group__libssh__callbacks_1gac63a4cc91d8c2a1465770ca5f6c0a436>`)(
+		ssh_session session,
+		void *userdata
+		);
+
+	typedef ssh_channel (*:ref:`ssh_channel_open_request_x11_callback<doxid-group__libssh__callbacks_1ga6fc88f06d2eaa263d3336621edea0dcc>`)(
+		ssh_session session,
+		const char *originator_address,
+		int originator_port,
+		void *userdata
+		);
+
+	typedef int (*:ref:`ssh_channel_pty_request_callback<doxid-group__libssh__callbacks_1ga2c740320a613c207ee4032f8ee93fde8>`)(
+		ssh_session session,
+		ssh_channel channel,
+		const char *term,
+		int width,
+		int height,
+		int pxwidth,
+		int pwheight,
+		void *userdata
+		);
+
+	typedef int (*:ref:`ssh_channel_pty_window_change_callback<doxid-group__libssh__callbacks_1ga3614f21f6afbe6f498cdaa9b28c0f003>`)(
+		ssh_session session,
+		ssh_channel channel,
+		int width,
+		int height,
+		int pxwidth,
+		int pwheight,
+		void *userdata
+		);
+
+	typedef int (*:ref:`ssh_channel_shell_request_callback<doxid-group__libssh__callbacks_1ga4d93fd06cb58478c40c9d1d1627881d9>`)(
+		ssh_session session,
+		ssh_channel channel,
+		void *userdata
+		);
+
+	typedef void (*:ref:`ssh_channel_signal_callback<doxid-group__libssh__callbacks_1ga62cc19678bef2caa53808ef5776e08fa>`)(
+		ssh_session session,
+		ssh_channel channel,
+		const char *signal,
+		void *userdata
+		);
+
+	typedef int (*:ref:`ssh_channel_subsystem_request_callback<doxid-group__libssh__callbacks_1gafeee5298cbdb0ed0b607560322448bfd>`)(
+		ssh_session session,
+		ssh_channel channel,
+		const char *subsystem,
+		void *userdata
+		);
+
+	typedef void (*:ref:`ssh_channel_x11_req_callback<doxid-group__libssh__callbacks_1ga4a0df3bb8a201fc52925595356806852>`)(
+		ssh_session session,
+		ssh_channel channel,
+		int single_connection,
+		const char *auth_protocol,
+		const char *auth_cookie,
+		uint32_t screen_number,
+		void *userdata
+		);
+
+	typedef void (*:ref:`ssh_global_request_callback<doxid-group__libssh__callbacks_1gaeeb75ac372db669157bba96c22e6df85>`)(
+		ssh_session session,
+		ssh_message message,
+		void *userdata
+		);
+
+	typedef int (*:target:`ssh_gssapi_accept_sec_ctx_callback<doxid-group__libssh__callbacks_1gaacc4a1270f919717917e8960dabd1af3>`)(
+		ssh_session session,
+		ssh_string input_token,
+		ssh_string *output_token,
+		void *userdata
+		);
+
+	typedef ssh_string (*:target:`ssh_gssapi_select_oid_callback<doxid-group__libssh__callbacks_1gaf5fa4522517284e010b4e3624356e4a4>`)(
+		ssh_session session,
+		const char *user,
+		int n_oid,
+		ssh_string *oids,
+		void *userdata
+		);
+
+	typedef int (*:target:`ssh_gssapi_verify_mic_callback<doxid-group__libssh__callbacks_1ga043d34d7436d150a9b8cd5ceb70ec19e>`)(
+		ssh_session session,
+		ssh_string mic,
+		void *mic_buffer,
+		size_t mic_buffer_size,
+		void *userdata
+		);
+
+	typedef void (*:ref:`ssh_log_callback<doxid-group__libssh__callbacks_1ga9057cbb0dc4ad1939cf6e03f36eaae9f>`)(
+		ssh_session session,
+		int priority,
+		const char *message,
+		void *userdata
+		);
+
+	typedef void (*:ref:`ssh_logging_callback<doxid-group__libssh__callbacks_1gab6eedc77c07dde0c6baf9c29e7700a99>`)(
+		int priority,
+		const char *function,
+		const char *buffer,
+		void *userdata
+		);
+
+	typedef int (*:target:`ssh_message_callback<doxid-group__libssh__callbacks_1gaf6fd77dd8566d8bd0d87be9d4b7c4243>`)(
+		ssh_session,
+		ssh_message message,
+		void *user
+		);
+
+	typedef int (*:ref:`ssh_packet_callback<doxid-group__libssh__callbacks_1ga6b8722467c98b73a7d78c0ec055e740d>`)(
+		ssh_session session,
+		uint8_t type,
+		ssh_buffer packet,
+		void *user
+		);
+
+	typedef int (*:ref:`ssh_service_request_callback<doxid-group__libssh__callbacks_1gaa1866ffc041b50c341f9cba866a8055c>`)(
+		ssh_session session,
+		const char *service,
+		void *userdata
+		);
+
+	typedef void (*:ref:`ssh_status_callback<doxid-group__libssh__callbacks_1gabd1e46f073ad992ae8642d8ebcde45a3>`)(
+		ssh_session session,
+		float status,
+		void *userdata
+		);
+
+	// structs
+
+	struct :ref:`ssh_callbacks_struct<doxid-structssh__callbacks__struct>`;
+	struct :ref:`ssh_channel_callbacks_struct<doxid-structssh__channel__callbacks__struct>`;
+	struct :ref:`ssh_packet_callbacks_struct<doxid-structssh__packet__callbacks__struct>`;
+	struct :ref:`ssh_server_callbacks_struct<doxid-structssh__server__callbacks__struct>`;
+	struct :ref:`ssh_socket_callbacks_struct<doxid-structssh__socket__callbacks__struct>`;
+
+	// global functions
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:ref:`ssh_set_callbacks<doxid-group__libssh__callbacks_1ga2e4b0507c738748a3f10e43fe201fe09>`(
+		ssh_session session,
+		ssh_callbacks cb
+		);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:ref:`ssh_set_channel_callbacks<doxid-group__libssh__callbacks_1gacea52d1373970a4922bf60e6b1680919>`(
+		ssh_channel channel,
+		ssh_channel_callbacks cb
+		);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:ref:`ssh_set_server_callbacks<doxid-group__libssh__callbacks_1gaa321f33172cfa54eb50baaa963457a17>`(
+		ssh_session session,
+		ssh_server_callbacks cb
+		);
+
+	// macros
+
+	#define :ref:`SSH_PACKET_CALLBACK<doxid-group__libssh__callbacks_1ga8fd26956f4e2b9bc57cfef26c50e321b>`(name)
+	#define :ref:`SSH_PACKET_NOT_USED<doxid-group__libssh__callbacks_1ga4766917128a12b646a8aee7ebc019f8c>`
+	#define :ref:`SSH_PACKET_USED<doxid-group__libssh__callbacks_1gac29df803aa1295d6a498c1b081f3b494>`
+	#define :target:`SSH_SOCKET_CONNECTED_ERROR<doxid-group__libssh__callbacks_1ga3121a6449b4f59f96dd1196e8fd87b2b>`
+	#define :target:`SSH_SOCKET_CONNECTED_OK<doxid-group__libssh__callbacks_1ga777321b241841b09620e4c948520b753>`
+	#define :target:`SSH_SOCKET_CONNECTED_TIMEOUT<doxid-group__libssh__callbacks_1ga17ef78f0410af7b1c4d52e4bfacffcfa>`
+	#define :target:`SSH_SOCKET_EXCEPTION_EOF<doxid-group__libssh__callbacks_1gadc333c5dedfa61e2a0725428bd3aab89>`
+	#define :target:`SSH_SOCKET_EXCEPTION_ERROR<doxid-group__libssh__callbacks_1ga37ab1ae01d34ff9b5a2b1b4ae334fd6f>`
+	#define :target:`SSH_SOCKET_FLOW_WRITEWILLBLOCK<doxid-group__libssh__callbacks_1ga1f68a25a8da56bb1b930cec98d539f4d>`
+	#define :target:`SSH_SOCKET_FLOW_WRITEWONTBLOCK<doxid-group__libssh__callbacks_1gab50359ff09370deb71808b135af21961>`
+
+	#define :target:`ssh_callbacks_exists<doxid-group__libssh__callbacks_1ga60a6fe85408a17ce8ef24c31a76d4a46>`( \
+		p, \
+		c \
+		)
+
+	#define :ref:`ssh_callbacks_init<doxid-group__libssh__callbacks_1gafe09b81e5346f0babe288dc38113d289>`(p)
+
+.. _details-group__libssh__callbacks:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+Callback which can be replaced in libssh.
+
+Typedefs
+--------
+
+.. index:: pair: typedef; ssh_auth_gssapi_mic_callback
+.. _doxid-group__libssh__callbacks_1gaadd49614879c70e0aaab096fd52cf2ab:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef int (*ssh_auth_gssapi_mic_callback)(
+		ssh_session session,
+		const char *user,
+		const char *principal,
+		void *userdata
+		)
+
+SSH authentication callback.
+
+Tries to authenticates user with the "gssapi-with-mic" method Implementations should verify that parameter user matches in some way the principal. user and principal can be different. Only the latter is guaranteed to be safe.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- Current session handler
+
+	*
+		- user
+
+		- Username of the user (can be spoofed)
+
+	*
+		- principal
+
+		- Authenticated principal of the user, including realm.
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function.
+
+
+
+.. rubric:: Returns:
+
+SSH_AUTH_SUCCESS Authentication is accepted.
+
+SSH_AUTH_PARTIAL Partial authentication, more authentication means are needed.
+
+SSH_AUTH_DENIED Authentication failed.
+
+.. index:: pair: typedef; ssh_auth_none_callback
+.. _doxid-group__libssh__callbacks_1ga8d98e68f8a2362bbcb5490211a4a62de:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef int (*ssh_auth_none_callback)(
+		ssh_session session,
+		const char *user,
+		void *userdata
+		)
+
+SSH authentication callback.
+
+Tries to authenticates user with the "none" method which is anonymous or passwordless.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- Current session handler
+
+	*
+		- user
+
+		- User that wants to authenticate
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function.
+
+
+
+.. rubric:: Returns:
+
+SSH_AUTH_SUCCESS Authentication is accepted.
+
+SSH_AUTH_PARTIAL Partial authentication, more authentication means are needed.
+
+SSH_AUTH_DENIED Authentication failed.
+
+.. index:: pair: typedef; ssh_auth_password_callback
+.. _doxid-group__libssh__callbacks_1gad32c421f392ad47275446378339f59c6:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef int (*ssh_auth_password_callback)(
+		ssh_session session,
+		const char *user,
+		const char *password,
+		void *userdata
+		)
+
+These are callbacks used specifically in SSH servers.
+
+SSH authentication callback.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- Current session handler
+
+	*
+		- user
+
+		- User that wants to authenticate
+
+	*
+		- password
+
+		- Password used for authentication
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function.
+
+
+
+.. rubric:: Returns:
+
+SSH_AUTH_SUCCESS Authentication is accepted.
+
+SSH_AUTH_PARTIAL Partial authentication, more authentication means are needed.
+
+SSH_AUTH_DENIED Authentication failed.
+
+.. index:: pair: typedef; ssh_auth_pubkey_callback
+.. _doxid-group__libssh__callbacks_1ga68f74aa25d6a193c5fcf016d6d1bdc51:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef int (*ssh_auth_pubkey_callback)(
+		ssh_session session,
+		const char *user,
+		struct ssh_key_struct *pubkey,
+		char signature_state,
+		void *userdata
+		)
+
+SSH authentication callback.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- Current session handler
+
+	*
+		- user
+
+		- User that wants to authenticate
+
+	*
+		- pubkey
+
+		- public key used for authentication
+
+	*
+		- signature_state
+
+		- SSH_PUBLICKEY_STATE_NONE if the key is not signed (simple public key probe), SSH_PUBLICKEY_STATE_VALID if the signature is valid. Others values should be replied with a SSH_AUTH_DENIED.
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function.
+
+
+
+.. rubric:: Returns:
+
+SSH_AUTH_SUCCESS Authentication is accepted.
+
+SSH_AUTH_PARTIAL Partial authentication, more authentication means are needed.
+
+SSH_AUTH_DENIED Authentication failed.
+
+.. index:: pair: typedef; ssh_channel_auth_agent_req_callback
+.. _doxid-group__libssh__callbacks_1gafbbd34a8b28db875055485e24d2149d0:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef void (*ssh_channel_auth_agent_req_callback)(
+		ssh_session session,
+		ssh_channel channel,
+		void *userdata
+		)
+
+SSH auth-agent-request from the client.
+
+This request is sent by a client when agent forwarding is available. Server is free to ignore this callback, no answer is expected.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- the channel
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function.
+
+.. index:: pair: typedef; ssh_channel_close_callback
+.. _doxid-group__libssh__callbacks_1ga58672dfbf52812e72946a3d6d8c74279:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef void (*ssh_channel_close_callback)(
+		ssh_session session,
+		ssh_channel channel,
+		void *userdata
+		)
+
+SSH channel close callback.
+
+Called when a channel is closed by remote peer
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- Current session handler
+
+	*
+		- channel
+
+		- the actual channel
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function.
+
+.. index:: pair: typedef; ssh_channel_data_callback
+.. _doxid-group__libssh__callbacks_1ga4f34cc77aa9d47e506cbae679ddd54a5:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef int (*ssh_channel_data_callback)(
+		ssh_session session,
+		ssh_channel channel,
+		void *data,
+		uint32_t len,
+		int is_stderr,
+		void *userdata
+		)
+
+SSH channel data callback.
+
+Called when data is available on a channel
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- Current session handler
+
+	*
+		- channel
+
+		- the actual channel
+
+	*
+		- data
+
+		- the data that has been read on the channel
+
+	*
+		- len
+
+		- the length of the data
+
+	*
+		- is_stderr
+
+		- is 0 for stdout or 1 for stderr
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function.
+
+
+
+.. rubric:: Returns:
+
+number of bytes processed by the callee. The remaining bytes will be sent in the next callback message, when more data is available.
+
+.. index:: pair: typedef; ssh_channel_env_request_callback
+.. _doxid-group__libssh__callbacks_1gae816543864b633ab89d20cdf39d69225:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef int (*ssh_channel_env_request_callback)(
+		ssh_session session,
+		ssh_channel channel,
+		const char *env_name,
+		const char *env_value,
+		void *userdata
+		)
+
+SSH channel environment request from a client.
+
+some environment variables can be dangerous if changed (e.g. LD_PRELOAD) and should not be fulfilled.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- the channel
+
+	*
+		- env_name
+
+		- name of the environment value to be set
+
+	*
+		- env_value
+
+		- value of the environment value to be set
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function.
+
+
+
+.. rubric:: Returns:
+
+0 if the env request is accepted
+
+1 if the request is denied
+
+.. index:: pair: typedef; ssh_channel_eof_callback
+.. _doxid-group__libssh__callbacks_1ga54351aff7adba9f84621069aff982c27:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef void (*ssh_channel_eof_callback)(
+		ssh_session session,
+		ssh_channel channel,
+		void *userdata
+		)
+
+SSH channel eof callback.
+
+Called when a channel receives EOF
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- Current session handler
+
+	*
+		- channel
+
+		- the actual channel
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function.
+
+.. index:: pair: typedef; ssh_channel_exec_request_callback
+.. _doxid-group__libssh__callbacks_1ga41ccf4a20d30e7c5ccd87ac25f580f9d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef int (*ssh_channel_exec_request_callback)(
+		ssh_session session,
+		ssh_channel channel,
+		const char *command,
+		void *userdata
+		)
+
+SSH channel Exec request from a client.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- the channel
+
+	*
+		- command
+
+		- the shell command to be executed
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function.
+
+
+
+.. rubric:: Returns:
+
+0 if the exec request is accepted
+
+1 if the request is denied
+
+.. index:: pair: typedef; ssh_channel_exit_signal_callback
+.. _doxid-group__libssh__callbacks_1gace982803d01abe445379b9c360a1a43d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef void (*ssh_channel_exit_signal_callback)(
+		ssh_session session,
+		ssh_channel channel,
+		const char *signal,
+		int core,
+		const char *errmsg,
+		const char *lang,
+		void *userdata
+		)
+
+SSH channel exit signal callback.
+
+Called when a channel has received an exit signal
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- Current session handler
+
+	*
+		- channel
+
+		- the actual channel
+
+	*
+		- signal
+
+		- the signal name (without the SIG prefix)
+
+	*
+		- core
+
+		- a boolean telling wether a core has been dumped or not
+
+	*
+		- errmsg
+
+		- the description of the exception
+
+	*
+		- lang
+
+		- the language of the description (format: RFC 3066)
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function.
+
+.. index:: pair: typedef; ssh_channel_exit_status_callback
+.. _doxid-group__libssh__callbacks_1ga6f834b43c812f871c7252bfbbb4ef6f4:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef void (*ssh_channel_exit_status_callback)(
+		ssh_session session,
+		ssh_channel channel,
+		int exit_status,
+		void *userdata
+		)
+
+SSH channel exit status callback.
+
+Called when a channel has received an exit status
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- Current session handler
+
+	*
+		- channel
+
+		- the actual channel
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function.
+
+.. index:: pair: typedef; ssh_channel_open_request_session_callback
+.. _doxid-group__libssh__callbacks_1gac63a4cc91d8c2a1465770ca5f6c0a436:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef ssh_channel (*ssh_channel_open_request_session_callback)(
+		ssh_session session,
+		void *userdata
+		)
+
+Handles an SSH new channel open session request.
+
+The channel pointer returned by this callback must be closed by the application.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- current session handler
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function.
+
+
+
+.. rubric:: Returns:
+
+a valid ssh_channel handle if the request is to be allowed
+
+NULL if the request should not be allowed
+
+.. index:: pair: typedef; ssh_channel_open_request_x11_callback
+.. _doxid-group__libssh__callbacks_1ga6fc88f06d2eaa263d3336621edea0dcc:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef ssh_channel (*ssh_channel_open_request_x11_callback)(
+		ssh_session session,
+		const char *originator_address,
+		int originator_port,
+		void *userdata
+		)
+
+Handles an SSH new channel open X11 request.
+
+This happens when the server sends back an X11 connection attempt. This is a client-side API The channel pointer returned by this callback must be closed by the application.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- current session handler
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function.
+
+
+
+.. rubric:: Returns:
+
+a valid ssh_channel handle if the request is to be allowed
+
+NULL if the request should not be allowed
+
+.. index:: pair: typedef; ssh_channel_pty_request_callback
+.. _doxid-group__libssh__callbacks_1ga2c740320a613c207ee4032f8ee93fde8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef int (*ssh_channel_pty_request_callback)(
+		ssh_session session,
+		ssh_channel channel,
+		const char *term,
+		int width,
+		int height,
+		int pxwidth,
+		int pwheight,
+		void *userdata
+		)
+
+SSH channel PTY request from a client.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- the channel
+
+	*
+		- term
+
+		- The type of terminal emulation
+
+	*
+		- width
+
+		- width of the terminal, in characters
+
+	*
+		- height
+
+		- height of the terminal, in characters
+
+	*
+		- pxwidth
+
+		- width of the terminal, in pixels
+
+	*
+		- pxheight
+
+		- height of the terminal, in pixels
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function.
+
+
+
+.. rubric:: Returns:
+
+0 if the pty request is accepted
+
+-1 if the request is denied
+
+.. index:: pair: typedef; ssh_channel_pty_window_change_callback
+.. _doxid-group__libssh__callbacks_1ga3614f21f6afbe6f498cdaa9b28c0f003:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef int (*ssh_channel_pty_window_change_callback)(
+		ssh_session session,
+		ssh_channel channel,
+		int width,
+		int height,
+		int pxwidth,
+		int pwheight,
+		void *userdata
+		)
+
+SSH channel PTY windows change (terminal size) from a client.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- the channel
+
+	*
+		- width
+
+		- width of the terminal, in characters
+
+	*
+		- height
+
+		- height of the terminal, in characters
+
+	*
+		- pxwidth
+
+		- width of the terminal, in pixels
+
+	*
+		- pxheight
+
+		- height of the terminal, in pixels
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function.
+
+
+
+.. rubric:: Returns:
+
+0 if the pty request is accepted
+
+-1 if the request is denied
+
+.. index:: pair: typedef; ssh_channel_shell_request_callback
+.. _doxid-group__libssh__callbacks_1ga4d93fd06cb58478c40c9d1d1627881d9:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef int (*ssh_channel_shell_request_callback)(
+		ssh_session session,
+		ssh_channel channel,
+		void *userdata
+		)
+
+SSH channel Shell request from a client.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- the channel
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function.
+
+
+
+.. rubric:: Returns:
+
+0 if the shell request is accepted
+
+1 if the request is denied
+
+.. index:: pair: typedef; ssh_channel_signal_callback
+.. _doxid-group__libssh__callbacks_1ga62cc19678bef2caa53808ef5776e08fa:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef void (*ssh_channel_signal_callback)(
+		ssh_session session,
+		ssh_channel channel,
+		const char *signal,
+		void *userdata
+		)
+
+SSH channel signal callback.
+
+Called when a channel has received a signal
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- Current session handler
+
+	*
+		- channel
+
+		- the actual channel
+
+	*
+		- signal
+
+		- the signal name (without the SIG prefix)
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function.
+
+.. index:: pair: typedef; ssh_channel_subsystem_request_callback
+.. _doxid-group__libssh__callbacks_1gafeee5298cbdb0ed0b607560322448bfd:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef int (*ssh_channel_subsystem_request_callback)(
+		ssh_session session,
+		ssh_channel channel,
+		const char *subsystem,
+		void *userdata
+		)
+
+SSH channel subsystem request from a client.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- the channel
+
+	*
+		- subsystem
+
+		- the subsystem required
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function.
+
+
+
+.. rubric:: Returns:
+
+0 if the subsystem request is accepted
+
+1 if the request is denied
+
+.. index:: pair: typedef; ssh_channel_x11_req_callback
+.. _doxid-group__libssh__callbacks_1ga4a0df3bb8a201fc52925595356806852:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef void (*ssh_channel_x11_req_callback)(
+		ssh_session session,
+		ssh_channel channel,
+		int single_connection,
+		const char *auth_protocol,
+		const char *auth_cookie,
+		uint32_t screen_number,
+		void *userdata
+		)
+
+SSH X11 request from the client.
+
+This request is sent by a client when X11 forwarding is requested(and available). Server is free to ignore this callback, no answer is expected.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- the channel
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function.
+
+.. index:: pair: typedef; ssh_global_request_callback
+.. _doxid-group__libssh__callbacks_1gaeeb75ac372db669157bba96c22e6df85:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef void (*ssh_global_request_callback)(
+		ssh_session session,
+		ssh_message message,
+		void *userdata
+		)
+
+SSH global request callback.
+
+All global request will go through this callback.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- Current session handler
+
+	*
+		- message
+
+		- the actual message
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function.
+
+.. index:: pair: typedef; ssh_log_callback
+.. _doxid-group__libssh__callbacks_1ga9057cbb0dc4ad1939cf6e03f36eaae9f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef void (*ssh_log_callback)(
+		ssh_session session,
+		int priority,
+		const char *message,
+		void *userdata
+		)
+
+SSH log callback.
+
+All logging messages will go through this callback
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- Current session handler
+
+	*
+		- priority
+
+		- Priority of the log, the smaller being the more important
+
+	*
+		- message
+
+		- the actual message
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function.
+
+.. index:: pair: typedef; ssh_logging_callback
+.. _doxid-group__libssh__callbacks_1gab6eedc77c07dde0c6baf9c29e7700a99:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef void (*ssh_logging_callback)(
+		int priority,
+		const char *function,
+		const char *buffer,
+		void *userdata
+		)
+
+SSH log callback.
+
+All logging messages will go through this callback.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- priority
+
+		- Priority of the log, the smaller being the more important.
+
+	*
+		- function
+
+		- The function name calling the the logging fucntions.
+
+	*
+		- message
+
+		- The actual message
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function.
+
+.. index:: pair: typedef; ssh_packet_callback
+.. _doxid-group__libssh__callbacks_1ga6b8722467c98b73a7d78c0ec055e740d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef int (*ssh_packet_callback)(
+		ssh_session session,
+		uint8_t type,
+		ssh_buffer packet,
+		void *user
+		)
+
+Prototype for a packet callback, to be called when a new packet arrives.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The current session of the packet
+
+	*
+		- type
+
+		- packet type (see ``ssh2.h``)
+
+	*
+		- packet
+
+		- buffer containing the packet, excluding size, type and padding fields
+
+	*
+		- user
+
+		- user argument to the callback and are called each time a packet shows up
+
+
+
+.. rubric:: Returns:
+
+SSH_PACKET_USED Packet was parsed and used
+
+SSH_PACKET_NOT_USED Packet was not used or understood, processing must continue
+
+.. index:: pair: typedef; ssh_service_request_callback
+.. _doxid-group__libssh__callbacks_1gaa1866ffc041b50c341f9cba866a8055c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef int (*ssh_service_request_callback)(
+		ssh_session session,
+		const char *service,
+		void *userdata
+		)
+
+Handles an SSH service request.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- current session handler
+
+	*
+		- service
+
+		- name of the service (e.g. "ssh-userauth") requested
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function.
+
+
+
+.. rubric:: Returns:
+
+0 if the request is to be allowed
+
+-1 if the request should not be allowed
+
+.. index:: pair: typedef; ssh_status_callback
+.. _doxid-group__libssh__callbacks_1gabd1e46f073ad992ae8642d8ebcde45a3:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef void (*ssh_status_callback)(
+		ssh_session session,
+		float status,
+		void *userdata
+		)
+
+SSH Connection status callback.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- Current session handler
+
+	*
+		- status
+
+		- Percentage of connection status, going from 0.0 to 1.0 once connection is done.
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function.
+
+Global Functions
+----------------
+
+.. index:: pair: function; ssh_set_callbacks
+.. _doxid-group__libssh__callbacks_1ga2e4b0507c738748a3f10e43fe201fe09:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	ssh_set_callbacks(
+		ssh_session session,
+		ssh_callbacks cb
+		)
+
+Set the session callback functions.
+
+This functions sets the callback structure to use your own callback functions for auth, logging and status.
+
+.. ref-code-block:: cpp
+
+	struct ssh_callbacks_struct cb = {
+	  .userdata = data,
+	  .auth_function = my_auth_function
+	};
+	ssh_callbacks_init(&cb);
+	ssh_set_callbacks(session, &cb);
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The session to set the callback structure.
+
+	*
+		- cb
+
+		- The callback structure itself.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR on error.
+
+.. index:: pair: function; ssh_set_channel_callbacks
+.. _doxid-group__libssh__callbacks_1gacea52d1373970a4922bf60e6b1680919:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	ssh_set_channel_callbacks(
+		ssh_channel channel,
+		ssh_channel_callbacks cb
+		)
+
+Set the channel callback functions.
+
+This functions sets the callback structure to use your own callback functions for channel data and exceptions
+
+.. ref-code-block:: cpp
+
+	struct ssh_channel_callbacks_struct cb = {
+	  .userdata = data,
+	  .channel_data = my_channel_data_function
+	};
+	ssh_callbacks_init(&cb);
+	ssh_set_channel_callbacks(channel, &cb);
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to set the callback structure.
+
+	*
+		- cb
+
+		- The callback structure itself.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR on error.
+
+.. index:: pair: function; ssh_set_server_callbacks
+.. _doxid-group__libssh__callbacks_1gaa321f33172cfa54eb50baaa963457a17:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	ssh_set_server_callbacks(
+		ssh_session session,
+		ssh_server_callbacks cb
+		)
+
+Set the session server callback functions.
+
+This functions sets the callback structure to use your own callback functions for user authentication, new channels and requests.
+
+.. ref-code-block:: cpp
+
+	struct ssh_server_callbacks_struct cb = {
+	  .userdata = data,
+	  .auth_password_function = my_auth_function
+	};
+	ssh_callbacks_init(&cb);
+	ssh_set_server_callbacks(session, &cb);
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The session to set the callback structure.
+
+	*
+		- cb
+
+		- The callback structure itself.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR on error.
+
+Macros
+------
+
+.. index:: pair: define; SSH_PACKET_CALLBACK
+.. _doxid-group__libssh__callbacks_1ga8fd26956f4e2b9bc57cfef26c50e321b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SSH_PACKET_CALLBACK(name)
+
+This macro declares a packet callback handler.
+
+.. ref-code-block:: cpp
+
+	SSH_PACKET_CALLBACK(mycallback){
+	...
+	}
+
+.. index:: pair: define; SSH_PACKET_NOT_USED
+.. _doxid-group__libssh__callbacks_1ga4766917128a12b646a8aee7ebc019f8c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SSH_PACKET_NOT_USED
+
+Packet was not used and should be passed to any other callback available.
+
+.. index:: pair: define; SSH_PACKET_USED
+.. _doxid-group__libssh__callbacks_1gac29df803aa1295d6a498c1b081f3b494:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SSH_PACKET_USED
+
+return values for a ssh_packet_callback
+
+Packet was used and should not be parsed by another callback
+
+.. index:: pair: define; ssh_callbacks_init
+.. _doxid-group__libssh__callbacks_1gafe09b81e5346f0babe288dc38113d289:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define ssh_callbacks_init(p)
+
+Initializes an :ref:`ssh_callbacks_struct <doxid-structssh__callbacks__struct>` A call to this macro is mandatory when you have set a new ssh_callback_struct structure.
+
+Its goal is to maintain the binary compatibility with future versions of libssh as the structure evolves with time.
+

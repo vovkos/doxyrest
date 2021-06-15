@@ -1,0 +1,994 @@
+.. index:: pair: group; Portability Routines
+.. _doxid-group__apr__portabile:
+
+Portability Routines
+====================
+
+.. toctree::
+	:hidden:
+
+	group_apr_os_dso.rst
+	group_apr_os_thread.rst
+	struct_apr_os_proc_mutex_t.rst
+	struct_apr_os_sock_info_t.rst
+
+Overview
+~~~~~~~~
+
+
+
+|	:ref:`DSO (Dynamic Loading) Portability Routines<doxid-group__apr__os__dso>`
+|	:ref:`Thread portability Routines<doxid-group__apr__os__thread>`
+
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef int :ref:`apr_os_file_t<doxid-group__apr__portabile_1ga885491b889a4a719549650d3a370fd34>`;
+	typedef DIR :ref:`apr_os_dir_t<doxid-group__apr__portabile_1gacb790646cfc3da1b43a5f7c4bfaa3937>`;
+	typedef int :ref:`apr_os_sock_t<doxid-group__apr__portabile_1ga2965cd2e48cb6513bc0ba05aa6083ed7>`;
+	typedef struct :ref:`apr_os_proc_mutex_t<doxid-structapr__os__proc__mutex__t>` :ref:`apr_os_proc_mutex_t<doxid-group__apr__portabile_1ga107413a26e947456cabfcab99b8a7ade>`;
+	typedef pthread_t :ref:`apr_os_thread_t<doxid-group__apr__portabile_1ga4ccd9519af148ccf9cff850dd58f00b6>`;
+	typedef pthread_key_t :ref:`apr_os_threadkey_t<doxid-group__apr__portabile_1ga0a228496d8a1a9b3be744ddb101a3e76>`;
+	typedef pid_t :ref:`apr_os_proc_t<doxid-group__apr__portabile_1ga2ce5962de629ee6528081813c6b60e2e>`;
+	typedef struct timeval :ref:`apr_os_imp_time_t<doxid-group__apr__portabile_1ga6d27e476300cd1d3fda24e1ff0e358e1>`;
+	typedef struct tm :ref:`apr_os_exp_time_t<doxid-group__apr__portabile_1ga0fa9349212690591b09a0cbea7b61bdd>`;
+	typedef void* :ref:`apr_os_dso_handle_t<doxid-group__apr__portabile_1ga542684803ee8ab0abd69077697599ec0>`;
+	typedef void* :ref:`apr_os_shm_t<doxid-group__apr__portabile_1ga7af1085d6390fbd08d66482b8c17de51>`;
+	typedef struct :ref:`apr_os_sock_info_t<doxid-structapr__os__sock__info__t>` :ref:`apr_os_sock_info_t<doxid-group__apr__portabile_1gaece2b8b41cbb949590896b47daaa9fd2>`;
+
+	// structs
+
+	struct :ref:`apr_os_proc_mutex_t<doxid-structapr__os__proc__mutex__t>`;
+	struct :ref:`apr_os_sock_info_t<doxid-structapr__os__sock__info__t>`;
+
+	// global functions
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_os_file_get<doxid-group__apr__portabile_1ga1ff9a9a7313954fb6590f280d2c2e992>`(
+		:ref:`apr_os_file_t<doxid-group__apr__portabile_1ga885491b889a4a719549650d3a370fd34>`* thefile,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* file
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_os_dir_get<doxid-group__apr__portabile_1ga99225bfab137069b9d5c5a72f863c577>`(
+		:ref:`apr_os_dir_t<doxid-group__apr__portabile_1gacb790646cfc3da1b43a5f7c4bfaa3937>`** thedir,
+		:ref:`apr_dir_t<doxid-group__apr__file__info_1ga92ed8cf52cba2abb42cf74087aa74da8>`* dir
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_os_sock_get<doxid-group__apr__portabile_1ga07ec79bbb5243596933cd2caf2d428df>`(
+		:ref:`apr_os_sock_t<doxid-group__apr__portabile_1ga2965cd2e48cb6513bc0ba05aa6083ed7>`* thesock,
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_os_proc_mutex_get<doxid-group__apr__portabile_1ga2003a3142f05675696268053b2fddbe1>`(
+		:ref:`apr_os_proc_mutex_t<doxid-structapr__os__proc__mutex__t>`* ospmutex,
+		:ref:`apr_proc_mutex_t<doxid-group__apr__proc__mutex_1ga0fae3a1ab686cd1f252c6062e4c97bd2>`* pmutex
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_os_exp_time_get<doxid-group__apr__portabile_1ga903df49f8cd2bb7298cb1612ff6394df>`(
+		:ref:`apr_os_exp_time_t<doxid-group__apr__portabile_1ga0fa9349212690591b09a0cbea7b61bdd>`** ostime,
+		:ref:`apr_time_exp_t<doxid-structapr__time__exp__t>`* aprtime
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_os_imp_time_get<doxid-group__apr__portabile_1ga406db611360a70360bec953cd92d2df7>`(
+		:ref:`apr_os_imp_time_t<doxid-group__apr__portabile_1ga6d27e476300cd1d3fda24e1ff0e358e1>`** ostime,
+		:ref:`apr_time_t<doxid-group__apr__time_1gadb4bde16055748190eae190c55aa02bb>`* aprtime
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_os_shm_get<doxid-group__apr__portabile_1ga80ebb75a574f97363455dbab05e289d6>`(
+		:ref:`apr_os_shm_t<doxid-group__apr__portabile_1ga7af1085d6390fbd08d66482b8c17de51>`* osshm,
+		:ref:`apr_shm_t<doxid-group__apr__shm_1ga79e8c16bdeaf7ade4ef0f935249e7c2f>`* shm
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_os_file_put<doxid-group__apr__portabile_1ga17a85a792b05506f293e7cf36f8754b7>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** file,
+		:ref:`apr_os_file_t<doxid-group__apr__portabile_1ga885491b889a4a719549650d3a370fd34>`* thefile,
+		apr_int32_t flags,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_os_pipe_put<doxid-group__apr__portabile_1ga8886290c57248bc4d6c1e4802cc377f0>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** file,
+		:ref:`apr_os_file_t<doxid-group__apr__portabile_1ga885491b889a4a719549650d3a370fd34>`* thefile,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_os_pipe_put_ex<doxid-group__apr__portabile_1gaa3b025a01b6e9b71e402abba74fe3b93>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** file,
+		:ref:`apr_os_file_t<doxid-group__apr__portabile_1ga885491b889a4a719549650d3a370fd34>`* thefile,
+		int register_cleanup,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_os_dir_put<doxid-group__apr__portabile_1ga5087057e23ff6b79ae31ef6e7cc7301e>`(
+		:ref:`apr_dir_t<doxid-group__apr__file__info_1ga92ed8cf52cba2abb42cf74087aa74da8>`** dir,
+		:ref:`apr_os_dir_t<doxid-group__apr__portabile_1gacb790646cfc3da1b43a5f7c4bfaa3937>`* thedir,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_os_sock_put<doxid-group__apr__portabile_1ga729bd6825dfadd814de2aa602462d838>`(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`** sock,
+		:ref:`apr_os_sock_t<doxid-group__apr__portabile_1ga2965cd2e48cb6513bc0ba05aa6083ed7>`* thesock,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_os_sock_make<doxid-group__apr__portabile_1ga5df9f6b1b9c07bfeca3685118760eefc>`(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`** apr_sock,
+		:ref:`apr_os_sock_info_t<doxid-structapr__os__sock__info__t>`* os_sock_info,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_os_proc_mutex_put<doxid-group__apr__portabile_1ga885f99da0c19912293b5b7bf9df21b02>`(
+		:ref:`apr_proc_mutex_t<doxid-group__apr__proc__mutex_1ga0fae3a1ab686cd1f252c6062e4c97bd2>`** pmutex,
+		:ref:`apr_os_proc_mutex_t<doxid-structapr__os__proc__mutex__t>`* ospmutex,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_os_imp_time_put<doxid-group__apr__portabile_1ga8ba8b7036b84e260c1cf519c3247a7d4>`(
+		:ref:`apr_time_t<doxid-group__apr__time_1gadb4bde16055748190eae190c55aa02bb>`* aprtime,
+		:ref:`apr_os_imp_time_t<doxid-group__apr__portabile_1ga6d27e476300cd1d3fda24e1ff0e358e1>`** ostime,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_os_exp_time_put<doxid-group__apr__portabile_1ga59486f31d5b591863ed83e67cc8106b1>`(
+		:ref:`apr_time_exp_t<doxid-structapr__time__exp__t>`* aprtime,
+		:ref:`apr_os_exp_time_t<doxid-group__apr__portabile_1ga0fa9349212690591b09a0cbea7b61bdd>`** ostime,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_os_shm_put<doxid-group__apr__portabile_1gaac2b48e4ea4ac8f959cd0e78ede6c5f2>`(
+		:ref:`apr_shm_t<doxid-group__apr__shm_1ga79e8c16bdeaf7ade4ef0f935249e7c2f>`** shm,
+		:ref:`apr_os_shm_t<doxid-group__apr__portabile_1ga7af1085d6390fbd08d66482b8c17de51>`* osshm,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_os_uuid_get<doxid-group__apr__portabile_1ga79f20b89377abd00e2caed59bff2eebe>`(unsigned char* uuid_data);
+
+	const char*
+	:ref:`apr_os_default_encoding<doxid-group__apr__portabile_1ga6e21845a4a5f3b7dd107b2beea50c91e>`(:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool);
+
+	const char*
+	:ref:`apr_os_locale_encoding<doxid-group__apr__portabile_1gaf4c49baaf6cb115c6c92e74e4a40fd46>`(:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool);
+
+	// macros
+
+	#define :ref:`apr_os_global_mutex_get<doxid-group__apr__portabile_1gae9be7821e8c021915c930fc83d6d4a73>`
+	#define :ref:`apr_os_global_mutex_t<doxid-group__apr__portabile_1gadd3a9818afc16248c3c30f22e19838dd>`
+
+.. _details-group__apr__portabile:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+Typedefs
+--------
+
+.. index:: pair: typedef; apr_os_file_t
+.. _doxid-group__apr__portabile_1ga885491b889a4a719549650d3a370fd34:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef int apr_os_file_t
+
+native file
+
+.. index:: pair: typedef; apr_os_dir_t
+.. _doxid-group__apr__portabile_1gacb790646cfc3da1b43a5f7c4bfaa3937:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef DIR apr_os_dir_t
+
+native dir
+
+.. index:: pair: typedef; apr_os_sock_t
+.. _doxid-group__apr__portabile_1ga2965cd2e48cb6513bc0ba05aa6083ed7:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef int apr_os_sock_t
+
+native dir
+
+.. index:: pair: typedef; apr_os_proc_mutex_t
+.. _doxid-group__apr__portabile_1ga107413a26e947456cabfcab99b8a7ade:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_os_proc_mutex_t<doxid-structapr__os__proc__mutex__t>` apr_os_proc_mutex_t
+
+native process mutex
+
+.. index:: pair: typedef; apr_os_thread_t
+.. _doxid-group__apr__portabile_1ga4ccd9519af148ccf9cff850dd58f00b6:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef pthread_t apr_os_thread_t
+
+native thread
+
+.. index:: pair: typedef; apr_os_threadkey_t
+.. _doxid-group__apr__portabile_1ga0a228496d8a1a9b3be744ddb101a3e76:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef pthread_key_t apr_os_threadkey_t
+
+native thread address space
+
+.. index:: pair: typedef; apr_os_proc_t
+.. _doxid-group__apr__portabile_1ga2ce5962de629ee6528081813c6b60e2e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef pid_t apr_os_proc_t
+
+native pid
+
+.. index:: pair: typedef; apr_os_imp_time_t
+.. _doxid-group__apr__portabile_1ga6d27e476300cd1d3fda24e1ff0e358e1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct timeval apr_os_imp_time_t
+
+native timeval
+
+.. index:: pair: typedef; apr_os_exp_time_t
+.. _doxid-group__apr__portabile_1ga0fa9349212690591b09a0cbea7b61bdd:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct tm apr_os_exp_time_t
+
+native tm
+
+.. index:: pair: typedef; apr_os_dso_handle_t
+.. _doxid-group__apr__portabile_1ga542684803ee8ab0abd69077697599ec0:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef void* apr_os_dso_handle_t
+
+native dso types
+
+.. index:: pair: typedef; apr_os_shm_t
+.. _doxid-group__apr__portabile_1ga7af1085d6390fbd08d66482b8c17de51:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef void* apr_os_shm_t
+
+native SHM
+
+.. index:: pair: typedef; apr_os_sock_info_t
+.. _doxid-group__apr__portabile_1gaece2b8b41cbb949590896b47daaa9fd2:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_os_sock_info_t<doxid-structapr__os__sock__info__t>` apr_os_sock_info_t
+
+alias for local OS socket
+
+Global Functions
+----------------
+
+.. index:: pair: function; apr_os_file_get
+.. _doxid-group__apr__portabile_1ga1ff9a9a7313954fb6590f280d2c2e992:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_os_file_get(
+		:ref:`apr_os_file_t<doxid-group__apr__portabile_1ga885491b889a4a719549650d3a370fd34>`* thefile,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* file
+		)
+
+convert the file from apr type to os specific type. On Unix, it is only possible to get a file descriptor from an apr file type.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thefile
+
+		- The os specific file we are converting to
+
+	*
+		- file
+
+		- The apr file to convert.
+
+.. index:: pair: function; apr_os_dir_get
+.. _doxid-group__apr__portabile_1ga99225bfab137069b9d5c5a72f863c577:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_os_dir_get(
+		:ref:`apr_os_dir_t<doxid-group__apr__portabile_1gacb790646cfc3da1b43a5f7c4bfaa3937>`** thedir,
+		:ref:`apr_dir_t<doxid-group__apr__file__info_1ga92ed8cf52cba2abb42cf74087aa74da8>`* dir
+		)
+
+convert the dir from apr type to os specific type.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thedir
+
+		- The os specific dir we are converting to
+
+	*
+		- dir
+
+		- The apr dir to convert.
+
+.. index:: pair: function; apr_os_sock_get
+.. _doxid-group__apr__portabile_1ga07ec79bbb5243596933cd2caf2d428df:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_os_sock_get(
+		:ref:`apr_os_sock_t<doxid-group__apr__portabile_1ga2965cd2e48cb6513bc0ba05aa6083ed7>`* thesock,
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock
+		)
+
+Convert the socket from an apr type to an OS specific socket
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thesock
+
+		- The socket to convert.
+
+	*
+		- sock
+
+		- The os specific equivalent of the apr socket..
+
+.. index:: pair: function; apr_os_proc_mutex_get
+.. _doxid-group__apr__portabile_1ga2003a3142f05675696268053b2fddbe1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_os_proc_mutex_get(
+		:ref:`apr_os_proc_mutex_t<doxid-structapr__os__proc__mutex__t>`* ospmutex,
+		:ref:`apr_proc_mutex_t<doxid-group__apr__proc__mutex_1ga0fae3a1ab686cd1f252c6062e4c97bd2>`* pmutex
+		)
+
+Convert the proc mutex from os specific type to apr type
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ospmutex
+
+		- The os specific proc mutex we are converting to.
+
+	*
+		- pmutex
+
+		- The apr proc mutex to convert.
+
+.. index:: pair: function; apr_os_exp_time_get
+.. _doxid-group__apr__portabile_1ga903df49f8cd2bb7298cb1612ff6394df:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_os_exp_time_get(
+		:ref:`apr_os_exp_time_t<doxid-group__apr__portabile_1ga0fa9349212690591b09a0cbea7b61bdd>`** ostime,
+		:ref:`apr_time_exp_t<doxid-structapr__time__exp__t>`* aprtime
+		)
+
+Get the exploded time in the platforms native format.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ostime
+
+		- the native time format
+
+	*
+		- aprtime
+
+		- the time to convert
+
+.. index:: pair: function; apr_os_imp_time_get
+.. _doxid-group__apr__portabile_1ga406db611360a70360bec953cd92d2df7:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_os_imp_time_get(
+		:ref:`apr_os_imp_time_t<doxid-group__apr__portabile_1ga6d27e476300cd1d3fda24e1ff0e358e1>`** ostime,
+		:ref:`apr_time_t<doxid-group__apr__time_1gadb4bde16055748190eae190c55aa02bb>`* aprtime
+		)
+
+Get the imploded time in the platforms native format.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ostime
+
+		- the native time format
+
+	*
+		- aprtime
+
+		- the time to convert
+
+.. index:: pair: function; apr_os_shm_get
+.. _doxid-group__apr__portabile_1ga80ebb75a574f97363455dbab05e289d6:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_os_shm_get(
+		:ref:`apr_os_shm_t<doxid-group__apr__portabile_1ga7af1085d6390fbd08d66482b8c17de51>`* osshm,
+		:ref:`apr_shm_t<doxid-group__apr__shm_1ga79e8c16bdeaf7ade4ef0f935249e7c2f>`* shm
+		)
+
+convert the shm from apr type to os specific type.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- osshm
+
+		- The os specific shm representation
+
+	*
+		- shm
+
+		- The apr shm to convert.
+
+.. index:: pair: function; apr_os_file_put
+.. _doxid-group__apr__portabile_1ga17a85a792b05506f293e7cf36f8754b7:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_os_file_put(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** file,
+		:ref:`apr_os_file_t<doxid-group__apr__portabile_1ga885491b889a4a719549650d3a370fd34>`* thefile,
+		apr_int32_t flags,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		)
+
+convert the file from os specific type to apr type. On Unix, it is only possible to put a file descriptor into an apr file type.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- file
+
+		- The apr file we are converting to.
+
+	*
+		- thefile
+
+		- The os specific file to convert
+
+	*
+		- flags
+
+		- The flags that were used to open this file.
+
+	*
+		- cont
+
+		- The pool to use if it is needed.
+
+.. index:: pair: function; apr_os_pipe_put
+.. _doxid-group__apr__portabile_1ga8886290c57248bc4d6c1e4802cc377f0:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_os_pipe_put(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** file,
+		:ref:`apr_os_file_t<doxid-group__apr__portabile_1ga885491b889a4a719549650d3a370fd34>`* thefile,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		)
+
+convert the file from os specific type to apr type. On Unix, it is only possible to put a file descriptor into an apr file type.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- file
+
+		- The apr file we are converting to.
+
+	*
+		- thefile
+
+		- The os specific pipe to convert
+
+	*
+		- cont
+
+		- The pool to use if it is needed.
+
+.. index:: pair: function; apr_os_pipe_put_ex
+.. _doxid-group__apr__portabile_1gaa3b025a01b6e9b71e402abba74fe3b93:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_os_pipe_put_ex(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** file,
+		:ref:`apr_os_file_t<doxid-group__apr__portabile_1ga885491b889a4a719549650d3a370fd34>`* thefile,
+		int register_cleanup,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		)
+
+convert the file from os specific type to apr type. On Unix, it is only possible to put a file descriptor into an apr file type.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- file
+
+		- The apr file we are converting to.
+
+	*
+		- thefile
+
+		- The os specific pipe to convert
+
+	*
+		- register_cleanup
+
+		- A cleanup will be registered on the apr_file_t to issue :ref:`apr_file_close() <doxid-group__apr__file__io_1ga5607bce1c4c798ceb6c8475a998a81a1>`.
+
+	*
+		- cont
+
+		- The pool to use if it is needed.
+
+.. index:: pair: function; apr_os_dir_put
+.. _doxid-group__apr__portabile_1ga5087057e23ff6b79ae31ef6e7cc7301e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_os_dir_put(
+		:ref:`apr_dir_t<doxid-group__apr__file__info_1ga92ed8cf52cba2abb42cf74087aa74da8>`** dir,
+		:ref:`apr_os_dir_t<doxid-group__apr__portabile_1gacb790646cfc3da1b43a5f7c4bfaa3937>`* thedir,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		)
+
+convert the dir from os specific type to apr type.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dir
+
+		- The apr dir we are converting to.
+
+	*
+		- thedir
+
+		- The os specific dir to convert
+
+	*
+		- cont
+
+		- The pool to use when creating to apr directory.
+
+.. index:: pair: function; apr_os_sock_put
+.. _doxid-group__apr__portabile_1ga729bd6825dfadd814de2aa602462d838:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_os_sock_put(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`** sock,
+		:ref:`apr_os_sock_t<doxid-group__apr__portabile_1ga2965cd2e48cb6513bc0ba05aa6083ed7>`* thesock,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		)
+
+Convert a socket from the os specific type to the apr type If it is a true socket, it is best to call :ref:`apr_os_sock_make() <doxid-group__apr__portabile_1ga5df9f6b1b9c07bfeca3685118760eefc>` and provide APR with more information about the socket.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sock
+
+		- The pool to use.
+
+	*
+		- thesock
+
+		- The socket to convert to.
+
+	*
+		- cont
+
+		- The socket we are converting to an apr type.
+
+.. index:: pair: function; apr_os_sock_make
+.. _doxid-group__apr__portabile_1ga5df9f6b1b9c07bfeca3685118760eefc:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_os_sock_make(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`** apr_sock,
+		:ref:`apr_os_sock_info_t<doxid-structapr__os__sock__info__t>`* os_sock_info,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		)
+
+Create a socket from an existing descriptor and local and remote socket addresses. If you only know the descriptor/handle or if it isn't really a true socket, use :ref:`apr_os_sock_put() <doxid-group__apr__portabile_1ga729bd6825dfadd814de2aa602462d838>` instead.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- apr_sock
+
+		- The new socket that has been set up
+
+	*
+		- os_sock_info
+
+		- The os representation of the socket handle and other characteristics of the socket
+
+	*
+		- cont
+
+		- The pool to use
+
+.. index:: pair: function; apr_os_proc_mutex_put
+.. _doxid-group__apr__portabile_1ga885f99da0c19912293b5b7bf9df21b02:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_os_proc_mutex_put(
+		:ref:`apr_proc_mutex_t<doxid-group__apr__proc__mutex_1ga0fae3a1ab686cd1f252c6062e4c97bd2>`** pmutex,
+		:ref:`apr_os_proc_mutex_t<doxid-structapr__os__proc__mutex__t>`* ospmutex,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		)
+
+Convert the proc mutex from os specific type to apr type
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pmutex
+
+		- The apr proc mutex we are converting to.
+
+	*
+		- ospmutex
+
+		- The os specific proc mutex to convert.
+
+	*
+		- cont
+
+		- The pool to use if it is needed.
+
+.. index:: pair: function; apr_os_imp_time_put
+.. _doxid-group__apr__portabile_1ga8ba8b7036b84e260c1cf519c3247a7d4:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_os_imp_time_put(
+		:ref:`apr_time_t<doxid-group__apr__time_1gadb4bde16055748190eae190c55aa02bb>`* aprtime,
+		:ref:`apr_os_imp_time_t<doxid-group__apr__portabile_1ga6d27e476300cd1d3fda24e1ff0e358e1>`** ostime,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		)
+
+Put the imploded time in the APR format.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- aprtime
+
+		- the APR time format
+
+	*
+		- ostime
+
+		- the time to convert
+
+	*
+		- cont
+
+		- the pool to use if necessary
+
+.. index:: pair: function; apr_os_exp_time_put
+.. _doxid-group__apr__portabile_1ga59486f31d5b591863ed83e67cc8106b1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_os_exp_time_put(
+		:ref:`apr_time_exp_t<doxid-structapr__time__exp__t>`* aprtime,
+		:ref:`apr_os_exp_time_t<doxid-group__apr__portabile_1ga0fa9349212690591b09a0cbea7b61bdd>`** ostime,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		)
+
+Put the exploded time in the APR format.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- aprtime
+
+		- the APR time format
+
+	*
+		- ostime
+
+		- the time to convert
+
+	*
+		- cont
+
+		- the pool to use if necessary
+
+.. index:: pair: function; apr_os_shm_put
+.. _doxid-group__apr__portabile_1gaac2b48e4ea4ac8f959cd0e78ede6c5f2:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_os_shm_put(
+		:ref:`apr_shm_t<doxid-group__apr__shm_1ga79e8c16bdeaf7ade4ef0f935249e7c2f>`** shm,
+		:ref:`apr_os_shm_t<doxid-group__apr__portabile_1ga7af1085d6390fbd08d66482b8c17de51>`* osshm,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		)
+
+convert the shared memory from os specific type to apr type. On fork()ed architectures, this is typically nothing more than the memory block mapped. On non-fork architectures, this is typically some internal handle to pass the mapping from process to process.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- shm
+
+		- The apr shm representation of osshm
+
+	*
+		- osshm
+
+		- The os specific shm identity
+
+	*
+		- cont
+
+		- The pool to use if it is needed.
+
+.. index:: pair: function; apr_os_uuid_get
+.. _doxid-group__apr__portabile_1ga79f20b89377abd00e2caed59bff2eebe:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_os_uuid_get(unsigned char* uuid_data)
+
+Private: apr-util's apr_uuid module when supported by the platform
+
+.. index:: pair: function; apr_os_default_encoding
+.. _doxid-group__apr__portabile_1ga6e21845a4a5f3b7dd107b2beea50c91e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	apr_os_default_encoding(:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool)
+
+Get the name of the system default character set.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pool
+
+		- the pool to allocate the name from, if needed
+
+.. index:: pair: function; apr_os_locale_encoding
+.. _doxid-group__apr__portabile_1gaf4c49baaf6cb115c6c92e74e4a40fd46:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	apr_os_locale_encoding(:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool)
+
+Get the name of the current locale character set. Defers to apr_os_default_encoding if the current locale's data can't be retrieved on this system.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pool
+
+		- the pool to allocate the name from, if needed
+
+Macros
+------
+
+.. index:: pair: define; apr_os_global_mutex_get
+.. _doxid-group__apr__portabile_1gae9be7821e8c021915c930fc83d6d4a73:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define apr_os_global_mutex_get
+
+
+
+.. rubric:: Returns:
+
+apr_os_global_mutex
+
+.. index:: pair: define; apr_os_global_mutex_t
+.. _doxid-group__apr__portabile_1gadd3a9818afc16248c3c30f22e19838dd:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define apr_os_global_mutex_t
+
+Opaque global mutex type
+

@@ -1,0 +1,473 @@
+.. index:: pair: group; Filepath Manipulation Functions
+.. _doxid-group__apr__filepath:
+
+Filepath Manipulation Functions
+===============================
+
+.. toctree::
+	:hidden:
+
+Overview
+~~~~~~~~
+
+
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// global functions
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_filepath_root<doxid-group__apr__filepath_1ga1eacdd5ed069faa137bde014fa50494d>`(
+		const char** rootpath,
+		const char** filepath,
+		apr_int32_t flags,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_filepath_merge<doxid-group__apr__filepath_1gae89fd67108f10dc5044b6d062dde0138>`(
+		char** newpath,
+		const char* rootpath,
+		const char* addpath,
+		apr_int32_t flags,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_filepath_list_split<doxid-group__apr__filepath_1gaf259849de62ac172dde7dcbe73421500>`(
+		:ref:`apr_array_header_t<doxid-structapr__array__header__t>`** pathelts,
+		const char* liststr,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_filepath_list_merge<doxid-group__apr__filepath_1ga8316896ab8e3901f9711d9d4cc89b373>`(
+		char** liststr,
+		:ref:`apr_array_header_t<doxid-structapr__array__header__t>`* pathelts,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_filepath_get<doxid-group__apr__filepath_1gaac7c26321fd60d7304326fe531639507>`(
+		char** path,
+		apr_int32_t flags,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_filepath_set<doxid-group__apr__filepath_1ga9773589b65b7f0b7d5b59d427fd0eb93>`(
+		const char* path,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_filepath_encoding<doxid-group__apr__filepath_1gad4d3a5888a54a52b3552911e448a3eb3>`(
+		int* style,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		);
+
+	// macros
+
+	#define :ref:`APR_FILEPATH_ENCODING_LOCALE<doxid-group__apr__filepath_1gaecb3193c8e36fbf58564f94b8c38b6d9>`
+	#define :ref:`APR_FILEPATH_ENCODING_UNKNOWN<doxid-group__apr__filepath_1ga26cd6345ccc38ae3ad001fd2fa885634>`
+	#define :ref:`APR_FILEPATH_ENCODING_UTF8<doxid-group__apr__filepath_1ga1c99d1644a8b49dc0be166bdc352819a>`
+	#define :ref:`APR_FILEPATH_NATIVE<doxid-group__apr__filepath_1ga2d72ade2cada76d2fa8af3fe4d8fb1de>`
+	#define :ref:`APR_FILEPATH_NOTABOVEROOT<doxid-group__apr__filepath_1gabb57ce7b23caf512d7f64b92a662ab3d>`
+	#define :ref:`APR_FILEPATH_NOTABSOLUTE<doxid-group__apr__filepath_1gaac75b8e9fd5c248b52ac36a1fd6b7f98>`
+	#define :ref:`APR_FILEPATH_NOTRELATIVE<doxid-group__apr__filepath_1ga487344eb474ea4033b19c386db9aa03a>`
+	#define :ref:`APR_FILEPATH_SECUREROOT<doxid-group__apr__filepath_1ga6a518889311b81e1d2fc434e7d3acecd>`
+	#define :ref:`APR_FILEPATH_SECUREROOTTEST<doxid-group__apr__filepath_1ga48b6cabfa91e6070c45977ba7035f328>`
+	#define :ref:`APR_FILEPATH_TRUENAME<doxid-group__apr__filepath_1gafb7dd411e9ef212a03051806cb60c9d8>`
+
+.. _details-group__apr__filepath:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+Global Functions
+----------------
+
+.. index:: pair: function; apr_filepath_root
+.. _doxid-group__apr__filepath_1ga1eacdd5ed069faa137bde014fa50494d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_filepath_root(
+		const char** rootpath,
+		const char** filepath,
+		apr_int32_t flags,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		)
+
+Extract the rootpath from the given filepath on return, filepath points to the first non-root character in the given filepath. In the simplest example, given a filepath of "/foo", returns the rootpath of "/" and filepath points at "foo". This is far more complex on other platforms, which will canonicalize the root form to a consistant format, given the APR_FILEPATH_TRUENAME flag, and also test for the validity of that root (e.g., that a drive d:/ or network share //machine/foovol/). The function returns APR_ERELATIVE if filepath isn't rooted (an error), APR_EINCOMPLETE if the root path is ambiguous (but potentially legitimate, e.g. "/" on Windows is incomplete because it doesn't specify the drive letter), or APR_EBADPATH if the root is simply invalid. APR_SUCCESS is returned if filepath is an absolute path.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rootpath
+
+		- the root file path returned with APR_SUCCESS or APR_EINCOMPLETE
+
+	*
+		- filepath
+
+		- the pathname to parse for its root component
+
+	*
+		- flags
+
+		- 
+		  the desired rules to apply, from
+		  
+		  .. code-block:: none
+		  
+		  
+		  	APR_FILEPATH_NATIVE    Use native path separators (e.g. '\' on Win32)
+		  	APR_FILEPATH_TRUENAME  Tests that the root exists, and makes it proper
+
+	*
+		- p
+
+		- the pool to allocate the new path string from
+
+.. index:: pair: function; apr_filepath_merge
+.. _doxid-group__apr__filepath_1gae89fd67108f10dc5044b6d062dde0138:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_filepath_merge(
+		char** newpath,
+		const char* rootpath,
+		const char* addpath,
+		apr_int32_t flags,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		)
+
+Merge additional file path onto the previously processed rootpath if the flag APR_FILEPATH_TRUENAME is given, and the addpath contains wildcard characters ('\*', '?') on platforms that don't support such characters within filenames, the paths will be merged, but the result code will be APR_EPATHWILD, and all further segments will not reflect the true filenames including the wildcard and following segments.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- newpath
+
+		- the merged paths returned
+
+	*
+		- rootpath
+
+		- the root file path (NULL uses the current working path)
+
+	*
+		- addpath
+
+		- the path to add to the root path
+
+	*
+		- flags
+
+		- the desired APR_FILEPATH\_ rules to apply when merging
+
+	*
+		- p
+
+		- the pool to allocate the new path string from
+
+.. index:: pair: function; apr_filepath_list_split
+.. _doxid-group__apr__filepath_1gaf259849de62ac172dde7dcbe73421500:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_filepath_list_split(
+		:ref:`apr_array_header_t<doxid-structapr__array__header__t>`** pathelts,
+		const char* liststr,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		)
+
+Split a search path into separate components empty path components do not become part of *pathelts*.
+
+the path separator in *liststr* is system specific; e.g., ':' on Unix, ';' on Windows, etc.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pathelts
+
+		- the returned components of the search path
+
+	*
+		- liststr
+
+		- the search path (e.g., ``getenv("PATH")``)
+
+	*
+		- p
+
+		- the pool to allocate the array and path components from
+
+.. index:: pair: function; apr_filepath_list_merge
+.. _doxid-group__apr__filepath_1ga8316896ab8e3901f9711d9d4cc89b373:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_filepath_list_merge(
+		char** liststr,
+		:ref:`apr_array_header_t<doxid-structapr__array__header__t>`* pathelts,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		)
+
+Merge a list of search path components into a single search path emtpy strings in the source array are ignored.
+
+the path separator in *liststr* is system specific; e.g., ':' on Unix, ';' on Windows, etc.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- liststr
+
+		- the returned search path; may be NULL if *pathelts* is empty
+
+	*
+		- pathelts
+
+		- the components of the search path
+
+	*
+		- p
+
+		- the pool to allocate the search path from
+
+.. index:: pair: function; apr_filepath_get
+.. _doxid-group__apr__filepath_1gaac7c26321fd60d7304326fe531639507:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_filepath_get(
+		char** path,
+		apr_int32_t flags,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		)
+
+Return the default file path (for relative file names)
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- path
+
+		- the default path string returned
+
+	*
+		- flags
+
+		- optional flag APR_FILEPATH_NATIVE to retrieve the default file path in os-native format.
+
+	*
+		- p
+
+		- the pool to allocate the default path string from
+
+.. index:: pair: function; apr_filepath_set
+.. _doxid-group__apr__filepath_1ga9773589b65b7f0b7d5b59d427fd0eb93:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_filepath_set(
+		const char* path,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		)
+
+Set the default file path (for relative file names)
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- path
+
+		- the default path returned
+
+	*
+		- p
+
+		- the pool to allocate any working storage
+
+.. index:: pair: function; apr_filepath_encoding
+.. _doxid-group__apr__filepath_1gad4d3a5888a54a52b3552911e448a3eb3:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_filepath_encoding(
+		int* style,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		)
+
+Determine the encoding used internally by the FilePath functions Use ``apr_os_locale_encoding`` and/or ``apr_os_default_encoding`` to get the name of the path encoding if it's not UTF-8.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- style
+
+		- points to a variable which receives the encoding style flag
+
+	*
+		- p
+
+		- the pool to allocate any working storage
+
+Macros
+------
+
+.. index:: pair: define; APR_FILEPATH_ENCODING_LOCALE
+.. _doxid-group__apr__filepath_1gaecb3193c8e36fbf58564f94b8c38b6d9:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_FILEPATH_ENCODING_LOCALE
+
+The FilePath character encoding is locale-dependent
+
+.. index:: pair: define; APR_FILEPATH_ENCODING_UNKNOWN
+.. _doxid-group__apr__filepath_1ga26cd6345ccc38ae3ad001fd2fa885634:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_FILEPATH_ENCODING_UNKNOWN
+
+The FilePath character encoding is unknown
+
+.. index:: pair: define; APR_FILEPATH_ENCODING_UTF8
+.. _doxid-group__apr__filepath_1ga1c99d1644a8b49dc0be166bdc352819a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_FILEPATH_ENCODING_UTF8
+
+The FilePath character encoding is UTF-8
+
+.. index:: pair: define; APR_FILEPATH_NATIVE
+.. _doxid-group__apr__filepath_1ga2d72ade2cada76d2fa8af3fe4d8fb1de:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_FILEPATH_NATIVE
+
+Return the file system's native path format (e.g. path delimiters of ':' on MacOS9, '\' on Win32, etc.)
+
+.. index:: pair: define; APR_FILEPATH_NOTABOVEROOT
+.. _doxid-group__apr__filepath_1gabb57ce7b23caf512d7f64b92a662ab3d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_FILEPATH_NOTABOVEROOT
+
+Cause apr_filepath_merge to fail if addpath is above rootpath Bug in APR 0.9 and 1.x, this flag's behavior is undefined if the rootpath is NULL or empty. In APR 2.0 this should be changed to imply NOTABSOLUTE if the rootpath is NULL or empty.
+
+.. index:: pair: define; APR_FILEPATH_NOTABSOLUTE
+.. _doxid-group__apr__filepath_1gaac75b8e9fd5c248b52ac36a1fd6b7f98:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_FILEPATH_NOTABSOLUTE
+
+Fail apr_filepath_merge if the merged path is absolute
+
+.. index:: pair: define; APR_FILEPATH_NOTRELATIVE
+.. _doxid-group__apr__filepath_1ga487344eb474ea4033b19c386db9aa03a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_FILEPATH_NOTRELATIVE
+
+Fail apr_filepath_merge if the merged path is relative
+
+.. index:: pair: define; APR_FILEPATH_SECUREROOT
+.. _doxid-group__apr__filepath_1ga6a518889311b81e1d2fc434e7d3acecd:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_FILEPATH_SECUREROOT
+
+Cause apr_filepath_merge to fail if addpath is above rootpath, even given a rootpath /foo/bar and an addpath ../bar/bash
+
+.. index:: pair: define; APR_FILEPATH_SECUREROOTTEST
+.. _doxid-group__apr__filepath_1ga48b6cabfa91e6070c45977ba7035f328:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_FILEPATH_SECUREROOTTEST
+
+internal: Only meaningful with APR_FILEPATH_NOTABOVEROOT
+
+.. index:: pair: define; APR_FILEPATH_TRUENAME
+.. _doxid-group__apr__filepath_1gafb7dd411e9ef212a03051806cb60c9d8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_FILEPATH_TRUENAME
+
+Resolve the true case of existing directories and file elements of addpath, (resolving any aliases on Win32) and append a proper trailing slash if a directory
+

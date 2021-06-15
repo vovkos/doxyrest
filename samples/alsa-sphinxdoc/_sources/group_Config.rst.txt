@@ -1,0 +1,3150 @@
+.. index:: pair: group; Configuration Interface
+.. _doxid-group___config:
+
+Configuration Interface
+=======================
+
+.. toctree::
+	:hidden:
+
+	enum_snd_config_type_t.rst
+	struct_snd_devname.rst
+
+Overview
+~~~~~~~~
+
+The configuration functions and types allow you to read, enumerate, modify and write the contents of ALSA configuration files. :ref:`More...<details-group___config>`
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef struct _snd_config :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`;
+	typedef struct _snd_config_iterator* :ref:`snd_config_iterator_t<doxid-group___config_1ga6c621ab8875a222e1fcb56e9feed6ec6>`;
+	typedef struct _snd_config_update :ref:`snd_config_update_t<doxid-group___config_1gab10b229189a94e3fcbac7f6ca5794cc0>`;
+
+	// enums
+
+	enum :ref:`snd_config_type_t<doxid-group___config_1gaa41083e55d19c7755c5d624030e06887>`;
+
+	// structs
+
+	struct :ref:`snd_devname<doxid-structsnd__devname>`;
+
+	// global variables
+
+	:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* :ref:`snd_config<doxid-group___config_1ga6cf7955d3a072d354dab4d7b536c7831>`;
+
+	// global functions
+
+	int
+	:ref:`snd_config_top<doxid-group___config_1gaf563d57ea9d576a94578368a3d2382c3>`(:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** config);
+
+	int
+	:ref:`snd_config_load<doxid-group___config_1ga51f79d1f24a519e126415c72210525b0>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		:ref:`snd_input_t<doxid-group___input_1ga39165553a2907c5a27f325e3ce4e8301>`* in
+		);
+
+	int
+	:ref:`snd_config_load_override<doxid-group___config_1ga27334922bab8391aa2ef1813f48f4d70>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		:ref:`snd_input_t<doxid-group___input_1ga39165553a2907c5a27f325e3ce4e8301>`* in
+		);
+
+	int
+	:ref:`snd_config_save<doxid-group___config_1gafac08a29a1e04b03a22028a8c70f78bd>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		:ref:`snd_output_t<doxid-group___output_1ga49729cc6454539495c1f5b6e95cd474a>`* out
+		);
+
+	int
+	:ref:`snd_config_update<doxid-group___config_1ga41a3d2202cfb9016e33aa85ea70a4c9c>`(void);
+
+	int
+	:ref:`snd_config_update_r<doxid-group___config_1ga06e80976c3c00fdc786f9b213e5c40f7>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** top,
+		:ref:`snd_config_update_t<doxid-group___config_1gab10b229189a94e3fcbac7f6ca5794cc0>`** update,
+		const char* path
+		);
+
+	int
+	:ref:`snd_config_update_free<doxid-group___config_1ga8f781ac635a0233fb2f58766a83d65cd>`(:ref:`snd_config_update_t<doxid-group___config_1gab10b229189a94e3fcbac7f6ca5794cc0>`* update);
+
+	int
+	:ref:`snd_config_update_free_global<doxid-group___config_1ga51dbc0ff1d9b34d753706d09d768116b>`(void);
+
+	int
+	:ref:`snd_config_update_ref<doxid-group___config_1ga568fcf6f45808319725ac066714b25a8>`(:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** top);
+
+	void
+	:ref:`snd_config_ref<doxid-group___config_1gae8baa15082818d721607932bb99f318d>`(:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* top);
+
+	void
+	:ref:`snd_config_unref<doxid-group___config_1gac87538403cb6f8125468a1af56f42e33>`(:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* top);
+
+	int
+	:ref:`snd_config_search<doxid-group___config_1gabafb8cac2181c4c1e34b99f54421d1c6>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		const char* key,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** result
+		);
+
+	int
+	:ref:`snd_config_searchv<doxid-group___config_1ga7b2f5723e44a1b69f2a8555d469803d1>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** result,
+		...
+		);
+
+	int
+	:ref:`snd_config_search_definition<doxid-group___config_1gad7c23084ee4052ad33d77db6278db46f>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		const char* base,
+		const char* key,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** result
+		);
+
+	int
+	:ref:`snd_config_expand<doxid-group___config_1ga7759f41c3757ce72ee9bd118976071c2>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* root,
+		const char* args,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* private_data,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** result
+		);
+
+	int
+	:ref:`snd_config_evaluate<doxid-group___config_1ga1a51645a07e204d4e814d890452da558>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* root,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* private_data,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** result
+		);
+
+	int
+	:ref:`snd_config_add<doxid-group___config_1gaf62dd825828c05f1d63a62eee7046080>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* leaf
+		);
+
+	int
+	:ref:`snd_config_delete<doxid-group___config_1ga2a006b942faa3335a958a7df7bcea17e>`(:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config);
+
+	int
+	:ref:`snd_config_delete_compound_members<doxid-group___config_1gaec120883e56ecb510e064151e0b11d51>`(const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config);
+
+	int
+	:ref:`snd_config_copy<doxid-group___config_1ga30f30bd27d13fbb3527270b3fc9e1676>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** dst,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* src
+		);
+
+	int
+	:ref:`snd_config_make<doxid-group___config_1gac570ecbaba611ccc12bc235a1f4d0181>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** config,
+		const char* key,
+		:ref:`snd_config_type_t<doxid-group___config_1gaa41083e55d19c7755c5d624030e06887>` type
+		);
+
+	int
+	:ref:`snd_config_make_integer<doxid-group___config_1ga838fac581e115574acc3711cad9f5877>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** config,
+		const char* key
+		);
+
+	int
+	:ref:`snd_config_make_integer64<doxid-group___config_1ga2c27175c162fe5027e3f1b3d5420afbb>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** config,
+		const char* key
+		);
+
+	int
+	:ref:`snd_config_make_real<doxid-group___config_1ga8f175813bfc2556bd08fd580f05d36e6>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** config,
+		const char* key
+		);
+
+	int
+	:ref:`snd_config_make_string<doxid-group___config_1ga6764115f489629be027b434c4e323cff>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** config,
+		const char* key
+		);
+
+	int
+	:ref:`snd_config_make_pointer<doxid-group___config_1gadbcce71d8d3a78709fc2a78d6f543584>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** config,
+		const char* key
+		);
+
+	int
+	:ref:`snd_config_make_compound<doxid-group___config_1ga2ce24133c1d6828e2afe366284c61e01>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** config,
+		const char* key,
+		int join
+		);
+
+	int
+	:ref:`snd_config_imake_integer<doxid-group___config_1gafeb0552cbed09a3badbb5e74c7a7973d>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** config,
+		const char* key,
+		const long value
+		);
+
+	int
+	:ref:`snd_config_imake_integer64<doxid-group___config_1ga04cfbfda89dc17c19a5a4076271a4d07>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** config,
+		const char* key,
+		const long long value
+		);
+
+	int
+	:ref:`snd_config_imake_real<doxid-group___config_1ga968e5bb773dfea922b5272636b26e9c2>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** config,
+		const char* key,
+		const double value
+		);
+
+	int
+	:ref:`snd_config_imake_string<doxid-group___config_1gaa83035f79027a464bf9d5d31e0a20547>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** config,
+		const char* key,
+		const char* ascii
+		);
+
+	int
+	:ref:`snd_config_imake_pointer<doxid-group___config_1gac7c6ce28a676169fff594aa4222705b2>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** config,
+		const char* key,
+		const void* ptr
+		);
+
+	:ref:`snd_config_type_t<doxid-group___config_1gaa41083e55d19c7755c5d624030e06887>`
+	:ref:`snd_config_get_type<doxid-group___config_1ga6def4c43ce325abaa3ddfba5a4f4d138>`(const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config);
+
+	int
+	:ref:`snd_config_set_id<doxid-group___config_1ga550948931d44695b6d8e8f148f87cb54>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		const char* id
+		);
+
+	int
+	:ref:`snd_config_set_integer<doxid-group___config_1ga6fd3be48221cae9cee9c7245a0804d73>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		long value
+		);
+
+	int
+	:ref:`snd_config_set_integer64<doxid-group___config_1gafdb63c78c07e11194a28d591b0fbffc4>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		long long value
+		);
+
+	int
+	:ref:`snd_config_set_real<doxid-group___config_1ga46c71d5d36c64f0a06ceae956a39fedc>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		double value
+		);
+
+	int
+	:ref:`snd_config_set_string<doxid-group___config_1ga0f76f8ad47dce7f90580c8d59c6e44f8>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		const char* value
+		);
+
+	int
+	:ref:`snd_config_set_ascii<doxid-group___config_1gac1810a11f576fe339074502f4fed4a91>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		const char* ascii
+		);
+
+	int
+	:ref:`snd_config_set_pointer<doxid-group___config_1ga037c3bf96326bb6f5dfd340475b34fbf>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		const void* ptr
+		);
+
+	int
+	:ref:`snd_config_get_id<doxid-group___config_1gae366751e8ea98aeb69f9ef876f7b949c>`(
+		const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		const char** value
+		);
+
+	int
+	:ref:`snd_config_get_integer<doxid-group___config_1gabfbc36060fd4f5d1d929938443f95559>`(
+		const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		long* value
+		);
+
+	int
+	:ref:`snd_config_get_integer64<doxid-group___config_1gaf4d9e68918f7d49d7b4b14ffbe94afc1>`(
+		const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		long long* value
+		);
+
+	int
+	:ref:`snd_config_get_real<doxid-group___config_1gad4d23c0bf941527d80aeb6f991bf88c9>`(
+		const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		double* value
+		);
+
+	int
+	:ref:`snd_config_get_ireal<doxid-group___config_1ga79738baffa6fa7722b1027ab84ac61bb>`(
+		const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		double* value
+		);
+
+	int
+	:ref:`snd_config_get_string<doxid-group___config_1ga5ab99983d1d93ddbcde9bb69a1e4f9fb>`(
+		const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		const char** value
+		);
+
+	int
+	:ref:`snd_config_get_ascii<doxid-group___config_1gaa26f97e098a0dd2cd5e28299b6b6c132>`(
+		const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		char** value
+		);
+
+	int
+	:ref:`snd_config_get_pointer<doxid-group___config_1ga54868e0fa30458ef1c259772a8e7c6d7>`(
+		const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		const void** value
+		);
+
+	int
+	:ref:`snd_config_test_id<doxid-group___config_1gaeec157fd161a138e402c9bd243bbd408>`(
+		const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		const char* id
+		);
+
+	:ref:`snd_config_iterator_t<doxid-group___config_1ga6c621ab8875a222e1fcb56e9feed6ec6>`
+	:ref:`snd_config_iterator_first<doxid-group___config_1gac8965466674c10b9a119d591ed484cef>`(const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* node);
+
+	:ref:`snd_config_iterator_t<doxid-group___config_1ga6c621ab8875a222e1fcb56e9feed6ec6>`
+	:ref:`snd_config_iterator_next<doxid-group___config_1ga10c27ddc83c78680d91a167dd2f0a3cb>`(const :ref:`snd_config_iterator_t<doxid-group___config_1ga6c621ab8875a222e1fcb56e9feed6ec6>` iterator);
+
+	:ref:`snd_config_iterator_t<doxid-group___config_1ga6c621ab8875a222e1fcb56e9feed6ec6>`
+	:ref:`snd_config_iterator_end<doxid-group___config_1gac08a30bc630481f69feb2170fed4afda>`(const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* node);
+
+	:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`*
+	:ref:`snd_config_iterator_entry<doxid-group___config_1gaa91fe1d926d88041ed516a6a7293f606>`(const :ref:`snd_config_iterator_t<doxid-group___config_1ga6c621ab8875a222e1fcb56e9feed6ec6>` iterator);
+
+	int
+	:ref:`snd_config_get_bool_ascii<doxid-group___config_1ga11dfab861b537b564f0c76d9b1eb2935>`(const char* ascii);
+
+	int
+	:ref:`snd_config_get_bool<doxid-group___config_1gae5d80ee31e779992fd14672fd850a3d1>`(const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* conf);
+
+	int
+	:ref:`snd_config_get_ctl_iface_ascii<doxid-group___config_1ga5759c972706da4bd3be35c9336568bfd>`(const char* ascii);
+
+	int
+	:ref:`snd_config_get_ctl_iface<doxid-group___config_1gaaf1c1ea4801961e3107ca23ba89bd429>`(const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* conf);
+
+	int
+	:ref:`snd_names_list<doxid-group___config_1gaf35b51ab61fd7ea628ab088a1b444aa4>`(
+		const char* iface,
+		snd_devname_t** list
+		);
+
+	void
+	:ref:`snd_names_list_free<doxid-group___config_1ga665741321b3c1c3f07a6eeb969406cb8>`(snd_devname_t* list);
+
+	int
+	:target:`snd_config_imake_safe_string<doxid-group___config_1ga5bb83b269c6e41717a3524abcec5f787>`(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** config,
+		const char* id,
+		const char* value
+		);
+
+	// macros
+
+	#define :ref:`SND_CONFIG_DLSYM_VERSION_EVALUATE<doxid-group___config_1ga96fd234b2ce9c03a9e82f4e854cc65ce>`
+	#define :ref:`SND_CONFIG_DLSYM_VERSION_HOOK<doxid-group___config_1ga948b35b3df554e2e06ba5bb9f5452704>`
+
+	#define :ref:`snd_config_for_each<doxid-group___config_1gac3f21333e1f9b602cad9b06cb418fa80>`( \
+		pos, \
+		next, \
+		node \
+		)
+
+.. _details-group___config:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+The configuration functions and types allow you to read, enumerate, modify and write the contents of ALSA configuration files.
+
+Typedefs
+--------
+
+.. index:: pair: typedef; snd_config_t
+.. _doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct _snd_config snd_config_t
+
+Internal structure for a configuration node object.
+
+The ALSA library uses a pointer to this structure as a handle to a configuration node. Applications don't access its contents directly.
+
+.. index:: pair: typedef; snd_config_iterator_t
+.. _doxid-group___config_1ga6c621ab8875a222e1fcb56e9feed6ec6:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct _snd_config_iterator* snd_config_iterator_t
+
+Type for a configuration compound iterator.
+
+The ALSA library uses this pointer type as a handle to a configuration compound iterator. Applications don't directly access the contents of the structure pointed to by this type.
+
+.. index:: pair: typedef; snd_config_update_t
+.. _doxid-group___config_1gab10b229189a94e3fcbac7f6ca5794cc0:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct _snd_config_update snd_config_update_t
+
+Internal structure for a configuration private update object.
+
+The ALSA library uses this structure to save private update information.
+
+Global Variables
+----------------
+
+.. index:: pair: variable; snd_config
+.. _doxid-group___config_1ga6cf7955d3a072d354dab4d7b536c7831:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* snd_config
+
+Configuration top-level node (the global configuration).
+
+This variable contains a handle to the top-level configuration node, as loaded from global configuration file.
+
+This variable is initialized or updated by :ref:`snd_config_update <doxid-group___config_1ga41a3d2202cfb9016e33aa85ea70a4c9c>`. Functions like :ref:`snd_pcm_open <doxid-group___p_c_m_1ga8340c7dc0ac37f37afe5e7c21d6c528b>` (that use a device name from the global configuration) automatically call :ref:`snd_config_update <doxid-group___config_1ga41a3d2202cfb9016e33aa85ea70a4c9c>`. Before the first call to :ref:`snd_config_update <doxid-group___config_1ga41a3d2202cfb9016e33aa85ea70a4c9c>`, this variable is ``NULL``.
+
+The global configuration files are specified in the environment variable ``ALSA_CONFIG_PATH``. If this is not set, the default value is "/usr/share/alsa/alsa.conf".
+
+Whenever the configuration tree is updated, all string pointers and configuration node handles previously obtained from this variable may become invalid.
+
+LSB 3.2
+
+Global Functions
+----------------
+
+.. index:: pair: function; snd_config_top
+.. _doxid-group___config_1gaf563d57ea9d576a94578368a3d2382c3:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_top(:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** config)
+
+Creates a top level configuration node.
+
+The returned node is an empty compound node without a parent and without an id.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -ENOMEM
+
+		- Out of memory.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to the new node.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_load
+.. _doxid-group___config_1ga51f79d1f24a519e126415c72210525b0:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_load(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		:ref:`snd_input_t<doxid-group___input_1ga39165553a2907c5a27f325e3ce4e8301>`* in
+		)
+
+Loads a configuration tree.
+
+The definitions loaded from the input are added to *config*, which must be a compound node.
+
+Any errors encountered when parsing the input or returned by hooks or functions.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to a top level configuration node.
+
+	*
+		- in
+
+		- Input handle to read the configuration from.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_load_override
+.. _doxid-group___config_1ga27334922bab8391aa2ef1813f48f4d70:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_load_override(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		:ref:`snd_input_t<doxid-group___input_1ga39165553a2907c5a27f325e3ce4e8301>`* in
+		)
+
+Loads a configuration tree and overrides existing configuration nodes.
+
+This function loads definitions from *in* into *config* like :ref:`snd_config_load <doxid-group___config_1ga51f79d1f24a519e126415c72210525b0>`, but the default mode for input nodes is 'override' (!) instead of 'merge+create' (+).
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to a top level configuration node.
+
+	*
+		- in
+
+		- Input handle to read the configuration from.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_save
+.. _doxid-group___config_1gafac08a29a1e04b03a22028a8c70f78bd:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_save(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		:ref:`snd_output_t<doxid-group___output_1ga49729cc6454539495c1f5b6e95cd474a>`* out
+		)
+
+Dumps the contents of a configuration node or tree.
+
+This function writes a textual representation of *config's* value to the output *out*.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -EINVAL
+
+		- A node in the tree has a type that cannot be printed, i.e., :ref:`SND_CONFIG_TYPE_POINTER <doxid-group___config_1ggaa41083e55d19c7755c5d624030e06887ab0b5d34e2f16e81d4eb5f933c30158fe>`.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to the (root) configuration node.
+
+	*
+		- out
+
+		- Output handle.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_update
+.. _doxid-group___config_1ga41a3d2202cfb9016e33aa85ea70a4c9c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_update(void)
+
+Updates :ref:`snd_config <doxid-group___config_1ga6cf7955d3a072d354dab4d7b536c7831>` by rereading the global configuration files (if needed).
+
+Whenever :ref:`snd_config <doxid-group___config_1ga6cf7955d3a072d354dab4d7b536c7831>` is updated, all string pointers and configuration node handles previously obtained from it may become invalid. For safer operations, use :ref:`snd_config_update_ref <doxid-group___config_1ga568fcf6f45808319725ac066714b25a8>` and release the config via :ref:`snd_config_unref <doxid-group___config_1gac87538403cb6f8125468a1af56f42e33>`.
+
+Any errors encountered when parsing the input or returned by hooks or functions.
+
+LSB 3.2
+
+
+
+.. rubric:: Returns:
+
+0 if :ref:`snd_config <doxid-group___config_1ga6cf7955d3a072d354dab4d7b536c7831>` was up to date, 1 if :ref:`snd_config <doxid-group___config_1ga6cf7955d3a072d354dab4d7b536c7831>` was updated, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_update_r
+.. _doxid-group___config_1ga06e80976c3c00fdc786f9b213e5c40f7:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_update_r(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** top,
+		:ref:`snd_config_update_t<doxid-group___config_1gab10b229189a94e3fcbac7f6ca5794cc0>`** update,
+		const char* path
+		)
+
+Updates a configuration tree by rereading the configuration files (if needed).
+
+The variables pointed to by *_top* and *_update* can be initialized to ``NULL`` before the first call to this function. The private update information holds information about all used configuration files that allows this function to detects changes to them; this data can be freed with :ref:`snd_config_update_free <doxid-group___config_1ga8f781ac635a0233fb2f58766a83d65cd>`.
+
+The global configuration files are specified in the environment variable ``ALSA_CONFIG_PATH``.
+
+If the configuration tree is reread, all string pointers and configuration node handles previously obtained from this tree become invalid.
+
+Any errors encountered when parsing the input or returned by hooks or functions.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- _top
+
+		- Address of the handle to the top-level node.
+
+	*
+		- _update
+
+		- Address of a pointer to private update information.
+
+	*
+		- cfgs
+
+		- A list of configuration file names, delimited with ':'. If ``cfgs`` is ``NULL``, the default global configuration file is used.
+
+
+
+.. rubric:: Returns:
+
+0 if *_top* was up to date, 1 if the configuration files have been reread, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_update_free
+.. _doxid-group___config_1ga8f781ac635a0233fb2f58766a83d65cd:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_update_free(:ref:`snd_config_update_t<doxid-group___config_1gab10b229189a94e3fcbac7f6ca5794cc0>`* update)
+
+Frees a private update structure.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- update
+
+		- The private update structure to free.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_update_free_global
+.. _doxid-group___config_1ga51dbc0ff1d9b34d753706d09d768116b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_update_free_global(void)
+
+Frees the global configuration tree in :ref:`snd_config <doxid-group___config_1ga6cf7955d3a072d354dab4d7b536c7831>`.
+
+This functions releases all resources of the global configuration tree, and sets :ref:`snd_config <doxid-group___config_1ga6cf7955d3a072d354dab4d7b536c7831>` to ``NULL``.
+
+LSB 3.2
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_update_ref
+.. _doxid-group___config_1ga568fcf6f45808319725ac066714b25a8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_update_ref(:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** top)
+
+Updates :ref:`snd_config <doxid-group___config_1ga6cf7955d3a072d354dab4d7b536c7831>` and takes its reference.
+
+Unlike :ref:`snd_config_update <doxid-group___config_1ga41a3d2202cfb9016e33aa85ea70a4c9c>`, this function increases a reference counter so that the obtained tree won't be deleted until unreferenced by :ref:`snd_config_unref <doxid-group___config_1gac87538403cb6f8125468a1af56f42e33>`.
+
+This function is supposed to be thread-safe.
+
+
+
+.. rubric:: Returns:
+
+0 if :ref:`snd_config <doxid-group___config_1ga6cf7955d3a072d354dab4d7b536c7831>` was up to date, 1 if :ref:`snd_config <doxid-group___config_1ga6cf7955d3a072d354dab4d7b536c7831>` was updated, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_ref
+.. _doxid-group___config_1gae8baa15082818d721607932bb99f318d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_config_ref(:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* top)
+
+Take the reference of the config tree.
+
+Increases a reference counter of the given config tree.
+
+This function is supposed to be thread-safe.
+
+.. index:: pair: function; snd_config_unref
+.. _doxid-group___config_1gac87538403cb6f8125468a1af56f42e33:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_config_unref(:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* top)
+
+Unreference the config tree.
+
+Decreases a reference counter of the given config tree, and eventually deletes the tree if all references are gone. This is the counterpart of :ref:`snd_config_unref <doxid-group___config_1gac87538403cb6f8125468a1af56f42e33>`.
+
+Also, the config taken via :ref:`snd_config_update_ref <doxid-group___config_1ga568fcf6f45808319725ac066714b25a8>` must be unreferenced by this function, too.
+
+This function is supposed to be thread-safe.
+
+.. index:: pair: function; snd_config_search
+.. _doxid-group___config_1gabafb8cac2181c4c1e34b99f54421d1c6:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_search(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		const char* key,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** result
+		)
+
+Searches for a node in a configuration tree.
+
+This function searches for a child node of *config* that is identified by *key*, which contains either the id of a direct child node of *config*, or a series of ids, separated with dots, where each id specifies a node that is contained in the previous compound node.
+
+In the following example, the comment after each node shows the search key to find that node, assuming that *config* is a handle to the compound node with id ``config:``
+
+.. ref-code-block:: cpp
+
+	config {
+	    a 42               # "a"
+	    b {                # "b"
+	        c "cee"        # "b.c"
+	        d {            # "b.d"
+	            e 2.71828  # "b.d.e"
+	        }
+	    }
+	}
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -ENOENT
+
+		- An id in *key* does not exist.
+
+	*
+		- -ENOENT
+
+		- *config* or one of its child nodes to be searched is not a compound node.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to the root of the configuration (sub)tree to search.
+
+	*
+		- key
+
+		- Search key: one or more node ids, separated with dots.
+
+	*
+		- result
+
+		- When *result*!= ``NULL``, the function puts the handle to the node found at the address specified by *result*.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_searchv
+.. _doxid-group___config_1ga7b2f5723e44a1b69f2a8555d469803d1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_searchv(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** result,
+		...
+		)
+
+Searches for a node in a configuration tree.
+
+This functions searches for a child node of *config* like :ref:`snd_config_search <doxid-group___config_1gabafb8cac2181c4c1e34b99f54421d1c6>`, but the search key is the concatenation of all passed search key strings. For example, the call
+
+.. ref-code-block:: cpp
+
+	snd_config_searchv(cfg, &res, "a", "b.c", "d.e", NULL);
+
+is equivalent to the call
+
+.. ref-code-block:: cpp
+
+	snd_config_search(cfg, "a.b.c.d.e", &res);
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -ENOENT
+
+		- An id in a search key does not exist.
+
+	*
+		- -ENOENT
+
+		- *config* or one of its child nodes to be searched is not a compound node.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to the root of the configuration (sub)tree to search.
+
+	*
+		- result
+
+		- When *result*!= ``NULL``, the function puts the handle to the node found at the address specified by *result*.
+
+	*
+		- ...
+
+		- One or more concatenated dot-separated search keys, terminated with ``NULL``.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_search_definition
+.. _doxid-group___config_1gad7c23084ee4052ad33d77db6278db46f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_search_definition(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		const char* base,
+		const char* key,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** result
+		)
+
+Searches for a definition in a configuration tree, using aliases and expanding hooks and arguments.
+
+This functions searches for a child node of *config*, allowing aliases and expanding hooks, like :ref:`snd_config_search_alias_hooks <doxid-conf_8c_1a1f86a23e559213fb07097637feeac70f>`.
+
+If *name* contains a colon (:), the rest of the string after the colon contains arguments that are expanded as with :ref:`snd_config_expand <doxid-group___config_1ga7759f41c3757ce72ee9bd118976071c2>`.
+
+In any case, *result* is a new node that must be freed by the caller.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -ENOENT
+
+		- An id in *key* or an alias id does not exist.
+
+	*
+		- -ENOENT
+
+		- *config* or one of its child nodes to be searched is not a compound node.
+
+Additionally, any errors encountered when parsing the hook definitions or arguments, or returned by (hook) functions.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to the configuration (sub)tree to search.
+
+	*
+		- base
+
+		- Implicit key base, or ``NULL`` for none.
+
+	*
+		- name
+
+		- Key suffix, optionally with arguments.
+
+	*
+		- result
+
+		- The function puts the handle to the expanded found node at the address specified by *result*.
+
+
+
+.. rubric:: Returns:
+
+A non-negative value if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_expand
+.. _doxid-group___config_1ga7759f41c3757ce72ee9bd118976071c2:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_expand(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* root,
+		const char* args,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* private_data,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** result
+		)
+
+Expands a configuration node, applying arguments and functions.
+
+If *config* has arguments (defined by a child with id ``@args``), this function replaces any string node beginning with $ with the respective argument value, or the default argument value, or nothing. Furthermore, any functions are evaluated (see :ref:`snd_config_evaluate <doxid-group___config_1ga1a51645a07e204d4e814d890452da558>`). The resulting copy of *config* is returned in *result*.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to the configuration node.
+
+	*
+		- root
+
+		- Handle to the root configuration node.
+
+	*
+		- args
+
+		- Arguments string, can be ``NULL``.
+
+	*
+		- private_data
+
+		- Handle to the private data node for functions.
+
+	*
+		- result
+
+		- The function puts the handle to the result configuration node at the address specified by *result*.
+
+
+
+.. rubric:: Returns:
+
+A non-negative value if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_evaluate
+.. _doxid-group___config_1ga1a51645a07e204d4e814d890452da558:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_evaluate(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* root,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* private_data,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** result
+		)
+
+Evaluates a configuration node at runtime.
+
+This function evaluates any functions (``@func``) in *config* and replaces those nodes with the respective function results.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to the source configuration node.
+
+	*
+		- root
+
+		- Handle to the root of the source configuration.
+
+	*
+		- private_data
+
+		- Handle to the private data node for runtime evaluation.
+
+	*
+		- result
+
+		- Must be ``NULL``.
+
+
+
+.. rubric:: Returns:
+
+A non-negative value if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_add
+.. _doxid-group___config_1gaf62dd825828c05f1d63a62eee7046080:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_add(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* leaf
+		)
+
+Adds a child to a compound configuration node.
+
+This function makes the node *child* a child of the node *parent*.
+
+The parent node then owns the child node, i.e., the child node gets deleted together with its parent.
+
+*child* must have an id.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -EINVAL
+
+		- *child* does not have an id.
+
+	*
+		- -EINVAL
+
+		- *child* already has a parent.
+
+	*
+		- -EEXIST
+
+		- *parent* already contains a child node with the same id as *child*.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- parent
+
+		- Handle to a compound configuration node.
+
+	*
+		- child
+
+		- Handle to the configuration node to be added.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_delete
+.. _doxid-group___config_1ga2a006b942faa3335a958a7df7bcea17e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_delete(:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config)
+
+Frees a configuration node.
+
+This function frees a configuration node and all its resources.
+
+If the node is a child node, it is removed from the tree before being deleted.
+
+If the node is a compound node, its descendants (the whole subtree) are deleted recursively.
+
+The function is supposed to be called only for locally copied config trees. For the global tree, take the reference via :ref:`snd_config_update_ref <doxid-group___config_1ga568fcf6f45808319725ac066714b25a8>` and free it via :ref:`snd_config_unref <doxid-group___config_1gac87538403cb6f8125468a1af56f42e33>`.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to the configuration node to be deleted.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_config_remove <doxid-conf_8c_1ad4d69b003662e09e8206a7892e849d27>`
+
+.. index:: pair: function; snd_config_delete_compound_members
+.. _doxid-group___config_1gaec120883e56ecb510e064151e0b11d51:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_delete_compound_members(const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config)
+
+Deletes the children of a node.
+
+This function removes and frees all children of a configuration node.
+
+Any compound nodes among the children of *config* are deleted recursively.
+
+After a successful call to this function, *config* is an empty compound node.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -EINVAL
+
+		- *config* is not a compound node.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to the compound configuration node.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_copy
+.. _doxid-group___config_1ga30f30bd27d13fbb3527270b3fc9e1676:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_copy(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** dst,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* src
+		)
+
+Creates a copy of a configuration node.
+
+This function creates a deep copy, i.e., if *src* is a compound node, all children are copied recursively.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -ENOMEM
+
+		- Out of memory.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dst
+
+		- The function puts the handle to the new configuration node at the address specified by *dst*.
+
+	*
+		- src
+
+		- Handle to the source configuration node.
+
+
+
+.. rubric:: Returns:
+
+A non-negative value if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_make
+.. _doxid-group___config_1gac570ecbaba611ccc12bc235a1f4d0181:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_make(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** config,
+		const char* key,
+		:ref:`snd_config_type_t<doxid-group___config_1gaa41083e55d19c7755c5d624030e06887>` type
+		)
+
+Creates a configuration node.
+
+This functions creates a new node of the specified type. The new node has id *id*, which may be ``NULL``.
+
+The value of the new node is zero (for numbers), or ``NULL`` (for strings and pointers), or empty (for compound nodes).
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -ENOMEM
+
+		- Out of memory.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- The function puts the handle to the new node at the address specified by *config*.
+
+	*
+		- id
+
+		- The id of the new node.
+
+	*
+		- type
+
+		- The type of the new node.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_make_integer
+.. _doxid-group___config_1ga838fac581e115574acc3711cad9f5877:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_make_integer(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** config,
+		const char* key
+		)
+
+Creates an integer configuration node.
+
+This function creates a new node of type :ref:`SND_CONFIG_TYPE_INTEGER <doxid-group___config_1ggaa41083e55d19c7755c5d624030e06887aaa9d6e02cd0eb42db96122c925c023e7>` and with value ``0``.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -ENOMEM
+
+		- Out of memory.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- The function puts the handle to the new node at the address specified by *config*.
+
+	*
+		- id
+
+		- The id of the new node.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_config_imake_integer <doxid-group___config_1gafeb0552cbed09a3badbb5e74c7a7973d>`
+
+.. index:: pair: function; snd_config_make_integer64
+.. _doxid-group___config_1ga2c27175c162fe5027e3f1b3d5420afbb:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_make_integer64(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** config,
+		const char* key
+		)
+
+Creates a 64-bit-integer configuration node.
+
+This function creates a new node of type :ref:`SND_CONFIG_TYPE_INTEGER64 <doxid-group___config_1ggaa41083e55d19c7755c5d624030e06887a710f962ebb93e3824ddee2d833f735a2>` and with value ``0``.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -ENOMEM
+
+		- Out of memory.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- The function puts the handle to the new node at the address specified by *config*.
+
+	*
+		- id
+
+		- The id of the new node.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_config_imake_integer64 <doxid-group___config_1ga04cfbfda89dc17c19a5a4076271a4d07>`
+
+.. index:: pair: function; snd_config_make_real
+.. _doxid-group___config_1ga8f175813bfc2556bd08fd580f05d36e6:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_make_real(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** config,
+		const char* key
+		)
+
+Creates a real number configuration node.
+
+This function creates a new node of type :ref:`SND_CONFIG_TYPE_REAL <doxid-group___config_1ggaa41083e55d19c7755c5d624030e06887a0a938daae4006e204150082ab9c73508>` and with value ``0.0``.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -ENOMEM
+
+		- Out of memory.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- The function puts the handle to the new node at the address specified by *config*.
+
+	*
+		- id
+
+		- The id of the new node.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_config_imake_real <doxid-group___config_1ga968e5bb773dfea922b5272636b26e9c2>`
+
+.. index:: pair: function; snd_config_make_string
+.. _doxid-group___config_1ga6764115f489629be027b434c4e323cff:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_make_string(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** config,
+		const char* key
+		)
+
+Creates a string configuration node.
+
+This function creates a new node of type :ref:`SND_CONFIG_TYPE_STRING <doxid-group___config_1ggaa41083e55d19c7755c5d624030e06887a99eed49f50d4f62a7fc0c95301918f49>` and with value ``NULL``.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -ENOMEM
+
+		- Out of memory.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- The function puts the handle to the new node at the address specified by *config*.
+
+	*
+		- id
+
+		- The id of the new node.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_config_imake_string <doxid-group___config_1gaa83035f79027a464bf9d5d31e0a20547>`
+
+.. index:: pair: function; snd_config_make_pointer
+.. _doxid-group___config_1gadbcce71d8d3a78709fc2a78d6f543584:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_make_pointer(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** config,
+		const char* key
+		)
+
+Creates a pointer configuration node.
+
+This function creates a new node of type :ref:`SND_CONFIG_TYPE_POINTER <doxid-group___config_1ggaa41083e55d19c7755c5d624030e06887ab0b5d34e2f16e81d4eb5f933c30158fe>` and with value ``NULL``.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -ENOMEM
+
+		- Out of memory.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- The function puts the handle to the new node at the address specified by *config*.
+
+	*
+		- id
+
+		- The id of the new node.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_config_imake_pointer <doxid-group___config_1gac7c6ce28a676169fff594aa4222705b2>`
+
+.. index:: pair: function; snd_config_make_compound
+.. _doxid-group___config_1ga2ce24133c1d6828e2afe366284c61e01:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_make_compound(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** config,
+		const char* key,
+		int join
+		)
+
+Creates an empty compound configuration node.
+
+This function creates a new empty node of type :ref:`SND_CONFIG_TYPE_COMPOUND <doxid-group___config_1ggaa41083e55d19c7755c5d624030e06887a82b5c1a9dbadaa4e36815fc1f01fc2f7>`.
+
+*join* determines how the compound node's id is printed when the configuration is saved to a text file. For example, if the join flag of compound node ``a`` is zero, the output will look as follows:
+
+.. ref-code-block:: cpp
+
+	a {
+	    b "hello"
+	    c 42
+	}
+
+If, however, the join flag of ``a`` is nonzero, its id will be joined with its children's ids, like this:
+
+.. ref-code-block:: cpp
+
+	a.b "hello"
+	a.c 42
+
+An *empty* compound node with its join flag set would result in no output, i.e., after saving and reloading the configuration file, that compound node would be lost.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -ENOMEM
+
+		- Out of memory.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- The function puts the handle to the new node at the address specified by *config*.
+
+	*
+		- id
+
+		- The id of the new node.
+
+	*
+		- join
+
+		- Join flag.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_imake_integer
+.. _doxid-group___config_1gafeb0552cbed09a3badbb5e74c7a7973d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_imake_integer(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** config,
+		const char* key,
+		const long value
+		)
+
+Creates an integer configuration node with the given initial value.
+
+This function creates a new node of type :ref:`SND_CONFIG_TYPE_INTEGER <doxid-group___config_1ggaa41083e55d19c7755c5d624030e06887aaa9d6e02cd0eb42db96122c925c023e7>` and with value *value*.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -ENOMEM
+
+		- Out of memory.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- The function puts the handle to the new node at the address specified by *config*.
+
+	*
+		- id
+
+		- The id of the new node.
+
+	*
+		- value
+
+		- The initial value of the new node.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_imake_integer64
+.. _doxid-group___config_1ga04cfbfda89dc17c19a5a4076271a4d07:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_imake_integer64(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** config,
+		const char* key,
+		const long long value
+		)
+
+Creates a 64-bit-integer configuration node with the given initial value.
+
+This function creates a new node of type :ref:`SND_CONFIG_TYPE_INTEGER64 <doxid-group___config_1ggaa41083e55d19c7755c5d624030e06887a710f962ebb93e3824ddee2d833f735a2>` and with value *value*.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -ENOMEM
+
+		- Out of memory.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- The function puts the handle to the new node at the address specified by *config*.
+
+	*
+		- id
+
+		- The id of the new node.
+
+	*
+		- value
+
+		- The initial value of the new node.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_imake_real
+.. _doxid-group___config_1ga968e5bb773dfea922b5272636b26e9c2:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_imake_real(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** config,
+		const char* key,
+		const double value
+		)
+
+Creates a real number configuration node with the given initial value.
+
+This function creates a new node of type :ref:`SND_CONFIG_TYPE_REAL <doxid-group___config_1ggaa41083e55d19c7755c5d624030e06887a0a938daae4006e204150082ab9c73508>` and with value *value*.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -ENOMEM
+
+		- Out of memory.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- The function puts the handle to the new node at the address specified by *config*.
+
+	*
+		- id
+
+		- The id of the new node.
+
+	*
+		- value
+
+		- The initial value of the new node.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_imake_string
+.. _doxid-group___config_1gaa83035f79027a464bf9d5d31e0a20547:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_imake_string(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** config,
+		const char* key,
+		const char* ascii
+		)
+
+Creates a string configuration node with the given initial value.
+
+This function creates a new node of type :ref:`SND_CONFIG_TYPE_STRING <doxid-group___config_1ggaa41083e55d19c7755c5d624030e06887a99eed49f50d4f62a7fc0c95301918f49>` and with a copy of the string ``value``.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -ENOMEM
+
+		- Out of memory.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- The function puts the handle to the new node at the address specified by *config*.
+
+	*
+		- id
+
+		- The id of the new node.
+
+	*
+		- value
+
+		- The initial value of the new node. May be ``NULL``.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_imake_pointer
+.. _doxid-group___config_1gac7c6ce28a676169fff594aa4222705b2:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_imake_pointer(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`** config,
+		const char* key,
+		const void* ptr
+		)
+
+Creates a pointer configuration node with the given initial value.
+
+This function creates a new node of type :ref:`SND_CONFIG_TYPE_POINTER <doxid-group___config_1ggaa41083e55d19c7755c5d624030e06887ab0b5d34e2f16e81d4eb5f933c30158fe>` and with value ``value``.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -ENOMEM
+
+		- Out of memory.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- The function puts the handle to the new node at the address specified by *config*.
+
+	*
+		- id
+
+		- The id of the new node.
+
+	*
+		- value
+
+		- The initial value of the new node.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_get_type
+.. _doxid-group___config_1ga6def4c43ce325abaa3ddfba5a4f4d138:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_config_type_t<doxid-group___config_1gaa41083e55d19c7755c5d624030e06887>`
+	snd_config_get_type(const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config)
+
+Returns the type of a configuration node.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to the configuration node.
+
+
+
+.. rubric:: Returns:
+
+The node's type.
+
+.. index:: pair: function; snd_config_set_id
+.. _doxid-group___config_1ga550948931d44695b6d8e8f148f87cb54:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_set_id(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		const char* id
+		)
+
+Sets the id of a configuration node.
+
+This function stores a copy of *id* in the node.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -EEXIST
+
+		- One of *config's* siblings already has the id *id*.
+
+	*
+		- -EINVAL
+
+		- The id of a node with a parent cannot be set to ``NULL``.
+
+	*
+		- -ENOMEM
+
+		- Out of memory.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to the configuration node.
+
+	*
+		- id
+
+		- The new node id, must not be ``NULL``.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_set_integer
+.. _doxid-group___config_1ga6fd3be48221cae9cee9c7245a0804d73:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_set_integer(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		long value
+		)
+
+Changes the value of an integer configuration node.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -EINVAL
+
+		- *config* is not an integer node.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to the configuration node.
+
+	*
+		- value
+
+		- The new value for the node.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_set_integer64
+.. _doxid-group___config_1gafdb63c78c07e11194a28d591b0fbffc4:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_set_integer64(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		long long value
+		)
+
+Changes the value of a 64-bit-integer configuration node.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -EINVAL
+
+		- *config* is not a 64-bit-integer node.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to the configuration node.
+
+	*
+		- value
+
+		- The new value for the node.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_set_real
+.. _doxid-group___config_1ga46c71d5d36c64f0a06ceae956a39fedc:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_set_real(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		double value
+		)
+
+Changes the value of a real-number configuration node.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -EINVAL
+
+		- *config* is not a real-number node.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to the configuration node.
+
+	*
+		- value
+
+		- The new value for the node.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_set_string
+.. _doxid-group___config_1ga0f76f8ad47dce7f90580c8d59c6e44f8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_set_string(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		const char* value
+		)
+
+Changes the value of a string configuration node.
+
+This function deletes the old string in the node and stores a copy of *value* string in the node.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -EINVAL
+
+		- *config* is not a string node.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to the configuration node.
+
+	*
+		- value
+
+		- The new value for the node. May be ``NULL``.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_set_ascii
+.. _doxid-group___config_1gac1810a11f576fe339074502f4fed4a91:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_set_ascii(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		const char* ascii
+		)
+
+Changes the value of a configuration node.
+
+This function changes the node's value to a new value that is parsed from the string *ascii*. *ascii* must not be ``NULL``, not even for a string node.
+
+The node's type does not change, i.e., the string must contain a valid value with the same type as the node's type. For a string node, the node's new value is a copy of *ascii*.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -EINVAL
+
+		- *config* is not a number or string node.
+
+	*
+		- -EINVAL
+
+		- The value in *ascii* cannot be parsed.
+
+	*
+		- -ERANGE
+
+		- The value in *ascii* is too big for the node's type.
+
+	*
+		- -ENOMEM
+
+		- Out of memory.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to the configuration node.
+
+	*
+		- ascii
+
+		- The new value for the node, as an ASCII string.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_set_pointer
+.. _doxid-group___config_1ga037c3bf96326bb6f5dfd340475b34fbf:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_set_pointer(
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		const void* ptr
+		)
+
+Changes the value of a pointer configuration node.
+
+This function does not free the old pointer in the node.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -EINVAL
+
+		- *config* is not a pointer node.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to the configuration node.
+
+	*
+		- value
+
+		- The new value for the node. May be ``NULL``.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_get_id
+.. _doxid-group___config_1gae366751e8ea98aeb69f9ef876f7b949c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_get_id(
+		const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		const char** value
+		)
+
+Returns the id of a configuration node.
+
+The returned string is owned by the configuration node; the application must not modify or delete it, and the string becomes invalid when the node's id changes or when the node is freed.
+
+If the node does not have an id, \*id is set to ``NULL``.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to the configuration node.
+
+	*
+		- id
+
+		- The function puts the pointer to the id string at the address specified by *id*.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_get_integer
+.. _doxid-group___config_1gabfbc36060fd4f5d1d929938443f95559:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_get_integer(
+		const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		long* value
+		)
+
+Returns the value of an integer configuration node.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -EINVAL
+
+		- *config* is not an integer node.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to the configuration node.
+
+	*
+		- ptr
+
+		- The node's value.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_get_integer64
+.. _doxid-group___config_1gaf4d9e68918f7d49d7b4b14ffbe94afc1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_get_integer64(
+		const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		long long* value
+		)
+
+Returns the value of a 64-bit-integer configuration node.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -EINVAL
+
+		- *config* is not a 64-bit-integer node.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to the configuration node.
+
+	*
+		- ptr
+
+		- The node's value.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_get_real
+.. _doxid-group___config_1gad4d23c0bf941527d80aeb6f991bf88c9:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_get_real(
+		const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		double* value
+		)
+
+Returns the value of a real-number configuration node.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -EINVAL
+
+		- *config* is not a real-number node.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to the configuration node.
+
+	*
+		- ptr
+
+		- The node's value.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_get_ireal
+.. _doxid-group___config_1ga79738baffa6fa7722b1027ab84ac61bb:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_get_ireal(
+		const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		double* value
+		)
+
+Returns the value of a real or integer configuration node.
+
+If the node's type is integer or integer64, the value is converted to the ``double`` type on the fly.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -EINVAL
+
+		- *config* is not a number node.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to the configuration node.
+
+	*
+		- ptr
+
+		- The node's value.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_get_string
+.. _doxid-group___config_1ga5ab99983d1d93ddbcde9bb69a1e4f9fb:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_get_string(
+		const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		const char** value
+		)
+
+Returns the value of a string configuration node.
+
+The returned string is owned by the configuration node; the application must not modify or delete it, and the string becomes invalid when the node's value changes or when the node is freed.
+
+The string may be ``NULL``.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -EINVAL
+
+		- *config* is not a string node.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to the configuration node.
+
+	*
+		- ptr
+
+		- The function puts the node's value at the address specified by *ptr*.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_get_ascii
+.. _doxid-group___config_1gaa26f97e098a0dd2cd5e28299b6b6c132:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_get_ascii(
+		const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		char** value
+		)
+
+Returns the value of a configuration node as a string.
+
+This function dynamically allocates the returned string. The application is responsible for deleting it with ``free()`` when it is no longer used.
+
+For a string node with ``NULL`` value, the returned string is ``NULL``.
+
+Supported node types are :ref:`SND_CONFIG_TYPE_INTEGER <doxid-group___config_1ggaa41083e55d19c7755c5d624030e06887aaa9d6e02cd0eb42db96122c925c023e7>`, :ref:`SND_CONFIG_TYPE_INTEGER64 <doxid-group___config_1ggaa41083e55d19c7755c5d624030e06887a710f962ebb93e3824ddee2d833f735a2>`, :ref:`SND_CONFIG_TYPE_REAL <doxid-group___config_1ggaa41083e55d19c7755c5d624030e06887a0a938daae4006e204150082ab9c73508>`, and :ref:`SND_CONFIG_TYPE_STRING <doxid-group___config_1ggaa41083e55d19c7755c5d624030e06887a99eed49f50d4f62a7fc0c95301918f49>`.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -EINVAL
+
+		- *config* is not a (64-bit) integer or real number or string node.
+
+	*
+		- -ENOMEM
+
+		- Out of memory.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to the configuration node.
+
+	*
+		- ascii
+
+		- The function puts the pointer to the returned string at the address specified by *ascii*.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_get_pointer
+.. _doxid-group___config_1ga54868e0fa30458ef1c259772a8e7c6d7:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_get_pointer(
+		const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		const void** value
+		)
+
+Returns the value of a pointer configuration node.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -EINVAL
+
+		- *config* is not a string node.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to the configuration node.
+
+	*
+		- ptr
+
+		- The function puts the node's value at the address specified by *ptr*.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_test_id
+.. _doxid-group___config_1gaeec157fd161a138e402c9bd243bbd408:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_test_id(
+		const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* config,
+		const char* id
+		)
+
+Compares the id of a configuration node to a given string.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to the configuration node.
+
+	*
+		- id
+
+		- ASCII id.
+
+
+
+.. rubric:: Returns:
+
+The same value as the result of the ``strcmp`` function, i.e., less than zero if *config's* id is lexicographically less than *id*, zero if *config's* id is equal to id, greater than zero otherwise.
+
+.. index:: pair: function; snd_config_iterator_first
+.. _doxid-group___config_1gac8965466674c10b9a119d591ed484cef:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_config_iterator_t<doxid-group___config_1ga6c621ab8875a222e1fcb56e9feed6ec6>`
+	snd_config_iterator_first(const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* node)
+
+Returns an iterator pointing to a node's first child.
+
+*config* must be a compound node.
+
+The returned iterator is valid if it is not equal to the return value of :ref:`snd_config_iterator_end <doxid-group___config_1gac08a30bc630481f69feb2170fed4afda>` on *config*.
+
+Use :ref:`snd_config_iterator_entry <doxid-group___config_1gaa91fe1d926d88041ed516a6a7293f606>` to get the handle of the node pointed to.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to a configuration node.
+
+
+
+.. rubric:: Returns:
+
+An iterator pointing to *config's* first child.
+
+.. index:: pair: function; snd_config_iterator_next
+.. _doxid-group___config_1ga10c27ddc83c78680d91a167dd2f0a3cb:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_config_iterator_t<doxid-group___config_1ga6c621ab8875a222e1fcb56e9feed6ec6>`
+	snd_config_iterator_next(const :ref:`snd_config_iterator_t<doxid-group___config_1ga6c621ab8875a222e1fcb56e9feed6ec6>` iterator)
+
+Returns an iterator pointing to the next sibling.
+
+The returned iterator is valid if it is not equal to the return value of :ref:`snd_config_iterator_end <doxid-group___config_1gac08a30bc630481f69feb2170fed4afda>` on the node's parent.
+
+Use :ref:`snd_config_iterator_entry <doxid-group___config_1gaa91fe1d926d88041ed516a6a7293f606>` to get the handle of the node pointed to.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- iterator
+
+		- An iterator pointing to a child configuration node.
+
+
+
+.. rubric:: Returns:
+
+An iterator pointing to the next sibling of *iterator*.
+
+.. index:: pair: function; snd_config_iterator_end
+.. _doxid-group___config_1gac08a30bc630481f69feb2170fed4afda:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_config_iterator_t<doxid-group___config_1ga6c621ab8875a222e1fcb56e9feed6ec6>`
+	snd_config_iterator_end(const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* node)
+
+Returns an iterator that ends a node's children list.
+
+*config* must be a compound node.
+
+The return value can be understood as pointing past the last child of *config*.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- config
+
+		- Handle to a configuration node.
+
+
+
+.. rubric:: Returns:
+
+An iterator that indicates the end of *config's* children list.
+
+.. index:: pair: function; snd_config_iterator_entry
+.. _doxid-group___config_1gaa91fe1d926d88041ed516a6a7293f606:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`*
+	snd_config_iterator_entry(const :ref:`snd_config_iterator_t<doxid-group___config_1ga6c621ab8875a222e1fcb56e9feed6ec6>` iterator)
+
+Returns the configuration node handle pointed to by an iterator.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- iterator
+
+		- A configuration node iterator.
+
+
+
+.. rubric:: Returns:
+
+The configuration node handle pointed to by *iterator*.
+
+.. index:: pair: function; snd_config_get_bool_ascii
+.. _doxid-group___config_1ga11dfab861b537b564f0c76d9b1eb2935:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_get_bool_ascii(const char* ascii)
+
+Gets the boolean value from the given ASCII string.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ascii
+
+		- The string to be parsed.
+
+
+
+.. rubric:: Returns:
+
+0 or 1 if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_get_bool
+.. _doxid-group___config_1gae5d80ee31e779992fd14672fd850a3d1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_get_bool(const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* conf)
+
+Gets the boolean value from a configuration node.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- conf
+
+		- Handle to the configuration node to be parsed.
+
+
+
+.. rubric:: Returns:
+
+0 or 1 if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_get_ctl_iface_ascii
+.. _doxid-group___config_1ga5759c972706da4bd3be35c9336568bfd:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_get_ctl_iface_ascii(const char* ascii)
+
+Gets the control interface index from the given ASCII string.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ascii
+
+		- The string to be parsed.
+
+
+
+.. rubric:: Returns:
+
+The control interface index if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_config_get_ctl_iface
+.. _doxid-group___config_1gaaf1c1ea4801961e3107ca23ba89bd429:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_config_get_ctl_iface(const :ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* conf)
+
+Gets the control interface index from a configuration node.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- conf
+
+		- Handle to the configuration node to be parsed.
+
+
+
+.. rubric:: Returns:
+
+The control interface index if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_names_list
+.. _doxid-group___config_1gaf35b51ab61fd7ea628ab088a1b444aa4:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_names_list(
+		const char* iface,
+		snd_devname_t** list
+		)
+
+This function is unimplemented.
+
+Deprecated Since 1.0.14
+
+.. index:: pair: function; snd_names_list_free
+.. _doxid-group___config_1ga665741321b3c1c3f07a6eeb969406cb8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_names_list_free(snd_devname_t* list)
+
+This function is unimplemented.
+
+Deprecated Since 1.0.14
+
+Macros
+------
+
+.. index:: pair: define; SND_CONFIG_DLSYM_VERSION_EVALUATE
+.. _doxid-group___config_1ga96fd234b2ce9c03a9e82f4e854cc65ce:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_CONFIG_DLSYM_VERSION_EVALUATE
+
+``dlsym`` version for the config evaluate callback.
+
+.. index:: pair: define; SND_CONFIG_DLSYM_VERSION_HOOK
+.. _doxid-group___config_1ga948b35b3df554e2e06ba5bb9f5452704:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_CONFIG_DLSYM_VERSION_HOOK
+
+``dlsym`` version for the config hook callback.
+
+.. index:: pair: define; snd_config_for_each
+.. _doxid-group___config_1gac3f21333e1f9b602cad9b06cb418fa80:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define snd_config_for_each( \
+		pos, \
+		next, \
+		node \
+		)
+
+Helper macro to iterate over the children of a compound node.
+
+Use this macro like a ``for`` statement, e.g.:
+
+.. ref-code-block:: cpp
+
+	snd_config_iterator_t pos, next;
+	snd_config_for_each(pos, next, node) {
+	    snd_config_t *entry = snd_config_iterator_entry(pos);
+	    ...
+	}
+
+This macro allows deleting or removing the current node.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pos
+
+		- Iterator variable for the current node.
+
+	*
+		- next
+
+		- Temporary iterator variable for the next node.
+
+	*
+		- node
+
+		- Handle to the compound configuration node to iterate over.
+

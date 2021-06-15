@@ -1,0 +1,421 @@
+.. index:: pair: group; Input Interface
+.. _doxid-group___input:
+
+Input Interface
+===============
+
+.. toctree::
+	:hidden:
+
+	enum_snd_input_type_t.rst
+
+Overview
+~~~~~~~~
+
+The input functions present an interface similar to the stdio functions on top of different underlying input sources. :ref:`More...<details-group___input>`
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef struct _snd_input :ref:`snd_input_t<doxid-group___input_1ga39165553a2907c5a27f325e3ce4e8301>`;
+
+	// enums
+
+	enum :ref:`snd_input_type_t<doxid-group___input_1ga95856616f8604ef37e7f5e6738ffad8a>`;
+
+	// global functions
+
+	int
+	:ref:`snd_input_stdio_open<doxid-group___input_1ga68ff91aaa391b39f5a3082e202fdd2ff>`(
+		:ref:`snd_input_t<doxid-group___input_1ga39165553a2907c5a27f325e3ce4e8301>`** inputp,
+		const char* file,
+		const char* mode
+		);
+
+	int
+	:ref:`snd_input_stdio_attach<doxid-group___input_1ga70e6704164f80072bfa118160ff81d54>`(
+		:ref:`snd_input_t<doxid-group___input_1ga39165553a2907c5a27f325e3ce4e8301>`** inputp,
+		FILE* fp,
+		int _close
+		);
+
+	int
+	:ref:`snd_input_buffer_open<doxid-group___input_1ga3c7947884b1caf50117bcecd23a3cc22>`(
+		:ref:`snd_input_t<doxid-group___input_1ga39165553a2907c5a27f325e3ce4e8301>`** inputp,
+		const char* buffer,
+		ssize_t size
+		);
+
+	int
+	:ref:`snd_input_close<doxid-group___input_1ga4c86d6c288e2b1be3fe2efca6859cdd6>`(:ref:`snd_input_t<doxid-group___input_1ga39165553a2907c5a27f325e3ce4e8301>`* input);
+
+	int
+	:ref:`snd_input_scanf<doxid-group___input_1ga079ba3d8ad9cfba4003c28520c2f8121>`(
+		:ref:`snd_input_t<doxid-group___input_1ga39165553a2907c5a27f325e3ce4e8301>`* input,
+		const char* format,
+		...
+		);
+
+	char*
+	:ref:`snd_input_gets<doxid-group___input_1gabc17742247f4733f1891c2caec453988>`(
+		:ref:`snd_input_t<doxid-group___input_1ga39165553a2907c5a27f325e3ce4e8301>`* input,
+		char* str,
+		size_t size
+		);
+
+	int
+	:ref:`snd_input_getc<doxid-group___input_1gafb9476884661a2d685e59e58740cc9e6>`(:ref:`snd_input_t<doxid-group___input_1ga39165553a2907c5a27f325e3ce4e8301>`* input);
+
+	int
+	:ref:`snd_input_ungetc<doxid-group___input_1gad665d319d2d0a4127110c141ef99a02b>`(
+		:ref:`snd_input_t<doxid-group___input_1ga39165553a2907c5a27f325e3ce4e8301>`* input,
+		int c
+		);
+
+.. _details-group___input:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+The input functions present an interface similar to the stdio functions on top of different underlying input sources.
+
+The :ref:`snd_config_load <doxid-group___config_1ga51f79d1f24a519e126415c72210525b0>` function uses such an input handle to be able to load configurations not only from standard files but also from other sources, e.g. from memory buffers.
+
+Typedefs
+--------
+
+.. index:: pair: typedef; snd_input_t
+.. _doxid-group___input_1ga39165553a2907c5a27f325e3ce4e8301:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct _snd_input snd_input_t
+
+Internal structure for an input object.
+
+The ALSA library uses a pointer to this structure as a handle to an input object. Applications don't access its contents directly.
+
+Global Functions
+----------------
+
+.. index:: pair: function; snd_input_stdio_open
+.. _doxid-group___input_1ga68ff91aaa391b39f5a3082e202fdd2ff:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_input_stdio_open(
+		:ref:`snd_input_t<doxid-group___input_1ga39165553a2907c5a27f325e3ce4e8301>`** inputp,
+		const char* file,
+		const char* mode
+		)
+
+Creates a new input object reading from a file.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- inputp
+
+		- The functions puts the pointer to the new input object at the address specified by ``inputp``.
+
+	*
+		- file
+
+		- The name of the file to read from.
+
+	*
+		- mode
+
+		- The open mode, like ``fopen(3)``.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_input_stdio_attach
+.. _doxid-group___input_1ga70e6704164f80072bfa118160ff81d54:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_input_stdio_attach(
+		:ref:`snd_input_t<doxid-group___input_1ga39165553a2907c5a27f325e3ce4e8301>`** inputp,
+		FILE* fp,
+		int _close
+		)
+
+Creates a new input object using an existing stdio ``FILE`` pointer.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- inputp
+
+		- The function puts the pointer to the new input object at the address specified by ``inputp``.
+
+	*
+		- fp
+
+		- The ``FILE`` pointer to read from. Reading begins at the current file position.
+
+	*
+		- _close
+
+		- Close flag. Set this to 1 if :ref:`snd_input_close <doxid-group___input_1ga4c86d6c288e2b1be3fe2efca6859cdd6>` should close ``fp`` by calling ``fclose``.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_input_buffer_open
+.. _doxid-group___input_1ga3c7947884b1caf50117bcecd23a3cc22:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_input_buffer_open(
+		:ref:`snd_input_t<doxid-group___input_1ga39165553a2907c5a27f325e3ce4e8301>`** inputp,
+		const char* buffer,
+		ssize_t size
+		)
+
+Creates a new input object from a memory buffer.
+
+This functions creates a copy of the input buffer, so the application is not required to preserve the buffer after this function has been called.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- inputp
+
+		- The function puts the pointer to the new input object at the address specified by ``inputp``.
+
+	*
+		- buf
+
+		- Address of the input buffer.
+
+	*
+		- size
+
+		- Size of the input buffer.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_input_close
+.. _doxid-group___input_1ga4c86d6c288e2b1be3fe2efca6859cdd6:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_input_close(:ref:`snd_input_t<doxid-group___input_1ga39165553a2907c5a27f325e3ce4e8301>`* input)
+
+Closes an input handle.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- input
+
+		- The input handle to be closed.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_input_scanf
+.. _doxid-group___input_1ga079ba3d8ad9cfba4003c28520c2f8121:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_input_scanf(
+		:ref:`snd_input_t<doxid-group___input_1ga39165553a2907c5a27f325e3ce4e8301>`* input,
+		const char* format,
+		...
+		)
+
+Reads formatted input (like ``fscanf(3)``) from an input handle.
+
+Bug Reading from a memory buffer doesn't work.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- input
+
+		- The input handle.
+
+	*
+		- format
+
+		- Format string in ``fscanf`` format.
+
+	*
+		- ...
+
+		- Other ``fscanf`` arguments.
+
+
+
+.. rubric:: Returns:
+
+The number of input items assigned, or ``EOF``.
+
+.. index:: pair: function; snd_input_gets
+.. _doxid-group___input_1gabc17742247f4733f1891c2caec453988:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	char*
+	snd_input_gets(
+		:ref:`snd_input_t<doxid-group___input_1ga39165553a2907c5a27f325e3ce4e8301>`* input,
+		char* str,
+		size_t size
+		)
+
+Reads a line from an input handle (like ``fgets(3)``).
+
+Like ``fgets``, the returned string is zero-terminated, and contains the new-line character ``'\n'`` if the line fits into the buffer.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- input
+
+		- The input handle.
+
+	*
+		- str
+
+		- Address of the destination buffer.
+
+	*
+		- size
+
+		- The size of the destination buffer.
+
+
+
+.. rubric:: Returns:
+
+Pointer to the buffer if successful, otherwise ``NULL``.
+
+.. index:: pair: function; snd_input_getc
+.. _doxid-group___input_1gafb9476884661a2d685e59e58740cc9e6:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_input_getc(:ref:`snd_input_t<doxid-group___input_1ga39165553a2907c5a27f325e3ce4e8301>`* input)
+
+Reads a character from an input handle (like ``fgetc(3)``).
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- input
+
+		- The input handle.
+
+
+
+.. rubric:: Returns:
+
+The character read, or ``EOF`` on end of file or error.
+
+.. index:: pair: function; snd_input_ungetc
+.. _doxid-group___input_1gad665d319d2d0a4127110c141ef99a02b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_input_ungetc(
+		:ref:`snd_input_t<doxid-group___input_1ga39165553a2907c5a27f325e3ce4e8301>`* input,
+		int c
+		)
+
+Puts the last character read back to an input handle (like ``ungetc(3)``).
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- input
+
+		- The input handle.
+
+	*
+		- c
+
+		- The character to push back.
+
+
+
+.. rubric:: Returns:
+
+The character pushed back, or ``EOF`` on error.
+

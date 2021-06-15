@@ -1,0 +1,317 @@
+.. index:: pair: group; Pool Cleanup Functions
+.. _doxid-group___pool_cleanup:
+
+Pool Cleanup Functions
+======================
+
+.. toctree::
+	:hidden:
+
+Overview
+~~~~~~~~
+
+Cleanups are performed in the reverse order they were registered. :ref:`More...<details-group___pool_cleanup>`
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// global functions
+
+	void
+	:ref:`apr_pool_cleanup_register<doxid-group___pool_cleanup_1ga6bdb28224dfe08160cbe3ba6b22dcbd7>`(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		const void* data,
+		:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`(*)(void*) plain_cleanup,
+		:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`(*)(void*) child_cleanup
+		);
+
+	void
+	:ref:`apr_pool_pre_cleanup_register<doxid-group___pool_cleanup_1ga64114542989d8872c7fd3c62f2a68678>`(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		const void* data,
+		:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`(*)(void*) plain_cleanup
+		);
+
+	void
+	:ref:`apr_pool_cleanup_kill<doxid-group___pool_cleanup_1gadc59bf32a0302e34fa0a2663f6e48a44>`(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		const void* data,
+		:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`(*)(void*) cleanup
+		);
+
+	void
+	:ref:`apr_pool_child_cleanup_set<doxid-group___pool_cleanup_1ga7197fa6b43d9c5e99de17e0e900989ea>`(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		const void* data,
+		:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`(*)(void*) plain_cleanup,
+		:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`(*)(void*) child_cleanup
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_pool_cleanup_run<doxid-group___pool_cleanup_1gabf3913823af6015895a726ab738eaac5>`(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		void* data,
+		:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`(*)(void*) cleanup
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_pool_cleanup_null<doxid-group___pool_cleanup_1gaa211acee585df08f396a50b0ea489b02>`(void* data);
+
+	void
+	:ref:`apr_pool_cleanup_for_exec<doxid-group___pool_cleanup_1ga1726cc585bda8997fcb0828f884be55b>`(void);
+
+.. _details-group___pool_cleanup:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+Cleanups are performed in the reverse order they were registered. That is: Last In, First Out. A cleanup function can safely allocate memory from the pool that is being cleaned up. It can also safely register additional cleanups which will be run LIFO, directly after the current cleanup terminates. Cleanups have to take caution in calling functions that create subpools. Subpools, created during cleanup will NOT automatically be cleaned up. In other words, cleanups are to clean up after themselves.
+
+Global Functions
+----------------
+
+.. index:: pair: function; apr_pool_cleanup_register
+.. _doxid-group___pool_cleanup_1ga6bdb28224dfe08160cbe3ba6b22dcbd7:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_pool_cleanup_register(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		const void* data,
+		:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`(*)(void*) plain_cleanup,
+		:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`(*)(void*) child_cleanup
+		)
+
+Register a function to be called when a pool is cleared or destroyed
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- The pool to register the cleanup with
+
+	*
+		- data
+
+		- The data to pass to the cleanup function.
+
+	*
+		- plain_cleanup
+
+		- The function to call when the pool is cleared or destroyed
+
+	*
+		- child_cleanup
+
+		- The function to call when a child process is about to exec - this function is called in the child, obviously!
+
+.. index:: pair: function; apr_pool_pre_cleanup_register
+.. _doxid-group___pool_cleanup_1ga64114542989d8872c7fd3c62f2a68678:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_pool_pre_cleanup_register(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		const void* data,
+		:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`(*)(void*) plain_cleanup
+		)
+
+Register a function to be called when a pool is cleared or destroyed.
+
+Unlike apr_pool_cleanup_register which registers a cleanup that is called AFTER all subpools are destroyed, this function registers a function that will be called before any of the subpools are destroyed.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- The pool to register the cleanup with
+
+	*
+		- data
+
+		- The data to pass to the cleanup function.
+
+	*
+		- plain_cleanup
+
+		- The function to call when the pool is cleared or destroyed
+
+.. index:: pair: function; apr_pool_cleanup_kill
+.. _doxid-group___pool_cleanup_1gadc59bf32a0302e34fa0a2663f6e48a44:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_pool_cleanup_kill(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		const void* data,
+		:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`(*)(void*) cleanup
+		)
+
+Remove a previously registered cleanup function.
+
+The cleanup most recently registered with *p* having the same values of *data* and *cleanup* will be removed.
+
+For some strange reason only the plain_cleanup is handled by this function
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- The pool to remove the cleanup from
+
+	*
+		- data
+
+		- The data of the registered cleanup
+
+	*
+		- cleanup
+
+		- The function to remove from cleanup
+
+.. index:: pair: function; apr_pool_child_cleanup_set
+.. _doxid-group___pool_cleanup_1ga7197fa6b43d9c5e99de17e0e900989ea:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_pool_child_cleanup_set(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		const void* data,
+		:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`(*)(void*) plain_cleanup,
+		:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`(*)(void*) child_cleanup
+		)
+
+Replace the child cleanup function of a previously registered cleanup.
+
+The cleanup most recently registered with *p* having the same values of *data* and *plain_cleanup* will have the registered child cleanup function replaced with *child_cleanup*.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- The pool of the registered cleanup
+
+	*
+		- data
+
+		- The data of the registered cleanup
+
+	*
+		- plain_cleanup
+
+		- The plain cleanup function of the registered cleanup
+
+	*
+		- child_cleanup
+
+		- The function to register as the child cleanup
+
+.. index:: pair: function; apr_pool_cleanup_run
+.. _doxid-group___pool_cleanup_1gabf3913823af6015895a726ab738eaac5:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_pool_cleanup_run(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		void* data,
+		:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`(*)(void*) cleanup
+		)
+
+Run the specified cleanup function immediately and unregister it.
+
+The cleanup most recently registered with *p* having the same values of *data* and *cleanup* will be removed and *cleanup* will be called with *data* as the argument.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- The pool to remove the cleanup from
+
+	*
+		- data
+
+		- The data to remove from cleanup
+
+	*
+		- cleanup
+
+		- The function to remove from cleanup
+
+.. index:: pair: function; apr_pool_cleanup_null
+.. _doxid-group___pool_cleanup_1gaa211acee585df08f396a50b0ea489b02:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_pool_cleanup_null(void* data)
+
+An empty cleanup function.
+
+Passed to :ref:`apr_pool_cleanup_register() <doxid-group___pool_cleanup_1ga6bdb28224dfe08160cbe3ba6b22dcbd7>` when no cleanup is required.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- data
+
+		- The data to cleanup, will not be used by this function.
+
+.. index:: pair: function; apr_pool_cleanup_for_exec
+.. _doxid-group___pool_cleanup_1ga1726cc585bda8997fcb0828f884be55b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_pool_cleanup_for_exec(void)
+
+Run all registered child cleanups, in preparation for an exec() call in a forked child close files, etc., but *don't* flush I/O buffers, *don't* wait for subprocesses, and *don't* free any memory.
+

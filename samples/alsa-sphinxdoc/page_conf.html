@@ -1,0 +1,320 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Configuration files &#8212; ALSA Library Documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/target-highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Control interface" href="page_control.html" />
+    <link rel="prev" title="Bug List" href="page_bug.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="page_control.html" title="Control interface"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="page_bug.html" title="Bug List"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ALSA Library Documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Configuration files</a><ul>
+<li><a class="reference internal" href="#whitespace">Whitespace</a></li>
+<li><a class="reference internal" href="#line-continuation-with">Line continuation with</a></li>
+<li><a class="reference internal" href="#comments">Comments</a></li>
+<li><a class="reference internal" href="#including-configuration-files">Including configuration files</a></li>
+<li><a class="reference internal" href="#punctuators">Punctuators</a><ul>
+<li><a class="reference internal" href="#braces">Braces</a></li>
+<li><a class="reference internal" href="#brackets">Brackets</a></li>
+<li><a class="reference internal" href="#comma-and-semicolon">Comma and semicolon</a></li>
+<li><a class="reference internal" href="#equal-sign">Equal sign</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#assignments">Assignments</a><ul>
+<li><a class="reference internal" href="#single-assignments">Single assignments</a></li>
+<li><a class="reference internal" href="#compound-assignments-definitions-using-braces">Compound assignments (definitions using braces)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#compound-assignments-one-key-definitions">Compound assignments (one key definitions)</a><ul>
+<li><a class="reference internal" href="#array-assignments-definitions-using-brackets">Array assignments (definitions using brackets)</a></li>
+<li><a class="reference internal" href="#array-assignments-one-key-definitions">Array assignments (one key definitions)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#operation-modes-for-parsing-nodes">Operation modes for parsing nodes</a></li>
+<li><a class="reference internal" href="#syntax-summary">Syntax summary</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="page_bug.html"
+                        title="previous chapter">Bug List</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="page_control.html"
+                        title="next chapter">Control interface</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="configuration-files">
+<span id="doxid-conf"></span><span id="index-0"></span><h1>Configuration files</h1>
+<p>Configuration files use a simple format allowing modern data description like nesting and array assignments.</p>
+<div class="section" id="whitespace">
+<span id="doxid-conf-1conf-whitespace"></span><h2>Whitespace</h2>
+<p>Whitespace is the collective name given to spaces (blanks), horizontal and vertical tabs, newline characters, and comments. Whitespace can indicate where configuration tokens start and end, but beyond this function, any surplus whitespace is discarded. For example, the two sequences</p>
+<pre class="highlight literal-block">
+<span></span><span class="n">a</span> <span class="mi">1</span> <span class="n">b</span> <span class="mi">2</span>
+</pre>
+<p>and</p>
+<pre class="highlight literal-block">
+<span></span><span class="n">a</span> <span class="mi">1</span>
+   <span class="n">b</span> <span class="mi">2</span>
+</pre>
+<p>are lexically equivalent and parse identically to give the four tokens:</p>
+<pre class="highlight literal-block">
+<span></span><span class="n">a</span>
+<span class="mi">1</span>
+<span class="n">b</span>
+<span class="mi">2</span>
+</pre>
+<p>The ASCII characters representing whitespace can occur within literal strings, in which case they are protected from the normal parsing process (they remain as part of the string). For example:</p>
+<pre class="highlight literal-block">
+<span></span><span class="n">name</span> <span class="s">&quot;John Smith&quot;</span>
+</pre>
+<p>parses to two tokens, including the single literal-string token “John
+Smith”.</p>
+</div>
+<div class="section" id="line-continuation-with">
+<span id="doxid-conf-1conf-linesplicing"></span><h2>Line continuation with</h2>
+<p>A special case occurs if a newline character in a string is preceded by a backslash (). The backslash and the new line are both discarded, allowing two physical lines of text to be treated as one unit.</p>
+<pre class="highlight literal-block">
+<span></span><span class="s">&quot;John \</span>
+<span class="s">Smith&quot;</span>
+</pre>
+<p>is parsed as “John Smith”.</p>
+</div>
+<div class="section" id="comments">
+<span id="doxid-conf-1conf-comments"></span><h2>Comments</h2>
+<p>A single-line comment begins with the character #. The comment can start at any position, and extends to the end of the line.</p>
+<pre class="highlight literal-block">
+<span></span><span class="n">a</span> <span class="mi">1</span>  <span class="err">#</span> <span class="k">this</span> <span class="n">is</span> <span class="n">a</span> <span class="n">comment</span>
+</pre>
+</div>
+<div class="section" id="including-configuration-files">
+<span id="doxid-conf-1conf-include"></span><h2>Including configuration files</h2>
+<p>To include another configuration file, write the file name in angle brackets. The prefix <code class="docutils literal notranslate"><span class="pre">confdir:</span></code> will reference the global configuration directory.</p>
+<pre class="highlight literal-block">
+<span></span><span class="o">&lt;/</span><span class="n">etc</span><span class="o">/</span><span class="n">alsa1</span><span class="p">.</span><span class="n">conf</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="nl">confdir</span><span class="p">:</span><span class="n">pcm</span><span class="o">/</span><span class="n">surround</span><span class="p">.</span><span class="n">conf</span><span class="o">&gt;</span>
+</pre>
+</div>
+<div class="section" id="punctuators">
+<span id="doxid-conf-1conf-punctuators"></span><h2>Punctuators</h2>
+<p>The configuration punctuators (also known as separators) are:</p>
+<pre class="highlight literal-block">
+<span></span><span class="p">{}</span> <span class="p">[]</span> <span class="p">,</span> <span class="p">;</span> <span class="o">=</span> <span class="p">.</span> <span class="sc">&#39; &quot; new-line form-feed carriage-return whitespace</span>
+</pre>
+<div class="section" id="braces">
+<span id="doxid-conf-1conf-braces"></span><h3>Braces</h3>
+<p>Opening and closing braces { } indicate the start and end of a compound statement:</p>
+<pre class="highlight literal-block">
+<span></span><span class="n">a</span> <span class="p">{</span>
+  <span class="n">b</span> <span class="mi">1</span>
+<span class="p">}</span>
+</pre>
+</div>
+<div class="section" id="brackets">
+<span id="doxid-conf-1conf-brackets"></span><h3>Brackets</h3>
+<p>Opening and closing brackets indicate a single array definition. The identifiers are automatically generated starting with zero.</p>
+<pre class="highlight literal-block">
+<span></span><span class="n">a</span> <span class="p">[</span>
+  <span class="s">&quot;first&quot;</span>
+  <span class="s">&quot;second&quot;</span>
+<span class="p">]</span>
+</pre>
+<p>The above code is equal to</p>
+<pre class="highlight literal-block">
+<span></span><span class="n">a</span><span class="mf">.0</span> <span class="s">&quot;first&quot;</span>
+<span class="n">a</span><span class="mf">.1</span> <span class="s">&quot;second&quot;</span>
+</pre>
+</div>
+<div class="section" id="comma-and-semicolon">
+<span id="doxid-conf-1conf-comma-semicolon"></span><h3>Comma and semicolon</h3>
+<p>The comma (,) or semicolon (;) can separate value assignments. It is not strictly required to use these separators because whitespace suffices to separate tokens.</p>
+<pre class="highlight literal-block">
+<span></span><span class="n">a</span> <span class="mi">1</span><span class="p">;</span>
+<span class="n">b</span> <span class="mi">1</span><span class="p">,</span>
+</pre>
+</div>
+<div class="section" id="equal-sign">
+<span id="doxid-conf-1conf-equal"></span><h3>Equal sign</h3>
+<p>The equal sign (=) can separate variable declarations from initialization lists:</p>
+<pre class="highlight literal-block">
+<span></span><span class="n">a</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">b</span><span class="o">=</span><span class="mi">2</span>
+</pre>
+<p>Using equal signs is not required because whitespace suffices to separate tokens.</p>
+</div>
+</div>
+<div class="section" id="assignments">
+<span id="doxid-conf-1conf-assigns"></span><h2>Assignments</h2>
+<p>The configuration file defines id (key) and value pairs. The id (key) can be composed from ASCII digits, characters from a to z and A to Z, and the underscore (_). The value can be either a string, an integer, a real number, or a compound statement.</p>
+<div class="section" id="single-assignments">
+<span id="doxid-conf-1conf-single"></span><h3>Single assignments</h3>
+<pre class="highlight literal-block">
+<span></span><span class="n">a</span> <span class="mi">1</span> <span class="err">#</span> <span class="n">is</span> <span class="n">equal</span> <span class="n">to</span>
+<span class="n">a</span><span class="o">=</span><span class="mi">1</span> <span class="err">#</span> <span class="n">is</span> <span class="n">equal</span> <span class="n">to</span>
+<span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>    <span class="err">#</span> <span class="n">is</span> <span class="n">equal</span> <span class="n">to</span>
+<span class="n">a</span> <span class="mi">1</span><span class="p">,</span>
+</pre>
+</div>
+<div class="section" id="compound-assignments-definitions-using-braces">
+<span id="doxid-conf-1conf-compound"></span><h3>Compound assignments (definitions using braces)</h3>
+<pre class="highlight literal-block">
+<span></span><span class="n">a</span> <span class="p">{</span>
+  <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="p">}</span>
+<span class="n">a</span><span class="o">=</span><span class="p">{</span>
+  <span class="n">b</span> <span class="mi">1</span><span class="p">,</span>
+<span class="p">}</span>
+</pre>
+</div>
+</div>
+<div class="section" id="compound-assignments-one-key-definitions">
+<span id="doxid-conf-1conf-compound1"></span><h2>Compound assignments (one key definitions)</h2>
+<pre class="highlight literal-block">
+<span></span><span class="n">a</span><span class="p">.</span><span class="n">b</span> <span class="mi">1</span>
+<span class="n">a</span><span class="p">.</span><span class="n">b</span><span class="o">=</span><span class="mi">1</span>
+</pre>
+<div class="section" id="array-assignments-definitions-using-brackets">
+<span id="doxid-conf-1conf-array"></span><h3>Array assignments (definitions using brackets)</h3>
+<pre class="highlight literal-block">
+<span></span><span class="n">a</span> <span class="p">[</span>
+  <span class="s">&quot;first&quot;</span>
+  <span class="s">&quot;second&quot;</span>
+<span class="p">]</span>
+</pre>
+</div>
+<div class="section" id="array-assignments-one-key-definitions">
+<span id="doxid-conf-1conf-array1"></span><h3>Array assignments (one key definitions)</h3>
+<pre class="highlight literal-block">
+<span></span><span class="n">a</span><span class="mf">.0</span> <span class="s">&quot;first&quot;</span>
+<span class="n">a</span><span class="mf">.1</span> <span class="s">&quot;second&quot;</span>
+</pre>
+</div>
+</div>
+<div class="section" id="operation-modes-for-parsing-nodes">
+<span id="doxid-conf-1conf-mode"></span><h2>Operation modes for parsing nodes</h2>
+<p>By default, the node operation mode is ‘merge+create’, i.e., if a configuration node is not present a new one is created, otherwise the latest assignment is merged (if possible - type checking). The ‘merge+create’ operation mode is specified with the prefix character plus (+).</p>
+<p>The operation mode ‘merge’ merges the node with the old one (which must exist). Type checking is done, so strings cannot be assigned to integers and so on. This mode is specified with the prefix character minus (-).</p>
+<p>The operation mode ‘do not override’ ignores a new configuration node if a configuration node with the same name exists. This mode is specified with the prefix character question mark (?).</p>
+<p>The operation mode ‘override’ always overrides the old configuration node with new contents. This mode is specified with the prefix character exclamation mark (!).</p>
+<pre class="highlight literal-block">
+<span></span><span class="n">defaults</span><span class="p">.</span><span class="n">pcm</span><span class="p">.</span><span class="o">!</span><span class="n">device</span> <span class="mi">1</span>
+</pre>
+</div>
+<div class="section" id="syntax-summary">
+<span id="doxid-conf-1conf-syntax-summary"></span><h2>Syntax summary</h2>
+<pre class="highlight literal-block">
+<span></span><span class="cp"># Configuration file syntax</span>
+
+<span class="cp"># Include a new configuration file</span>
+<span class="o">&lt;</span><span class="n">filename</span><span class="o">&gt;</span>
+
+<span class="cp"># Simple assignment</span>
+<span class="n">name</span> <span class="p">[</span><span class="o">=</span><span class="p">]</span> <span class="n">value</span> <span class="p">[,</span><span class="o">|</span><span class="p">;]</span>
+
+<span class="cp"># Compound assignment (first style)</span>
+<span class="n">name</span> <span class="p">[</span><span class="o">=</span><span class="p">]</span> <span class="p">{</span>
+        <span class="n">name1</span> <span class="p">[</span><span class="o">=</span><span class="p">]</span> <span class="n">value</span> <span class="p">[,</span><span class="o">|</span><span class="p">;]</span>
+        <span class="p">...</span>
+<span class="p">}</span>
+
+<span class="cp"># Compound assignment (second style)</span>
+<span class="n">name</span><span class="p">.</span><span class="n">name1</span> <span class="p">[</span><span class="o">=</span><span class="p">]</span> <span class="n">value</span> <span class="p">[,</span><span class="o">|</span><span class="p">;]</span>
+
+<span class="cp"># Array assignment (first style)</span>
+<span class="n">name</span> <span class="p">[</span>
+        <span class="n">value0</span> <span class="p">[,</span><span class="o">|</span><span class="p">;]</span>
+        <span class="n">value1</span> <span class="p">[,</span><span class="o">|</span><span class="p">;]</span>
+        <span class="p">...</span>
+<span class="p">]</span>
+
+<span class="cp"># Array assignment (second style)</span>
+<span class="n">name</span><span class="mf">.0</span> <span class="p">[</span><span class="o">=</span><span class="p">]</span> <span class="n">value0</span> <span class="p">[,</span><span class="o">|</span><span class="p">;]</span>
+<span class="n">name</span><span class="mf">.1</span> <span class="p">[</span><span class="o">=</span><span class="p">]</span> <span class="n">value1</span> <span class="p">[,</span><span class="o">|</span><span class="p">;]</span>
+</pre>
+</div>
+<div class="section" id="references">
+<span id="doxid-conf-1conf-syntax-ref"></span><h2>References</h2>
+<p><a class="reference internal" href="page_confarg.html#doxid-confarg"><span class="std std-ref">Runtime arguments in configuration files</span></a> <a class="reference internal" href="page_conffunc.html#doxid-conffunc"><span class="std std-ref">Runtime functions in configuration files</span></a> <a class="reference internal" href="page_confhooks.html#doxid-confhooks"><span class="std std-ref">Hooks in configuration files</span></a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="page_control.html" title="Control interface"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="page_bug.html" title="Bug List"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ALSA Library Documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 1998-2017, ALSA Library Maintainers.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    </div>
+  </body>
+</html>

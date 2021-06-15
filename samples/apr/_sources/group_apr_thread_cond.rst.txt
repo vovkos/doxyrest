@@ -1,0 +1,264 @@
+.. index:: pair: group; Condition Variable Routines
+.. _doxid-group__apr__thread__cond:
+
+Condition Variable Routines
+===========================
+
+.. toctree::
+	:hidden:
+
+Overview
+~~~~~~~~
+
+
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef struct :ref:`apr_thread_cond_t<doxid-group__apr__thread__cond_1gae8f918d38bf1c58bc09670eee456ae5e>` :ref:`apr_thread_cond_t<doxid-group__apr__thread__cond_1gae8f918d38bf1c58bc09670eee456ae5e>`;
+
+	// global functions
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_thread_cond_create<doxid-group__apr__thread__cond_1gab39e8b722d46d23466e9e346ada85a7f>`(
+		:ref:`apr_thread_cond_t<doxid-group__apr__thread__cond_1gae8f918d38bf1c58bc09670eee456ae5e>`** cond,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_thread_cond_wait<doxid-group__apr__thread__cond_1ga789719a5f02bdab8b8abbc8bddd0406b>`(
+		:ref:`apr_thread_cond_t<doxid-group__apr__thread__cond_1gae8f918d38bf1c58bc09670eee456ae5e>`* cond,
+		:ref:`apr_thread_mutex_t<doxid-group__apr__thread__mutex_1ga95712060ba3a192036416e1ccef1db75>`* mutex
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_thread_cond_timedwait<doxid-group__apr__thread__cond_1ga67f2feecb7fa1929cc9b354dafd00306>`(
+		:ref:`apr_thread_cond_t<doxid-group__apr__thread__cond_1gae8f918d38bf1c58bc09670eee456ae5e>`* cond,
+		:ref:`apr_thread_mutex_t<doxid-group__apr__thread__mutex_1ga95712060ba3a192036416e1ccef1db75>`* mutex,
+		:ref:`apr_interval_time_t<doxid-group__apr__time_1gaae2129185a395cc393f76fabf4f43e47>` timeout
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_thread_cond_signal<doxid-group__apr__thread__cond_1gadf7ad6c2731bc6128f969d3efc7ff5eb>`(:ref:`apr_thread_cond_t<doxid-group__apr__thread__cond_1gae8f918d38bf1c58bc09670eee456ae5e>`* cond);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_thread_cond_broadcast<doxid-group__apr__thread__cond_1gafbbedd2a07629fe3186343035ae83152>`(:ref:`apr_thread_cond_t<doxid-group__apr__thread__cond_1gae8f918d38bf1c58bc09670eee456ae5e>`* cond);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_thread_cond_destroy<doxid-group__apr__thread__cond_1ga049e646e23c670f3a79fe25401b9c1b0>`(:ref:`apr_thread_cond_t<doxid-group__apr__thread__cond_1gae8f918d38bf1c58bc09670eee456ae5e>`* cond);
+
+	:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`*
+	:ref:`apr_thread_cond_pool_get<doxid-group__apr__thread__cond_1gafc2d7f2907eb12e5543c971a4c0140ee>`(const :ref:`apr_thread_cond_t<doxid-group__apr__thread__cond_1gae8f918d38bf1c58bc09670eee456ae5e>`* thethread_cond);
+
+.. _details-group__apr__thread__cond:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+Typedefs
+--------
+
+.. index:: pair: typedef; apr_thread_cond_t
+.. _doxid-group__apr__thread__cond_1gae8f918d38bf1c58bc09670eee456ae5e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_thread_cond_t<doxid-group__apr__thread__cond_1gae8f918d38bf1c58bc09670eee456ae5e>` apr_thread_cond_t
+
+Opaque structure for thread condition variables
+
+Global Functions
+----------------
+
+.. index:: pair: function; apr_thread_cond_create
+.. _doxid-group__apr__thread__cond_1gab39e8b722d46d23466e9e346ada85a7f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_thread_cond_create(
+		:ref:`apr_thread_cond_t<doxid-group__apr__thread__cond_1gae8f918d38bf1c58bc09670eee456ae5e>`** cond,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		)
+
+Note: destroying a condition variable (or likewise, destroying or clearing the pool from which a condition variable was allocated) if any threads are blocked waiting on it gives undefined results. Create and initialize a condition variable that can be used to signal and schedule threads in a single process.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- cond
+
+		- the memory address where the newly created condition variable will be stored.
+
+	*
+		- pool
+
+		- the pool from which to allocate the condition.
+
+.. index:: pair: function; apr_thread_cond_wait
+.. _doxid-group__apr__thread__cond_1ga789719a5f02bdab8b8abbc8bddd0406b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_thread_cond_wait(
+		:ref:`apr_thread_cond_t<doxid-group__apr__thread__cond_1gae8f918d38bf1c58bc09670eee456ae5e>`* cond,
+		:ref:`apr_thread_mutex_t<doxid-group__apr__thread__mutex_1ga95712060ba3a192036416e1ccef1db75>`* mutex
+		)
+
+Put the active calling thread to sleep until signaled to wake up. Each condition variable must be associated with a mutex, and that mutex must be locked before calling this function, or the behavior will be undefined. As the calling thread is put to sleep, the given mutex will be simultaneously released; and as this thread wakes up the lock is again simultaneously acquired. Spurious wakeups may occur. Before and after every call to wait on a condition variable, the caller should test whether the condition is already met.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- cond
+
+		- the condition variable on which to block.
+
+	*
+		- mutex
+
+		- the mutex that must be locked upon entering this function, is released while the thread is asleep, and is again acquired before returning from this function.
+
+.. index:: pair: function; apr_thread_cond_timedwait
+.. _doxid-group__apr__thread__cond_1ga67f2feecb7fa1929cc9b354dafd00306:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_thread_cond_timedwait(
+		:ref:`apr_thread_cond_t<doxid-group__apr__thread__cond_1gae8f918d38bf1c58bc09670eee456ae5e>`* cond,
+		:ref:`apr_thread_mutex_t<doxid-group__apr__thread__mutex_1ga95712060ba3a192036416e1ccef1db75>`* mutex,
+		:ref:`apr_interval_time_t<doxid-group__apr__time_1gaae2129185a395cc393f76fabf4f43e47>` timeout
+		)
+
+Put the active calling thread to sleep until signaled to wake up or the timeout is reached. Each condition variable must be associated with a mutex, and that mutex must be locked before calling this function, or the behavior will be undefined. As the calling thread is put to sleep, the given mutex will be simultaneously released; and as this thread wakes up the lock is again simultaneously acquired.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- cond
+
+		- the condition variable on which to block.
+
+	*
+		- mutex
+
+		- the mutex that must be locked upon entering this function, is released while the thread is asleep, and is again acquired before returning from this function.
+
+	*
+		- timeout
+
+		- The amount of time in microseconds to wait. This is a maximum, not a minimum. If the condition is signaled, we will wake up before this time, otherwise the error APR_TIMEUP is returned.
+
+.. index:: pair: function; apr_thread_cond_signal
+.. _doxid-group__apr__thread__cond_1gadf7ad6c2731bc6128f969d3efc7ff5eb:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_thread_cond_signal(:ref:`apr_thread_cond_t<doxid-group__apr__thread__cond_1gae8f918d38bf1c58bc09670eee456ae5e>`* cond)
+
+Signals a single thread, if one exists, that is blocking on the given condition variable. That thread is then scheduled to wake up and acquire the associated mutex. Although it is not required, if predictable scheduling is desired, that mutex must be locked while calling this function. If no threads are waiting on the condition variable, nothing happens.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- cond
+
+		- the condition variable on which to produce the signal.
+
+.. index:: pair: function; apr_thread_cond_broadcast
+.. _doxid-group__apr__thread__cond_1gafbbedd2a07629fe3186343035ae83152:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_thread_cond_broadcast(:ref:`apr_thread_cond_t<doxid-group__apr__thread__cond_1gae8f918d38bf1c58bc09670eee456ae5e>`* cond)
+
+Signals all threads blocking on the given condition variable. Each thread that was signaled is then scheduled to wake up and acquire the associated mutex. This will happen in a serialized manner. If no threads are waiting on the condition variable, nothing happens.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- cond
+
+		- the condition variable on which to produce the broadcast.
+
+.. index:: pair: function; apr_thread_cond_destroy
+.. _doxid-group__apr__thread__cond_1ga049e646e23c670f3a79fe25401b9c1b0:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_thread_cond_destroy(:ref:`apr_thread_cond_t<doxid-group__apr__thread__cond_1gae8f918d38bf1c58bc09670eee456ae5e>`* cond)
+
+Destroy the condition variable and free the associated memory.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- cond
+
+		- the condition variable to destroy.
+
+.. index:: pair: function; apr_thread_cond_pool_get
+.. _doxid-group__apr__thread__cond_1gafc2d7f2907eb12e5543c971a4c0140ee:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`*
+	apr_thread_cond_pool_get(const :ref:`apr_thread_cond_t<doxid-group__apr__thread__cond_1gae8f918d38bf1c58bc09670eee456ae5e>`* thethread_cond)
+
+Get the pool used by this thread_cond.
+
+
+
+.. rubric:: Returns:
+
+apr_pool_t the pool
+

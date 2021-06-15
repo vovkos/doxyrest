@@ -1,0 +1,305 @@
+.. index:: pair: group; MMAP (Memory Map) Routines
+.. _doxid-group__apr__mmap:
+
+MMAP (Memory Map) Routines
+==========================
+
+.. toctree::
+	:hidden:
+
+	struct_apr_mmap_t.rst
+
+Overview
+~~~~~~~~
+
+
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef struct :ref:`apr_mmap_t<doxid-structapr__mmap__t>` :ref:`apr_mmap_t<doxid-group__apr__mmap_1ga766b01a3e1e0438d06dc88d76f826f80>`;
+
+	// structs
+
+	struct :ref:`apr_mmap_t<doxid-structapr__mmap__t>`;
+
+	// global functions
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_mmap_create<doxid-group__apr__mmap_1gac6b103139be2e859741ec94cc6ad34cc>`(
+		:ref:`apr_mmap_t<doxid-structapr__mmap__t>`** newmmap,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* file,
+		apr_off_t offset,
+		apr_size_t size,
+		apr_int32_t flag,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cntxt
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_mmap_dup<doxid-group__apr__mmap_1ga9fcdbf8090e924a4e8f2b301519bb4c8>`(
+		:ref:`apr_mmap_t<doxid-structapr__mmap__t>`** new_mmap,
+		:ref:`apr_mmap_t<doxid-structapr__mmap__t>`* old_mmap,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_mmap_delete<doxid-group__apr__mmap_1ga4b67a2d22a07707897cc1183a1682040>`(:ref:`apr_mmap_t<doxid-structapr__mmap__t>`* mm);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_mmap_offset<doxid-group__apr__mmap_1ga4c1d31bd9e911744bd5edb97e17210ec>`(
+		void** addr,
+		:ref:`apr_mmap_t<doxid-structapr__mmap__t>`* mm,
+		apr_off_t offset
+		);
+
+	// macros
+
+	#define :ref:`APR_MMAP_CANDIDATE<doxid-group__apr__mmap_1ga4f469432098e986567576fd4c4ce5adc>`(filelength)
+	#define :ref:`APR_MMAP_LIMIT<doxid-group__apr__mmap_1ga548e49b3c9e8265ad8ccf70994f4fe25>`
+	#define :ref:`APR_MMAP_READ<doxid-group__apr__mmap_1gac231fdf15d2d29802e0abbc5d0cf25b8>`
+	#define :ref:`APR_MMAP_THRESHOLD<doxid-group__apr__mmap_1ga19d1916e7b64bfb1a969648fe7b0846a>`
+	#define :ref:`APR_MMAP_WRITE<doxid-group__apr__mmap_1gac2eb7f697d8bf190e630b85f967c8273>`
+
+.. _details-group__apr__mmap:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+Typedefs
+--------
+
+.. index:: pair: typedef; apr_mmap_t
+.. _doxid-group__apr__mmap_1ga766b01a3e1e0438d06dc88d76f826f80:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_mmap_t<doxid-structapr__mmap__t>` apr_mmap_t
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_mmap_t <doxid-structapr__mmap__t>`
+
+Global Functions
+----------------
+
+.. index:: pair: function; apr_mmap_create
+.. _doxid-group__apr__mmap_1gac6b103139be2e859741ec94cc6ad34cc:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_mmap_create(
+		:ref:`apr_mmap_t<doxid-structapr__mmap__t>`** newmmap,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* file,
+		apr_off_t offset,
+		apr_size_t size,
+		apr_int32_t flag,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cntxt
+		)
+
+Create a new mmap'ed file out of an existing APR file.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- newmmap
+
+		- The newly created mmap'ed file.
+
+	*
+		- file
+
+		- The file to turn into an mmap.
+
+	*
+		- offset
+
+		- The offset into the file to start the data pointer at.
+
+	*
+		- size
+
+		- The size of the file
+
+	*
+		- flag
+
+		- 
+		  bit-wise or of:
+		  
+		  .. code-block:: none
+		  
+		  
+		  	APR_MMAP_READ       MMap opened for reading
+		  	APR_MMAP_WRITE      MMap opened for writing
+
+	*
+		- cntxt
+
+		- The pool to use when creating the mmap.
+
+.. index:: pair: function; apr_mmap_dup
+.. _doxid-group__apr__mmap_1ga9fcdbf8090e924a4e8f2b301519bb4c8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_mmap_dup(
+		:ref:`apr_mmap_t<doxid-structapr__mmap__t>`** new_mmap,
+		:ref:`apr_mmap_t<doxid-structapr__mmap__t>`* old_mmap,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		)
+
+Duplicate the specified MMAP.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- new_mmap
+
+		- The structure to duplicate into.
+
+	*
+		- old_mmap
+
+		- The mmap to duplicate.
+
+	*
+		- p
+
+		- The pool to use for new_mmap.
+
+.. index:: pair: function; apr_mmap_delete
+.. _doxid-group__apr__mmap_1ga4b67a2d22a07707897cc1183a1682040:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_mmap_delete(:ref:`apr_mmap_t<doxid-structapr__mmap__t>`* mm)
+
+Remove a mmap'ed.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mm
+
+		- The mmap'ed file.
+
+.. index:: pair: function; apr_mmap_offset
+.. _doxid-group__apr__mmap_1ga4c1d31bd9e911744bd5edb97e17210ec:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_mmap_offset(
+		void** addr,
+		:ref:`apr_mmap_t<doxid-structapr__mmap__t>`* mm,
+		apr_off_t offset
+		)
+
+Move the pointer into the mmap'ed file to the specified offset.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- addr
+
+		- The pointer to the offset specified.
+
+	*
+		- mm
+
+		- The mmap'ed file.
+
+	*
+		- offset
+
+		- The offset to move to.
+
+Macros
+------
+
+.. index:: pair: define; APR_MMAP_CANDIDATE
+.. _doxid-group__apr__mmap_1ga4f469432098e986567576fd4c4ce5adc:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_MMAP_CANDIDATE(filelength)
+
+Can this file be MMaped
+
+.. index:: pair: define; APR_MMAP_LIMIT
+.. _doxid-group__apr__mmap_1ga548e49b3c9e8265ad8ccf70994f4fe25:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_MMAP_LIMIT
+
+Maximum size of MMap region
+
+.. index:: pair: define; APR_MMAP_READ
+.. _doxid-group__apr__mmap_1gac231fdf15d2d29802e0abbc5d0cf25b8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_MMAP_READ
+
+MMap opened for reading
+
+.. index:: pair: define; APR_MMAP_THRESHOLD
+.. _doxid-group__apr__mmap_1ga19d1916e7b64bfb1a969648fe7b0846a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_MMAP_THRESHOLD
+
+Files have to be at least this big before they're mmap()d. This is to deal with systems where the expense of doing an mmap() and an munmap() outweighs the benefit for small files. It shouldn't be set lower than 1.
+
+.. index:: pair: define; APR_MMAP_WRITE
+.. _doxid-group__apr__mmap_1gac2eb7f697d8bf190e630b85f967c8273:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_MMAP_WRITE
+
+MMap opened for writing
+

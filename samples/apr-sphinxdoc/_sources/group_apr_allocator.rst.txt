@@ -1,0 +1,382 @@
+.. index:: pair: group; Internal Memory Allocation
+.. _doxid-group__apr__allocator:
+
+Internal Memory Allocation
+==========================
+
+.. toctree::
+	:hidden:
+
+	struct_apr_memnode_t.rst
+
+Overview
+~~~~~~~~
+
+
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef struct :ref:`apr_allocator_t<doxid-group__apr__allocator_1ga1ceabfd30fcfc455e47d052d2a24244b>` :ref:`apr_allocator_t<doxid-group__apr__allocator_1ga1ceabfd30fcfc455e47d052d2a24244b>`;
+	typedef struct :ref:`apr_memnode_t<doxid-structapr__memnode__t>` :ref:`apr_memnode_t<doxid-group__apr__allocator_1ga3b6437036dfcdffbf87ad4677c818211>`;
+
+	// structs
+
+	struct :ref:`apr_memnode_t<doxid-structapr__memnode__t>`;
+
+	// global functions
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_allocator_create<doxid-group__apr__allocator_1gaf834f409a34b7f8656c045cff02fd953>`(:ref:`apr_allocator_t<doxid-group__apr__allocator_1ga1ceabfd30fcfc455e47d052d2a24244b>`** allocator);
+
+	void
+	:ref:`apr_allocator_destroy<doxid-group__apr__allocator_1ga704529f6b26279ad1c48d5e8372d859c>`(:ref:`apr_allocator_t<doxid-group__apr__allocator_1ga1ceabfd30fcfc455e47d052d2a24244b>`* allocator);
+
+	:ref:`apr_memnode_t<doxid-structapr__memnode__t>`*
+	:ref:`apr_allocator_alloc<doxid-group__apr__allocator_1ga7452b0837c2148bd63109f89bbc0c3db>`(
+		:ref:`apr_allocator_t<doxid-group__apr__allocator_1ga1ceabfd30fcfc455e47d052d2a24244b>`* allocator,
+		apr_size_t size
+		);
+
+	void
+	:ref:`apr_allocator_free<doxid-group__apr__allocator_1ga124e48339838213fd5e160a4125cb7e8>`(
+		:ref:`apr_allocator_t<doxid-group__apr__allocator_1ga1ceabfd30fcfc455e47d052d2a24244b>`* allocator,
+		:ref:`apr_memnode_t<doxid-structapr__memnode__t>`* memnode
+		);
+
+	void
+	:ref:`apr_allocator_owner_set<doxid-group__apr__allocator_1gadf38bbec37c29c24388e95b1c9acad28>`(
+		:ref:`apr_allocator_t<doxid-group__apr__allocator_1ga1ceabfd30fcfc455e47d052d2a24244b>`* allocator,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		);
+
+	:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`*
+	:ref:`apr_allocator_owner_get<doxid-group__apr__allocator_1ga3cfe48c8717de6495480ce1479d262f1>`(:ref:`apr_allocator_t<doxid-group__apr__allocator_1ga1ceabfd30fcfc455e47d052d2a24244b>`* allocator);
+
+	void
+	:ref:`apr_allocator_max_free_set<doxid-group__apr__allocator_1ga1d45cb6dbe69ba25dee0ec5f4e031d60>`(
+		:ref:`apr_allocator_t<doxid-group__apr__allocator_1ga1ceabfd30fcfc455e47d052d2a24244b>`* allocator,
+		apr_size_t size
+		);
+
+	void
+	:ref:`apr_allocator_mutex_set<doxid-group__apr__allocator_1gab803d74f56683004f7ec384ced210dd5>`(
+		:ref:`apr_allocator_t<doxid-group__apr__allocator_1ga1ceabfd30fcfc455e47d052d2a24244b>`* allocator,
+		:ref:`apr_thread_mutex_t<doxid-group__apr__thread__mutex_1ga95712060ba3a192036416e1ccef1db75>`* mutex
+		);
+
+	:ref:`apr_thread_mutex_t<doxid-group__apr__thread__mutex_1ga95712060ba3a192036416e1ccef1db75>`*
+	:ref:`apr_allocator_mutex_get<doxid-group__apr__allocator_1ga38599aa9f1330846a2d2b25ec5c8d9c9>`(:ref:`apr_allocator_t<doxid-group__apr__allocator_1ga1ceabfd30fcfc455e47d052d2a24244b>`* allocator);
+
+	// macros
+
+	#define :ref:`APR_ALLOCATOR_MAX_FREE_UNLIMITED<doxid-group__apr__allocator_1ga54f32b19d8dad59bc6364a7a6b8ebec9>`
+	#define :ref:`APR_MEMNODE_T_SIZE<doxid-group__apr__allocator_1gaf382851817012929f4e2458b43f4482c>`
+
+.. _details-group__apr__allocator:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+Typedefs
+--------
+
+.. index:: pair: typedef; apr_allocator_t
+.. _doxid-group__apr__allocator_1ga1ceabfd30fcfc455e47d052d2a24244b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_allocator_t<doxid-group__apr__allocator_1ga1ceabfd30fcfc455e47d052d2a24244b>` apr_allocator_t
+
+the allocator structure
+
+.. index:: pair: typedef; apr_memnode_t
+.. _doxid-group__apr__allocator_1ga3b6437036dfcdffbf87ad4677c818211:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_memnode_t<doxid-structapr__memnode__t>` apr_memnode_t
+
+the structure which holds information about the allocation
+
+Global Functions
+----------------
+
+.. index:: pair: function; apr_allocator_create
+.. _doxid-group__apr__allocator_1gaf834f409a34b7f8656c045cff02fd953:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_allocator_create(:ref:`apr_allocator_t<doxid-group__apr__allocator_1ga1ceabfd30fcfc455e47d052d2a24244b>`** allocator)
+
+Create a new allocator
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- allocator
+
+		- The allocator we have just created.
+
+.. index:: pair: function; apr_allocator_destroy
+.. _doxid-group__apr__allocator_1ga704529f6b26279ad1c48d5e8372d859c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_allocator_destroy(:ref:`apr_allocator_t<doxid-group__apr__allocator_1ga1ceabfd30fcfc455e47d052d2a24244b>`* allocator)
+
+Destroy an allocator Any memnodes not given back to the allocator prior to destroying will *not* be free()d.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- allocator
+
+		- The allocator to be destroyed
+
+.. index:: pair: function; apr_allocator_alloc
+.. _doxid-group__apr__allocator_1ga7452b0837c2148bd63109f89bbc0c3db:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_memnode_t<doxid-structapr__memnode__t>`*
+	apr_allocator_alloc(
+		:ref:`apr_allocator_t<doxid-group__apr__allocator_1ga1ceabfd30fcfc455e47d052d2a24244b>`* allocator,
+		apr_size_t size
+		)
+
+Allocate a block of mem from the allocator
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- allocator
+
+		- The allocator to allocate from
+
+	*
+		- size
+
+		- The size of the mem to allocate (excluding the memnode structure)
+
+.. index:: pair: function; apr_allocator_free
+.. _doxid-group__apr__allocator_1ga124e48339838213fd5e160a4125cb7e8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_allocator_free(
+		:ref:`apr_allocator_t<doxid-group__apr__allocator_1ga1ceabfd30fcfc455e47d052d2a24244b>`* allocator,
+		:ref:`apr_memnode_t<doxid-structapr__memnode__t>`* memnode
+		)
+
+Free a list of blocks of mem, giving them back to the allocator. The list is typically terminated by a memnode with its next field set to NULL.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- allocator
+
+		- The allocator to give the mem back to
+
+	*
+		- memnode
+
+		- The memory node to return
+
+.. index:: pair: function; apr_allocator_owner_set
+.. _doxid-group__apr__allocator_1gadf38bbec37c29c24388e95b1c9acad28:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_allocator_owner_set(
+		:ref:`apr_allocator_t<doxid-group__apr__allocator_1ga1ceabfd30fcfc455e47d052d2a24244b>`* allocator,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		)
+
+Set the owner of the allocator Typically pool is the highest level pool using the allocator
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- allocator
+
+		- The allocator to set the owner for
+
+	*
+		- pool
+
+		- The pool that is to own the allocator
+
+.. index:: pair: function; apr_allocator_owner_get
+.. _doxid-group__apr__allocator_1ga3cfe48c8717de6495480ce1479d262f1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`*
+	apr_allocator_owner_get(:ref:`apr_allocator_t<doxid-group__apr__allocator_1ga1ceabfd30fcfc455e47d052d2a24244b>`* allocator)
+
+Get the current owner of the allocator
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- allocator
+
+		- The allocator to get the owner from
+
+.. index:: pair: function; apr_allocator_max_free_set
+.. _doxid-group__apr__allocator_1ga1d45cb6dbe69ba25dee0ec5f4e031d60:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_allocator_max_free_set(
+		:ref:`apr_allocator_t<doxid-group__apr__allocator_1ga1ceabfd30fcfc455e47d052d2a24244b>`* allocator,
+		apr_size_t size
+		)
+
+Set the current threshold at which the allocator should start giving blocks back to the system.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- allocator
+
+		- The allocator to set the threshold on
+
+	*
+		- size
+
+		- The threshold. 0 == unlimited.
+
+.. index:: pair: function; apr_allocator_mutex_set
+.. _doxid-group__apr__allocator_1gab803d74f56683004f7ec384ced210dd5:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_allocator_mutex_set(
+		:ref:`apr_allocator_t<doxid-group__apr__allocator_1ga1ceabfd30fcfc455e47d052d2a24244b>`* allocator,
+		:ref:`apr_thread_mutex_t<doxid-group__apr__thread__mutex_1ga95712060ba3a192036416e1ccef1db75>`* mutex
+		)
+
+Set a mutex for the allocator to use
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- allocator
+
+		- The allocator to set the mutex for
+
+	*
+		- mutex
+
+		- The mutex
+
+.. index:: pair: function; apr_allocator_mutex_get
+.. _doxid-group__apr__allocator_1ga38599aa9f1330846a2d2b25ec5c8d9c9:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_thread_mutex_t<doxid-group__apr__thread__mutex_1ga95712060ba3a192036416e1ccef1db75>`*
+	apr_allocator_mutex_get(:ref:`apr_allocator_t<doxid-group__apr__allocator_1ga1ceabfd30fcfc455e47d052d2a24244b>`* allocator)
+
+Get the mutex currently set for the allocator
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- allocator
+
+		- The allocator
+
+Macros
+------
+
+.. index:: pair: define; APR_ALLOCATOR_MAX_FREE_UNLIMITED
+.. _doxid-group__apr__allocator_1ga54f32b19d8dad59bc6364a7a6b8ebec9:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_ALLOCATOR_MAX_FREE_UNLIMITED
+
+Symbolic constants
+
+.. index:: pair: define; APR_MEMNODE_T_SIZE
+.. _doxid-group__apr__allocator_1gaf382851817012929f4e2458b43f4482c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_MEMNODE_T_SIZE
+
+The base size of a memory node - aligned.
+

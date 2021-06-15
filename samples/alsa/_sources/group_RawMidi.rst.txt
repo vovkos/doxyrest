@@ -1,0 +1,2108 @@
+.. index:: pair: group; RawMidi Interface
+.. _doxid-group___raw_midi:
+
+RawMidi Interface
+=================
+
+.. toctree::
+	:hidden:
+
+	enum_snd_rawmidi_stream_t.rst
+	enum_snd_rawmidi_type_t.rst
+
+Overview
+~~~~~~~~
+
+The RawMidi Interface. :ref:`More...<details-group___raw_midi>`
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef struct _snd_rawmidi_info :ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`;
+	typedef struct _snd_rawmidi_params :ref:`snd_rawmidi_params_t<doxid-group___raw_midi_1ga98ad06bccfabc646530241d3a0eef5a1>`;
+	typedef struct _snd_rawmidi_status :ref:`snd_rawmidi_status_t<doxid-group___raw_midi_1ga10a44a41000ef7dfe61f712466237aff>`;
+	typedef struct _snd_rawmidi :ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`;
+
+	// enums
+
+	enum :ref:`snd_rawmidi_stream_t<doxid-group___raw_midi_1gac3d11365c928cdfd3176ffede3e6f8c5>`;
+	enum :ref:`snd_rawmidi_type_t<doxid-group___raw_midi_1ga271ccd508f221ec7c99a27b150c657ba>`;
+
+	// global functions
+
+	int
+	:ref:`snd_rawmidi_open<doxid-group___raw_midi_1ga2ab783051deeb7eb37eb568b76448889>`(
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`** in_rmidi,
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`** out_rmidi,
+		const char* name,
+		int mode
+		);
+
+	int
+	:ref:`snd_rawmidi_open_lconf<doxid-group___raw_midi_1gaa7e3daf5cf4dd36b2534d2f1d6309477>`(
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`** in_rmidi,
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`** out_rmidi,
+		const char* name,
+		int mode,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* lconf
+		);
+
+	int
+	:ref:`snd_rawmidi_close<doxid-group___raw_midi_1gabc6bd5922151fb50196f62b9a4ab9f56>`(:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi);
+
+	int
+	:ref:`snd_rawmidi_poll_descriptors_count<doxid-group___raw_midi_1ga39ac11df7e520e753b26ab4eceabe6de>`(:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi);
+
+	int
+	:ref:`snd_rawmidi_poll_descriptors<doxid-group___raw_midi_1ga22fcc3fc5c62c9db88d79a0b91e3a75f>`(
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi,
+		struct pollfd* pfds,
+		unsigned int space
+		);
+
+	int
+	:ref:`snd_rawmidi_poll_descriptors_revents<doxid-group___raw_midi_1ga38f15766f77c0bb50fec6cdcd87254b0>`(
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rawmidi,
+		struct pollfd* pfds,
+		unsigned int nfds,
+		unsigned short* revent
+		);
+
+	int
+	:ref:`snd_rawmidi_nonblock<doxid-group___raw_midi_1gafe714a54fdb6083eb003bcc21da89553>`(
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi,
+		int nonblock
+		);
+
+	size_t
+	:ref:`snd_rawmidi_info_sizeof<doxid-group___raw_midi_1ga383592eddf099559822357678fbe7d8c>`(void);
+
+	int
+	:ref:`snd_rawmidi_info_malloc<doxid-group___raw_midi_1ga11f8d3832ec7ea7fd6e8445338704528>`(:ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`** ptr);
+
+	void
+	:ref:`snd_rawmidi_info_free<doxid-group___raw_midi_1gaa84495bee993f34fb9bac33b5a9cf65f>`(:ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* obj);
+
+	void
+	:ref:`snd_rawmidi_info_copy<doxid-group___raw_midi_1gabfb769e2aaf0a6b8274b5e0c3e9141d8>`(
+		:ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* dst,
+		const :ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* src
+		);
+
+	unsigned int
+	:ref:`snd_rawmidi_info_get_device<doxid-group___raw_midi_1gacfb2e65475c314f5f1dde0c5d7a05a7b>`(const :ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* obj);
+
+	unsigned int
+	:ref:`snd_rawmidi_info_get_subdevice<doxid-group___raw_midi_1ga3fea97d5bff26c54831e95b2200f857c>`(const :ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* obj);
+
+	:ref:`snd_rawmidi_stream_t<doxid-group___raw_midi_1gac3d11365c928cdfd3176ffede3e6f8c5>`
+	:ref:`snd_rawmidi_info_get_stream<doxid-group___raw_midi_1ga760552af30a089ddacc3af79985e24f6>`(const :ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* obj);
+
+	int
+	:ref:`snd_rawmidi_info_get_card<doxid-group___raw_midi_1ga463916bd78a0ab5a96a053edca05a8d3>`(const :ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* obj);
+
+	unsigned int
+	:ref:`snd_rawmidi_info_get_flags<doxid-group___raw_midi_1gaf9ede5bbc9abc9124910c2612363de30>`(const :ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* obj);
+
+	const char*
+	:ref:`snd_rawmidi_info_get_id<doxid-group___raw_midi_1gac7ac90e99759ee7b2dddd3613219c798>`(const :ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* obj);
+
+	const char*
+	:ref:`snd_rawmidi_info_get_name<doxid-group___raw_midi_1gafd809c976c1dab23957e338b5af2a353>`(const :ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* obj);
+
+	const char*
+	:ref:`snd_rawmidi_info_get_subdevice_name<doxid-group___raw_midi_1ga428398f23118575aa4f62eed860132cf>`(const :ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* obj);
+
+	unsigned int
+	:ref:`snd_rawmidi_info_get_subdevices_count<doxid-group___raw_midi_1gac0b33eb2f54cd6fc9b34002fe28ca9fe>`(const :ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* obj);
+
+	unsigned int
+	:ref:`snd_rawmidi_info_get_subdevices_avail<doxid-group___raw_midi_1ga71717ea1f35bf2a59548d3d106278336>`(const :ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* obj);
+
+	void
+	:ref:`snd_rawmidi_info_set_device<doxid-group___raw_midi_1ga98fcdcb94c12baf65dd0ec8f9d52ef59>`(
+		:ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* obj,
+		unsigned int val
+		);
+
+	void
+	:ref:`snd_rawmidi_info_set_subdevice<doxid-group___raw_midi_1ga49eff1cd1b62e0399826740863cdcce3>`(
+		:ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* obj,
+		unsigned int val
+		);
+
+	void
+	:ref:`snd_rawmidi_info_set_stream<doxid-group___raw_midi_1gad704ac98c8313235c73c23d374bf6831>`(
+		:ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* obj,
+		:ref:`snd_rawmidi_stream_t<doxid-group___raw_midi_1gac3d11365c928cdfd3176ffede3e6f8c5>` val
+		);
+
+	int
+	:ref:`snd_rawmidi_info<doxid-group___raw_midi_1ga3c3595d2907ee30754f6a1d5ceb2d97f>`(
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi,
+		:ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* info
+		);
+
+	size_t
+	:ref:`snd_rawmidi_params_sizeof<doxid-group___raw_midi_1gaeb5767a318d349a4d2a100191c3cf8d8>`(void);
+
+	int
+	:ref:`snd_rawmidi_params_malloc<doxid-group___raw_midi_1gaedc01312384764d02b6bc946cb1e79a9>`(:ref:`snd_rawmidi_params_t<doxid-group___raw_midi_1ga98ad06bccfabc646530241d3a0eef5a1>`** ptr);
+
+	void
+	:ref:`snd_rawmidi_params_free<doxid-group___raw_midi_1gad8c735ed6a8533655dabd7318f25a6fc>`(:ref:`snd_rawmidi_params_t<doxid-group___raw_midi_1ga98ad06bccfabc646530241d3a0eef5a1>`* obj);
+
+	void
+	:ref:`snd_rawmidi_params_copy<doxid-group___raw_midi_1ga533710a31f6b6b4f6791baa27e69089f>`(
+		:ref:`snd_rawmidi_params_t<doxid-group___raw_midi_1ga98ad06bccfabc646530241d3a0eef5a1>`* dst,
+		const :ref:`snd_rawmidi_params_t<doxid-group___raw_midi_1ga98ad06bccfabc646530241d3a0eef5a1>`* src
+		);
+
+	int
+	:ref:`snd_rawmidi_params_set_buffer_size<doxid-group___raw_midi_1ga612c96757e2f81fda5b6cd6dec826de1>`(
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi,
+		:ref:`snd_rawmidi_params_t<doxid-group___raw_midi_1ga98ad06bccfabc646530241d3a0eef5a1>`* params,
+		size_t val
+		);
+
+	size_t
+	:ref:`snd_rawmidi_params_get_buffer_size<doxid-group___raw_midi_1ga0bd9629686062562b88bfd2a3eadc1bd>`(const :ref:`snd_rawmidi_params_t<doxid-group___raw_midi_1ga98ad06bccfabc646530241d3a0eef5a1>`* params);
+
+	int
+	:ref:`snd_rawmidi_params_set_avail_min<doxid-group___raw_midi_1ga89782681ce86b3d5cbebb5136d25439f>`(
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi,
+		:ref:`snd_rawmidi_params_t<doxid-group___raw_midi_1ga98ad06bccfabc646530241d3a0eef5a1>`* params,
+		size_t val
+		);
+
+	size_t
+	:ref:`snd_rawmidi_params_get_avail_min<doxid-group___raw_midi_1gae629f2ef814eda39dc081dff65bf7d20>`(const :ref:`snd_rawmidi_params_t<doxid-group___raw_midi_1ga98ad06bccfabc646530241d3a0eef5a1>`* params);
+
+	int
+	:ref:`snd_rawmidi_params_set_no_active_sensing<doxid-group___raw_midi_1gab717719be70fe4396dc84f3f895d6e12>`(
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi,
+		:ref:`snd_rawmidi_params_t<doxid-group___raw_midi_1ga98ad06bccfabc646530241d3a0eef5a1>`* params,
+		int val
+		);
+
+	int
+	:ref:`snd_rawmidi_params_get_no_active_sensing<doxid-group___raw_midi_1ga6a057d467faa2b65ddace364fde985fd>`(const :ref:`snd_rawmidi_params_t<doxid-group___raw_midi_1ga98ad06bccfabc646530241d3a0eef5a1>`* params);
+
+	int
+	:ref:`snd_rawmidi_params<doxid-group___raw_midi_1ga458d8ad22277645d9b65fa47c011465c>`(
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi,
+		:ref:`snd_rawmidi_params_t<doxid-group___raw_midi_1ga98ad06bccfabc646530241d3a0eef5a1>`* params
+		);
+
+	int
+	:ref:`snd_rawmidi_params_current<doxid-group___raw_midi_1ga86eabf81acd7c43fc100c67fbda5085d>`(
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi,
+		:ref:`snd_rawmidi_params_t<doxid-group___raw_midi_1ga98ad06bccfabc646530241d3a0eef5a1>`* params
+		);
+
+	size_t
+	:ref:`snd_rawmidi_status_sizeof<doxid-group___raw_midi_1ga7933bdb7eea04815be0bba98261865e4>`(void);
+
+	int
+	:ref:`snd_rawmidi_status_malloc<doxid-group___raw_midi_1gac1035208bbdf81852dbcf2e14ce4a8dc>`(:ref:`snd_rawmidi_status_t<doxid-group___raw_midi_1ga10a44a41000ef7dfe61f712466237aff>`** ptr);
+
+	void
+	:ref:`snd_rawmidi_status_free<doxid-group___raw_midi_1gac9852f68911bbb8aef21d2e20c3ff2c0>`(:ref:`snd_rawmidi_status_t<doxid-group___raw_midi_1ga10a44a41000ef7dfe61f712466237aff>`* obj);
+
+	void
+	:ref:`snd_rawmidi_status_copy<doxid-group___raw_midi_1gab62e8a4ca0033166f906a969048d935c>`(
+		:ref:`snd_rawmidi_status_t<doxid-group___raw_midi_1ga10a44a41000ef7dfe61f712466237aff>`* dst,
+		const :ref:`snd_rawmidi_status_t<doxid-group___raw_midi_1ga10a44a41000ef7dfe61f712466237aff>`* src
+		);
+
+	void
+	:ref:`snd_rawmidi_status_get_tstamp<doxid-group___raw_midi_1gaeb867dbf1d4d5fb3bdcad36a86565837>`(
+		const :ref:`snd_rawmidi_status_t<doxid-group___raw_midi_1ga10a44a41000ef7dfe61f712466237aff>`* obj,
+		:ref:`snd_htimestamp_t<doxid-group___global_1ga3a3f5b65c40f498cdbc26944bd9855cf>`* ptr
+		);
+
+	size_t
+	:ref:`snd_rawmidi_status_get_avail<doxid-group___raw_midi_1ga7ff63a2376b2df549698296d37b532ed>`(const :ref:`snd_rawmidi_status_t<doxid-group___raw_midi_1ga10a44a41000ef7dfe61f712466237aff>`* obj);
+
+	size_t
+	:ref:`snd_rawmidi_status_get_xruns<doxid-group___raw_midi_1gae4f69ac10574cfc2cd5c848628e75f9b>`(const :ref:`snd_rawmidi_status_t<doxid-group___raw_midi_1ga10a44a41000ef7dfe61f712466237aff>`* obj);
+
+	int
+	:ref:`snd_rawmidi_status<doxid-group___raw_midi_1gab888bce923769882931f77603327231d>`(
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi,
+		:ref:`snd_rawmidi_status_t<doxid-group___raw_midi_1ga10a44a41000ef7dfe61f712466237aff>`* status
+		);
+
+	int
+	:ref:`snd_rawmidi_drain<doxid-group___raw_midi_1gabfff7417ec957b7ee07882f91d73d7be>`(:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi);
+
+	int
+	:ref:`snd_rawmidi_drop<doxid-group___raw_midi_1ga01076c87d169cf77334d35bd094abd0a>`(:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi);
+
+	ssize_t
+	:ref:`snd_rawmidi_write<doxid-group___raw_midi_1ga0a30e482efec57f4ea74c533a0f9b134>`(
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi,
+		const void* buffer,
+		size_t size
+		);
+
+	ssize_t
+	:ref:`snd_rawmidi_read<doxid-group___raw_midi_1ga9b0952fc04facda83cdf1521325ca475>`(
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi,
+		void* buffer,
+		size_t size
+		);
+
+	const char*
+	:ref:`snd_rawmidi_name<doxid-group___raw_midi_1gaa4bf6540f3f36c5878d31abd34a341d3>`(:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi);
+
+	:ref:`snd_rawmidi_type_t<doxid-group___raw_midi_1ga271ccd508f221ec7c99a27b150c657ba>`
+	:ref:`snd_rawmidi_type<doxid-group___raw_midi_1ga5984e0c61995c8184a0e6e0a68a6faaf>`(:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi);
+
+	:ref:`snd_rawmidi_stream_t<doxid-group___raw_midi_1gac3d11365c928cdfd3176ffede3e6f8c5>`
+	:ref:`snd_rawmidi_stream<doxid-group___raw_midi_1ga295d2f3ce9e992919f205b929fcb83ee>`(:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rawmidi);
+
+	// macros
+
+	#define :ref:`SND_RAWMIDI_APPEND<doxid-group___raw_midi_1ga7060640f32abcd337239bde2c8749d23>`
+	#define :ref:`SND_RAWMIDI_DLSYM_VERSION<doxid-group___raw_midi_1ga2b1694b5b3e98514d6b2bc5b824e9adc>`
+	#define :ref:`SND_RAWMIDI_NONBLOCK<doxid-group___raw_midi_1ga31ee35659c82272382ccc3014c8a73f8>`
+	#define :ref:`SND_RAWMIDI_SYNC<doxid-group___raw_midi_1gab1a659b38e5174d790d5671739995894>`
+	#define :ref:`snd_rawmidi_info_alloca<doxid-group___raw_midi_1gaaa4c7257d03c396293cffaef02818c35>`(ptr)
+	#define :ref:`snd_rawmidi_params_alloca<doxid-group___raw_midi_1ga0a7ab61af3880409ccd9adee0e756210>`(ptr)
+	#define :ref:`snd_rawmidi_status_alloca<doxid-group___raw_midi_1gaa83c6963d341b0c067764dd1ba2c3d76>`(ptr)
+
+.. _details-group___raw_midi:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+The RawMidi Interface. See :ref:`RawMidi interface <doxid-rawmidi>` page for more details.
+
+Typedefs
+--------
+
+.. index:: pair: typedef; snd_rawmidi_info_t
+.. _doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct _snd_rawmidi_info snd_rawmidi_info_t
+
+RawMidi information container
+
+.. index:: pair: typedef; snd_rawmidi_params_t
+.. _doxid-group___raw_midi_1ga98ad06bccfabc646530241d3a0eef5a1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct _snd_rawmidi_params snd_rawmidi_params_t
+
+RawMidi settings container
+
+.. index:: pair: typedef; snd_rawmidi_status_t
+.. _doxid-group___raw_midi_1ga10a44a41000ef7dfe61f712466237aff:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct _snd_rawmidi_status snd_rawmidi_status_t
+
+RawMidi status container
+
+.. index:: pair: typedef; snd_rawmidi_t
+.. _doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct _snd_rawmidi snd_rawmidi_t
+
+RawMidi handle
+
+Global Functions
+----------------
+
+.. index:: pair: function; snd_rawmidi_open
+.. _doxid-group___raw_midi_1ga2ab783051deeb7eb37eb568b76448889:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_rawmidi_open(
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`** in_rmidi,
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`** out_rmidi,
+		const char* name,
+		int mode
+		)
+
+Opens a new connection to the RawMidi interface.
+
+Opens a new connection to the RawMidi interface specified with an ASCII identifier and mode.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- inputp
+
+		- Returned input handle (NULL if not wanted)
+
+	*
+		- outputp
+
+		- Returned output handle (NULL if not wanted)
+
+	*
+		- name
+
+		- ASCII identifier of the RawMidi handle
+
+	*
+		- mode
+
+		- Open mode
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_rawmidi_open_lconf
+.. _doxid-group___raw_midi_1gaa7e3daf5cf4dd36b2534d2f1d6309477:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_rawmidi_open_lconf(
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`** in_rmidi,
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`** out_rmidi,
+		const char* name,
+		int mode,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* lconf
+		)
+
+Opens a new connection to the RawMidi interface using local configuration.
+
+Opens a new connection to the RawMidi interface specified with an ASCII identifier and mode.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- inputp
+
+		- Returned input handle (NULL if not wanted)
+
+	*
+		- outputp
+
+		- Returned output handle (NULL if not wanted)
+
+	*
+		- name
+
+		- ASCII identifier of the RawMidi handle
+
+	*
+		- mode
+
+		- Open mode
+
+	*
+		- lconf
+
+		- Local configuration
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_rawmidi_close
+.. _doxid-group___raw_midi_1gabc6bd5922151fb50196f62b9a4ab9f56:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_rawmidi_close(:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi)
+
+close RawMidi handle
+
+Closes the specified RawMidi handle and frees all associated resources.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rawmidi
+
+		- RawMidi handle
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_rawmidi_poll_descriptors_count
+.. _doxid-group___raw_midi_1ga39ac11df7e520e753b26ab4eceabe6de:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_rawmidi_poll_descriptors_count(:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi)
+
+get count of poll descriptors for RawMidi handle
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rawmidi
+
+		- RawMidi handle
+
+
+
+.. rubric:: Returns:
+
+count of poll descriptors
+
+.. index:: pair: function; snd_rawmidi_poll_descriptors
+.. _doxid-group___raw_midi_1ga22fcc3fc5c62c9db88d79a0b91e3a75f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_rawmidi_poll_descriptors(
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi,
+		struct pollfd* pfds,
+		unsigned int space
+		)
+
+get poll descriptors
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rawmidi
+
+		- RawMidi handle
+
+	*
+		- pfds
+
+		- array of poll descriptors
+
+	*
+		- space
+
+		- space in the poll descriptor array
+
+
+
+.. rubric:: Returns:
+
+count of filled descriptors
+
+.. index:: pair: function; snd_rawmidi_poll_descriptors_revents
+.. _doxid-group___raw_midi_1ga38f15766f77c0bb50fec6cdcd87254b0:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_rawmidi_poll_descriptors_revents(
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rawmidi,
+		struct pollfd* pfds,
+		unsigned int nfds,
+		unsigned short* revent
+		)
+
+get returned events from poll descriptors
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rawmidi
+
+		- rawmidi RawMidi handle
+
+	*
+		- pfds
+
+		- array of poll descriptors
+
+	*
+		- nfds
+
+		- count of poll descriptors
+
+	*
+		- revents
+
+		- returned events
+
+
+
+.. rubric:: Returns:
+
+zero if success, otherwise a negative error code
+
+.. index:: pair: function; snd_rawmidi_nonblock
+.. _doxid-group___raw_midi_1gafe714a54fdb6083eb003bcc21da89553:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_rawmidi_nonblock(
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi,
+		int nonblock
+		)
+
+set nonblock mode
+
+The nonblock mode cannot be used when the stream is in :ref:`SND_RAWMIDI_APPEND <doxid-group___raw_midi_1ga7060640f32abcd337239bde2c8749d23>` state.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rawmidi
+
+		- RawMidi handle
+
+	*
+		- nonblock
+
+		- 0 = block, 1 = nonblock mode
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_rawmidi_info_sizeof
+.. _doxid-group___raw_midi_1ga383592eddf099559822357678fbe7d8c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	size_t
+	snd_rawmidi_info_sizeof(void)
+
+get size of the snd_rawmidi_info_t structure in bytes
+
+
+
+.. rubric:: Returns:
+
+size of the snd_rawmidi_info_t structure in bytes
+
+.. index:: pair: function; snd_rawmidi_info_malloc
+.. _doxid-group___raw_midi_1ga11f8d3832ec7ea7fd6e8445338704528:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_rawmidi_info_malloc(:ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`** ptr)
+
+allocate a new snd_rawmidi_info_t structure
+
+Allocates a new snd_rawmidi_params_t structure using the standard malloc C library function.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- info
+
+		- returned pointer
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code if fails
+
+.. index:: pair: function; snd_rawmidi_info_free
+.. _doxid-group___raw_midi_1gaa84495bee993f34fb9bac33b5a9cf65f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_rawmidi_info_free(:ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* obj)
+
+frees the snd_rawmidi_info_t structure
+
+Frees the given snd_rawmidi_params_t structure using the standard free C library function.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- info
+
+		- pointer to the snd_rawmidi_info_t structure to free
+
+.. index:: pair: function; snd_rawmidi_info_copy
+.. _doxid-group___raw_midi_1gabfb769e2aaf0a6b8274b5e0c3e9141d8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_rawmidi_info_copy(
+		:ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* dst,
+		const :ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* src
+		)
+
+copy one snd_rawmidi_info_t structure to another
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dst
+
+		- destination snd_rawmidi_info_t structure
+
+	*
+		- src
+
+		- source snd_rawmidi_info_t structure
+
+.. index:: pair: function; snd_rawmidi_info_get_device
+.. _doxid-group___raw_midi_1gacfb2e65475c314f5f1dde0c5d7a05a7b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	unsigned int
+	snd_rawmidi_info_get_device(const :ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* obj)
+
+get rawmidi device number
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- info
+
+		- pointer to a snd_rawmidi_info_t structure
+
+
+
+.. rubric:: Returns:
+
+rawmidi device number
+
+.. index:: pair: function; snd_rawmidi_info_get_subdevice
+.. _doxid-group___raw_midi_1ga3fea97d5bff26c54831e95b2200f857c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	unsigned int
+	snd_rawmidi_info_get_subdevice(const :ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* obj)
+
+get rawmidi subdevice number
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- info
+
+		- pointer to a snd_rawmidi_info_t structure
+
+
+
+.. rubric:: Returns:
+
+rawmidi subdevice number
+
+.. index:: pair: function; snd_rawmidi_info_get_stream
+.. _doxid-group___raw_midi_1ga760552af30a089ddacc3af79985e24f6:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_rawmidi_stream_t<doxid-group___raw_midi_1gac3d11365c928cdfd3176ffede3e6f8c5>`
+	snd_rawmidi_info_get_stream(const :ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* obj)
+
+get rawmidi stream identification
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- info
+
+		- pointer to a snd_rawmidi_info_t structure
+
+
+
+.. rubric:: Returns:
+
+rawmidi stream identification
+
+.. index:: pair: function; snd_rawmidi_info_get_card
+.. _doxid-group___raw_midi_1ga463916bd78a0ab5a96a053edca05a8d3:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_rawmidi_info_get_card(const :ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* obj)
+
+get rawmidi card number
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- info
+
+		- pointer to a snd_rawmidi_info_t structure
+
+
+
+.. rubric:: Returns:
+
+rawmidi card number
+
+.. index:: pair: function; snd_rawmidi_info_get_flags
+.. _doxid-group___raw_midi_1gaf9ede5bbc9abc9124910c2612363de30:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	unsigned int
+	snd_rawmidi_info_get_flags(const :ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* obj)
+
+get rawmidi flags
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- info
+
+		- pointer to a snd_rawmidi_info_t structure
+
+
+
+.. rubric:: Returns:
+
+rawmidi flags
+
+.. index:: pair: function; snd_rawmidi_info_get_id
+.. _doxid-group___raw_midi_1gac7ac90e99759ee7b2dddd3613219c798:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	snd_rawmidi_info_get_id(const :ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* obj)
+
+get rawmidi hardware driver identifier
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- info
+
+		- pointer to a snd_rawmidi_info_t structure
+
+
+
+.. rubric:: Returns:
+
+rawmidi hardware driver identifier
+
+.. index:: pair: function; snd_rawmidi_info_get_name
+.. _doxid-group___raw_midi_1gafd809c976c1dab23957e338b5af2a353:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	snd_rawmidi_info_get_name(const :ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* obj)
+
+get rawmidi hardware driver name
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- info
+
+		- pointer to a snd_rawmidi_info_t structure
+
+
+
+.. rubric:: Returns:
+
+rawmidi hardware driver name
+
+.. index:: pair: function; snd_rawmidi_info_get_subdevice_name
+.. _doxid-group___raw_midi_1ga428398f23118575aa4f62eed860132cf:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	snd_rawmidi_info_get_subdevice_name(const :ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* obj)
+
+get rawmidi subdevice name
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- info
+
+		- pointer to a snd_rawmidi_info_t structure
+
+
+
+.. rubric:: Returns:
+
+rawmidi subdevice name
+
+.. index:: pair: function; snd_rawmidi_info_get_subdevices_count
+.. _doxid-group___raw_midi_1gac0b33eb2f54cd6fc9b34002fe28ca9fe:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	unsigned int
+	snd_rawmidi_info_get_subdevices_count(const :ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* obj)
+
+get rawmidi count of subdevices
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- info
+
+		- pointer to a snd_rawmidi_info_t structure
+
+
+
+.. rubric:: Returns:
+
+rawmidi count of subdevices
+
+.. index:: pair: function; snd_rawmidi_info_get_subdevices_avail
+.. _doxid-group___raw_midi_1ga71717ea1f35bf2a59548d3d106278336:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	unsigned int
+	snd_rawmidi_info_get_subdevices_avail(const :ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* obj)
+
+get rawmidi available count of subdevices
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- info
+
+		- pointer to a snd_rawmidi_info_t structure
+
+
+
+.. rubric:: Returns:
+
+rawmidi available count of subdevices
+
+.. index:: pair: function; snd_rawmidi_info_set_device
+.. _doxid-group___raw_midi_1ga98fcdcb94c12baf65dd0ec8f9d52ef59:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_rawmidi_info_set_device(
+		:ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* obj,
+		unsigned int val
+		)
+
+set rawmidi device number
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- info
+
+		- pointer to a snd_rawmidi_info_t structure
+
+	*
+		- val
+
+		- device number
+
+.. index:: pair: function; snd_rawmidi_info_set_subdevice
+.. _doxid-group___raw_midi_1ga49eff1cd1b62e0399826740863cdcce3:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_rawmidi_info_set_subdevice(
+		:ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* obj,
+		unsigned int val
+		)
+
+set rawmidi subdevice number
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- info
+
+		- pointer to a snd_rawmidi_info_t structure
+
+	*
+		- val
+
+		- subdevice number
+
+.. index:: pair: function; snd_rawmidi_info_set_stream
+.. _doxid-group___raw_midi_1gad704ac98c8313235c73c23d374bf6831:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_rawmidi_info_set_stream(
+		:ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* obj,
+		:ref:`snd_rawmidi_stream_t<doxid-group___raw_midi_1gac3d11365c928cdfd3176ffede3e6f8c5>` val
+		)
+
+set rawmidi stream identifier
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- info
+
+		- pointer to a snd_rawmidi_info_t structure
+
+	*
+		- val
+
+		- rawmidi stream identifier
+
+.. index:: pair: function; snd_rawmidi_info
+.. _doxid-group___raw_midi_1ga3c3595d2907ee30754f6a1d5ceb2d97f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_rawmidi_info(
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi,
+		:ref:`snd_rawmidi_info_t<doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>`* info
+		)
+
+get information about RawMidi handle
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rawmidi
+
+		- RawMidi handle
+
+	*
+		- info
+
+		- pointer to a snd_rawmidi_info_t structure to be filled
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_rawmidi_params_sizeof
+.. _doxid-group___raw_midi_1gaeb5767a318d349a4d2a100191c3cf8d8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	size_t
+	snd_rawmidi_params_sizeof(void)
+
+get size of the snd_rawmidi_params_t structure in bytes
+
+
+
+.. rubric:: Returns:
+
+size of the snd_rawmidi_params_t structure in bytes
+
+.. index:: pair: function; snd_rawmidi_params_malloc
+.. _doxid-group___raw_midi_1gaedc01312384764d02b6bc946cb1e79a9:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_rawmidi_params_malloc(:ref:`snd_rawmidi_params_t<doxid-group___raw_midi_1ga98ad06bccfabc646530241d3a0eef5a1>`** ptr)
+
+allocate the snd_rawmidi_params_t structure
+
+Allocates a new snd_rawmidi_params_t structure using the standard malloc C library function.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- params
+
+		- returned pointer
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code if fails
+
+.. index:: pair: function; snd_rawmidi_params_free
+.. _doxid-group___raw_midi_1gad8c735ed6a8533655dabd7318f25a6fc:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_rawmidi_params_free(:ref:`snd_rawmidi_params_t<doxid-group___raw_midi_1ga98ad06bccfabc646530241d3a0eef5a1>`* obj)
+
+frees the snd_rawmidi_params_t structure
+
+Frees the given snd_rawmidi_params_t structure using the standard free C library function.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- params
+
+		- pointer to the :ref:`snd_rawmidi_params_t <doxid-group___raw_midi_1ga98ad06bccfabc646530241d3a0eef5a1>` structure to free
+
+.. index:: pair: function; snd_rawmidi_params_copy
+.. _doxid-group___raw_midi_1ga533710a31f6b6b4f6791baa27e69089f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_rawmidi_params_copy(
+		:ref:`snd_rawmidi_params_t<doxid-group___raw_midi_1ga98ad06bccfabc646530241d3a0eef5a1>`* dst,
+		const :ref:`snd_rawmidi_params_t<doxid-group___raw_midi_1ga98ad06bccfabc646530241d3a0eef5a1>`* src
+		)
+
+copy one snd_rawmidi_params_t structure to another
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dst
+
+		- destination snd_rawmidi_params_t structure
+
+	*
+		- src
+
+		- source snd_rawmidi_params_t structure
+
+.. index:: pair: function; snd_rawmidi_params_set_buffer_size
+.. _doxid-group___raw_midi_1ga612c96757e2f81fda5b6cd6dec826de1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_rawmidi_params_set_buffer_size(
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi,
+		:ref:`snd_rawmidi_params_t<doxid-group___raw_midi_1ga98ad06bccfabc646530241d3a0eef5a1>`* params,
+		size_t val
+		)
+
+set rawmidi I/O ring buffer size
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rawmidi
+
+		- RawMidi handle
+
+	*
+		- params
+
+		- pointer to a snd_rawmidi_params_t structure
+
+	*
+		- val
+
+		- size in bytes
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_rawmidi_params_get_buffer_size
+.. _doxid-group___raw_midi_1ga0bd9629686062562b88bfd2a3eadc1bd:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	size_t
+	snd_rawmidi_params_get_buffer_size(const :ref:`snd_rawmidi_params_t<doxid-group___raw_midi_1ga98ad06bccfabc646530241d3a0eef5a1>`* params)
+
+get rawmidi I/O ring buffer size
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- params
+
+		- pointer to a snd_rawmidi_params_t structure
+
+
+
+.. rubric:: Returns:
+
+size of rawmidi I/O ring buffer in bytes
+
+.. index:: pair: function; snd_rawmidi_params_set_avail_min
+.. _doxid-group___raw_midi_1ga89782681ce86b3d5cbebb5136d25439f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_rawmidi_params_set_avail_min(
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi,
+		:ref:`snd_rawmidi_params_t<doxid-group___raw_midi_1ga98ad06bccfabc646530241d3a0eef5a1>`* params,
+		size_t val
+		)
+
+set minimum available bytes in rawmidi I/O ring buffer for wakeup
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rawmidi
+
+		- RawMidi handle
+
+	*
+		- params
+
+		- pointer to a snd_rawmidi_params_t structure
+
+	*
+		- val
+
+		- desired value
+
+.. index:: pair: function; snd_rawmidi_params_get_avail_min
+.. _doxid-group___raw_midi_1gae629f2ef814eda39dc081dff65bf7d20:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	size_t
+	snd_rawmidi_params_get_avail_min(const :ref:`snd_rawmidi_params_t<doxid-group___raw_midi_1ga98ad06bccfabc646530241d3a0eef5a1>`* params)
+
+get minimum available bytes in rawmidi I/O ring buffer for wakeup
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- params
+
+		- pointer to snd_rawmidi_params_t structure
+
+
+
+.. rubric:: Returns:
+
+minimum available bytes
+
+.. index:: pair: function; snd_rawmidi_params_set_no_active_sensing
+.. _doxid-group___raw_midi_1gab717719be70fe4396dc84f3f895d6e12:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_rawmidi_params_set_no_active_sensing(
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi,
+		:ref:`snd_rawmidi_params_t<doxid-group___raw_midi_1ga98ad06bccfabc646530241d3a0eef5a1>`* params,
+		int val
+		)
+
+set no-active-sensing action on :ref:`snd_rawmidi_close() <doxid-group___raw_midi_1gabc6bd5922151fb50196f62b9a4ab9f56>`
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rawmidi
+
+		- RawMidi handle
+
+	*
+		- params
+
+		- pointer to snd_rawmidi_params_t structure
+
+	*
+		- val
+
+		- value: 0 = enable to send the active sensing message, 1 = disable
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_rawmidi_params_get_no_active_sensing
+.. _doxid-group___raw_midi_1ga6a057d467faa2b65ddace364fde985fd:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_rawmidi_params_get_no_active_sensing(const :ref:`snd_rawmidi_params_t<doxid-group___raw_midi_1ga98ad06bccfabc646530241d3a0eef5a1>`* params)
+
+get no-active-sensing action status
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- params
+
+		- pointer to snd_rawmidi_params_t structure
+
+
+
+.. rubric:: Returns:
+
+the current status (0 = enable, 1 = disable the active sensing message)
+
+.. index:: pair: function; snd_rawmidi_params
+.. _doxid-group___raw_midi_1ga458d8ad22277645d9b65fa47c011465c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_rawmidi_params(
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi,
+		:ref:`snd_rawmidi_params_t<doxid-group___raw_midi_1ga98ad06bccfabc646530241d3a0eef5a1>`* params
+		)
+
+set parameters about rawmidi stream
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rawmidi
+
+		- RawMidi handle
+
+	*
+		- params
+
+		- pointer to a snd_rawmidi_params_t structure to be filled
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_rawmidi_params_current
+.. _doxid-group___raw_midi_1ga86eabf81acd7c43fc100c67fbda5085d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_rawmidi_params_current(
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi,
+		:ref:`snd_rawmidi_params_t<doxid-group___raw_midi_1ga98ad06bccfabc646530241d3a0eef5a1>`* params
+		)
+
+get current parameters about rawmidi stream
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rawmidi
+
+		- RawMidi handle
+
+	*
+		- params
+
+		- pointer to a snd_rawmidi_params_t structure to be filled
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_rawmidi_status_sizeof
+.. _doxid-group___raw_midi_1ga7933bdb7eea04815be0bba98261865e4:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	size_t
+	snd_rawmidi_status_sizeof(void)
+
+get size of the snd_rawmidi_status_t structure in bytes
+
+
+
+.. rubric:: Returns:
+
+size of the snd_rawmidi_status_t structure in bytes
+
+.. index:: pair: function; snd_rawmidi_status_malloc
+.. _doxid-group___raw_midi_1gac1035208bbdf81852dbcf2e14ce4a8dc:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_rawmidi_status_malloc(:ref:`snd_rawmidi_status_t<doxid-group___raw_midi_1ga10a44a41000ef7dfe61f712466237aff>`** ptr)
+
+allocate the snd_rawmidi_status_t structure
+
+Allocates a new snd_rawmidi_status_t structure using the standard malloc C library function.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ptr
+
+		- returned pointer
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code if fails
+
+.. index:: pair: function; snd_rawmidi_status_free
+.. _doxid-group___raw_midi_1gac9852f68911bbb8aef21d2e20c3ff2c0:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_rawmidi_status_free(:ref:`snd_rawmidi_status_t<doxid-group___raw_midi_1ga10a44a41000ef7dfe61f712466237aff>`* obj)
+
+frees the snd_rawmidi_status_t structure
+
+Frees the given snd_rawmidi_status_t structure using the standard free C library function.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- status
+
+		- pointer to the snd_rawmidi_status_t structure to free
+
+.. index:: pair: function; snd_rawmidi_status_copy
+.. _doxid-group___raw_midi_1gab62e8a4ca0033166f906a969048d935c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_rawmidi_status_copy(
+		:ref:`snd_rawmidi_status_t<doxid-group___raw_midi_1ga10a44a41000ef7dfe61f712466237aff>`* dst,
+		const :ref:`snd_rawmidi_status_t<doxid-group___raw_midi_1ga10a44a41000ef7dfe61f712466237aff>`* src
+		)
+
+copy one snd_rawmidi_status_t structure to another
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dst
+
+		- destination snd_rawmidi_status_t structure
+
+	*
+		- src
+
+		- source snd_rawmidi_status_t structure
+
+.. index:: pair: function; snd_rawmidi_status_get_tstamp
+.. _doxid-group___raw_midi_1gaeb867dbf1d4d5fb3bdcad36a86565837:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_rawmidi_status_get_tstamp(
+		const :ref:`snd_rawmidi_status_t<doxid-group___raw_midi_1ga10a44a41000ef7dfe61f712466237aff>`* obj,
+		:ref:`snd_htimestamp_t<doxid-group___global_1ga3a3f5b65c40f498cdbc26944bd9855cf>`* ptr
+		)
+
+get the start timestamp
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- status
+
+		- pointer to a snd_rawmidi_status_t structure
+
+	*
+		- tstamp
+
+		- returned timestamp value
+
+.. index:: pair: function; snd_rawmidi_status_get_avail
+.. _doxid-group___raw_midi_1ga7ff63a2376b2df549698296d37b532ed:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	size_t
+	snd_rawmidi_status_get_avail(const :ref:`snd_rawmidi_status_t<doxid-group___raw_midi_1ga10a44a41000ef7dfe61f712466237aff>`* obj)
+
+get current available bytes in the rawmidi I/O ring buffer
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- status
+
+		- pointer to a snd_rawmidi_status_t structure
+
+
+
+.. rubric:: Returns:
+
+current available bytes in the rawmidi I/O ring buffer
+
+.. index:: pair: function; snd_rawmidi_status_get_xruns
+.. _doxid-group___raw_midi_1gae4f69ac10574cfc2cd5c848628e75f9b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	size_t
+	snd_rawmidi_status_get_xruns(const :ref:`snd_rawmidi_status_t<doxid-group___raw_midi_1ga10a44a41000ef7dfe61f712466237aff>`* obj)
+
+get count of xruns
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- status
+
+		- pointer to a snd_rawmidi_status_t structure
+
+
+
+.. rubric:: Returns:
+
+count of xruns
+
+.. index:: pair: function; snd_rawmidi_status
+.. _doxid-group___raw_midi_1gab888bce923769882931f77603327231d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_rawmidi_status(
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi,
+		:ref:`snd_rawmidi_status_t<doxid-group___raw_midi_1ga10a44a41000ef7dfe61f712466237aff>`* status
+		)
+
+get status of rawmidi stream
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rawmidi
+
+		- RawMidi handle
+
+	*
+		- status
+
+		- pointer to a snd_rawmidi_status_t structure to be filled
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_rawmidi_drain
+.. _doxid-group___raw_midi_1gabfff7417ec957b7ee07882f91d73d7be:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_rawmidi_drain(:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi)
+
+drain all bytes in the rawmidi I/O ring buffer
+
+Waits until all MIDI bytes are not drained (sent) to the hardware device.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rawmidi
+
+		- RawMidi handle
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_rawmidi_drop
+.. _doxid-group___raw_midi_1ga01076c87d169cf77334d35bd094abd0a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_rawmidi_drop(:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi)
+
+drop all bytes in the rawmidi I/O ring buffer immediately
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rawmidi
+
+		- RawMidi handle
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_rawmidi_write
+.. _doxid-group___raw_midi_1ga0a30e482efec57f4ea74c533a0f9b134:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	ssize_t
+	snd_rawmidi_write(
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi,
+		const void* buffer,
+		size_t size
+		)
+
+write MIDI bytes to MIDI stream
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rawmidi
+
+		- RawMidi handle
+
+	*
+		- buffer
+
+		- buffer containing MIDI bytes
+
+	*
+		- size
+
+		- output buffer size in bytes
+
+.. index:: pair: function; snd_rawmidi_read
+.. _doxid-group___raw_midi_1ga9b0952fc04facda83cdf1521325ca475:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	ssize_t
+	snd_rawmidi_read(
+		:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi,
+		void* buffer,
+		size_t size
+		)
+
+read MIDI bytes from MIDI stream
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rawmidi
+
+		- RawMidi handle
+
+	*
+		- buffer
+
+		- buffer to store the input MIDI bytes
+
+	*
+		- size
+
+		- input buffer size in bytes
+
+.. index:: pair: function; snd_rawmidi_name
+.. _doxid-group___raw_midi_1gaa4bf6540f3f36c5878d31abd34a341d3:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	snd_rawmidi_name(:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi)
+
+get identifier of RawMidi handle
+
+Returns the ASCII identifier of given RawMidi handle. It's the same identifier specified in :ref:`snd_rawmidi_open() <doxid-group___raw_midi_1ga2ab783051deeb7eb37eb568b76448889>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rawmidi
+
+		- a RawMidi handle
+
+
+
+.. rubric:: Returns:
+
+ascii identifier of RawMidi handle
+
+.. index:: pair: function; snd_rawmidi_type
+.. _doxid-group___raw_midi_1ga5984e0c61995c8184a0e6e0a68a6faaf:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_rawmidi_type_t<doxid-group___raw_midi_1ga271ccd508f221ec7c99a27b150c657ba>`
+	snd_rawmidi_type(:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rmidi)
+
+get type of RawMidi handle
+
+Returns the type :ref:`snd_rawmidi_type_t <doxid-group___raw_midi_1ga271ccd508f221ec7c99a27b150c657ba>` of given RawMidi handle.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rawmidi
+
+		- a RawMidi handle
+
+
+
+.. rubric:: Returns:
+
+type of RawMidi handle
+
+.. index:: pair: function; snd_rawmidi_stream
+.. _doxid-group___raw_midi_1ga295d2f3ce9e992919f205b929fcb83ee:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_rawmidi_stream_t<doxid-group___raw_midi_1gac3d11365c928cdfd3176ffede3e6f8c5>`
+	snd_rawmidi_stream(:ref:`snd_rawmidi_t<doxid-group___raw_midi_1gaa21972df6ca3ebde0f7225b2472d0095>`* rawmidi)
+
+get stream (direction) of RawMidi handle
+
+Returns the stream :ref:`snd_rawmidi_stream_t <doxid-group___raw_midi_1gac3d11365c928cdfd3176ffede3e6f8c5>` of given RawMidi handle.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rawmidi
+
+		- a RawMidi handle
+
+
+
+.. rubric:: Returns:
+
+stream of RawMidi handle
+
+Macros
+------
+
+.. index:: pair: define; SND_RAWMIDI_APPEND
+.. _doxid-group___raw_midi_1ga7060640f32abcd337239bde2c8749d23:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_RAWMIDI_APPEND
+
+Append (flag to open mode)
+
+.. index:: pair: define; SND_RAWMIDI_DLSYM_VERSION
+.. _doxid-group___raw_midi_1ga2b1694b5b3e98514d6b2bc5b824e9adc:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_RAWMIDI_DLSYM_VERSION
+
+dlsym version for interface entry callback
+
+.. index:: pair: define; SND_RAWMIDI_NONBLOCK
+.. _doxid-group___raw_midi_1ga31ee35659c82272382ccc3014c8a73f8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_RAWMIDI_NONBLOCK
+
+Non blocking mode (flag to open mode)
+
+.. index:: pair: define; SND_RAWMIDI_SYNC
+.. _doxid-group___raw_midi_1gab1a659b38e5174d790d5671739995894:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_RAWMIDI_SYNC
+
+Write sync mode (Flag to open mode)
+
+.. index:: pair: define; snd_rawmidi_info_alloca
+.. _doxid-group___raw_midi_1gaaa4c7257d03c396293cffaef02818c35:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define snd_rawmidi_info_alloca(ptr)
+
+allocate an invalid :ref:`snd_rawmidi_info_t <doxid-group___raw_midi_1gab0f0f325ab812941e9b81addf0b941d3>` using standard alloca
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ptr
+
+		- returned pointer
+
+.. index:: pair: define; snd_rawmidi_params_alloca
+.. _doxid-group___raw_midi_1ga0a7ab61af3880409ccd9adee0e756210:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define snd_rawmidi_params_alloca(ptr)
+
+allocate an invalid :ref:`snd_rawmidi_params_t <doxid-group___raw_midi_1ga98ad06bccfabc646530241d3a0eef5a1>` using standard alloca
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ptr
+
+		- returned pointer
+
+.. index:: pair: define; snd_rawmidi_status_alloca
+.. _doxid-group___raw_midi_1gaa83c6963d341b0c067764dd1ba2c3d76:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define snd_rawmidi_status_alloca(ptr)
+
+allocate an invalid :ref:`snd_rawmidi_status_t <doxid-group___raw_midi_1ga10a44a41000ef7dfe61f712466237aff>` using standard alloca
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ptr
+
+		- returned pointer
+

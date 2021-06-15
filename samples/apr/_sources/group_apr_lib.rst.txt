@@ -1,0 +1,333 @@
+.. index:: pair: group; General Purpose Library Routines
+.. _doxid-group__apr__lib:
+
+General Purpose Library Routines
+================================
+
+.. toctree::
+	:hidden:
+
+	struct_apr_vformatter_buff_t.rst
+
+Overview
+~~~~~~~~
+
+This is collection of oddballs that didn't fit anywhere else, and might move to more appropriate headers with the release of APR 1.0. :ref:`More...<details-group__apr__lib>`
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef struct :ref:`apr_vformatter_buff_t<doxid-structapr__vformatter__buff__t>` :ref:`apr_vformatter_buff_t<doxid-group__apr__lib_1ga5e9986deebda40f2d1cf8364fa03c3c5>`;
+
+	// structs
+
+	struct :ref:`apr_vformatter_buff_t<doxid-structapr__vformatter__buff__t>`;
+
+	// global functions
+
+	const char*
+	:ref:`apr_filepath_name_get<doxid-group__apr__lib_1ga241e929df23aede34eb3f2651cf56bc9>`(const char* pathname);
+
+	int
+	:ref:`apr_vformatter<doxid-group__apr__lib_1gad2cd3594aeaafd45931d1034965f48c1>`(
+		int(*)(:ref:`apr_vformatter_buff_t<doxid-structapr__vformatter__buff__t>`*b) flush_func,
+		:ref:`apr_vformatter_buff_t<doxid-structapr__vformatter__buff__t>`* c,
+		const char* fmt,
+		va_list ap
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_password_get<doxid-group__apr__lib_1ga377e0677598745769ec6f80fecf8f859>`(
+		const char* prompt,
+		char* pwbuf,
+		apr_size_t* bufsize
+		);
+
+	// macros
+
+	#define :ref:`HUGE_STRING_LEN<doxid-group__apr__lib_1ga0c9dd98f46b90b5bcd4cbf75e252d0da>`
+
+	#define :ref:`apr_killpg<doxid-group__apr__lib_1gaa3b0264aadbd9f8d805252fb1ca1cd0e>`( \
+		x, \
+		y \
+		)
+
+.. _details-group__apr__lib:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+This is collection of oddballs that didn't fit anywhere else, and might move to more appropriate headers with the release of APR 1.0.
+
+Typedefs
+--------
+
+.. index:: pair: typedef; apr_vformatter_buff_t
+.. _doxid-group__apr__lib_1ga5e9986deebda40f2d1cf8364fa03c3c5:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_vformatter_buff_t<doxid-structapr__vformatter__buff__t>` apr_vformatter_buff_t
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_vformatter_buff_t <doxid-structapr__vformatter__buff__t>`
+
+Global Functions
+----------------
+
+.. index:: pair: function; apr_filepath_name_get
+.. _doxid-group__apr__lib_1ga241e929df23aede34eb3f2651cf56bc9:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	apr_filepath_name_get(const char* pathname)
+
+return the final element of the pathname.. code-block:: none
+
+	
+	For example:
+	                "/foo/bar/gum"    -> "gum"
+	                "/foo/bar/gum/"   -> ""
+	                "gum"             -> "gum"
+	                "bs\\path\\stuff" -> "stuff"
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pathname
+
+		- The path to get the final element of
+
+
+
+.. rubric:: Returns:
+
+the final element of the path
+
+.. index:: pair: function; apr_vformatter
+.. _doxid-group__apr__lib_1gad2cd3594aeaafd45931d1034965f48c1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	apr_vformatter(
+		int(*)(:ref:`apr_vformatter_buff_t<doxid-structapr__vformatter__buff__t>`*b) flush_func,
+		:ref:`apr_vformatter_buff_t<doxid-structapr__vformatter__buff__t>`* c,
+		const char* fmt,
+		va_list ap
+		)
+
+:ref:`apr_vformatter() <doxid-group__apr__lib_1gad2cd3594aeaafd45931d1034965f48c1>` is a generic printf-style formatting routine with some extensions... code-block:: none
+
+	
+	The extensions are:
+
+
+
+* .. code-block:: none
+  
+  	%pA takes a struct in_addr *, and prints it as a.b.c.d
+
+* .. code-block:: none
+  
+  	%pI takes an :ref:`apr_sockaddr_t <doxid-structapr__sockaddr__t>` * and prints it as a.b.c.d:port or
+  	[ipv6-address]:port
+
+* .. code-block:: none
+  
+  	%pT takes an apr_os_thread_t * and prints it in decimal
+  	('0' is printed if !APR_HAS_THREADS)
+
+* .. code-block:: none
+  
+  	%pt takes an apr_os_thread_t * and prints it in hexadecimal
+  	('0' is printed if !APR_HAS_THREADS)
+
+* .. code-block:: none
+  
+  	%pm takes an apr_status_t * and prints the appropriate error
+  	string (from apr_strerror) corresponding to that error code.
+
+* .. code-block:: none
+  
+  	%pp takes a void * and outputs it in hex
+
+* .. code-block:: none
+  
+  	%pB takes a apr_uint32_t * as bytes and outputs it's apr_strfsize
+
+* .. code-block:: none
+  
+  	%pF same as above, but takes a apr_off_t *
+
+* .. code-block:: none
+  
+  	%pS same as above, but takes a apr_size_t *
+
+.. code-block:: none
+
+	%pA, %pI, %pT, %pp are available from APR 1.0.0 onwards (and in 0.9.x).
+	%pt is only available from APR 1.2.0 onwards.
+	%pm, %pB, %pF and %pS are only available from APR 1.3.0 onwards.
+
+.. code-block:: none
+
+	The %p hacks are to force gcc's printf warning code to skip
+	over a pointer argument without complaining.  This does
+	mean that the ANSI-style %p (output a void * in hex format) won't
+	work as expected at all, but that seems to be a fair trade-off
+	for the increased robustness of having printf-warnings work.
+
+.. code-block:: none
+
+	Additionally, apr_vformatter allows for arbitrary output methods
+	using the apr_vformatter_buff and flush_func.
+
+.. code-block:: none
+
+	The apr_vformatter_buff has two elements curpos and endpos.
+	curpos is where apr_vformatter will write the next byte of output.
+	It proceeds writing output to curpos, and updating curpos, until
+	either the end of output is reached, or curpos == endpos (i.e. the
+	buffer is full).
+
+.. code-block:: none
+
+	If the end of output is reached, apr_vformatter returns the
+	number of bytes written.
+
+.. code-block:: none
+
+	When the buffer is full, the flush_func is called.  The flush_func
+	can return -1 to indicate that no further output should be attempted,
+	and apr_vformatter will return immediately with -1.  Otherwise
+	the flush_func should flush the buffer in whatever manner is
+	appropriate, re apr_pool_t nitialize curpos and endpos, and return 0.
+
+.. code-block:: none
+
+	Note that flush_func is only invoked as a result of attempting to
+	write another byte at curpos when curpos >= endpos.  So for
+	example, it's possible when the output exactly matches the buffer
+	space available that curpos == endpos will be true when
+	apr_vformatter returns.
+
+.. code-block:: none
+
+	apr_vformatter does not call out to any other code, it is entirely
+	self-contained.  This allows the callers to do things which are
+	otherwise "unsafe".  For example, apr_psprintf uses the "scratch"
+	space at the unallocated end of a block, and doesn't actually
+	complete the allocation until apr_vformatter returns.  apr_psprintf
+	would be completely broken if apr_vformatter were to call anything
+	that used this same pool.  Similarly http_bprintf() uses the "scratch"
+	space at the end of its output buffer, and doesn't actually note
+	that the space is in use until it either has to flush the buffer
+	or until apr_vformatter returns.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- flush_func
+
+		- The function to call when the buffer is full
+
+	*
+		- c
+
+		- The buffer to write to
+
+	*
+		- fmt
+
+		- The format string
+
+	*
+		- ap
+
+		- The arguments to use to fill out the format string.
+
+.. index:: pair: function; apr_password_get
+.. _doxid-group__apr__lib_1ga377e0677598745769ec6f80fecf8f859:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_password_get(
+		const char* prompt,
+		char* pwbuf,
+		apr_size_t* bufsize
+		)
+
+Display a prompt and read in the password from stdin. If the password entered must be truncated to fit in the provided buffer, APR_ENAMETOOLONG will be returned. Note that the bufsize paramater is passed by reference for no reason; its value will never be modified by the :ref:`apr_password_get() <doxid-group__apr__lib_1ga377e0677598745769ec6f80fecf8f859>` function.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- prompt
+
+		- The prompt to display
+
+	*
+		- pwbuf
+
+		- Buffer to store the password
+
+	*
+		- bufsize
+
+		- The length of the password buffer.
+
+Macros
+------
+
+.. index:: pair: define; HUGE_STRING_LEN
+.. _doxid-group__apr__lib_1ga0c9dd98f46b90b5bcd4cbf75e252d0da:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define HUGE_STRING_LEN
+
+A constant representing a 'large' string.
+
+.. index:: pair: define; apr_killpg
+.. _doxid-group__apr__lib_1gaa3b0264aadbd9f8d805252fb1ca1cd0e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define apr_killpg( \
+		x, \
+		y \
+		)
+
+apr_killpg Small utility macros to make things easier to read. Not usually a goal, to be sure..
+

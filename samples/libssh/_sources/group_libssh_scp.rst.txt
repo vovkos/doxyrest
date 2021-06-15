@@ -1,0 +1,840 @@
+.. index:: pair: group; The SSH scp functions
+.. _doxid-group__libssh__scp:
+
+The SSH scp functions
+=====================
+
+.. toctree::
+	:hidden:
+
+Overview
+~~~~~~~~
+
+SCP protocol over SSH functions. :ref:`More...<details-group__libssh__scp>`
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// global functions
+
+	int
+	:ref:`ssh_scp_accept_request<doxid-group__libssh__scp_1gad3bb38b15f02597cc1e155c526a51e51>`(ssh_scp scp);
+
+	int
+	:ref:`ssh_scp_close<doxid-group__libssh__scp_1ga14d31059dcf6fb2325fb960da8e4474e>`(ssh_scp scp);
+
+	int
+	:ref:`ssh_scp_deny_request<doxid-group__libssh__scp_1gad36438c6b1e235d96cec43ca350e9b4f>`(
+		ssh_scp scp,
+		const char* reason
+		);
+
+	void
+	:ref:`ssh_scp_free<doxid-group__libssh__scp_1gac29000cdb07c74d54251fbd838c0c661>`(ssh_scp scp);
+
+	int
+	:ref:`ssh_scp_init<doxid-group__libssh__scp_1ga1db56dcb9dee01dd0b679b3b11151110>`(ssh_scp scp);
+
+	int
+	:ref:`ssh_scp_leave_directory<doxid-group__libssh__scp_1ga2ca698c1e49612c083d9f8a72df52188>`(ssh_scp scp);
+
+	ssh_scp
+	:ref:`ssh_scp_new<doxid-group__libssh__scp_1ga9fcd39a2bb6438e39cf19ff859dc2f2e>`(
+		ssh_session session,
+		int mode,
+		const char* location
+		);
+
+	int
+	:ref:`ssh_scp_pull_request<doxid-group__libssh__scp_1gaba59cd8cc77d219cac93f865445c6e47>`(ssh_scp scp);
+
+	int
+	:ref:`ssh_scp_push_directory<doxid-group__libssh__scp_1gaa584f03d4e3d582ac10a3a19818ec56d>`(
+		ssh_scp scp,
+		const char* dirname,
+		int mode
+		);
+
+	int
+	:ref:`ssh_scp_push_file<doxid-group__libssh__scp_1ga544f4b9c525071910110ada94148adc6>`(
+		ssh_scp scp,
+		const char* filename,
+		size_t size,
+		int perms
+		);
+
+	int
+	:ref:`ssh_scp_push_file64<doxid-group__libssh__scp_1ga50b701b9c8923011d4fc6489c9c7eaae>`(
+		ssh_scp scp,
+		const char* filename,
+		uint64_t size,
+		int perms
+		);
+
+	int
+	:ref:`ssh_scp_read<doxid-group__libssh__scp_1ga10bf627407959b51a7c39b37e8d46460>`(
+		ssh_scp scp,
+		void* buffer,
+		size_t size
+		);
+
+	const char*
+	:ref:`ssh_scp_request_get_filename<doxid-group__libssh__scp_1gab41ede14208dea4bbd3600077008ccf3>`(ssh_scp scp);
+
+	int
+	:ref:`ssh_scp_request_get_permissions<doxid-group__libssh__scp_1ga3386eb6df0cc620e74a039974c6280d4>`(ssh_scp scp);
+
+	size_t
+	:ref:`ssh_scp_request_get_size<doxid-group__libssh__scp_1ga8b6f736a5b5af73cf59c7825d7e61966>`(ssh_scp scp);
+
+	uint64_t
+	:ref:`ssh_scp_request_get_size64<doxid-group__libssh__scp_1gaefe7f44417e1dc0d857d634fe1117d6d>`(ssh_scp scp);
+
+	const char*
+	:ref:`ssh_scp_request_get_warning<doxid-group__libssh__scp_1gafa91c1569e4d22d58a928b232264bbcb>`(ssh_scp scp);
+
+	int
+	:ref:`ssh_scp_write<doxid-group__libssh__scp_1ga11f48e2cf62bcec20d9232ed3ca41752>`(
+		ssh_scp scp,
+		const void* buffer,
+		size_t len
+		);
+
+	int
+	:ref:`ssh_scp_integer_mode<doxid-group__libssh__scp_1gab7d6e452c6963199477103394456d3ae>`(const char* mode);
+
+	int
+	:ref:`ssh_scp_read_string<doxid-group__libssh__scp_1ga0be44d8a450767d92668d36d1beb43b9>`(
+		ssh_scp scp,
+		char* buffer,
+		size_t len
+		);
+
+	char*
+	:ref:`ssh_scp_string_mode<doxid-group__libssh__scp_1ga8772a6523a2a21a06e3986dbcc02118f>`(int mode);
+
+	int
+	:target:`ssh_scp_response<doxid-group__libssh__scp_1gab713864881af7ebda7e1e9c609fdf604>`(
+		ssh_scp scp,
+		char** response
+		);
+
+.. _details-group__libssh__scp:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+SCP protocol over SSH functions.
+
+Global Functions
+----------------
+
+.. index:: pair: function; ssh_scp_accept_request
+.. _doxid-group__libssh__scp_1gad3bb38b15f02597cc1e155c526a51e51:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_scp_accept_request(ssh_scp scp)
+
+Accepts transfer of a file or creation of a directory coming from the remote party.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- scp
+
+		- The scp handle.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK if the message was sent, SSH_ERROR if sending the message failed, or sending it in a bad state.
+
+.. index:: pair: function; ssh_scp_close
+.. _doxid-group__libssh__scp_1ga14d31059dcf6fb2325fb960da8e4474e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_scp_close(ssh_scp scp)
+
+Close the scp channel.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- scp
+
+		- The scp context to close.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success or an SSH error code.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_scp_init() <doxid-group__libssh__scp_1ga1db56dcb9dee01dd0b679b3b11151110>`
+
+.. index:: pair: function; ssh_scp_deny_request
+.. _doxid-group__libssh__scp_1gad36438c6b1e235d96cec43ca350e9b4f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_scp_deny_request(
+		ssh_scp scp,
+		const char* reason
+		)
+
+Deny the transfer of a file or creation of a directory coming from the remote party.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- scp
+
+		- The scp handle.
+
+	*
+		- reason
+
+		- A nul-terminated string with a human-readable explanation of the deny.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK if the message was sent, SSH_ERROR if the sending the message failed, or sending it in a bad state.
+
+.. index:: pair: function; ssh_scp_free
+.. _doxid-group__libssh__scp_1gac29000cdb07c74d54251fbd838c0c661:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	ssh_scp_free(ssh_scp scp)
+
+Free a scp context.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- scp
+
+		- The context to free.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_scp_new() <doxid-group__libssh__scp_1ga9fcd39a2bb6438e39cf19ff859dc2f2e>`
+
+.. index:: pair: function; ssh_scp_init
+.. _doxid-group__libssh__scp_1ga1db56dcb9dee01dd0b679b3b11151110:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_scp_init(ssh_scp scp)
+
+Initialize the scp channel.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- scp
+
+		- The scp context to initialize.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success or an SSH error code.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_scp_new() <doxid-group__libssh__scp_1ga9fcd39a2bb6438e39cf19ff859dc2f2e>`
+
+.. index:: pair: function; ssh_scp_leave_directory
+.. _doxid-group__libssh__scp_1ga2ca698c1e49612c083d9f8a72df52188:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_scp_leave_directory(ssh_scp scp)
+
+Leave a directory.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK if the directory has been left,SSH_ERROR if an error occured.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_scp_push_directory() <doxid-group__libssh__scp_1gaa584f03d4e3d582ac10a3a19818ec56d>`
+
+.. index:: pair: function; ssh_scp_new
+.. _doxid-group__libssh__scp_1ga9fcd39a2bb6438e39cf19ff859dc2f2e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	ssh_scp
+	ssh_scp_new(
+		ssh_session session,
+		int mode,
+		const char* location
+		)
+
+Create a new scp session.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The SSH session to use.
+
+	*
+		- mode
+
+		- One of SSH_SCP_WRITE or SSH_SCP_READ, depending if you need to drop files remotely or read them. It is not possible to combine read and write. SSH_SCP_RECURSIVE Flag can be or'ed to this to indicate that you're going to use recursion. Browsing through directories is not possible without this.
+
+	*
+		- location
+
+		- The directory in which write or read will be done. Any push or pull will be relative to this place. This can also be a pattern of files to download (read).
+
+
+
+.. rubric:: Returns:
+
+A ssh_scp handle, NULL if the creation was impossible.
+
+.. index:: pair: function; ssh_scp_pull_request
+.. _doxid-group__libssh__scp_1gaba59cd8cc77d219cac93f865445c6e47:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_scp_pull_request(ssh_scp scp)
+
+Wait for a scp request (file, directory).
+
+
+
+.. rubric:: Returns:
+
+SSH_SCP_REQUEST_NEWFILE: The other side is sending a file SSH_SCP_REQUEST_NEWDIR: The other side is sending a directory SSH_SCP_REQUEST_ENDDIR: The other side has finished with the current directory SSH_SCP_REQUEST_WARNING: The other side sent us a warning SSH_SCP_REQUEST_EOF: The other side finished sending us files and data. SSH_ERROR: Some error happened
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_scp_read() <doxid-group__libssh__scp_1ga10bf627407959b51a7c39b37e8d46460>`
+
+:ref:`ssh_scp_deny_request() <doxid-group__libssh__scp_1gad36438c6b1e235d96cec43ca350e9b4f>`
+
+:ref:`ssh_scp_accept_request() <doxid-group__libssh__scp_1gad3bb38b15f02597cc1e155c526a51e51>`
+
+:ref:`ssh_scp_request_get_warning() <doxid-group__libssh__scp_1gafa91c1569e4d22d58a928b232264bbcb>`
+
+.. index:: pair: function; ssh_scp_push_directory
+.. _doxid-group__libssh__scp_1gaa584f03d4e3d582ac10a3a19818ec56d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_scp_push_directory(
+		ssh_scp scp,
+		const char* dirname,
+		int mode
+		)
+
+Create a directory in a scp in sink mode.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- scp
+
+		- The scp handle.
+
+	*
+		- dirname
+
+		- The name of the directory being created.
+
+	*
+		- mode
+
+		- The UNIX permissions for the new directory, e.g. 0755.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK if the directory has been created, SSH_ERROR if an error occured.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_scp_leave_directory() <doxid-group__libssh__scp_1ga2ca698c1e49612c083d9f8a72df52188>`
+
+.. index:: pair: function; ssh_scp_push_file
+.. _doxid-group__libssh__scp_1ga544f4b9c525071910110ada94148adc6:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_scp_push_file(
+		ssh_scp scp,
+		const char* filename,
+		size_t size,
+		int perms
+		)
+
+Initialize the sending of a file to a scp in sink mode.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- scp
+
+		- The scp handle.
+
+	*
+		- filename
+
+		- The name of the file being sent. It should not contain any path indicator
+
+	*
+		- size
+
+		- Exact size in bytes of the file being sent.
+
+	*
+		- mode
+
+		- The UNIX permissions for the new file, e.g. 0644.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK if the file is ready to be sent, SSH_ERROR if an error occured.
+
+.. index:: pair: function; ssh_scp_push_file64
+.. _doxid-group__libssh__scp_1ga50b701b9c8923011d4fc6489c9c7eaae:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_scp_push_file64(
+		ssh_scp scp,
+		const char* filename,
+		uint64_t size,
+		int perms
+		)
+
+Initialize the sending of a file to a scp in sink mode, using a 64-bit size.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- scp
+
+		- The scp handle.
+
+	*
+		- filename
+
+		- The name of the file being sent. It should not contain any path indicator
+
+	*
+		- size
+
+		- Exact size in bytes of the file being sent.
+
+	*
+		- mode
+
+		- The UNIX permissions for the new file, e.g. 0644.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK if the file is ready to be sent, SSH_ERROR if an error occured.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_scp_push_file() <doxid-group__libssh__scp_1ga544f4b9c525071910110ada94148adc6>`
+
+.. index:: pair: function; ssh_scp_read
+.. _doxid-group__libssh__scp_1ga10bf627407959b51a7c39b37e8d46460:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_scp_read(
+		ssh_scp scp,
+		void* buffer,
+		size_t size
+		)
+
+Read from a remote scp file.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- scp
+
+		- The scp handle.
+
+	*
+		- buffer
+
+		- The destination buffer.
+
+	*
+		- size
+
+		- The size of the buffer.
+
+
+
+.. rubric:: Returns:
+
+The nNumber of bytes read, SSH_ERROR if an error occured while reading.
+
+.. index:: pair: function; ssh_scp_request_get_filename
+.. _doxid-group__libssh__scp_1gab41ede14208dea4bbd3600077008ccf3:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	ssh_scp_request_get_filename(ssh_scp scp)
+
+Get the name of the directory or file being pushed from the other party.
+
+
+
+.. rubric:: Returns:
+
+The file name, NULL on error. The string should not be freed.
+
+.. index:: pair: function; ssh_scp_request_get_permissions
+.. _doxid-group__libssh__scp_1ga3386eb6df0cc620e74a039974c6280d4:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_scp_request_get_permissions(ssh_scp scp)
+
+Get the permissions of the directory or file being pushed from the other party.
+
+
+
+.. rubric:: Returns:
+
+The UNIX permission, e.g 0644, -1 on error.
+
+.. index:: pair: function; ssh_scp_request_get_size
+.. _doxid-group__libssh__scp_1ga8b6f736a5b5af73cf59c7825d7e61966:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	size_t
+	ssh_scp_request_get_size(ssh_scp scp)
+
+Get the size of the file being pushed from the other party.
+
+The real size may not fit in a 32 bits field and may be truncated.
+
+
+
+.. rubric:: Returns:
+
+The numeric size of the file being read.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_scp_request_get_size64() <doxid-group__libssh__scp_1gaefe7f44417e1dc0d857d634fe1117d6d>`
+
+.. index:: pair: function; ssh_scp_request_get_size64
+.. _doxid-group__libssh__scp_1gaefe7f44417e1dc0d857d634fe1117d6d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	uint64_t
+	ssh_scp_request_get_size64(ssh_scp scp)
+
+Get the size of the file being pushed from the other party.
+
+
+
+.. rubric:: Returns:
+
+The numeric size of the file being read.
+
+.. index:: pair: function; ssh_scp_request_get_warning
+.. _doxid-group__libssh__scp_1gafa91c1569e4d22d58a928b232264bbcb:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	ssh_scp_request_get_warning(ssh_scp scp)
+
+Get the warning string from a scp handle.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- scp
+
+		- The scp handle.
+
+
+
+.. rubric:: Returns:
+
+A warning string, or NULL on error. The string should not be freed.
+
+.. index:: pair: function; ssh_scp_write
+.. _doxid-group__libssh__scp_1ga11f48e2cf62bcec20d9232ed3ca41752:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_scp_write(
+		ssh_scp scp,
+		const void* buffer,
+		size_t len
+		)
+
+Write into a remote scp file.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- scp
+
+		- The scp handle.
+
+	*
+		- buffer
+
+		- The buffer to write.
+
+	*
+		- len
+
+		- The number of bytes to write.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK if the write was successful, SSH_ERROR an error occured while writing.
+
+.. index:: pair: function; ssh_scp_integer_mode
+.. _doxid-group__libssh__scp_1gab7d6e452c6963199477103394456d3ae:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_scp_integer_mode(const char* mode)
+
+Convert a scp text mode to an integer.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mode
+
+		- The mode to convert, e.g. "0644".
+
+
+
+.. rubric:: Returns:
+
+An integer value, e.g. 420 for "0644".
+
+.. index:: pair: function; ssh_scp_read_string
+.. _doxid-group__libssh__scp_1ga0be44d8a450767d92668d36d1beb43b9:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_scp_read_string(
+		ssh_scp scp,
+		char* buffer,
+		size_t len
+		)
+
+Read a string on a channel, terminated by '
+
+'.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- scp
+
+		- The scp handle.
+
+	*
+		- buffer
+
+		- A pointer to a buffer to place the string.
+
+	*
+		- len
+
+		- The size of the buffer in bytes. If the string is bigger than len-1, only len-1 bytes are read and the string is null-terminated.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK if the string was read, SSH_ERROR if an error occured while reading.
+
+.. index:: pair: function; ssh_scp_string_mode
+.. _doxid-group__libssh__scp_1ga8772a6523a2a21a06e3986dbcc02118f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	char*
+	ssh_scp_string_mode(int mode)
+
+Convert a unix mode into a scp string.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mode
+
+		- The mode to convert, e.g. 420 or 0644.
+
+
+
+.. rubric:: Returns:
+
+A pointer to a malloc'ed string containing the scp mode, e.g. "0644".
+

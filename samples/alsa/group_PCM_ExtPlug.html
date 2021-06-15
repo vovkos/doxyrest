@@ -1,0 +1,668 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>External Filter plugin SDK &mdash; ALSA Library Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/doxyrest-pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/doxyrest-sphinx_rtd_theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/target-highlight.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="struct snd_pcm_extplug" href="struct_snd_pcm_extplug.html" />
+    <link rel="prev" title="External PCM plugin SDK" href="group_Plugin_SDK.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ALSA Library Documentation
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="group_Config.html">Configuration Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Digital_Audio_Interface.html">Constants for Digital Audio Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_MIDI_Interface.html">Constants for MIDI v1.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Control.html">Control Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Error.html">Error handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_CtlPlugin_SDK.html">External Control Plugin SDK</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="group_Plugin_SDK.html">External PCM plugin SDK</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">External Filter plugin SDK</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="struct_snd_pcm_extplug.html">struct snd_pcm_extplug</a></li>
+<li class="toctree-l3"><a class="reference internal" href="struct_snd_pcm_extplug_callback.html">struct snd_pcm_extplug_callback</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#enum-values">Enum Values</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#global-functions">Global Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#macros">Macros</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="group_PCM_IOPlug.html">External I/O plugin SDK</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_Plugin_SDK.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_Plugin_SDK.html#detailed-documentation">Detailed Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="group_Global.html">Global defines and functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_HwDep.html">Hardware Dependant Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Input.html">Input Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Sequencer.html">MIDI Sequencer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Mixer.html">Mixer Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Output.html">Output Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_PCM.html">PCM Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_RawMidi.html">RawMidi Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Timer.html">Timer Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_topology.html">Topology Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_ucm.html">Use Case Interface</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="page_topology.html">ALSA Topology Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_Usecase.html">ALSA Use Case Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_bug.html">Bug List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_conf.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_control.html">Control interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_deprecated.html">Deprecated List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_ctl_external_plugins.html">External Control Plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_hcontrol.html">High level control interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_confhooks.html">Hooks in configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_mixer.html">Mixer interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_pcm.html">PCM (digital audio) interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_pcm_plugins.html">PCM (digital audio) plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_pcm_external_plugins.html">PCM External Plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_rawmidi.html">RawMidi interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_confarg.html">Runtime arguments in configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_conffunc.html">Runtime functions in configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_seq.html">Sequencer interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_timer.html">Timer interface</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="example__test_latency.c.html">/test/latency.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_pcm.c.html">/test/pcm.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_pcm_min.c.html">/test/pcm_min.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_rawmidi.c.html">/test/rawmidi.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_timer.c.html">/test/timer.c</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ALSA Library Documentation</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="group_Plugin_SDK.html">External PCM plugin SDK</a> &raquo;</li>
+        
+      <li>External Filter plugin SDK</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="external-filter-plugin-sdk">
+<span id="doxid-group-p-c-m-ext-plug"></span><span id="index-0"></span><h1>External Filter plugin SDK</h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="overview">
+<h2>Overview</h2>
+<p>See the <a class="reference internal" href="page_pcm.html#doxid-pcm"><span class="std std-ref">PCM (digital audio) interface</span></a> page for more details. <a class="reference internal" href="#details-group-p-c-m-ext-plug"><span class="std std-ref">More…</span></a></p>
+<pre class="highlight doxyrest-overview-code-block literal-block">
+<span></span><span class="c1">// typedefs</span>
+
+<span class="k">typedef</span> <a class="reference internal" href="struct_snd_pcm_extplug.html#doxid-structsnd-pcm-extplug"><span class="std std-ref">snd_pcm_extplug</span></a><span></span> <a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gaeddcbb8005ccafb008a75283d5d9e551"><span class="std std-ref">snd_pcm_extplug_t</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <a class="reference internal" href="struct_snd_pcm_extplug_callback.html#doxid-structsnd-pcm-extplug-callback"><span class="std std-ref">snd_pcm_extplug_callback</span></a><span></span> <a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1ga0c554fce3192586b7a5ff51d45272f44"><span class="std std-ref">snd_pcm_extplug_callback_t</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// enums</span>
+
+<span class="k">enum</span> <span class="p">{</span>
+    <a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gga61dadd085c1777f559549e05962b2c9ea627234d455a7d4652aacead45cf650ab"><span class="std std-ref">&#64;5::SND_PCM_EXTPLUG_HW_FORMAT</span></a><span></span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gga61dadd085c1777f559549e05962b2c9ea24eab971805f640763f6ffd9f60875dd"><span class="std std-ref">&#64;5::SND_PCM_EXTPLUG_HW_CHANNELS</span></a><span></span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gga61dadd085c1777f559549e05962b2c9eae359079bba1fec51841cd82179961801"><span class="std std-ref">&#64;5::SND_PCM_EXTPLUG_HW_PARAMS</span></a><span></span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="c1">// structs</span>
+
+<span class="k">struct</span> <a class="reference internal" href="struct_snd_pcm_extplug.html#doxid-structsnd-pcm-extplug"><span class="std std-ref">snd_pcm_extplug</span></a><span></span><span class="p">;</span>
+<span class="k">struct</span> <a class="reference internal" href="struct_snd_pcm_extplug_callback.html#doxid-structsnd-pcm-extplug-callback"><span class="std std-ref">snd_pcm_extplug_callback</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// global functions</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gab0b27889f74c83cd033062981320fd62"><span class="std std-ref">snd_pcm_extplug_create</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gaeddcbb8005ccafb008a75283d5d9e551"><span class="std std-ref">snd_pcm_extplug_t</span></a><span></span><span class="o">*</span> <span class="n">ext</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">,</span>
+    <a class="reference internal" href="group_Config.html#doxid-group-config-1ga1c20905af775ae77d04d1a5696f67985"><span class="std std-ref">snd_config_t</span></a><span></span><span class="o">*</span> <span class="n">root</span><span class="p">,</span>
+    <a class="reference internal" href="group_Config.html#doxid-group-config-1ga1c20905af775ae77d04d1a5696f67985"><span class="std std-ref">snd_config_t</span></a><span></span><span class="o">*</span> <span class="n">slave_conf</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_pcm_stream_t.html#doxid-group-p-c-m-1gac23b43ff55add78638e503b9cc892c24"><span class="std std-ref">snd_pcm_stream_t</span></a><span></span> <span class="n">stream</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">mode</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1ga7259292a6f64a2432f4c2a44bb5f8508"><span class="std std-ref">snd_pcm_extplug_delete</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gaeddcbb8005ccafb008a75283d5d9e551"><span class="std std-ref">snd_pcm_extplug_t</span></a><span></span><span class="o">*</span> <span class="n">ext</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gacef181565eb697397ce41c1aab381777"><span class="std std-ref">snd_pcm_extplug_params_reset</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gaeddcbb8005ccafb008a75283d5d9e551"><span class="std std-ref">snd_pcm_extplug_t</span></a><span></span><span class="o">*</span> <span class="n">ext</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gadbf27adba1a7cd0195b6ac750bb11bf7"><span class="std std-ref">snd_pcm_extplug_set_param_list</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gaeddcbb8005ccafb008a75283d5d9e551"><span class="std std-ref">snd_pcm_extplug_t</span></a><span></span><span class="o">*</span> <span class="n">extplug</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">type</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">num_list</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span><span class="o">*</span> <span class="n">list</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gabef139bbe5db265433fd5310d0faad4d"><span class="std std-ref">snd_pcm_extplug_set_param_minmax</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gaeddcbb8005ccafb008a75283d5d9e551"><span class="std std-ref">snd_pcm_extplug_t</span></a><span></span><span class="o">*</span> <span class="n">extplug</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">type</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">min</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">max</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gad14f6746e36d556c7a7937633b965ca7"><span class="std std-ref">snd_pcm_extplug_set_slave_param_list</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gaeddcbb8005ccafb008a75283d5d9e551"><span class="std std-ref">snd_pcm_extplug_t</span></a><span></span><span class="o">*</span> <span class="n">extplug</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">type</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">num_list</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span><span class="o">*</span> <span class="n">list</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gad3cac0ee15293f349220a75cce69a51e"><span class="std std-ref">snd_pcm_extplug_set_slave_param_minmax</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gaeddcbb8005ccafb008a75283d5d9e551"><span class="std std-ref">snd_pcm_extplug_t</span></a><span></span><span class="o">*</span> <span class="n">extplug</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">type</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">min</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">max</span>
+    <span class="p">);</span>
+
+<span class="k">static</span>
+<span class="n">__inline__</span> <span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1ga63f38acb512e5879cae7502a935f1f11"><span class="std std-ref">snd_pcm_extplug_set_param</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gaeddcbb8005ccafb008a75283d5d9e551"><span class="std std-ref">snd_pcm_extplug_t</span></a><span></span><span class="o">*</span> <span class="n">extplug</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">type</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">val</span>
+    <span class="p">);</span>
+
+<span class="k">static</span>
+<span class="n">__inline__</span> <span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gae8a6ccbdfed94e3baca2f28f0583320f"><span class="std std-ref">snd_pcm_extplug_set_slave_param</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gaeddcbb8005ccafb008a75283d5d9e551"><span class="std std-ref">snd_pcm_extplug_t</span></a><span></span><span class="o">*</span> <span class="n">extplug</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">type</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">val</span>
+    <span class="p">);</span>
+
+<span class="c1">// macros</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1ga24d0ae71d106f08685d9ba8c6cf5fe78"><span class="std std-ref">SND_PCM_EXTPLUG_VERSION</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1ga82e7bf8a5b451792195a70cb74e31fc4"><span class="std std-ref">SND_PCM_EXTPLUG_VERSION_MAJOR</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1ga40f40d20f8683751fdbb25b1f9ed013c"><span class="std std-ref">SND_PCM_EXTPLUG_VERSION_MINOR</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1ga685e379757c606a4d2a7fcc969cc5dc1"><span class="std std-ref">SND_PCM_EXTPLUG_VERSION_TINY</span></a>
+</pre>
+</div>
+<div class="section" id="detailed-documentation">
+<span id="details-group-p-c-m-ext-plug"></span><h2>Detailed Documentation</h2>
+<p>See the <a class="reference internal" href="page_pcm.html#doxid-pcm"><span class="std std-ref">PCM (digital audio) interface</span></a> page for more details.</p>
+<div class="section" id="enum-values">
+<h3>Enum Values</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-ext-plug-1gga61dadd085c1777f559549e05962b2c9ea627234d455a7d4652aacead45cf650ab">
+<span id="index-1"></span><span></span><span class="n">SND_PCM_EXTPLUG_HW_FORMAT</span>
+</pre>
+<p>format</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-ext-plug-1gga61dadd085c1777f559549e05962b2c9ea24eab971805f640763f6ffd9f60875dd">
+<span id="index-2"></span><span></span><span class="n">SND_PCM_EXTPLUG_HW_CHANNELS</span>
+</pre>
+<p>channels</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-ext-plug-1gga61dadd085c1777f559549e05962b2c9eae359079bba1fec51841cd82179961801">
+<span id="index-3"></span><span></span><span class="n">SND_PCM_EXTPLUG_HW_PARAMS</span>
+</pre>
+<p>max number of hw constraints</p>
+</div>
+<div class="section" id="typedefs">
+<h3>Typedefs</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-ext-plug-1gaeddcbb8005ccafb008a75283d5d9e551">
+<span id="index-4"></span><span></span><span class="k">typedef</span> <a class="reference internal" href="struct_snd_pcm_extplug.html#doxid-structsnd-pcm-extplug"><span class="std std-ref">snd_pcm_extplug</span></a><span></span> <span class="n">snd_pcm_extplug_t</span>
+</pre>
+<p>Handle of external filter plugin</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-ext-plug-1ga0c554fce3192586b7a5ff51d45272f44">
+<span id="index-5"></span><span></span><span class="k">typedef</span> <a class="reference internal" href="struct_snd_pcm_extplug_callback.html#doxid-structsnd-pcm-extplug-callback"><span class="std std-ref">snd_pcm_extplug_callback</span></a><span></span> <span class="n">snd_pcm_extplug_callback_t</span>
+</pre>
+<p>Callback table of extplug</p>
+</div>
+<div class="section" id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-ext-plug-1gab0b27889f74c83cd033062981320fd62">
+<span id="index-6"></span><span></span><span class="kt">int</span>
+<span class="n">snd_pcm_extplug_create</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gaeddcbb8005ccafb008a75283d5d9e551"><span class="std std-ref">snd_pcm_extplug_t</span></a><span></span><span class="o">*</span> <span class="n">ext</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">,</span>
+    <a class="reference internal" href="group_Config.html#doxid-group-config-1ga1c20905af775ae77d04d1a5696f67985"><span class="std std-ref">snd_config_t</span></a><span></span><span class="o">*</span> <span class="n">root</span><span class="p">,</span>
+    <a class="reference internal" href="group_Config.html#doxid-group-config-1ga1c20905af775ae77d04d1a5696f67985"><span class="std std-ref">snd_config_t</span></a><span></span><span class="o">*</span> <span class="n">slave_conf</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_pcm_stream_t.html#doxid-group-p-c-m-1gac23b43ff55add78638e503b9cc892c24"><span class="std std-ref">snd_pcm_stream_t</span></a><span></span> <span class="n">stream</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">mode</span>
+    <span class="p">)</span>
+</pre>
+<p>Create an extplug instance.</p>
+<p>Creates the extplug instance based on the given handle. The slave_conf argument is mandatory, and usually taken from the config tree of the PCM plugin as “slave” config value. name, root, stream and mode arguments are the values used for opening the PCM.</p>
+<p>The callback is the mandatory field of extplug handle. At least, start, stop and pointer callbacks must be set before calling this function.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>extplug</td>
+<td>the extplug handle</td>
+</tr>
+<tr class="row-even"><td>name</td>
+<td>name of the PCM</td>
+</tr>
+<tr class="row-odd"><td>root</td>
+<td>configuration tree root</td>
+</tr>
+<tr class="row-even"><td>slave_conf</td>
+<td>slave configuration root</td>
+</tr>
+<tr class="row-odd"><td>stream</td>
+<td>stream direction</td>
+</tr>
+<tr class="row-even"><td>mode</td>
+<td>PCM open mode</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if successful, or a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-ext-plug-1ga7259292a6f64a2432f4c2a44bb5f8508">
+<span id="index-7"></span><span></span><span class="kt">int</span>
+<span class="n">snd_pcm_extplug_delete</span><span class="p">(</span><a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gaeddcbb8005ccafb008a75283d5d9e551"><span class="std std-ref">snd_pcm_extplug_t</span></a><span></span><span class="o">*</span> <span class="n">ext</span><span class="p">)</span>
+</pre>
+<p>Delete the extplug instance.</p>
+<p>The destructor of extplug instance. Closes the PCM and deletes the associated resources.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>extplug</td>
+<td>the extplug handle to delete</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if successful, or a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-ext-plug-1gacef181565eb697397ce41c1aab381777">
+<span id="index-8"></span><span></span><span class="kt">void</span>
+<span class="n">snd_pcm_extplug_params_reset</span><span class="p">(</span><a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gaeddcbb8005ccafb008a75283d5d9e551"><span class="std std-ref">snd_pcm_extplug_t</span></a><span></span><span class="o">*</span> <span class="n">ext</span><span class="p">)</span>
+</pre>
+<p>Reset extplug parameters.</p>
+<p>Resets the all parameters for the given extplug handle.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>extplug</td>
+<td>the extplug handle</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-ext-plug-1gadbf27adba1a7cd0195b6ac750bb11bf7">
+<span id="index-9"></span><span></span><span class="kt">int</span>
+<span class="n">snd_pcm_extplug_set_param_list</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gaeddcbb8005ccafb008a75283d5d9e551"><span class="std std-ref">snd_pcm_extplug_t</span></a><span></span><span class="o">*</span> <span class="n">extplug</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">type</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">num_list</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span><span class="o">*</span> <span class="n">list</span>
+    <span class="p">)</span>
+</pre>
+<p>Set master parameter as the list.</p>
+<p>Sets the master parameter as the list. The available values of the given parameter type of this PCM (as input) is restricted to the ones of the given list.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>extplug</td>
+<td>the extplug handle</td>
+</tr>
+<tr class="row-even"><td>type</td>
+<td>parameter type</td>
+</tr>
+<tr class="row-odd"><td>num_list</td>
+<td>number of available values</td>
+</tr>
+<tr class="row-even"><td>list</td>
+<td>the list of available values</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if successful, or a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-ext-plug-1gabef139bbe5db265433fd5310d0faad4d">
+<span id="index-10"></span><span></span><span class="kt">int</span>
+<span class="n">snd_pcm_extplug_set_param_minmax</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gaeddcbb8005ccafb008a75283d5d9e551"><span class="std std-ref">snd_pcm_extplug_t</span></a><span></span><span class="o">*</span> <span class="n">extplug</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">type</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">min</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">max</span>
+    <span class="p">)</span>
+</pre>
+<p>Set master parameter as the min/max values.</p>
+<p>Sets the master parameter as the min/max values. The available values of the given parameter type of this PCM (as input) is restricted between the given minimum and maximum values.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>extplug</td>
+<td>the extplug handle</td>
+</tr>
+<tr class="row-even"><td>type</td>
+<td>parameter type</td>
+</tr>
+<tr class="row-odd"><td>min</td>
+<td>the minimum value</td>
+</tr>
+<tr class="row-even"><td>max</td>
+<td>the maximum value</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if successful, or a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-ext-plug-1gad14f6746e36d556c7a7937633b965ca7">
+<span id="index-11"></span><span></span><span class="kt">int</span>
+<span class="n">snd_pcm_extplug_set_slave_param_list</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gaeddcbb8005ccafb008a75283d5d9e551"><span class="std std-ref">snd_pcm_extplug_t</span></a><span></span><span class="o">*</span> <span class="n">extplug</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">type</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">num_list</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span><span class="o">*</span> <span class="n">list</span>
+    <span class="p">)</span>
+</pre>
+<p>Set slave parameter as the list.</p>
+<p>Sets the slave parameter as the list. The available values of the given parameter type of the slave PCM is restricted to the ones of the given list.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>extplug</td>
+<td>the extplug handle</td>
+</tr>
+<tr class="row-even"><td>type</td>
+<td>parameter type</td>
+</tr>
+<tr class="row-odd"><td>num_list</td>
+<td>number of available values</td>
+</tr>
+<tr class="row-even"><td>list</td>
+<td>the list of available values</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if successful, or a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-ext-plug-1gad3cac0ee15293f349220a75cce69a51e">
+<span id="index-12"></span><span></span><span class="kt">int</span>
+<span class="n">snd_pcm_extplug_set_slave_param_minmax</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gaeddcbb8005ccafb008a75283d5d9e551"><span class="std std-ref">snd_pcm_extplug_t</span></a><span></span><span class="o">*</span> <span class="n">extplug</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">type</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">min</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">max</span>
+    <span class="p">)</span>
+</pre>
+<p>Set slave parameter as the min/max values.</p>
+<p>Sets the slave parameter as the min/max values. The available values of the given parameter type of the slave PCM is restricted between the given minimum and maximum values.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>extplug</td>
+<td>the extplug handle</td>
+</tr>
+<tr class="row-even"><td>type</td>
+<td>parameter type</td>
+</tr>
+<tr class="row-odd"><td>min</td>
+<td>the minimum value</td>
+</tr>
+<tr class="row-even"><td>max</td>
+<td>the maximum value</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if successful, or a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-ext-plug-1ga63f38acb512e5879cae7502a935f1f11">
+<span id="index-13"></span><span></span><span class="k">static</span>
+<span class="n">__inline__</span> <span class="kt">int</span>
+<span class="n">snd_pcm_extplug_set_param</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gaeddcbb8005ccafb008a75283d5d9e551"><span class="std std-ref">snd_pcm_extplug_t</span></a><span></span><span class="o">*</span> <span class="n">extplug</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">type</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">val</span>
+    <span class="p">)</span>
+</pre>
+<p>set the parameter constraint with a single value</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-ext-plug-1gae8a6ccbdfed94e3baca2f28f0583320f">
+<span id="index-14"></span><span></span><span class="k">static</span>
+<span class="n">__inline__</span> <span class="kt">int</span>
+<span class="n">snd_pcm_extplug_set_slave_param</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-p-c-m-ext-plug-1gaeddcbb8005ccafb008a75283d5d9e551"><span class="std std-ref">snd_pcm_extplug_t</span></a><span></span><span class="o">*</span> <span class="n">extplug</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">type</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">val</span>
+    <span class="p">)</span>
+</pre>
+<p>set the parameter constraint for slave PCM with a single value</p>
+</div>
+<div class="section" id="macros">
+<h3>Macros</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-ext-plug-1ga24d0ae71d106f08685d9ba8c6cf5fe78">
+<span id="index-15"></span><span></span><span class="cp">#define SND_PCM_EXTPLUG_VERSION</span>
+</pre>
+<p>Filter-plugin protocol version</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-ext-plug-1ga82e7bf8a5b451792195a70cb74e31fc4">
+<span id="index-16"></span><span></span><span class="cp">#define SND_PCM_EXTPLUG_VERSION_MAJOR</span>
+</pre>
+<p>Protocol major version</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-ext-plug-1ga40f40d20f8683751fdbb25b1f9ed013c">
+<span id="index-17"></span><span></span><span class="cp">#define SND_PCM_EXTPLUG_VERSION_MINOR</span>
+</pre>
+<p>Protocol minor version</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-ext-plug-1ga685e379757c606a4d2a7fcc969cc5dc1">
+<span id="index-18"></span><span></span><span class="cp">#define SND_PCM_EXTPLUG_VERSION_TINY</span>
+</pre>
+<p>Protocol tiny version</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="struct_snd_pcm_extplug.html" class="btn btn-neutral float-right" title="struct snd_pcm_extplug" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="group_Plugin_SDK.html" class="btn btn-neutral float-left" title="External PCM plugin SDK" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 1998-2017, ALSA Library Maintainers.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

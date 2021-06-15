@@ -1,0 +1,575 @@
+.. index:: pair: group; Global defines and functions
+.. _doxid-group___global:
+
+Global defines and functions
+============================
+
+.. toctree::
+	:hidden:
+
+Overview
+~~~~~~~~
+
+Global defines and functions. :ref:`More...<details-group___global>`
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef struct _snd_async_handler :ref:`snd_async_handler_t<doxid-group___global_1ga8cd9a1d441e9219ca5f2ff04094c7c6d>`;
+	typedef void (*:ref:`snd_async_callback_t<doxid-group___global_1gaf8937eadd968df14b64e54f49c29821c>`)(snd_async_handler_t *handler);
+	typedef struct timeval :ref:`snd_timestamp_t<doxid-group___global_1gadd377862d568809fb0e32c9faddf99a4>`;
+	typedef struct timespec :ref:`snd_htimestamp_t<doxid-group___global_1ga3a3f5b65c40f498cdbc26944bd9855cf>`;
+
+	// global functions
+
+	const char*
+	:ref:`snd_asoundlib_version<doxid-group___global_1ga1b8d6e2acb0a62de5c23bd8aef3ec225>`(void);
+
+	void*
+	:ref:`snd_dlopen<doxid-group___global_1ga40fa4f69aa58fd0086a43baef8e685b8>`(
+		const char* file,
+		int mode
+		);
+
+	void*
+	:ref:`snd_dlsym<doxid-group___global_1gae865f293c8771998b2b6a9f25a135408>`(
+		void* handle,
+		const char* name,
+		const char* version
+		);
+
+	int
+	:ref:`snd_dlclose<doxid-group___global_1ga7cc0866a9d1fbce4e34a8b342674836e>`(void* handle);
+
+	int
+	:ref:`snd_async_add_handler<doxid-group___global_1gafd936c40505997bb659b74bd368636b8>`(
+		:ref:`snd_async_handler_t<doxid-group___global_1ga8cd9a1d441e9219ca5f2ff04094c7c6d>`** handler,
+		int fd,
+		:ref:`snd_async_callback_t<doxid-group___global_1gaf8937eadd968df14b64e54f49c29821c>` callback,
+		void* private_data
+		);
+
+	int
+	:ref:`snd_async_del_handler<doxid-group___global_1ga1c0bd4d123e9581a749b80e2df48b4e1>`(:ref:`snd_async_handler_t<doxid-group___global_1ga8cd9a1d441e9219ca5f2ff04094c7c6d>`* handler);
+
+	int
+	:ref:`snd_async_handler_get_fd<doxid-group___global_1gad601f70e0405a8522860edb15db6350c>`(:ref:`snd_async_handler_t<doxid-group___global_1ga8cd9a1d441e9219ca5f2ff04094c7c6d>`* handler);
+
+	int
+	:ref:`snd_async_handler_get_signo<doxid-group___global_1gab32c9afe265784634c78e7a6b5d27abe>`(:ref:`snd_async_handler_t<doxid-group___global_1ga8cd9a1d441e9219ca5f2ff04094c7c6d>`* handler);
+
+	void*
+	:ref:`snd_async_handler_get_callback_private<doxid-group___global_1gad9c76588a87918901c6273e6bc98a1bc>`(:ref:`snd_async_handler_t<doxid-group___global_1ga8cd9a1d441e9219ca5f2ff04094c7c6d>`* handler);
+
+	struct snd_shm_area*
+	:target:`snd_shm_area_create<doxid-group___global_1ga4141de7b343dd6e5af12df97f98c6caf>`(
+		int shmid,
+		void* ptr
+		);
+
+	struct snd_shm_area*
+	:target:`snd_shm_area_share<doxid-group___global_1ga9dbf4bcf38bb7cc054accbbbf3a33df2>`(struct snd_shm_area* area);
+
+	int
+	:target:`snd_shm_area_destroy<doxid-group___global_1ga59f424fb93a72226e642dbb04b870c45>`(struct snd_shm_area* area);
+
+	int
+	:ref:`snd_user_file<doxid-group___global_1gaade4b91c735abcec70101b9d83b11126>`(
+		const char* file,
+		char** result
+		);
+
+	// macros
+
+	#define :ref:`SND_DLSYM_BUILD_VERSION<doxid-group___global_1ga355c462c8c5dee0aeadae17d096ba531>`( \
+		name, \
+		version \
+		)
+
+	#define :ref:`SND_DLSYM_VERSION<doxid-group___global_1ga7bba39703a3275de48b3e919a2849c4b>`(version)
+
+	#define :ref:`__SND_DLSYM_VERSION<doxid-group___global_1gafefcb2bb4a877727b16de5c56e09055b>`( \
+		name, \
+		version \
+		)
+
+	#define :ref:`__STRING<doxid-group___global_1ga375c4dc9f0fb338999de81aab826f9d6>`(x)
+
+	#define :ref:`__snd_alloca<doxid-group___global_1ga0d723ca68908f9c4eb7c6e9eb03cff3f>`( \
+		ptr, \
+		type \
+		)
+
+.. _details-group___global:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+Global defines and functions. The ALSA library implementation uses these macros and functions. Most applications probably do not need them.
+
+Typedefs
+--------
+
+.. index:: pair: typedef; snd_async_handler_t
+.. _doxid-group___global_1ga8cd9a1d441e9219ca5f2ff04094c7c6d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct _snd_async_handler snd_async_handler_t
+
+Internal structure for an async notification client handler.
+
+The ALSA library uses a pointer to this structure as a handle to an async notification object. Applications don't access its contents directly.
+
+.. index:: pair: typedef; snd_async_callback_t
+.. _doxid-group___global_1gaf8937eadd968df14b64e54f49c29821c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef void (*snd_async_callback_t)(snd_async_handler_t *handler)
+
+Async notification callback.
+
+See the :ref:`snd_async_add_handler <doxid-group___global_1gafd936c40505997bb659b74bd368636b8>` function for details.
+
+.. index:: pair: typedef; snd_timestamp_t
+.. _doxid-group___global_1gadd377862d568809fb0e32c9faddf99a4:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct timeval snd_timestamp_t
+
+Timestamp
+
+.. index:: pair: typedef; snd_htimestamp_t
+.. _doxid-group___global_1ga3a3f5b65c40f498cdbc26944bd9855cf:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct timespec snd_htimestamp_t
+
+Hi-res timestamp
+
+Global Functions
+----------------
+
+.. index:: pair: function; snd_asoundlib_version
+.. _doxid-group___global_1ga1b8d6e2acb0a62de5c23bd8aef3ec225:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	snd_asoundlib_version(void)
+
+Returns the ALSA sound library version in ASCII format.
+
+
+
+.. rubric:: Returns:
+
+The ASCII description of the used ALSA sound library.
+
+.. index:: pair: function; snd_dlopen
+.. _doxid-group___global_1ga40fa4f69aa58fd0086a43baef8e685b8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void*
+	snd_dlopen(
+		const char* file,
+		int mode
+		)
+
+Opens a dynamic library - ALSA wrapper for ``dlopen``.
+
+This function can emulate dynamic linking for the static build of the alsa-lib library. In that case, ``name`` is set to ``NULL``.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- name
+
+		- name of the library, similar to ``dlopen``.
+
+	*
+		- mode
+
+		- mode flags, similar to ``dlopen``.
+
+
+
+.. rubric:: Returns:
+
+Library handle if successful, otherwise ``NULL``.
+
+.. index:: pair: function; snd_dlsym
+.. _doxid-group___global_1gae865f293c8771998b2b6a9f25a135408:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void*
+	snd_dlsym(
+		void* handle,
+		const char* name,
+		const char* version
+		)
+
+Resolves a symbol from a dynamic library - ALSA wrapper for ``dlsym``.
+
+This function can emulate dynamic linking for the static build of the alsa-lib library.
+
+This special version of the ``dlsym`` function checks also the version of the symbol. A versioned symbol should be defined using the :ref:`SND_DLSYM_BUILD_VERSION <doxid-group___global_1ga355c462c8c5dee0aeadae17d096ba531>` macro.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- handle
+
+		- Library handle, similar to ``dlsym``.
+
+	*
+		- name
+
+		- Symbol name.
+
+	*
+		- version
+
+		- Version of the symbol.
+
+.. index:: pair: function; snd_dlclose
+.. _doxid-group___global_1ga7cc0866a9d1fbce4e34a8b342674836e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_dlclose(void* handle)
+
+Closes a dynamic library - ALSA wrapper for ``dlclose``.
+
+This function can emulate dynamic linking for the static build of the alsa-lib library.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- handle
+
+		- Library handle, similar to ``dlclose``.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise an error code.
+
+.. index:: pair: function; snd_async_add_handler
+.. _doxid-group___global_1gafd936c40505997bb659b74bd368636b8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_async_add_handler(
+		:ref:`snd_async_handler_t<doxid-group___global_1ga8cd9a1d441e9219ca5f2ff04094c7c6d>`** handler,
+		int fd,
+		:ref:`snd_async_callback_t<doxid-group___global_1gaf8937eadd968df14b64e54f49c29821c>` callback,
+		void* private_data
+		)
+
+Registers an async handler.
+
+This function associates the callback function with the given file, and saves this association in a ``snd_async_handler_t`` object.
+
+Whenever the ``SIGIO`` signal is raised for the file ``fd``, the callback function will be called with its parameter pointing to the async handler object returned by this function.
+
+The ALSA ``sigaction`` handler for the ``SIGIO`` signal automatically multiplexes the notifications to the registered async callbacks. However, the application is responsible for instructing the device driver to generate the ``SIGIO`` signal.
+
+The ``SIGIO`` signal may have been replaced with another signal, see :ref:`snd_async_handler_get_signo <doxid-group___global_1gab32c9afe265784634c78e7a6b5d27abe>`.
+
+When the async handler isn't needed anymore, you must delete it with :ref:`snd_async_del_handler <doxid-group___global_1ga1c0bd4d123e9581a749b80e2df48b4e1>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- handler
+
+		- The function puts the pointer to the new async handler object at the address specified by ``handler``.
+
+	*
+		- fd
+
+		- The file descriptor to be associated with the callback.
+
+	*
+		- callback
+
+		- The async callback function.
+
+	*
+		- private_data
+
+		- Private data for the async callback function.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_async_add_pcm_handler <doxid-group___p_c_m_1ga5a0c0da6d0d35a3ac9f6a97567ac3b63>`, :ref:`snd_async_add_ctl_handler <doxid-group___control_1ga23813430fb81fecb0e95d1dfd688337d>`
+
+.. index:: pair: function; snd_async_del_handler
+.. _doxid-group___global_1ga1c0bd4d123e9581a749b80e2df48b4e1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_async_del_handler(:ref:`snd_async_handler_t<doxid-group___global_1ga8cd9a1d441e9219ca5f2ff04094c7c6d>`* handler)
+
+Deletes an async handler.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- handler
+
+		- Handle of the async handler to delete.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_async_handler_get_fd
+.. _doxid-group___global_1gad601f70e0405a8522860edb15db6350c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_async_handler_get_fd(:ref:`snd_async_handler_t<doxid-group___global_1ga8cd9a1d441e9219ca5f2ff04094c7c6d>`* handler)
+
+Returns the file descriptor assigned to an async handler.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- handler
+
+		- Handle to an async handler.
+
+
+
+.. rubric:: Returns:
+
+The file descriptor if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_async_handler_get_signo
+.. _doxid-group___global_1gab32c9afe265784634c78e7a6b5d27abe:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_async_handler_get_signo(:ref:`snd_async_handler_t<doxid-group___global_1ga8cd9a1d441e9219ca5f2ff04094c7c6d>`* handler)
+
+Returns the signal number assigned to an async handler.
+
+The signal number for async handlers usually is ``SIGIO``, but wizards can redefine it to a realtime signal when compiling the ALSA library.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- handler
+
+		- Handle to an async handler.
+
+
+
+.. rubric:: Returns:
+
+The signal number if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_async_handler_get_callback_private
+.. _doxid-group___global_1gad9c76588a87918901c6273e6bc98a1bc:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void*
+	snd_async_handler_get_callback_private(:ref:`snd_async_handler_t<doxid-group___global_1ga8cd9a1d441e9219ca5f2ff04094c7c6d>`* handler)
+
+Returns the private data assigned to an async handler.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- handler
+
+		- Handle to an async handler.
+
+
+
+.. rubric:: Returns:
+
+The ``private_data`` value registered with the async handler.
+
+.. index:: pair: function; snd_user_file
+.. _doxid-group___global_1gaade4b91c735abcec70101b9d83b11126:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_user_file(
+		const char* file,
+		char** result
+		)
+
+Get the full file name.
+
+Parses the given file name with POSIX-Shell-like expansion and stores the first matchine one. The returned string is strdup'ed.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- file
+
+		- The file name string to parse
+
+	*
+		- result
+
+		- The pointer to store the resultant file name
+
+
+
+.. rubric:: Returns:
+
+0 if successful, or a negative error code
+
+Macros
+------
+
+.. index:: pair: define; SND_DLSYM_BUILD_VERSION
+.. _doxid-group___global_1ga355c462c8c5dee0aeadae17d096ba531:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_DLSYM_BUILD_VERSION( \
+		name, \
+		version \
+		)
+
+Appends the build version to the name of a versioned dynamic symbol.
+
+.. index:: pair: define; SND_DLSYM_VERSION
+.. _doxid-group___global_1ga7bba39703a3275de48b3e919a2849c4b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_DLSYM_VERSION(version)
+
+Returns the version of a dynamic symbol as a string.
+
+.. index:: pair: define; __SND_DLSYM_VERSION
+.. _doxid-group___global_1gafefcb2bb4a877727b16de5c56e09055b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define __SND_DLSYM_VERSION( \
+		name, \
+		version \
+		)
+
+Helper macro for :ref:`SND_DLSYM_BUILD_VERSION <doxid-group___global_1ga355c462c8c5dee0aeadae17d096ba531>`.
+
+.. index:: pair: define; __STRING
+.. _doxid-group___global_1ga375c4dc9f0fb338999de81aab826f9d6:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define __STRING(x)
+
+Return 'x' argument as string.
+
+.. index:: pair: define; __snd_alloca
+.. _doxid-group___global_1ga0d723ca68908f9c4eb7c6e9eb03cff3f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define __snd_alloca( \
+		ptr, \
+		type \
+		)
+
+alloca helper macro.
+

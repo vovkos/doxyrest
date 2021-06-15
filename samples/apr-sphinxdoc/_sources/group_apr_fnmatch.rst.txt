@@ -1,0 +1,251 @@
+.. index:: pair: group; Filename Matching Functions
+.. _doxid-group__apr__fnmatch:
+
+Filename Matching Functions
+===========================
+
+.. toctree::
+	:hidden:
+
+Overview
+~~~~~~~~
+
+
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// global functions
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_fnmatch<doxid-group__apr__fnmatch_1gabe9c7d7efe6afc203a01befbc45bad96>`(
+		const char* pattern,
+		const char* strings,
+		int flags
+		);
+
+	int
+	:ref:`apr_fnmatch_test<doxid-group__apr__fnmatch_1ga4e7828bb7be756d999f13b8af8202204>`(const char* pattern);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_match_glob<doxid-group__apr__fnmatch_1ga25c7eacaa966d0c9c09ef160644ac997>`(
+		const char* dir_pattern,
+		:ref:`apr_array_header_t<doxid-structapr__array__header__t>`** result,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		);
+
+	// macros
+
+	#define :ref:`APR_FNM_CASE_BLIND<doxid-group__apr__fnmatch_1ga5cee1c0a917a283a193721d11160b502>`
+	#define :ref:`APR_FNM_NOESCAPE<doxid-group__apr__fnmatch_1gae12c1286631f316647be6dc007170630>`
+	#define :ref:`APR_FNM_NOMATCH<doxid-group__apr__fnmatch_1gaea769621807400e4c741e7deddf6c3df>`
+	#define :ref:`APR_FNM_PATHNAME<doxid-group__apr__fnmatch_1ga0d421a2cef68cb590f958b5de6c7fe1b>`
+	#define :ref:`APR_FNM_PERIOD<doxid-group__apr__fnmatch_1ga4806f936b6eacc59dfed831d67b750ef>`
+
+.. _details-group__apr__fnmatch:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+Global Functions
+----------------
+
+.. index:: pair: function; apr_fnmatch
+.. _doxid-group__apr__fnmatch_1gabe9c7d7efe6afc203a01befbc45bad96:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_fnmatch(
+		const char* pattern,
+		const char* strings,
+		int flags
+		)
+
+Try to match the string to the given pattern, return APR_SUCCESS if match, else return APR_FNM_NOMATCH. Note that there is no such thing as an illegal pattern.
+
+With all flags unset, a pattern is interpreted as such:
+
+PATTERN: Backslash followed by any character, including another backslash.
+
+MATCHES: That character exactly.
+
+PATTERN: ?
+
+MATCHES: Any single character.
+
+PATTERN: \*
+
+MATCHES: Any sequence of zero or more characters. (Note that multiple \*s in a row are equivalent to one.)
+
+PATTERN: Any character other than \?\*[ or a \ at the end of the pattern
+
+MATCHES: That character exactly. (Case sensitive.)
+
+PATTERN: [ followed by a class description followed by ]
+
+MATCHES: A single character described by the class description. (Never matches, if the class description reaches until the end of the string without a ].) If the first character of the class description is ^ or !, the sense of the description is reversed. The rest of the class description is a list of single characters or pairs of characters separated by -. Any of those characters can have a backslash in front of them, which is ignored; this lets you use the characters ] and - in the character class, as well as ^ and ! at the beginning. The pattern matches a single character if it is one of the listed characters or falls into one of the listed ranges (inclusive, case sensitive). Ranges with the first character larger than the second are legal but never match. Edge cases: [] never matches, and [^] and [!] always match without consuming a character.
+
+Note that these patterns attempt to match the entire string, not just find a substring matching the pattern.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pattern
+
+		- The pattern to match to
+
+	*
+		- strings
+
+		- The string we are trying to match
+
+	*
+		- flags
+
+		- 
+		  flags to use in the match. Bitwise OR of:
+		  
+		  .. code-block:: none
+		  
+		  
+		  	APR_FNM_NOESCAPE       Disable backslash escaping
+		  	APR_FNM_PATHNAME       Slash must be matched by slash
+		  	APR_FNM_PERIOD         Period must be matched by period
+		  	APR_FNM_CASE_BLIND     Compare characters case-insensitively.
+
+.. index:: pair: function; apr_fnmatch_test
+.. _doxid-group__apr__fnmatch_1ga4e7828bb7be756d999f13b8af8202204:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	apr_fnmatch_test(const char* pattern)
+
+Determine if the given pattern is a regular expression.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pattern
+
+		- The pattern to search for glob characters.
+
+
+
+.. rubric:: Returns:
+
+non-zero if pattern has any glob characters in it
+
+.. index:: pair: function; apr_match_glob
+.. _doxid-group__apr__fnmatch_1ga25c7eacaa966d0c9c09ef160644ac997:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_match_glob(
+		const char* dir_pattern,
+		:ref:`apr_array_header_t<doxid-structapr__array__header__t>`** result,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		)
+
+Find all files that match a specified pattern in a directory. The returned array may be empty even if APR_SUCCESS was returned.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dir_pattern
+
+		- The pattern to use for finding files, appended to the search directory. The pattern is anything following the final forward or backward slash in the parameter. If no slash is found, the current directory is searched.
+
+	*
+		- result
+
+		- Array to use when storing the results
+
+	*
+		- p
+
+		- The pool to use.
+
+
+
+.. rubric:: Returns:
+
+APR_SUCCESS if no processing errors occurred, APR error code otherwise
+
+Macros
+------
+
+.. index:: pair: define; APR_FNM_CASE_BLIND
+.. _doxid-group__apr__fnmatch_1ga5cee1c0a917a283a193721d11160b502:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_FNM_CASE_BLIND
+
+Compare characters case-insensitively.
+
+.. index:: pair: define; APR_FNM_NOESCAPE
+.. _doxid-group__apr__fnmatch_1gae12c1286631f316647be6dc007170630:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_FNM_NOESCAPE
+
+Disable backslash escaping.
+
+.. index:: pair: define; APR_FNM_NOMATCH
+.. _doxid-group__apr__fnmatch_1gaea769621807400e4c741e7deddf6c3df:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_FNM_NOMATCH
+
+Match failed.
+
+.. index:: pair: define; APR_FNM_PATHNAME
+.. _doxid-group__apr__fnmatch_1ga0d421a2cef68cb590f958b5de6c7fe1b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_FNM_PATHNAME
+
+Slash must be matched by slash.
+
+.. index:: pair: define; APR_FNM_PERIOD
+.. _doxid-group__apr__fnmatch_1ga4806f936b6eacc59dfed831d67b750ef:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_FNM_PERIOD
+
+Period must be matched by period.
+

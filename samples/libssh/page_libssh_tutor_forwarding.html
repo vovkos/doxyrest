@@ -1,0 +1,432 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Chapter 7: Forwarding connections (tunnel) &mdash; LibSSH Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/doxyrest-pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/doxyrest-sphinx_rtd_theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/target-highlight.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Chapter 8: Threads with libssh" href="page_libssh_tutor_threads.html" />
+    <link rel="prev" title="Chapter 6: The SCP subsystem" href="page_libssh_tutor_scp.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> LibSSH Documentation
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="page_libssh_linking.html">The Linking HowTo</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="page_libssh_tutorial.html">The Tutorial</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="page_libssh_tutorial.html#introduction">Introduction</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_guided_tour.html">Chapter 1: A typical SSH session</a></li>
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_authentication.html">Chapter 2: A deeper insight on authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_shell.html">Chapter 3: Opening a remote shell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_command.html">Chapter 4: Passing a remote command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_sftp.html">Chapter 5: The SFTP subsystem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_scp.html">Chapter 6: The SCP subsystem</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Chapter 7: Forwarding connections (tunnel)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#forwarding-connections">Forwarding connections</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_threads.html">Chapter 8: Threads with libssh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_todo.html">To be done</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="group_libssh.html">The libssh API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_ssh_cpp.html">The libssh C++ wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libssh_sftp.html">The libssh SFTP API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libssh_server.html">The libssh server API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="page_bug.html">Bug List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_deprecated.html">Deprecated List</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LibSSH Documentation</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="page_libssh_tutorial.html">The Tutorial</a> &raquo;</li>
+        
+      <li>Chapter 7: Forwarding connections (tunnel)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="chapter-7-forwarding-connections-tunnel">
+<span id="doxid-libssh-tutor-forwarding"></span><span id="index-0"></span><h1>Chapter 7: Forwarding connections (tunnel)</h1>
+<div class="section" id="forwarding-connections">
+<span id="doxid-libssh-tutor-forwarding-1forwarding-connections"></span><h2>Forwarding connections</h2>
+<p>Port forwarding comes in SSH protocol in two different flavours: direct or reverse port forwarding. Direct port forwarding is also named local port forwardind, and reverse port forwarding is also called remote port forwarding. SSH also allows X11 tunnels.</p>
+<div class="section" id="direct-port-forwarding">
+<span id="doxid-libssh-tutor-forwarding-1forwarding-direct"></span><h3>Direct port forwarding</h3>
+<p>Direct port forwarding is from client to server. The client opens a tunnel, and forwards whatever data to the server. Then, the server connects to an end point. The end point can reside on another machine or on the SSH server itself.</p>
+<p>Example of use of direct port forwarding:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Mail client application   Google Mail
+         |                    ^
+     5555 (arbitrary)         |
+         |                143 (IMAP2)
+         V                    |
+    SSH client   =====&gt;   SSH server
+
+Legend:
+--P--&gt;: port connexion through port P
+=====&gt;: SSH tunnel
+</pre></div>
+</div>
+<p>A mail client connects to port 5555 of a client. An encrypted tunnel is established to the server. The server connects to port 143 of Google Mail (the end point). Now the local mail client can retreive mail.</p>
+</div>
+<div class="section" id="reverse-port-forwarding">
+<span id="doxid-libssh-tutor-forwarding-1forwarding-reverse"></span><h3>Reverse port forwarding</h3>
+<p>The reverse forwarding is slightly different. It goes from server to client, even though the client has the initiative of establishing the tunnel. Once the tunnel is established, the server will listen on a port. Whenever a connection to this port is made, the server forwards the data to the client.</p>
+<p>Example of use of reverse port forwarding:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span> Local mail server    Mail client application
+         ^                     |
+         |               5555 (arbitrary)
+     143 (IMAP2)               |
+         |                     V
+    SSH client   &lt;=====   SSH server
+
+Legend:
+--P--&gt;: port connexion through port P
+=====&gt;: SSH tunnel
+</pre></div>
+</div>
+<p>In this example, the SSH client establishes the tunnel, but it is used to forward the connections established at the server to the client.</p>
+</div>
+<div class="section" id="x11-tunnels">
+<span id="doxid-libssh-tutor-forwarding-1forwarding-x11"></span><h3>X11 tunnels</h3>
+<p>X11 tunnels allow a remote application to display locally.</p>
+<p>Example of use of X11 tunnels:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>   Local display     Graphical application
+   (X11 server)          (X11 client)
+         ^                     |
+         |                     V
+    SSH client   &lt;=====   SSH server
+
+Legend:
+-----&gt;: X11 connection through X11 display number
+=====&gt;: SSH tunnel
+</pre></div>
+</div>
+<p>The SSH tunnel is established by the client.</p>
+<p>How to establish X11 tunnels with libssh has already been described in this tutorial.</p>
+</div>
+<div class="section" id="doing-direct-port-forwarding-with-libssh">
+<span id="doxid-libssh-tutor-forwarding-1libssh-direct"></span><h3>Doing direct port forwarding with libssh</h3>
+<p>To do direct port forwarding, call function <a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1gae86b0704a1f2bdebb268b55567f7f47b"><span class="std std-ref">ssh_channel_open_forward()</span></a> :</p>
+<ul class="simple">
+<li>you need a separate channel for the tunnel as first parameter;</li>
+<li>second and third parameters are the remote endpoint;</li>
+<li>fourth and fifth parameters are sent to the remote server so that they can be logged on that server.</li>
+</ul>
+<p>If you don’t plan to forward the data you will receive to any local port, just put fake values like “localhost” and 5555 as your local host and port.</p>
+<p>The example below shows how to open a direct channel that would be used to retrieve google’s home page from the remote SSH server.</p>
+<pre class="highlight literal-block">
+<span></span><span class="kt">int</span> <span class="nf">direct_forwarding</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">ssh_channel</span> <span class="n">forwarding_channel</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">http_get</span> <span class="o">=</span> <span class="s">&quot;GET / HTTP/1.1</span><span class="se">\n</span><span class="s">Host: www.google.com</span><span class="se">\n\n</span><span class="s">&quot;</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">nbytes</span><span class="p">,</span> <span class="n">nwritten</span><span class="p">;</span>
+
+  <span class="n">forwarding_channel</span> <span class="o">=</span> <span class="n">ssh_channel_new</span><span class="p">(</span><span class="n">session</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">forwarding_channel</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_channel_open_forward</span><span class="p">(</span><span class="n">forwarding_channel</span><span class="p">,</span>
+                                <span class="s">&quot;www.google.com&quot;</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span>
+                                <span class="s">&quot;localhost&quot;</span><span class="p">,</span> <span class="mi">5555</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_OK</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">ssh_channel_free</span><span class="p">(</span><span class="n">forwarding_channel</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">nbytes</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">http_get</span><span class="p">);</span>
+  <span class="n">nwritten</span> <span class="o">=</span> <span class="n">ssh_channel_write</span><span class="p">(</span><span class="n">forwarding_channel</span><span class="p">,</span>
+                           <span class="n">http_get</span><span class="p">,</span>
+                           <span class="n">nbytes</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">nbytes</span> <span class="o">!=</span> <span class="n">nwritten</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">ssh_channel_free</span><span class="p">(</span><span class="n">forwarding_channel</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="p">...</span>
+
+  <span class="n">ssh_channel_free</span><span class="p">(</span><span class="n">forwarding_channel</span><span class="p">);</span>
+  <span class="k">return</span> <span class="n">SSH_OK</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+<p>The data sent by Google can be retrieved for example with <a class="reference internal" href="group_libssh_session.html#doxid-group-libssh-session-1ga86cbf041bced56d18a2a5248c46cecb4"><span class="std std-ref">ssh_select()</span></a> and <a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1gac92381c4c5d4a7eab35f6e84686f033d"><span class="std std-ref">ssh_channel_read()</span></a>. Goggle’s home page can then be displayed on the local SSH client, saved into a local file, made available on a local port, or whatever use you have for it.</p>
+</div>
+<div class="section" id="doing-reverse-port-forwarding-with-libssh">
+<span id="doxid-libssh-tutor-forwarding-1libssh-reverse"></span><h3>Doing reverse port forwarding with libssh</h3>
+<p>To do reverse port forwarding, call <a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1ga758cda957227751870c8772df46e5b39"><span class="std std-ref">ssh_channel_listen_forward()</span></a>, then <a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1ga490e4b0a7adc022507b7f165b336afe4"><span class="std std-ref">ssh_channel_accept_forward()</span></a>.</p>
+<p>When you call <a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1ga758cda957227751870c8772df46e5b39"><span class="std std-ref">ssh_channel_listen_forward()</span></a>, you can let the remote server chose the non-priviledged port it should listen to. Otherwise, you can chose your own priviledged or non-priviledged port. Beware that you should have administrative priviledges on the remote server to open a priviledged port (port number &lt; 1024).</p>
+<p>Below is an example of a very rough web server waiting for connections on port 8080 of remote SSH server. The incoming connections are passed to the local libssh application, which handles them:</p>
+<pre class="highlight literal-block">
+<span></span><span class="kt">int</span> <span class="nf">web_server</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
+  <span class="kt">int</span> <span class="n">nbytes</span><span class="p">,</span> <span class="n">nwritten</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">port</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">helloworld</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+<span class="s">&quot;HTTP/1.1 200 OK</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;Content-Type: text/html</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;Content-Length: 113</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;&lt;html&gt;</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;  &lt;head&gt;</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;    &lt;title&gt;Hello, World!&lt;/title&gt;</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;  &lt;/head&gt;</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;  &lt;body&gt;</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;    &lt;h1&gt;Hello, World!&lt;/h1&gt;</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;  &lt;/body&gt;</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;&lt;/html&gt;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_channel_listen_forward</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">8080</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_OK</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Error opening remote port: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">channel</span> <span class="o">=</span> <span class="n">ssh_channel_accept_forward</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="mi">60000</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">port</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">channel</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Error waiting for incoming connection: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+    <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">nbytes</span> <span class="o">=</span> <span class="n">ssh_channel_read</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">),</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">nbytes</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Error reading incoming data: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+              <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+      <span class="n">ssh_channel_send_eof</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+      <span class="n">ssh_channel_free</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+      <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">strncmp</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="s">&quot;GET /&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span> <span class="k">continue</span><span class="p">;</span>
+
+    <span class="n">nbytes</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">helloworld</span><span class="p">);</span>
+    <span class="n">nwritten</span> <span class="o">=</span> <span class="n">ssh_channel_write</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">helloworld</span><span class="p">,</span> <span class="n">nbytes</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">nwritten</span> <span class="o">!=</span> <span class="n">nbytes</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Error sending answer: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+              <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+      <span class="n">ssh_channel_send_eof</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+      <span class="n">ssh_channel_free</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+      <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Sent answer</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="n">ssh_channel_send_eof</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+  <span class="n">ssh_channel_free</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+  <span class="k">return</span> <span class="n">SSH_OK</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+<p class="rubric">See also:</p>
+<p>x11</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="page_libssh_tutor_threads.html" class="btn btn-neutral float-right" title="Chapter 8: Threads with libssh" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="page_libssh_tutor_scp.html" class="btn btn-neutral float-left" title="Chapter 6: The SCP subsystem" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2003-2017, LibSSH Maintainers.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

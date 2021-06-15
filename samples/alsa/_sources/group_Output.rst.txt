@@ -1,0 +1,487 @@
+.. index:: pair: group; Output Interface
+.. _doxid-group___output:
+
+Output Interface
+================
+
+.. toctree::
+	:hidden:
+
+	enum_snd_output_type_t.rst
+
+Overview
+~~~~~~~~
+
+The output functions present an interface similar to the stdio functions on top of different underlying output destinations. :ref:`More...<details-group___output>`
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef struct _snd_output :ref:`snd_output_t<doxid-group___output_1ga49729cc6454539495c1f5b6e95cd474a>`;
+
+	// enums
+
+	enum :ref:`snd_output_type_t<doxid-group___output_1ga7217dd8d10e2491388e866d3354a4b29>`;
+
+	// global functions
+
+	int
+	:ref:`snd_output_stdio_open<doxid-group___output_1gae7b87e8cfcc2d46b124b2ad221ed6435>`(
+		:ref:`snd_output_t<doxid-group___output_1ga49729cc6454539495c1f5b6e95cd474a>`** outputp,
+		const char* file,
+		const char* mode
+		);
+
+	int
+	:ref:`snd_output_stdio_attach<doxid-group___output_1gaca78d01bf6d081274650794861373c7d>`(
+		:ref:`snd_output_t<doxid-group___output_1ga49729cc6454539495c1f5b6e95cd474a>`** outputp,
+		FILE* fp,
+		int _close
+		);
+
+	int
+	:ref:`snd_output_buffer_open<doxid-group___output_1gafb4d1ae52ed7148b0abab0de3257fae1>`(:ref:`snd_output_t<doxid-group___output_1ga49729cc6454539495c1f5b6e95cd474a>`** outputp);
+
+	size_t
+	:ref:`snd_output_buffer_string<doxid-group___output_1gaae66e163bd719593b6787d922546a055>`(
+		:ref:`snd_output_t<doxid-group___output_1ga49729cc6454539495c1f5b6e95cd474a>`* output,
+		char** buf
+		);
+
+	int
+	:ref:`snd_output_close<doxid-group___output_1gab4be4e572d2a0d0f2f46faf8d45aa35d>`(:ref:`snd_output_t<doxid-group___output_1ga49729cc6454539495c1f5b6e95cd474a>`* output);
+
+	int
+	:ref:`snd_output_printf<doxid-group___output_1ga5dd8e7d3089a82d8449a9dff221caf1c>`(
+		:ref:`snd_output_t<doxid-group___output_1ga49729cc6454539495c1f5b6e95cd474a>`* output,
+		const char* format,
+		...
+		);
+
+	int
+	:ref:`snd_output_vprintf<doxid-group___output_1gae01572ae47fd3ead25ffd6856118780f>`(
+		:ref:`snd_output_t<doxid-group___output_1ga49729cc6454539495c1f5b6e95cd474a>`* output,
+		const char* format,
+		va_list args
+		);
+
+	int
+	:ref:`snd_output_puts<doxid-group___output_1gaa370cff392c8fdaf03e08c667561d4ec>`(
+		:ref:`snd_output_t<doxid-group___output_1ga49729cc6454539495c1f5b6e95cd474a>`* output,
+		const char* str
+		);
+
+	int
+	:ref:`snd_output_putc<doxid-group___output_1ga7b2b8c27042964a5b57acabe0af6e30b>`(
+		:ref:`snd_output_t<doxid-group___output_1ga49729cc6454539495c1f5b6e95cd474a>`* output,
+		int c
+		);
+
+	int
+	:ref:`snd_output_flush<doxid-group___output_1ga9d188a05400c944bc1f70d757c179226>`(:ref:`snd_output_t<doxid-group___output_1ga49729cc6454539495c1f5b6e95cd474a>`* output);
+
+.. _details-group___output:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+The output functions present an interface similar to the stdio functions on top of different underlying output destinations.
+
+Many PCM debugging functions (``snd_pcm_xxx_dump_xxx``) use such an output handle to be able to write not only to the screen but also to other destinations, e.g. to files or to memory buffers.
+
+Typedefs
+--------
+
+.. index:: pair: typedef; snd_output_t
+.. _doxid-group___output_1ga49729cc6454539495c1f5b6e95cd474a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct _snd_output snd_output_t
+
+Internal structure for an output object.
+
+The ALSA library uses a pointer to this structure as a handle to an output object. Applications don't access its contents directly.
+
+Global Functions
+----------------
+
+.. index:: pair: function; snd_output_stdio_open
+.. _doxid-group___output_1gae7b87e8cfcc2d46b124b2ad221ed6435:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_output_stdio_open(
+		:ref:`snd_output_t<doxid-group___output_1ga49729cc6454539495c1f5b6e95cd474a>`** outputp,
+		const char* file,
+		const char* mode
+		)
+
+Creates a new output object writing to a file.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- outputp
+
+		- The function puts the pointer to the new output object at the address specified by ``outputp``.
+
+	*
+		- file
+
+		- The name of the file to open.
+
+	*
+		- mode
+
+		- The open mode, like ``fopen(3)``.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_output_stdio_attach
+.. _doxid-group___output_1gaca78d01bf6d081274650794861373c7d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_output_stdio_attach(
+		:ref:`snd_output_t<doxid-group___output_1ga49729cc6454539495c1f5b6e95cd474a>`** outputp,
+		FILE* fp,
+		int _close
+		)
+
+Creates a new output object using an existing stdio ``FILE`` pointer.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- outputp
+
+		- The function puts the pointer to the new output object at the address specified by ``outputp``.
+
+	*
+		- fp
+
+		- The ``FILE`` pointer to write to. Characters are written to the file starting at the current file position.
+
+	*
+		- _close
+
+		- Close flag. Set this to 1 if :ref:`snd_output_close <doxid-group___output_1gab4be4e572d2a0d0f2f46faf8d45aa35d>` should close ``fp`` by calling ``fclose``.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_output_buffer_open
+.. _doxid-group___output_1gafb4d1ae52ed7148b0abab0de3257fae1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_output_buffer_open(:ref:`snd_output_t<doxid-group___output_1ga49729cc6454539495c1f5b6e95cd474a>`** outputp)
+
+Creates a new output object with an auto-extending memory buffer.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- outputp
+
+		- The function puts the pointer to the new output object at the address specified by ``outputp``.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_output_buffer_string
+.. _doxid-group___output_1gaae66e163bd719593b6787d922546a055:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	size_t
+	snd_output_buffer_string(
+		:ref:`snd_output_t<doxid-group___output_1ga49729cc6454539495c1f5b6e95cd474a>`* output,
+		char** buf
+		)
+
+Returns the address of the buffer of a :ref:`SND_OUTPUT_BUFFER <doxid-group___output_1gga7217dd8d10e2491388e866d3354a4b29a5630f21823bbe05e6547b8cc27af4e37>` output handle.
+
+The address of the buffer may become invalid when output functions or :ref:`snd_output_close <doxid-group___output_1gab4be4e572d2a0d0f2f46faf8d45aa35d>` are called.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- output
+
+		- The output handle.
+
+	*
+		- buf
+
+		- The functions puts the current address of the buffer at the address specified by ``buf``.
+
+
+
+.. rubric:: Returns:
+
+The current size of valid data in the buffer.
+
+.. index:: pair: function; snd_output_close
+.. _doxid-group___output_1gab4be4e572d2a0d0f2f46faf8d45aa35d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_output_close(:ref:`snd_output_t<doxid-group___output_1ga49729cc6454539495c1f5b6e95cd474a>`* output)
+
+Closes an output handle.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- output
+
+		- The output handle to be closed.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code.
+
+.. index:: pair: function; snd_output_printf
+.. _doxid-group___output_1ga5dd8e7d3089a82d8449a9dff221caf1c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_output_printf(
+		:ref:`snd_output_t<doxid-group___output_1ga49729cc6454539495c1f5b6e95cd474a>`* output,
+		const char* format,
+		...
+		)
+
+Writes formatted output (like ``fprintf(3)``) to an output handle.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- output
+
+		- The output handle.
+
+	*
+		- format
+
+		- Format string in ``fprintf`` format.
+
+	*
+		- ...
+
+		- Other ``fprintf`` arguments.
+
+
+
+.. rubric:: Returns:
+
+The number of characters written, or a negative error code.
+
+.. index:: pair: function; snd_output_vprintf
+.. _doxid-group___output_1gae01572ae47fd3ead25ffd6856118780f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_output_vprintf(
+		:ref:`snd_output_t<doxid-group___output_1ga49729cc6454539495c1f5b6e95cd474a>`* output,
+		const char* format,
+		va_list args
+		)
+
+Writes formatted output (like ``fprintf(3)``) to an output handle.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- output
+
+		- The output handle.
+
+	*
+		- format
+
+		- Format string in ``fprintf`` format.
+
+	*
+		- args
+
+		- Other ``fprintf`` arguments.
+
+
+
+.. rubric:: Returns:
+
+The number of characters written, or a negative error code.
+
+.. index:: pair: function; snd_output_puts
+.. _doxid-group___output_1gaa370cff392c8fdaf03e08c667561d4ec:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_output_puts(
+		:ref:`snd_output_t<doxid-group___output_1ga49729cc6454539495c1f5b6e95cd474a>`* output,
+		const char* str
+		)
+
+Writes a string to an output handle (like ``fputs(3)``).
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- output
+
+		- The output handle.
+
+	*
+		- str
+
+		- Pointer to the string.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code or ``EOF``.
+
+.. index:: pair: function; snd_output_putc
+.. _doxid-group___output_1ga7b2b8c27042964a5b57acabe0af6e30b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_output_putc(
+		:ref:`snd_output_t<doxid-group___output_1ga49729cc6454539495c1f5b6e95cd474a>`* output,
+		int c
+		)
+
+Writes a character to an output handle (like ``putc(3)``).
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- output
+
+		- The output handle.
+
+	*
+		- c
+
+		- The character.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise a negative error code or ``EOF``.
+
+.. index:: pair: function; snd_output_flush
+.. _doxid-group___output_1ga9d188a05400c944bc1f70d757c179226:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_output_flush(:ref:`snd_output_t<doxid-group___output_1ga49729cc6454539495c1f5b6e95cd474a>`* output)
+
+Flushes an output handle (like fflush(3)).
+
+If the underlying destination is a stdio stream, this function calls ``fflush``. If the underlying destination is a memory buffer, the write position is reset to the beginning of the buffer. ``=`` :-o
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- output
+
+		- The output handle.
+
+
+
+.. rubric:: Returns:
+
+Zero if successful, otherwise ``EOF``.
+

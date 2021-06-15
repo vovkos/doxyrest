@@ -1,0 +1,612 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Chapter 5: The SFTP subsystem &mdash; LibSSH Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/doxyrest-pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/doxyrest-sphinx_rtd_theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/target-highlight.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Chapter 6: The SCP subsystem" href="page_libssh_tutor_scp.html" />
+    <link rel="prev" title="Chapter 4: Passing a remote command" href="page_libssh_tutor_command.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> LibSSH Documentation
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="page_libssh_linking.html">The Linking HowTo</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="page_libssh_tutorial.html">The Tutorial</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="page_libssh_tutorial.html#introduction">Introduction</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_guided_tour.html">Chapter 1: A typical SSH session</a></li>
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_authentication.html">Chapter 2: A deeper insight on authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_shell.html">Chapter 3: Opening a remote shell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_command.html">Chapter 4: Passing a remote command</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Chapter 5: The SFTP subsystem</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#the-sftp-subsystem">The SFTP subsystem</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_scp.html">Chapter 6: The SCP subsystem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_forwarding.html">Chapter 7: Forwarding connections (tunnel)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_threads.html">Chapter 8: Threads with libssh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_todo.html">To be done</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="group_libssh.html">The libssh API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_ssh_cpp.html">The libssh C++ wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libssh_sftp.html">The libssh SFTP API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libssh_server.html">The libssh server API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="page_bug.html">Bug List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_deprecated.html">Deprecated List</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LibSSH Documentation</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="page_libssh_tutorial.html">The Tutorial</a> &raquo;</li>
+        
+      <li>Chapter 5: The SFTP subsystem</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="chapter-5-the-sftp-subsystem">
+<span id="doxid-libssh-tutor-sftp"></span><span id="index-0"></span><h1>Chapter 5: The SFTP subsystem</h1>
+<div class="section" id="the-sftp-subsystem">
+<span id="doxid-libssh-tutor-sftp-1sftp-subsystem"></span><h2>The SFTP subsystem</h2>
+<p>SFTP stands for “Secure File Transfer Protocol”. It enables you to safely transfer files between the local and the remote computer. It reminds a lot of the old FTP protocol.</p>
+<p>SFTP is a rich protocol. It lets you do over the network almost everything that you can do with local files:</p>
+<ul class="simple">
+<li>send files</li>
+<li>modify only a portion of a file</li>
+<li>receive files</li>
+<li>receive only a portion of a file</li>
+<li>get file owner and group</li>
+<li>get file permissions</li>
+<li>set file owner and group</li>
+<li>set file permissions</li>
+<li>remove files</li>
+<li>rename files</li>
+<li>create a directory</li>
+<li>remove a directory</li>
+<li>retrieve the list of files in a directory</li>
+<li>get the target of a symbolic link</li>
+<li>create symbolic links</li>
+<li>get information about mounted filesystems.</li>
+</ul>
+<p>The current implemented version of the SFTP protocol is version 3. All functions aren’t implemented yet, but the most important are.</p>
+<div class="section" id="opening-and-closing-a-sftp-session">
+<span id="doxid-libssh-tutor-sftp-1sftp-session"></span><h3>Opening and closing a SFTP session</h3>
+<p>Unlike with remote shells and remote commands, when you use the SFTP subsystem, you don’t handle directly the SSH channels. Instead, you open a “SFTP session”.</p>
+<p>The function <a class="reference internal" href="group_libssh_sftp.html#doxid-group-libssh-sftp-1ga32c8e182e97352e1aa8a20443c320d7f"><span class="std std-ref">sftp_new()</span></a> creates a new SFTP session. The function <a class="reference internal" href="group_libssh_sftp.html#doxid-group-libssh-sftp-1ga6eb5a92e33493ec3d9a3576e1617da0d"><span class="std std-ref">sftp_init()</span></a> initializes it. The function <a class="reference internal" href="group_libssh_sftp.html#doxid-group-libssh-sftp-1ga155c66639cb3342c7e02a96c8dbf7501"><span class="std std-ref">sftp_free()</span></a> deletes it.</p>
+<p>As you see, all the SFTP-related functions start with the “sftp_” prefix instead of the usual “ssh_” prefix.</p>
+<p>The example below shows how to use these functions:</p>
+<pre class="highlight literal-block">
+<span></span><span class="cp">#include</span> <span class="cpf">&lt;libssh/sftp.h&gt;</span><span class="cp"></span>
+
+<span class="kt">int</span> <span class="nf">sftp_helloworld</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">sftp_session</span> <span class="n">sftp</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">rc</span><span class="p">;</span>
+
+  <span class="n">sftp</span> <span class="o">=</span> <span class="n">sftp_new</span><span class="p">(</span><span class="n">session</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">sftp</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Error allocating SFTP session: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+    <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">sftp_init</span><span class="p">(</span><span class="n">sftp</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_OK</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Error initializing SFTP session: %s.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="n">sftp_get_error</span><span class="p">(</span><span class="n">sftp</span><span class="p">));</span>
+    <span class="n">sftp_free</span><span class="p">(</span><span class="n">sftp</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="p">...</span>
+
+  <span class="n">sftp_free</span><span class="p">(</span><span class="n">sftp</span><span class="p">);</span>
+  <span class="k">return</span> <span class="n">SSH_OK</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+</div>
+<div class="section" id="analyzing-sftp-errors">
+<span id="doxid-libssh-tutor-sftp-1sftp-errors"></span><h3>Analyzing SFTP errors</h3>
+<p>In case of a problem, the function <a class="reference internal" href="group_libssh_sftp.html#doxid-group-libssh-sftp-1ga1f7fca4091a0075d9e69e47c928f7494"><span class="std std-ref">sftp_get_error()</span></a> returns a SFTP-specific error number, in addition to the regular SSH error number returned by ssh_get_error_number().</p>
+<p>Possible errors are:</p>
+<ul class="simple">
+<li>SSH_FX_OK: no error</li>
+<li>SSH_FX_EOF: end-of-file encountered</li>
+<li>SSH_FX_NO_SUCH_FILE: file does not exist</li>
+<li>SSH_FX_PERMISSION_DENIED: permission denied</li>
+<li>SSH_FX_FAILURE: generic failure</li>
+<li>SSH_FX_BAD_MESSAGE: garbage received from server</li>
+<li>SSH_FX_NO_CONNECTION: no connection has been set up</li>
+<li>SSH_FX_CONNECTION_LOST: there was a connection, but we lost it</li>
+<li>SSH_FX_OP_UNSUPPORTED: operation not supported by libssh yet</li>
+<li>SSH_FX_INVALID_HANDLE: invalid file handle</li>
+<li>SSH_FX_NO_SUCH_PATH: no such file or directory path exists</li>
+<li>SSH_FX_FILE_ALREADY_EXISTS: an attempt to create an already existing file or directory has been made</li>
+<li>SSH_FX_WRITE_PROTECT: write-protected filesystem</li>
+<li>SSH_FX_NO_MEDIA: no media was in remote drive</li>
+</ul>
+</div>
+<div class="section" id="creating-a-directory">
+<span id="doxid-libssh-tutor-sftp-1sftp-mkdir"></span><h3>Creating a directory</h3>
+<p>The function <a class="reference internal" href="group_libssh_sftp.html#doxid-group-libssh-sftp-1ga9cc63cd3efe83edfa3f6a4c5314383cb"><span class="std std-ref">sftp_mkdir()</span></a> tahes the “SFTP session” we juste created as its first argument. It also needs the name of the file to create, and the desired permissions. The permissions are the same as for the usual mkdir() function. To get a comprehensive list of the available permissions, use the “man 2 stat” command. The desired permissions are combined with the remote user’s mask to determine the effective permissions.</p>
+<p>The code below creates a directory named “helloworld” in the current directory that can be read and written only by its owner:</p>
+<pre class="highlight literal-block">
+<span></span><span class="cp">#include</span> <span class="cpf">&lt;libssh/sftp.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;sys/stat.h&gt;</span><span class="cp"></span>
+
+<span class="kt">int</span> <span class="nf">sftp_helloworld</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span> <span class="n">sftp_session</span> <span class="n">sftp</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">rc</span><span class="p">;</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">sftp_mkdir</span><span class="p">(</span><span class="n">sftp</span><span class="p">,</span> <span class="s">&quot;helloworld&quot;</span><span class="p">,</span> <span class="n">S_IRWXU</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_OK</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">sftp_get_error</span><span class="p">(</span><span class="n">sftp</span><span class="p">)</span> <span class="o">!=</span> <span class="n">SSH_FX_FILE_ALREADY_EXISTS</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Can&#39;t create directory: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+              <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+        <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="p">...</span>
+
+  <span class="k">return</span> <span class="n">SSH_OK</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+<p>Unlike its equivalent in the SCP subsystem, this function does NOT change the current directory to the newly created subdirectory.</p>
+</div>
+<div class="section" id="copying-a-file-to-the-remote-computer">
+<span id="doxid-libssh-tutor-sftp-1sftp-write"></span><h3>Copying a file to the remote computer</h3>
+<p>You handle the contents of a remote file just like you would do with a local file: you open the file in a given mode, move the file pointer in it, read or write data, and close the file.</p>
+<p>The <a class="reference internal" href="group_libssh_sftp.html#doxid-group-libssh-sftp-1gab95cb5fe091efcc49dfa7729e4d48010"><span class="std std-ref">sftp_open()</span></a> function is very similar to the regular open() function, excepted that it returns a file handle of type sftp_file. This file handle is then used by the other file manipulation functions and remains valid until you close the remote file with <a class="reference internal" href="group_libssh_sftp.html#doxid-group-libssh-sftp-1ga5878919249d4e8abe59b0ec699eed293"><span class="std std-ref">sftp_close()</span></a>.</p>
+<p>The example below creates a new file named “helloworld.txt” in the newly created “helloworld” directory. If the file already exists, it will be truncated. It then writes the famous “Hello, World!” sentence to the file, followed by a new line character. Finally, the file is closed:</p>
+<pre class="highlight literal-block">
+<span></span><span class="cp">#include</span> <span class="cpf">&lt;libssh/sftp.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;sys/stat.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;fcntl.h&gt;</span><span class="cp"></span>
+
+<span class="kt">int</span> <span class="nf">sftp_helloworld</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span> <span class="n">sftp_session</span> <span class="n">sftp</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">access_type</span> <span class="o">=</span> <span class="n">O_WRONLY</span> <span class="o">|</span> <span class="n">O_CREAT</span> <span class="o">|</span> <span class="n">O_TRUNC</span><span class="p">;</span>
+  <span class="n">sftp_file</span> <span class="n">file</span><span class="p">;</span>
+  <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">helloworld</span> <span class="o">=</span> <span class="s">&quot;Hello, World!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">helloworld</span><span class="p">);</span>
+  <span class="kt">int</span> <span class="n">rc</span><span class="p">,</span> <span class="n">nwritten</span><span class="p">;</span>
+
+  <span class="p">...</span>
+
+  <span class="n">file</span> <span class="o">=</span> <span class="n">sftp_open</span><span class="p">(</span><span class="n">sftp</span><span class="p">,</span> <span class="s">&quot;helloworld/helloworld.txt&quot;</span><span class="p">,</span>
+                   <span class="n">access_type</span><span class="p">,</span> <span class="n">S_IRWXU</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">file</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Can&#39;t open file for writing: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+    <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">nwritten</span> <span class="o">=</span> <span class="n">sftp_write</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">helloworld</span><span class="p">,</span> <span class="n">length</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">nwritten</span> <span class="o">!=</span> <span class="n">length</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Can&#39;t write data to file: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+    <span class="n">sftp_close</span><span class="p">(</span><span class="n">file</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">sftp_close</span><span class="p">(</span><span class="n">file</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_OK</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Can&#39;t close the written file: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="n">SSH_OK</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+</div>
+<div class="section" id="reading-a-file-from-the-remote-computer">
+<span id="doxid-libssh-tutor-sftp-1sftp-read"></span><h3>Reading a file from the remote computer</h3>
+<p>The nice thing with reading a file over the network through SFTP is that it can be done both in a synchronous way or an asynchronous way. If you read the file asynchronously, your program can do something else while it waits for the results to come.</p>
+<p>Synchronous read is done with <a class="reference internal" href="group_libssh_sftp.html#doxid-group-libssh-sftp-1ga6c2bfeb2e089f54c04afe1e484a7fff2"><span class="std std-ref">sftp_read()</span></a>.</p>
+<p>Files are normally transferred in chunks. A good chunk size is 16 KB. The following example transfers the remote file “/etc/profile” in 16 KB chunks. For each chunk we request, sftp_read blocks till the data has been received:</p>
+<pre class="highlight literal-block">
+<span></span><span class="c1">// Good chunk size</span>
+<span class="cp">#define MAX_XFER_BUF_SIZE 16384</span>
+
+<span class="kt">int</span> <span class="nf">sftp_read_sync</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span> <span class="n">sftp_session</span> <span class="n">sftp</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">access_type</span><span class="p">;</span>
+  <span class="n">sftp_file</span> <span class="n">file</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span><span class="n">MAX_XFER_BUF_SIZE</span><span class="p">];</span>
+  <span class="kt">int</span> <span class="n">nbytes</span><span class="p">,</span> <span class="n">nwritten</span><span class="p">,</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">fd</span><span class="p">;</span>
+
+  <span class="n">access_type</span> <span class="o">=</span> <span class="n">O_RDONLY</span><span class="p">;</span>
+  <span class="n">file</span> <span class="o">=</span> <span class="n">sftp_open</span><span class="p">(</span><span class="n">sftp</span><span class="p">,</span> <span class="s">&quot;/etc/profile&quot;</span><span class="p">,</span>
+                   <span class="n">access_type</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">file</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Can&#39;t open file for reading: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+              <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+      <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">fd</span> <span class="o">=</span> <span class="n">open</span><span class="p">(</span><span class="s">&quot;/path/to/profile&quot;</span><span class="p">,</span> <span class="n">O_CREAT</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">fd</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Can&#39;t open file for writing: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+              <span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+      <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">for</span> <span class="p">(;;)</span> <span class="p">{</span>
+      <span class="n">nbytes</span> <span class="o">=</span> <span class="n">sftp_read</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">));</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">nbytes</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">break</span><span class="p">;</span> <span class="c1">// EOF</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">nbytes</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+          <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Error while reading file: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+                  <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+          <span class="n">sftp_close</span><span class="p">(</span><span class="n">file</span><span class="p">);</span>
+          <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+      <span class="p">}</span>
+
+      <span class="n">nwritten</span> <span class="o">=</span> <span class="n">write</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">nbytes</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">nwritten</span> <span class="o">!=</span> <span class="n">nbytes</span><span class="p">)</span> <span class="p">{</span>
+          <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Error writing: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+                  <span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+          <span class="n">sftp_close</span><span class="p">(</span><span class="n">file</span><span class="p">);</span>
+          <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+      <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">sftp_close</span><span class="p">(</span><span class="n">file</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_OK</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Can&#39;t close the read file: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+              <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="n">SSH_OK</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+<p>Asynchronous read is done in two steps, first <a class="reference internal" href="group_libssh_sftp.html#doxid-group-libssh-sftp-1ga4c2cca19b38c54d4b04bb3584b0517cd"><span class="std std-ref">sftp_async_read_begin()</span></a>, which returns a “request handle”, and then <a class="reference internal" href="group_libssh_sftp.html#doxid-group-libssh-sftp-1ga4399c7ccd8b39a460265047f9d7bc9b1"><span class="std std-ref">sftp_async_read()</span></a>, which uses that request handle. If the file has been opened in nonblocking mode, then <a class="reference internal" href="group_libssh_sftp.html#doxid-group-libssh-sftp-1ga4399c7ccd8b39a460265047f9d7bc9b1"><span class="std std-ref">sftp_async_read()</span></a> might return SSH_AGAIN, which means that the request hasn’t completed yet and that the function should be called again later on. Otherwise, <a class="reference internal" href="group_libssh_sftp.html#doxid-group-libssh-sftp-1ga4399c7ccd8b39a460265047f9d7bc9b1"><span class="std std-ref">sftp_async_read()</span></a> waits for the data to come. To open a file in nonblocking mode, call <a class="reference internal" href="group_libssh_sftp.html#doxid-group-libssh-sftp-1gac0ccac0257aece8197654bed83b7ec01"><span class="std std-ref">sftp_file_set_nonblocking()</span></a> right after you opened it. Default is blocking mode.</p>
+<p>The example below reads a very big file in asynchronous, nonblocking, mode. Each time the data is not ready yet, a counter is incremented.</p>
+<pre class="highlight literal-block">
+<span></span><span class="c1">// Good chunk size</span>
+<span class="cp">#define MAX_XFER_BUF_SIZE 16384</span>
+
+<span class="kt">int</span> <span class="nf">sftp_read_async</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span> <span class="n">sftp_session</span> <span class="n">sftp</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">access_type</span><span class="p">;</span>
+  <span class="n">sftp_file</span> <span class="n">file</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span><span class="n">MAX_XFER_BUF_SIZE</span><span class="p">];</span>
+  <span class="kt">int</span> <span class="n">async_request</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">nbytes</span><span class="p">;</span>
+  <span class="kt">long</span> <span class="n">counter</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">rc</span><span class="p">;</span>
+
+  <span class="n">access_type</span> <span class="o">=</span> <span class="n">O_RDONLY</span><span class="p">;</span>
+  <span class="n">file</span> <span class="o">=</span> <span class="n">sftp_open</span><span class="p">(</span><span class="n">sftp</span><span class="p">,</span> <span class="s">&quot;some_very_big_file&quot;</span><span class="p">,</span>
+                   <span class="n">access_type</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">file</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Can&#39;t open file for reading: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+                     <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+    <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="n">sftp_file_set_nonblocking</span><span class="p">(</span><span class="n">file</span><span class="p">);</span>
+
+  <span class="n">async_request</span> <span class="o">=</span> <span class="n">sftp_async_read_begin</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">));</span>
+  <span class="n">counter</span> <span class="o">=</span> <span class="mi">0L</span><span class="p">;</span>
+  <span class="n">usleep</span><span class="p">(</span><span class="mi">10000</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">async_request</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">nbytes</span> <span class="o">=</span> <span class="n">sftp_async_read</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">),</span>
+                             <span class="n">async_request</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="n">nbytes</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">while</span> <span class="p">(</span><span class="n">nbytes</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">nbytes</span> <span class="o">==</span> <span class="n">SSH_AGAIN</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">nbytes</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">write</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">nbytes</span><span class="p">);</span>
+      <span class="n">async_request</span> <span class="o">=</span> <span class="n">sftp_async_read_begin</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">));</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">counter</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">usleep</span><span class="p">(</span><span class="mi">10000</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">async_request</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">nbytes</span> <span class="o">=</span> <span class="n">sftp_async_read</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">),</span>
+                               <span class="n">async_request</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">nbytes</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">nbytes</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Error while reading file: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+    <span class="n">sftp_close</span><span class="p">(</span><span class="n">file</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;The counter has reached value: %ld</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">counter</span><span class="p">);</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">sftp_close</span><span class="p">(</span><span class="n">file</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_OK</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Can&#39;t close the read file: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="n">SSH_OK</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+</div>
+<div class="section" id="listing-the-contents-of-a-directory">
+<span id="doxid-libssh-tutor-sftp-1sftp-ls"></span><h3>Listing the contents of a directory</h3>
+<p>The functions <a class="reference internal" href="group_libssh_sftp.html#doxid-group-libssh-sftp-1gab4290874bdb55796b2823496e0d9b7ec"><span class="std std-ref">sftp_opendir()</span></a>, <a class="reference internal" href="group_libssh_sftp.html#doxid-group-libssh-sftp-1ga976ecf6f7d415856e1fd4a0f16ada9b8"><span class="std std-ref">sftp_readdir()</span></a>, <a class="reference internal" href="group_libssh_sftp.html#doxid-group-libssh-sftp-1gad60f8e71b06eb8fdae2b262bb58f8fec"><span class="std std-ref">sftp_dir_eof()</span></a>, and <a class="reference internal" href="group_libssh_sftp.html#doxid-group-libssh-sftp-1ga35551e5b28b192ef8035628d347f7d3e"><span class="std std-ref">sftp_closedir()</span></a> enable to list the contents of a directory. They use a new handle_type, “sftp_dir”, which gives access to the directory being read.</p>
+<p>In addition, <a class="reference internal" href="group_libssh_sftp.html#doxid-group-libssh-sftp-1ga976ecf6f7d415856e1fd4a0f16ada9b8"><span class="std std-ref">sftp_readdir()</span></a> returns a “sftp_attributes” which is a pointer to a structure with informations about a directory entry:</p>
+<ul class="simple">
+<li>name: the name of the file or directory</li>
+<li>size: its size in bytes</li>
+<li>etc.</li>
+</ul>
+<p><a class="reference internal" href="group_libssh_sftp.html#doxid-group-libssh-sftp-1ga976ecf6f7d415856e1fd4a0f16ada9b8"><span class="std std-ref">sftp_readdir()</span></a> might return NULL under two conditions:</p>
+<ul class="simple">
+<li>when the end of the directory has been met</li>
+<li>when an error occured</li>
+</ul>
+<p>To tell the difference, call <a class="reference internal" href="group_libssh_sftp.html#doxid-group-libssh-sftp-1gad60f8e71b06eb8fdae2b262bb58f8fec"><span class="std std-ref">sftp_dir_eof()</span></a>.</p>
+<p>The attributes must be freed with <a class="reference internal" href="group_libssh_sftp.html#doxid-group-libssh-sftp-1gadee9f7af9fc1ad3a0a66c7d97bf7977c"><span class="std std-ref">sftp_attributes_free()</span></a> when no longer needed.</p>
+<p>The following example reads the contents of some remote directory:</p>
+<pre class="highlight literal-block">
+<span></span><span class="kt">int</span> <span class="nf">sftp_list_dir</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span> <span class="n">sftp_session</span> <span class="n">sftp</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">sftp_dir</span> <span class="n">dir</span><span class="p">;</span>
+  <span class="n">sftp_attributes</span> <span class="n">attributes</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">rc</span><span class="p">;</span>
+
+  <span class="n">dir</span> <span class="o">=</span> <span class="n">sftp_opendir</span><span class="p">(</span><span class="n">sftp</span><span class="p">,</span> <span class="s">&quot;/var/log&quot;</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">dir</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Directory not opened: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+    <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Name                       Size Perms    Owner</span><span class="se">\t</span><span class="s">Group</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+
+  <span class="k">while</span> <span class="p">((</span><span class="n">attributes</span> <span class="o">=</span> <span class="n">sftp_readdir</span><span class="p">(</span><span class="n">sftp</span><span class="p">,</span> <span class="n">dir</span><span class="p">))</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%-20s %10llu %.8o %s(%d)</span><span class="se">\t</span><span class="s">%s(%d)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+     <span class="n">attributes</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span>
+     <span class="p">(</span><span class="kt">long</span> <span class="kt">long</span> <span class="kt">unsigned</span> <span class="kt">int</span><span class="p">)</span> <span class="n">attributes</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">,</span>
+     <span class="n">attributes</span><span class="o">-&gt;</span><span class="n">permissions</span><span class="p">,</span>
+     <span class="n">attributes</span><span class="o">-&gt;</span><span class="n">owner</span><span class="p">,</span>
+     <span class="n">attributes</span><span class="o">-&gt;</span><span class="n">uid</span><span class="p">,</span>
+     <span class="n">attributes</span><span class="o">-&gt;</span><span class="n">group</span><span class="p">,</span>
+     <span class="n">attributes</span><span class="o">-&gt;</span><span class="n">gid</span><span class="p">);</span>
+
+     <span class="n">sftp_attributes_free</span><span class="p">(</span><span class="n">attributes</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">sftp_dir_eof</span><span class="p">(</span><span class="n">dir</span><span class="p">))</span>
+  <span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Can&#39;t list directory: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+    <span class="n">sftp_closedir</span><span class="p">(</span><span class="n">dir</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">sftp_closedir</span><span class="p">(</span><span class="n">dir</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_OK</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Can&#39;t close directory: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="page_libssh_tutor_scp.html" class="btn btn-neutral float-right" title="Chapter 6: The SCP subsystem" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="page_libssh_tutor_command.html" class="btn btn-neutral float-left" title="Chapter 4: Passing a remote command" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2003-2017, LibSSH Maintainers.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

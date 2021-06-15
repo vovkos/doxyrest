@@ -1,0 +1,2107 @@
+.. index:: pair: group; The SSH session functions.
+.. _doxid-group__libssh__session:
+
+The SSH session functions.
+==========================
+
+.. toctree::
+	:hidden:
+
+Overview
+~~~~~~~~
+
+Functions that manage a session. :ref:`More...<details-group__libssh__session>`
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// global functions
+
+	int
+	:ref:`ssh_blocking_flush<doxid-group__libssh__session_1ga60da8e2c47897a209a455923c35d52d8>`(
+		ssh_session session,
+		int timeout
+		);
+
+	void
+	:ref:`ssh_clean_pubkey_hash<doxid-group__libssh__session_1ga07827fd70a51ddc4030364f220eb4c9c>`(unsigned char** hash);
+
+	int
+	:ref:`ssh_connect<doxid-group__libssh__session_1ga032e07cbd8bc3f14cb2dd375db0b03d7>`(ssh_session session);
+
+	void
+	:ref:`ssh_disconnect<doxid-group__libssh__session_1ga0f048a4c0dbe02cfb7e9c5b6d0db0f27>`(ssh_session session);
+
+	void
+	:ref:`ssh_free<doxid-group__libssh__session_1gae5af27a98a7488e9f5ded6b37c274156>`(ssh_session session);
+
+	const char*
+	:ref:`ssh_get_cipher_in<doxid-group__libssh__session_1ga81d8525f77c58d93ed0d320c38e62009>`(ssh_session session);
+
+	const char*
+	:ref:`ssh_get_cipher_out<doxid-group__libssh__session_1ga0a0b33868aec5337ba1d9aee8fee26d1>`(ssh_session session);
+
+	const char*
+	:ref:`ssh_get_clientbanner<doxid-group__libssh__session_1ga1e76a1fc03d1d16fb59b0bd5e9978aa0>`(ssh_session session);
+
+	const char*
+	:ref:`ssh_get_disconnect_message<doxid-group__libssh__session_1gad19e368e35d48e02ba95970a7d1e87f5>`(ssh_session session);
+
+	:ref:`socket_t<doxid-libssh_8h_1a30353f381f5fccbb956eea1f3a110b6c>`
+	:ref:`ssh_get_fd<doxid-group__libssh__session_1gafe509fcea47714b5cd277d1e35e83276>`(ssh_session session);
+
+	char*
+	:ref:`ssh_get_hexa<doxid-group__libssh__session_1ga6ebcfc53884fdc5afb1607c94f8007d4>`(
+		const unsigned char* what,
+		size_t len
+		);
+
+	const char*
+	:ref:`ssh_get_hmac_in<doxid-group__libssh__session_1ga293196b7f1b1653ff970b8206671def9>`(ssh_session session);
+
+	const char*
+	:ref:`ssh_get_hmac_out<doxid-group__libssh__session_1ga2fc37631d6a350d9c31dcb336b98a836>`(ssh_session session);
+
+	char*
+	:ref:`ssh_get_issue_banner<doxid-group__libssh__session_1ga89864d4d5cc6d3d6ef1c39652f2a688f>`(ssh_session session);
+
+	const char*
+	:ref:`ssh_get_kex_algo<doxid-group__libssh__session_1ga3870bf9e03a2ac470ab202424224b15e>`(ssh_session session);
+
+	int
+	:ref:`ssh_get_openssh_version<doxid-group__libssh__session_1gac55d2895467a1e898ee75b4710d836a5>`(ssh_session session);
+
+	int
+	:ref:`ssh_get_poll_flags<doxid-group__libssh__session_1gae9d0104fbeca17bcfb0659ad718c4606>`(ssh_session session);
+
+	int
+	:ref:`ssh_get_pubkey_hash<doxid-group__libssh__session_1gaf8ff0e2236d54d964a82f68d7323a741>`(
+		ssh_session session,
+		unsigned char** hash
+		);
+
+	int
+	:ref:`ssh_get_publickey<doxid-group__libssh__session_1ga839a93298aeff85adbaf4db815b58730>`(
+		ssh_session session,
+		ssh_key* key
+		);
+
+	int
+	:ref:`ssh_get_publickey_hash<doxid-group__libssh__session_1ga7a7b16a4bed6d8d58f10bdb269172ff7>`(
+		const ssh_key key,
+		enum :ref:`ssh_publickey_hash_type<doxid-libssh_8h_1a259d7cf33d738bfbc221aeac362c84c8>` type,
+		unsigned char** hash,
+		size_t* hlen
+		);
+
+	const char*
+	:ref:`ssh_get_serverbanner<doxid-group__libssh__session_1gac89bcc9f438d031a32260926b04ea6b9>`(ssh_session session);
+
+	int
+	:ref:`ssh_get_status<doxid-group__libssh__session_1gac199314d1646372c566ef14b9b6dca53>`(ssh_session session);
+
+	int
+	:ref:`ssh_get_version<doxid-group__libssh__session_1ga8467735e4735165336f68ee82e24de0e>`(ssh_session session);
+
+	int
+	:ref:`ssh_is_blocking<doxid-group__libssh__session_1ga0c959bde817801ac5de2db1e64b52f26>`(ssh_session session);
+
+	int
+	:ref:`ssh_is_connected<doxid-group__libssh__session_1ga49d8f413a3c7879070a112703de1d6e2>`(ssh_session session);
+
+	int
+	:ref:`ssh_is_server_known<doxid-group__libssh__session_1ga6f37e3d7bb6b938b44d6a34a76fdfa0b>`(ssh_session session);
+
+	ssh_session
+	:ref:`ssh_new<doxid-group__libssh__session_1gaadadc0f9601547c30db7c4d62017d32c>`(void);
+
+	int
+	:ref:`ssh_options_copy<doxid-group__libssh__session_1gaead8cef1f39e785139bc510852ce1dff>`(
+		ssh_session src,
+		ssh_session* dest
+		);
+
+	int
+	:ref:`ssh_options_get<doxid-group__libssh__session_1gaaa9d400920cad4d6e4a0fb09ff8c7b01>`(
+		ssh_session session,
+		enum :ref:`ssh_options_e<doxid-libssh_8h_1af7093adacb08e7ee1e9b16e9c8b0f46c>` type,
+		char** value
+		);
+
+	int
+	:ref:`ssh_options_get_port<doxid-group__libssh__session_1gaa298d8445355420d80f2d968477ba86f>`(
+		ssh_session session,
+		unsigned int* port_target
+		);
+
+	int
+	:ref:`ssh_options_getopt<doxid-group__libssh__session_1ga93f7f7159893f3ce62c9b178724eff75>`(
+		ssh_session session,
+		int* argcptr,
+		char** argv
+		);
+
+	int
+	:ref:`ssh_options_parse_config<doxid-group__libssh__session_1ga82371e723260c7572ea061edecc2e9f1>`(
+		ssh_session session,
+		const char* filename
+		);
+
+	int
+	:ref:`ssh_options_set<doxid-group__libssh__session_1ga7a801b85800baa3f4e16f5b47db0a73d>`(
+		ssh_session session,
+		enum :ref:`ssh_options_e<doxid-libssh_8h_1af7093adacb08e7ee1e9b16e9c8b0f46c>` type,
+		const void* value
+		);
+
+	void
+	:ref:`ssh_print_hexa<doxid-group__libssh__session_1ga39bf7936ed51361fe9cf3c3bbfc25514>`(
+		const char* descr,
+		const unsigned char* what,
+		size_t len
+		);
+
+	int
+	:ref:`ssh_select<doxid-group__libssh__session_1ga86cbf041bced56d18a2a5248c46cecb4>`(
+		ssh_channel* channels,
+		ssh_channel* outchannels,
+		:ref:`socket_t<doxid-libssh_8h_1a30353f381f5fccbb956eea1f3a110b6c>` maxfd,
+		fd_set* readfds,
+		struct timeval* timeout
+		);
+
+	int
+	:ref:`ssh_send_debug<doxid-group__libssh__session_1ga5ffa2201152e29cc680c4b8e4a3f4fdf>`(
+		ssh_session session,
+		const char* message,
+		int always_display
+		);
+
+	int
+	:ref:`ssh_send_ignore<doxid-group__libssh__session_1gab8827415fd19cf6cb64e7fc83c09e423>`(
+		ssh_session session,
+		const char* data
+		);
+
+	void
+	:ref:`ssh_set_blocking<doxid-group__libssh__session_1ga2a29cff08855611be84d050e5bec73bc>`(
+		ssh_session session,
+		int blocking
+		);
+
+	void
+	:ref:`ssh_set_counters<doxid-group__libssh__session_1ga84d4ac53ac8582b70da9b63739df61ad>`(
+		ssh_session session,
+		ssh_counter scounter,
+		ssh_counter rcounter
+		);
+
+	void
+	:ref:`ssh_set_fd_except<doxid-group__libssh__session_1ga06453278350fd9e940c5c1b0d5225f19>`(ssh_session session);
+
+	void
+	:ref:`ssh_set_fd_toread<doxid-group__libssh__session_1ga0e05c91c6f475eabc8d221914d25a425>`(ssh_session session);
+
+	void
+	:ref:`ssh_set_fd_towrite<doxid-group__libssh__session_1ga3f1b3c59662464eec3649d3d72a40543>`(ssh_session session);
+
+	void
+	:ref:`ssh_silent_disconnect<doxid-group__libssh__session_1gae1bd16255ba373325adf76307d0c8c42>`(ssh_session session);
+
+	int
+	:ref:`ssh_write_knownhost<doxid-group__libssh__session_1gaf61a9cfdc40c76ffce9f9a8543755d36>`(ssh_session session);
+
+	static
+	void
+	:target:`ssh_client_connection_callback<doxid-group__libssh__session_1gafa8d153635a261e97870ab71d570149a>`(ssh_session session);
+
+	static
+	int
+	:target:`ssh_connect_termination<doxid-group__libssh__session_1gabca86e5dcb03e23c150b16f9655cd782>`(void* user);
+
+	const char*
+	:target:`ssh_copyright<doxid-group__libssh__session_1gaffbc8276ff57983966ce108998df40bd>`(void);
+
+	static
+	int
+	:target:`ssh_select_cb<doxid-group__libssh__session_1gaed7aa63089bc78f3827115f476badab5>`(
+		:ref:`socket_t<doxid-libssh_8h_1a30353f381f5fccbb956eea1f3a110b6c>` fd,
+		int revents,
+		void* userdata
+		);
+
+	static
+	int
+	:target:`alldigits<doxid-group__libssh__session_1ga1a06292da7667385acb7181c17fb2aaf>`(const char* s);
+
+	static
+	int
+	:ref:`check_public_key<doxid-group__libssh__session_1ga7c21df77bcd00b832e2f33c3afae64a0>`(
+		ssh_session session,
+		char** tokens
+		);
+
+	static
+	int
+	:ref:`match_hashed_host<doxid-group__libssh__session_1ga8986fdab5f7b17935b21e96652f22cf8>`(
+		const char* host,
+		const char* sourcehash
+		);
+
+	static
+	char**
+	:target:`ssh_get_knownhost_line<doxid-group__libssh__session_1ga3d5f65b5769fb17797618a60f2b78101>`(
+		FILE** file,
+		const char* filename,
+		const char** found_type
+		);
+
+	char**
+	:target:`ssh_knownhosts_algorithms<doxid-group__libssh__session_1ga0cdaf267ea18c4d7910864f7203842f3>`(ssh_session session);
+
+	static
+	void
+	:target:`tokens_free<doxid-group__libssh__session_1ga4443531b37afa026f6a8cac3bf313166>`(char** tokens);
+
+	int
+	:target:`ssh_options_apply<doxid-group__libssh__session_1ga882e56c9ac92b2e860f055ac903e9c07>`(ssh_session session);
+
+	int
+	:target:`ssh_options_set_algo<doxid-group__libssh__session_1ga980c4ecd572fdb816d2f8b0a0479cea7>`(
+		ssh_session session,
+		int algo,
+		const char* list
+		);
+
+	static
+	int
+	:target:`ssh_flush_termination<doxid-group__libssh__session_1gac06e77d8cc7d3c9b3ce54cfd8db35afa>`(void* c);
+
+	int
+	:target:`ssh_handle_packets<doxid-group__libssh__session_1gaa0e04dc9e24d5112a5ca2b7bd68031d0>`(
+		ssh_session session,
+		int timeout
+		);
+
+	int
+	:target:`ssh_handle_packets_termination<doxid-group__libssh__session_1gab3686ad27fa79078da6ad919ccff0fd5>`(
+		ssh_session session,
+		int timeout,
+		:ref:`ssh_termination_function<doxid-session_8h_1afe190fe0d01c9d8b63862d56b7f67ffa>` fct,
+		void* user
+		);
+
+	void
+	:target:`ssh_socket_exception_callback<doxid-group__libssh__session_1ga2635562d4c0bb8507e9a9f7274ff4729>`(
+		int code,
+		int errno_code,
+		void* user
+		);
+
+	// macros
+
+	#define :target:`KNOWNHOSTS_MAXTYPES<doxid-group__libssh__session_1gaf973d65853ac2ac2b0eb78b48c51e925>`
+
+.. _details-group__libssh__session:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+Functions that manage a session.
+
+Global Functions
+----------------
+
+.. index:: pair: function; ssh_blocking_flush
+.. _doxid-group__libssh__session_1ga60da8e2c47897a209a455923c35d52d8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_blocking_flush(
+		ssh_session session,
+		int timeout
+		)
+
+Blocking flush of the outgoing buffer.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The SSH session
+
+	*
+		- timeout
+
+		- Set an upper limit on the time for which this function will block, in milliseconds. Specifying -1 means an infinite timeout. This parameter is passed to the poll() function.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_AGAIN if timeout occurred, SSH_ERROR otherwise.
+
+.. index:: pair: function; ssh_clean_pubkey_hash
+.. _doxid-group__libssh__session_1ga07827fd70a51ddc4030364f220eb4c9c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	ssh_clean_pubkey_hash(unsigned char** hash)
+
+Deallocate the hash obtained by ssh_get_pubkey_hash.
+
+This is required under Microsoft platform as this library might use a different C library than your software, hence a different heap.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hash
+
+		- The buffer to deallocate.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_get_pubkey_hash() <doxid-group__libssh__session_1gaf8ff0e2236d54d964a82f68d7323a741>`
+
+.. index:: pair: function; ssh_connect
+.. _doxid-group__libssh__session_1ga032e07cbd8bc3f14cb2dd375db0b03d7:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_connect(ssh_session session)
+
+Connect to the ssh server.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to connect.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR on error.
+
+SSH_AGAIN, if the session is in nonblocking mode, and call must be done again.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_new() <doxid-group__libssh__session_1gaadadc0f9601547c30db7c4d62017d32c>`
+
+:ref:`ssh_disconnect() <doxid-group__libssh__session_1ga0f048a4c0dbe02cfb7e9c5b6d0db0f27>`
+
+.. index:: pair: function; ssh_disconnect
+.. _doxid-group__libssh__session_1ga0f048a4c0dbe02cfb7e9c5b6d0db0f27:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	ssh_disconnect(ssh_session session)
+
+Disconnect from a session (client or server).
+
+The session can then be reused to open a new session.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The SSH session to use.
+
+.. index:: pair: function; ssh_free
+.. _doxid-group__libssh__session_1gae5af27a98a7488e9f5ded6b37c274156:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	ssh_free(ssh_session session)
+
+Deallocate a SSH session handle.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The SSH session to free.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_disconnect() <doxid-group__libssh__session_1ga0f048a4c0dbe02cfb7e9c5b6d0db0f27>`
+
+:ref:`ssh_new() <doxid-group__libssh__session_1gaadadc0f9601547c30db7c4d62017d32c>`
+
+.. index:: pair: function; ssh_get_cipher_in
+.. _doxid-group__libssh__session_1ga81d8525f77c58d93ed0d320c38e62009:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	ssh_get_cipher_in(ssh_session session)
+
+get the name of the input cipher for the given session.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The SSH session.
+
+
+
+.. rubric:: Returns:
+
+Returns cipher name or NULL.
+
+.. index:: pair: function; ssh_get_cipher_out
+.. _doxid-group__libssh__session_1ga0a0b33868aec5337ba1d9aee8fee26d1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	ssh_get_cipher_out(ssh_session session)
+
+get the name of the output cipher for the given session.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The SSH session.
+
+
+
+.. rubric:: Returns:
+
+Returns cipher name or NULL.
+
+.. index:: pair: function; ssh_get_clientbanner
+.. _doxid-group__libssh__session_1ga1e76a1fc03d1d16fb59b0bd5e9978aa0:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	ssh_get_clientbanner(ssh_session session)
+
+get the client banner
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The SSH session
+
+
+
+.. rubric:: Returns:
+
+Returns the client banner string or NULL.
+
+.. index:: pair: function; ssh_get_disconnect_message
+.. _doxid-group__libssh__session_1gad19e368e35d48e02ba95970a7d1e87f5:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	ssh_get_disconnect_message(ssh_session session)
+
+Get the disconnect message from the server.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to use.
+
+
+
+.. rubric:: Returns:
+
+The message sent by the server along with the disconnect, or NULL in which case the reason of the disconnect may be found with ssh_get_error.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_get_error() <doxid-group__libssh__error_1ga9241586665bf21f823806473fc386258>`
+
+.. index:: pair: function; ssh_get_fd
+.. _doxid-group__libssh__session_1gafe509fcea47714b5cd277d1e35e83276:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`socket_t<doxid-libssh_8h_1a30353f381f5fccbb956eea1f3a110b6c>`
+	ssh_get_fd(ssh_session session)
+
+Get the fd of a connection.
+
+In case you'd need the file descriptor of the connection to the server/client.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to use.
+
+
+
+.. rubric:: Returns:
+
+The file descriptor of the connection, or -1 if it is not connected
+
+.. index:: pair: function; ssh_get_hexa
+.. _doxid-group__libssh__session_1ga6ebcfc53884fdc5afb1607c94f8007d4:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	char*
+	ssh_get_hexa(
+		const unsigned char* what,
+		size_t len
+		)
+
+Convert a buffer into a colon separated hex string.
+
+The caller has to free the memory.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- what
+
+		- What should be converted to a hex string.
+
+	*
+		- len
+
+		- Length of the buffer to convert.
+
+
+
+.. rubric:: Returns:
+
+The hex string or NULL on error.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_string_free_char() <doxid-group__libssh__string_1gafc10700722d6cafc468c2ee97585449a>`
+
+.. index:: pair: function; ssh_get_hmac_in
+.. _doxid-group__libssh__session_1ga293196b7f1b1653ff970b8206671def9:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	ssh_get_hmac_in(ssh_session session)
+
+get the name of the input HMAC algorithm for the given session.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The SSH session.
+
+
+
+.. rubric:: Returns:
+
+Returns HMAC algorithm name or NULL if unknown.
+
+.. index:: pair: function; ssh_get_hmac_out
+.. _doxid-group__libssh__session_1ga2fc37631d6a350d9c31dcb336b98a836:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	ssh_get_hmac_out(ssh_session session)
+
+get the name of the output HMAC algorithm for the given session.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The SSH session.
+
+
+
+.. rubric:: Returns:
+
+Returns HMAC algorithm name or NULL if unknown.
+
+.. index:: pair: function; ssh_get_issue_banner
+.. _doxid-group__libssh__session_1ga89864d4d5cc6d3d6ef1c39652f2a688f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	char*
+	ssh_get_issue_banner(ssh_session session)
+
+Get the issue banner from the server.
+
+This is the banner showing a disclaimer to users who log in, typically their right or the fact that they will be monitored.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The SSH session to use.
+
+
+
+.. rubric:: Returns:
+
+A newly allocated string with the banner, NULL on error.
+
+.. index:: pair: function; ssh_get_kex_algo
+.. _doxid-group__libssh__session_1ga3870bf9e03a2ac470ab202424224b15e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	ssh_get_kex_algo(ssh_session session)
+
+get the name of the current key exchange algorithm.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The SSH session
+
+
+
+.. rubric:: Returns:
+
+Returns the key exchange algorithm string or NULL.
+
+.. index:: pair: function; ssh_get_openssh_version
+.. _doxid-group__libssh__session_1gac55d2895467a1e898ee75b4710d836a5:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_get_openssh_version(ssh_session session)
+
+Get the version of the OpenSSH server, if it is not an OpenSSH server then 0 will be returned.
+
+You can use the SSH_VERSION_INT macro to compare version numbers.
+
+.. ref-code-block:: cpp
+
+	int openssh = ssh_get_openssh_version();
+	
+	if (openssh == SSH_INT_VERSION(6, 1, 0)) {
+	    printf("Version match!\m");
+	}
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The SSH session to use.
+
+
+
+.. rubric:: Returns:
+
+The version number if available, 0 otherwise.
+
+.. index:: pair: function; ssh_get_poll_flags
+.. _doxid-group__libssh__session_1gae9d0104fbeca17bcfb0659ad718c4606:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_get_poll_flags(ssh_session session)
+
+Get poll flags for an external mainloop.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to use.
+
+
+
+.. rubric:: Returns:
+
+A bitmask including SSH_READ_PENDING or SSH_WRITE_PENDING. For SSH_READ_PENDING, your invocation of poll() should include POLLIN. For SSH_WRITE_PENDING, your invocation of poll() should include POLLOUT.
+
+.. index:: pair: function; ssh_get_pubkey_hash
+.. _doxid-group__libssh__session_1gaf8ff0e2236d54d964a82f68d7323a741:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_get_pubkey_hash(
+		ssh_session session,
+		unsigned char** hash
+		)
+
+Deprecated Use :ref:`ssh_get_publickey_hash() <doxid-group__libssh__session_1ga7a7b16a4bed6d8d58f10bdb269172ff7>`
+
+.. index:: pair: function; ssh_get_publickey
+.. _doxid-group__libssh__session_1ga839a93298aeff85adbaf4db815b58730:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_get_publickey(
+		ssh_session session,
+		ssh_key* key
+		)
+
+Get the server public key from a session.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The session to get the key from.
+
+	*
+		- key
+
+		- A pointer to store the allocated key. You need to free the key.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR on errror.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_key_free() <doxid-group__libssh__pki_1ga08808beb83a42ccd6f1c710ddeb1b4c2>`
+
+.. index:: pair: function; ssh_get_publickey_hash
+.. _doxid-group__libssh__session_1ga7a7b16a4bed6d8d58f10bdb269172ff7:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_get_publickey_hash(
+		const ssh_key key,
+		enum :ref:`ssh_publickey_hash_type<doxid-libssh_8h_1a259d7cf33d738bfbc221aeac362c84c8>` type,
+		unsigned char** hash,
+		size_t* hlen
+		)
+
+Allocates a buffer with the hash of the public key.
+
+This function allows you to get a hash of the public key. You can then print this hash in a human-readable form to the user so that he is able to verify it. Use :ref:`ssh_get_hexa() <doxid-group__libssh__session_1ga6ebcfc53884fdc5afb1607c94f8007d4>` or :ref:`ssh_print_hexa() <doxid-group__libssh__session_1ga39bf7936ed51361fe9cf3c3bbfc25514>` to display it.
+
+It is very important that you verify at some moment that the hash matches a known server. If you don't do it, cryptography wont help you at making things secure. OpenSSH uses SHA1 to print public key digests.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- key
+
+		- The public key to create the hash for.
+
+	*
+		- type
+
+		- The type of the hash you want.
+
+	*
+		- hash
+
+		- A pointer to store the allocated buffer. It can be freed using :ref:`ssh_clean_pubkey_hash() <doxid-group__libssh__session_1ga07827fd70a51ddc4030364f220eb4c9c>`.
+
+	*
+		- hlen
+
+		- The length of the hash.
+
+
+
+.. rubric:: Returns:
+
+0 on success, -1 if an error occured.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_is_server_known() <doxid-group__libssh__session_1ga6f37e3d7bb6b938b44d6a34a76fdfa0b>`
+
+:ref:`ssh_get_hexa() <doxid-group__libssh__session_1ga6ebcfc53884fdc5afb1607c94f8007d4>`
+
+:ref:`ssh_print_hexa() <doxid-group__libssh__session_1ga39bf7936ed51361fe9cf3c3bbfc25514>`
+
+:ref:`ssh_clean_pubkey_hash() <doxid-group__libssh__session_1ga07827fd70a51ddc4030364f220eb4c9c>`
+
+.. index:: pair: function; ssh_get_serverbanner
+.. _doxid-group__libssh__session_1gac89bcc9f438d031a32260926b04ea6b9:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	ssh_get_serverbanner(ssh_session session)
+
+get the server banner
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The SSH session
+
+
+
+.. rubric:: Returns:
+
+Returns the server banner string or NULL.
+
+.. index:: pair: function; ssh_get_status
+.. _doxid-group__libssh__session_1gac199314d1646372c566ef14b9b6dca53:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_get_status(ssh_session session)
+
+Get session status.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to use.
+
+
+
+.. rubric:: Returns:
+
+A bitmask including SSH_CLOSED, SSH_READ_PENDING, SSH_WRITE_PENDING or SSH_CLOSED_ERROR which respectively means the session is closed, has data to read on the connection socket and session was closed due to an error.
+
+.. index:: pair: function; ssh_get_version
+.. _doxid-group__libssh__session_1ga8467735e4735165336f68ee82e24de0e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_get_version(ssh_session session)
+
+Get the protocol version of the session.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to use.
+
+
+
+.. rubric:: Returns:
+
+1 or 2, for ssh1 or ssh2, < 0 on error.
+
+.. index:: pair: function; ssh_is_blocking
+.. _doxid-group__libssh__session_1ga0c959bde817801ac5de2db1e64b52f26:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_is_blocking(ssh_session session)
+
+Return the blocking mode of libssh.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The SSH session
+
+
+
+.. rubric:: Returns:
+
+0 if the session is nonblocking,
+
+1 if the functions may block.
+
+.. index:: pair: function; ssh_is_connected
+.. _doxid-group__libssh__session_1ga49d8f413a3c7879070a112703de1d6e2:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_is_connected(ssh_session session)
+
+Check if we are connected.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The session to check if it is connected.
+
+
+
+.. rubric:: Returns:
+
+1 if we are connected, 0 if not.
+
+.. index:: pair: function; ssh_is_server_known
+.. _doxid-group__libssh__session_1ga6f37e3d7bb6b938b44d6a34a76fdfa0b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_is_server_known(ssh_session session)
+
+Check if the server is known.
+
+Checks the user's known host file for a previous connection to the current server.
+
+Bug There is no current way to remove or modify an entry into the known host table.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The SSH session to use.
+
+
+
+.. rubric:: Returns:
+
+SSH_SERVER_KNOWN_OK: The server is known and has not changed.
+
+SSH_SERVER_KNOWN_CHANGED: The server key has changed. Either you are under attack or the administrator changed the key. You HAVE to warn the user about a possible attack.
+
+SSH_SERVER_FOUND_OTHER: The server gave use a key of a type while we had an other type recorded. It is a possible attack.
+
+SSH_SERVER_NOT_KNOWN: The server is unknown. User should confirm the MD5 is correct.
+
+SSH_SERVER_FILE_NOT_FOUND: The known host file does not exist. The host is thus unknown. File will be created if host key is accepted.
+
+SSH_SERVER_ERROR: Some error happened.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_get_pubkey_hash() <doxid-group__libssh__session_1gaf8ff0e2236d54d964a82f68d7323a741>`
+
+.. index:: pair: function; ssh_new
+.. _doxid-group__libssh__session_1gaadadc0f9601547c30db7c4d62017d32c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	ssh_session
+	ssh_new(void)
+
+Create a new ssh session.
+
+
+
+.. rubric:: Returns:
+
+A new ssh_session pointer, NULL on error.
+
+.. index:: pair: function; ssh_options_copy
+.. _doxid-group__libssh__session_1gaead8cef1f39e785139bc510852ce1dff:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_options_copy(
+		ssh_session src,
+		ssh_session* dest
+		)
+
+Duplicate the options of a session structure.
+
+If you make several sessions with the same options this is useful. You cannot use twice the same option structure in ssh_session_connect.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- src
+
+		- The session to use to copy the options.
+
+	*
+		- dest
+
+		- A pointer to store the allocated session with duplicated options. You have to free the memory.
+
+
+
+.. rubric:: Returns:
+
+0 on sucess, -1 on error with errno set.
+
+
+
+.. rubric:: See also:
+
+ssh_session_connect()
+
+.. index:: pair: function; ssh_options_get
+.. _doxid-group__libssh__session_1gaaa9d400920cad4d6e4a0fb09ff8c7b01:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_options_get(
+		ssh_session session,
+		enum :ref:`ssh_options_e<doxid-libssh_8h_1af7093adacb08e7ee1e9b16e9c8b0f46c>` type,
+		char** value
+		)
+
+This function can get ssh options, it does not support all options provided for ssh options set, but mostly those which a user-space program may care about having trusted the ssh driver to infer these values from underlaying configuration files.
+
+It operates only on those SSH_OPTIONS\_\* which return char\*. If you wish to receive the port then please use :ref:`ssh_options_get_port() <doxid-group__libssh__session_1gaa298d8445355420d80f2d968477ba86f>` which returns an unsigned int.
+
+* SSH_OPTIONS_HOST: The hostname or ip address to connect to (const char \*).
+
+* SSH_OPTIONS_USER: The username for authentication (const char \*).
+  
+  
+  
+  when not explicitly set this will be inferred from the ~/.ssh/config file.
+
+* SSH_OPTIONS_IDENTITY: Set the identity file name (const char \*,format string).
+  
+  
+  
+  By default identity, id_dsa and id_rsa are checked.
+  
+  
+  
+  The identity file used authenticate with public key. It may include "%s" which will be replaced by the user home directory.
+
+* SSH_OPTIONS_PROXYCOMMAND: Get the proxycommand necessary to log into the remote host. When not explicitly set, it will be read from the ~/.ssh/config file.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- An allocated SSH session structure.
+
+	*
+		- type
+
+		- The option type to get. This could be one of the following:
+
+	*
+		- value
+
+		- The value to get into. As a char\*\*, space will be allocated by the function for the value, it is your responsibility to free the memory using :ref:`ssh_string_free_char() <doxid-group__libssh__string_1gafc10700722d6cafc468c2ee97585449a>`.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR on error.
+
+.. index:: pair: function; ssh_options_get_port
+.. _doxid-group__libssh__session_1gaa298d8445355420d80f2d968477ba86f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_options_get_port(
+		ssh_session session,
+		unsigned int* port_target
+		)
+
+This function can get ssh the ssh port.
+
+It must only be used on a valid ssh session. This function is useful when the session options have been automatically inferred from the environment or configuration files and one
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- An allocated SSH session structure.
+
+	*
+		- port_target
+
+		- An unsigned integer into which the port will be set from the ssh session.
+
+
+
+.. rubric:: Returns:
+
+0 on success, < 0 on error.
+
+.. index:: pair: function; ssh_options_getopt
+.. _doxid-group__libssh__session_1ga93f7f7159893f3ce62c9b178724eff75:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_options_getopt(
+		ssh_session session,
+		int* argcptr,
+		char** argv
+		)
+
+Parse command line arguments.
+
+This is a helper for your application to generate the appropriate options from the command line arguments.
+
+The argv array and argc value are changed so that the parsed arguments wont appear anymore in them.
+
+The single arguments (without switches) are not parsed. thus, myssh -l user localhost
+
+The command wont set the hostname value of options to localhost.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The session to configure.
+
+	*
+		- argcptr
+
+		- The pointer to the argument count.
+
+	*
+		- argv
+
+		- The arguments list pointer.
+
+
+
+.. rubric:: Returns:
+
+0 on success, < 0 on error.
+
+
+
+.. rubric:: See also:
+
+ssh_session_new()
+
+.. index:: pair: function; ssh_options_parse_config
+.. _doxid-group__libssh__session_1ga82371e723260c7572ea061edecc2e9f1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_options_parse_config(
+		ssh_session session,
+		const char* filename
+		)
+
+Parse the ssh config file.
+
+This should be the last call of all options, it may overwrite options which are already set. It requires that the host name is already set with ssh_options_set_host().
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- SSH session handle
+
+	*
+		- filename
+
+		- The options file to use, if NULL the default ~/.ssh/config will be used.
+
+
+
+.. rubric:: Returns:
+
+0 on success, < 0 on error.
+
+
+
+.. rubric:: See also:
+
+ssh_options_set_host()
+
+.. index:: pair: function; ssh_options_set
+.. _doxid-group__libssh__session_1ga7a801b85800baa3f4e16f5b47db0a73d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_options_set(
+		ssh_session session,
+		enum :ref:`ssh_options_e<doxid-libssh_8h_1af7093adacb08e7ee1e9b16e9c8b0f46c>` type,
+		const void* value
+		)
+
+This function can set all possible ssh options.
+
+* SSH_OPTIONS_HOST: The hostname or ip address to connect to (const char \*).
+
+* SSH_OPTIONS_PORT: The port to connect to (unsigned int).
+
+* SSH_OPTIONS_PORT_STR: The port to connect to (const char \*).
+
+* SSH_OPTIONS_FD: The file descriptor to use (socket_t).
+  
+  
+  
+  If you wish to open the socket yourself for a reason or another, set the file descriptor. Don't forget to set the hostname as the hostname is used as a key in the known_host mechanism.
+
+* SSH_OPTIONS_BINDADDR: The address to bind the client to (const char \*).
+
+* SSH_OPTIONS_USER: The username for authentication (const char \*).
+  
+  
+  
+  If the value is NULL, the username is set to the default username.
+
+* SSH_OPTIONS_SSH_DIR: Set the ssh directory (const char \*,format string).
+  
+  
+  
+  If the value is NULL, the directory is set to the default ssh directory.
+  
+  
+  
+  The ssh directory is used for files like known_hosts and identity (private and public key). It may include "%s" which will be replaced by the user home directory.
+
+* SSH_OPTIONS_KNOWNHOSTS: Set the known hosts file name (const char \*,format string).
+  
+  
+  
+  If the value is NULL, the directory is set to the default known hosts file, normally ~/.ssh/known_hosts.
+  
+  
+  
+  The known hosts file is used to certify remote hosts are genuine. It may include "%s" which will be replaced by the user home directory.
+
+* SSH_OPTIONS_IDENTITY: Set the identity file name (const char \*,format string).
+  
+  
+  
+  By default identity, id_dsa and id_rsa are checked.
+  
+  
+  
+  The identity file used authenticate with public key. It may include "%s" which will be replaced by the user home directory.
+
+* SSH_OPTIONS_TIMEOUT: Set a timeout for the connection in seconds (long).
+
+* SSH_OPTIONS_TIMEOUT_USEC: Set a timeout for the connection in micro seconds (long).
+
+* SSH_OPTIONS_SSH1: Allow or deny the connection to SSH1 servers (int, 0 is false).
+
+* SSH_OPTIONS_SSH2: Allow or deny the connection to SSH2 servers (int, 0 is false).
+
+* SSH_OPTIONS_LOG_VERBOSITY: Set the session logging verbosity (int).
+  
+  
+  
+  The verbosity of the messages. Every log smaller or equal to verbosity will be shown.
+  
+  * SSH_LOG_NOLOG: No logging
+  
+  * SSH_LOG_RARE: Rare conditions or warnings
+  
+  * SSH_LOG_ENTRY: API-accessible entrypoints
+  
+  * SSH_LOG_PACKET: Packet id and size
+  
+  * SSH_LOG_FUNCTIONS: Function entering and leaving
+
+* SSH_OPTIONS_LOG_VERBOSITY_STR: Set the session logging verbosity (const char \*).
+  
+  
+  
+  The verbosity of the messages. Every log smaller or equal to verbosity will be shown.
+  
+  * SSH_LOG_NOLOG: No logging
+  
+  * SSH_LOG_RARE: Rare conditions or warnings
+  
+  * SSH_LOG_ENTRY: API-accessible entrypoints
+  
+  * SSH_LOG_PACKET: Packet id and size
+  
+  * SSH_LOG_FUNCTIONS: Function entering and leaving
+    
+    See the corresponding numbers in ``libssh.h``.
+
+* SSH_OPTIONS_AUTH_CALLBACK: Set a callback to use your own authentication function (function pointer).
+
+* SSH_OPTIONS_AUTH_USERDATA: Set the user data passed to the authentication function (generic pointer).
+
+* SSH_OPTIONS_LOG_CALLBACK: Set a callback to use your own logging function (function pointer).
+
+* SSH_OPTIONS_LOG_USERDATA: Set the user data passed to the logging function (generic pointer).
+
+* SSH_OPTIONS_STATUS_CALLBACK: Set a callback to show connection status in realtime (function pointer).
+  
+  
+  
+  
+  
+  .. ref-code-block:: cpp
+  
+  	fn(void *arg, float status)
+  
+  
+  
+  During :ref:`ssh_connect() <doxid-group__libssh__session_1ga032e07cbd8bc3f14cb2dd375db0b03d7>`, libssh will call the callback with status from 0.0 to 1.0.
+
+* SSH_OPTIONS_STATUS_ARG: Set the status argument which should be passed to the status callback (generic pointer).
+
+* SSH_OPTIONS_CIPHERS_C_S: Set the symmetric cipher client to server (const char \*, comma-separated list).
+
+* SSH_OPTIONS_CIPHERS_S_C: Set the symmetric cipher server to client (const char \*, comma-separated list).
+
+* SSH_OPTIONS_KEY_EXCHANGE: Set the key exchange method to be used (const char \*, comma-separated list). ex: "ecdh-sha2-nistp256,diffie-hellman-group14-sha1,diffie-hellman-group1-sha1"
+
+* SSH_OPTIONS_HOSTKEYS: Set the preferred server host key types (const char \*, comma-separated list). ex: "ssh-rsa,ssh-dss,ecdh-sha2-nistp256"
+
+* SSH_OPTIONS_COMPRESSION_C_S: Set the compression to use for client to server communication (const char \*, "yes", "no" or a specific algorithm name if needed ("zlib","zlib@openssh.com","none").
+
+* SSH_OPTIONS_COMPRESSION_S_C: Set the compression to use for server to client communication (const char \*, "yes", "no" or a specific algorithm name if needed ("zlib","zlib@openssh.com","none").
+
+* SSH_OPTIONS_COMPRESSION: Set the compression to use for both directions communication (const char \*, "yes", "no" or a specific algorithm name if needed ("zlib","zlib@openssh.com","none").
+
+* SSH_OPTIONS_COMPRESSION_LEVEL: Set the compression level to use for zlib functions. (int, value from 1 to 9, 9 being the most efficient but slower).
+
+* SSH_OPTIONS_STRICTHOSTKEYCHECK: Set the parameter StrictHostKeyChecking to avoid asking about a fingerprint (int, 0 = false).
+
+* SSH_OPTIONS_PROXYCOMMAND: Set the command to be executed in order to connect to server (const char \*).
+
+* SSH_OPTIONS_GSSAPI_SERVER_IDENTITY Set it to specify the GSSAPI server identity that libssh should expect when connecting to the server (const char \*).
+
+* SSH_OPTIONS_GSSAPI_CLIENT_IDENTITY Set it to specify the GSSAPI client identity that libssh should expect when connecting to the server (const char \*).
+
+* SSH_OPTIONS_GSSAPI_DELEGATE_CREDENTIALS Set it to specify that GSSAPI should delegate credentials to the server (int, 0 = false).
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- An allocated SSH session structure.
+
+	*
+		- type
+
+		- The option type to set. This could be one of the following:
+
+	*
+		- value
+
+		- The value to set. This is a generic pointer and the datatype which is used should be set according to the type set.
+
+
+
+.. rubric:: Returns:
+
+0 on success, < 0 on error.
+
+.. index:: pair: function; ssh_print_hexa
+.. _doxid-group__libssh__session_1ga39bf7936ed51361fe9cf3c3bbfc25514:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	ssh_print_hexa(
+		const char* descr,
+		const unsigned char* what,
+		size_t len
+		)
+
+Print a buffer as colon separated hex string.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- descr
+
+		- Description printed in front of the hex string.
+
+	*
+		- what
+
+		- What should be converted to a hex string.
+
+	*
+		- len
+
+		- Length of the buffer to convert.
+
+.. index:: pair: function; ssh_select
+.. _doxid-group__libssh__session_1ga86cbf041bced56d18a2a5248c46cecb4:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_select(
+		ssh_channel* channels,
+		ssh_channel* outchannels,
+		:ref:`socket_t<doxid-libssh_8h_1a30353f381f5fccbb956eea1f3a110b6c>` maxfd,
+		fd_set* readfds,
+		struct timeval* timeout
+		)
+
+A wrapper for the select syscall.
+
+This functions acts more or less like the select(2) syscall.
+
+There is no support for writing or exceptions.
+
+libssh is not reentrant here. That means that if a signal is caught during the processing of this function, you cannot call libssh functions on sessions that are busy with :ref:`ssh_select() <doxid-group__libssh__session_1ga86cbf041bced56d18a2a5248c46cecb4>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channels
+
+		- Arrays of channels pointers terminated by a NULL. It is never rewritten.
+
+	*
+		- outchannels
+
+		- Arrays of same size that "channels", there is no need to initialize it.
+
+	*
+		- maxfd
+
+		- Maximum +1 file descriptor from readfds.
+
+	*
+		- readfds
+
+		- A fd_set of file descriptors to be select'ed for reading.
+
+	*
+		- timeout
+
+		- The timeout in milliseconds.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR on error, SSH_EINTR if it was interrupted. In that case, just restart it.
+
+
+
+.. rubric:: See also:
+
+select(2)
+
+.. index:: pair: function; ssh_send_debug
+.. _doxid-group__libssh__session_1ga5ffa2201152e29cc680c4b8e4a3f4fdf:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_send_debug(
+		ssh_session session,
+		const char* message,
+		int always_display
+		)
+
+Send a debug message.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The SSH session
+
+	*
+		- message
+
+		- Data to be sent
+
+	*
+		- always_display
+
+		- Message SHOULD be displayed by the server. It SHOULD NOT be displayed unless debugging information has been explicitly requested.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR otherwise.
+
+.. index:: pair: function; ssh_send_ignore
+.. _doxid-group__libssh__session_1gab8827415fd19cf6cb64e7fc83c09e423:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_send_ignore(
+		ssh_session session,
+		const char* data
+		)
+
+Send a message that should be ignored.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The SSH session
+
+	*
+		- data
+
+		- Data to be sent
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR otherwise.
+
+.. index:: pair: function; ssh_set_blocking
+.. _doxid-group__libssh__session_1ga2a29cff08855611be84d050e5bec73bc:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	ssh_set_blocking(
+		ssh_session session,
+		int blocking
+		)
+
+Set the session in blocking/nonblocking mode.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to change.
+
+	*
+		- blocking
+
+		- Zero for nonblocking mode.
+
+.. index:: pair: function; ssh_set_counters
+.. _doxid-group__libssh__session_1ga84d4ac53ac8582b70da9b63739df61ad:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	ssh_set_counters(
+		ssh_session session,
+		ssh_counter scounter,
+		ssh_counter rcounter
+		)
+
+Set the session data counters.
+
+This functions sets the counter structures to be used to calculate data which comes in and goes out through the session at different levels.
+
+.. ref-code-block:: cpp
+
+	struct ssh_counter_struct scounter = {
+	    .in_bytes = 0,
+	    .out_bytes = 0,
+	    .in_packets = 0,
+	    .out_packets = 0
+	};
+	
+	struct ssh_counter_struct rcounter = {
+	    .in_bytes = 0,
+	    .out_bytes = 0,
+	    .in_packets = 0,
+	    .out_packets = 0
+	};
+	
+	ssh_set_counters(session, &scounter, &rcounter);
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The SSH session.
+
+	*
+		- scounter
+
+		- Counter for byte data handled by the session sockets.
+
+	*
+		- rcounter
+
+		- Counter for byte and packet data handled by the session, prior compression and SSH overhead.
+
+.. index:: pair: function; ssh_set_fd_except
+.. _doxid-group__libssh__session_1ga06453278350fd9e940c5c1b0d5225f19:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	ssh_set_fd_except(ssh_session session)
+
+Tell the session it has an exception to catch on the file descriptor.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to use.
+
+.. index:: pair: function; ssh_set_fd_toread
+.. _doxid-group__libssh__session_1ga0e05c91c6f475eabc8d221914d25a425:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	ssh_set_fd_toread(ssh_session session)
+
+Tell the session it has data to read on the file descriptor without blocking.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to use.
+
+.. index:: pair: function; ssh_set_fd_towrite
+.. _doxid-group__libssh__session_1ga3f1b3c59662464eec3649d3d72a40543:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	ssh_set_fd_towrite(ssh_session session)
+
+Tell the session it may write to the file descriptor without blocking.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to use.
+
+.. index:: pair: function; ssh_silent_disconnect
+.. _doxid-group__libssh__session_1gae1bd16255ba373325adf76307d0c8c42:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	ssh_silent_disconnect(ssh_session session)
+
+Disconnect impolitely from a remote host by closing the socket.
+
+Suitable if you forked and want to destroy this session.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The SSH session to disconnect.
+
+.. index:: pair: function; ssh_write_knownhost
+.. _doxid-group__libssh__session_1gaf61a9cfdc40c76ffce9f9a8543755d36:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_write_knownhost(ssh_session session)
+
+Write the current server as known in the known hosts file.
+
+This will create the known hosts file if it does not exist. You generaly use it when :ref:`ssh_is_server_known() <doxid-group__libssh__session_1ga6f37e3d7bb6b938b44d6a34a76fdfa0b>` answered SSH_SERVER_NOT_KNOWN.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to use.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR on error.
+
+.. index:: pair: function; check_public_key
+.. _doxid-group__libssh__session_1ga7c21df77bcd00b832e2f33c3afae64a0:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	static
+	int
+	check_public_key(
+		ssh_session session,
+		char** tokens
+		)
+
+Check the public key in the known host line matches the public key of the currently connected server.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The SSH session to use.
+
+	*
+		- tokens
+
+		- A list of tokens in the known_hosts line.
+
+
+
+.. rubric:: Returns:
+
+1 if the key matches, 0 if the key doesn't match and -1 on error.
+
+.. index:: pair: function; match_hashed_host
+.. _doxid-group__libssh__session_1ga8986fdab5f7b17935b21e96652f22cf8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	static
+	int
+	match_hashed_host(
+		const char* host,
+		const char* sourcehash
+		)
+
+Check if a hostname matches a openssh-style hashed known host.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- host
+
+		- The host to check.
+
+	*
+		- hashed
+
+		- The hashed value.
+
+
+
+.. rubric:: Returns:
+
+1 if it matches, 0 otherwise.
+

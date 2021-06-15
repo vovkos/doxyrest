@@ -1,0 +1,184 @@
+.. index:: pair: group; Library initialization/deinitialization
+.. _doxid-group__libusb__lib:
+
+Library initialization/deinitialization
+=======================================
+
+.. toctree::
+	:hidden:
+
+	enum_libusb_log_level.rst
+	struct_libusb_version.rst
+
+Overview
+~~~~~~~~
+
+This page details how to initialize and deinitialize libusb. :ref:`More...<details-group__libusb__lib>`
+
+
+.. ref-code-block:: c
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef struct :ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>` :ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`;
+
+	// enums
+
+	enum :ref:`libusb_log_level<doxid-group__libusb__lib_1ga2d6144203f0fc6d373677f6e2e89d2d2>`;
+
+	// structs
+
+	struct :ref:`libusb_version<doxid-structlibusb__version>`;
+
+	// global functions
+
+	void
+	:ref:`libusb_set_debug<doxid-group__libusb__lib_1ga5f8376b7a863a5a8d5b8824feb8a427a>`(
+		:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx,
+		int level
+		);
+
+	int
+	:ref:`libusb_init<doxid-group__libusb__lib_1ga9517c37281bba0b51cc62eba728be48b>`(:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`** context);
+
+	void
+	:ref:`libusb_exit<doxid-group__libusb__lib_1ga86532f222d4f1332a5f8f5eef9a92da9>`(struct :ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx);
+
+.. _details-group__libusb__lib:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+This page details how to initialize and deinitialize libusb.
+
+Initialization must be performed before using any libusb functionality, and similarly you must not call any libusb functions after deinitialization.
+
+Typedefs
+--------
+
+.. index:: pair: typedef; libusb_context
+.. _doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>` libusb_context
+
+Structure representing a libusb session.
+
+The concept of individual libusb sessions allows for your program to use two libraries (or dynamically load two modules) which both independently use libusb. This will prevent interference between the individual libusb users - for example :ref:`libusb_set_debug() <doxid-group__libusb__lib_1ga5f8376b7a863a5a8d5b8824feb8a427a>` will not affect the other user of the library, and :ref:`libusb_exit() <doxid-group__libusb__lib_1ga86532f222d4f1332a5f8f5eef9a92da9>` will not destroy resources that the other user is still using.
+
+Sessions are created by :ref:`libusb_init() <doxid-group__libusb__lib_1ga9517c37281bba0b51cc62eba728be48b>` and destroyed through :ref:`libusb_exit() <doxid-group__libusb__lib_1ga86532f222d4f1332a5f8f5eef9a92da9>`. If your application is guaranteed to only ever include a single libusb user (i.e. you), you do not have to worry about contexts: pass NULL in every function call where a context is required. The default context will be used.
+
+For more information, see :ref:`Contexts <doxid-libusb_contexts>`.
+
+Global Functions
+----------------
+
+.. index:: pair: function; libusb_set_debug
+.. _doxid-group__libusb__lib_1ga5f8376b7a863a5a8d5b8824feb8a427a:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	void
+	libusb_set_debug(
+		:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx,
+		int level
+		)
+
+Set log message verbosity.
+
+The default level is LIBUSB_LOG_LEVEL_NONE, which means no messages are ever printed. If you choose to increase the message verbosity level, ensure that your application does not close the stdout/stderr file descriptors.
+
+You are advised to use level LIBUSB_LOG_LEVEL_WARNING. libusb is conservative with its message logging and most of the time, will only log messages that explain error conditions and other oddities. This will help you debug your software.
+
+If the LIBUSB_DEBUG environment variable was set when libusb was initialized, this function does nothing: the message verbosity is fixed to the value in the environment variable.
+
+If libusb was compiled without any message logging, this function does nothing: you'll never get any messages.
+
+If libusb was compiled with verbose debug message logging, this function does nothing: you'll always get messages from all levels.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ctx
+
+		- the context to operate on, or NULL for the default context
+
+	*
+		- level
+
+		- debug level to set
+
+.. index:: pair: function; libusb_init
+.. _doxid-group__libusb__lib_1ga9517c37281bba0b51cc62eba728be48b:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_init(:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`** context)
+
+Initialize libusb.
+
+This function must be called before calling any other libusb function.
+
+If you do not provide an output location for a context pointer, a default context will be created. If there was already a default context, it will be reused (and nothing will be initialized/reinitialized).
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- context
+
+		- Optional output location for context pointer. Only valid on return code 0.
+
+
+
+.. rubric:: Returns:
+
+0 on success, or a LIBUSB_ERROR code on failure
+
+
+
+.. rubric:: See also:
+
+libusb_contexts
+
+.. index:: pair: function; libusb_exit
+.. _doxid-group__libusb__lib_1ga86532f222d4f1332a5f8f5eef9a92da9:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	void
+	libusb_exit(struct :ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx)
+
+Deinitialize libusb.
+
+Should be called after closing all open devices and before your application terminates.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ctx
+
+		- the context to deinitialize, or NULL for the default context
+

@@ -1,0 +1,986 @@
+.. index:: pair: group; The SSH poll functions.
+.. _doxid-group__libssh__poll:
+
+The SSH poll functions.
+=======================
+
+.. toctree::
+	:hidden:
+
+	struct_ssh_event_fd_wrapper.rst
+	struct_ssh_event_struct.rst
+	struct_ssh_poll_ctx_struct.rst
+	struct_ssh_poll_handle_struct.rst
+
+Overview
+~~~~~~~~
+
+Add a generic way to handle sockets asynchronously. :ref:`More...<details-group__libssh__poll>`
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef int (*:target:`poll_fn<doxid-group__libssh__poll_1ga3cb7d4c185d70c6a2e2b9696ef125fd4>`)(
+		ssh_pollfd_t *,
+		nfds_t,
+		int
+		);
+
+	// structs
+
+	struct :ref:`ssh_event_fd_wrapper<doxid-structssh__event__fd__wrapper>`;
+	struct :ref:`ssh_event_struct<doxid-structssh__event__struct>`;
+	struct :ref:`ssh_poll_ctx_struct<doxid-structssh__poll__ctx__struct>`;
+	struct :ref:`ssh_poll_handle_struct<doxid-structssh__poll__handle__struct>`;
+
+	// global variables
+
+	static :ref:`poll_fn<doxid-group__libssh__poll_1ga3cb7d4c185d70c6a2e2b9696ef125fd4>` :target:`ssh_poll_emu<doxid-group__libssh__poll_1ga6abf974b607f70c29b4ea8065f69d333>`;
+
+	// global functions
+
+	int
+	:ref:`ssh_event_add_fd<doxid-group__libssh__poll_1ga41d63ffe950a48e8b2c513877e0cd6b4>`(
+		ssh_event event,
+		:ref:`socket_t<doxid-libssh_8h_1a30353f381f5fccbb956eea1f3a110b6c>` fd,
+		short events,
+		:ref:`ssh_event_callback<doxid-libssh_8h_1ad86976ea739d21a91265820921ee123c>` cb,
+		void* userdata
+		);
+
+	int
+	:ref:`ssh_event_add_session<doxid-group__libssh__poll_1ga51af38de4cc3adbd5566ec1f1b91983d>`(
+		ssh_event event,
+		ssh_session session
+		);
+
+	int
+	:ref:`ssh_event_dopoll<doxid-group__libssh__poll_1gada90c0ca6919271708ba1ea0352632cb>`(
+		ssh_event event,
+		int timeout
+		);
+
+	void
+	:ref:`ssh_event_free<doxid-group__libssh__poll_1ga101388903c74d53ed550574b587449cd>`(ssh_event event);
+
+	ssh_event
+	:ref:`ssh_event_new<doxid-group__libssh__poll_1ga406895f99b6b486c4b65536e5399ff96>`(void);
+
+	int
+	:ref:`ssh_event_remove_fd<doxid-group__libssh__poll_1gaf2cdca09a3a2024ed9bb4f134c8ae368>`(
+		ssh_event event,
+		:ref:`socket_t<doxid-libssh_8h_1a30353f381f5fccbb956eea1f3a110b6c>` fd
+		);
+
+	int
+	:ref:`ssh_event_remove_session<doxid-group__libssh__poll_1gaab8dec05a0afb49392c63b2ec158ac3d>`(
+		ssh_event event,
+		ssh_session session
+		);
+
+	void
+	:ref:`ssh_poll_add_events<doxid-group__libssh__poll_1ga26ad689751420b91bf002f616e8bf4f7>`(
+		ssh_poll_handle p,
+		short events
+		);
+
+	int
+	:ref:`ssh_poll_ctx_add<doxid-group__libssh__poll_1ga2c9eca31ff21406f13c1b7472ae8c85b>`(
+		ssh_poll_ctx ctx,
+		ssh_poll_handle p
+		);
+
+	int
+	:ref:`ssh_poll_ctx_dopoll<doxid-group__libssh__poll_1ga6c0f6d3c677838181df5cd03a755fd7c>`(
+		ssh_poll_ctx ctx,
+		int timeout
+		);
+
+	void
+	:ref:`ssh_poll_ctx_free<doxid-group__libssh__poll_1ga86bd0c5c2fa5614acef127e6689282ae>`(ssh_poll_ctx ctx);
+
+	ssh_poll_ctx
+	:ref:`ssh_poll_ctx_new<doxid-group__libssh__poll_1ga5364b3fb8ae1cb44e3ec09c8c10cb5fa>`(size_t chunk_size);
+
+	void
+	:ref:`ssh_poll_ctx_remove<doxid-group__libssh__poll_1gad4404e7da7c676b126b87d2de4d45d1d>`(
+		ssh_poll_ctx ctx,
+		ssh_poll_handle p
+		);
+
+	void
+	:ref:`ssh_poll_free<doxid-group__libssh__poll_1ga873ecc6866c286f7777612d94de5c00d>`(ssh_poll_handle p);
+
+	ssh_poll_ctx
+	:ref:`ssh_poll_get_ctx<doxid-group__libssh__poll_1gaca05fcf77e6c4b5e55a9cfd2c9690ea5>`(ssh_poll_handle p);
+
+	short
+	:ref:`ssh_poll_get_events<doxid-group__libssh__poll_1ga8e2e646ac338021e8e804992e8c13496>`(ssh_poll_handle p);
+
+	:ref:`socket_t<doxid-libssh_8h_1a30353f381f5fccbb956eea1f3a110b6c>`
+	:ref:`ssh_poll_get_fd<doxid-group__libssh__poll_1ga26c19b17ac8d1e3d7fcbfb4367fb93ff>`(ssh_poll_handle p);
+
+	ssh_poll_handle
+	:ref:`ssh_poll_new<doxid-group__libssh__poll_1gac657ed07db9e5851ffb0aba45e071e99>`(
+		:ref:`socket_t<doxid-libssh_8h_1a30353f381f5fccbb956eea1f3a110b6c>` fd,
+		short events,
+		:ref:`ssh_poll_callback<doxid-poll_8h_1af2a7809ed930c3f7eb5ab1a086673053>` cb,
+		void* userdata
+		);
+
+	void
+	:ref:`ssh_poll_remove_events<doxid-group__libssh__poll_1ga012582349ce62cf788761e5f97548496>`(
+		ssh_poll_handle p,
+		short events
+		);
+
+	void
+	:ref:`ssh_poll_set_callback<doxid-group__libssh__poll_1ga98ba36c2771b1e49d5c8e2f79be6d3ba>`(
+		ssh_poll_handle p,
+		:ref:`ssh_poll_callback<doxid-poll_8h_1af2a7809ed930c3f7eb5ab1a086673053>` cb,
+		void* userdata
+		);
+
+	void
+	:ref:`ssh_poll_set_events<doxid-group__libssh__poll_1gac02bf6f4444d4cc442da5865009fa5f6>`(
+		ssh_poll_handle p,
+		short events
+		);
+
+	void
+	:ref:`ssh_poll_set_fd<doxid-group__libssh__poll_1ga2da5adcc03754a3b17e4fb0f23867ace>`(
+		ssh_poll_handle p,
+		:ref:`socket_t<doxid-libssh_8h_1a30353f381f5fccbb956eea1f3a110b6c>` fd
+		);
+
+	static
+	int
+	:target:`bsd_poll<doxid-group__libssh__poll_1ga2d4a5991605a0507ae9f8854fd1ebce7>`(
+		:ref:`ssh_pollfd_t<doxid-structssh__pollfd__t>`* fds,
+		:ref:`nfds_t<doxid-poll_8h_1abf4939a673f2b874b24dc204cedab8f5>` nfds,
+		int timeout
+		);
+
+	static
+	int
+	:target:`ssh_event_fd_wrapper_callback<doxid-group__libssh__poll_1ga495b312ef6f56bdf6d7e47dc0f75ab2d>`(
+		ssh_poll_handle p,
+		:ref:`socket_t<doxid-libssh_8h_1a30353f381f5fccbb956eea1f3a110b6c>` fd,
+		int revents,
+		void* userdata
+		);
+
+	int
+	:target:`ssh_poll<doxid-group__libssh__poll_1gad71eb057dc675a9291b6fa78e99ebbc9>`(
+		:ref:`ssh_pollfd_t<doxid-structssh__pollfd__t>`* fds,
+		:ref:`nfds_t<doxid-poll_8h_1abf4939a673f2b874b24dc204cedab8f5>` nfds,
+		int timeout
+		);
+
+	void
+	:target:`ssh_poll_cleanup<doxid-group__libssh__poll_1ga7e60f5f498b15eab57d9b2de70ab1acb>`(void);
+
+	int
+	:ref:`ssh_poll_ctx_add_socket<doxid-group__libssh__poll_1ga4aa3ef276370adbb4afb284947dc8005>`(
+		ssh_poll_ctx ctx,
+		ssh_socket s
+		);
+
+	static
+	int
+	:target:`ssh_poll_ctx_resize<doxid-group__libssh__poll_1ga87079a58e0cc336ad94fbd041e97bb19>`(
+		ssh_poll_ctx ctx,
+		size_t new_size
+		);
+
+	ssh_poll_ctx
+	:target:`ssh_poll_get_default_ctx<doxid-group__libssh__poll_1ga8ad007907f642d4aa2c25e5209bf337a>`(ssh_session session);
+
+	void
+	:target:`ssh_poll_init<doxid-group__libssh__poll_1ga26aa5e00c0201c30dad6ec0e93d3871f>`(void);
+
+.. _details-group__libssh__poll:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+Add a generic way to handle sockets asynchronously.
+
+It's based on poll objects, each of which store a socket, its events and a callback, which gets called whenever an event is set. The poll objects are attached to a poll context, which should be allocated on per thread basis.
+
+Polling the poll context will poll all the attached poll objects and call their callbacks (handlers) if any of the socket events are set. This should be done within the main loop of an application.
+
+Global Functions
+----------------
+
+.. index:: pair: function; ssh_event_add_fd
+.. _doxid-group__libssh__poll_1ga41d63ffe950a48e8b2c513877e0cd6b4:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_event_add_fd(
+		ssh_event event,
+		:ref:`socket_t<doxid-libssh_8h_1a30353f381f5fccbb956eea1f3a110b6c>` fd,
+		short events,
+		:ref:`ssh_event_callback<doxid-libssh_8h_1ad86976ea739d21a91265820921ee123c>` cb,
+		void* userdata
+		)
+
+Add a fd to the event and assign it a callback, when used in blocking mode.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- event
+
+		- The ssh_event
+
+	*
+		- fd
+
+		- Socket that will be polled.
+
+	*
+		- events
+
+		- Poll events that will be monitored for the socket. i.e. POLLIN, POLLPRI, POLLOUT
+
+	*
+		- cb
+
+		- Function to be called if any of the events are set. The prototype of cb is: int (\*ssh_event_callback)(socket_t fd, int revents, void \*userdata);
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function. NULL if not needed.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success SSH_ERROR on failure
+
+.. index:: pair: function; ssh_event_add_session
+.. _doxid-group__libssh__poll_1ga51af38de4cc3adbd5566ec1f1b91983d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_event_add_session(
+		ssh_event event,
+		ssh_session session
+		)
+
+remove the poll handle from session and assign them to a event, when used in blocking mode.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- event
+
+		- The ssh_event object
+
+	*
+		- session
+
+		- The session to add to the event.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success SSH_ERROR on failure
+
+.. index:: pair: function; ssh_event_dopoll
+.. _doxid-group__libssh__poll_1gada90c0ca6919271708ba1ea0352632cb:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_event_dopoll(
+		ssh_event event,
+		int timeout
+		)
+
+Poll all the sockets and sessions associated through an event object.
+
+If any of the events are set after the poll, the call back functions of the sessions or sockets will be called. This function should be called once within the programs main loop.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- event
+
+		- The ssh_event object to poll.
+
+	*
+		- timeout
+
+		- An upper limit on the time for which the poll will block, in milliseconds. Specifying a negative value means an infinite timeout. This parameter is passed to the poll() function.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK No error. SSH_ERROR Error happened during the poll.
+
+.. index:: pair: function; ssh_event_free
+.. _doxid-group__libssh__poll_1ga101388903c74d53ed550574b587449cd:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	ssh_event_free(ssh_event event)
+
+Free an event context.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- event
+
+		- The ssh_event object to free. Note: you have to manually remove sessions and socket fds before freeing the event object.
+
+.. index:: pair: function; ssh_event_new
+.. _doxid-group__libssh__poll_1ga406895f99b6b486c4b65536e5399ff96:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	ssh_event
+	ssh_event_new(void)
+
+Create a new event context.
+
+It could be associated with many ssh_session objects and socket fd which are going to be polled at the same time as the event context. You would need a single event context per thread.
+
+
+
+.. rubric:: Returns:
+
+The ssh_event object on success, NULL on failure.
+
+.. index:: pair: function; ssh_event_remove_fd
+.. _doxid-group__libssh__poll_1gaf2cdca09a3a2024ed9bb4f134c8ae368:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_event_remove_fd(
+		ssh_event event,
+		:ref:`socket_t<doxid-libssh_8h_1a30353f381f5fccbb956eea1f3a110b6c>` fd
+		)
+
+Remove a socket fd from an event context.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- event
+
+		- The ssh_event object.
+
+	*
+		- fd
+
+		- The fd to remove.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success SSH_ERROR on failure
+
+.. index:: pair: function; ssh_event_remove_session
+.. _doxid-group__libssh__poll_1gaab8dec05a0afb49392c63b2ec158ac3d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_event_remove_session(
+		ssh_event event,
+		ssh_session session
+		)
+
+Remove a session object from an event context.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- event
+
+		- The ssh_event object.
+
+	*
+		- session
+
+		- The session to remove.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success SSH_ERROR on failure
+
+.. index:: pair: function; ssh_poll_add_events
+.. _doxid-group__libssh__poll_1ga26ad689751420b91bf002f616e8bf4f7:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	ssh_poll_add_events(
+		ssh_poll_handle p,
+		short events
+		)
+
+Add extra events to a poll object.
+
+Duplicates are ignored. The events will also be propagated to an associated poll context.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- Pointer to an already allocated poll object.
+
+	*
+		- events
+
+		- Poll events.
+
+.. index:: pair: function; ssh_poll_ctx_add
+.. _doxid-group__libssh__poll_1ga2c9eca31ff21406f13c1b7472ae8c85b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_poll_ctx_add(
+		ssh_poll_ctx ctx,
+		ssh_poll_handle p
+		)
+
+Add a poll object to a poll context.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ctx
+
+		- Pointer to an already allocated poll context.
+
+	*
+		- p
+
+		- Pointer to an already allocated poll object.
+
+
+
+.. rubric:: Returns:
+
+0 on success, < 0 on error
+
+.. index:: pair: function; ssh_poll_ctx_dopoll
+.. _doxid-group__libssh__poll_1ga6c0f6d3c677838181df5cd03a755fd7c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_poll_ctx_dopoll(
+		ssh_poll_ctx ctx,
+		int timeout
+		)
+
+Poll all the sockets associated through a poll object with a poll context.
+
+If any of the events are set after the poll, the call back function of the socket will be called. This function should be called once within the programs main loop.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ctx
+
+		- Pointer to an already allocated poll context.
+
+	*
+		- timeout
+
+		- An upper limit on the time for which ssh_poll_ctx() will block, in milliseconds. Specifying a negative value means an infinite timeout. This parameter is passed to the poll() function.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK No error. SSH_ERROR Error happened during the poll. SSH_AGAIN Timeout occured
+
+.. index:: pair: function; ssh_poll_ctx_free
+.. _doxid-group__libssh__poll_1ga86bd0c5c2fa5614acef127e6689282ae:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	ssh_poll_ctx_free(ssh_poll_ctx ctx)
+
+Free a poll context.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ctx
+
+		- Pointer to an already allocated poll context.
+
+.. index:: pair: function; ssh_poll_ctx_new
+.. _doxid-group__libssh__poll_1ga5364b3fb8ae1cb44e3ec09c8c10cb5fa:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	ssh_poll_ctx
+	ssh_poll_ctx_new(size_t chunk_size)
+
+Create a new poll context.
+
+It could be associated with many poll object which are going to be polled at the same time as the poll context. You would need a single poll context per thread.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- chunk_size
+
+		- The size of the memory chunk that will be allocated, when more memory is needed. This is for efficiency reasons, i.e. don't allocate memory for each new poll object, but for the next 5. Set it to 0 if you want to use the library's default value.
+
+.. index:: pair: function; ssh_poll_ctx_remove
+.. _doxid-group__libssh__poll_1gad4404e7da7c676b126b87d2de4d45d1d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	ssh_poll_ctx_remove(
+		ssh_poll_ctx ctx,
+		ssh_poll_handle p
+		)
+
+Remove a poll object from a poll context.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ctx
+
+		- Pointer to an already allocated poll context.
+
+	*
+		- p
+
+		- Pointer to an already allocated poll object.
+
+.. index:: pair: function; ssh_poll_free
+.. _doxid-group__libssh__poll_1ga873ecc6866c286f7777612d94de5c00d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	ssh_poll_free(ssh_poll_handle p)
+
+Free a poll object.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- Pointer to an already allocated poll object.
+
+.. index:: pair: function; ssh_poll_get_ctx
+.. _doxid-group__libssh__poll_1gaca05fcf77e6c4b5e55a9cfd2c9690ea5:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	ssh_poll_ctx
+	ssh_poll_get_ctx(ssh_poll_handle p)
+
+Get the poll context of a poll object.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- Pointer to an already allocated poll object.
+
+
+
+.. rubric:: Returns:
+
+Poll context or NULL if the poll object isn't attached.
+
+.. index:: pair: function; ssh_poll_get_events
+.. _doxid-group__libssh__poll_1ga8e2e646ac338021e8e804992e8c13496:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	short
+	ssh_poll_get_events(ssh_poll_handle p)
+
+Get the events of a poll object.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- Pointer to an already allocated poll object.
+
+
+
+.. rubric:: Returns:
+
+Poll events.
+
+.. index:: pair: function; ssh_poll_get_fd
+.. _doxid-group__libssh__poll_1ga26c19b17ac8d1e3d7fcbfb4367fb93ff:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`socket_t<doxid-libssh_8h_1a30353f381f5fccbb956eea1f3a110b6c>`
+	ssh_poll_get_fd(ssh_poll_handle p)
+
+Get the raw socket of a poll object.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- Pointer to an already allocated poll object.
+
+
+
+.. rubric:: Returns:
+
+Raw socket.
+
+.. index:: pair: function; ssh_poll_new
+.. _doxid-group__libssh__poll_1gac657ed07db9e5851ffb0aba45e071e99:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	ssh_poll_handle
+	ssh_poll_new(
+		:ref:`socket_t<doxid-libssh_8h_1a30353f381f5fccbb956eea1f3a110b6c>` fd,
+		short events,
+		:ref:`ssh_poll_callback<doxid-poll_8h_1af2a7809ed930c3f7eb5ab1a086673053>` cb,
+		void* userdata
+		)
+
+Allocate a new poll object, which could be used within a poll context.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- fd
+
+		- Socket that will be polled.
+
+	*
+		- events
+
+		- Poll events that will be monitored for the socket. i.e. POLLIN, POLLPRI, POLLOUT
+
+	*
+		- cb
+
+		- Function to be called if any of the events are set. The prototype of cb is: int (\*ssh_poll_callback)(ssh_poll_handle p, socket_t fd, int revents, void \*userdata);
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function. NULL if not needed.
+
+
+
+.. rubric:: Returns:
+
+A new poll object, NULL on error
+
+.. index:: pair: function; ssh_poll_remove_events
+.. _doxid-group__libssh__poll_1ga012582349ce62cf788761e5f97548496:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	ssh_poll_remove_events(
+		ssh_poll_handle p,
+		short events
+		)
+
+Remove events from a poll object.
+
+Non-existent are ignored. The events will also be propagated to an associated poll context.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- Pointer to an already allocated poll object.
+
+	*
+		- events
+
+		- Poll events.
+
+.. index:: pair: function; ssh_poll_set_callback
+.. _doxid-group__libssh__poll_1ga98ba36c2771b1e49d5c8e2f79be6d3ba:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	ssh_poll_set_callback(
+		ssh_poll_handle p,
+		:ref:`ssh_poll_callback<doxid-poll_8h_1af2a7809ed930c3f7eb5ab1a086673053>` cb,
+		void* userdata
+		)
+
+Set the callback of a poll object.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- Pointer to an already allocated poll object.
+
+	*
+		- cb
+
+		- Function to be called if any of the events are set.
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function. NULL if not needed.
+
+.. index:: pair: function; ssh_poll_set_events
+.. _doxid-group__libssh__poll_1gac02bf6f4444d4cc442da5865009fa5f6:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	ssh_poll_set_events(
+		ssh_poll_handle p,
+		short events
+		)
+
+Set the events of a poll object.
+
+The events will also be propagated to an associated poll context.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- Pointer to an already allocated poll object.
+
+	*
+		- events
+
+		- Poll events.
+
+.. index:: pair: function; ssh_poll_set_fd
+.. _doxid-group__libssh__poll_1ga2da5adcc03754a3b17e4fb0f23867ace:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	ssh_poll_set_fd(
+		ssh_poll_handle p,
+		:ref:`socket_t<doxid-libssh_8h_1a30353f381f5fccbb956eea1f3a110b6c>` fd
+		)
+
+Set the file descriptor of a poll object.
+
+The FD will also be propagated to an associated poll context.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- Pointer to an already allocated poll object.
+
+	*
+		- fd
+
+		- New file descriptor.
+
+.. index:: pair: function; ssh_poll_ctx_add_socket
+.. _doxid-group__libssh__poll_1ga4aa3ef276370adbb4afb284947dc8005:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_poll_ctx_add_socket(
+		ssh_poll_ctx ctx,
+		ssh_socket s
+		)
+
+Add a socket object to a poll context.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ctx
+
+		- Pointer to an already allocated poll context.
+
+	*
+		- s
+
+		- A SSH socket handle
+
+
+
+.. rubric:: Returns:
+
+0 on success, < 0 on error
+

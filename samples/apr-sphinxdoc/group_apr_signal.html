@@ -1,0 +1,241 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Signal Handling &#8212; Apache Portable Runtime Documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/target-highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Skip list implementation" href="group_apr_skiplist.html" />
+    <link rel="prev" title="Shared Memory Routines" href="group_apr_shm.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="group_apr_skiplist.html" title="Skip list implementation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="group_apr_shm.html" title="Shared Memory Routines"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Apache Portable Runtime Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="group_APR.html" accesskey="U">Apache Portability Runtime library</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Signal Handling</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li><a class="reference internal" href="#global-functions">Global Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="group_apr_shm.html"
+                        title="previous chapter">Shared Memory Routines</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="group_apr_skiplist.html"
+                        title="next chapter">Skip list implementation</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="signal-handling">
+<span id="doxid-group-apr-signal"></span><span id="index-0"></span><h1>Signal Handling</h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="overview">
+<h2>Overview</h2>
+<pre class="highlight doxyrest-overview-code-block literal-block">
+<span></span><span class="c1">// typedefs</span>
+
+<span class="k">typedef</span> <span class="kt">void</span> <a class="reference internal" href="#doxid-group-apr-signal-1ga2afd99d29d57dc1358aeccedb714368a"><span class="std std-ref">apr_sigfunc_t</span></a><span></span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
+
+<span class="c1">// global functions</span>
+
+<a class="reference internal" href="#doxid-group-apr-signal-1ga2afd99d29d57dc1358aeccedb714368a"><span class="std std-ref">apr_sigfunc_t</span></a><span></span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-signal-1ga77ecb509002eeb784c06014c635a9a5a"><span class="std std-ref">apr_signal</span></a><span></span><span class="p">(</span>
+    <span class="kt">int</span> <span class="n">signo</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-signal-1ga2afd99d29d57dc1358aeccedb714368a"><span class="std std-ref">apr_sigfunc_t</span></a><span></span><span class="o">*</span> <span class="n">func</span>
+    <span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-signal-1ga685b8a8e5e7a5067e3fe3456c5c1a150"><span class="std std-ref">apr_signal_description_get</span></a><span></span><span class="p">(</span><span class="kt">int</span> <span class="n">signum</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-apr-signal-1ga76f1701a2f33697425b3fa6fa44a192b"><span class="std std-ref">apr_signal_init</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pglobal</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-signal-1ga111744ccf1db400150bf7c14c2cfc312"><span class="std std-ref">apr_signal_block</span></a><span></span><span class="p">(</span><span class="kt">int</span> <span class="n">signum</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-signal-1ga9d8a1d786de4ace76f711806e9e34071"><span class="std std-ref">apr_signal_unblock</span></a><span></span><span class="p">(</span><span class="kt">int</span> <span class="n">signum</span><span class="p">);</span>
+</pre>
+</div>
+<div class="section" id="detailed-documentation">
+<span id="details-group-apr-signal"></span><h2>Detailed Documentation</h2>
+<div class="section" id="typedefs">
+<h3>Typedefs</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-signal-1ga2afd99d29d57dc1358aeccedb714368a">
+<span id="index-1"></span><span></span><span class="k">typedef</span> <span class="kt">void</span> <span class="n">apr_sigfunc_t</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span>
+</pre>
+<p>Function prototype for signal handlers</p>
+</div>
+<div class="section" id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-signal-1ga77ecb509002eeb784c06014c635a9a5a">
+<span id="index-2"></span><a class="reference internal" href="#doxid-group-apr-signal-1ga2afd99d29d57dc1358aeccedb714368a"><span class="std std-ref">apr_sigfunc_t</span></a><span></span><span class="o">*</span>
+<span class="n">apr_signal</span><span class="p">(</span>
+    <span class="kt">int</span> <span class="n">signo</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-signal-1ga2afd99d29d57dc1358aeccedb714368a"><span class="std std-ref">apr_sigfunc_t</span></a><span></span><span class="o">*</span> <span class="n">func</span>
+    <span class="p">)</span>
+</pre>
+<p>Set the signal handler function for a given signal</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>signo</td>
+<td>The signal (eg… SIGWINCH)</td>
+</tr>
+<tr class="row-even"><td>func</td>
+<td>the function to get called</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-signal-1ga685b8a8e5e7a5067e3fe3456c5c1a150">
+<span id="index-3"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">apr_signal_description_get</span><span class="p">(</span><span class="kt">int</span> <span class="n">signum</span><span class="p">)</span>
+</pre>
+<p>Get the description for a specific signal number</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>signum</td>
+<td>The signal number</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>The description of the signal</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-signal-1ga76f1701a2f33697425b3fa6fa44a192b">
+<span id="index-4"></span><span></span><span class="kt">void</span>
+<span class="n">apr_signal_init</span><span class="p">(</span><a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pglobal</span><span class="p">)</span>
+</pre>
+<p>APR-private function for initializing the signal package</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-signal-1ga111744ccf1db400150bf7c14c2cfc312">
+<span id="index-5"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_signal_block</span><span class="p">(</span><span class="kt">int</span> <span class="n">signum</span><span class="p">)</span>
+</pre>
+<p>Block the delivery of a particular signal</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>signum</td>
+<td>The signal number</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>status</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-signal-1ga9d8a1d786de4ace76f711806e9e34071">
+<span id="index-6"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_signal_unblock</span><span class="p">(</span><span class="kt">int</span> <span class="n">signum</span><span class="p">)</span>
+</pre>
+<p>Enable the delivery of a particular signal</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>signum</td>
+<td>The signal number</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>status</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="group_apr_skiplist.html" title="Skip list implementation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="group_apr_shm.html" title="Shared Memory Routines"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Apache Portable Runtime Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="group_APR.html" >Apache Portability Runtime library</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2008-2017, Apache Portable Runtime Maintainers.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    </div>
+  </body>
+</html>

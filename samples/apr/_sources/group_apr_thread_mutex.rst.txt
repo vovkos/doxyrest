@@ -1,0 +1,263 @@
+.. index:: pair: group; Thread Mutex Routines
+.. _doxid-group__apr__thread__mutex:
+
+Thread Mutex Routines
+=====================
+
+.. toctree::
+	:hidden:
+
+Overview
+~~~~~~~~
+
+
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef struct :ref:`apr_thread_mutex_t<doxid-group__apr__thread__mutex_1ga95712060ba3a192036416e1ccef1db75>` :ref:`apr_thread_mutex_t<doxid-group__apr__thread__mutex_1ga95712060ba3a192036416e1ccef1db75>`;
+
+	// global functions
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_thread_mutex_create<doxid-group__apr__thread__mutex_1ga927e99580a669f577fbcb6508814ff12>`(
+		:ref:`apr_thread_mutex_t<doxid-group__apr__thread__mutex_1ga95712060ba3a192036416e1ccef1db75>`** mutex,
+		unsigned int flags,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_thread_mutex_lock<doxid-group__apr__thread__mutex_1ga1430fd10d8d260c0e3832c959742a977>`(:ref:`apr_thread_mutex_t<doxid-group__apr__thread__mutex_1ga95712060ba3a192036416e1ccef1db75>`* mutex);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_thread_mutex_trylock<doxid-group__apr__thread__mutex_1ga6ac9c8ebee83ff89416f00231a858798>`(:ref:`apr_thread_mutex_t<doxid-group__apr__thread__mutex_1ga95712060ba3a192036416e1ccef1db75>`* mutex);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_thread_mutex_unlock<doxid-group__apr__thread__mutex_1ga74e58f753737283f9b826d8cdcbcb4bf>`(:ref:`apr_thread_mutex_t<doxid-group__apr__thread__mutex_1ga95712060ba3a192036416e1ccef1db75>`* mutex);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_thread_mutex_destroy<doxid-group__apr__thread__mutex_1gae80e6f9c2a2fbaa94f5a6954e02118f4>`(:ref:`apr_thread_mutex_t<doxid-group__apr__thread__mutex_1ga95712060ba3a192036416e1ccef1db75>`* mutex);
+
+	:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`*
+	:ref:`apr_thread_mutex_pool_get<doxid-group__apr__thread__mutex_1gafec9362d92f8bd67660b97cb3c246544>`(const :ref:`apr_thread_mutex_t<doxid-group__apr__thread__mutex_1ga95712060ba3a192036416e1ccef1db75>`* thethread_mutex);
+
+	// macros
+
+	#define :ref:`APR_THREAD_MUTEX_DEFAULT<doxid-group__apr__thread__mutex_1ga579050872f9aff06e773b084264f7d06>`
+	#define :ref:`APR_THREAD_MUTEX_NESTED<doxid-group__apr__thread__mutex_1gaf421e0445dbc3c739130f5f6544c2e78>`
+	#define :ref:`APR_THREAD_MUTEX_UNNESTED<doxid-group__apr__thread__mutex_1gac31107f3db115edc0c26ea48943c6a16>`
+
+.. _details-group__apr__thread__mutex:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+Typedefs
+--------
+
+.. index:: pair: typedef; apr_thread_mutex_t
+.. _doxid-group__apr__thread__mutex_1ga95712060ba3a192036416e1ccef1db75:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_thread_mutex_t<doxid-group__apr__thread__mutex_1ga95712060ba3a192036416e1ccef1db75>` apr_thread_mutex_t
+
+Opaque thread-local mutex structure
+
+Global Functions
+----------------
+
+.. index:: pair: function; apr_thread_mutex_create
+.. _doxid-group__apr__thread__mutex_1ga927e99580a669f577fbcb6508814ff12:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_thread_mutex_create(
+		:ref:`apr_thread_mutex_t<doxid-group__apr__thread__mutex_1ga95712060ba3a192036416e1ccef1db75>`** mutex,
+		unsigned int flags,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		)
+
+Create and initialize a mutex that can be used to synchronize threads. Be cautious in using APR_THREAD_MUTEX_DEFAULT. While this is the most optimal mutex based on a given platform's performance characteristics, it will behave as either a nested or an unnested lock.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mutex
+
+		- the memory address where the newly created mutex will be stored.
+
+	*
+		- flags
+
+		- 
+		  Or'ed value of:
+		  
+		  .. code-block:: none
+		  
+		  
+		  	APR_THREAD_MUTEX_DEFAULT   platform-optimal lock behavior.
+		  	APR_THREAD_MUTEX_NESTED    enable nested (recursive) locks.
+		  	APR_THREAD_MUTEX_UNNESTED  disable nested locks (non-recursive).
+
+	*
+		- pool
+
+		- the pool from which to allocate the mutex.
+
+.. index:: pair: function; apr_thread_mutex_lock
+.. _doxid-group__apr__thread__mutex_1ga1430fd10d8d260c0e3832c959742a977:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_thread_mutex_lock(:ref:`apr_thread_mutex_t<doxid-group__apr__thread__mutex_1ga95712060ba3a192036416e1ccef1db75>`* mutex)
+
+Acquire the lock for the given mutex. If the mutex is already locked, the current thread will be put to sleep until the lock becomes available.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mutex
+
+		- the mutex on which to acquire the lock.
+
+.. index:: pair: function; apr_thread_mutex_trylock
+.. _doxid-group__apr__thread__mutex_1ga6ac9c8ebee83ff89416f00231a858798:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_thread_mutex_trylock(:ref:`apr_thread_mutex_t<doxid-group__apr__thread__mutex_1ga95712060ba3a192036416e1ccef1db75>`* mutex)
+
+Attempt to acquire the lock for the given mutex. If the mutex has already been acquired, the call returns immediately with APR_EBUSY. Note: it is important that the :ref:`APR_STATUS_IS_EBUSY(s) <doxid-group___a_p_r___s_t_a_t_u_s___i_s_1gabb92ad7b6ef304132de70e9e5cbaa896>` macro be used to determine if the return value was APR_EBUSY, for portability reasons.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mutex
+
+		- the mutex on which to attempt the lock acquiring.
+
+.. index:: pair: function; apr_thread_mutex_unlock
+.. _doxid-group__apr__thread__mutex_1ga74e58f753737283f9b826d8cdcbcb4bf:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_thread_mutex_unlock(:ref:`apr_thread_mutex_t<doxid-group__apr__thread__mutex_1ga95712060ba3a192036416e1ccef1db75>`* mutex)
+
+Release the lock for the given mutex.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mutex
+
+		- the mutex from which to release the lock.
+
+.. index:: pair: function; apr_thread_mutex_destroy
+.. _doxid-group__apr__thread__mutex_1gae80e6f9c2a2fbaa94f5a6954e02118f4:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_thread_mutex_destroy(:ref:`apr_thread_mutex_t<doxid-group__apr__thread__mutex_1ga95712060ba3a192036416e1ccef1db75>`* mutex)
+
+Destroy the mutex and free the memory associated with the lock.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mutex
+
+		- the mutex to destroy.
+
+.. index:: pair: function; apr_thread_mutex_pool_get
+.. _doxid-group__apr__thread__mutex_1gafec9362d92f8bd67660b97cb3c246544:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`*
+	apr_thread_mutex_pool_get(const :ref:`apr_thread_mutex_t<doxid-group__apr__thread__mutex_1ga95712060ba3a192036416e1ccef1db75>`* thethread_mutex)
+
+Get the pool used by this thread_mutex.
+
+
+
+.. rubric:: Returns:
+
+apr_pool_t the pool
+
+Macros
+------
+
+.. index:: pair: define; APR_THREAD_MUTEX_DEFAULT
+.. _doxid-group__apr__thread__mutex_1ga579050872f9aff06e773b084264f7d06:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_THREAD_MUTEX_DEFAULT
+
+platform-optimal lock behavior
+
+.. index:: pair: define; APR_THREAD_MUTEX_NESTED
+.. _doxid-group__apr__thread__mutex_1gaf421e0445dbc3c739130f5f6544c2e78:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_THREAD_MUTEX_NESTED
+
+enable nested (recursive) locks
+
+.. index:: pair: define; APR_THREAD_MUTEX_UNNESTED
+.. _doxid-group__apr__thread__mutex_1gac31107f3db115edc0c26ea48943c6a16:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_THREAD_MUTEX_UNNESTED
+
+disable nested locks
+

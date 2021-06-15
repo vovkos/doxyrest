@@ -1,0 +1,160 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Chapter 8: Threads with libssh &#8212; LibSSH Documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/target-highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="To be done" href="page_libssh_tutor_todo.html" />
+    <link rel="prev" title="Chapter 7: Forwarding connections (tunnel)" href="page_libssh_tutor_forwarding.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="page_libssh_tutor_todo.html" title="To be done"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="page_libssh_tutor_forwarding.html" title="Chapter 7: Forwarding connections (tunnel)"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LibSSH Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="page_libssh_tutorial.html" accesskey="U">The Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Chapter 8: Threads with libssh</a><ul>
+<li><a class="reference internal" href="#how-to-use-libssh-with-threads">How to use libssh with threads</a><ul>
+<li><a class="reference internal" href="#initialization-of-threads">Initialization of threads</a></li>
+<li><a class="reference internal" href="#using-libpthread-with-libssh">Using libpthread with libssh</a></li>
+<li><a class="reference internal" href="#using-another-threading-library">Using another threading library</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="page_libssh_tutor_forwarding.html"
+                        title="previous chapter">Chapter 7: Forwarding connections (tunnel)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="page_libssh_tutor_todo.html"
+                        title="next chapter">To be done</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="chapter-8-threads-with-libssh">
+<span id="doxid-libssh-tutor-threads"></span><span id="index-0"></span><h1>Chapter 8: Threads with libssh</h1>
+<div class="section" id="how-to-use-libssh-with-threads">
+<span id="doxid-libssh-tutor-threads-1threads-with-libssh"></span><h2>How to use libssh with threads</h2>
+<p>libssh may be used in multithreaded applications, but under several conditions :</p>
+<ul class="simple">
+<li>Threading must be initialized during the initialization of libssh. This initialization must be done outside of any threading context.</li>
+<li>If pthreads is being used by your application (or your framework’s backend), you must link with libssh_threads dynamic library and initialize threading with the ssh_threads_pthreads threading object.</li>
+<li>If an other threading library is being used by your application, you must implement all the methods of the <a class="reference internal" href="struct_ssh_threads_callbacks_struct.html#doxid-structssh-threads-callbacks-struct"><span class="std std-ref">ssh_threads_callbacks_struct</span></a> structure and initialize libssh with it.</li>
+<li>At all times, you may use different sessions inside threads, make parallel connections, read/write on different sessions and so on. You <em>cannot</em> use a single session (or channels for a single session) in several threads at the same time. This will most likely lead to internal state corruption. This limitation is being worked out and will maybe disappear later.</li>
+</ul>
+<div class="section" id="initialization-of-threads">
+<span id="doxid-libssh-tutor-threads-1threads-init"></span><h3>Initialization of threads</h3>
+<p>To initialize threading, you must first select the threading model you want to use, using <a class="reference internal" href="group_libssh_threads.html#doxid-group-libssh-threads-1gaf473af3fbae6f1bb0e249fd1d079ff68"><span class="std std-ref">ssh_threads_set_callbacks()</span></a>, then call <a class="reference internal" href="group_libssh.html#doxid-group-libssh-1ga3ebf8d6920e563f3b032e3cd5277598e"><span class="std std-ref">ssh_init()</span></a>.</p>
+<pre class="highlight literal-block">
+<span></span><span class="cp">#include</span> <span class="cpf">&lt;libssh/callbacks.h&gt;</span><span class="cp"></span>
+<span class="p">...</span>
+<span class="n">ssh_threads_set_callbacks</span><span class="p">(</span><span class="n">ssh_threads_get_noop</span><span class="p">());</span>
+<span class="n">ssh_init</span><span class="p">();</span>
+</pre>
+<p>ssh_threads_noop is the threading structure that does nothing. It’s the threading callbacks being used by default when you’re not using threading.</p>
+</div>
+<div class="section" id="using-libpthread-with-libssh">
+<span id="doxid-libssh-tutor-threads-1threads-pthread"></span><h3>Using libpthread with libssh</h3>
+<p>If your application is using libpthread, you may simply use the libpthread threading backend:</p>
+<pre class="highlight literal-block">
+<span></span><span class="cp">#include</span> <span class="cpf">&lt;libssh/callbacks.h&gt;</span><span class="cp"></span>
+<span class="p">...</span>
+<span class="n">ssh_threads_set_callbacks</span><span class="p">(</span><span class="n">ssh_threads_get_pthread</span><span class="p">());</span>
+<span class="n">ssh_init</span><span class="p">();</span>
+</pre>
+<p>However, you must be sure to link with the library ssh_threads. If you’re using gcc, you must use the commandline</p>
+<pre class="highlight literal-block">
+<span></span><span class="n">gcc</span> <span class="o">-</span><span class="n">o</span> <span class="n">output</span> <span class="n">input</span><span class="p">.</span><span class="n">c</span> <span class="o">-</span><span class="n">lssh</span> <span class="o">-</span><span class="n">lssh_threads</span>
+</pre>
+</div>
+<div class="section" id="using-another-threading-library">
+<span id="doxid-libssh-tutor-threads-1threads-other"></span><h3>Using another threading library</h3>
+<p>You must find your way in the <a class="reference internal" href="struct_ssh_threads_callbacks_struct.html#doxid-structssh-threads-callbacks-struct"><span class="std std-ref">ssh_threads_callbacks_struct</span></a> structure. You must implement the following methods :</p>
+<ul class="simple">
+<li>mutex_lock</li>
+<li>mutex_unlock</li>
+<li>mutex_init</li>
+<li>mutex_destroy</li>
+<li>thread_id</li>
+</ul>
+<p>libgcrypt 1.6 and bigger backend does not support custom callback. Using anything else than pthreads (<a class="reference internal" href="global.html#doxid-callbacks-8h-1a117f2dff40905608871165129de1fbf7"><span class="std std-ref">ssh_threads_get_pthread()</span></a>) here will fail. Good luck !</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="page_libssh_tutor_todo.html" title="To be done"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="page_libssh_tutor_forwarding.html" title="Chapter 7: Forwarding connections (tunnel)"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LibSSH Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="page_libssh_tutorial.html" >The Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2003-2017, LibSSH Maintainers.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    </div>
+  </body>
+</html>

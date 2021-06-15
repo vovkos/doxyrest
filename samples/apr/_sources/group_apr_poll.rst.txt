@@ -1,0 +1,774 @@
+.. index:: pair: group; Poll Routines
+.. _doxid-group__apr__poll:
+
+Poll Routines
+=============
+
+.. toctree::
+	:hidden:
+
+	group_pollopts.rst
+	group_pollflags.rst
+	enum_apr_datatype_e.rst
+	enum_apr_pollset_method_e.rst
+	struct_apr_pollfd_t.rst
+	union_apr_descriptor.rst
+
+Overview
+~~~~~~~~
+
+
+
+|	:ref:`Poll options<doxid-group__pollopts>`
+|	:ref:`Pollset Flags<doxid-group__pollflags>`
+
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef struct :ref:`apr_pollfd_t<doxid-structapr__pollfd__t>` :ref:`apr_pollfd_t<doxid-group__apr__poll_1ga0c89b184cbe2337e44207f1ad245129b>`;
+	typedef struct :ref:`apr_pollset_t<doxid-group__apr__poll_1ga680da1f10ac5ef75efc503a9d15b8906>` :ref:`apr_pollset_t<doxid-group__apr__poll_1ga680da1f10ac5ef75efc503a9d15b8906>`;
+	typedef struct :ref:`apr_pollcb_t<doxid-group__apr__poll_1gae382e39bdf0c5a02fca7da3944bece08>` :ref:`apr_pollcb_t<doxid-group__apr__poll_1gae382e39bdf0c5a02fca7da3944bece08>`;
+
+	typedef :ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>` (*:ref:`apr_pollcb_cb_t<doxid-group__apr__poll_1ga1dcd8c87e233dbf105e83d50ef601f55>`)(
+		void *baton,
+		apr_pollfd_t *descriptor
+		);
+
+	// enums
+
+	enum :ref:`apr_datatype_e<doxid-group__apr__poll_1ga0a8549d84c1721788b102a4cc8b4b0f0>`;
+	enum :ref:`apr_pollset_method_e<doxid-group__apr__poll_1gabe6f1238ea45e9425fa052e2788e4a29>`;
+
+	// structs
+
+	struct :ref:`apr_pollfd_t<doxid-structapr__pollfd__t>`;
+
+	// unions
+
+	union :ref:`apr_descriptor<doxid-unionapr__descriptor>`;
+
+	// global functions
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_pollset_create<doxid-group__apr__poll_1ga4ca4056a19daee8fe94ddba100fe2326>`(
+		:ref:`apr_pollset_t<doxid-group__apr__poll_1ga680da1f10ac5ef75efc503a9d15b8906>`** pollset,
+		apr_uint32_t size,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		apr_uint32_t flags
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_pollset_create_ex<doxid-group__apr__poll_1ga9448a2d756868aa1c6dbc9726a2e32b5>`(
+		:ref:`apr_pollset_t<doxid-group__apr__poll_1ga680da1f10ac5ef75efc503a9d15b8906>`** pollset,
+		apr_uint32_t size,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		apr_uint32_t flags,
+		:ref:`apr_pollset_method_e<doxid-group__apr__poll_1gabe6f1238ea45e9425fa052e2788e4a29>` method
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_pollset_destroy<doxid-group__apr__poll_1gaa06c538d3fea9d860374043aff9450b2>`(:ref:`apr_pollset_t<doxid-group__apr__poll_1ga680da1f10ac5ef75efc503a9d15b8906>`* pollset);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_pollset_add<doxid-group__apr__poll_1ga4ec50bf9a11c6b60927c51b81412f5b9>`(
+		:ref:`apr_pollset_t<doxid-group__apr__poll_1ga680da1f10ac5ef75efc503a9d15b8906>`* pollset,
+		const :ref:`apr_pollfd_t<doxid-structapr__pollfd__t>`* descriptor
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_pollset_remove<doxid-group__apr__poll_1ga3c99c06e142d6b6b789eeb6086122e3a>`(
+		:ref:`apr_pollset_t<doxid-group__apr__poll_1ga680da1f10ac5ef75efc503a9d15b8906>`* pollset,
+		const :ref:`apr_pollfd_t<doxid-structapr__pollfd__t>`* descriptor
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_pollset_poll<doxid-group__apr__poll_1ga6b31d7b3a7b2d356370403dd2b79ecf3>`(
+		:ref:`apr_pollset_t<doxid-group__apr__poll_1ga680da1f10ac5ef75efc503a9d15b8906>`* pollset,
+		:ref:`apr_interval_time_t<doxid-group__apr__time_1gaae2129185a395cc393f76fabf4f43e47>` timeout,
+		apr_int32_t* num,
+		const :ref:`apr_pollfd_t<doxid-structapr__pollfd__t>`** descriptors
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_pollset_wakeup<doxid-group__apr__poll_1gac5e86828143e169e18b2a6eab94be531>`(:ref:`apr_pollset_t<doxid-group__apr__poll_1ga680da1f10ac5ef75efc503a9d15b8906>`* pollset);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_poll<doxid-group__apr__poll_1gad1d8a1ccd14952be6da5f272ca8dda76>`(
+		:ref:`apr_pollfd_t<doxid-structapr__pollfd__t>`* aprset,
+		apr_int32_t numsock,
+		apr_int32_t* nsds,
+		:ref:`apr_interval_time_t<doxid-group__apr__time_1gaae2129185a395cc393f76fabf4f43e47>` timeout
+		);
+
+	const char*
+	:ref:`apr_pollset_method_name<doxid-group__apr__poll_1ga942ebbcc17d27911da86e1bd5c7a592e>`(:ref:`apr_pollset_t<doxid-group__apr__poll_1ga680da1f10ac5ef75efc503a9d15b8906>`* pollset);
+
+	const char*
+	:ref:`apr_poll_method_defname<doxid-group__apr__poll_1ga5d64867d7a3abd53d3765b4b47cf774f>`(void);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_pollcb_create<doxid-group__apr__poll_1ga76c33736268d57fca503790711d6d04e>`(
+		:ref:`apr_pollcb_t<doxid-group__apr__poll_1gae382e39bdf0c5a02fca7da3944bece08>`** pollcb,
+		apr_uint32_t size,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		apr_uint32_t flags
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_pollcb_create_ex<doxid-group__apr__poll_1ga2ebdd0cba2d3b8333c46ee48170f8e90>`(
+		:ref:`apr_pollcb_t<doxid-group__apr__poll_1gae382e39bdf0c5a02fca7da3944bece08>`** pollcb,
+		apr_uint32_t size,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		apr_uint32_t flags,
+		:ref:`apr_pollset_method_e<doxid-group__apr__poll_1gabe6f1238ea45e9425fa052e2788e4a29>` method
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_pollcb_add<doxid-group__apr__poll_1ga8fab02dfa803d911dae98656fac7a2c8>`(
+		:ref:`apr_pollcb_t<doxid-group__apr__poll_1gae382e39bdf0c5a02fca7da3944bece08>`* pollcb,
+		:ref:`apr_pollfd_t<doxid-structapr__pollfd__t>`* descriptor
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_pollcb_remove<doxid-group__apr__poll_1gad004b778a14d6bcc4e48a10e5af729d8>`(
+		:ref:`apr_pollcb_t<doxid-group__apr__poll_1gae382e39bdf0c5a02fca7da3944bece08>`* pollcb,
+		:ref:`apr_pollfd_t<doxid-structapr__pollfd__t>`* descriptor
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_pollcb_poll<doxid-group__apr__poll_1ga11765d1b27e2f621a8dcd2c40f0e259c>`(
+		:ref:`apr_pollcb_t<doxid-group__apr__poll_1gae382e39bdf0c5a02fca7da3944bece08>`* pollcb,
+		:ref:`apr_interval_time_t<doxid-group__apr__time_1gaae2129185a395cc393f76fabf4f43e47>` timeout,
+		:ref:`apr_pollcb_cb_t<doxid-group__apr__poll_1ga1dcd8c87e233dbf105e83d50ef601f55>` func,
+		void* baton
+		);
+
+.. _details-group__apr__poll:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+Typedefs
+--------
+
+.. index:: pair: typedef; apr_pollfd_t
+.. _doxid-group__apr__poll_1ga0c89b184cbe2337e44207f1ad245129b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_pollfd_t<doxid-structapr__pollfd__t>` apr_pollfd_t
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_pollfd_t <doxid-structapr__pollfd__t>`
+
+.. index:: pair: typedef; apr_pollset_t
+.. _doxid-group__apr__poll_1ga680da1f10ac5ef75efc503a9d15b8906:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_pollset_t<doxid-group__apr__poll_1ga680da1f10ac5ef75efc503a9d15b8906>` apr_pollset_t
+
+Opaque structure used for pollset API
+
+.. index:: pair: typedef; apr_pollcb_t
+.. _doxid-group__apr__poll_1gae382e39bdf0c5a02fca7da3944bece08:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_pollcb_t<doxid-group__apr__poll_1gae382e39bdf0c5a02fca7da3944bece08>` apr_pollcb_t
+
+Opaque structure used for pollcb API
+
+.. index:: pair: typedef; apr_pollcb_cb_t
+.. _doxid-group__apr__poll_1ga1dcd8c87e233dbf105e83d50ef601f55:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef :ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>` (*apr_pollcb_cb_t)(
+		void *baton,
+		apr_pollfd_t *descriptor
+		)
+
+Function prototype for pollcb handlers
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- baton
+
+		- Opaque baton passed into :ref:`apr_pollcb_poll() <doxid-group__apr__poll_1ga11765d1b27e2f621a8dcd2c40f0e259c>`
+
+	*
+		- descriptor
+
+		- Contains the notification for an active descriptor, the rtnevents member contains what events were triggered for this descriptor.
+
+Global Functions
+----------------
+
+.. index:: pair: function; apr_pollset_create
+.. _doxid-group__apr__poll_1ga4ca4056a19daee8fe94ddba100fe2326:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_pollset_create(
+		:ref:`apr_pollset_t<doxid-group__apr__poll_1ga680da1f10ac5ef75efc503a9d15b8906>`** pollset,
+		apr_uint32_t size,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		apr_uint32_t flags
+		)
+
+Set up a pollset object If flags contains APR_POLLSET_THREADSAFE, then a pollset is created on which it is safe to make concurrent calls to :ref:`apr_pollset_add() <doxid-group__apr__poll_1ga4ec50bf9a11c6b60927c51b81412f5b9>`, :ref:`apr_pollset_remove() <doxid-group__apr__poll_1ga3c99c06e142d6b6b789eeb6086122e3a>` and :ref:`apr_pollset_poll() <doxid-group__apr__poll_1ga6b31d7b3a7b2d356370403dd2b79ecf3>` from separate threads. This feature is only supported on some platforms; the :ref:`apr_pollset_create() <doxid-group__apr__poll_1ga4ca4056a19daee8fe94ddba100fe2326>` call will fail with APR_ENOTIMPL on platforms where it is not supported.
+
+If flags contains APR_POLLSET_WAKEABLE, then a pollset is created with an additional internal pipe object used for the :ref:`apr_pollset_wakeup() <doxid-group__apr__poll_1gac5e86828143e169e18b2a6eab94be531>` call. The actual size of pollset is in that case *size* + 1. This feature is only supported on some platforms; the :ref:`apr_pollset_create() <doxid-group__apr__poll_1ga4ca4056a19daee8fe94ddba100fe2326>` call will fail with APR_ENOTIMPL on platforms where it is not supported.
+
+If flags contains APR_POLLSET_NOCOPY, then the :ref:`apr_pollfd_t <doxid-structapr__pollfd__t>` structures passed to :ref:`apr_pollset_add() <doxid-group__apr__poll_1ga4ec50bf9a11c6b60927c51b81412f5b9>` are not copied and must have a lifetime at least as long as the pollset.
+
+Some poll methods (including APR_POLLSET_KQUEUE, APR_POLLSET_PORT, and APR_POLLSET_EPOLL) do not have a fixed limit on the size of the pollset. For these methods, the size parameter controls the maximum number of descriptors that will be returned by a single call to :ref:`apr_pollset_poll() <doxid-group__apr__poll_1ga6b31d7b3a7b2d356370403dd2b79ecf3>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pollset
+
+		- The pointer in which to return the newly created object
+
+	*
+		- size
+
+		- The maximum number of descriptors that this pollset can hold
+
+	*
+		- p
+
+		- The pool from which to allocate the pollset
+
+	*
+		- flags
+
+		- Optional flags to modify the operation of the pollset.
+
+.. index:: pair: function; apr_pollset_create_ex
+.. _doxid-group__apr__poll_1ga9448a2d756868aa1c6dbc9726a2e32b5:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_pollset_create_ex(
+		:ref:`apr_pollset_t<doxid-group__apr__poll_1ga680da1f10ac5ef75efc503a9d15b8906>`** pollset,
+		apr_uint32_t size,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		apr_uint32_t flags,
+		:ref:`apr_pollset_method_e<doxid-group__apr__poll_1gabe6f1238ea45e9425fa052e2788e4a29>` method
+		)
+
+Set up a pollset object If flags contains APR_POLLSET_THREADSAFE, then a pollset is created on which it is safe to make concurrent calls to :ref:`apr_pollset_add() <doxid-group__apr__poll_1ga4ec50bf9a11c6b60927c51b81412f5b9>`, :ref:`apr_pollset_remove() <doxid-group__apr__poll_1ga3c99c06e142d6b6b789eeb6086122e3a>` and :ref:`apr_pollset_poll() <doxid-group__apr__poll_1ga6b31d7b3a7b2d356370403dd2b79ecf3>` from separate threads. This feature is only supported on some platforms; the :ref:`apr_pollset_create_ex() <doxid-group__apr__poll_1ga9448a2d756868aa1c6dbc9726a2e32b5>` call will fail with APR_ENOTIMPL on platforms where it is not supported.
+
+If flags contains APR_POLLSET_WAKEABLE, then a pollset is created with additional internal pipe object used for the :ref:`apr_pollset_wakeup() <doxid-group__apr__poll_1gac5e86828143e169e18b2a6eab94be531>` call. The actual size of pollset is in that case size + 1. This feature is only supported on some platforms; the :ref:`apr_pollset_create_ex() <doxid-group__apr__poll_1ga9448a2d756868aa1c6dbc9726a2e32b5>` call will fail with APR_ENOTIMPL on platforms where it is not supported.
+
+If flags contains APR_POLLSET_NOCOPY, then the :ref:`apr_pollfd_t <doxid-structapr__pollfd__t>` structures passed to :ref:`apr_pollset_add() <doxid-group__apr__poll_1ga4ec50bf9a11c6b60927c51b81412f5b9>` are not copied and must have a lifetime at least as long as the pollset.
+
+Some poll methods (including APR_POLLSET_KQUEUE, APR_POLLSET_PORT, and APR_POLLSET_EPOLL) do not have a fixed limit on the size of the pollset. For these methods, the size parameter controls the maximum number of descriptors that will be returned by a single call to :ref:`apr_pollset_poll() <doxid-group__apr__poll_1ga6b31d7b3a7b2d356370403dd2b79ecf3>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pollset
+
+		- The pointer in which to return the newly created object
+
+	*
+		- size
+
+		- The maximum number of descriptors that this pollset can hold
+
+	*
+		- p
+
+		- The pool from which to allocate the pollset
+
+	*
+		- flags
+
+		- Optional flags to modify the operation of the pollset.
+
+	*
+		- method
+
+		- Poll method to use. See :ref:`apr_pollset_method_e <doxid-group__apr__poll_1gabe6f1238ea45e9425fa052e2788e4a29>`. If this method cannot be used, the default method will be used unless the APR_POLLSET_NODEFAULT flag has been specified.
+
+.. index:: pair: function; apr_pollset_destroy
+.. _doxid-group__apr__poll_1gaa06c538d3fea9d860374043aff9450b2:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_pollset_destroy(:ref:`apr_pollset_t<doxid-group__apr__poll_1ga680da1f10ac5ef75efc503a9d15b8906>`* pollset)
+
+Destroy a pollset object
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pollset
+
+		- The pollset to destroy
+
+.. index:: pair: function; apr_pollset_add
+.. _doxid-group__apr__poll_1ga4ec50bf9a11c6b60927c51b81412f5b9:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_pollset_add(
+		:ref:`apr_pollset_t<doxid-group__apr__poll_1ga680da1f10ac5ef75efc503a9d15b8906>`* pollset,
+		const :ref:`apr_pollfd_t<doxid-structapr__pollfd__t>`* descriptor
+		)
+
+Add a socket or file descriptor to a pollset If you set client_data in the descriptor, that value will be returned in the client_data field whenever this descriptor is signalled in :ref:`apr_pollset_poll() <doxid-group__apr__poll_1ga6b31d7b3a7b2d356370403dd2b79ecf3>`.
+
+If the pollset has been created with APR_POLLSET_THREADSAFE and thread T1 is blocked in a call to :ref:`apr_pollset_poll() <doxid-group__apr__poll_1ga6b31d7b3a7b2d356370403dd2b79ecf3>` for this same pollset that is being modified via :ref:`apr_pollset_add() <doxid-group__apr__poll_1ga4ec50bf9a11c6b60927c51b81412f5b9>` in thread T2, the currently executing :ref:`apr_pollset_poll() <doxid-group__apr__poll_1ga6b31d7b3a7b2d356370403dd2b79ecf3>` call in T1 will either: (1) automatically include the newly added descriptor in the set of descriptors it is watching or (2) return immediately with APR_EINTR. Option (1) is recommended, but option (2) is allowed for implementations where option (1) is impossible or impractical.
+
+If the pollset has been created with APR_POLLSET_NOCOPY, the :ref:`apr_pollfd_t <doxid-structapr__pollfd__t>` structure referenced by descriptor will not be copied and must have a lifetime at least as long as the pollset.
+
+Do not add the same socket or file descriptor to the same pollset multiple times, even if the requested events differ for the different calls to :ref:`apr_pollset_add() <doxid-group__apr__poll_1ga4ec50bf9a11c6b60927c51b81412f5b9>`. If the events of interest for a descriptor change, you must first remove the descriptor from the pollset with :ref:`apr_pollset_remove() <doxid-group__apr__poll_1ga3c99c06e142d6b6b789eeb6086122e3a>`, then add it again specifying all requested events.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pollset
+
+		- The pollset to which to add the descriptor
+
+	*
+		- descriptor
+
+		- The descriptor to add
+
+.. index:: pair: function; apr_pollset_remove
+.. _doxid-group__apr__poll_1ga3c99c06e142d6b6b789eeb6086122e3a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_pollset_remove(
+		:ref:`apr_pollset_t<doxid-group__apr__poll_1ga680da1f10ac5ef75efc503a9d15b8906>`* pollset,
+		const :ref:`apr_pollfd_t<doxid-structapr__pollfd__t>`* descriptor
+		)
+
+Remove a descriptor from a pollset If the descriptor is not found, APR_NOTFOUND is returned.
+
+If the pollset has been created with APR_POLLSET_THREADSAFE and thread T1 is blocked in a call to :ref:`apr_pollset_poll() <doxid-group__apr__poll_1ga6b31d7b3a7b2d356370403dd2b79ecf3>` for this same pollset that is being modified via :ref:`apr_pollset_remove() <doxid-group__apr__poll_1ga3c99c06e142d6b6b789eeb6086122e3a>` in thread T2, the currently executing :ref:`apr_pollset_poll() <doxid-group__apr__poll_1ga6b31d7b3a7b2d356370403dd2b79ecf3>` call in T1 will either: (1) automatically exclude the newly added descriptor in the set of descriptors it is watching or (2) return immediately with APR_EINTR. Option (1) is recommended, but option (2) is allowed for implementations where option (1) is impossible or impractical.
+
+:ref:`apr_pollset_remove() <doxid-group__apr__poll_1ga3c99c06e142d6b6b789eeb6086122e3a>` cannot be used to remove a subset of requested events for a descriptor. The reqevents field in the :ref:`apr_pollfd_t <doxid-structapr__pollfd__t>` parameter must contain the same value when removing as when adding.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pollset
+
+		- The pollset from which to remove the descriptor
+
+	*
+		- descriptor
+
+		- The descriptor to remove
+
+.. index:: pair: function; apr_pollset_poll
+.. _doxid-group__apr__poll_1ga6b31d7b3a7b2d356370403dd2b79ecf3:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_pollset_poll(
+		:ref:`apr_pollset_t<doxid-group__apr__poll_1ga680da1f10ac5ef75efc503a9d15b8906>`* pollset,
+		:ref:`apr_interval_time_t<doxid-group__apr__time_1gaae2129185a395cc393f76fabf4f43e47>` timeout,
+		apr_int32_t* num,
+		const :ref:`apr_pollfd_t<doxid-structapr__pollfd__t>`** descriptors
+		)
+
+Block for activity on the descriptor(s) in a pollset APR_EINTR will be returned if the pollset has been created with APR_POLLSET_WAKEABLE, :ref:`apr_pollset_wakeup() <doxid-group__apr__poll_1gac5e86828143e169e18b2a6eab94be531>` has been called while waiting for activity, and there were no signalled descriptors at the time of the wakeup call.
+
+Multiple signalled conditions for the same descriptor may be reported in one or more returned :ref:`apr_pollfd_t <doxid-structapr__pollfd__t>` structures, depending on the implementation.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pollset
+
+		- The pollset to use
+
+	*
+		- timeout
+
+		- The amount of time in microseconds to wait. This is a maximum, not a minimum. If a descriptor is signalled, the function will return before this time. If timeout is negative, the function will block until a descriptor is signalled or until :ref:`apr_pollset_wakeup() <doxid-group__apr__poll_1gac5e86828143e169e18b2a6eab94be531>` has been called.
+
+	*
+		- num
+
+		- Number of signalled descriptors (output parameter)
+
+	*
+		- descriptors
+
+		- Array of signalled descriptors (output parameter)
+
+.. index:: pair: function; apr_pollset_wakeup
+.. _doxid-group__apr__poll_1gac5e86828143e169e18b2a6eab94be531:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_pollset_wakeup(:ref:`apr_pollset_t<doxid-group__apr__poll_1ga680da1f10ac5ef75efc503a9d15b8906>`* pollset)
+
+Interrupt the blocked :ref:`apr_pollset_poll() <doxid-group__apr__poll_1ga6b31d7b3a7b2d356370403dd2b79ecf3>` call. If the pollset was not created with APR_POLLSET_WAKEABLE the return value is APR_EINIT.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pollset
+
+		- The pollset to use
+
+.. index:: pair: function; apr_poll
+.. _doxid-group__apr__poll_1gad1d8a1ccd14952be6da5f272ca8dda76:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_poll(
+		:ref:`apr_pollfd_t<doxid-structapr__pollfd__t>`* aprset,
+		apr_int32_t numsock,
+		apr_int32_t* nsds,
+		:ref:`apr_interval_time_t<doxid-group__apr__time_1gaae2129185a395cc393f76fabf4f43e47>` timeout
+		)
+
+Poll the descriptors in the poll structure The number of descriptors signalled is returned in the third argument. This is a blocking call, and it will not return until either a descriptor has been signalled or the timeout has expired.
+
+The rtnevents field in the :ref:`apr_pollfd_t <doxid-structapr__pollfd__t>` array will only be filled- in if the return value is APR_SUCCESS.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- aprset
+
+		- The poll structure we will be using.
+
+	*
+		- numsock
+
+		- The number of descriptors we are polling
+
+	*
+		- nsds
+
+		- The number of descriptors signalled (output parameter)
+
+	*
+		- timeout
+
+		- The amount of time in microseconds to wait. This is a maximum, not a minimum. If a descriptor is signalled, the function will return before this time. If timeout is negative, the function will block until a descriptor is signalled or until :ref:`apr_pollset_wakeup() <doxid-group__apr__poll_1gac5e86828143e169e18b2a6eab94be531>` has been called.
+
+.. index:: pair: function; apr_pollset_method_name
+.. _doxid-group__apr__poll_1ga942ebbcc17d27911da86e1bd5c7a592e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	apr_pollset_method_name(:ref:`apr_pollset_t<doxid-group__apr__poll_1ga680da1f10ac5ef75efc503a9d15b8906>`* pollset)
+
+Return a printable representation of the pollset method.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pollset
+
+		- The pollset to use
+
+.. index:: pair: function; apr_poll_method_defname
+.. _doxid-group__apr__poll_1ga5d64867d7a3abd53d3765b4b47cf774f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	apr_poll_method_defname(void)
+
+Return a printable representation of the default pollset method (APR_POLLSET_DEFAULT).
+
+.. index:: pair: function; apr_pollcb_create
+.. _doxid-group__apr__poll_1ga76c33736268d57fca503790711d6d04e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_pollcb_create(
+		:ref:`apr_pollcb_t<doxid-group__apr__poll_1gae382e39bdf0c5a02fca7da3944bece08>`** pollcb,
+		apr_uint32_t size,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		apr_uint32_t flags
+		)
+
+Set up a pollcb object Pollcb is only supported on some platforms; the :ref:`apr_pollcb_create() <doxid-group__apr__poll_1ga76c33736268d57fca503790711d6d04e>` call will fail with APR_ENOTIMPL on platforms where it is not supported.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pollcb
+
+		- The pointer in which to return the newly created object
+
+	*
+		- size
+
+		- The maximum number of descriptors that a single _poll can return.
+
+	*
+		- p
+
+		- The pool from which to allocate the pollcb
+
+	*
+		- flags
+
+		- Optional flags to modify the operation of the pollcb.
+
+.. index:: pair: function; apr_pollcb_create_ex
+.. _doxid-group__apr__poll_1ga2ebdd0cba2d3b8333c46ee48170f8e90:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_pollcb_create_ex(
+		:ref:`apr_pollcb_t<doxid-group__apr__poll_1gae382e39bdf0c5a02fca7da3944bece08>`** pollcb,
+		apr_uint32_t size,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		apr_uint32_t flags,
+		:ref:`apr_pollset_method_e<doxid-group__apr__poll_1gabe6f1238ea45e9425fa052e2788e4a29>` method
+		)
+
+Set up a pollcb object Pollcb is only supported on some platforms; the :ref:`apr_pollcb_create_ex() <doxid-group__apr__poll_1ga2ebdd0cba2d3b8333c46ee48170f8e90>` call will fail with APR_ENOTIMPL on platforms where it is not supported.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pollcb
+
+		- The pointer in which to return the newly created object
+
+	*
+		- size
+
+		- The maximum number of descriptors that a single _poll can return.
+
+	*
+		- p
+
+		- The pool from which to allocate the pollcb
+
+	*
+		- flags
+
+		- Optional flags to modify the operation of the pollcb.
+
+	*
+		- method
+
+		- Poll method to use. See :ref:`apr_pollset_method_e <doxid-group__apr__poll_1gabe6f1238ea45e9425fa052e2788e4a29>`. If this method cannot be used, the default method will be used unless the APR_POLLSET_NODEFAULT flag has been specified.
+
+.. index:: pair: function; apr_pollcb_add
+.. _doxid-group__apr__poll_1ga8fab02dfa803d911dae98656fac7a2c8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_pollcb_add(
+		:ref:`apr_pollcb_t<doxid-group__apr__poll_1gae382e39bdf0c5a02fca7da3944bece08>`* pollcb,
+		:ref:`apr_pollfd_t<doxid-structapr__pollfd__t>`* descriptor
+		)
+
+Add a socket or file descriptor to a pollcb If you set client_data in the descriptor, that value will be returned in the client_data field whenever this descriptor is signalled in :ref:`apr_pollcb_poll() <doxid-group__apr__poll_1ga11765d1b27e2f621a8dcd2c40f0e259c>`.
+
+Unlike the apr_pollset API, the descriptor is not copied, and users must retain the memory used by descriptor, as the same pointer will be returned to them from apr_pollcb_poll.
+
+Do not add the same socket or file descriptor to the same pollcb multiple times, even if the requested events differ for the different calls to :ref:`apr_pollcb_add() <doxid-group__apr__poll_1ga8fab02dfa803d911dae98656fac7a2c8>`. If the events of interest for a descriptor change, you must first remove the descriptor from the pollcb with :ref:`apr_pollcb_remove() <doxid-group__apr__poll_1gad004b778a14d6bcc4e48a10e5af729d8>`, then add it again specifying all requested events.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pollcb
+
+		- The pollcb to which to add the descriptor
+
+	*
+		- descriptor
+
+		- The descriptor to add
+
+.. index:: pair: function; apr_pollcb_remove
+.. _doxid-group__apr__poll_1gad004b778a14d6bcc4e48a10e5af729d8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_pollcb_remove(
+		:ref:`apr_pollcb_t<doxid-group__apr__poll_1gae382e39bdf0c5a02fca7da3944bece08>`* pollcb,
+		:ref:`apr_pollfd_t<doxid-structapr__pollfd__t>`* descriptor
+		)
+
+Remove a descriptor from a pollcb :ref:`apr_pollcb_remove() <doxid-group__apr__poll_1gad004b778a14d6bcc4e48a10e5af729d8>` cannot be used to remove a subset of requested events for a descriptor. The reqevents field in the :ref:`apr_pollfd_t <doxid-structapr__pollfd__t>` parameter must contain the same value when removing as when adding.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pollcb
+
+		- The pollcb from which to remove the descriptor
+
+	*
+		- descriptor
+
+		- The descriptor to remove
+
+.. index:: pair: function; apr_pollcb_poll
+.. _doxid-group__apr__poll_1ga11765d1b27e2f621a8dcd2c40f0e259c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_pollcb_poll(
+		:ref:`apr_pollcb_t<doxid-group__apr__poll_1gae382e39bdf0c5a02fca7da3944bece08>`* pollcb,
+		:ref:`apr_interval_time_t<doxid-group__apr__time_1gaae2129185a395cc393f76fabf4f43e47>` timeout,
+		:ref:`apr_pollcb_cb_t<doxid-group__apr__poll_1ga1dcd8c87e233dbf105e83d50ef601f55>` func,
+		void* baton
+		)
+
+Block for activity on the descriptor(s) in a pollcb Multiple signalled conditions for the same descriptor may be reported in one or more calls to the callback function, depending on the implementation.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pollcb
+
+		- The pollcb to use
+
+	*
+		- timeout
+
+		- The amount of time in microseconds to wait. This is a maximum, not a minimum. If a descriptor is signalled, the function will return before this time. If timeout is negative, the function will block until a descriptor is signalled.
+
+	*
+		- func
+
+		- Callback function to call for each active descriptor.
+
+	*
+		- baton
+
+		- Opaque baton passed to the callback function.
+

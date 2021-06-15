@@ -1,0 +1,1058 @@
+.. index:: pair: group; Polling and timing
+.. _doxid-group__libusb__poll:
+
+Polling and timing
+==================
+
+.. toctree::
+	:hidden:
+
+	struct_libusb_pollfd.rst
+
+Overview
+~~~~~~~~
+
+This page documents libusb's functions for polling events and timing. :ref:`More...<details-group__libusb__poll>`
+
+
+.. ref-code-block:: c
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef void (*:ref:`libusb_pollfd_added_cb<doxid-group__libusb__poll_1ga2962a11284b09a3f18936d8f73a43804>`)(
+		int fd,
+		short events,
+		void *user_data
+		);
+
+	typedef void (*:ref:`libusb_pollfd_removed_cb<doxid-group__libusb__poll_1ga32aa803f54cfb5bfe8b41747e6b62af5>`)(
+		int fd,
+		void *user_data
+		);
+
+	// structs
+
+	struct :ref:`libusb_pollfd<doxid-structlibusb__pollfd>`;
+
+	// global functions
+
+	int
+	:ref:`libusb_try_lock_events<doxid-group__libusb__poll_1ga6e5a116d5c9498ca4a0e29587fec1a05>`(:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx);
+
+	void
+	:ref:`libusb_lock_events<doxid-group__libusb__poll_1gaa72153938dc4f34decfacbc6cc6237ef>`(:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx);
+
+	void
+	:ref:`libusb_unlock_events<doxid-group__libusb__poll_1gacefbeabdd3409490dc4678f00779c165>`(:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx);
+
+	int
+	:ref:`libusb_event_handling_ok<doxid-group__libusb__poll_1ga63592b28c265185d9469d1e6920d8373>`(:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx);
+
+	int
+	:ref:`libusb_event_handler_active<doxid-group__libusb__poll_1ga3a0a6e8be310c20f1ca68722149f9dbf>`(:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx);
+
+	void
+	:ref:`libusb_interrupt_event_handler<doxid-group__libusb__poll_1ga188b6c50944b49f122ccfd45b93fa9f2>`(:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx);
+
+	void
+	:ref:`libusb_lock_event_waiters<doxid-group__libusb__poll_1ga150865a3f35c38173d688efa7ee52929>`(:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx);
+
+	void
+	:ref:`libusb_unlock_event_waiters<doxid-group__libusb__poll_1ga41d7716458c11ee02d0deb19a31233ed>`(:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx);
+
+	int
+	:ref:`libusb_wait_for_event<doxid-group__libusb__poll_1gae22755d523560be2867be7d09034ca50>`(
+		:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx,
+		struct timeval* tv
+		);
+
+	int
+	:ref:`libusb_handle_events_timeout_completed<doxid-group__libusb__poll_1ga43e52b912a760b41a0cf8a4a472fbd5b>`(
+		:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx,
+		struct timeval* tv,
+		int* completed
+		);
+
+	int
+	:ref:`libusb_handle_events_timeout<doxid-group__libusb__poll_1ga6deff4c7d3a6c04bb9ec9fd259b48933>`(
+		:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx,
+		struct timeval* tv
+		);
+
+	int
+	:ref:`libusb_handle_events<doxid-group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327>`(:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx);
+
+	int
+	:ref:`libusb_handle_events_completed<doxid-group__libusb__poll_1ga0bc99f39e4cf5ad393cd5936c36037d1>`(
+		:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx,
+		int* completed
+		);
+
+	int
+	:ref:`libusb_handle_events_locked<doxid-group__libusb__poll_1ga71da081f97afa3bf68aed8e372254e8f>`(
+		:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx,
+		struct timeval* tv
+		);
+
+	int
+	:ref:`libusb_pollfds_handle_timeouts<doxid-group__libusb__poll_1gae7a654315636bebf404c1784429f06df>`(:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx);
+
+	int
+	:ref:`libusb_get_next_timeout<doxid-group__libusb__poll_1ga5bc6f5bc71a43845244912da6679f634>`(
+		:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx,
+		struct timeval* tv
+		);
+
+	void
+	:ref:`libusb_set_pollfd_notifiers<doxid-group__libusb__poll_1ga1b7b2deb193f2e9ffda5e727361d7e67>`(
+		:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx,
+		:ref:`libusb_pollfd_added_cb<doxid-group__libusb__poll_1ga2962a11284b09a3f18936d8f73a43804>` added_cb,
+		:ref:`libusb_pollfd_removed_cb<doxid-group__libusb__poll_1ga32aa803f54cfb5bfe8b41747e6b62af5>` removed_cb,
+		void* user_data
+		);
+
+	const struct :ref:`libusb_pollfd<doxid-structlibusb__pollfd>`**
+	:ref:`libusb_get_pollfds<doxid-group__libusb__poll_1ga54c27dcf8a95d2a3a03cfb7dd37eae63>`(:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx);
+
+	void
+	:ref:`libusb_free_pollfds<doxid-group__libusb__poll_1gad703b12ab275b6420c2c27e6279c955f>`(const struct :ref:`libusb_pollfd<doxid-structlibusb__pollfd>`** pollfds);
+
+.. _details-group__libusb__poll:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+This page documents libusb's functions for polling events and timing.
+
+These functions are only necessary for users of the :ref:`asynchronous API <doxid-group__libusb__asyncio>`. If you are only using the simpler :ref:`synchronous API <doxid-group__libusb__syncio>` then you do not need to ever call these functions.
+
+The justification for the functionality described here has already been discussed in the :ref:`event handling <doxid-group__libusb__asyncio_1asyncevent>` section of the asynchronous API documentation. In summary, libusb does not create internal threads for event processing and hence relies on your application calling into libusb at certain points in time so that pending events can be handled.
+
+Your main loop is probably already calling poll() or select() or a variant on a set of file descriptors for other event sources (e.g. keyboard button presses, mouse movements, network sockets, etc). You then add libusb's file descriptors to your poll()/select() calls, and when activity is detected on such descriptors you know it is time to call :ref:`libusb_handle_events() <doxid-group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327>`.
+
+There is one final event handling complication. libusb supports asynchronous transfers which time out after a specified time period.
+
+On some platforms a timerfd is used, so the timeout handling is just another fd, on other platforms this requires that libusb is called into at or after the timeout to handle it. So, in addition to considering libusb's file descriptors in your main event loop, you must also consider that libusb sometimes needs to be called into at fixed points in time even when there is no file descriptor activity, see :ref:`Notes on time-based events <doxid-group__libusb__poll_1polltime>` details.
+
+In order to know precisely when libusb needs to be called into, libusb offers you a set of pollable file descriptors and information about when the next timeout expires.
+
+If you are using the asynchronous I/O API, you must take one of the two following options, otherwise your I/O will not complete.
+
+
+
+.. _doxid-group__libusb__poll_1pollsimple:
+
+The simple option
+~~~~~~~~~~~~~~~~~
+
+If your application revolves solely around libusb and does not need to handle other event sources, you can have a program structure as follows:
+
+.. ref-code-block:: c
+
+	// initialize libusb
+	// find and open device
+	// maybe fire off some initial async I/O
+	
+	while (user_has_not_requested_exit)
+	    libusb_handle_events(ctx);
+	
+	// clean up and exit
+
+With such a simple main loop, you do not have to worry about managing sets of file descriptors or handling timeouts. :ref:`libusb_handle_events() <doxid-group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327>` will handle those details internally.
+
+
+
+
+
+.. _doxid-group__libusb__poll_1libusb_pollmain:
+
+The more advanced option
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+This functionality is currently only available on Unix-like platforms. On Windows, :ref:`libusb_get_pollfds() <doxid-group__libusb__poll_1ga54c27dcf8a95d2a3a03cfb7dd37eae63>` simply returns NULL. Applications which want to support Windows are advised to use an :ref:`event handling thread <doxid-group__libusb__asyncio_1eventthread>` instead.
+
+In more advanced applications, you will already have a main loop which is monitoring other event sources: network sockets, X11 events, mouse movements, etc. Through exposing a set of file descriptors, libusb is designed to cleanly integrate into such main loops.
+
+In addition to polling file descriptors for the other event sources, you take a set of file descriptors from libusb and monitor those too. When you detect activity on libusb's file descriptors, you call :ref:`libusb_handle_events_timeout() <doxid-group__libusb__poll_1ga6deff4c7d3a6c04bb9ec9fd259b48933>` in non-blocking mode.
+
+What's more, libusb may also need to handle events at specific moments in time. No file descriptor activity is generated at these times, so your own application needs to be continually aware of when the next one of these moments occurs (through calling :ref:`libusb_get_next_timeout() <doxid-group__libusb__poll_1ga5bc6f5bc71a43845244912da6679f634>`), and then it needs to call :ref:`libusb_handle_events_timeout() <doxid-group__libusb__poll_1ga6deff4c7d3a6c04bb9ec9fd259b48933>` in non-blocking mode when these moments occur. This means that you need to adjust your poll()/select() timeout accordingly.
+
+libusb provides you with a set of file descriptors to poll and expects you to poll all of them, treating them as a single entity. The meaning of each file descriptor in the set is an internal implementation detail, platform-dependent and may vary from release to release. Don't try and interpret the meaning of the file descriptors, just do as libusb indicates, polling all of them at once.
+
+In pseudo-code, you want something that looks like:
+
+.. ref-code-block:: c
+
+	// initialise libusb
+	
+	libusb_get_pollfds(ctx)
+	while (user has not requested application exit) {
+	    libusb_get_next_timeout(ctx);
+	    poll(on libusb file descriptors plus any other event sources of interest,
+	        using a timeout no larger than the value libusb just suggested)
+	    if (poll() indicated activity on libusb file descriptors)
+	        libusb_handle_events_timeout(ctx, &zero_tv);
+	    if (time has elapsed to or beyond the libusb timeout)
+	        libusb_handle_events_timeout(ctx, &zero_tv);
+	    // handle events from other sources here
+	}
+	
+	// clean up and exit
+
+
+
+.. _doxid-group__libusb__poll_1polltime:
+
+Notes on time-based events
+--------------------------
+
+The above complication with having to track time and call into libusb at specific moments is a bit of a headache. For maximum compatibility, you do need to write your main loop as above, but you may decide that you can restrict the supported platforms of your application and get away with a more simplistic scheme.
+
+These time-based event complications are **not** required on the following platforms:
+
+* Darwin
+
+* Linux, provided that the following version requirements are satisfied:
+  
+  * Linux v2.6.27 or newer, compiled with timerfd support
+  
+  * glibc v2.9 or newer
+  
+  * libusb v1.0.5 or newer
+
+Under these configurations, :ref:`libusb_get_next_timeout() <doxid-group__libusb__poll_1ga5bc6f5bc71a43845244912da6679f634>` will *always* return 0, so your main loop can be simplified to:
+
+.. ref-code-block:: c
+
+	// initialise libusb
+	
+	libusb_get_pollfds(ctx)
+	while (user has not requested application exit) {
+	    poll(on libusb file descriptors plus any other event sources of interest,
+	        using any timeout that you like)
+	    if (poll() indicated activity on libusb file descriptors)
+	        libusb_handle_events_timeout(ctx, &zero_tv);
+	    // handle events from other sources here
+	}
+	
+	// clean up and exit
+
+Do remember that if you simplify your main loop to the above, you will lose compatibility with some platforms (including legacy Linux platforms, and *any future platforms supported by libusb which may have time-based event requirements*). The resultant problems will likely appear as strange bugs in your application.
+
+You can use the :ref:`libusb_pollfds_handle_timeouts() <doxid-group__libusb__poll_1gae7a654315636bebf404c1784429f06df>` function to do a runtime check to see if it is safe to ignore the time-based event complications. If your application has taken the shortcut of ignoring libusb's next timeout in your main loop, then you are advised to check the return value of :ref:`libusb_pollfds_handle_timeouts() <doxid-group__libusb__poll_1gae7a654315636bebf404c1784429f06df>` during application startup, and to abort if the platform does suffer from these timing complications.
+
+
+
+
+
+.. _doxid-group__libusb__poll_1fdsetchange:
+
+Changes in the file descriptor set
+----------------------------------
+
+The set of file descriptors that libusb uses as event sources may change during the life of your application. Rather than having to repeatedly call :ref:`libusb_get_pollfds() <doxid-group__libusb__poll_1ga54c27dcf8a95d2a3a03cfb7dd37eae63>`, you can set up notification functions for when the file descriptor set changes using :ref:`libusb_set_pollfd_notifiers() <doxid-group__libusb__poll_1ga1b7b2deb193f2e9ffda5e727361d7e67>`.
+
+
+
+
+
+.. _doxid-group__libusb__poll_1mtissues:
+
+Multi-threaded considerations
+-----------------------------
+
+Unfortunately, the situation is complicated further when multiple threads come into play. If two threads are monitoring the same file descriptors, the fact that only one thread will be woken up when an event occurs causes some headaches.
+
+The events lock, event waiters lock, and :ref:`libusb_handle_events_locked() <doxid-group__libusb__poll_1ga71da081f97afa3bf68aed8e372254e8f>` entities are added to solve these problems. You do not need to be concerned with these entities otherwise.
+
+See the extra documentation: :ref:`Multi-threaded applications and asynchronous I/O <doxid-libusb_mtasync>`
+
+Typedefs
+--------
+
+.. index:: pair: typedef; libusb_pollfd_added_cb
+.. _doxid-group__libusb__poll_1ga2962a11284b09a3f18936d8f73a43804:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	typedef void (*libusb_pollfd_added_cb)(
+		int fd,
+		short events,
+		void *user_data
+		)
+
+Callback function, invoked when a new file descriptor should be added to the set of file descriptors monitored for events.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- fd
+
+		- the new file descriptor
+
+	*
+		- events
+
+		- events to monitor for, see :ref:`libusb_pollfd <doxid-structlibusb__pollfd>` for a description
+
+	*
+		- user_data
+
+		- User data pointer specified in :ref:`libusb_set_pollfd_notifiers() <doxid-group__libusb__poll_1ga1b7b2deb193f2e9ffda5e727361d7e67>` call
+
+
+
+.. rubric:: See also:
+
+:ref:`libusb_set_pollfd_notifiers() <doxid-group__libusb__poll_1ga1b7b2deb193f2e9ffda5e727361d7e67>`
+
+.. index:: pair: typedef; libusb_pollfd_removed_cb
+.. _doxid-group__libusb__poll_1ga32aa803f54cfb5bfe8b41747e6b62af5:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	typedef void (*libusb_pollfd_removed_cb)(
+		int fd,
+		void *user_data
+		)
+
+Callback function, invoked when a file descriptor should be removed from the set of file descriptors being monitored for events.
+
+After returning from this callback, do not use that file descriptor again.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- fd
+
+		- the file descriptor to stop monitoring
+
+	*
+		- user_data
+
+		- User data pointer specified in :ref:`libusb_set_pollfd_notifiers() <doxid-group__libusb__poll_1ga1b7b2deb193f2e9ffda5e727361d7e67>` call
+
+
+
+.. rubric:: See also:
+
+:ref:`libusb_set_pollfd_notifiers() <doxid-group__libusb__poll_1ga1b7b2deb193f2e9ffda5e727361d7e67>`
+
+Global Functions
+----------------
+
+.. index:: pair: function; libusb_try_lock_events
+.. _doxid-group__libusb__poll_1ga6e5a116d5c9498ca4a0e29587fec1a05:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_try_lock_events(:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx)
+
+Attempt to acquire the event handling lock.
+
+This lock is used to ensure that only one thread is monitoring libusb event sources at any one time.
+
+You only need to use this lock if you are developing an application which calls poll() or select() on libusb's file descriptors directly. If you stick to libusb's event handling loop functions (e.g. :ref:`libusb_handle_events() <doxid-group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327>`) then you do not need to be concerned with this locking.
+
+While holding this lock, you are trusted to actually be handling events. If you are no longer handling events, you must call :ref:`libusb_unlock_events() <doxid-group__libusb__poll_1gacefbeabdd3409490dc4678f00779c165>` as soon as possible.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ctx
+
+		- the context to operate on, or NULL for the default context
+
+
+
+.. rubric:: Returns:
+
+0 if the lock was obtained successfully
+
+1 if the lock was not obtained (i.e. another thread holds the lock) :ref:`Multi-threaded applications and asynchronous I/O <doxid-libusb_mtasync>`
+
+.. index:: pair: function; libusb_lock_events
+.. _doxid-group__libusb__poll_1gaa72153938dc4f34decfacbc6cc6237ef:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	void
+	libusb_lock_events(:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx)
+
+Acquire the event handling lock, blocking until successful acquisition if it is contended.
+
+This lock is used to ensure that only one thread is monitoring libusb event sources at any one time.
+
+You only need to use this lock if you are developing an application which calls poll() or select() on libusb's file descriptors directly. If you stick to libusb's event handling loop functions (e.g. :ref:`libusb_handle_events() <doxid-group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327>`) then you do not need to be concerned with this locking.
+
+While holding this lock, you are trusted to actually be handling events. If you are no longer handling events, you must call :ref:`libusb_unlock_events() <doxid-group__libusb__poll_1gacefbeabdd3409490dc4678f00779c165>` as soon as possible.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ctx
+
+		- the context to operate on, or NULL for the default context :ref:`Multi-threaded applications and asynchronous I/O <doxid-libusb_mtasync>`
+
+.. index:: pair: function; libusb_unlock_events
+.. _doxid-group__libusb__poll_1gacefbeabdd3409490dc4678f00779c165:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	void
+	libusb_unlock_events(:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx)
+
+Release the lock previously acquired with :ref:`libusb_try_lock_events() <doxid-group__libusb__poll_1ga6e5a116d5c9498ca4a0e29587fec1a05>` or :ref:`libusb_lock_events() <doxid-group__libusb__poll_1gaa72153938dc4f34decfacbc6cc6237ef>`.
+
+Releasing this lock will wake up any threads blocked on :ref:`libusb_wait_for_event() <doxid-group__libusb__poll_1gae22755d523560be2867be7d09034ca50>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ctx
+
+		- the context to operate on, or NULL for the default context :ref:`Multi-threaded applications and asynchronous I/O <doxid-libusb_mtasync>`
+
+.. index:: pair: function; libusb_event_handling_ok
+.. _doxid-group__libusb__poll_1ga63592b28c265185d9469d1e6920d8373:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_event_handling_ok(:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx)
+
+Determine if it is still OK for this thread to be doing event handling.
+
+Sometimes, libusb needs to temporarily pause all event handlers, and this is the function you should use before polling file descriptors to see if this is the case.
+
+If this function instructs your thread to give up the events lock, you should just continue the usual logic that is documented in :ref:`Multi-threaded applications and asynchronous I/O <doxid-libusb_mtasync>`. On the next iteration, your thread will fail to obtain the events lock, and will hence become an event waiter.
+
+This function should be called while the events lock is held: you don't need to worry about the results of this function if your thread is not the current event handler.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ctx
+
+		- the context to operate on, or NULL for the default context
+
+
+
+.. rubric:: Returns:
+
+1 if event handling can start or continue
+
+0 if this thread must give up the events lock :ref:`Multi-threaded I/O: the full story <doxid-libusb_mtasync_1fullstory>`
+
+.. index:: pair: function; libusb_event_handler_active
+.. _doxid-group__libusb__poll_1ga3a0a6e8be310c20f1ca68722149f9dbf:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_event_handler_active(:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx)
+
+Determine if an active thread is handling events (i.e.
+
+if anyone is holding the event handling lock).
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ctx
+
+		- the context to operate on, or NULL for the default context
+
+
+
+.. rubric:: Returns:
+
+1 if a thread is handling events
+
+0 if there are no threads currently handling events :ref:`Multi-threaded applications and asynchronous I/O <doxid-libusb_mtasync>`
+
+.. index:: pair: function; libusb_interrupt_event_handler
+.. _doxid-group__libusb__poll_1ga188b6c50944b49f122ccfd45b93fa9f2:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	void
+	libusb_interrupt_event_handler(:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx)
+
+Interrupt any active thread that is handling events.
+
+This is mainly useful for interrupting a dedicated event handling thread when an application wishes to call :ref:`libusb_exit() <doxid-group__libusb__lib_1ga86532f222d4f1332a5f8f5eef9a92da9>`.
+
+Since version 1.0.21, :ref:`LIBUSB_API_VERSION <doxid-group__libusb__misc_1gaabe4bc36a83358685d36a6c853cbb4de>`>= 0x01000105
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ctx
+
+		- the context to operate on, or NULL for the default context :ref:`Multi-threaded applications and asynchronous I/O <doxid-libusb_mtasync>`
+
+.. index:: pair: function; libusb_lock_event_waiters
+.. _doxid-group__libusb__poll_1ga150865a3f35c38173d688efa7ee52929:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	void
+	libusb_lock_event_waiters(:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx)
+
+Acquire the event waiters lock.
+
+This lock is designed to be obtained under the situation where you want to be aware when events are completed, but some other thread is event handling so calling :ref:`libusb_handle_events() <doxid-group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327>` is not allowed.
+
+You then obtain this lock, re-check that another thread is still handling events, then call :ref:`libusb_wait_for_event() <doxid-group__libusb__poll_1gae22755d523560be2867be7d09034ca50>`.
+
+You only need to use this lock if you are developing an application which calls poll() or select() on libusb's file descriptors directly, **and** may potentially be handling events from 2 threads simultaenously. If you stick to libusb's event handling loop functions (e.g. :ref:`libusb_handle_events() <doxid-group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327>`) then you do not need to be concerned with this locking.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ctx
+
+		- the context to operate on, or NULL for the default context :ref:`Multi-threaded applications and asynchronous I/O <doxid-libusb_mtasync>`
+
+.. index:: pair: function; libusb_unlock_event_waiters
+.. _doxid-group__libusb__poll_1ga41d7716458c11ee02d0deb19a31233ed:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	void
+	libusb_unlock_event_waiters(:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx)
+
+Release the event waiters lock.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ctx
+
+		- the context to operate on, or NULL for the default context :ref:`Multi-threaded applications and asynchronous I/O <doxid-libusb_mtasync>`
+
+.. index:: pair: function; libusb_wait_for_event
+.. _doxid-group__libusb__poll_1gae22755d523560be2867be7d09034ca50:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_wait_for_event(
+		:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx,
+		struct timeval* tv
+		)
+
+Wait for another thread to signal completion of an event.
+
+Must be called with the event waiters lock held, see :ref:`libusb_lock_event_waiters() <doxid-group__libusb__poll_1ga150865a3f35c38173d688efa7ee52929>`.
+
+This function will block until any of the following conditions are met:
+
+#. The timeout expires
+
+#. A transfer completes
+
+#. A thread releases the event handling lock through :ref:`libusb_unlock_events() <doxid-group__libusb__poll_1gacefbeabdd3409490dc4678f00779c165>`
+
+Condition 1 is obvious. Condition 2 unblocks your thread *after* the callback for the transfer has completed. Condition 3 is important because it means that the thread that was previously handling events is no longer doing so, so if any events are to complete, another thread needs to step up and start event handling.
+
+This function releases the event waiters lock before putting your thread to sleep, and reacquires the lock as it is being woken up.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ctx
+
+		- the context to operate on, or NULL for the default context
+
+	*
+		- tv
+
+		- maximum timeout for this blocking function. A NULL value indicates unlimited timeout.
+
+
+
+.. rubric:: Returns:
+
+0 after a transfer completes or another thread stops event handling
+
+1 if the timeout expired :ref:`Multi-threaded applications and asynchronous I/O <doxid-libusb_mtasync>`
+
+.. index:: pair: function; libusb_handle_events_timeout_completed
+.. _doxid-group__libusb__poll_1ga43e52b912a760b41a0cf8a4a472fbd5b:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_handle_events_timeout_completed(
+		:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx,
+		struct timeval* tv,
+		int* completed
+		)
+
+Handle any pending events.
+
+libusb determines "pending events" by checking if any timeouts have expired and by checking the set of file descriptors for activity.
+
+If a zero timeval is passed, this function will handle any already-pending events and then immediately return in non-blocking style.
+
+If a non-zero timeval is passed and no events are currently pending, this function will block waiting for events to handle up until the specified timeout. If an event arrives or a signal is raised, this function will return early.
+
+If the parameter completed is not NULL then *after obtaining the event handling lock* this function will return immediately if the integer pointed to is not 0. This allows for race free waiting for the completion of a specific transfer.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ctx
+
+		- the context to operate on, or NULL for the default context
+
+	*
+		- tv
+
+		- the maximum time to block waiting for events, or an all zero timeval struct for non-blocking mode
+
+	*
+		- completed
+
+		- pointer to completion integer to check, or NULL
+
+
+
+.. rubric:: Returns:
+
+0 on success, or a LIBUSB_ERROR code on failure :ref:`Multi-threaded applications and asynchronous I/O <doxid-libusb_mtasync>`
+
+.. index:: pair: function; libusb_handle_events_timeout
+.. _doxid-group__libusb__poll_1ga6deff4c7d3a6c04bb9ec9fd259b48933:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_handle_events_timeout(
+		:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx,
+		struct timeval* tv
+		)
+
+Handle any pending events.
+
+Like :ref:`libusb_handle_events_timeout_completed() <doxid-group__libusb__poll_1ga43e52b912a760b41a0cf8a4a472fbd5b>`, but without the completed parameter, calling this function is equivalent to calling :ref:`libusb_handle_events_timeout_completed() <doxid-group__libusb__poll_1ga43e52b912a760b41a0cf8a4a472fbd5b>` with a NULL completed parameter.
+
+This function is kept primarily for backwards compatibility. All new code should call :ref:`libusb_handle_events_completed() <doxid-group__libusb__poll_1ga0bc99f39e4cf5ad393cd5936c36037d1>` or :ref:`libusb_handle_events_timeout_completed() <doxid-group__libusb__poll_1ga43e52b912a760b41a0cf8a4a472fbd5b>` to avoid race conditions.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ctx
+
+		- the context to operate on, or NULL for the default context
+
+	*
+		- tv
+
+		- the maximum time to block waiting for events, or an all zero timeval struct for non-blocking mode
+
+
+
+.. rubric:: Returns:
+
+0 on success, or a LIBUSB_ERROR code on failure
+
+.. index:: pair: function; libusb_handle_events
+.. _doxid-group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_handle_events(:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx)
+
+Handle any pending events in blocking mode.
+
+There is currently a timeout hardcoded at 60 seconds but we plan to make it unlimited in future. For finer control over whether this function is blocking or non-blocking, or for control over the timeout, use :ref:`libusb_handle_events_timeout_completed() <doxid-group__libusb__poll_1ga43e52b912a760b41a0cf8a4a472fbd5b>` instead.
+
+This function is kept primarily for backwards compatibility. All new code should call :ref:`libusb_handle_events_completed() <doxid-group__libusb__poll_1ga0bc99f39e4cf5ad393cd5936c36037d1>` or :ref:`libusb_handle_events_timeout_completed() <doxid-group__libusb__poll_1ga43e52b912a760b41a0cf8a4a472fbd5b>` to avoid race conditions.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ctx
+
+		- the context to operate on, or NULL for the default context
+
+
+
+.. rubric:: Returns:
+
+0 on success, or a LIBUSB_ERROR code on failure
+
+.. index:: pair: function; libusb_handle_events_completed
+.. _doxid-group__libusb__poll_1ga0bc99f39e4cf5ad393cd5936c36037d1:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_handle_events_completed(
+		:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx,
+		int* completed
+		)
+
+Handle any pending events in blocking mode.
+
+Like :ref:`libusb_handle_events() <doxid-group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327>`, with the addition of a completed parameter to allow for race free waiting for the completion of a specific transfer.
+
+See :ref:`libusb_handle_events_timeout_completed() <doxid-group__libusb__poll_1ga43e52b912a760b41a0cf8a4a472fbd5b>` for details on the completed parameter.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ctx
+
+		- the context to operate on, or NULL for the default context
+
+	*
+		- completed
+
+		- pointer to completion integer to check, or NULL
+
+
+
+.. rubric:: Returns:
+
+0 on success, or a LIBUSB_ERROR code on failure :ref:`Multi-threaded applications and asynchronous I/O <doxid-libusb_mtasync>`
+
+.. index:: pair: function; libusb_handle_events_locked
+.. _doxid-group__libusb__poll_1ga71da081f97afa3bf68aed8e372254e8f:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_handle_events_locked(
+		:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx,
+		struct timeval* tv
+		)
+
+Handle any pending events by polling file descriptors, without checking if any other threads are already doing so.
+
+Must be called with the event lock held, see :ref:`libusb_lock_events() <doxid-group__libusb__poll_1gaa72153938dc4f34decfacbc6cc6237ef>`.
+
+This function is designed to be called under the situation where you have taken the event lock and are calling poll()/select() directly on libusb's file descriptors (as opposed to using :ref:`libusb_handle_events() <doxid-group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327>` or similar). You detect events on libusb's descriptors, so you then call this function with a zero timeout value (while still holding the event lock).
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ctx
+
+		- the context to operate on, or NULL for the default context
+
+	*
+		- tv
+
+		- the maximum time to block waiting for events, or zero for non-blocking mode
+
+
+
+.. rubric:: Returns:
+
+0 on success, or a LIBUSB_ERROR code on failure :ref:`Multi-threaded applications and asynchronous I/O <doxid-libusb_mtasync>`
+
+.. index:: pair: function; libusb_pollfds_handle_timeouts
+.. _doxid-group__libusb__poll_1gae7a654315636bebf404c1784429f06df:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_pollfds_handle_timeouts(:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx)
+
+Determines whether your application must apply special timing considerations when monitoring libusb's file descriptors.
+
+This function is only useful for applications which retrieve and poll libusb's file descriptors in their own main loop (:ref:`The more advanced option <doxid-group__libusb__poll_1libusb_pollmain>`).
+
+Ordinarily, libusb's event handler needs to be called into at specific moments in time (in addition to times when there is activity on the file descriptor set). The usual approach is to use :ref:`libusb_get_next_timeout() <doxid-group__libusb__poll_1ga5bc6f5bc71a43845244912da6679f634>` to learn about when the next timeout occurs, and to adjust your poll()/select() timeout accordingly so that you can make a call into the library at that time.
+
+Some platforms supported by libusb do not come with this baggage - any events relevant to timing will be represented by activity on the file descriptor set, and :ref:`libusb_get_next_timeout() <doxid-group__libusb__poll_1ga5bc6f5bc71a43845244912da6679f634>` will always return 0. This function allows you to detect whether you are running on such a platform.
+
+Since v1.0.5.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ctx
+
+		- the context to operate on, or NULL for the default context
+
+
+
+.. rubric:: Returns:
+
+0 if you must call into libusb at times determined by :ref:`libusb_get_next_timeout() <doxid-group__libusb__poll_1ga5bc6f5bc71a43845244912da6679f634>`, or 1 if all timeout events are handled internally or through regular activity on the file descriptors. :ref:`Polling libusb file descriptors for event handling <doxid-group__libusb__poll_1libusb_pollmain>`
+
+.. index:: pair: function; libusb_get_next_timeout
+.. _doxid-group__libusb__poll_1ga5bc6f5bc71a43845244912da6679f634:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_get_next_timeout(
+		:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx,
+		struct timeval* tv
+		)
+
+Determine the next internal timeout that libusb needs to handle.
+
+You only need to use this function if you are calling poll() or select() or similar on libusb's file descriptors yourself - you do not need to use it if you are calling :ref:`libusb_handle_events() <doxid-group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327>` or a variant directly.
+
+You should call this function in your main loop in order to determine how long to wait for select() or poll() to return results. libusb needs to be called into at this timeout, so you should use it as an upper bound on your select() or poll() call.
+
+When the timeout has expired, call into :ref:`libusb_handle_events_timeout() <doxid-group__libusb__poll_1ga6deff4c7d3a6c04bb9ec9fd259b48933>` (perhaps in non-blocking mode) so that libusb can handle the timeout.
+
+This function may return 1 (success) and an all-zero timeval. If this is the case, it indicates that libusb has a timeout that has already expired so you should call :ref:`libusb_handle_events_timeout() <doxid-group__libusb__poll_1ga6deff4c7d3a6c04bb9ec9fd259b48933>` or similar immediately. A return code of 0 indicates that there are no pending timeouts.
+
+On some platforms, this function will always returns 0 (no pending timeouts). See :ref:`Notes on time-based events <doxid-group__libusb__poll_1polltime>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ctx
+
+		- the context to operate on, or NULL for the default context
+
+	*
+		- tv
+
+		- output location for a relative time against the current clock in which libusb must be called into in order to process timeout events
+
+
+
+.. rubric:: Returns:
+
+0 if there are no pending timeouts, 1 if a timeout was returned, or LIBUSB_ERROR_OTHER on failure
+
+.. index:: pair: function; libusb_set_pollfd_notifiers
+.. _doxid-group__libusb__poll_1ga1b7b2deb193f2e9ffda5e727361d7e67:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	void
+	libusb_set_pollfd_notifiers(
+		:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx,
+		:ref:`libusb_pollfd_added_cb<doxid-group__libusb__poll_1ga2962a11284b09a3f18936d8f73a43804>` added_cb,
+		:ref:`libusb_pollfd_removed_cb<doxid-group__libusb__poll_1ga32aa803f54cfb5bfe8b41747e6b62af5>` removed_cb,
+		void* user_data
+		)
+
+Register notification functions for file descriptor additions/removals.
+
+These functions will be invoked for every new or removed file descriptor that libusb uses as an event source.
+
+To remove notifiers, pass NULL values for the function pointers.
+
+Note that file descriptors may have been added even before you register these notifiers (e.g. at :ref:`libusb_init() <doxid-group__libusb__lib_1ga9517c37281bba0b51cc62eba728be48b>` time).
+
+Additionally, note that the removal notifier may be called during :ref:`libusb_exit() <doxid-group__libusb__lib_1ga86532f222d4f1332a5f8f5eef9a92da9>` (e.g. when it is closing file descriptors that were opened and added to the poll set at :ref:`libusb_init() <doxid-group__libusb__lib_1ga9517c37281bba0b51cc62eba728be48b>` time). If you don't want this, remove the notifiers immediately before calling :ref:`libusb_exit() <doxid-group__libusb__lib_1ga86532f222d4f1332a5f8f5eef9a92da9>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ctx
+
+		- the context to operate on, or NULL for the default context
+
+	*
+		- added_cb
+
+		- pointer to function for addition notifications
+
+	*
+		- removed_cb
+
+		- pointer to function for removal notifications
+
+	*
+		- user_data
+
+		- User data to be passed back to callbacks (useful for passing context information)
+
+.. index:: pair: function; libusb_get_pollfds
+.. _doxid-group__libusb__poll_1ga54c27dcf8a95d2a3a03cfb7dd37eae63:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	const struct :ref:`libusb_pollfd<doxid-structlibusb__pollfd>`**
+	libusb_get_pollfds(:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx)
+
+Retrieve a list of file descriptors that should be polled by your main loop as libusb event sources.
+
+The returned list is NULL-terminated and should be freed with :ref:`libusb_free_pollfds() <doxid-group__libusb__poll_1gad703b12ab275b6420c2c27e6279c955f>` when done. The actual list contents must not be touched.
+
+As file descriptors are a Unix-specific concept, this function is not available on Windows and will always return NULL.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ctx
+
+		- the context to operate on, or NULL for the default context
+
+
+
+.. rubric:: Returns:
+
+a NULL-terminated list of :ref:`libusb_pollfd <doxid-structlibusb__pollfd>` structures
+
+NULL on error
+
+NULL on platforms where the functionality is not available
+
+.. index:: pair: function; libusb_free_pollfds
+.. _doxid-group__libusb__poll_1gad703b12ab275b6420c2c27e6279c955f:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	void
+	libusb_free_pollfds(const struct :ref:`libusb_pollfd<doxid-structlibusb__pollfd>`** pollfds)
+
+Free a list of :ref:`libusb_pollfd <doxid-structlibusb__pollfd>` structures.
+
+This should be called for all pollfd lists allocated with :ref:`libusb_get_pollfds() <doxid-group__libusb__poll_1ga54c27dcf8a95d2a3a03cfb7dd37eae63>`.
+
+Since version 1.0.20, :ref:`LIBUSB_API_VERSION <doxid-group__libusb__misc_1gaabe4bc36a83358685d36a6c853cbb4de>`>= 0x01000104
+
+It is legal to call this function with a NULL pollfd list. In this case, the function will simply return safely.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- pollfds
+
+		- the list of :ref:`libusb_pollfd <doxid-structlibusb__pollfd>` structures to free
+

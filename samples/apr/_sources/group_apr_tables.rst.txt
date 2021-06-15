@@ -1,0 +1,1563 @@
+.. index:: pair: group; Table and Array Functions
+.. _doxid-group__apr__tables:
+
+Table and Array Functions
+=========================
+
+.. toctree::
+	:hidden:
+
+	struct_apr_array_header_t.rst
+	struct_apr_table_entry_t.rst
+
+Overview
+~~~~~~~~
+
+Arrays are used to store data which is referenced sequentially or as a stack. :ref:`More...<details-group__apr__tables>`
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef struct :ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>` :ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`;
+	typedef struct :ref:`apr_array_header_t<doxid-structapr__array__header__t>` :ref:`apr_array_header_t<doxid-group__apr__tables_1ga63e76617a1cd3828bbaefcbf93928ec2>`;
+	typedef struct :ref:`apr_table_entry_t<doxid-structapr__table__entry__t>` :ref:`apr_table_entry_t<doxid-group__apr__tables_1gac7e0151b714e58b75c597dafed75df3f>`;
+
+	typedef int() :ref:`apr_table_do_callback_fn_t<doxid-group__apr__tables_1ga633325e16f9e1f81adce476fb71cbd88>`(
+		void *rec,
+		const char *key,
+		const char *value
+		);
+
+	// structs
+
+	struct :ref:`apr_array_header_t<doxid-structapr__array__header__t>`;
+	struct :ref:`apr_table_entry_t<doxid-structapr__table__entry__t>`;
+
+	// global functions
+
+	const :ref:`apr_array_header_t<doxid-structapr__array__header__t>`*
+	:ref:`apr_table_elts<doxid-group__apr__tables_1gaea3005541cce67481f48ab201b5c0cf3>`(const :ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t);
+
+	int
+	:ref:`apr_is_empty_table<doxid-group__apr__tables_1ga198e52683a86ecf8df9642990c220ff7>`(const :ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t);
+
+	int
+	:ref:`apr_is_empty_array<doxid-group__apr__tables_1gacae19f5b2182d5813f4ef3050f82ff29>`(const :ref:`apr_array_header_t<doxid-structapr__array__header__t>`* a);
+
+	:ref:`apr_array_header_t<doxid-structapr__array__header__t>`*
+	:ref:`apr_array_make<doxid-group__apr__tables_1ga8f4308b5a1636ec06544113a9c283304>`(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		int nelts,
+		int elt_size
+		);
+
+	void*
+	:ref:`apr_array_push<doxid-group__apr__tables_1gac08267b32905197dd02ffff3314d9603>`(:ref:`apr_array_header_t<doxid-structapr__array__header__t>`* arr);
+
+	void*
+	:ref:`apr_array_pop<doxid-group__apr__tables_1gad1ab3e0ca2de25a7ff2fbed393380972>`(:ref:`apr_array_header_t<doxid-structapr__array__header__t>`* arr);
+
+	void
+	:ref:`apr_array_clear<doxid-group__apr__tables_1ga6a6436840256ed8a47b5d6be4ea2ae03>`(:ref:`apr_array_header_t<doxid-structapr__array__header__t>`* arr);
+
+	void
+	:ref:`apr_array_cat<doxid-group__apr__tables_1ga532e0f0e4d1e2b7243ebdb7eb1f783c7>`(
+		:ref:`apr_array_header_t<doxid-structapr__array__header__t>`* dst,
+		const :ref:`apr_array_header_t<doxid-structapr__array__header__t>`* src
+		);
+
+	:ref:`apr_array_header_t<doxid-structapr__array__header__t>`*
+	:ref:`apr_array_copy<doxid-group__apr__tables_1ga327e2d5e29fa49d5a2a31295a6932950>`(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		const :ref:`apr_array_header_t<doxid-structapr__array__header__t>`* arr
+		);
+
+	:ref:`apr_array_header_t<doxid-structapr__array__header__t>`*
+	:ref:`apr_array_copy_hdr<doxid-group__apr__tables_1ga6203e9f731bf43e7373857c38d04397d>`(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		const :ref:`apr_array_header_t<doxid-structapr__array__header__t>`* arr
+		);
+
+	:ref:`apr_array_header_t<doxid-structapr__array__header__t>`*
+	:ref:`apr_array_append<doxid-group__apr__tables_1ga893cade58c5fabecb593cb4ffac7e9be>`(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		const :ref:`apr_array_header_t<doxid-structapr__array__header__t>`* first,
+		const :ref:`apr_array_header_t<doxid-structapr__array__header__t>`* second
+		);
+
+	char*
+	:ref:`apr_array_pstrcat<doxid-group__apr__tables_1ga6232817e4a32ee5619c99fe55e145c7a>`(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		const :ref:`apr_array_header_t<doxid-structapr__array__header__t>`* arr,
+		const char sep
+		);
+
+	:ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`*
+	:ref:`apr_table_make<doxid-group__apr__tables_1ga7b0a16a1388c68e66bff32190cf092f6>`(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		int nelts
+		);
+
+	:ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`*
+	:ref:`apr_table_copy<doxid-group__apr__tables_1gae69f2b0b593bcdbf4c678a0f3dfde5f3>`(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		const :ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t
+		);
+
+	:ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`*
+	:ref:`apr_table_clone<doxid-group__apr__tables_1ga7e8bc16b272840302545ed4a6a082a6e>`(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		const :ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t
+		);
+
+	void
+	:ref:`apr_table_clear<doxid-group__apr__tables_1ga03f03de545f9a18e25420f261938ffea>`(:ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t);
+
+	const char*
+	:ref:`apr_table_get<doxid-group__apr__tables_1ga4db13e3915c6b9a3142b175d4c15d915>`(
+		const :ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t,
+		const char* key
+		);
+
+	const char*
+	:ref:`apr_table_getm<doxid-group__apr__tables_1gaa52177e485731ec599d04f863872c5f3>`(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		const :ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t,
+		const char* key
+		);
+
+	void
+	:ref:`apr_table_set<doxid-group__apr__tables_1gaf101d92c2f6343cdf4ec062ff416f244>`(
+		:ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t,
+		const char* key,
+		const char* val
+		);
+
+	void
+	:ref:`apr_table_setn<doxid-group__apr__tables_1ga1fe7bb25d4027bb79d3c2bb41d8d8b75>`(
+		:ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t,
+		const char* key,
+		const char* val
+		);
+
+	void
+	:ref:`apr_table_unset<doxid-group__apr__tables_1gab0df7a237feb4cd9beed201f4e236127>`(
+		:ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t,
+		const char* key
+		);
+
+	void
+	:ref:`apr_table_merge<doxid-group__apr__tables_1gad5d10eca30b76fb44d999b4dfda8d632>`(
+		:ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t,
+		const char* key,
+		const char* val
+		);
+
+	void
+	:ref:`apr_table_mergen<doxid-group__apr__tables_1ga1d50805448114c476cfcd00d5ee3e3a8>`(
+		:ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t,
+		const char* key,
+		const char* val
+		);
+
+	void
+	:ref:`apr_table_add<doxid-group__apr__tables_1gab2ea874754a0fbf139b7316c1f837f12>`(
+		:ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t,
+		const char* key,
+		const char* val
+		);
+
+	void
+	:ref:`apr_table_addn<doxid-group__apr__tables_1gaff9fdbd8f499f0dfb07123230e19ea54>`(
+		:ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t,
+		const char* key,
+		const char* val
+		);
+
+	:ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`*
+	:ref:`apr_table_overlay<doxid-group__apr__tables_1ga783b5c439d46c109bb45e7bc1a6d7ef2>`(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		const :ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* overlay,
+		const :ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* base
+		);
+
+	int
+	:ref:`apr_table_do<doxid-group__apr__tables_1ga5917e542ae910961ee48b0ec2d09a879>`(
+		:ref:`apr_table_do_callback_fn_t<doxid-group__apr__tables_1ga633325e16f9e1f81adce476fb71cbd88>`* comp,
+		void* rec,
+		const :ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t,
+		...
+		);
+
+	int
+	:ref:`apr_table_vdo<doxid-group__apr__tables_1ga753c5247c9cd7f90c8958b64d9b6aeae>`(
+		:ref:`apr_table_do_callback_fn_t<doxid-group__apr__tables_1ga633325e16f9e1f81adce476fb71cbd88>`* comp,
+		void* rec,
+		const :ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t,
+		va_list vp
+		);
+
+	void
+	:ref:`apr_table_overlap<doxid-group__apr__tables_1ga603ebc9b97703b855f8ad77640165372>`(
+		:ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* a,
+		const :ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* b,
+		unsigned flags
+		);
+
+	void
+	:ref:`apr_table_compress<doxid-group__apr__tables_1ga7f2a652a0cdaf8c20588823c97a3007f>`(
+		:ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t,
+		unsigned flags
+		);
+
+	// macros
+
+	#define :ref:`APR_ARRAY_IDX<doxid-group__apr__tables_1ga84066caaa4c7632671af18c229809fc4>`( \
+		ary, \
+		i, \
+		type \
+		)
+
+	#define :ref:`APR_ARRAY_PUSH<doxid-group__apr__tables_1ga1833b0f940ec03d0b95926812152e1ca>`( \
+		ary, \
+		type \
+		)
+
+	#define :ref:`APR_OVERLAP_TABLES_MERGE<doxid-group__apr__tables_1ga553eea6eb6fea4bafaf4cbd7acafdf5f>`
+	#define :ref:`APR_OVERLAP_TABLES_SET<doxid-group__apr__tables_1ga867455bb7008872e03b08c0742f9698c>`
+
+.. _details-group__apr__tables:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+Arrays are used to store data which is referenced sequentially or as a stack. Functions are provided to push and pop individual elements as well as to operate on the entire array.
+
+Tables are used to store data which can be referenced by key. Limited capabilities are provided for tables with multiple elements which share a key; while key lookup will return only a single element, iteration is available. Additionally, a table can be compressed to resolve duplicates.
+
+Both arrays and tables may store string or binary data; some features, such as concatenation or merging of elements, work only for string data.
+
+Typedefs
+--------
+
+.. index:: pair: typedef; apr_table_t
+.. _doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>` apr_table_t
+
+the table abstract data type
+
+.. index:: pair: typedef; apr_array_header_t
+.. _doxid-group__apr__tables_1ga63e76617a1cd3828bbaefcbf93928ec2:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_array_header_t<doxid-structapr__array__header__t>` apr_array_header_t
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_array_header_t <doxid-structapr__array__header__t>`
+
+.. index:: pair: typedef; apr_table_entry_t
+.. _doxid-group__apr__tables_1gac7e0151b714e58b75c597dafed75df3f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_table_entry_t<doxid-structapr__table__entry__t>` apr_table_entry_t
+
+The (opaque) structure for string-content tables.
+
+.. index:: pair: typedef; apr_table_do_callback_fn_t
+.. _doxid-group__apr__tables_1ga633325e16f9e1f81adce476fb71cbd88:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef int() apr_table_do_callback_fn_t(
+		void *rec,
+		const char *key,
+		const char *value
+		)
+
+Declaration prototype for the iterator callback function of :ref:`apr_table_do() <doxid-group__apr__tables_1ga5917e542ae910961ee48b0ec2d09a879>` and :ref:`apr_table_vdo() <doxid-group__apr__tables_1ga753c5247c9cd7f90c8958b64d9b6aeae>`. Iteration continues while this callback function returns non-zero. To export the callback function for apr_table\_[v]do() it must be declared in the _NONSTD convention.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rec
+
+		- The data passed as the first argument to apr_table\_[v]do()
+
+	*
+		- key
+
+		- The key from this iteration of the table
+
+	*
+		- value
+
+		- The value from this iteration of the table
+
+Global Functions
+----------------
+
+.. index:: pair: function; apr_table_elts
+.. _doxid-group__apr__tables_1gaea3005541cce67481f48ab201b5c0cf3:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const :ref:`apr_array_header_t<doxid-structapr__array__header__t>`*
+	apr_table_elts(const :ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t)
+
+Get the elements from a table.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- t
+
+		- The table
+
+
+
+.. rubric:: Returns:
+
+An array containing the contents of the table
+
+.. index:: pair: function; apr_is_empty_table
+.. _doxid-group__apr__tables_1ga198e52683a86ecf8df9642990c220ff7:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	apr_is_empty_table(const :ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t)
+
+Determine if the table is empty (either NULL or having no elements).
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- t
+
+		- The table to check
+
+
+
+.. rubric:: Returns:
+
+True if empty, False otherwise
+
+.. index:: pair: function; apr_is_empty_array
+.. _doxid-group__apr__tables_1gacae19f5b2182d5813f4ef3050f82ff29:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	apr_is_empty_array(const :ref:`apr_array_header_t<doxid-structapr__array__header__t>`* a)
+
+Determine if the array is empty (either NULL or having no elements).
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- a
+
+		- The array to check
+
+
+
+.. rubric:: Returns:
+
+True if empty, False otherwise
+
+.. index:: pair: function; apr_array_make
+.. _doxid-group__apr__tables_1ga8f4308b5a1636ec06544113a9c283304:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_array_header_t<doxid-structapr__array__header__t>`*
+	apr_array_make(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		int nelts,
+		int elt_size
+		)
+
+Create an array.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- The pool to allocate the memory out of
+
+	*
+		- nelts
+
+		- the number of elements in the initial array
+
+	*
+		- elt_size
+
+		- The size of each element in the array.
+
+
+
+.. rubric:: Returns:
+
+The new array
+
+.. index:: pair: function; apr_array_push
+.. _doxid-group__apr__tables_1gac08267b32905197dd02ffff3314d9603:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void*
+	apr_array_push(:ref:`apr_array_header_t<doxid-structapr__array__header__t>`* arr)
+
+Add a new element to an array (as a first-in, last-out stack). If there are no free spots in the array, then this function will allocate new space for the new element.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- arr
+
+		- The array to add an element to.
+
+
+
+.. rubric:: Returns:
+
+Location for the new element in the array.
+
+.. index:: pair: function; apr_array_pop
+.. _doxid-group__apr__tables_1gad1ab3e0ca2de25a7ff2fbed393380972:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void*
+	apr_array_pop(:ref:`apr_array_header_t<doxid-structapr__array__header__t>`* arr)
+
+Remove an element from an array (as a first-in, last-out stack). If there are no elements in the array, NULL is returned.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- arr
+
+		- The array to remove an element from.
+
+
+
+.. rubric:: Returns:
+
+Location of the element in the array.
+
+.. index:: pair: function; apr_array_clear
+.. _doxid-group__apr__tables_1ga6a6436840256ed8a47b5d6be4ea2ae03:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_array_clear(:ref:`apr_array_header_t<doxid-structapr__array__header__t>`* arr)
+
+Remove all elements from an array. As the underlying storage is allocated from a pool, no memory is freed by this operation, but is available for reuse.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- arr
+
+		- The array to remove all elements from.
+
+.. index:: pair: function; apr_array_cat
+.. _doxid-group__apr__tables_1ga532e0f0e4d1e2b7243ebdb7eb1f783c7:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_array_cat(
+		:ref:`apr_array_header_t<doxid-structapr__array__header__t>`* dst,
+		const :ref:`apr_array_header_t<doxid-structapr__array__header__t>`* src
+		)
+
+Concatenate two arrays together.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dst
+
+		- The destination array, and the one to go first in the combined array
+
+	*
+		- src
+
+		- The source array to add to the destination array
+
+.. index:: pair: function; apr_array_copy
+.. _doxid-group__apr__tables_1ga327e2d5e29fa49d5a2a31295a6932950:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_array_header_t<doxid-structapr__array__header__t>`*
+	apr_array_copy(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		const :ref:`apr_array_header_t<doxid-structapr__array__header__t>`* arr
+		)
+
+Copy the entire array. The alternate apr_array_copy_hdr copies only the header, and arranges for the elements to be copied if (and only if) the code subsequently does a push or arraycat.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- The pool to allocate the copy of the array out of
+
+	*
+		- arr
+
+		- The array to copy
+
+
+
+.. rubric:: Returns:
+
+An exact copy of the array passed in
+
+.. index:: pair: function; apr_array_copy_hdr
+.. _doxid-group__apr__tables_1ga6203e9f731bf43e7373857c38d04397d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_array_header_t<doxid-structapr__array__header__t>`*
+	apr_array_copy_hdr(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		const :ref:`apr_array_header_t<doxid-structapr__array__header__t>`* arr
+		)
+
+Copy the headers of the array, and arrange for the elements to be copied if and only if the code subsequently does a push or arraycat. The alternate apr_array_copy copies the *entire* array.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- The pool to allocate the copy of the array out of
+
+	*
+		- arr
+
+		- The array to copy
+
+
+
+.. rubric:: Returns:
+
+An exact copy of the array passed in
+
+.. index:: pair: function; apr_array_append
+.. _doxid-group__apr__tables_1ga893cade58c5fabecb593cb4ffac7e9be:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_array_header_t<doxid-structapr__array__header__t>`*
+	apr_array_append(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		const :ref:`apr_array_header_t<doxid-structapr__array__header__t>`* first,
+		const :ref:`apr_array_header_t<doxid-structapr__array__header__t>`* second
+		)
+
+Append one array to the end of another, creating a new array in the process.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- The pool to allocate the new array out of
+
+	*
+		- first
+
+		- The array to put first in the new array.
+
+	*
+		- second
+
+		- The array to put second in the new array.
+
+
+
+.. rubric:: Returns:
+
+A new array containing the data from the two arrays passed in.
+
+.. index:: pair: function; apr_array_pstrcat
+.. _doxid-group__apr__tables_1ga6232817e4a32ee5619c99fe55e145c7a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	char*
+	apr_array_pstrcat(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		const :ref:`apr_array_header_t<doxid-structapr__array__header__t>`* arr,
+		const char sep
+		)
+
+Generate a new string from the apr_pool_t containing the concatenated sequence of substrings referenced as elements within the array. The string will be empty if all substrings are empty or null, or if there are no elements in the array. If sep is non-NUL, it will be inserted between elements as a separator.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- The pool to allocate the string out of
+
+	*
+		- arr
+
+		- The array to generate the string from
+
+	*
+		- sep
+
+		- The separator to use
+
+
+
+.. rubric:: Returns:
+
+A string containing all of the data in the array.
+
+.. index:: pair: function; apr_table_make
+.. _doxid-group__apr__tables_1ga7b0a16a1388c68e66bff32190cf092f6:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`*
+	apr_table_make(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		int nelts
+		)
+
+Make a new table. This table can only store text data
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- The pool to allocate the pool out of
+
+	*
+		- nelts
+
+		- The number of elements in the initial table.
+
+
+
+.. rubric:: Returns:
+
+The new table.
+
+.. index:: pair: function; apr_table_copy
+.. _doxid-group__apr__tables_1gae69f2b0b593bcdbf4c678a0f3dfde5f3:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`*
+	apr_table_copy(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		const :ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t
+		)
+
+Create a new table and copy another table into it. The table keys and respective values are not copied
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- The pool to allocate the new table out of
+
+	*
+		- t
+
+		- The table to copy
+
+
+
+.. rubric:: Returns:
+
+A copy of the table passed in
+
+.. index:: pair: function; apr_table_clone
+.. _doxid-group__apr__tables_1ga7e8bc16b272840302545ed4a6a082a6e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`*
+	apr_table_clone(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		const :ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t
+		)
+
+Create a new table whose contents are deep copied from the given table. A deep copy operation copies all fields, and makes copies of dynamically allocated memory pointed to by the fields.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- The pool to allocate the new table out of
+
+	*
+		- t
+
+		- The table to clone
+
+
+
+.. rubric:: Returns:
+
+A deep copy of the table passed in
+
+.. index:: pair: function; apr_table_clear
+.. _doxid-group__apr__tables_1ga03f03de545f9a18e25420f261938ffea:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_table_clear(:ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t)
+
+Delete all of the elements from a table.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- t
+
+		- The table to clear
+
+.. index:: pair: function; apr_table_get
+.. _doxid-group__apr__tables_1ga4db13e3915c6b9a3142b175d4c15d915:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	apr_table_get(
+		const :ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t,
+		const char* key
+		)
+
+Get the value associated with a given key from the table. After this call, the data is still in the table.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- t
+
+		- The table to search for the key
+
+	*
+		- key
+
+		- The key to search for (case does not matter)
+
+
+
+.. rubric:: Returns:
+
+The value associated with the key, or NULL if the key does not exist.
+
+.. index:: pair: function; apr_table_getm
+.. _doxid-group__apr__tables_1gaa52177e485731ec599d04f863872c5f3:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	apr_table_getm(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		const :ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t,
+		const char* key
+		)
+
+Get values associated with a given key from the table. If more than one value exists, return a comma separated list of values. After this call, the data is still in the table.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- The pool to allocate the combined value from, if necessary
+
+	*
+		- t
+
+		- The table to search for the key
+
+	*
+		- key
+
+		- The key to search for (case does not matter)
+
+
+
+.. rubric:: Returns:
+
+The value associated with the key, or NULL if the key does not exist.
+
+.. index:: pair: function; apr_table_set
+.. _doxid-group__apr__tables_1gaf101d92c2f6343cdf4ec062ff416f244:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_table_set(
+		:ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t,
+		const char* key,
+		const char* val
+		)
+
+Add a key/value pair to a table. If another element already exists with the same key, this will overwrite the old data. When adding data, this function makes a copy of both the key and the value.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- t
+
+		- The table to add the data to.
+
+	*
+		- key
+
+		- The key to use (case does not matter)
+
+	*
+		- val
+
+		- The value to add
+
+.. index:: pair: function; apr_table_setn
+.. _doxid-group__apr__tables_1ga1fe7bb25d4027bb79d3c2bb41d8d8b75:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_table_setn(
+		:ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t,
+		const char* key,
+		const char* val
+		)
+
+Add a key/value pair to a table. If another element already exists with the same key, this will overwrite the old data. When adding data, this function does not make a copy of the key or the value, so care should be taken to ensure that the values will not change after they have been added..
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- t
+
+		- The table to add the data to.
+
+	*
+		- key
+
+		- The key to use (case does not matter)
+
+	*
+		- val
+
+		- The value to add
+
+.. index:: pair: function; apr_table_unset
+.. _doxid-group__apr__tables_1gab0df7a237feb4cd9beed201f4e236127:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_table_unset(
+		:ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t,
+		const char* key
+		)
+
+Remove data from the table.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- t
+
+		- The table to remove data from
+
+	*
+		- key
+
+		- The key of the data being removed (case does not matter)
+
+.. index:: pair: function; apr_table_merge
+.. _doxid-group__apr__tables_1gad5d10eca30b76fb44d999b4dfda8d632:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_table_merge(
+		:ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t,
+		const char* key,
+		const char* val
+		)
+
+Add data to a table by merging the value with data that has already been stored. The merging is done by concatenating the two values, separated by the string ", ". If the key is not found, then this function acts like apr_table_add
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- t
+
+		- The table to search for the data
+
+	*
+		- key
+
+		- The key to merge data for (case does not matter)
+
+	*
+		- val
+
+		- The data to add
+
+.. index:: pair: function; apr_table_mergen
+.. _doxid-group__apr__tables_1ga1d50805448114c476cfcd00d5ee3e3a8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_table_mergen(
+		:ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t,
+		const char* key,
+		const char* val
+		)
+
+Add data to a table by merging the value with data that has already been stored. The merging is done by concatenating the two values, separated by the string ", ". If the key is not found, then this function acts like apr_table_addn
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- t
+
+		- The table to search for the data
+
+	*
+		- key
+
+		- The key to merge data for (case does not matter)
+
+	*
+		- val
+
+		- The data to add
+
+.. index:: pair: function; apr_table_add
+.. _doxid-group__apr__tables_1gab2ea874754a0fbf139b7316c1f837f12:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_table_add(
+		:ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t,
+		const char* key,
+		const char* val
+		)
+
+Add data to a table, regardless of whether there is another element with the same key. When adding data, this function makes a copy of both the key and the value.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- t
+
+		- The table to add to
+
+	*
+		- key
+
+		- The key to use
+
+	*
+		- val
+
+		- The value to add.
+
+.. index:: pair: function; apr_table_addn
+.. _doxid-group__apr__tables_1gaff9fdbd8f499f0dfb07123230e19ea54:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_table_addn(
+		:ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t,
+		const char* key,
+		const char* val
+		)
+
+Add data to a table, regardless of whether there is another element with the same key. When adding data, this function does not make a copy of the key or the value, so care should be taken to ensure that the values will not change after they have been added.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- t
+
+		- The table to add to
+
+	*
+		- key
+
+		- The key to use
+
+	*
+		- val
+
+		- The value to add.
+
+.. index:: pair: function; apr_table_overlay
+.. _doxid-group__apr__tables_1ga783b5c439d46c109bb45e7bc1a6d7ef2:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`*
+	apr_table_overlay(
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p,
+		const :ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* overlay,
+		const :ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* base
+		)
+
+Merge two tables into one new table.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- The pool to use for the new table
+
+	*
+		- overlay
+
+		- The first table to put in the new table
+
+	*
+		- base
+
+		- The table to add at the end of the new table
+
+
+
+.. rubric:: Returns:
+
+A new table containing all of the data from the two passed in
+
+.. index:: pair: function; apr_table_do
+.. _doxid-group__apr__tables_1ga5917e542ae910961ee48b0ec2d09a879:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	apr_table_do(
+		:ref:`apr_table_do_callback_fn_t<doxid-group__apr__tables_1ga633325e16f9e1f81adce476fb71cbd88>`* comp,
+		void* rec,
+		const :ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t,
+		...
+		)
+
+Iterate over a table running the provided function once for every element in the table. The varargs array must be a list of zero or more (char \*) keys followed by a NULL pointer. If zero keys are given, the If an invocation of the
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- comp
+
+		- function will be invoked for every element in the table. Otherwise, the function is invoked only for those elements matching the keys specified.
+
+	*
+		- comp
+
+		- function returns zero, iteration will continue using the next specified key, if any.
+
+	*
+		- comp
+
+		- The function to run
+
+	*
+		- rec
+
+		- The data to pass as the first argument to the function
+
+	*
+		- t
+
+		- The table to iterate over
+
+	*
+		- ...
+
+		- A varargs array of zero or more (char \*) keys followed by NULL
+
+
+
+.. rubric:: Returns:
+
+FALSE if one of the comp() iterations returned zero; TRUE if all iterations returned non-zero
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_table_do_callback_fn_t <doxid-group__apr__tables_1ga633325e16f9e1f81adce476fb71cbd88>`
+
+.. index:: pair: function; apr_table_vdo
+.. _doxid-group__apr__tables_1ga753c5247c9cd7f90c8958b64d9b6aeae:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	apr_table_vdo(
+		:ref:`apr_table_do_callback_fn_t<doxid-group__apr__tables_1ga633325e16f9e1f81adce476fb71cbd88>`* comp,
+		void* rec,
+		const :ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t,
+		va_list vp
+		)
+
+Iterate over a table running the provided function once for every element in the table. The If an invocation of the
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- vp
+
+		- varargs parameter must be a list of zero or more (char \*) keys followed by a NULL pointer. If zero keys are given, the
+
+	*
+		- comp
+
+		- function will be invoked for every element in the table. Otherwise, the function is invoked only for those elements matching the keys specified.
+
+	*
+		- comp
+
+		- function returns zero, iteration will continue using the next specified key, if any.
+
+	*
+		- comp
+
+		- The function to run
+
+	*
+		- rec
+
+		- The data to pass as the first argument to the function
+
+	*
+		- t
+
+		- The table to iterate over
+
+	*
+		- vp
+
+		- List of zero or more (char \*) keys followed by NULL
+
+
+
+.. rubric:: Returns:
+
+FALSE if one of the comp() iterations returned zero; TRUE if all iterations returned non-zero
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_table_do_callback_fn_t <doxid-group__apr__tables_1ga633325e16f9e1f81adce476fb71cbd88>`
+
+.. index:: pair: function; apr_table_overlap
+.. _doxid-group__apr__tables_1ga603ebc9b97703b855f8ad77640165372:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_table_overlap(
+		:ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* a,
+		const :ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* b,
+		unsigned flags
+		)
+
+For each element in table b, either use setn or mergen to add the data to table a. Which method is used is determined by the flags passed in. When merging duplicates, the two values are concatenated, separated by the string ", ".
+
+This function is highly optimized, and uses less memory and CPU cycles than a function that just loops through table b calling other functions. Conceptually, apr_table_overlap does this:
+
+
+
+.. code-block:: none
+
+
+	:ref:`apr_array_header_t <doxid-structapr__array__header__t>` *barr = apr_table_elts(b);
+	:ref:`apr_table_entry_t <doxid-structapr__table__entry__t>` *belt = (:ref:`apr_table_entry_t <doxid-structapr__table__entry__t>` *)barr->elts;
+	int i;
+
+.. code-block:: none
+
+	for (i = 0; i < barr->nelts; ++i) {
+	    if (flags & APR_OVERLAP_TABLES_MERGE) {
+	        apr_table_mergen(a, belt[i].key, belt[i].val);
+	    }
+	    else {
+	        apr_table_setn(a, belt[i].key, belt[i].val);
+	    }
+	}
+
+Except that it is more efficient (less space and cpu-time) especially when b has many elements.
+
+Notice the assumptions on the keys and values in b they must be in an ancestor of a's pool. In practice b and a are usually from the same pool.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- a
+
+		- The table to add the data to.
+
+	*
+		- b
+
+		- The table to iterate over, adding its data to table a
+
+	*
+		- flags
+
+		- How to add the table to table a. One of: APR_OVERLAP_TABLES_SET Use apr_table_setn APR_OVERLAP_TABLES_MERGE Use apr_table_mergen
+
+.. index:: pair: function; apr_table_compress
+.. _doxid-group__apr__tables_1ga7f2a652a0cdaf8c20588823c97a3007f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_table_compress(
+		:ref:`apr_table_t<doxid-group__apr__tables_1gad7ea82d6608a4a633fc3775694ab71e4>`* t,
+		unsigned flags
+		)
+
+Eliminate redundant entries in a table by either overwriting or merging duplicates.
+
+When merging duplicates, the two values are concatenated, separated by the string ", ".
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- t
+
+		- Table.
+
+	*
+		- flags
+
+		- APR_OVERLAP_TABLES_MERGE to merge, or APR_OVERLAP_TABLES_SET to overwrite
+
+Macros
+------
+
+.. index:: pair: define; APR_ARRAY_IDX
+.. _doxid-group__apr__tables_1ga84066caaa4c7632671af18c229809fc4:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_ARRAY_IDX( \
+		ary, \
+		i, \
+		type \
+		)
+
+A helper macro for accessing a member of an APR array.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ary
+
+		- the array
+
+	*
+		- i
+
+		- the index into the array to return
+
+	*
+		- type
+
+		- the type of the objects stored in the array
+
+
+
+.. rubric:: Returns:
+
+the item at index i
+
+.. index:: pair: define; APR_ARRAY_PUSH
+.. _doxid-group__apr__tables_1ga1833b0f940ec03d0b95926812152e1ca:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_ARRAY_PUSH( \
+		ary, \
+		type \
+		)
+
+A helper macro for pushing elements into an APR array.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ary
+
+		- the array
+
+	*
+		- type
+
+		- the type of the objects stored in the array
+
+
+
+.. rubric:: Returns:
+
+the location where the new object should be placed
+
+.. index:: pair: define; APR_OVERLAP_TABLES_MERGE
+.. _doxid-group__apr__tables_1ga553eea6eb6fea4bafaf4cbd7acafdf5f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_OVERLAP_TABLES_MERGE
+
+flag for overlap to use apr_table_mergen
+
+.. index:: pair: define; APR_OVERLAP_TABLES_SET
+.. _doxid-group__apr__tables_1ga867455bb7008872e03b08c0742f9698c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_OVERLAP_TABLES_SET
+
+flag for overlap to use apr_table_setn
+

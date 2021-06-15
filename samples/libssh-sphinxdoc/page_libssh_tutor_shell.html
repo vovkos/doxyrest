@@ -1,0 +1,389 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Chapter 3: Opening a remote shell &#8212; LibSSH Documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/target-highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Chapter 4: Passing a remote command" href="page_libssh_tutor_command.html" />
+    <link rel="prev" title="Chapter 2: A deeper insight on authentication" href="page_libssh_tutor_authentication.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="page_libssh_tutor_command.html" title="Chapter 4: Passing a remote command"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="page_libssh_tutor_authentication.html" title="Chapter 2: A deeper insight on authentication"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LibSSH Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="page_libssh_tutorial.html" accesskey="U">The Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Chapter 3: Opening a remote shell</a><ul>
+<li><a class="reference internal" href="#opening-a-remote-shell">Opening a remote shell</a><ul>
+<li><a class="reference internal" href="#opening-and-closing-a-channel">Opening and closing a channel</a></li>
+<li><a class="reference internal" href="#interactive-and-non-interactive-sessions">Interactive and non-interactive sessions</a></li>
+<li><a class="reference internal" href="#displaying-the-data-sent-by-the-remote-computer">Displaying the data sent by the remote computer</a></li>
+<li><a class="reference internal" href="#sending-user-input-to-the-remote-computer">Sending user input to the remote computer</a></li>
+<li><a class="reference internal" href="#a-more-elaborate-way-to-get-the-remote-data">A more elaborate way to get the remote data</a></li>
+<li><a class="reference internal" href="#using-graphical-applications-on-the-remote-side">Using graphical applications on the remote side</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="page_libssh_tutor_authentication.html"
+                        title="previous chapter">Chapter 2: A deeper insight on authentication</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="page_libssh_tutor_command.html"
+                        title="next chapter">Chapter 4: Passing a remote command</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="chapter-3-opening-a-remote-shell">
+<span id="doxid-libssh-tutor-shell"></span><span id="index-0"></span><h1>Chapter 3: Opening a remote shell</h1>
+<div class="section" id="opening-a-remote-shell">
+<span id="doxid-libssh-tutor-shell-1opening-shell"></span><h2>Opening a remote shell</h2>
+<p>We already mentioned that a single SSH connection can be shared between several “channels”. Channels can be used for different purposes.</p>
+<p>This chapter shows how to open one of these channels, and how to use it to start a command interpreter on a remote computer.</p>
+<div class="section" id="opening-and-closing-a-channel">
+<span id="doxid-libssh-tutor-shell-1open-channel"></span><h3>Opening and closing a channel</h3>
+<p>The <a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1gada8ccda7bf65165fe145d3096a252dcc"><span class="std std-ref">ssh_channel_new()</span></a> function creates a channel. It returns the channel as a variable of type ssh_channel.</p>
+<p>Once you have this channel, you open a SSH session that uses it with <a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1gaf051dd30d75bf6dc45d1a5088cf970bd"><span class="std std-ref">ssh_channel_open_session()</span></a>.</p>
+<p>Once you don’t need the channel anymore, you can send an end-of-file to it with <a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1ga238f07e0455456a5bfd8a49ead917732"><span class="std std-ref">ssh_channel_close()</span></a>. At this point, you can destroy the channel with <a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1gad1417f9eae8928fed20faafe2d9dbfff"><span class="std std-ref">ssh_channel_free()</span></a>.</p>
+<p>The code sample below achieves these tasks:</p>
+<pre class="highlight literal-block">
+<span></span><span class="kt">int</span> <span class="nf">shell_session</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">rc</span><span class="p">;</span>
+
+  <span class="n">channel</span> <span class="o">=</span> <span class="n">ssh_channel_new</span><span class="p">(</span><span class="n">session</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">channel</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_channel_open_session</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_OK</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">ssh_channel_free</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="p">...</span>
+
+  <span class="n">ssh_channel_close</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+  <span class="n">ssh_channel_send_eof</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+  <span class="n">ssh_channel_free</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+
+  <span class="k">return</span> <span class="n">SSH_OK</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+</div>
+<div class="section" id="interactive-and-non-interactive-sessions">
+<span id="doxid-libssh-tutor-shell-1interactive"></span><h3>Interactive and non-interactive sessions</h3>
+<p>A “shell” is a command interpreter. It is said to be “interactive” if there is a human user typing the commands, one after the other. The contrary, a non-interactive shell, is similar to the execution of commands in the background: there is no attached terminal.</p>
+<p>If you plan using an interactive shell, you need to create a pseud-terminal on the remote side. A remote terminal is usually referred to as a “pty”, for “pseudo-teletype”. The remote processes won’t see the difference with a real text-oriented terminal.</p>
+<p>If needed, you request the pty with the function <a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1ga37c1cec33fe5a2f184768aba52e3a0db"><span class="std std-ref">ssh_channel_request_pty()</span></a>. Then you define its dimensions (number of rows and columns) with <a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1gaf5d55c90f3d98c583df23d21905c1127"><span class="std std-ref">ssh_channel_change_pty_size()</span></a>.</p>
+<p>Be your session interactive or not, the next step is to request a shell with <a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1gaed4c5fb30c9df2b2548421ccf4e81bf1"><span class="std std-ref">ssh_channel_request_shell()</span></a>.</p>
+<pre class="highlight literal-block">
+<span></span><span class="kt">int</span> <span class="nf">interactive_shell_session</span><span class="p">(</span><span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">rc</span><span class="p">;</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_channel_request_pty</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_OK</span><span class="p">)</span> <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_channel_change_pty_size</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">24</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_OK</span><span class="p">)</span> <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_channel_request_shell</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_OK</span><span class="p">)</span> <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+
+  <span class="p">...</span>
+
+  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+</div>
+<div class="section" id="displaying-the-data-sent-by-the-remote-computer">
+<span id="doxid-libssh-tutor-shell-1read-data"></span><h3>Displaying the data sent by the remote computer</h3>
+<p>In your program, you will usually need to receive all the data “displayed” into the remote pty. You will usually analyse, log, or display this data.</p>
+<p><a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1gac92381c4c5d4a7eab35f6e84686f033d"><span class="std std-ref">ssh_channel_read()</span></a> and <a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1gaaca5a3fbe9839c3ffb37b746afc35f4c"><span class="std std-ref">ssh_channel_read_nonblocking()</span></a> are the simplest way to read data from a channel. If you only need to read from a single channel, they should be enough.</p>
+<p>The example below shows how to wait for remote data using <a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1gac92381c4c5d4a7eab35f6e84686f033d"><span class="std std-ref">ssh_channel_read()</span></a> :</p>
+<pre class="highlight literal-block">
+<span></span><span class="kt">int</span> <span class="nf">interactive_shell_session</span><span class="p">(</span><span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
+  <span class="kt">int</span> <span class="n">nbytes</span><span class="p">;</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_channel_request_pty</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_OK</span><span class="p">)</span> <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_channel_change_pty_size</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">24</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_OK</span><span class="p">)</span> <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_channel_request_shell</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_OK</span><span class="p">)</span> <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+
+  <span class="k">while</span> <span class="p">(</span><span class="n">ssh_channel_is_open</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+         <span class="o">!</span><span class="n">ssh_channel_is_eof</span><span class="p">(</span><span class="n">channel</span><span class="p">))</span>
+  <span class="p">{</span>
+    <span class="n">nbytes</span> <span class="o">=</span> <span class="n">ssh_channel_read</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">),</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">nbytes</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">nbytes</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="n">write</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">nbytes</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+<p>Unlike <a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1gac92381c4c5d4a7eab35f6e84686f033d"><span class="std std-ref">ssh_channel_read()</span></a>, <a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1gaaca5a3fbe9839c3ffb37b746afc35f4c"><span class="std std-ref">ssh_channel_read_nonblocking()</span></a> never waits for remote data to be ready. It returns immediately.</p>
+<p>If you plan to use <a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1gaaca5a3fbe9839c3ffb37b746afc35f4c"><span class="std std-ref">ssh_channel_read_nonblocking()</span></a> repeatedly in a loop, you should use a “passive wait” function like usleep(3) in the same loop. Otherwise, your program will consume all the CPU time, and your computer might become unresponsive.</p>
+</div>
+<div class="section" id="sending-user-input-to-the-remote-computer">
+<span id="doxid-libssh-tutor-shell-1write-data"></span><h3>Sending user input to the remote computer</h3>
+<p>User’s input is sent to the remote site with <a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1ga5d658df773ba854b35ff9f905341e2fb"><span class="std std-ref">ssh_channel_write()</span></a>.</p>
+<p>The following example shows how to combine a nonblocking read from a SSH channel with a nonblocking read from the keyboard. The local input is then sent to the remote computer:</p>
+<pre class="highlight literal-block">
+<span></span><span class="cm">/* Under Linux, this function determines whether a key has been pressed.</span>
+<span class="cm">   Under Windows, it is a standard function, so you need not redefine it.</span>
+<span class="cm">*/</span>
+<span class="kt">int</span> <span class="nf">kbhit</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="n">timeval</span> <span class="n">tv</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0L</span><span class="p">,</span> <span class="mi">0L</span> <span class="p">};</span>
+    <span class="n">fd_set</span> <span class="n">fds</span><span class="p">;</span>
+
+    <span class="n">FD_ZERO</span><span class="p">(</span><span class="o">&amp;</span><span class="n">fds</span><span class="p">);</span>
+    <span class="n">FD_SET</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">fds</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="n">select</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">fds</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tv</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/* A very simple terminal emulator:</span>
+<span class="cm">   - print data received from the remote computer</span>
+<span class="cm">   - send keyboard input to the remote computer</span>
+<span class="cm">*/</span>
+<span class="kt">int</span> <span class="nf">interactive_shell_session</span><span class="p">(</span><span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="cm">/* Session and terminal initialization skipped */</span>
+  <span class="p">...</span>
+
+  <span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
+  <span class="kt">int</span> <span class="n">nbytes</span><span class="p">,</span> <span class="n">nwritten</span><span class="p">;</span>
+
+  <span class="k">while</span> <span class="p">(</span><span class="n">ssh_channel_is_open</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+         <span class="o">!</span><span class="n">ssh_channel_is_eof</span><span class="p">(</span><span class="n">channel</span><span class="p">))</span>
+  <span class="p">{</span>
+    <span class="n">nbytes</span> <span class="o">=</span> <span class="n">ssh_channel_read_nonblocking</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">),</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">nbytes</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">nbytes</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="n">nwritten</span> <span class="o">=</span> <span class="n">write</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">nbytes</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">nwritten</span> <span class="o">!=</span> <span class="n">nbytes</span><span class="p">)</span> <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">kbhit</span><span class="p">())</span>
+    <span class="p">{</span>
+      <span class="n">usleep</span><span class="p">(</span><span class="mi">50000L</span><span class="p">);</span> <span class="c1">// 0.05 second</span>
+      <span class="k">continue</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">nbytes</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">));</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">nbytes</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">nbytes</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="n">nwritten</span> <span class="o">=</span> <span class="n">ssh_channel_write</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">nbytes</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">nwritten</span> <span class="o">!=</span> <span class="n">nbytes</span><span class="p">)</span> <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+<p>Of course, this is a poor terminal emulator, since the echo from the keys pressed should not be done locally, but should be done by the remote side. Also, user’s input should not be sent once “Enter” key is pressed, but immediately after each key is pressed. This can be accomplished by setting the local terminal to “raw” mode with the cfmakeraw(3) function. cfmakeraw() is a standard function under Linux, on other systems you can recode it with:</p>
+<pre class="highlight literal-block">
+<span></span><span class="k">static</span> <span class="kt">void</span> <span class="nf">cfmakeraw</span><span class="p">(</span><span class="k">struct</span> <span class="n">termios</span> <span class="o">*</span><span class="n">termios_p</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">termios_p</span><span class="o">-&gt;</span><span class="n">c_iflag</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="p">(</span><span class="n">IGNBRK</span><span class="o">|</span><span class="n">BRKINT</span><span class="o">|</span><span class="n">PARMRK</span><span class="o">|</span><span class="n">ISTRIP</span><span class="o">|</span><span class="n">INLCR</span><span class="o">|</span><span class="n">IGNCR</span><span class="o">|</span><span class="n">ICRNL</span><span class="o">|</span><span class="n">IXON</span><span class="p">);</span>
+    <span class="n">termios_p</span><span class="o">-&gt;</span><span class="n">c_oflag</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">OPOST</span><span class="p">;</span>
+    <span class="n">termios_p</span><span class="o">-&gt;</span><span class="n">c_lflag</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="p">(</span><span class="n">ECHO</span><span class="o">|</span><span class="n">ECHONL</span><span class="o">|</span><span class="n">ICANON</span><span class="o">|</span><span class="n">ISIG</span><span class="o">|</span><span class="n">IEXTEN</span><span class="p">);</span>
+    <span class="n">termios_p</span><span class="o">-&gt;</span><span class="n">c_cflag</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="p">(</span><span class="n">CSIZE</span><span class="o">|</span><span class="n">PARENB</span><span class="p">);</span>
+    <span class="n">termios_p</span><span class="o">-&gt;</span><span class="n">c_cflag</span> <span class="o">|=</span> <span class="n">CS8</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+<p>If you are not using a local terminal, but some kind of graphical environment, the solution to this kind of “echo” problems will be different.</p>
+</div>
+<div class="section" id="a-more-elaborate-way-to-get-the-remote-data">
+<span id="doxid-libssh-tutor-shell-1select-loop"></span><h3>A more elaborate way to get the remote data</h3>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Warning: ssh_select() and ssh_channel_select() are not relevant anymore,
+since libssh is about to provide an easier system for asynchronous
+communications. This subsection should be removed then. ***
+</pre></div>
+</div>
+<p><a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1gac92381c4c5d4a7eab35f6e84686f033d"><span class="std std-ref">ssh_channel_read()</span></a> and <a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1gaaca5a3fbe9839c3ffb37b746afc35f4c"><span class="std std-ref">ssh_channel_read_nonblocking()</span></a> functions are simple, but they are not adapted when you expect data from more than one SSH channel, or from other file descriptors. Last example showed how getting data from the standard input (the keyboard) at the same time as data from the SSH channel was complicated. The functions <a class="reference internal" href="group_libssh_session.html#doxid-group-libssh-session-1ga86cbf041bced56d18a2a5248c46cecb4"><span class="std std-ref">ssh_select()</span></a> and <a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1ga1026cfa48ecfc0b4898d4ea443acfc5d"><span class="std std-ref">ssh_channel_select()</span></a> provide a more elegant way to wait for data coming from many sources.</p>
+<p>The functions <a class="reference internal" href="group_libssh_session.html#doxid-group-libssh-session-1ga86cbf041bced56d18a2a5248c46cecb4"><span class="std std-ref">ssh_select()</span></a> and <a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1ga1026cfa48ecfc0b4898d4ea443acfc5d"><span class="std std-ref">ssh_channel_select()</span></a> remind of the standard UNIX select(2) function. The idea is to wait for “something” to happen: incoming data to be read, outcoming data to block, or an exception to occur. Both these functions do a “passive wait”, i.e. you can safely use them repeatedly in a loop, it will not consume exaggerate processor time and make your computer unresponsive. It is quite common to use these functions in your application’s main loop.</p>
+<p>The difference between <a class="reference internal" href="group_libssh_session.html#doxid-group-libssh-session-1ga86cbf041bced56d18a2a5248c46cecb4"><span class="std std-ref">ssh_select()</span></a> and <a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1ga1026cfa48ecfc0b4898d4ea443acfc5d"><span class="std std-ref">ssh_channel_select()</span></a> is that <a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1ga1026cfa48ecfc0b4898d4ea443acfc5d"><span class="std std-ref">ssh_channel_select()</span></a> is simpler, but allows you only to watch SSH channels. <a class="reference internal" href="group_libssh_session.html#doxid-group-libssh-session-1ga86cbf041bced56d18a2a5248c46cecb4"><span class="std std-ref">ssh_select()</span></a> is more complete and enables watching regular file descriptors as well, in the same function call.</p>
+<p>Below is an example of a function that waits both for remote SSH data to come, as well as standard input from the keyboard:</p>
+<pre class="highlight literal-block">
+<span></span><span class="kt">int</span> <span class="nf">interactive_shell_session</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span> <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="cm">/* Session and terminal initialization skipped */</span>
+  <span class="p">...</span>
+
+  <span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
+  <span class="kt">int</span> <span class="n">nbytes</span><span class="p">,</span> <span class="n">nwritten</span><span class="p">;</span>
+
+  <span class="k">while</span> <span class="p">(</span><span class="n">ssh_channel_is_open</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+         <span class="o">!</span><span class="n">ssh_channel_is_eof</span><span class="p">(</span><span class="n">channel</span><span class="p">))</span>
+  <span class="p">{</span>
+    <span class="k">struct</span> <span class="n">timeval</span> <span class="n">timeout</span><span class="p">;</span>
+    <span class="n">ssh_channel</span> <span class="n">in_channels</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">out_channels</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+    <span class="n">fd_set</span> <span class="n">fds</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">maxfd</span><span class="p">;</span>
+
+    <span class="n">timeout</span><span class="p">.</span><span class="n">tv_sec</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;</span>
+    <span class="n">timeout</span><span class="p">.</span><span class="n">tv_usec</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">in_channels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">channel</span><span class="p">;</span>
+    <span class="n">in_channels</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">FD_ZERO</span><span class="p">(</span><span class="o">&amp;</span><span class="n">fds</span><span class="p">);</span>
+    <span class="n">FD_SET</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">fds</span><span class="p">);</span>
+    <span class="n">FD_SET</span><span class="p">(</span><span class="n">ssh_get_fd</span><span class="p">(</span><span class="n">session</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">fds</span><span class="p">);</span>
+    <span class="n">maxfd</span> <span class="o">=</span> <span class="n">ssh_get_fd</span><span class="p">(</span><span class="n">session</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="n">ssh_select</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">maxfd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">fds</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">timeout</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">out_channels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="n">nbytes</span> <span class="o">=</span> <span class="n">ssh_channel_read</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">),</span> <span class="mi">0</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">nbytes</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">nbytes</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="p">{</span>
+        <span class="n">nwritten</span> <span class="o">=</span> <span class="n">write</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">nbytes</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">nwritten</span> <span class="o">!=</span> <span class="n">nbytes</span><span class="p">)</span> <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">FD_ISSET</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">fds</span><span class="p">))</span>
+    <span class="p">{</span>
+      <span class="n">nbytes</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">));</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">nbytes</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">nbytes</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="p">{</span>
+        <span class="n">nwritten</span> <span class="o">=</span> <span class="n">ssh_channel_write</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">nbytes</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">nbytes</span> <span class="o">!=</span> <span class="n">nwritten</span><span class="p">)</span> <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+</div>
+<div class="section" id="using-graphical-applications-on-the-remote-side">
+<span id="doxid-libssh-tutor-shell-1x11"></span><h3>Using graphical applications on the remote side</h3>
+<p>If your remote application is graphical, you can forward the X11 protocol to your local computer.</p>
+<p>To do that, you first declare that you accept X11 connections with <a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1ga548bd0f77a50b7c8180942544b375866"><span class="std std-ref">ssh_channel_accept_x11()</span></a>. Then you create the forwarding tunnel for the X11 protocol with <a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1gadfa34624c28164bd73453cd04aa64c1f"><span class="std std-ref">ssh_channel_request_x11()</span></a>.</p>
+<p>The following code performs channel initialization and shell session opening, and handles a parallel X11 connection:</p>
+<pre class="highlight literal-block">
+<span></span><span class="kt">int</span> <span class="nf">interactive_shell_session</span><span class="p">(</span><span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="n">ssh_channel</span> <span class="n">x11channel</span><span class="p">;</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_channel_request_pty</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_OK</span><span class="p">)</span> <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_channel_change_pty_size</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">24</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_OK</span><span class="p">)</span> <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_channel_request_x11</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_OK</span><span class="p">)</span> <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_channel_request_shell</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_OK</span><span class="p">)</span> <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+
+  <span class="cm">/* Read the data sent by the remote computer here */</span>
+  <span class="p">...</span>
+<span class="p">}</span>
+</pre>
+<p>Don’t forget to set the $DISPLAY environment variable on the remote side, or the remote applications won’t try using the X11 tunnel:</p>
+<pre class="highlight literal-block">
+<span></span><span class="err">$</span> <span class="k">export</span> <span class="n">DISPLAY</span><span class="o">=:</span><span class="mi">0</span>
+<span class="err">$</span> <span class="n">xclock</span> <span class="o">&amp;</span>
+</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="page_libssh_tutor_command.html" title="Chapter 4: Passing a remote command"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="page_libssh_tutor_authentication.html" title="Chapter 2: A deeper insight on authentication"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LibSSH Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="page_libssh_tutorial.html" >The Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2003-2017, LibSSH Maintainers.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    </div>
+  </body>
+</html>

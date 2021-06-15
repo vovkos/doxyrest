@@ -1,0 +1,2551 @@
+.. index:: pair: group; File I/O Handling Functions
+.. _doxid-group__apr__file__io:
+
+File I/O Handling Functions
+===========================
+
+.. toctree::
+	:hidden:
+
+	group_apr_file_attrs_set_flags.rst
+	group_apr_file_lock_types.rst
+	group_apr_file_open_flags.rst
+	group_apr_file_seek_flags.rst
+	group_apr_file_writev.rst
+
+Overview
+~~~~~~~~
+
+
+
+|	:ref:`File Attribute Flags<doxid-group__apr__file__attrs__set__flags>`
+|	:ref:`File Lock Types<doxid-group__apr__file__lock__types>`
+|	:ref:`File Open Flags/Routines<doxid-group__apr__file__open__flags>`
+|	:ref:`File Seek Flags<doxid-group__apr__file__seek__flags>`
+|	:ref:`{_full} max iovec size<doxid-group__apr__file__writev>`
+
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef apr_uint32_t :ref:`apr_fileattrs_t<doxid-group__apr__file__io_1ga11fbee5a7a3f3d45fff5c31df0db9737>`;
+	typedef int :ref:`apr_seek_where_t<doxid-group__apr__file__io_1ga8eecd44975906042e0e369771802a145>`;
+	typedef struct :ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>` :ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`;
+
+	// global functions
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_open<doxid-group__apr__file__io_1gabda14cbf242fb4fe99055434213e5446>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** newf,
+		const char* fname,
+		apr_int32_t flag,
+		:ref:`apr_fileperms_t<doxid-group__apr__file__info_1ga3af19c4c47007169064a70f9351bc7d8>` perm,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_close<doxid-group__apr__file__io_1ga5607bce1c4c798ceb6c8475a998a81a1>`(:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* file);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_remove<doxid-group__apr__file__io_1ga211c40be82f8bf8b8d7dce5afca5500b>`(
+		const char* path,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_rename<doxid-group__apr__file__io_1ga29b5633bb80226baa5de79a83c6999aa>`(
+		const char* from_path,
+		const char* to_path,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_link<doxid-group__apr__file__io_1gaa7911275c0e97edc064b8167be658f9e>`(
+		const char* from_path,
+		const char* to_path
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_copy<doxid-group__apr__file__io_1ga2b82c441246cc4596795420b0a94a9a2>`(
+		const char* from_path,
+		const char* to_path,
+		:ref:`apr_fileperms_t<doxid-group__apr__file__info_1ga3af19c4c47007169064a70f9351bc7d8>` perms,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_append<doxid-group__apr__file__io_1ga0b9bc41ffa4ac43cbea46b44eace939e>`(
+		const char* from_path,
+		const char* to_path,
+		:ref:`apr_fileperms_t<doxid-group__apr__file__info_1ga3af19c4c47007169064a70f9351bc7d8>` perms,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_eof<doxid-group__apr__file__io_1ga8efaff2f556b250fee1021541b782ea8>`(:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* fptr);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_open_stderr<doxid-group__apr__file__io_1gaf426d98943319acced2c9b52757f377f>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** thefile,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_open_stdout<doxid-group__apr__file__io_1ga0d36922c0944ff9675cc820e68d56199>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** thefile,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_open_stdin<doxid-group__apr__file__io_1ga539454470148f9b22a31f85936a5f8b4>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** thefile,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_open_flags_stderr<doxid-group__apr__file__io_1ga6e87d695994e236dae3d428ed68886bf>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** thefile,
+		apr_int32_t flags,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_open_flags_stdout<doxid-group__apr__file__io_1gaeda353505bc1dc46db93b0a80d0b1c4c>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** thefile,
+		apr_int32_t flags,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_open_flags_stdin<doxid-group__apr__file__io_1ga3bde3e61454b5604077f297b1d1671c0>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** thefile,
+		apr_int32_t flags,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_read<doxid-group__apr__file__io_1gadd067ee0050dff0c03a9420c9d424466>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile,
+		void* buf,
+		apr_size_t* nbytes
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_write<doxid-group__apr__file__io_1ga2e4baa94102c363fdca3c850375d3584>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile,
+		const void* buf,
+		apr_size_t* nbytes
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_writev<doxid-group__apr__file__io_1gacc7924dd7af1c2948b5b2ea6e5f77984>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile,
+		const struct iovec* vec,
+		apr_size_t nvec,
+		apr_size_t* nbytes
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_read_full<doxid-group__apr__file__io_1gaf39a17404e868808aff8e2e7ecaa87e0>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile,
+		void* buf,
+		apr_size_t nbytes,
+		apr_size_t* bytes_read
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_write_full<doxid-group__apr__file__io_1ga560d5c062d65e64c07d906d1207337d4>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile,
+		const void* buf,
+		apr_size_t nbytes,
+		apr_size_t* bytes_written
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_writev_full<doxid-group__apr__file__io_1ga24457e11f0db908b21b7e1742db4ed7b>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile,
+		const struct iovec* vec,
+		apr_size_t nvec,
+		apr_size_t* nbytes
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_putc<doxid-group__apr__file__io_1ga33e51b53194e7c0dac513ca27ca18e63>`(
+		char ch,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_getc<doxid-group__apr__file__io_1ga852b9c77d4223af15d8d3674a0e2714d>`(
+		char* ch,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_ungetc<doxid-group__apr__file__io_1ga9d06778e719d596ab96bca812b01cb3a>`(
+		char ch,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_gets<doxid-group__apr__file__io_1gaf9513b769c10b09e5f37d6d0b86bdce9>`(
+		char* str,
+		int len,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_puts<doxid-group__apr__file__io_1gacde81145cc38660a1512d469886ddb16>`(
+		const char* str,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_flush<doxid-group__apr__file__io_1ga68aba780b7fc53e47404bfd8def949bc>`(:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_sync<doxid-group__apr__file__io_1ga4385e141c4bbb96294acd7d342f138da>`(:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_datasync<doxid-group__apr__file__io_1gaa4b4e5027c1d8dbe4e5cb47b8eebc03b>`(:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_dup<doxid-group__apr__file__io_1ga6e849af1b0fd31669c58a803fcb13837>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** new_file,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* old_file,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_dup2<doxid-group__apr__file__io_1ga602926aad867088297e8f59490ff939c>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* new_file,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* old_file,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_setaside<doxid-group__apr__file__io_1gadaf046ce39aa118dab921a407446355b>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** new_file,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* old_file,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_buffer_set<doxid-group__apr__file__io_1gafe4be8c3b62c42535b84d4237bf6e421>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile,
+		char* buffer,
+		apr_size_t bufsize
+		);
+
+	apr_size_t
+	:ref:`apr_file_buffer_size_get<doxid-group__apr__file__io_1ga42bbb9227095686ea15eb79f99d248a2>`(:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_seek<doxid-group__apr__file__io_1ga9db84bec24db97a53890df1a6aff63a1>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile,
+		:ref:`apr_seek_where_t<doxid-group__apr__file__io_1ga8eecd44975906042e0e369771802a145>` where,
+		apr_off_t* offset
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_pipe_create<doxid-group__apr__file__io_1gaae3b81342d239c58c351cf11190740ed>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** in,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** out,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_pipe_create_ex<doxid-group__apr__file__io_1ga2fbbae715bee0e0ca9adadd66ac65e96>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** in,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** out,
+		apr_int32_t blocking,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_namedpipe_create<doxid-group__apr__file__io_1ga60cec3e6717bab0f11577bd7c38b4c59>`(
+		const char* filename,
+		:ref:`apr_fileperms_t<doxid-group__apr__file__info_1ga3af19c4c47007169064a70f9351bc7d8>` perm,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_pipe_timeout_get<doxid-group__apr__file__io_1ga90e481207a38df04818a0c55883ee953>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thepipe,
+		:ref:`apr_interval_time_t<doxid-group__apr__time_1gaae2129185a395cc393f76fabf4f43e47>`* timeout
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_pipe_timeout_set<doxid-group__apr__file__io_1gaf88d2fca768e3fa9f28ea010e1bf602a>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thepipe,
+		:ref:`apr_interval_time_t<doxid-group__apr__time_1gaae2129185a395cc393f76fabf4f43e47>` timeout
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_lock<doxid-group__apr__file__io_1ga2d337e66c1fa0cd433164079bf542484>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile,
+		int type
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_unlock<doxid-group__apr__file__io_1ga3a255996fb439b6d66ed7cd65319525b>`(:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_name_get<doxid-group__apr__file__io_1ga5c750a88fe1e032e1d85d3db40d9519f>`(
+		const char** new_path,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_data_get<doxid-group__apr__file__io_1gafa13b7024748a7e45344d6998ddbd281>`(
+		void** data,
+		const char* key,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* file
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_data_set<doxid-group__apr__file__io_1ga58c857162593d8b3aa999df5b7af0805>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* file,
+		void* data,
+		const char* key,
+		:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`(*)(void*) cleanup
+		);
+
+	int
+	:ref:`apr_file_printf<doxid-group__apr__file__io_1ga29fca4b0201c236856fea5578f410c0e>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* fptr,
+		const char* format,
+		...
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_perms_set<doxid-group__apr__file__io_1gac5fed6d75597476718c40fc603823b1e>`(
+		const char* fname,
+		:ref:`apr_fileperms_t<doxid-group__apr__file__info_1ga3af19c4c47007169064a70f9351bc7d8>` perms
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_attrs_set<doxid-group__apr__file__io_1ga96ceec3492ad0c75d2b58c167087ee6a>`(
+		const char* fname,
+		:ref:`apr_fileattrs_t<doxid-group__apr__file__io_1ga11fbee5a7a3f3d45fff5c31df0db9737>` attributes,
+		:ref:`apr_fileattrs_t<doxid-group__apr__file__io_1ga11fbee5a7a3f3d45fff5c31df0db9737>` attr_mask,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_mtime_set<doxid-group__apr__file__io_1ga79f58458a00a4072622005c09ed8f96f>`(
+		const char* fname,
+		:ref:`apr_time_t<doxid-group__apr__time_1gadb4bde16055748190eae190c55aa02bb>` mtime,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_dir_make<doxid-group__apr__file__io_1ga51e0b4703c7561f72587982808985d29>`(
+		const char* path,
+		:ref:`apr_fileperms_t<doxid-group__apr__file__info_1ga3af19c4c47007169064a70f9351bc7d8>` perm,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_dir_make_recursive<doxid-group__apr__file__io_1ga6a3b2602f57ff148cd64096da02adbd2>`(
+		const char* path,
+		:ref:`apr_fileperms_t<doxid-group__apr__file__info_1ga3af19c4c47007169064a70f9351bc7d8>` perm,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_dir_remove<doxid-group__apr__file__io_1ga5487d02a62fba9444747ccb5838150ba>`(
+		const char* path,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_info_get<doxid-group__apr__file__io_1ga39be7fe05d0dda4a28f4358b61a44ac8>`(
+		:ref:`apr_finfo_t<doxid-structapr__finfo__t>`* finfo,
+		apr_int32_t wanted,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_trunc<doxid-group__apr__file__io_1gac067fe5f208c927cf6d213197b9335a8>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* fp,
+		apr_off_t offset
+		);
+
+	apr_int32_t
+	:ref:`apr_file_flags_get<doxid-group__apr__file__io_1ga023d6e4d2512382a9d4b1f881e105b8f>`(:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* f);
+
+	:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`*
+	:ref:`apr_file_pool_get<doxid-group__apr__file__io_1gab5950b3b0156097b0181394a37e03ede>`(const :ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_inherit_set<doxid-group__apr__file__io_1ga137bee13d2c65fb8afd4b34e400187c7>`(:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_inherit_unset<doxid-group__apr__file__io_1ga69fa72a6f77b96572248c2a6a347c02a>`(:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_file_mktemp<doxid-group__apr__file__io_1gac34981f9ff41f85e4377a6dde185fe52>`(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** fp,
+		char* templ,
+		apr_int32_t flags,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_temp_dir_get<doxid-group__apr__file__io_1ga5cc19828a668c362be0ad7a12b805cc0>`(
+		const char** temp_dir,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		);
+
+.. _details-group__apr__file__io:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+Typedefs
+--------
+
+.. index:: pair: typedef; apr_fileattrs_t
+.. _doxid-group__apr__file__io_1ga11fbee5a7a3f3d45fff5c31df0db9737:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef apr_uint32_t apr_fileattrs_t
+
+File attributes
+
+.. index:: pair: typedef; apr_seek_where_t
+.. _doxid-group__apr__file__io_1ga8eecd44975906042e0e369771802a145:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef int apr_seek_where_t
+
+Type to pass as whence argument to apr_file_seek.
+
+.. index:: pair: typedef; apr_file_t
+.. _doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>` apr_file_t
+
+Structure for referencing files.
+
+Global Functions
+----------------
+
+.. index:: pair: function; apr_file_open
+.. _doxid-group__apr__file__io_1gabda14cbf242fb4fe99055434213e5446:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_open(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** newf,
+		const char* fname,
+		apr_int32_t flag,
+		:ref:`apr_fileperms_t<doxid-group__apr__file__info_1ga3af19c4c47007169064a70f9351bc7d8>` perm,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		)
+
+Open the specified file. If perm is :ref:`APR_FPROT_OS_DEFAULT <doxid-group__apr__file__permissions_1gad3c65a67ee6eb12ecc6a33857397900b>` and the file is being created, appropriate default permissions will be used.
+
+By default, the returned file descriptor will not be inherited by child processes created by :ref:`apr_proc_create() <doxid-group__apr__thread__proc_1gab51dd90b98d365a969f0ec5c7bef4e14>`. This can be changed using :ref:`apr_file_inherit_set() <doxid-group__apr__file__io_1ga137bee13d2c65fb8afd4b34e400187c7>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- newf
+
+		- The opened file descriptor.
+
+	*
+		- fname
+
+		- The full path to the file (using / on all systems)
+
+	*
+		- flag
+
+		- 
+		  Or'ed value of:
+		  
+		  * :ref:`APR_FOPEN_READ <doxid-group__apr__file__open__flags_1gaf9e7303f028b130ff7d4b209d6662d7d>` open for reading
+		  
+		  * :ref:`APR_FOPEN_WRITE <doxid-group__apr__file__open__flags_1gac598bb95fc9476b0bf2ed0b1c308842c>` open for writing
+		  
+		  * :ref:`APR_FOPEN_CREATE <doxid-group__apr__file__open__flags_1gafe94f21ccbf411172e70e7f473af251a>` create the file if not there
+		  
+		  * :ref:`APR_FOPEN_APPEND <doxid-group__apr__file__open__flags_1ga45f353db9b71d4760a3f35cf3781cfc8>` file ptr is set to end prior to all writes
+		  
+		  * :ref:`APR_FOPEN_TRUNCATE <doxid-group__apr__file__open__flags_1ga09b05a5bd5db534b93794f7657bcb146>` set length to zero if file exists
+		  
+		  * :ref:`APR_FOPEN_BINARY <doxid-group__apr__file__open__flags_1gacb20b3028864f34cb26314fe2cacc3fa>` not a text file
+		  
+		  * :ref:`APR_FOPEN_BUFFERED <doxid-group__apr__file__open__flags_1gac48fd4c853c9f561632a2e8aaf5d8d97>` buffer the data. Default is non-buffered
+		  
+		  * :ref:`APR_FOPEN_EXCL <doxid-group__apr__file__open__flags_1gabb7fb062cdf1d58faee8c7ea518496f1>` return error if :ref:`APR_FOPEN_CREATE <doxid-group__apr__file__open__flags_1gafe94f21ccbf411172e70e7f473af251a>` and file exists
+		  
+		  * :ref:`APR_FOPEN_DELONCLOSE <doxid-group__apr__file__open__flags_1ga5d3756f6d242c667ed1d3f54af4916eb>` delete the file after closing
+		  
+		  * :ref:`APR_FOPEN_XTHREAD <doxid-group__apr__file__open__flags_1ga435cd9b2604b11796779c23ffa00a3dd>` Platform dependent tag to open the file for use across multiple threads
+		  
+		  * :ref:`APR_FOPEN_SHARELOCK <doxid-group__apr__file__open__flags_1ga426f6e2a8457ab410d99248269059a18>` Platform dependent support for higher level locked read/write access to support writes across process/machines
+		  
+		  * :ref:`APR_FOPEN_NOCLEANUP <doxid-group__apr__file__open__flags_1ga3fc9b5a7791d9f462997cd29de67eb80>` Do not register a cleanup with the pool passed in on the *pool* argument (see below)
+		  
+		  * :ref:`APR_FOPEN_SENDFILE_ENABLED <doxid-group__apr__file__open__flags_1ga60c21e28e4a612d58a874fe2cc71a6e4>` Open with appropriate platform semantics for sendfile operations. Advisory only, apr_socket_sendfile does not check this flag
+		  
+		  * :ref:`APR_FOPEN_LARGEFILE <doxid-group__apr__file__open__flags_1gaf6cfaa4789e6264afd186235f0adbc22>` Platform dependent flag to enable large file support, see WARNING below
+		  
+		  * :ref:`APR_FOPEN_SPARSE <doxid-group__apr__file__open__flags_1ga0d155e9bb7fbf1a5cd4e84b5ede059f4>` Platform dependent flag to enable sparse file support, see WARNING below
+		  
+		  * :ref:`APR_FOPEN_NONBLOCK <doxid-group__apr__file__open__flags_1ga31e4d14068147e43e1778bcf975dda62>` Platform dependent flag to enable non blocking file io
+
+	*
+		- perm
+
+		- Access permissions for file.
+
+	*
+		- pool
+
+		- The pool to use.
+
+.. index:: pair: function; apr_file_close
+.. _doxid-group__apr__file__io_1ga5607bce1c4c798ceb6c8475a998a81a1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_close(:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* file)
+
+Close the specified file.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- file
+
+		- The file descriptor to close.
+
+.. index:: pair: function; apr_file_remove
+.. _doxid-group__apr__file__io_1ga211c40be82f8bf8b8d7dce5afca5500b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_remove(
+		const char* path,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		)
+
+Delete the specified file. If the file is open, it won't be removed until all instances are closed.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- path
+
+		- The full path to the file (using / on all systems)
+
+	*
+		- pool
+
+		- The pool to use.
+
+.. index:: pair: function; apr_file_rename
+.. _doxid-group__apr__file__io_1ga29b5633bb80226baa5de79a83c6999aa:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_rename(
+		const char* from_path,
+		const char* to_path,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		)
+
+Rename the specified file. If a file exists at the new location, then it will be overwritten. Moving files or directories across devices may not be possible.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- from_path
+
+		- The full path to the original file (using / on all systems)
+
+	*
+		- to_path
+
+		- The full path to the new file (using / on all systems)
+
+	*
+		- pool
+
+		- The pool to use.
+
+.. index:: pair: function; apr_file_link
+.. _doxid-group__apr__file__io_1gaa7911275c0e97edc064b8167be658f9e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_link(
+		const char* from_path,
+		const char* to_path
+		)
+
+Create a hard link to the specified file. Both files must reside on the same device.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- from_path
+
+		- The full path to the original file (using / on all systems)
+
+	*
+		- to_path
+
+		- The full path to the new file (using / on all systems)
+
+.. index:: pair: function; apr_file_copy
+.. _doxid-group__apr__file__io_1ga2b82c441246cc4596795420b0a94a9a2:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_copy(
+		const char* from_path,
+		const char* to_path,
+		:ref:`apr_fileperms_t<doxid-group__apr__file__info_1ga3af19c4c47007169064a70f9351bc7d8>` perms,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		)
+
+Copy the specified file to another file. The new file does not need to exist, it will be created if required.
+
+If the new file already exists, its contents will be overwritten.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- from_path
+
+		- The full path to the original file (using / on all systems)
+
+	*
+		- to_path
+
+		- The full path to the new file (using / on all systems)
+
+	*
+		- perms
+
+		- Access permissions for the new file if it is created. In place of the usual or'd combination of file permissions, the value :ref:`APR_FPROT_FILE_SOURCE_PERMS <doxid-group__apr__file__permissions_1gac08d4e868c7c9532f7c97c70556663dc>` may be given, in which case the source file's permissions are copied.
+
+	*
+		- pool
+
+		- The pool to use.
+
+.. index:: pair: function; apr_file_append
+.. _doxid-group__apr__file__io_1ga0b9bc41ffa4ac43cbea46b44eace939e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_append(
+		const char* from_path,
+		const char* to_path,
+		:ref:`apr_fileperms_t<doxid-group__apr__file__info_1ga3af19c4c47007169064a70f9351bc7d8>` perms,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		)
+
+Append the specified file to another file. The new file does not need to exist, it will be created if required.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- from_path
+
+		- The full path to the source file (use / on all systems)
+
+	*
+		- to_path
+
+		- The full path to the destination file (use / on all systems)
+
+	*
+		- perms
+
+		- Access permissions for the destination file if it is created. In place of the usual or'd combination of file permissions, the value :ref:`APR_FPROT_FILE_SOURCE_PERMS <doxid-group__apr__file__permissions_1gac08d4e868c7c9532f7c97c70556663dc>` may be given, in which case the source file's permissions are copied.
+
+	*
+		- pool
+
+		- The pool to use.
+
+.. index:: pair: function; apr_file_eof
+.. _doxid-group__apr__file__io_1ga8efaff2f556b250fee1021541b782ea8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_eof(:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* fptr)
+
+Are we at the end of the file Returns :ref:`APR_EOF <doxid-group___a_p_r___error_1ga35d9dca2514c522a2840aca0f3e2ebd3>` if we are at the end of file, :ref:`APR_SUCCESS <doxid-group__apr__errno_1ga9ee311b7bf1c691dc521d721339ee2a6>` otherwise.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- fptr
+
+		- The apr file we are testing.
+
+.. index:: pair: function; apr_file_open_stderr
+.. _doxid-group__apr__file__io_1gaf426d98943319acced2c9b52757f377f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_open_stderr(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** thefile,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		)
+
+Open standard error as an apr file pointer. The only reason that the apr_file_open_std\* functions exist is that you may not always have a stderr/out/in on Windows. This is generally a problem with newer versions of Windows and services.
+
+The other problem is that the C library functions generally work differently on Windows and Unix. So, by using apr_file_open_std\* functions, you can get a handle to an APR struct that works with the APR functions which are supposed to work identically on all platforms.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thefile
+
+		- The apr file to use as stderr.
+
+	*
+		- pool
+
+		- The pool to allocate the file out of.
+
+.. index:: pair: function; apr_file_open_stdout
+.. _doxid-group__apr__file__io_1ga0d36922c0944ff9675cc820e68d56199:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_open_stdout(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** thefile,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		)
+
+open standard output as an apr file pointer. See remarks for :ref:`apr_file_open_stderr() <doxid-group__apr__file__io_1gaf426d98943319acced2c9b52757f377f>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thefile
+
+		- The apr file to use as stdout.
+
+	*
+		- pool
+
+		- The pool to allocate the file out of.
+
+.. index:: pair: function; apr_file_open_stdin
+.. _doxid-group__apr__file__io_1ga539454470148f9b22a31f85936a5f8b4:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_open_stdin(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** thefile,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		)
+
+open standard input as an apr file pointer. See remarks for :ref:`apr_file_open_stderr() <doxid-group__apr__file__io_1gaf426d98943319acced2c9b52757f377f>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thefile
+
+		- The apr file to use as stdin.
+
+	*
+		- pool
+
+		- The pool to allocate the file out of.
+
+.. index:: pair: function; apr_file_open_flags_stderr
+.. _doxid-group__apr__file__io_1ga6e87d695994e236dae3d428ed68886bf:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_open_flags_stderr(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** thefile,
+		apr_int32_t flags,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		)
+
+open standard error as an apr file pointer, with flags. See remarks for :ref:`apr_file_open_stderr() <doxid-group__apr__file__io_1gaf426d98943319acced2c9b52757f377f>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thefile
+
+		- The apr file to use as stderr.
+
+	*
+		- flags
+
+		- 
+		  The flags to open the file with. Only the
+		  
+		  * :ref:`APR_FOPEN_EXCL <doxid-group__apr__file__open__flags_1gabb7fb062cdf1d58faee8c7ea518496f1>`
+		  
+		  * :ref:`APR_FOPEN_BUFFERED <doxid-group__apr__file__open__flags_1gac48fd4c853c9f561632a2e8aaf5d8d97>`
+		  
+		  * :ref:`APR_FOPEN_XTHREAD <doxid-group__apr__file__open__flags_1ga435cd9b2604b11796779c23ffa00a3dd>`
+		  
+		  * :ref:`APR_FOPEN_SHARELOCK <doxid-group__apr__file__open__flags_1ga426f6e2a8457ab410d99248269059a18>`
+		  
+		  * :ref:`APR_FOPEN_SENDFILE_ENABLED <doxid-group__apr__file__open__flags_1ga60c21e28e4a612d58a874fe2cc71a6e4>`
+		  
+		  * :ref:`APR_FOPEN_LARGEFILE <doxid-group__apr__file__open__flags_1gaf6cfaa4789e6264afd186235f0adbc22>`
+		  
+		  flags should be used. The :ref:`APR_FOPEN_WRITE <doxid-group__apr__file__open__flags_1gac598bb95fc9476b0bf2ed0b1c308842c>` flag will be set unconditionally.
+
+	*
+		- pool
+
+		- The pool to allocate the file out of.
+
+.. index:: pair: function; apr_file_open_flags_stdout
+.. _doxid-group__apr__file__io_1gaeda353505bc1dc46db93b0a80d0b1c4c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_open_flags_stdout(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** thefile,
+		apr_int32_t flags,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		)
+
+open standard output as an apr file pointer, with flags. See remarks for :ref:`apr_file_open_stderr() <doxid-group__apr__file__io_1gaf426d98943319acced2c9b52757f377f>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thefile
+
+		- The apr file to use as stdout.
+
+	*
+		- flags
+
+		- 
+		  The flags to open the file with. Only the
+		  
+		  * :ref:`APR_FOPEN_EXCL <doxid-group__apr__file__open__flags_1gabb7fb062cdf1d58faee8c7ea518496f1>`
+		  
+		  * :ref:`APR_FOPEN_BUFFERED <doxid-group__apr__file__open__flags_1gac48fd4c853c9f561632a2e8aaf5d8d97>`
+		  
+		  * :ref:`APR_FOPEN_XTHREAD <doxid-group__apr__file__open__flags_1ga435cd9b2604b11796779c23ffa00a3dd>`
+		  
+		  * :ref:`APR_FOPEN_SHARELOCK <doxid-group__apr__file__open__flags_1ga426f6e2a8457ab410d99248269059a18>`
+		  
+		  * :ref:`APR_FOPEN_SENDFILE_ENABLED <doxid-group__apr__file__open__flags_1ga60c21e28e4a612d58a874fe2cc71a6e4>`
+		  
+		  * :ref:`APR_FOPEN_LARGEFILE <doxid-group__apr__file__open__flags_1gaf6cfaa4789e6264afd186235f0adbc22>`
+		  
+		  flags should be used. The :ref:`APR_FOPEN_WRITE <doxid-group__apr__file__open__flags_1gac598bb95fc9476b0bf2ed0b1c308842c>` flag will be set unconditionally.
+
+	*
+		- pool
+
+		- The pool to allocate the file out of.
+
+.. index:: pair: function; apr_file_open_flags_stdin
+.. _doxid-group__apr__file__io_1ga3bde3e61454b5604077f297b1d1671c0:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_open_flags_stdin(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** thefile,
+		apr_int32_t flags,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		)
+
+open standard input as an apr file pointer, with flags. See remarks for :ref:`apr_file_open_stderr() <doxid-group__apr__file__io_1gaf426d98943319acced2c9b52757f377f>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thefile
+
+		- The apr file to use as stdin.
+
+	*
+		- flags
+
+		- 
+		  The flags to open the file with. Only the
+		  
+		  * :ref:`APR_FOPEN_EXCL <doxid-group__apr__file__open__flags_1gabb7fb062cdf1d58faee8c7ea518496f1>`
+		  
+		  * :ref:`APR_FOPEN_BUFFERED <doxid-group__apr__file__open__flags_1gac48fd4c853c9f561632a2e8aaf5d8d97>`
+		  
+		  * :ref:`APR_FOPEN_XTHREAD <doxid-group__apr__file__open__flags_1ga435cd9b2604b11796779c23ffa00a3dd>`
+		  
+		  * :ref:`APR_FOPEN_SHARELOCK <doxid-group__apr__file__open__flags_1ga426f6e2a8457ab410d99248269059a18>`
+		  
+		  * :ref:`APR_FOPEN_SENDFILE_ENABLED <doxid-group__apr__file__open__flags_1ga60c21e28e4a612d58a874fe2cc71a6e4>`
+		  
+		  * :ref:`APR_FOPEN_LARGEFILE <doxid-group__apr__file__open__flags_1gaf6cfaa4789e6264afd186235f0adbc22>`
+		  
+		  flags should be used. The :ref:`APR_FOPEN_WRITE <doxid-group__apr__file__open__flags_1gac598bb95fc9476b0bf2ed0b1c308842c>` flag will be set unconditionally.
+
+	*
+		- pool
+
+		- The pool to allocate the file out of.
+
+.. index:: pair: function; apr_file_read
+.. _doxid-group__apr__file__io_1gadd067ee0050dff0c03a9420c9d424466:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_read(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile,
+		void* buf,
+		apr_size_t* nbytes
+		)
+
+Read data from the specified file. :ref:`apr_file_read() <doxid-group__apr__file__io_1gadd067ee0050dff0c03a9420c9d424466>` will read up to the specified number of bytes, but never more. If there isn't enough data to fill that number of bytes, all of the available data is read. The third argument is modified to reflect the number of bytes read. If a char was put back into the stream via ungetc, it will be the first character returned.
+
+It is not possible for both bytes to be read and an :ref:`APR_EOF <doxid-group___a_p_r___error_1ga35d9dca2514c522a2840aca0f3e2ebd3>` or other error to be returned. :ref:`APR_EINTR <doxid-group___a_p_r___error_1gaee1ce306c0ebf1701b34172310aa1bd5>` is never returned.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thefile
+
+		- The file descriptor to read from.
+
+	*
+		- buf
+
+		- The buffer to store the data to.
+
+	*
+		- nbytes
+
+		- On entry, the number of bytes to read; on exit, the number of bytes read.
+
+.. index:: pair: function; apr_file_write
+.. _doxid-group__apr__file__io_1ga2e4baa94102c363fdca3c850375d3584:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_write(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile,
+		const void* buf,
+		apr_size_t* nbytes
+		)
+
+Write data to the specified file. :ref:`apr_file_write() <doxid-group__apr__file__io_1ga2e4baa94102c363fdca3c850375d3584>` will write up to the specified number of bytes, but never more. If the OS cannot write that many bytes, it will write as many as it can. The third argument is modified to reflect the \* number of bytes written.
+
+It is possible for both bytes to be written and an error to be returned. :ref:`APR_EINTR <doxid-group___a_p_r___error_1gaee1ce306c0ebf1701b34172310aa1bd5>` is never returned.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thefile
+
+		- The file descriptor to write to.
+
+	*
+		- buf
+
+		- The buffer which contains the data.
+
+	*
+		- nbytes
+
+		- On entry, the number of bytes to write; on exit, the number of bytes written.
+
+.. index:: pair: function; apr_file_writev
+.. _doxid-group__apr__file__io_1gacc7924dd7af1c2948b5b2ea6e5f77984:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_writev(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile,
+		const struct iovec* vec,
+		apr_size_t nvec,
+		apr_size_t* nbytes
+		)
+
+Write data from iovec array to the specified file. It is possible for both bytes to be written and an error to be returned. :ref:`APR_EINTR <doxid-group___a_p_r___error_1gaee1ce306c0ebf1701b34172310aa1bd5>` is never returned.
+
+:ref:`apr_file_writev() <doxid-group__apr__file__io_1gacc7924dd7af1c2948b5b2ea6e5f77984>` is available even if the underlying operating system doesn't provide writev().
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thefile
+
+		- The file descriptor to write to.
+
+	*
+		- vec
+
+		- The array from which to get the data to write to the file.
+
+	*
+		- nvec
+
+		- The number of elements in the struct iovec array. This must be smaller than :ref:`APR_MAX_IOVEC_SIZE <doxid-group__apr__file__writev_1gae04a4721139b2b252ea20e68883da4b4>`. If it isn't, the function will fail with :ref:`APR_EINVAL <doxid-group___a_p_r___error_1gae3ffc41994444e71ce522c036ca1d9a4>`.
+
+	*
+		- nbytes
+
+		- The number of bytes written.
+
+.. index:: pair: function; apr_file_read_full
+.. _doxid-group__apr__file__io_1gaf39a17404e868808aff8e2e7ecaa87e0:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_read_full(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile,
+		void* buf,
+		apr_size_t nbytes,
+		apr_size_t* bytes_read
+		)
+
+Read data from the specified file, ensuring that the buffer is filled before returning. :ref:`apr_file_read_full() <doxid-group__apr__file__io_1gaf39a17404e868808aff8e2e7ecaa87e0>` will read up to the specified number of bytes, but never more. If there isn't enough data to fill that number of bytes, then the process/thread will block until it is available or EOF is reached. If a char was put back into the stream via ungetc, it will be the first character returned.
+
+It is possible for both bytes to be read and an error to be returned. And if \*bytes_read is less than nbytes, an accompanying error is *always* returned.
+
+:ref:`APR_EINTR <doxid-group___a_p_r___error_1gaee1ce306c0ebf1701b34172310aa1bd5>` is never returned.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thefile
+
+		- The file descriptor to read from.
+
+	*
+		- buf
+
+		- The buffer to store the data to.
+
+	*
+		- nbytes
+
+		- The number of bytes to read.
+
+	*
+		- bytes_read
+
+		- If non-NULL, this will contain the number of bytes read.
+
+.. index:: pair: function; apr_file_write_full
+.. _doxid-group__apr__file__io_1ga560d5c062d65e64c07d906d1207337d4:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_write_full(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile,
+		const void* buf,
+		apr_size_t nbytes,
+		apr_size_t* bytes_written
+		)
+
+Write data to the specified file, ensuring that all of the data is written before returning. :ref:`apr_file_write_full() <doxid-group__apr__file__io_1ga560d5c062d65e64c07d906d1207337d4>` will write up to the specified number of bytes, but never more. If the OS cannot write that many bytes, the process/thread will block until they can be written. Exceptional error such as "out of space" or "pipe closed" will terminate with an error.
+
+It is possible for both bytes to be written and an error to be returned. And if \*bytes_written is less than nbytes, an accompanying error is *always* returned.
+
+:ref:`APR_EINTR <doxid-group___a_p_r___error_1gaee1ce306c0ebf1701b34172310aa1bd5>` is never returned.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thefile
+
+		- The file descriptor to write to.
+
+	*
+		- buf
+
+		- The buffer which contains the data.
+
+	*
+		- nbytes
+
+		- The number of bytes to write.
+
+	*
+		- bytes_written
+
+		- If non-NULL, set to the number of bytes written.
+
+.. index:: pair: function; apr_file_writev_full
+.. _doxid-group__apr__file__io_1ga24457e11f0db908b21b7e1742db4ed7b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_writev_full(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile,
+		const struct iovec* vec,
+		apr_size_t nvec,
+		apr_size_t* nbytes
+		)
+
+Write data from iovec array to the specified file, ensuring that all of the data is written before returning. :ref:`apr_file_writev_full() <doxid-group__apr__file__io_1ga24457e11f0db908b21b7e1742db4ed7b>` is available even if the underlying operating system doesn't provide writev().
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thefile
+
+		- The file descriptor to write to.
+
+	*
+		- vec
+
+		- The array from which to get the data to write to the file.
+
+	*
+		- nvec
+
+		- The number of elements in the struct iovec array. This must be smaller than :ref:`APR_MAX_IOVEC_SIZE <doxid-group__apr__file__writev_1gae04a4721139b2b252ea20e68883da4b4>`. If it isn't, the function will fail with :ref:`APR_EINVAL <doxid-group___a_p_r___error_1gae3ffc41994444e71ce522c036ca1d9a4>`.
+
+	*
+		- nbytes
+
+		- The number of bytes written.
+
+.. index:: pair: function; apr_file_putc
+.. _doxid-group__apr__file__io_1ga33e51b53194e7c0dac513ca27ca18e63:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_putc(
+		char ch,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile
+		)
+
+Write a character into the specified file.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ch
+
+		- The character to write.
+
+	*
+		- thefile
+
+		- The file descriptor to write to
+
+.. index:: pair: function; apr_file_getc
+.. _doxid-group__apr__file__io_1ga852b9c77d4223af15d8d3674a0e2714d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_getc(
+		char* ch,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile
+		)
+
+Read a character from the specified file.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ch
+
+		- The character to read into
+
+	*
+		- thefile
+
+		- The file descriptor to read from
+
+.. index:: pair: function; apr_file_ungetc
+.. _doxid-group__apr__file__io_1ga9d06778e719d596ab96bca812b01cb3a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_ungetc(
+		char ch,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile
+		)
+
+Put a character back onto a specified stream.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ch
+
+		- The character to write.
+
+	*
+		- thefile
+
+		- The file descriptor to write to
+
+.. index:: pair: function; apr_file_gets
+.. _doxid-group__apr__file__io_1gaf9513b769c10b09e5f37d6d0b86bdce9:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_gets(
+		char* str,
+		int len,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile
+		)
+
+Read a line from the specified file The buffer will be NUL-terminated if any characters are stored. The newline at the end of the line will not be stripped.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- str
+
+		- The buffer to store the string in.
+
+	*
+		- len
+
+		- The length of the string
+
+	*
+		- thefile
+
+		- The file descriptor to read from
+
+.. index:: pair: function; apr_file_puts
+.. _doxid-group__apr__file__io_1gacde81145cc38660a1512d469886ddb16:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_puts(
+		const char* str,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile
+		)
+
+Write the string into the specified file.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- str
+
+		- The string to write.
+
+	*
+		- thefile
+
+		- The file descriptor to write to
+
+.. index:: pair: function; apr_file_flush
+.. _doxid-group__apr__file__io_1ga68aba780b7fc53e47404bfd8def949bc:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_flush(:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile)
+
+Flush the file's buffer.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thefile
+
+		- The file descriptor to flush
+
+.. index:: pair: function; apr_file_sync
+.. _doxid-group__apr__file__io_1ga4385e141c4bbb96294acd7d342f138da:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_sync(:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile)
+
+Transfer all file modified data and metadata to disk.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thefile
+
+		- The file descriptor to sync
+
+.. index:: pair: function; apr_file_datasync
+.. _doxid-group__apr__file__io_1gaa4b4e5027c1d8dbe4e5cb47b8eebc03b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_datasync(:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile)
+
+Transfer all file modified data to disk.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thefile
+
+		- The file descriptor to sync
+
+.. index:: pair: function; apr_file_dup
+.. _doxid-group__apr__file__io_1ga6e849af1b0fd31669c58a803fcb13837:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_dup(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** new_file,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* old_file,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		)
+
+Duplicate the specified file descriptor. \*new_file must point to a valid apr_file_t, or point to NULL.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- new_file
+
+		- The structure to duplicate into.
+
+	*
+		- old_file
+
+		- The file to duplicate.
+
+	*
+		- p
+
+		- The pool to use for the new file.
+
+.. index:: pair: function; apr_file_dup2
+.. _doxid-group__apr__file__io_1ga602926aad867088297e8f59490ff939c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_dup2(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* new_file,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* old_file,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		)
+
+Duplicate the specified file descriptor and close the original new_file MUST point at a valid apr_file_t. It cannot be NULL.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- new_file
+
+		- The old file that is to be closed and reused
+
+	*
+		- old_file
+
+		- The file to duplicate
+
+	*
+		- p
+
+		- The pool to use for the new file
+
+.. index:: pair: function; apr_file_setaside
+.. _doxid-group__apr__file__io_1gadaf046ce39aa118dab921a407446355b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_setaside(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** new_file,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* old_file,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		)
+
+Move the specified file descriptor to a new pool Unlike :ref:`apr_file_dup2() <doxid-group__apr__file__io_1ga602926aad867088297e8f59490ff939c>`, this function doesn't do an OS dup() operation on the underlying descriptor; it just moves the descriptor's apr_file_t wrapper to a new pool.
+
+The new pool need not be an ancestor of old_file's pool.
+
+After calling this function, old_file may not be used
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- new_file
+
+		- Pointer in which to return the new apr_file_t
+
+	*
+		- old_file
+
+		- The file to move
+
+	*
+		- p
+
+		- The pool to which the descriptor is to be moved
+
+.. index:: pair: function; apr_file_buffer_set
+.. _doxid-group__apr__file__io_1gafe4be8c3b62c42535b84d4237bf6e421:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_buffer_set(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile,
+		char* buffer,
+		apr_size_t bufsize
+		)
+
+Give the specified apr file handle a new buffer It is possible to add a buffer to previously unbuffered file handles, the :ref:`APR_FOPEN_BUFFERED <doxid-group__apr__file__open__flags_1gac48fd4c853c9f561632a2e8aaf5d8d97>` flag will be added to the file handle's flags. Likewise, with buffer=NULL and bufsize=0 arguments it is possible to make a previously buffered file handle unbuffered.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thefile
+
+		- The file handle that is to be modified
+
+	*
+		- buffer
+
+		- The buffer
+
+	*
+		- bufsize
+
+		- The size of the buffer
+
+.. index:: pair: function; apr_file_buffer_size_get
+.. _doxid-group__apr__file__io_1ga42bbb9227095686ea15eb79f99d248a2:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	apr_size_t
+	apr_file_buffer_size_get(:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile)
+
+Get the size of any buffer for the specified apr file handle
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thefile
+
+		- The file handle
+
+.. index:: pair: function; apr_file_seek
+.. _doxid-group__apr__file__io_1ga9db84bec24db97a53890df1a6aff63a1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_seek(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile,
+		:ref:`apr_seek_where_t<doxid-group__apr__file__io_1ga8eecd44975906042e0e369771802a145>` where,
+		apr_off_t* offset
+		)
+
+Move the read/write file offset to a specified byte within a file. The third argument is modified to be the offset the pointer was actually moved to.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thefile
+
+		- The file descriptor
+
+	*
+		- where
+
+		- 
+		  How to move the pointer, one of:
+		  
+		  * :ref:`APR_SET <doxid-group__apr__file__seek__flags_1ga2fdf78845c897f69451d49e1e2b90ac9>` set the offset to offset
+		  
+		  * :ref:`APR_CUR <doxid-group__apr__file__seek__flags_1gae17abc53fea00bfd51e184017113e250>` add the offset to the current position
+		  
+		  * :ref:`APR_END <doxid-group__apr__file__seek__flags_1ga438f3568be799d1e4bbd19492ca47d22>` add the offset to the current file size
+
+	*
+		- offset
+
+		- The offset to move the pointer to.
+
+.. index:: pair: function; apr_file_pipe_create
+.. _doxid-group__apr__file__io_1gaae3b81342d239c58c351cf11190740ed:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_pipe_create(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** in,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** out,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		)
+
+Create an anonymous pipe. By default, the returned file descriptors will be inherited by child processes created using :ref:`apr_proc_create() <doxid-group__apr__thread__proc_1gab51dd90b98d365a969f0ec5c7bef4e14>`. This can be changed using :ref:`apr_file_inherit_unset() <doxid-group__apr__file__io_1ga69fa72a6f77b96572248c2a6a347c02a>`.
+
+Bug Some platforms cannot toggle between blocking and nonblocking, and when passing a pipe as a standard handle to an application which does not expect it, a non-blocking stream will fluxor the client app.
+
+Deprecated
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- in
+
+		- The newly created pipe's file for reading.
+
+	*
+		- out
+
+		- The newly created pipe's file for writing.
+
+	*
+		- pool
+
+		- The pool to operate on.
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_file_pipe_create_ex() <doxid-group__apr__file__io_1ga2fbbae715bee0e0ca9adadd66ac65e96>`
+
+.. index:: pair: function; apr_file_pipe_create_ex
+.. _doxid-group__apr__file__io_1ga2fbbae715bee0e0ca9adadd66ac65e96:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_pipe_create_ex(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** in,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** out,
+		apr_int32_t blocking,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		)
+
+Create an anonymous pipe which portably supports async timeout options. By default, the returned file descriptors will be inherited by child processes created using :ref:`apr_proc_create() <doxid-group__apr__thread__proc_1gab51dd90b98d365a969f0ec5c7bef4e14>`. This can be changed using :ref:`apr_file_inherit_unset() <doxid-group__apr__file__io_1ga69fa72a6f77b96572248c2a6a347c02a>`.
+
+Some platforms cannot toggle between blocking and nonblocking, and when passing a pipe as a standard handle to an application which does not expect it, a non-blocking stream will fluxor the client app. Use this function rather than :ref:`apr_file_pipe_create() <doxid-group__apr__file__io_1gaae3b81342d239c58c351cf11190740ed>` to create pipes where one or both ends require non-blocking semantics.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- in
+
+		- The newly created pipe's file for reading.
+
+	*
+		- out
+
+		- The newly created pipe's file for writing.
+
+	*
+		- blocking
+
+		- 
+		  one of these values defined in ``apr_thread_proc.h``;
+		  
+		  * :ref:`APR_FULL_BLOCK <doxid-group__apr__thread__proc_1ga646af57314e71f4647243f36dd03e5ea>`
+		  
+		  * :ref:`APR_READ_BLOCK <doxid-group__apr__thread__proc_1gaf8295548cb0821ee02249d6de8336bcb>`
+		  
+		  * :ref:`APR_WRITE_BLOCK <doxid-group__apr__thread__proc_1ga36ff2de9664ad6995bd488b4ac715c9c>`
+		  
+		  * :ref:`APR_FULL_NONBLOCK <doxid-group__apr__thread__proc_1gae0707f76da785490830fc3491093767c>`
+
+	*
+		- pool
+
+		- The pool to operate on.
+
+.. index:: pair: function; apr_file_namedpipe_create
+.. _doxid-group__apr__file__io_1ga60cec3e6717bab0f11577bd7c38b4c59:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_namedpipe_create(
+		const char* filename,
+		:ref:`apr_fileperms_t<doxid-group__apr__file__info_1ga3af19c4c47007169064a70f9351bc7d8>` perm,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		)
+
+Create a named pipe.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- filename
+
+		- The filename of the named pipe
+
+	*
+		- perm
+
+		- The permissions for the newly created pipe.
+
+	*
+		- pool
+
+		- The pool to operate on.
+
+.. index:: pair: function; apr_file_pipe_timeout_get
+.. _doxid-group__apr__file__io_1ga90e481207a38df04818a0c55883ee953:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_pipe_timeout_get(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thepipe,
+		:ref:`apr_interval_time_t<doxid-group__apr__time_1gaae2129185a395cc393f76fabf4f43e47>`* timeout
+		)
+
+Get the timeout value for a pipe or manipulate the blocking state.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thepipe
+
+		- The pipe we are getting a timeout for.
+
+	*
+		- timeout
+
+		- The current timeout value in microseconds.
+
+.. index:: pair: function; apr_file_pipe_timeout_set
+.. _doxid-group__apr__file__io_1gaf88d2fca768e3fa9f28ea010e1bf602a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_pipe_timeout_set(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thepipe,
+		:ref:`apr_interval_time_t<doxid-group__apr__time_1gaae2129185a395cc393f76fabf4f43e47>` timeout
+		)
+
+Set the timeout value for a pipe or manipulate the blocking state.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thepipe
+
+		- The pipe we are setting a timeout on.
+
+	*
+		- timeout
+
+		- The timeout value in microseconds. Values < 0 mean wait forever, 0 means do not wait at all.
+
+.. index:: pair: function; apr_file_lock
+.. _doxid-group__apr__file__io_1ga2d337e66c1fa0cd433164079bf542484:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_lock(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile,
+		int type
+		)
+
+file (un)locking functions. Establish a lock on the specified, open file. The lock may be advisory or mandatory, at the discretion of the platform. The lock applies to the file as a whole, rather than a specific range. Locks are established on a per-thread/process basis; a second lock by the same thread will not block.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thefile
+
+		- The file to lock.
+
+	*
+		- type
+
+		- The type of lock to establish on the file.
+
+.. index:: pair: function; apr_file_unlock
+.. _doxid-group__apr__file__io_1ga3a255996fb439b6d66ed7cd65319525b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_unlock(:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile)
+
+Remove any outstanding locks on the file.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thefile
+
+		- The file to unlock.
+
+.. index:: pair: function; apr_file_name_get
+.. _doxid-group__apr__file__io_1ga5c750a88fe1e032e1d85d3db40d9519f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_name_get(
+		const char** new_path,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile
+		)
+
+accessor and general file_io functions. return the file name of the current file.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- new_path
+
+		- The path of the file.
+
+	*
+		- thefile
+
+		- The currently open file.
+
+.. index:: pair: function; apr_file_data_get
+.. _doxid-group__apr__file__io_1gafa13b7024748a7e45344d6998ddbd281:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_data_get(
+		void** data,
+		const char* key,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* file
+		)
+
+Return the data associated with the current file.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- data
+
+		- The user data associated with the file.
+
+	*
+		- key
+
+		- The key to use for retrieving data associated with this file.
+
+	*
+		- file
+
+		- The currently open file.
+
+.. index:: pair: function; apr_file_data_set
+.. _doxid-group__apr__file__io_1ga58c857162593d8b3aa999df5b7af0805:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_data_set(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* file,
+		void* data,
+		const char* key,
+		:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`(*)(void*) cleanup
+		)
+
+Set the data associated with the current file.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- file
+
+		- The currently open file.
+
+	*
+		- data
+
+		- The user data to associate with the file.
+
+	*
+		- key
+
+		- The key to use for associating data with the file.
+
+	*
+		- cleanup
+
+		- The cleanup routine to use when the file is destroyed.
+
+.. index:: pair: function; apr_file_printf
+.. _doxid-group__apr__file__io_1ga29fca4b0201c236856fea5578f410c0e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	apr_file_printf(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* fptr,
+		const char* format,
+		...
+		)
+
+Write a string to a file using a printf format.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- fptr
+
+		- The file to write to.
+
+	*
+		- format
+
+		- The format string
+
+	*
+		- ...
+
+		- The values to substitute in the format string
+
+
+
+.. rubric:: Returns:
+
+The number of bytes written
+
+.. index:: pair: function; apr_file_perms_set
+.. _doxid-group__apr__file__io_1gac5fed6d75597476718c40fc603823b1e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_perms_set(
+		const char* fname,
+		:ref:`apr_fileperms_t<doxid-group__apr__file__info_1ga3af19c4c47007169064a70f9351bc7d8>` perms
+		)
+
+set the specified file's permission bits. Some platforms may not be able to apply all of the available permission bits; :ref:`APR_INCOMPLETE <doxid-group___a_p_r___error_1ga64dff43b83bcefd3f3c751be6b864ca1>` will be returned if some permissions are specified which could not be set.
+
+Platforms which do not implement this feature will return :ref:`APR_ENOTIMPL <doxid-group___a_p_r___error_1ga939ddb834a30bc9a5a0a329b13000161>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- fname
+
+		- The file (name) to apply the permissions to.
+
+	*
+		- perms
+
+		- The permission bits to apply to the file.
+
+.. index:: pair: function; apr_file_attrs_set
+.. _doxid-group__apr__file__io_1ga96ceec3492ad0c75d2b58c167087ee6a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_attrs_set(
+		const char* fname,
+		:ref:`apr_fileattrs_t<doxid-group__apr__file__io_1ga11fbee5a7a3f3d45fff5c31df0db9737>` attributes,
+		:ref:`apr_fileattrs_t<doxid-group__apr__file__io_1ga11fbee5a7a3f3d45fff5c31df0db9737>` attr_mask,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		)
+
+Set attributes of the specified file. This function should be used in preference to explicit manipulation of the file permissions, because the operations to provide these attributes are platform specific and may involve more than simply setting permission bits.
+
+Platforms which do not implement this feature will return :ref:`APR_ENOTIMPL <doxid-group___a_p_r___error_1ga939ddb834a30bc9a5a0a329b13000161>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- fname
+
+		- The full path to the file (using / on all systems)
+
+	*
+		- attributes
+
+		- 
+		  Or'd combination of
+		  
+		  * :ref:`APR_FILE_ATTR_READONLY <doxid-group__apr__file__attrs__set__flags_1ga333f2c798495cfb95ee624e11c862e38>` - make the file readonly
+		  
+		  * :ref:`APR_FILE_ATTR_EXECUTABLE <doxid-group__apr__file__attrs__set__flags_1ga51346f433e354f0bc8722388b6b275fd>` - make the file executable
+		  
+		  * :ref:`APR_FILE_ATTR_HIDDEN <doxid-group__apr__file__attrs__set__flags_1ga68c188c0e56b9abdef3c97ffd913c5aa>` - make the file hidden
+
+	*
+		- attr_mask
+
+		- Mask of valid bits in attributes.
+
+	*
+		- pool
+
+		- the pool to use.
+
+.. index:: pair: function; apr_file_mtime_set
+.. _doxid-group__apr__file__io_1ga79f58458a00a4072622005c09ed8f96f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_mtime_set(
+		const char* fname,
+		:ref:`apr_time_t<doxid-group__apr__time_1gadb4bde16055748190eae190c55aa02bb>` mtime,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		)
+
+Set the mtime of the specified file. Platforms which do not implement this feature will return :ref:`APR_ENOTIMPL <doxid-group___a_p_r___error_1ga939ddb834a30bc9a5a0a329b13000161>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- fname
+
+		- The full path to the file (using / on all systems)
+
+	*
+		- mtime
+
+		- The mtime to apply to the file.
+
+	*
+		- pool
+
+		- The pool to use.
+
+.. index:: pair: function; apr_dir_make
+.. _doxid-group__apr__file__io_1ga51e0b4703c7561f72587982808985d29:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_dir_make(
+		const char* path,
+		:ref:`apr_fileperms_t<doxid-group__apr__file__info_1ga3af19c4c47007169064a70f9351bc7d8>` perm,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		)
+
+Create a new directory on the file system.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- path
+
+		- the path for the directory to be created. (use / on all systems)
+
+	*
+		- perm
+
+		- Permissions for the new directory.
+
+	*
+		- pool
+
+		- the pool to use.
+
+.. index:: pair: function; apr_dir_make_recursive
+.. _doxid-group__apr__file__io_1ga6a3b2602f57ff148cd64096da02adbd2:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_dir_make_recursive(
+		const char* path,
+		:ref:`apr_fileperms_t<doxid-group__apr__file__info_1ga3af19c4c47007169064a70f9351bc7d8>` perm,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		)
+
+Creates a new directory on the file system, but behaves like 'mkdir -p'. Creates intermediate directories as required. No error will be reported if PATH already exists.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- path
+
+		- the path for the directory to be created. (use / on all systems)
+
+	*
+		- perm
+
+		- Permissions for the new directory.
+
+	*
+		- pool
+
+		- the pool to use.
+
+.. index:: pair: function; apr_dir_remove
+.. _doxid-group__apr__file__io_1ga5487d02a62fba9444747ccb5838150ba:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_dir_remove(
+		const char* path,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		)
+
+Remove directory from the file system. Removing a directory which is in-use (e.g., the current working directory, or during apr_dir_read, or with an open file) is not portable.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- path
+
+		- the path for the directory to be removed. (use / on all systems)
+
+	*
+		- pool
+
+		- the pool to use.
+
+.. index:: pair: function; apr_file_info_get
+.. _doxid-group__apr__file__io_1ga39be7fe05d0dda4a28f4358b61a44ac8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_info_get(
+		:ref:`apr_finfo_t<doxid-structapr__finfo__t>`* finfo,
+		apr_int32_t wanted,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile
+		)
+
+get the specified file's stats.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- finfo
+
+		- Where to store the information about the file.
+
+	*
+		- wanted
+
+		- The desired :ref:`apr_finfo_t <doxid-structapr__finfo__t>` fields, as a bit flag of APR_FINFO\_\* values
+
+	*
+		- thefile
+
+		- The file to get information about.
+
+.. index:: pair: function; apr_file_trunc
+.. _doxid-group__apr__file__io_1gac067fe5f208c927cf6d213197b9335a8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_trunc(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* fp,
+		apr_off_t offset
+		)
+
+Truncate the file's length to the specified offset The read/write file offset is repositioned to offset.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- fp
+
+		- The file to truncate
+
+	*
+		- offset
+
+		- The offset to truncate to.
+
+.. index:: pair: function; apr_file_flags_get
+.. _doxid-group__apr__file__io_1ga023d6e4d2512382a9d4b1f881e105b8f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	apr_int32_t
+	apr_file_flags_get(:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* f)
+
+Retrieve the flags that were passed into :ref:`apr_file_open() <doxid-group__apr__file__io_1gabda14cbf242fb4fe99055434213e5446>` when the file was opened.
+
+
+
+.. rubric:: Returns:
+
+apr_int32_t the flags
+
+.. index:: pair: function; apr_file_pool_get
+.. _doxid-group__apr__file__io_1gab5950b3b0156097b0181394a37e03ede:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`*
+	apr_file_pool_get(const :ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile)
+
+Get the pool used by the file.
+
+.. index:: pair: function; apr_file_inherit_set
+.. _doxid-group__apr__file__io_1ga137bee13d2c65fb8afd4b34e400187c7:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_inherit_set(:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile)
+
+Set a file to be inherited by child processes.
+
+.. index:: pair: function; apr_file_inherit_unset
+.. _doxid-group__apr__file__io_1ga69fa72a6f77b96572248c2a6a347c02a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_inherit_unset(:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* thefile)
+
+Unset a file from being inherited by child processes.
+
+.. index:: pair: function; apr_file_mktemp
+.. _doxid-group__apr__file__io_1gac34981f9ff41f85e4377a6dde185fe52:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_file_mktemp(
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`** fp,
+		char* templ,
+		apr_int32_t flags,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		)
+
+Open a temporary file This function generates a unique temporary file name from template. The last six characters of template must be XXXXXX and these are replaced with a string that makes the filename unique. Since it will be modified, template must not be a string constant, but should be declared as a character array.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- fp
+
+		- The apr file to use as a temporary file.
+
+	*
+		- templ
+
+		- The template to use when creating a temp file.
+
+	*
+		- flags
+
+		- The flags to open the file with. If this is zero, the file is opened with :ref:`APR_FOPEN_CREATE <doxid-group__apr__file__open__flags_1gafe94f21ccbf411172e70e7f473af251a>` | :ref:`APR_FOPEN_READ <doxid-group__apr__file__open__flags_1gaf9e7303f028b130ff7d4b209d6662d7d>` | :ref:`APR_FOPEN_WRITE <doxid-group__apr__file__open__flags_1gac598bb95fc9476b0bf2ed0b1c308842c>` | :ref:`APR_FOPEN_EXCL <doxid-group__apr__file__open__flags_1gabb7fb062cdf1d58faee8c7ea518496f1>` | :ref:`APR_FOPEN_DELONCLOSE <doxid-group__apr__file__open__flags_1ga5d3756f6d242c667ed1d3f54af4916eb>`
+
+	*
+		- p
+
+		- The pool to allocate the file out of.
+
+.. index:: pair: function; apr_temp_dir_get
+.. _doxid-group__apr__file__io_1ga5cc19828a668c362be0ad7a12b805cc0:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_temp_dir_get(
+		const char** temp_dir,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		)
+
+Find an existing directory suitable as a temporary storage location. This function uses an algorithm to search for a directory that an an application can use for temporary storage.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- temp_dir
+
+		- The temp directory.
+
+	*
+		- p
+
+		- The pool to use for any necessary allocations.
+

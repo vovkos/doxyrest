@@ -1,0 +1,604 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>The SSH helper functions. &mdash; LibSSH Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/doxyrest-pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/doxyrest-sphinx_rtd_theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/target-highlight.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="The SSH logging functions." href="group_libssh_log.html" />
+    <link rel="prev" title="The SSH error functions." href="group_libssh_error.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> LibSSH Documentation
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="page_libssh_linking.html">The Linking HowTo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_libssh_tutorial.html">The Tutorial</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="group_libssh.html">The libssh API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_pki.html">The SSH Public Key Infrastructure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_auth.html">The SSH authentication functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_buffer.html">The SSH buffer functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_channel.html">The SSH channel functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_error.html">The SSH error functions.</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">The SSH helper functions.</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#global-functions">Global Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_log.html">The SSH logging functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_messages.html">The SSH message functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_poll.html">The SSH poll functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_scp.html">The SSH scp functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_session.html">The SSH session functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_string.html">The SSH string functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_threads.html">The SSH threading functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_callbacks.html">The libssh callbacks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh.html#detailed-documentation">Detailed Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="group_ssh_cpp.html">The libssh C++ wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libssh_sftp.html">The libssh SFTP API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libssh_server.html">The libssh server API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="page_bug.html">Bug List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_deprecated.html">Deprecated List</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LibSSH Documentation</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="group_libssh.html">The libssh API</a> &raquo;</li>
+        
+      <li>The SSH helper functions.</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="the-ssh-helper-functions">
+<span id="doxid-group-libssh-misc"></span><span id="index-0"></span><h1>The SSH helper functions.</h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="overview">
+<h2>Overview</h2>
+<p>Different helper functions used in the SSH Library. <a class="reference internal" href="#details-group-libssh-misc"><span class="std std-ref">More…</span></a></p>
+<pre class="highlight doxyrest-overview-code-block literal-block">
+<span></span><span class="c1">// global functions</span>
+
+<span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libssh-misc-1ga83b053a8bdf80eea5ebc662e5098a52b"><span class="std std-ref">ssh_basename</span></a><span></span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">path</span><span class="p">);</span>
+
+<span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libssh-misc-1gad36f0f8dbde59aefedd385dff76384fa"><span class="std std-ref">ssh_dirname</span></a><span></span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">path</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-misc-1gad6effc9fcc3529ae5d7301fb096aa71c"><span class="std std-ref">ssh_getpass</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">prompt</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">len</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">echo</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">verify</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-misc-1ga5e15e93beecaef3af67d02b7ba55309f"><span class="std std-ref">ssh_mkdir</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">pathname</span><span class="p">,</span>
+    <span class="kt">mode_t</span> <span class="n">mode</span>
+    <span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libssh-misc-1gaeda71ed34a62fa332762f25b14dac6eb"><span class="std std-ref">ssh_version</span></a><span></span><span class="p">(</span><span class="kt">int</span> <span class="n">req_version</span><span class="p">);</span>
+
+<span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libssh-misc-1ga85622306848fd7e735d5843747f6eb28"><span class="std std-ref">ssh_path_expand_tilde</span></a><span></span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">d</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-misc-1gad1c4b29e2421eb8f9ca111d98b0c2976"><span class="std std-ref">ssh_timeout_update</span></a><span></span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_ssh_timestamp.html#doxid-structssh-timestamp"><span class="std std-ref">ssh_timestamp</span></a><span></span><span class="o">*</span> <span class="n">ts</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">timeout</span>
+    <span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">void</span><span class="o">*</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-misc-1ga7a36607f228dfde10db885d03b89c32e"><span></span><span class="n">_ssh_list_pop_head</span></span><span></span><span class="p">(</span><span class="k">struct</span> <a class="reference internal" href="struct_ssh_list.html#doxid-structssh-list"><span class="std std-ref">ssh_list</span></a><span></span><span class="o">*</span> <span class="n">list</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-misc-1ga37f393d573c9692e87b5a838bef7ebe4"><span></span><span class="n">ssh_analyze_banner</span></span><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">server</span><span class="p">,</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">ssh1</span><span class="p">,</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">ssh2</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-misc-1ga8077c07f3f7ca5bc62ac7ba807f30476"><span></span><span class="n">ssh_file_readaccess_ok</span></span><span></span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">file</span><span class="p">);</span>
+
+<span class="kt">char</span><span class="o">*</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-misc-1gaa9b6cc5a03233cde110bc394a9cc1a51"><span></span><span class="n">ssh_get_local_username</span></span><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="kt">char</span><span class="o">*</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-misc-1ga894753441a2150b0599fdb283bf02c24"><span></span><span class="n">ssh_get_user_home_dir</span></span><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="kt">char</span><span class="o">*</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-misc-1gaa8ec4fa8a47283d9a7fd8920e84f8fc1"><span></span><span class="n">ssh_hostport</span></span><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">host</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">port</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-misc-1ga1c673445ca02a6f30ba5940682b5e7ba"><span></span><span class="n">ssh_is_ipaddr</span></span><span></span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">str</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-misc-1ga6b7c4da7c95d8122de1d4f9c12d1a809"><span></span><span class="n">ssh_is_ipaddr_v4</span></span><span></span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">str</span><span class="p">);</span>
+
+<span class="k">static</span>
+<span class="k">struct</span> <a class="reference internal" href="struct_ssh_iterator.html#doxid-structssh-iterator"><span class="std std-ref">ssh_iterator</span></a><span></span><span class="o">*</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-misc-1ga4c467539707d0cee932840c3134ef15d"><span></span><span class="n">ssh_iterator_new</span></span><span></span><span class="p">(</span><span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-misc-1ga4590c6ff62f0e6feb59e2e3152a6721f"><span></span><span class="n">ssh_list_append</span></span><span></span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_ssh_list.html#doxid-structssh-list"><span class="std std-ref">ssh_list</span></a><span></span><span class="o">*</span> <span class="n">list</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">data</span>
+    <span class="p">);</span>
+
+<span class="k">struct</span> <a class="reference internal" href="struct_ssh_iterator.html#doxid-structssh-iterator"><span class="std std-ref">ssh_iterator</span></a><span></span><span class="o">*</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-misc-1ga7a929a68f02650d474604a10252afd68"><span></span><span class="n">ssh_list_find</span></span><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="k">struct</span> <a class="reference internal" href="struct_ssh_list.html#doxid-structssh-list"><span class="std std-ref">ssh_list</span></a><span></span><span class="o">*</span> <span class="n">list</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">value</span>
+    <span class="p">);</span>
+
+<span class="kt">void</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-misc-1ga069155e0b5924eb930022b8d566f6d28"><span></span><span class="n">ssh_list_free</span></span><span></span><span class="p">(</span><span class="k">struct</span> <a class="reference internal" href="struct_ssh_list.html#doxid-structssh-list"><span class="std std-ref">ssh_list</span></a><span></span><span class="o">*</span> <span class="n">list</span><span class="p">);</span>
+
+<span class="k">struct</span> <a class="reference internal" href="struct_ssh_iterator.html#doxid-structssh-iterator"><span class="std std-ref">ssh_iterator</span></a><span></span><span class="o">*</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-misc-1gad36d247bfcae7965d6aca8245d061e0d"><span></span><span class="n">ssh_list_get_iterator</span></span><span></span><span class="p">(</span><span class="k">const</span> <span class="k">struct</span> <a class="reference internal" href="struct_ssh_list.html#doxid-structssh-list"><span class="std std-ref">ssh_list</span></a><span></span><span class="o">*</span> <span class="n">list</span><span class="p">);</span>
+
+<span class="k">struct</span> <a class="reference internal" href="struct_ssh_list.html#doxid-structssh-list"><span class="std std-ref">ssh_list</span></a><span></span><span class="o">*</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-misc-1ga4c696e6fd38257737962971fa0362435"><span></span><span class="n">ssh_list_new</span></span><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-misc-1ga7f1c23a518f3ca0b63189763b64141c4"><span></span><span class="n">ssh_list_prepend</span></span><span></span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_ssh_list.html#doxid-structssh-list"><span class="std std-ref">ssh_list</span></a><span></span><span class="o">*</span> <span class="n">list</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">data</span>
+    <span class="p">);</span>
+
+<span class="kt">void</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-misc-1gac862429660a1f93dcf625d08f407b85e"><span></span><span class="n">ssh_list_remove</span></span><span></span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_ssh_list.html#doxid-structssh-list"><span class="std std-ref">ssh_list</span></a><span></span><span class="o">*</span> <span class="n">list</span><span class="p">,</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_ssh_iterator.html#doxid-structssh-iterator"><span class="std std-ref">ssh_iterator</span></a><span></span><span class="o">*</span> <span class="n">iterator</span>
+    <span class="p">);</span>
+
+<span class="kt">char</span><span class="o">*</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-misc-1ga88c3547781e8d80983e1ad1fe3cb70ff"><span></span><span class="n">ssh_lowercase</span></span><span></span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">str</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-misc-1ga7178af941c118949a8a7f34e3b5c815e"><span></span><span class="n">ssh_make_milliseconds</span></span><span></span><span class="p">(</span>
+    <span class="kt">long</span> <span class="n">sec</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">usec</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-misc-1gaf3cfcc97538c099a8f3d2a8b9ac8c258"><span></span><span class="n">ssh_match_group</span></span><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">group</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">object</span>
+    <span class="p">);</span>
+
+<span class="kt">char</span><span class="o">*</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-misc-1gabee03cec7d5ba668885bd1a47e9650ea"><span></span><span class="n">ssh_path_expand_escape</span></span><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">s</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-misc-1ga1a6abbb2da16c6543f7de29b5c98f086"><span></span><span class="n">ssh_timeout_elapsed</span></span><span></span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_ssh_timestamp.html#doxid-structssh-timestamp"><span class="std std-ref">ssh_timestamp</span></a><span></span><span class="o">*</span> <span class="n">ts</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">timeout</span>
+    <span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-misc-1ga8252b2c061fd7e0f75a00696e4edf12d"><span></span><span class="n">ssh_timestamp_difference</span></span><span></span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_ssh_timestamp.html#doxid-structssh-timestamp"><span class="std std-ref">ssh_timestamp</span></a><span></span><span class="o">*</span> <span class="n">old</span><span class="p">,</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_ssh_timestamp.html#doxid-structssh-timestamp"><span class="std std-ref">ssh_timestamp</span></a><span></span><span class="o">*</span> <span class="k">new</span>
+    <span class="p">);</span>
+
+<span class="kt">void</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-misc-1gaaa0c97f49044d29f2a3b5b3ae82979ff"><span></span><span class="n">ssh_timestamp_init</span></span><span></span><span class="p">(</span><span class="k">struct</span> <a class="reference internal" href="struct_ssh_timestamp.html#doxid-structssh-timestamp"><span class="std std-ref">ssh_timestamp</span></a><span></span><span class="o">*</span> <span class="n">ts</span><span class="p">);</span>
+
+<span class="c1">// macros</span>
+
+<span class="cp">#define </span><span class="doxyrest-code-target target" id="doxid-group-libssh-misc-1ga3be7ef61d339af381862a81d4b363efb"><span></span><span class="n">CLOCK</span></span><span></span>
+<span class="cp">#define </span><span class="doxyrest-code-target target" id="doxid-group-libssh-misc-1ga89cd34ceafacdb777878d4bf68da7a7e"><span></span><span class="n">NSS_BUFLEN_PASSWD</span></span>
+</pre>
+</div>
+<div class="section" id="detailed-documentation">
+<span id="details-group-libssh-misc"></span><h2>Detailed Documentation</h2>
+<p>Different helper functions used in the SSH Library.</p>
+<div class="section" id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-misc-1ga83b053a8bdf80eea5ebc662e5098a52b">
+<span id="index-1"></span><span></span><span class="kt">char</span><span class="o">*</span>
+<span class="n">ssh_basename</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">path</span><span class="p">)</span>
+</pre>
+<p>basename - parse filename component.</p>
+<p>basename breaks a null-terminated pathname string into a filename component. <a class="reference internal" href="#doxid-group-libssh-misc-1ga83b053a8bdf80eea5ebc662e5098a52b"><span class="std std-ref">ssh_basename()</span></a> returns the component following the final ‘/’. Trailing ‘/’ characters are not counted as part of the pathname.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>path</td>
+<td>The path to parse.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>The filename of path or NULL if we can’t allocate memory. If path is a the string “/”, basename returns the string “/”. If path is NULL or an empty string, “.” is returned.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-misc-1gad36f0f8dbde59aefedd385dff76384fa">
+<span id="index-2"></span><span></span><span class="kt">char</span><span class="o">*</span>
+<span class="n">ssh_dirname</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">path</span><span class="p">)</span>
+</pre>
+<p>Parse directory component.</p>
+<p>dirname breaks a null-terminated pathname string into a directory component. In the usual case, <a class="reference internal" href="#doxid-group-libssh-misc-1gad36f0f8dbde59aefedd385dff76384fa"><span class="std std-ref">ssh_dirname()</span></a> returns the string up to, but not including, the final ‘/’. Trailing ‘/’ characters are not counted as part of the pathname. The caller must free the memory.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>path</td>
+<td>The path to parse.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>The dirname of path or NULL if we can’t allocate memory. If path does not contain a slash, c_dirname() returns the string “.”. If path is the string “/”, it returns the string “/”. If path is NULL or an empty string, “.” is returned.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-misc-1gad6effc9fcc3529ae5d7301fb096aa71c">
+<span id="index-3"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_getpass</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">prompt</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">len</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">echo</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">verify</span>
+    <span class="p">)</span>
+</pre>
+<p>Get a password from the console.</p>
+<p>You should make sure that the buffer is an empty string!</p>
+<p>You can also use this function to ask for a username. Then you can fill the buffer with the username and it is shows to the users. If the users just presses enter the buffer will be untouched.</p>
+<pre class="highlight literal-block">
+<span></span><span class="kt">char</span> <span class="n">username</span><span class="p">[</span><span class="mi">128</span><span class="p">];</span>
+
+<span class="n">snprintf</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">username</span><span class="p">),</span> <span class="s">&quot;john&quot;</span><span class="p">);</span>
+
+<span class="n">ssh_getpass</span><span class="p">(</span><span class="s">&quot;Username:&quot;</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">username</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</pre>
+<p>The prompt will look like this:</p>
+<p>Username: [john]</p>
+<p>If you press enter then john is used as the username, or you can type it in to change it.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>prompt</td>
+<td>The prompt to show to ask for the password.</td>
+</tr>
+<tr class="row-even"><td>buf</td>
+<td>The buffer the password should be stored. It NEEDS to be empty or filled out.</td>
+</tr>
+<tr class="row-odd"><td>len</td>
+<td>The length of the buffer.</td>
+</tr>
+<tr class="row-even"><td>echo</td>
+<td>Should we echo what you type.</td>
+</tr>
+<tr class="row-odd"><td>verify</td>
+<td>Should we ask for the password twice.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success, -1 on error.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-misc-1ga5e15e93beecaef3af67d02b7ba55309f">
+<span id="index-4"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_mkdir</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">pathname</span><span class="p">,</span>
+    <span class="kt">mode_t</span> <span class="n">mode</span>
+    <span class="p">)</span>
+</pre>
+<p>Attempts to create a directory with the given pathname.</p>
+<p>This is the portable version of mkdir, mode is ignored on Windows systems.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>pathname</td>
+<td>The path name to create the directory.</td>
+</tr>
+<tr class="row-even"><td>mode</td>
+<td>The permissions to use.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success, &lt; 0 on error with errno set.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-misc-1gaeda71ed34a62fa332762f25b14dac6eb">
+<span id="index-5"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">ssh_version</span><span class="p">(</span><span class="kt">int</span> <span class="n">req_version</span><span class="p">)</span>
+</pre>
+<p>Check if libssh is the required version or get the version string.</p>
+<p>Example:</p>
+<pre class="highlight literal-block">
+<span></span><span class="k">if</span> <span class="p">(</span><span class="n">ssh_version</span><span class="p">(</span><span class="n">SSH_VERSION_INT</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;libssh version is too old!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+  <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">debug</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;libssh %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">ssh_version</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
+<span class="p">}</span>
+</pre>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>req_version</td>
+<td>The version required.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>If the version of libssh is newer than the version required it will return a version string. NULL if the version is older.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-misc-1ga85622306848fd7e735d5843747f6eb28">
+<span id="index-6"></span><span></span><span class="kt">char</span><span class="o">*</span>
+<span class="n">ssh_path_expand_tilde</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">d</span><span class="p">)</span>
+</pre>
+<p>Expand a directory starting with a tilde ‘~’.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>d</td>
+<td>The directory to expand.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>The expanded directory, NULL on error.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-misc-1gad1c4b29e2421eb8f9ca111d98b0c2976">
+<span id="index-7"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_timeout_update</span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_ssh_timestamp.html#doxid-structssh-timestamp"><span class="std std-ref">ssh_timestamp</span></a><span></span><span class="o">*</span> <span class="n">ts</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">timeout</span>
+    <span class="p">)</span>
+</pre>
+<p>updates a timeout value so it reflects the remaining time</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>ts</td>
+<td>pointer to an existing timestamp</td>
+</tr>
+<tr class="row-even"><td>timeout</td>
+<td>timeout in milliseconds. Negative values mean infinite timeout</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>remaining time in milliseconds, 0 if elapsed, -1 if never.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="group_libssh_log.html" class="btn btn-neutral float-right" title="The SSH logging functions." accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="group_libssh_error.html" class="btn btn-neutral float-left" title="The SSH error functions." accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2003-2017, LibSSH Maintainers.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

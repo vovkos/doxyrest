@@ -1,0 +1,1524 @@
+.. index:: pair: group; Device handling and enumeration
+.. _doxid-group__libusb__dev:
+
+Device handling and enumeration
+===============================
+
+.. toctree::
+	:hidden:
+
+	enum_libusb_bos_type.rst
+	enum_libusb_speed.rst
+	enum_libusb_ss_usb_device_capability_attributes.rst
+	enum_libusb_supported_speed.rst
+	enum_libusb_usb_2_0_extension_attributes.rst
+
+Overview
+~~~~~~~~
+
+The functionality documented below is designed to help with the following operations: :ref:`More...<details-group__libusb__dev>`
+
+
+.. ref-code-block:: c
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef struct :ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>` :ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`;
+	typedef struct :ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>` :ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`;
+
+	// enums
+
+	enum :ref:`libusb_bos_type<doxid-group__libusb__dev_1ga6ccabbf3b3728ae69608ba83bba4e64c>`;
+	enum :ref:`libusb_speed<doxid-group__libusb__dev_1ga2959abf1184f87b2ce06fe90db6ce614>`;
+	enum :ref:`libusb_ss_usb_device_capability_attributes<doxid-group__libusb__dev_1gaad5a5399176a35a64164dafad7fe4fcd>`;
+	enum :ref:`libusb_supported_speed<doxid-group__libusb__dev_1ga1454797ecc0de4d084c1619c420014f6>`;
+	enum :ref:`libusb_usb_2_0_extension_attributes<doxid-group__libusb__dev_1gacb8cfa928bffdd0066a3dd2e6aba0558>`;
+
+	// global functions
+
+	ssize_t
+	:ref:`libusb_get_device_list<doxid-group__libusb__dev_1gac0fe4b65914c5ed036e6cbec61cb0b97>`(
+		:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx,
+		:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`*** list
+		);
+
+	void
+	:ref:`libusb_free_device_list<doxid-group__libusb__dev_1gad3b8561d064bb3e1b8851ddeed3cd7d6>`(
+		:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`** list,
+		int unref_devices
+		);
+
+	uint8_t
+	:ref:`libusb_get_bus_number<doxid-group__libusb__dev_1gaf2718609d50c8ded2704e4051b3d2925>`(:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`* dev);
+
+	uint8_t
+	:ref:`libusb_get_port_number<doxid-group__libusb__dev_1ga14879a0ea7daccdcddb68852d86c00c4>`(:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`* dev);
+
+	int
+	:ref:`libusb_get_port_numbers<doxid-group__libusb__dev_1gaa4b7b2b50a9ce2aa396b0af2b979544d>`(
+		:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`* dev,
+		uint8_t* port_numbers,
+		int port_numbers_len
+		);
+
+	int
+	:ref:`libusb_get_port_path<doxid-group__libusb__dev_1ga9d392b8dff7abf5e475c72fd071c3c34>`(
+		:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx,
+		:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`* dev,
+		uint8_t* port_numbers,
+		uint8_t port_numbers_len
+		);
+
+	:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`*
+	:ref:`libusb_get_parent<doxid-group__libusb__dev_1ga97bb4dfff6bbb897ed9dfd6fa1a1deed>`(:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`* dev);
+
+	uint8_t
+	:ref:`libusb_get_device_address<doxid-group__libusb__dev_1gab6d4e39ac483ebaeb108f2954715305d>`(:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`* dev);
+
+	int
+	:ref:`libusb_get_device_speed<doxid-group__libusb__dev_1ga58c4e448ecd5cd4782f2b896ec40b22b>`(:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`* dev);
+
+	int
+	:ref:`libusb_get_max_packet_size<doxid-group__libusb__dev_1gac81968047e262409e78f3fe24321b604>`(
+		:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`* dev,
+		unsigned char endpoint
+		);
+
+	int
+	:ref:`libusb_get_max_iso_packet_size<doxid-group__libusb__dev_1gaec10b71c7209760db55ee0f8768bb4f0>`(
+		:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`* dev,
+		unsigned char endpoint
+		);
+
+	:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`*
+	:ref:`libusb_ref_device<doxid-group__libusb__dev_1gaabaa4193adcabba1789cc1165ac41a03>`(:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`* dev);
+
+	void
+	:ref:`libusb_unref_device<doxid-group__libusb__dev_1ga3cc62e6a191b7a9f213e62b81ec30f4d>`(:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`* dev);
+
+	int
+	:ref:`libusb_open<doxid-group__libusb__dev_1ga3f184a8be4488a767b2e0ae07e76d1b0>`(
+		:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`* dev,
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`** dev_handle
+		);
+
+	:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`*
+	:ref:`libusb_open_device_with_vid_pid<doxid-group__libusb__dev_1ga11ba48adb896b1492bbd3d0bf7e0f665>`(
+		:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx,
+		uint16_t vendor_id,
+		uint16_t product_id
+		);
+
+	void
+	:ref:`libusb_close<doxid-group__libusb__dev_1ga779bc4f1316bdb0ac383bddbd538620e>`(:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle);
+
+	:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`*
+	:ref:`libusb_get_device<doxid-group__libusb__dev_1gafe70b8a797893d4d16985980acec956a>`(:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle);
+
+	int
+	:ref:`libusb_get_configuration<doxid-group__libusb__dev_1gae921014b888b105471a31d54c77c1c4d>`(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		int* config
+		);
+
+	int
+	:ref:`libusb_set_configuration<doxid-group__libusb__dev_1ga785ddea63a2b9bcb879a614ca4867bed>`(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		int configuration
+		);
+
+	int
+	:ref:`libusb_claim_interface<doxid-group__libusb__dev_1gaee5076addf5de77c7962138397fd5b1a>`(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		int interface_number
+		);
+
+	int
+	:ref:`libusb_release_interface<doxid-group__libusb__dev_1ga49b5cb0d894f6807cd1693ef29aecbfa>`(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		int interface_number
+		);
+
+	int
+	:ref:`libusb_set_interface_alt_setting<doxid-group__libusb__dev_1ga4858ad4f0f58fd1dc0afaead1fe6479a>`(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		int interface_number,
+		int alternate_setting
+		);
+
+	int
+	:ref:`libusb_clear_halt<doxid-group__libusb__dev_1gab794bbc0b055d140f186f5a4d39c0891>`(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		unsigned char endpoint
+		);
+
+	int
+	:ref:`libusb_reset_device<doxid-group__libusb__dev_1gafee9c4638f1713ca5faa867948878111>`(:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle);
+
+	int
+	:ref:`libusb_kernel_driver_active<doxid-group__libusb__dev_1ga1cabd4660a274f715eeb82de112e0779>`(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		int interface_number
+		);
+
+	int
+	:ref:`libusb_detach_kernel_driver<doxid-group__libusb__dev_1ga5e0cc1d666097e915748593effdc634a>`(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		int interface_number
+		);
+
+	int
+	:ref:`libusb_attach_kernel_driver<doxid-group__libusb__dev_1gadeba36e900db663c0b7cf1b164a20d02>`(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		int interface_number
+		);
+
+	int
+	:ref:`libusb_set_auto_detach_kernel_driver<doxid-group__libusb__dev_1gac35b26fef01271eba65c60b2b3ce1cbf>`(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		int enable
+		);
+
+.. _details-group__libusb__dev:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+The functionality documented below is designed to help with the following operations:
+
+* Enumerating the USB devices currently attached to the system
+
+* Choosing a device to operate from your software
+
+* Opening and closing the chosen device
+
+
+
+.. _doxid-group__libusb__dev_1nutshell:
+
+In a nutshell...
+~~~~~~~~~~~~~~~~
+
+The description below really makes things sound more complicated than they actually are. The following sequence of function calls will be suitable for almost all scenarios and does not require you to have such a deep understanding of the resource management issues:
+
+.. ref-code-block:: c
+
+	// discover devices
+	libusb_device **list;
+	libusb_device *found = NULL;
+	ssize_t cnt = libusb_get_device_list(NULL, &list);
+	ssize_t i = 0;
+	int err = 0;
+	if (cnt < 0)
+	    error();
+	
+	for (i = 0; i < cnt; i++) {
+	    libusb_device *device = list[i];
+	    if (is_interesting(device)) {
+	        found = device;
+	        break;
+	    }
+	}
+	
+	if (found) {
+	    libusb_device_handle *handle;
+	
+	    err = libusb_open(found, &handle);
+	    if (err)
+	        error();
+	    // etc
+	}
+	
+	libusb_free_device_list(list, 1);
+
+The two important points:
+
+* You asked :ref:`libusb_free_device_list() <doxid-group__libusb__dev_1gad3b8561d064bb3e1b8851ddeed3cd7d6>` to unreference the devices (2nd parameter)
+
+* You opened the device before freeing the list and unreferencing the devices
+
+If you ended up with a handle, you can now proceed to perform I/O on the device.
+
+
+
+
+
+.. _doxid-group__libusb__dev_1devshandles:
+
+Devices and device handles
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+libusb has a concept of a USB device, represented by the :ref:`libusb_device <doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>` opaque type. A device represents a USB device that is currently or was previously connected to the system. Using a reference to a device, you can determine certain information about the device (e.g. you can read the descriptor data).
+
+The :ref:`libusb_get_device_list() <doxid-group__libusb__dev_1gac0fe4b65914c5ed036e6cbec61cb0b97>` function can be used to obtain a list of devices currently connected to the system. This is known as device discovery.
+
+Just because you have a reference to a device does not mean it is necessarily usable. The device may have been unplugged, you may not have permission to operate such device, or another program or driver may be using the device.
+
+When you've found a device that you'd like to operate, you must ask libusb to open the device using the :ref:`libusb_open() <doxid-group__libusb__dev_1ga3f184a8be4488a767b2e0ae07e76d1b0>` function. Assuming success, libusb then returns you a *device handle* (a :ref:`libusb_device_handle <doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>` pointer). All "real" I/O operations then operate on the handle rather than the original device pointer.
+
+
+
+
+
+.. _doxid-group__libusb__dev_1devref:
+
+Device discovery and reference counting
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Device discovery (i.e. calling :ref:`libusb_get_device_list() <doxid-group__libusb__dev_1gac0fe4b65914c5ed036e6cbec61cb0b97>`) returns a freshly-allocated list of devices. The list itself must be freed when you are done with it. libusb also needs to know when it is OK to free the contents of the list - the devices themselves.
+
+To handle these issues, libusb provides you with two separate items:
+
+* A function to free the list itself
+
+* A reference counting system for the devices inside
+
+New devices presented by the :ref:`libusb_get_device_list() <doxid-group__libusb__dev_1gac0fe4b65914c5ed036e6cbec61cb0b97>` function all have a reference count of 1. You can increase and decrease reference count using :ref:`libusb_ref_device() <doxid-group__libusb__dev_1gaabaa4193adcabba1789cc1165ac41a03>` and :ref:`libusb_unref_device() <doxid-group__libusb__dev_1ga3cc62e6a191b7a9f213e62b81ec30f4d>`. A device is destroyed when its reference count reaches 0.
+
+With the above information in mind, the process of opening a device can be viewed as follows:
+
+#. Discover devices using :ref:`libusb_get_device_list() <doxid-group__libusb__dev_1gac0fe4b65914c5ed036e6cbec61cb0b97>`.
+
+#. Choose the device that you want to operate, and call :ref:`libusb_open() <doxid-group__libusb__dev_1ga3f184a8be4488a767b2e0ae07e76d1b0>`.
+
+#. Unref all devices in the discovered device list.
+
+#. Free the discovered device list.
+
+The order is important - you must not unreference the device before attempting to open it, because unreferencing it may destroy the device.
+
+For convenience, the :ref:`libusb_free_device_list() <doxid-group__libusb__dev_1gad3b8561d064bb3e1b8851ddeed3cd7d6>` function includes a parameter to optionally unreference all the devices in the list before freeing the list itself. This combines steps 3 and 4 above.
+
+As an implementation detail, :ref:`libusb_open() <doxid-group__libusb__dev_1ga3f184a8be4488a767b2e0ae07e76d1b0>` actually adds a reference to the device in question. This is because the device remains available through the handle via :ref:`libusb_get_device() <doxid-group__libusb__dev_1gafe70b8a797893d4d16985980acec956a>`. The reference is deleted during :ref:`libusb_close() <doxid-group__libusb__dev_1ga779bc4f1316bdb0ac383bddbd538620e>`.
+
+Typedefs
+--------
+
+.. index:: pair: typedef; libusb_device
+.. _doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>` libusb_device
+
+Structure representing a USB device detected on the system.
+
+This is an opaque type for which you are only ever provided with a pointer, usually originating from :ref:`libusb_get_device_list() <doxid-group__libusb__dev_1gac0fe4b65914c5ed036e6cbec61cb0b97>`.
+
+Certain operations can be performed on a device, but in order to do any I/O you will have to first obtain a device handle using :ref:`libusb_open() <doxid-group__libusb__dev_1ga3f184a8be4488a767b2e0ae07e76d1b0>`.
+
+Devices are reference counted with :ref:`libusb_ref_device() <doxid-group__libusb__dev_1gaabaa4193adcabba1789cc1165ac41a03>` and :ref:`libusb_unref_device() <doxid-group__libusb__dev_1ga3cc62e6a191b7a9f213e62b81ec30f4d>`, and are freed when the reference count reaches 0. New devices presented by :ref:`libusb_get_device_list() <doxid-group__libusb__dev_1gac0fe4b65914c5ed036e6cbec61cb0b97>` have a reference count of 1, and :ref:`libusb_free_device_list() <doxid-group__libusb__dev_1gad3b8561d064bb3e1b8851ddeed3cd7d6>` can optionally decrease the reference count on all devices in the list. :ref:`libusb_open() <doxid-group__libusb__dev_1ga3f184a8be4488a767b2e0ae07e76d1b0>` adds another reference which is later destroyed by :ref:`libusb_close() <doxid-group__libusb__dev_1ga779bc4f1316bdb0ac383bddbd538620e>`.
+
+.. index:: pair: typedef; libusb_device_handle
+.. _doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>` libusb_device_handle
+
+Structure representing a handle on a USB device.
+
+This is an opaque type for which you are only ever provided with a pointer, usually originating from :ref:`libusb_open() <doxid-group__libusb__dev_1ga3f184a8be4488a767b2e0ae07e76d1b0>`.
+
+A device handle is used to perform I/O and other operations. When finished with a device handle, you should call :ref:`libusb_close() <doxid-group__libusb__dev_1ga779bc4f1316bdb0ac383bddbd538620e>`.
+
+Global Functions
+----------------
+
+.. index:: pair: function; libusb_get_device_list
+.. _doxid-group__libusb__dev_1gac0fe4b65914c5ed036e6cbec61cb0b97:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	ssize_t
+	libusb_get_device_list(
+		:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx,
+		:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`*** list
+		)
+
+Returns a list of USB devices currently attached to the system.
+
+This is your entry point into finding a USB device to operate.
+
+You are expected to unreference all the devices when you are done with them, and then free the list with :ref:`libusb_free_device_list() <doxid-group__libusb__dev_1gad3b8561d064bb3e1b8851ddeed3cd7d6>`. Note that :ref:`libusb_free_device_list() <doxid-group__libusb__dev_1gad3b8561d064bb3e1b8851ddeed3cd7d6>` can unref all the devices for you. Be careful not to unreference a device you are about to open until after you have opened it.
+
+This return value of this function indicates the number of devices in the resultant list. The list is actually one element larger, as it is NULL-terminated.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ctx
+
+		- the context to operate on, or NULL for the default context
+
+	*
+		- list
+
+		- output location for a list of devices. Must be later freed with :ref:`libusb_free_device_list() <doxid-group__libusb__dev_1gad3b8561d064bb3e1b8851ddeed3cd7d6>`.
+
+
+
+.. rubric:: Returns:
+
+the number of devices in the outputted list, or any :ref:`libusb_error <doxid-group__libusb__misc_1gab2323aa0f04bc22038e7e1740b2f29ef>` according to errors encountered by the backend.
+
+.. index:: pair: function; libusb_free_device_list
+.. _doxid-group__libusb__dev_1gad3b8561d064bb3e1b8851ddeed3cd7d6:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	void
+	libusb_free_device_list(
+		:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`** list,
+		int unref_devices
+		)
+
+Frees a list of devices previously discovered using :ref:`libusb_get_device_list() <doxid-group__libusb__dev_1gac0fe4b65914c5ed036e6cbec61cb0b97>`.
+
+If the unref_devices parameter is set, the reference count of each device in the list is decremented by 1.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- list
+
+		- the list to free
+
+	*
+		- unref_devices
+
+		- whether to unref the devices in the list
+
+.. index:: pair: function; libusb_get_bus_number
+.. _doxid-group__libusb__dev_1gaf2718609d50c8ded2704e4051b3d2925:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	uint8_t
+	libusb_get_bus_number(:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`* dev)
+
+Get the number of the bus that a device is connected to.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev
+
+		- a device
+
+
+
+.. rubric:: Returns:
+
+the bus number
+
+.. index:: pair: function; libusb_get_port_number
+.. _doxid-group__libusb__dev_1ga14879a0ea7daccdcddb68852d86c00c4:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	uint8_t
+	libusb_get_port_number(:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`* dev)
+
+Get the number of the port that a device is connected to.
+
+Unless the OS does something funky, or you are hot-plugging USB extension cards, the port number returned by this call is usually guaranteed to be uniquely tied to a physical port, meaning that different devices plugged on the same physical port should return the same port number.
+
+But outside of this, there is no guarantee that the port number returned by this call will remain the same, or even match the order in which ports have been numbered by the HUB/HCD manufacturer.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev
+
+		- a device
+
+
+
+.. rubric:: Returns:
+
+the port number (0 if not available)
+
+.. index:: pair: function; libusb_get_port_numbers
+.. _doxid-group__libusb__dev_1gaa4b7b2b50a9ce2aa396b0af2b979544d:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_get_port_numbers(
+		:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`* dev,
+		uint8_t* port_numbers,
+		int port_numbers_len
+		)
+
+Get the list of all port numbers from root for the specified device.
+
+Since version 1.0.16, :ref:`LIBUSB_API_VERSION <doxid-group__libusb__misc_1gaabe4bc36a83358685d36a6c853cbb4de>`>= 0x01000102
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev
+
+		- a device
+
+	*
+		- port_numbers
+
+		- the array that should contain the port numbers
+
+	*
+		- port_numbers_len
+
+		- the maximum length of the array. As per the USB 3.0 specs, the current maximum limit for the depth is 7.
+
+
+
+.. rubric:: Returns:
+
+the number of elements filled
+
+LIBUSB_ERROR_OVERFLOW if the array is too small
+
+.. index:: pair: function; libusb_get_port_path
+.. _doxid-group__libusb__dev_1ga9d392b8dff7abf5e475c72fd071c3c34:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_get_port_path(
+		:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx,
+		:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`* dev,
+		uint8_t* port_numbers,
+		uint8_t port_numbers_len
+		)
+
+Deprecated please use libusb_get_port_numbers instead.
+
+.. index:: pair: function; libusb_get_parent
+.. _doxid-group__libusb__dev_1ga97bb4dfff6bbb897ed9dfd6fa1a1deed:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`*
+	libusb_get_parent(:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`* dev)
+
+Get the the parent from the specified device.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev
+
+		- a device
+
+
+
+.. rubric:: Returns:
+
+the device parent or NULL if not available You should issue a :ref:`libusb_get_device_list() <doxid-group__libusb__dev_1gac0fe4b65914c5ed036e6cbec61cb0b97>` before calling this function and make sure that you only access the parent before issuing :ref:`libusb_free_device_list() <doxid-group__libusb__dev_1gad3b8561d064bb3e1b8851ddeed3cd7d6>`. The reason is that libusb currently does not maintain a permanent list of device instances, and therefore can only guarantee that parents are fully instantiated within a :ref:`libusb_get_device_list() <doxid-group__libusb__dev_1gac0fe4b65914c5ed036e6cbec61cb0b97>` - :ref:`libusb_free_device_list() <doxid-group__libusb__dev_1gad3b8561d064bb3e1b8851ddeed3cd7d6>` block.
+
+.. index:: pair: function; libusb_get_device_address
+.. _doxid-group__libusb__dev_1gab6d4e39ac483ebaeb108f2954715305d:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	uint8_t
+	libusb_get_device_address(:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`* dev)
+
+Get the address of the device on the bus it is connected to.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev
+
+		- a device
+
+
+
+.. rubric:: Returns:
+
+the device address
+
+.. index:: pair: function; libusb_get_device_speed
+.. _doxid-group__libusb__dev_1ga58c4e448ecd5cd4782f2b896ec40b22b:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_get_device_speed(:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`* dev)
+
+Get the negotiated connection speed for a device.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev
+
+		- a device
+
+
+
+.. rubric:: Returns:
+
+a :ref:`libusb_speed <doxid-group__libusb__dev_1ga2959abf1184f87b2ce06fe90db6ce614>` code, where LIBUSB_SPEED_UNKNOWN means that the OS doesn't know or doesn't support returning the negotiated speed.
+
+.. index:: pair: function; libusb_get_max_packet_size
+.. _doxid-group__libusb__dev_1gac81968047e262409e78f3fe24321b604:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_get_max_packet_size(
+		:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`* dev,
+		unsigned char endpoint
+		)
+
+Convenience function to retrieve the wMaxPacketSize value for a particular endpoint in the active device configuration.
+
+This function was originally intended to be of assistance when setting up isochronous transfers, but a design mistake resulted in this function instead. It simply returns the wMaxPacketSize value without considering its contents. If you're dealing with isochronous transfers, you probably want :ref:`libusb_get_max_iso_packet_size() <doxid-group__libusb__dev_1gaec10b71c7209760db55ee0f8768bb4f0>` instead.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev
+
+		- a device
+
+	*
+		- endpoint
+
+		- address of the endpoint in question
+
+
+
+.. rubric:: Returns:
+
+the wMaxPacketSize value
+
+LIBUSB_ERROR_NOT_FOUND if the endpoint does not exist
+
+LIBUSB_ERROR_OTHER on other failure
+
+.. index:: pair: function; libusb_get_max_iso_packet_size
+.. _doxid-group__libusb__dev_1gaec10b71c7209760db55ee0f8768bb4f0:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_get_max_iso_packet_size(
+		:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`* dev,
+		unsigned char endpoint
+		)
+
+Calculate the maximum packet size which a specific endpoint is capable is sending or receiving in the duration of 1 microframe.
+
+Only the active configuration is examined. The calculation is based on the wMaxPacketSize field in the endpoint descriptor as described in section 9.6.6 in the USB 2.0 specifications.
+
+If acting on an isochronous or interrupt endpoint, this function will multiply the value found in bits 0:10 by the number of transactions per microframe (determined by bits 11:12). Otherwise, this function just returns the numeric value found in bits 0:10.
+
+This function is useful for setting up isochronous transfers, for example you might pass the return value from this function to :ref:`libusb_set_iso_packet_lengths() <doxid-group__libusb__asyncio_1gacbdecd6f50093f0c1d0e72ee35ace274>` in order to set the length field of every isochronous packet in a transfer.
+
+Since v1.0.3.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev
+
+		- a device
+
+	*
+		- endpoint
+
+		- address of the endpoint in question
+
+
+
+.. rubric:: Returns:
+
+the maximum packet size which can be sent/received on this endpoint
+
+LIBUSB_ERROR_NOT_FOUND if the endpoint does not exist
+
+LIBUSB_ERROR_OTHER on other failure
+
+.. index:: pair: function; libusb_ref_device
+.. _doxid-group__libusb__dev_1gaabaa4193adcabba1789cc1165ac41a03:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`*
+	libusb_ref_device(:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`* dev)
+
+Increment the reference count of a device.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev
+
+		- the device to reference
+
+
+
+.. rubric:: Returns:
+
+the same device
+
+.. index:: pair: function; libusb_unref_device
+.. _doxid-group__libusb__dev_1ga3cc62e6a191b7a9f213e62b81ec30f4d:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	void
+	libusb_unref_device(:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`* dev)
+
+Decrement the reference count of a device.
+
+If the decrement operation causes the reference count to reach zero, the device shall be destroyed.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev
+
+		- the device to unreference
+
+.. index:: pair: function; libusb_open
+.. _doxid-group__libusb__dev_1ga3f184a8be4488a767b2e0ae07e76d1b0:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_open(
+		:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`* dev,
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`** dev_handle
+		)
+
+Open a device and obtain a device handle.
+
+A handle allows you to perform I/O on the device in question.
+
+Internally, this function adds a reference to the device and makes it available to you through :ref:`libusb_get_device() <doxid-group__libusb__dev_1gafe70b8a797893d4d16985980acec956a>`. This reference is removed during :ref:`libusb_close() <doxid-group__libusb__dev_1ga779bc4f1316bdb0ac383bddbd538620e>`.
+
+This is a non-blocking function; no requests are sent over the bus.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev
+
+		- the device to open
+
+	*
+		- dev_handle
+
+		- output location for the returned device handle pointer. Only populated when the return code is 0.
+
+
+
+.. rubric:: Returns:
+
+0 on success
+
+LIBUSB_ERROR_NO_MEM on memory allocation failure
+
+LIBUSB_ERROR_ACCESS if the user has insufficient permissions
+
+LIBUSB_ERROR_NO_DEVICE if the device has been disconnected
+
+another LIBUSB_ERROR code on other failure
+
+.. index:: pair: function; libusb_open_device_with_vid_pid
+.. _doxid-group__libusb__dev_1ga11ba48adb896b1492bbd3d0bf7e0f665:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`*
+	libusb_open_device_with_vid_pid(
+		:ref:`libusb_context<doxid-group__libusb__lib_1ga4ec088aa7b79c4a9599e39bf36a72833>`* ctx,
+		uint16_t vendor_id,
+		uint16_t product_id
+		)
+
+Convenience function for finding a device with a particular ``idVendor`` / ``idProduct`` combination.
+
+This function is intended for those scenarios where you are using libusb to knock up a quick test application - it allows you to avoid calling :ref:`libusb_get_device_list() <doxid-group__libusb__dev_1gac0fe4b65914c5ed036e6cbec61cb0b97>` and worrying about traversing/freeing the list.
+
+This function has limitations and is hence not intended for use in real applications: if multiple devices have the same IDs it will only give you the first one, etc.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ctx
+
+		- the context to operate on, or NULL for the default context
+
+	*
+		- vendor_id
+
+		- the idVendor value to search for
+
+	*
+		- product_id
+
+		- the idProduct value to search for
+
+
+
+.. rubric:: Returns:
+
+a device handle for the first found device, or NULL on error or if the device could not be found.
+
+.. index:: pair: function; libusb_close
+.. _doxid-group__libusb__dev_1ga779bc4f1316bdb0ac383bddbd538620e:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	void
+	libusb_close(:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle)
+
+Close a device handle.
+
+Should be called on all open handles before your application exits.
+
+Internally, this function destroys the reference that was added by :ref:`libusb_open() <doxid-group__libusb__dev_1ga3f184a8be4488a767b2e0ae07e76d1b0>` on the given device.
+
+This is a non-blocking function; no requests are sent over the bus.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev_handle
+
+		- the device handle to close
+
+.. index:: pair: function; libusb_get_device
+.. _doxid-group__libusb__dev_1gafe70b8a797893d4d16985980acec956a:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	:ref:`libusb_device<doxid-group__libusb__dev_1ga77eedd00d01eb7569b880e861a971c2b>`*
+	libusb_get_device(:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle)
+
+Get the underlying device for a device handle.
+
+This function does not modify the reference count of the returned device, so do not feel compelled to unreference it when you are done.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev_handle
+
+		- a device handle
+
+
+
+.. rubric:: Returns:
+
+the underlying device
+
+.. index:: pair: function; libusb_get_configuration
+.. _doxid-group__libusb__dev_1gae921014b888b105471a31d54c77c1c4d:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_get_configuration(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		int* config
+		)
+
+Determine the bConfigurationValue of the currently active configuration.
+
+You could formulate your own control request to obtain this information, but this function has the advantage that it may be able to retrieve the information from operating system caches (no I/O involved).
+
+If the OS does not cache this information, then this function will block while a control transfer is submitted to retrieve the information.
+
+This function will return a value of 0 in the ``config`` output parameter if the device is in unconfigured state.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev_handle
+
+		- a device handle
+
+	*
+		- config
+
+		- output location for the bConfigurationValue of the active configuration (only valid for return code 0)
+
+
+
+.. rubric:: Returns:
+
+0 on success
+
+LIBUSB_ERROR_NO_DEVICE if the device has been disconnected
+
+another LIBUSB_ERROR code on other failure
+
+.. index:: pair: function; libusb_set_configuration
+.. _doxid-group__libusb__dev_1ga785ddea63a2b9bcb879a614ca4867bed:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_set_configuration(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		int configuration
+		)
+
+Set the active configuration for a device.
+
+The operating system may or may not have already set an active configuration on the device. It is up to your application to ensure the correct configuration is selected before you attempt to claim interfaces and perform other operations.
+
+If you call this function on a device already configured with the selected configuration, then this function will act as a lightweight device reset: it will issue a SET_CONFIGURATION request using the current configuration, causing most USB-related device state to be reset (altsetting reset to zero, endpoint halts cleared, toggles reset).
+
+You cannot change/reset configuration if your application has claimed interfaces. It is advised to set the desired configuration before claiming interfaces.
+
+Alternatively you can call :ref:`libusb_release_interface() <doxid-group__libusb__dev_1ga49b5cb0d894f6807cd1693ef29aecbfa>` first. Note if you do things this way you must ensure that auto_detach_kernel_driver for ``dev`` is 0, otherwise the kernel driver will be re-attached when you release the interface(s).
+
+You cannot change/reset configuration if other applications or drivers have claimed interfaces.
+
+A configuration value of -1 will put the device in unconfigured state. The USB specifications state that a configuration value of 0 does this, however buggy devices exist which actually have a configuration 0.
+
+You should always use this function rather than formulating your own SET_CONFIGURATION control request. This is because the underlying operating system needs to know when such changes happen.
+
+This is a blocking function.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev_handle
+
+		- a device handle
+
+	*
+		- configuration
+
+		- the bConfigurationValue of the configuration you wish to activate, or -1 if you wish to put the device in an unconfigured state
+
+
+
+.. rubric:: Returns:
+
+0 on success
+
+LIBUSB_ERROR_NOT_FOUND if the requested configuration does not exist
+
+LIBUSB_ERROR_BUSY if interfaces are currently claimed
+
+LIBUSB_ERROR_NO_DEVICE if the device has been disconnected
+
+another LIBUSB_ERROR code on other failure
+
+
+
+.. rubric:: See also:
+
+:ref:`libusb_set_auto_detach_kernel_driver() <doxid-group__libusb__dev_1gac35b26fef01271eba65c60b2b3ce1cbf>`
+
+.. index:: pair: function; libusb_claim_interface
+.. _doxid-group__libusb__dev_1gaee5076addf5de77c7962138397fd5b1a:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_claim_interface(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		int interface_number
+		)
+
+Claim an interface on a given device handle.
+
+You must claim the interface you wish to use before you can perform I/O on any of its endpoints.
+
+It is legal to attempt to claim an already-claimed interface, in which case libusb just returns 0 without doing anything.
+
+If auto_detach_kernel_driver is set to 1 for ``dev``, the kernel driver will be detached if necessary, on failure the detach error is returned.
+
+Claiming of interfaces is a purely logical operation; it does not cause any requests to be sent over the bus. Interface claiming is used to instruct the underlying operating system that your application wishes to take ownership of the interface.
+
+This is a non-blocking function.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev_handle
+
+		- a device handle
+
+	*
+		- interface_number
+
+		- the ``bInterfaceNumber`` of the interface you wish to claim
+
+
+
+.. rubric:: Returns:
+
+0 on success
+
+LIBUSB_ERROR_NOT_FOUND if the requested interface does not exist
+
+LIBUSB_ERROR_BUSY if another program or driver has claimed the interface
+
+LIBUSB_ERROR_NO_DEVICE if the device has been disconnected
+
+a LIBUSB_ERROR code on other failure
+
+
+
+.. rubric:: See also:
+
+:ref:`libusb_set_auto_detach_kernel_driver() <doxid-group__libusb__dev_1gac35b26fef01271eba65c60b2b3ce1cbf>`
+
+.. index:: pair: function; libusb_release_interface
+.. _doxid-group__libusb__dev_1ga49b5cb0d894f6807cd1693ef29aecbfa:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_release_interface(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		int interface_number
+		)
+
+Release an interface previously claimed with :ref:`libusb_claim_interface() <doxid-group__libusb__dev_1gaee5076addf5de77c7962138397fd5b1a>`.
+
+You should release all claimed interfaces before closing a device handle.
+
+This is a blocking function. A SET_INTERFACE control request will be sent to the device, resetting interface state to the first alternate setting.
+
+If auto_detach_kernel_driver is set to 1 for ``dev``, the kernel driver will be re-attached after releasing the interface.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev_handle
+
+		- a device handle
+
+	*
+		- interface_number
+
+		- the ``bInterfaceNumber`` of the previously-claimed interface
+
+
+
+.. rubric:: Returns:
+
+0 on success
+
+LIBUSB_ERROR_NOT_FOUND if the interface was not claimed
+
+LIBUSB_ERROR_NO_DEVICE if the device has been disconnected
+
+another LIBUSB_ERROR code on other failure
+
+
+
+.. rubric:: See also:
+
+:ref:`libusb_set_auto_detach_kernel_driver() <doxid-group__libusb__dev_1gac35b26fef01271eba65c60b2b3ce1cbf>`
+
+.. index:: pair: function; libusb_set_interface_alt_setting
+.. _doxid-group__libusb__dev_1ga4858ad4f0f58fd1dc0afaead1fe6479a:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_set_interface_alt_setting(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		int interface_number,
+		int alternate_setting
+		)
+
+Activate an alternate setting for an interface.
+
+The interface must have been previously claimed with :ref:`libusb_claim_interface() <doxid-group__libusb__dev_1gaee5076addf5de77c7962138397fd5b1a>`.
+
+You should always use this function rather than formulating your own SET_INTERFACE control request. This is because the underlying operating system needs to know when such changes happen.
+
+This is a blocking function.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev_handle
+
+		- a device handle
+
+	*
+		- interface_number
+
+		- the ``bInterfaceNumber`` of the previously-claimed interface
+
+	*
+		- alternate_setting
+
+		- the ``bAlternateSetting`` of the alternate setting to activate
+
+
+
+.. rubric:: Returns:
+
+0 on success
+
+LIBUSB_ERROR_NOT_FOUND if the interface was not claimed, or the requested alternate setting does not exist
+
+LIBUSB_ERROR_NO_DEVICE if the device has been disconnected
+
+another LIBUSB_ERROR code on other failure
+
+.. index:: pair: function; libusb_clear_halt
+.. _doxid-group__libusb__dev_1gab794bbc0b055d140f186f5a4d39c0891:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_clear_halt(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		unsigned char endpoint
+		)
+
+Clear the halt/stall condition for an endpoint.
+
+Endpoints with halt status are unable to receive or transmit data until the halt condition is stalled.
+
+You should cancel all pending transfers before attempting to clear the halt condition.
+
+This is a blocking function.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev_handle
+
+		- a device handle
+
+	*
+		- endpoint
+
+		- the endpoint to clear halt status
+
+
+
+.. rubric:: Returns:
+
+0 on success
+
+LIBUSB_ERROR_NOT_FOUND if the endpoint does not exist
+
+LIBUSB_ERROR_NO_DEVICE if the device has been disconnected
+
+another LIBUSB_ERROR code on other failure
+
+.. index:: pair: function; libusb_reset_device
+.. _doxid-group__libusb__dev_1gafee9c4638f1713ca5faa867948878111:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_reset_device(:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle)
+
+Perform a USB port reset to reinitialize a device.
+
+The system will attempt to restore the previous configuration and alternate settings after the reset has completed.
+
+If the reset fails, the descriptors change, or the previous state cannot be restored, the device will appear to be disconnected and reconnected. This means that the device handle is no longer valid (you should close it) and rediscover the device. A return code of LIBUSB_ERROR_NOT_FOUND indicates when this is the case.
+
+This is a blocking function which usually incurs a noticeable delay.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev_handle
+
+		- a handle of the device to reset
+
+
+
+.. rubric:: Returns:
+
+0 on success
+
+LIBUSB_ERROR_NOT_FOUND if re-enumeration is required, or if the device has been disconnected
+
+another LIBUSB_ERROR code on other failure
+
+.. index:: pair: function; libusb_kernel_driver_active
+.. _doxid-group__libusb__dev_1ga1cabd4660a274f715eeb82de112e0779:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_kernel_driver_active(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		int interface_number
+		)
+
+Determine if a kernel driver is active on an interface.
+
+If a kernel driver is active, you cannot claim the interface, and libusb will be unable to perform I/O.
+
+This functionality is not available on Windows.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev_handle
+
+		- a device handle
+
+	*
+		- interface_number
+
+		- the interface to check
+
+
+
+.. rubric:: Returns:
+
+0 if no kernel driver is active
+
+1 if a kernel driver is active
+
+LIBUSB_ERROR_NO_DEVICE if the device has been disconnected
+
+LIBUSB_ERROR_NOT_SUPPORTED on platforms where the functionality is not available
+
+another LIBUSB_ERROR code on other failure
+
+
+
+.. rubric:: See also:
+
+:ref:`libusb_detach_kernel_driver() <doxid-group__libusb__dev_1ga5e0cc1d666097e915748593effdc634a>`
+
+.. index:: pair: function; libusb_detach_kernel_driver
+.. _doxid-group__libusb__dev_1ga5e0cc1d666097e915748593effdc634a:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_detach_kernel_driver(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		int interface_number
+		)
+
+Detach a kernel driver from an interface.
+
+If successful, you will then be able to claim the interface and perform I/O.
+
+This functionality is not available on Darwin or Windows.
+
+Note that libusb itself also talks to the device through a special kernel driver, if this driver is already attached to the device, this call will not detach it and return LIBUSB_ERROR_NOT_FOUND.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev_handle
+
+		- a device handle
+
+	*
+		- interface_number
+
+		- the interface to detach the driver from
+
+
+
+.. rubric:: Returns:
+
+0 on success
+
+LIBUSB_ERROR_NOT_FOUND if no kernel driver was active
+
+LIBUSB_ERROR_INVALID_PARAM if the interface does not exist
+
+LIBUSB_ERROR_NO_DEVICE if the device has been disconnected
+
+LIBUSB_ERROR_NOT_SUPPORTED on platforms where the functionality is not available
+
+another LIBUSB_ERROR code on other failure
+
+
+
+.. rubric:: See also:
+
+:ref:`libusb_kernel_driver_active() <doxid-group__libusb__dev_1ga1cabd4660a274f715eeb82de112e0779>`
+
+.. index:: pair: function; libusb_attach_kernel_driver
+.. _doxid-group__libusb__dev_1gadeba36e900db663c0b7cf1b164a20d02:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_attach_kernel_driver(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		int interface_number
+		)
+
+Re-attach an interface's kernel driver, which was previously detached using :ref:`libusb_detach_kernel_driver() <doxid-group__libusb__dev_1ga5e0cc1d666097e915748593effdc634a>`.
+
+This call is only effective on Linux and returns LIBUSB_ERROR_NOT_SUPPORTED on all other platforms.
+
+This functionality is not available on Darwin or Windows.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev_handle
+
+		- a device handle
+
+	*
+		- interface_number
+
+		- the interface to attach the driver from
+
+
+
+.. rubric:: Returns:
+
+0 on success
+
+LIBUSB_ERROR_NOT_FOUND if no kernel driver was active
+
+LIBUSB_ERROR_INVALID_PARAM if the interface does not exist
+
+LIBUSB_ERROR_NO_DEVICE if the device has been disconnected
+
+LIBUSB_ERROR_NOT_SUPPORTED on platforms where the functionality is not available
+
+LIBUSB_ERROR_BUSY if the driver cannot be attached because the interface is claimed by a program or driver
+
+another LIBUSB_ERROR code on other failure
+
+
+
+.. rubric:: See also:
+
+:ref:`libusb_kernel_driver_active() <doxid-group__libusb__dev_1ga1cabd4660a274f715eeb82de112e0779>`
+
+.. index:: pair: function; libusb_set_auto_detach_kernel_driver
+.. _doxid-group__libusb__dev_1gac35b26fef01271eba65c60b2b3ce1cbf:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_set_auto_detach_kernel_driver(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		int enable
+		)
+
+Enable/disable libusb's automatic kernel driver detachment.
+
+When this is enabled libusb will automatically detach the kernel driver on an interface when claiming the interface, and attach it when releasing the interface.
+
+Automatic kernel driver detachment is disabled on newly opened device handles by default.
+
+On platforms which do not have LIBUSB_CAP_SUPPORTS_DETACH_KERNEL_DRIVER this function will return LIBUSB_ERROR_NOT_SUPPORTED, and libusb will continue as if this function was never called.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev_handle
+
+		- a device handle
+
+	*
+		- enable
+
+		- whether to enable or disable auto kernel driver detachment
+
+
+
+.. rubric:: Returns:
+
+LIBUSB_SUCCESS on success
+
+LIBUSB_ERROR_NOT_SUPPORTED on platforms where the functionality is not available
+
+
+
+.. rubric:: See also:
+
+:ref:`libusb_claim_interface() <doxid-group__libusb__dev_1gaee5076addf5de77c7962138397fd5b1a>`
+
+:ref:`libusb_release_interface() <doxid-group__libusb__dev_1ga49b5cb0d894f6807cd1693ef29aecbfa>`
+
+:ref:`libusb_set_configuration() <doxid-group__libusb__dev_1ga785ddea63a2b9bcb879a614ca4867bed>`
+

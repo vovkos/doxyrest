@@ -1,0 +1,261 @@
+.. index:: pair: group; Reader/Writer Lock Routines
+.. _doxid-group__apr__thread__rwlock:
+
+Reader/Writer Lock Routines
+===========================
+
+.. toctree::
+	:hidden:
+
+Overview
+~~~~~~~~
+
+
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef struct :ref:`apr_thread_rwlock_t<doxid-group__apr__thread__rwlock_1gaede9b908e3d9e6a8aed7bd10d0ae0498>` :ref:`apr_thread_rwlock_t<doxid-group__apr__thread__rwlock_1gaede9b908e3d9e6a8aed7bd10d0ae0498>`;
+
+	// global functions
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_thread_rwlock_create<doxid-group__apr__thread__rwlock_1gadae9c87ad957112406b48947cb1f0e93>`(
+		:ref:`apr_thread_rwlock_t<doxid-group__apr__thread__rwlock_1gaede9b908e3d9e6a8aed7bd10d0ae0498>`** rwlock,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_thread_rwlock_rdlock<doxid-group__apr__thread__rwlock_1gad44a106cd9a81eef362d31837ca7018f>`(:ref:`apr_thread_rwlock_t<doxid-group__apr__thread__rwlock_1gaede9b908e3d9e6a8aed7bd10d0ae0498>`* rwlock);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_thread_rwlock_tryrdlock<doxid-group__apr__thread__rwlock_1ga2bbbc137f5c610e31bf87fd0a60c428e>`(:ref:`apr_thread_rwlock_t<doxid-group__apr__thread__rwlock_1gaede9b908e3d9e6a8aed7bd10d0ae0498>`* rwlock);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_thread_rwlock_wrlock<doxid-group__apr__thread__rwlock_1ga91543c9f97a6a1265524a5a8f55fef31>`(:ref:`apr_thread_rwlock_t<doxid-group__apr__thread__rwlock_1gaede9b908e3d9e6a8aed7bd10d0ae0498>`* rwlock);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_thread_rwlock_trywrlock<doxid-group__apr__thread__rwlock_1ga54c04596f8a1f44630bdda5a25578d63>`(:ref:`apr_thread_rwlock_t<doxid-group__apr__thread__rwlock_1gaede9b908e3d9e6a8aed7bd10d0ae0498>`* rwlock);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_thread_rwlock_unlock<doxid-group__apr__thread__rwlock_1gac7b31112d972abfcac30252e622eb040>`(:ref:`apr_thread_rwlock_t<doxid-group__apr__thread__rwlock_1gaede9b908e3d9e6a8aed7bd10d0ae0498>`* rwlock);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_thread_rwlock_destroy<doxid-group__apr__thread__rwlock_1ga136118166f50091fb30011d837a4cdcc>`(:ref:`apr_thread_rwlock_t<doxid-group__apr__thread__rwlock_1gaede9b908e3d9e6a8aed7bd10d0ae0498>`* rwlock);
+
+	:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`*
+	:ref:`apr_thread_rwlock_pool_get<doxid-group__apr__thread__rwlock_1ga3e78c5d8f2e7f4cdad46e912e68edd33>`(const :ref:`apr_thread_rwlock_t<doxid-group__apr__thread__rwlock_1gaede9b908e3d9e6a8aed7bd10d0ae0498>`* thethread_rwlock);
+
+.. _details-group__apr__thread__rwlock:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+Typedefs
+--------
+
+.. index:: pair: typedef; apr_thread_rwlock_t
+.. _doxid-group__apr__thread__rwlock_1gaede9b908e3d9e6a8aed7bd10d0ae0498:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_thread_rwlock_t<doxid-group__apr__thread__rwlock_1gaede9b908e3d9e6a8aed7bd10d0ae0498>` apr_thread_rwlock_t
+
+Opaque read-write thread-safe lock.
+
+Global Functions
+----------------
+
+.. index:: pair: function; apr_thread_rwlock_create
+.. _doxid-group__apr__thread__rwlock_1gadae9c87ad957112406b48947cb1f0e93:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_thread_rwlock_create(
+		:ref:`apr_thread_rwlock_t<doxid-group__apr__thread__rwlock_1gaede9b908e3d9e6a8aed7bd10d0ae0498>`** rwlock,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		)
+
+Note: The following operations have undefined results: unlocking a read-write lock which is not locked in the calling thread; write locking a read-write lock which is already locked by the calling thread; destroying a read-write lock more than once; clearing or destroying the pool from which a **locked** read-write lock is allocated. Create and initialize a read-write lock that can be used to synchronize threads.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rwlock
+
+		- the memory address where the newly created readwrite lock will be stored.
+
+	*
+		- pool
+
+		- the pool from which to allocate the mutex.
+
+.. index:: pair: function; apr_thread_rwlock_rdlock
+.. _doxid-group__apr__thread__rwlock_1gad44a106cd9a81eef362d31837ca7018f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_thread_rwlock_rdlock(:ref:`apr_thread_rwlock_t<doxid-group__apr__thread__rwlock_1gaede9b908e3d9e6a8aed7bd10d0ae0498>`* rwlock)
+
+Acquire a shared-read lock on the given read-write lock. This will allow multiple threads to enter the same critical section while they have acquired the read lock.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rwlock
+
+		- the read-write lock on which to acquire the shared read.
+
+.. index:: pair: function; apr_thread_rwlock_tryrdlock
+.. _doxid-group__apr__thread__rwlock_1ga2bbbc137f5c610e31bf87fd0a60c428e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_thread_rwlock_tryrdlock(:ref:`apr_thread_rwlock_t<doxid-group__apr__thread__rwlock_1gaede9b908e3d9e6a8aed7bd10d0ae0498>`* rwlock)
+
+Attempt to acquire the shared-read lock on the given read-write lock. This is the same as :ref:`apr_thread_rwlock_rdlock() <doxid-group__apr__thread__rwlock_1gad44a106cd9a81eef362d31837ca7018f>`, only that the function fails if there is another thread holding the write lock, or if there are any write threads blocking on the lock. If the function fails for this case, APR_EBUSY will be returned. Note: it is important that the :ref:`APR_STATUS_IS_EBUSY(s) <doxid-group___a_p_r___s_t_a_t_u_s___i_s_1gabb92ad7b6ef304132de70e9e5cbaa896>` macro be used to determine if the return value was APR_EBUSY, for portability reasons.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rwlock
+
+		- the rwlock on which to attempt the shared read.
+
+.. index:: pair: function; apr_thread_rwlock_wrlock
+.. _doxid-group__apr__thread__rwlock_1ga91543c9f97a6a1265524a5a8f55fef31:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_thread_rwlock_wrlock(:ref:`apr_thread_rwlock_t<doxid-group__apr__thread__rwlock_1gaede9b908e3d9e6a8aed7bd10d0ae0498>`* rwlock)
+
+Acquire an exclusive-write lock on the given read-write lock. This will allow only one single thread to enter the critical sections. If there are any threads currently holding the read-lock, this thread is put to sleep until it can have exclusive access to the lock.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rwlock
+
+		- the read-write lock on which to acquire the exclusive write.
+
+.. index:: pair: function; apr_thread_rwlock_trywrlock
+.. _doxid-group__apr__thread__rwlock_1ga54c04596f8a1f44630bdda5a25578d63:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_thread_rwlock_trywrlock(:ref:`apr_thread_rwlock_t<doxid-group__apr__thread__rwlock_1gaede9b908e3d9e6a8aed7bd10d0ae0498>`* rwlock)
+
+Attempt to acquire the exclusive-write lock on the given read-write lock. This is the same as :ref:`apr_thread_rwlock_wrlock() <doxid-group__apr__thread__rwlock_1ga91543c9f97a6a1265524a5a8f55fef31>`, only that the function fails if there is any other thread holding the lock (for reading or writing), in which case the function will return APR_EBUSY. Note: it is important that the :ref:`APR_STATUS_IS_EBUSY(s) <doxid-group___a_p_r___s_t_a_t_u_s___i_s_1gabb92ad7b6ef304132de70e9e5cbaa896>` macro be used to determine if the return value was APR_EBUSY, for portability reasons.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rwlock
+
+		- the rwlock on which to attempt the exclusive write.
+
+.. index:: pair: function; apr_thread_rwlock_unlock
+.. _doxid-group__apr__thread__rwlock_1gac7b31112d972abfcac30252e622eb040:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_thread_rwlock_unlock(:ref:`apr_thread_rwlock_t<doxid-group__apr__thread__rwlock_1gaede9b908e3d9e6a8aed7bd10d0ae0498>`* rwlock)
+
+Release either the read or write lock currently held by the calling thread associated with the given read-write lock.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rwlock
+
+		- the read-write lock to be released (unlocked).
+
+.. index:: pair: function; apr_thread_rwlock_destroy
+.. _doxid-group__apr__thread__rwlock_1ga136118166f50091fb30011d837a4cdcc:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_thread_rwlock_destroy(:ref:`apr_thread_rwlock_t<doxid-group__apr__thread__rwlock_1gaede9b908e3d9e6a8aed7bd10d0ae0498>`* rwlock)
+
+Destroy the read-write lock and free the associated memory.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- rwlock
+
+		- the rwlock to destroy.
+
+.. index:: pair: function; apr_thread_rwlock_pool_get
+.. _doxid-group__apr__thread__rwlock_1ga3e78c5d8f2e7f4cdad46e912e68edd33:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`*
+	apr_thread_rwlock_pool_get(const :ref:`apr_thread_rwlock_t<doxid-group__apr__thread__rwlock_1gaede9b908e3d9e6a8aed7bd10d0ae0498>`* thethread_rwlock)
+
+Get the pool used by this thread_rwlock.
+
+
+
+.. rubric:: Returns:
+
+apr_pool_t the pool
+

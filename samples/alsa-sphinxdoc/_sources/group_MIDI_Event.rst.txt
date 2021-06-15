@@ -1,0 +1,643 @@
+.. index:: pair: group; Sequencer event <-> MIDI byte stream coder
+.. _doxid-group___m_i_d_i___event:
+
+Sequencer event <-> MIDI byte stream coder
+==========================================
+
+.. toctree::
+	:hidden:
+
+Overview
+~~~~~~~~
+
+Sequencer event <-> MIDI byte stream coder :ref:`More...<details-group___m_i_d_i___event>`
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef struct snd_midi_event :ref:`snd_midi_event_t<doxid-group___m_i_d_i___event_1gaf4d255a5c5228aa8d46a9c3e368a0e4b>`;
+
+	// global functions
+
+	int
+	:ref:`snd_midi_event_new<doxid-group___m_i_d_i___event_1gaa3c1797128d84a182197f5dd853c53ec>`(
+		size_t bufsize,
+		:ref:`snd_midi_event_t<doxid-group___m_i_d_i___event_1gaf4d255a5c5228aa8d46a9c3e368a0e4b>`** rdev
+		);
+
+	int
+	:ref:`snd_midi_event_resize_buffer<doxid-group___m_i_d_i___event_1ga22cffc488269968de6cae6796f92ee12>`(
+		:ref:`snd_midi_event_t<doxid-group___m_i_d_i___event_1gaf4d255a5c5228aa8d46a9c3e368a0e4b>`* dev,
+		size_t bufsize
+		);
+
+	void
+	:ref:`snd_midi_event_free<doxid-group___m_i_d_i___event_1ga84b9fdddfc1996d0abf759773593931f>`(:ref:`snd_midi_event_t<doxid-group___m_i_d_i___event_1gaf4d255a5c5228aa8d46a9c3e368a0e4b>`* dev);
+
+	void
+	:ref:`snd_midi_event_init<doxid-group___m_i_d_i___event_1ga670f51a0ce1402b7d03c2a3f5b2801ed>`(:ref:`snd_midi_event_t<doxid-group___m_i_d_i___event_1gaf4d255a5c5228aa8d46a9c3e368a0e4b>`* dev);
+
+	void
+	:ref:`snd_midi_event_reset_encode<doxid-group___m_i_d_i___event_1ga54a3d6f03dc0f83ae32d7b12b1da7e63>`(:ref:`snd_midi_event_t<doxid-group___m_i_d_i___event_1gaf4d255a5c5228aa8d46a9c3e368a0e4b>`* dev);
+
+	void
+	:ref:`snd_midi_event_reset_decode<doxid-group___m_i_d_i___event_1ga1d6bd40b70cdd77e500b25e6eec19484>`(:ref:`snd_midi_event_t<doxid-group___m_i_d_i___event_1gaf4d255a5c5228aa8d46a9c3e368a0e4b>`* dev);
+
+	void
+	:ref:`snd_midi_event_no_status<doxid-group___m_i_d_i___event_1ga4c32d90809d0c2d44fb41be0276100df>`(
+		:ref:`snd_midi_event_t<doxid-group___m_i_d_i___event_1gaf4d255a5c5228aa8d46a9c3e368a0e4b>`* dev,
+		int on
+		);
+
+	long
+	:ref:`snd_midi_event_encode<doxid-group___m_i_d_i___event_1gae44531e8091bdd6e97a5b70e7b81ea10>`(
+		:ref:`snd_midi_event_t<doxid-group___m_i_d_i___event_1gaf4d255a5c5228aa8d46a9c3e368a0e4b>`* dev,
+		const unsigned char* buf,
+		long count,
+		:ref:`snd_seq_event_t<doxid-structsnd__seq__event__t>`* ev
+		);
+
+	int
+	:ref:`snd_midi_event_encode_byte<doxid-group___m_i_d_i___event_1gab758a60cfa82dfa28e08ba2e2cbe2149>`(
+		:ref:`snd_midi_event_t<doxid-group___m_i_d_i___event_1gaf4d255a5c5228aa8d46a9c3e368a0e4b>`* dev,
+		int c,
+		:ref:`snd_seq_event_t<doxid-structsnd__seq__event__t>`* ev
+		);
+
+	long
+	:ref:`snd_midi_event_decode<doxid-group___m_i_d_i___event_1ga9ef018a85ec7f61d45d8b17083bf8cc3>`(
+		:ref:`snd_midi_event_t<doxid-group___m_i_d_i___event_1gaf4d255a5c5228aa8d46a9c3e368a0e4b>`* dev,
+		unsigned char* buf,
+		long count,
+		const :ref:`snd_seq_event_t<doxid-structsnd__seq__event__t>`* ev
+		);
+
+.. _details-group___m_i_d_i___event:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+Sequencer event <-> MIDI byte stream coder
+
+Typedefs
+--------
+
+.. index:: pair: typedef; snd_midi_event_t
+.. _doxid-group___m_i_d_i___event_1gaf4d255a5c5228aa8d46a9c3e368a0e4b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct snd_midi_event snd_midi_event_t
+
+container for sequencer midi event parsers
+
+Global Functions
+----------------
+
+.. index:: pair: function; snd_midi_event_new
+.. _doxid-group___m_i_d_i___event_1gaa3c1797128d84a182197f5dd853c53ec:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_midi_event_new(
+		size_t bufsize,
+		:ref:`snd_midi_event_t<doxid-group___m_i_d_i___event_1gaf4d255a5c5228aa8d46a9c3e368a0e4b>`** rdev
+		)
+
+Creates a MIDI event parser.
+
+This function creates and initializes a MIDI parser object that can be used to convert a MIDI byte stream to sequencer events (encoding) and/or to convert sequencer events to a MIDI byte stream (decoding).
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -ENOMEM
+
+		- Out of memory.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- bufsize
+
+		- Size of the buffer used for encoding; this should be large enough to hold the largest MIDI message to be encoded.
+
+	*
+		- rdev
+
+		- The new MIDI event parser.
+
+
+
+.. rubric:: Returns:
+
+Zero on success, otherwise a negative error code.
+
+.. index:: pair: function; snd_midi_event_resize_buffer
+.. _doxid-group___m_i_d_i___event_1ga22cffc488269968de6cae6796f92ee12:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_midi_event_resize_buffer(
+		:ref:`snd_midi_event_t<doxid-group___m_i_d_i___event_1gaf4d255a5c5228aa8d46a9c3e368a0e4b>`* dev,
+		size_t bufsize
+		)
+
+Resizes the MIDI message encoding buffer.
+
+This function resizes the buffer that is used to hold partially encoded MIDI messages.
+
+If there is a partially encoded message in the buffer, it is dropped.
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -ENOMEM
+
+		- Out of memory.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev
+
+		- MIDI event parser.
+
+	*
+		- bufsize
+
+		- The new buffer size.
+
+
+
+.. rubric:: Returns:
+
+Zero on success, otherwise a negative error code.
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_midi_event_encode <doxid-group___m_i_d_i___event_1gae44531e8091bdd6e97a5b70e7b81ea10>`, :ref:`snd_midi_event_reset_encode <doxid-group___m_i_d_i___event_1ga54a3d6f03dc0f83ae32d7b12b1da7e63>`
+
+.. index:: pair: function; snd_midi_event_free
+.. _doxid-group___m_i_d_i___event_1ga84b9fdddfc1996d0abf759773593931f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_midi_event_free(:ref:`snd_midi_event_t<doxid-group___m_i_d_i___event_1gaf4d255a5c5228aa8d46a9c3e368a0e4b>`* dev)
+
+Frees a MIDI event parser.
+
+Frees a MIDI event parser.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev
+
+		- MIDI event parser.
+
+.. index:: pair: function; snd_midi_event_init
+.. _doxid-group___m_i_d_i___event_1ga670f51a0ce1402b7d03c2a3f5b2801ed:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_midi_event_init(:ref:`snd_midi_event_t<doxid-group___m_i_d_i___event_1gaf4d255a5c5228aa8d46a9c3e368a0e4b>`* dev)
+
+Resets MIDI encode/decode parsers.
+
+This function resets both encoder and decoder of the MIDI event parser. LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev
+
+		- MIDI event parser.
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_midi_event_reset_encode <doxid-group___m_i_d_i___event_1ga54a3d6f03dc0f83ae32d7b12b1da7e63>`, :ref:`snd_midi_event_reset_decode <doxid-group___m_i_d_i___event_1ga1d6bd40b70cdd77e500b25e6eec19484>`
+
+.. index:: pair: function; snd_midi_event_reset_encode
+.. _doxid-group___m_i_d_i___event_1ga54a3d6f03dc0f83ae32d7b12b1da7e63:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_midi_event_reset_encode(:ref:`snd_midi_event_t<doxid-group___m_i_d_i___event_1gaf4d255a5c5228aa8d46a9c3e368a0e4b>`* dev)
+
+Resets MIDI encode parser.
+
+This function resets the MIDI encoder of the parser *dev*. Any partially encoded MIDI message is dropped, and running status state is cleared.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev
+
+		- MIDI event parser.
+
+.. index:: pair: function; snd_midi_event_reset_decode
+.. _doxid-group___m_i_d_i___event_1ga1d6bd40b70cdd77e500b25e6eec19484:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_midi_event_reset_decode(:ref:`snd_midi_event_t<doxid-group___m_i_d_i___event_1gaf4d255a5c5228aa8d46a9c3e368a0e4b>`* dev)
+
+Resets MIDI decode parser.
+
+This function resets the MIDI decoder of the parser *dev*. The next decoded message does not use running status from before the call to *snd_midi_event_reset_decode*.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev
+
+		- MIDI event parser.
+
+.. index:: pair: function; snd_midi_event_no_status
+.. _doxid-group___m_i_d_i___event_1ga4c32d90809d0c2d44fb41be0276100df:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_midi_event_no_status(
+		:ref:`snd_midi_event_t<doxid-group___m_i_d_i___event_1gaf4d255a5c5228aa8d46a9c3e368a0e4b>`* dev,
+		int on
+		)
+
+Enables/disables MIDI command merging.
+
+This function enables or disables MIDI command merging (running status).
+
+When MIDI command merging is not disabled, :ref:`snd_midi_event_decode <doxid-group___m_i_d_i___event_1ga9ef018a85ec7f61d45d8b17083bf8cc3>` is allowed to omit any status byte that is identical to the previous status byte.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev
+
+		- MIDI event parser.
+
+	*
+		- on
+
+		- 0 to enable MIDI command merging, 1 to always write the command byte.
+
+.. index:: pair: function; snd_midi_event_encode
+.. _doxid-group___m_i_d_i___event_1gae44531e8091bdd6e97a5b70e7b81ea10:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	long
+	snd_midi_event_encode(
+		:ref:`snd_midi_event_t<doxid-group___m_i_d_i___event_1gaf4d255a5c5228aa8d46a9c3e368a0e4b>`* dev,
+		const unsigned char* buf,
+		long count,
+		:ref:`snd_seq_event_t<doxid-structsnd__seq__event__t>`* ev
+		)
+
+Encodes bytes to sequencer event.
+
+This function tries to use up to *count* bytes from the beginning of the buffer to encode a sequencer event. If a complete MIDI message has been encoded, the sequencer event is written to *ev*; otherwise, *ev->type* is set to :ref:`SND_SEQ_EVENT_NONE <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40a78b0f3e8f6d674f01d3823481c0b90f6>`, and further bytes are required to complete a message.
+
+The buffer in *dev* is used to hold any bytes of a not-yet-complete MIDI message. If a System Exclusive message is larger than the buffer, the message is split into multiple parts, and a sequencer event is returned at the end of each part.
+
+Any bytes that are not part of a valid MIDI message are silently ignored, i.e., they are consumed without signaling an error.
+
+When this function returns a system exclusive sequencer event (*ev->type* is :ref:`SND_SEQ_EVENT_SYSEX <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40a053842a32bef6aac4c8b21b2fc80fc74>`), the data pointer (*ev->data.ext.ptr*) points into the MIDI event parser's buffer. Therefore, the sequencer event can only be used as long as that buffer remains valid, i.e., until the next call to :ref:`snd_midi_event_encode <doxid-group___m_i_d_i___event_1gae44531e8091bdd6e97a5b70e7b81ea10>`, :ref:`snd_midi_event_encode_byte <doxid-group___m_i_d_i___event_1gab758a60cfa82dfa28e08ba2e2cbe2149>`, :ref:`snd_midi_event_resize_buffer <doxid-group___m_i_d_i___event_1ga22cffc488269968de6cae6796f92ee12>`, :ref:`snd_midi_event_init <doxid-group___m_i_d_i___event_1ga670f51a0ce1402b7d03c2a3f5b2801ed>`, :ref:`snd_midi_event_reset_encode <doxid-group___m_i_d_i___event_1ga54a3d6f03dc0f83ae32d7b12b1da7e63>`, or :ref:`snd_midi_event_free <doxid-group___m_i_d_i___event_1ga84b9fdddfc1996d0abf759773593931f>` for that MIDI event parser.
+
+This function can generate any sequencer event that corresponds to a MIDI message, i.e.:
+
+* :ref:`SND_SEQ_EVENT_NOTEOFF <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40aa7359bc2f050a79c5021cfa90d0705f8>`
+
+* :ref:`SND_SEQ_EVENT_NOTEON <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40af35df63c334c5388ff349550e31460c2>`
+
+* :ref:`SND_SEQ_EVENT_KEYPRESS <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40a6d7adef3e4f2ed96cd7e2def9d541510>`
+
+* :ref:`SND_SEQ_EVENT_CONTROLLER <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40a926c84318eb653c739e1d21fa20a0d95>`
+
+* :ref:`SND_SEQ_EVENT_PGMCHANGE <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40ae8264fb5f3870a1e5f6c2724b916cefd>`
+
+* :ref:`SND_SEQ_EVENT_CHANPRESS <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40a7eb97df129127eb771e9800da217f1fe>`
+
+* :ref:`SND_SEQ_EVENT_PITCHBEND <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40ab1bb9ffa38e5247f993f9368a144336b>`
+
+* :ref:`SND_SEQ_EVENT_SYSEX <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40a053842a32bef6aac4c8b21b2fc80fc74>`
+
+* :ref:`SND_SEQ_EVENT_QFRAME <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40ad2bcd713ea5fc228791eb95545cdf23f>`
+
+* :ref:`SND_SEQ_EVENT_SONGPOS <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40a04f1e8a2a2201a7fbddf628b127dab39>`
+
+* :ref:`SND_SEQ_EVENT_SONGSEL <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40afc621686c4f2ac288e24ff8d0aa448bd>`
+
+* :ref:`SND_SEQ_EVENT_TUNE_REQUEST <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40a60918a2617fd3435decbf96029994ac1>`
+
+* :ref:`SND_SEQ_EVENT_CLOCK <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40a54f38f955c675d0e9624f67befe513b9>`
+
+* :ref:`SND_SEQ_EVENT_START <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40aeca878e55b4482dc3d83bbc1c1411f0a>`
+
+* :ref:`SND_SEQ_EVENT_CONTINUE <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40a85633da32af8af5efa596a7f68cff5c7>`
+
+* :ref:`SND_SEQ_EVENT_STOP <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40a8bda57193eede5c6d45a34a135c8d95d>`
+
+* :ref:`SND_SEQ_EVENT_SENSING <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40af0cd5b4a2aa37ee9b34c6ecdde1b32b2>`
+
+* :ref:`SND_SEQ_EVENT_RESET <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40aefe6bb7adade51add7905856d70efc65>`
+
+Some implementations may also be able to generate the following events for a sequence of controller change messages:
+
+* :ref:`SND_SEQ_EVENT_CONTROL14 <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40a931edc93b65db5e11be1670166a6623b>`
+
+* :ref:`SND_SEQ_EVENT_NONREGPARAM <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40a83eb21e2fe5bf509d0d9c4a911f0cd36>`
+
+* :ref:`SND_SEQ_EVENT_REGPARAM <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40ae85ad451b5012c5d4f37bec4cb39516c>`
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev
+
+		- MIDI event parser.
+
+	*
+		- buf
+
+		- Buffer containing bytes of a raw MIDI stream.
+
+	*
+		- count
+
+		- Number of bytes in *buf*.
+
+	*
+		- ev
+
+		- Sequencer event.
+
+
+
+.. rubric:: Returns:
+
+The number of bytes consumed, or a negative error code.
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_midi_event_new <doxid-group___m_i_d_i___event_1gaa3c1797128d84a182197f5dd853c53ec>`, :ref:`snd_midi_event_reset_encode <doxid-group___m_i_d_i___event_1ga54a3d6f03dc0f83ae32d7b12b1da7e63>`, :ref:`snd_midi_event_encode_byte <doxid-group___m_i_d_i___event_1gab758a60cfa82dfa28e08ba2e2cbe2149>`
+
+.. index:: pair: function; snd_midi_event_encode_byte
+.. _doxid-group___m_i_d_i___event_1gab758a60cfa82dfa28e08ba2e2cbe2149:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_midi_event_encode_byte(
+		:ref:`snd_midi_event_t<doxid-group___m_i_d_i___event_1gaf4d255a5c5228aa8d46a9c3e368a0e4b>`* dev,
+		int c,
+		:ref:`snd_seq_event_t<doxid-structsnd__seq__event__t>`* ev
+		)
+
+Encodes byte to sequencer event.
+
+This function tries to use the byte *c* to encode a sequencer event. If a complete MIDI message has been encoded, the sequencer event is written to *ev*; otherwise, further bytes are required to complete a message.
+
+See also the description of :ref:`snd_midi_event_encode <doxid-group___m_i_d_i___event_1gae44531e8091bdd6e97a5b70e7b81ea10>`.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev
+
+		- MIDI event parser.
+
+	*
+		- c
+
+		- A byte of a raw MIDI stream.
+
+	*
+		- ev
+
+		- Sequencer event.
+
+
+
+.. rubric:: Returns:
+
+1 if a sequenver event has been completed, 0 if more bytes are required to complete an event, or a negative error code.
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_midi_event_new <doxid-group___m_i_d_i___event_1gaa3c1797128d84a182197f5dd853c53ec>`, :ref:`snd_midi_event_reset_encode <doxid-group___m_i_d_i___event_1ga54a3d6f03dc0f83ae32d7b12b1da7e63>`, :ref:`snd_midi_event_encode <doxid-group___m_i_d_i___event_1gae44531e8091bdd6e97a5b70e7b81ea10>`
+
+.. index:: pair: function; snd_midi_event_decode
+.. _doxid-group___m_i_d_i___event_1ga9ef018a85ec7f61d45d8b17083bf8cc3:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	long
+	snd_midi_event_decode(
+		:ref:`snd_midi_event_t<doxid-group___m_i_d_i___event_1gaf4d255a5c5228aa8d46a9c3e368a0e4b>`* dev,
+		unsigned char* buf,
+		long count,
+		const :ref:`snd_seq_event_t<doxid-structsnd__seq__event__t>`* ev
+		)
+
+Decodes sequencer event to MIDI byte stream.
+
+This function tries to decode the sequencer event into one or more MIDI messages, and writes the raw MIDI byte(s) into *buf*.
+
+The generated MIDI messages may use running status, unless disabled with :ref:`snd_midi_event_no_status <doxid-group___m_i_d_i___event_1ga4c32d90809d0c2d44fb41be0276100df>`.
+
+The required buffer size for a sequencer event it as most 12 bytes, except for System Exclusive events (*ev->type* == :ref:`SND_SEQ_EVENT_SYSEX <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40a053842a32bef6aac4c8b21b2fc80fc74>`) which can have any length (as specified by *ev->data.ext.len*).
+
+The following sequencer events correspond to MIDI messages:
+
+* :ref:`SND_SEQ_EVENT_NOTEOFF <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40aa7359bc2f050a79c5021cfa90d0705f8>`
+
+* :ref:`SND_SEQ_EVENT_NOTEON <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40af35df63c334c5388ff349550e31460c2>`
+
+* :ref:`SND_SEQ_EVENT_KEYPRESS <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40a6d7adef3e4f2ed96cd7e2def9d541510>`
+
+* :ref:`SND_SEQ_EVENT_CONTROLLER <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40a926c84318eb653c739e1d21fa20a0d95>`
+
+* :ref:`SND_SEQ_EVENT_PGMCHANGE <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40ae8264fb5f3870a1e5f6c2724b916cefd>`
+
+* :ref:`SND_SEQ_EVENT_CHANPRESS <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40a7eb97df129127eb771e9800da217f1fe>`
+
+* :ref:`SND_SEQ_EVENT_PITCHBEND <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40ab1bb9ffa38e5247f993f9368a144336b>`
+
+* :ref:`SND_SEQ_EVENT_SYSEX <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40a053842a32bef6aac4c8b21b2fc80fc74>`
+
+* :ref:`SND_SEQ_EVENT_QFRAME <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40ad2bcd713ea5fc228791eb95545cdf23f>`
+
+* :ref:`SND_SEQ_EVENT_SONGPOS <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40a04f1e8a2a2201a7fbddf628b127dab39>`
+
+* :ref:`SND_SEQ_EVENT_SONGSEL <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40afc621686c4f2ac288e24ff8d0aa448bd>`
+
+* :ref:`SND_SEQ_EVENT_TUNE_REQUEST <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40a60918a2617fd3435decbf96029994ac1>`
+
+* :ref:`SND_SEQ_EVENT_CLOCK <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40a54f38f955c675d0e9624f67befe513b9>`
+
+* :ref:`SND_SEQ_EVENT_START <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40aeca878e55b4482dc3d83bbc1c1411f0a>`
+
+* :ref:`SND_SEQ_EVENT_CONTINUE <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40a85633da32af8af5efa596a7f68cff5c7>`
+
+* :ref:`SND_SEQ_EVENT_STOP <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40a8bda57193eede5c6d45a34a135c8d95d>`
+
+* :ref:`SND_SEQ_EVENT_SENSING <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40af0cd5b4a2aa37ee9b34c6ecdde1b32b2>`
+
+* :ref:`SND_SEQ_EVENT_RESET <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40aefe6bb7adade51add7905856d70efc65>`
+
+* :ref:`SND_SEQ_EVENT_CONTROL14 <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40a931edc93b65db5e11be1670166a6623b>`
+
+* :ref:`SND_SEQ_EVENT_NONREGPARAM <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40a83eb21e2fe5bf509d0d9c4a911f0cd36>`
+
+* :ref:`SND_SEQ_EVENT_REGPARAM <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40ae85ad451b5012c5d4f37bec4cb39516c>`
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- -EINVAL
+
+		- *ev* is not a valid sequencer event.
+
+	*
+		- -ENOENT
+
+		- The sequencer event does not correspond to one or more MIDI messages.
+
+	*
+		- -ENOMEM
+
+		- The MIDI message(s) would not fit into *count* bytes.
+
+LSB 3.2
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev
+
+		- MIDI event parser.
+
+	*
+		- buf
+
+		- Buffer for the resulting MIDI byte stream.
+
+	*
+		- count
+
+		- Number of bytes in *buf*.
+
+	*
+		- ev
+
+		- The sequencer event to decode.
+
+
+
+.. rubric:: Returns:
+
+The number of bytes written to *buf*, or a negative error code.
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_midi_event_reset_decode <doxid-group___m_i_d_i___event_1ga1d6bd40b70cdd77e500b25e6eec19484>`, :ref:`snd_midi_event_no_status <doxid-group___m_i_d_i___event_1ga4c32d90809d0c2d44fb41be0276100df>`
+

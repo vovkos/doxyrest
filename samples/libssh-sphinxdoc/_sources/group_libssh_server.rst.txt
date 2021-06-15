@@ -1,0 +1,1367 @@
+.. index:: pair: group; The libssh server API
+.. _doxid-group__libssh__server:
+
+The libssh server API
+=====================
+
+.. toctree::
+	:hidden:
+
+	enum_ssh_bind_options_e.rst
+	struct_ssh_bind_callbacks_struct.rst
+
+Overview
+~~~~~~~~
+
+
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef void (*:ref:`ssh_bind_incoming_connection_callback<doxid-group__libssh__server_1ga76a8630e8ad9b00dd17518e324c407e0>`)(
+		ssh_bind sshbind,
+		void *userdata
+		);
+
+	// enums
+
+	enum :ref:`ssh_bind_options_e<doxid-group__libssh__server_1ga4c8b5efd4d5e280d59fb680cb7c5d3b8>`;
+
+	// structs
+
+	struct :ref:`ssh_bind_callbacks_struct<doxid-structssh__bind__callbacks__struct>`;
+
+	// global functions
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:ref:`ssh_bind_accept<doxid-group__libssh__server_1ga6609243446f1650243101e0a779dc822>`(
+		ssh_bind ssh_bind_o,
+		ssh_session session
+		);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:ref:`ssh_bind_accept_fd<doxid-group__libssh__server_1ga142f1e2f79f6623f14dcfa40dccaa061>`(
+		ssh_bind ssh_bind_o,
+		ssh_session session,
+		:ref:`socket_t<doxid-libssh_8h_1a30353f381f5fccbb956eea1f3a110b6c>` fd
+		);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` void
+	:ref:`ssh_bind_fd_toaccept<doxid-group__libssh__server_1gab69593f009137ccabafc18a98bd55546>`(ssh_bind ssh_bind_o);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` void
+	:ref:`ssh_bind_free<doxid-group__libssh__server_1gaa7650d22d982a82bf328345c04948cdf>`(ssh_bind ssh_bind_o);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` :ref:`socket_t<doxid-libssh_8h_1a30353f381f5fccbb956eea1f3a110b6c>`
+	:ref:`ssh_bind_get_fd<doxid-group__libssh__server_1ga2b0d1842bf3892ce8b5ebd6c0c7db735>`(ssh_bind ssh_bind_o);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:ref:`ssh_bind_listen<doxid-group__libssh__server_1gaee5406f486d73aad765cab4c445f2f63>`(ssh_bind ssh_bind_o);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` ssh_bind
+	:ref:`ssh_bind_new<doxid-group__libssh__server_1ga4e4edf0cfd185a335d08e6e610aed77e>`(void);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:ref:`ssh_bind_options_set<doxid-group__libssh__server_1ga8fd4253643bc9cf33d6f41d170e83fff>`(
+		ssh_bind sshbind,
+		enum :ref:`ssh_bind_options_e<doxid-group__libssh__server_1ga4c8b5efd4d5e280d59fb680cb7c5d3b8>` type,
+		const void* value
+		);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` void
+	:ref:`ssh_bind_set_blocking<doxid-group__libssh__server_1gaf7e6f23c6934892d6a96011456b6c280>`(
+		ssh_bind ssh_bind_o,
+		int blocking
+		);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:ref:`ssh_bind_set_callbacks<doxid-group__libssh__server_1gaaa9bf406809735d4afc75ecd482ba89d>`(
+		ssh_bind sshbind,
+		ssh_bind_callbacks callbacks,
+		void* userdata
+		);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` void
+	:ref:`ssh_bind_set_fd<doxid-group__libssh__server_1gacbba3e298a4493c7b9bfbee514df199c>`(
+		ssh_bind ssh_bind_o,
+		:ref:`socket_t<doxid-libssh_8h_1a30353f381f5fccbb956eea1f3a110b6c>` fd
+		);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:ref:`ssh_channel_open_reverse_forward<doxid-group__libssh__server_1gae372d2f97205d23493dd856eedf95f22>`(
+		ssh_channel channel,
+		const char* remotehost,
+		int remoteport,
+		const char* sourcehost,
+		int localport
+		);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:ref:`ssh_channel_open_x11<doxid-group__libssh__server_1gab3688d962a1865ae2d0df9eb1f83c8fb>`(
+		ssh_channel channel,
+		const char* orig_addr,
+		int orig_port
+		);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:ref:`ssh_channel_request_send_exit_signal<doxid-group__libssh__server_1gaca9d5a6b5d8d82496b46267337088a51>`(
+		ssh_channel channel,
+		const char* signum,
+		int core,
+		const char* errmsg,
+		const char* lang
+		);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:ref:`ssh_channel_request_send_exit_status<doxid-group__libssh__server_1ga7325dd7617635e99f6e62921cb4e0406>`(
+		ssh_channel channel,
+		int exit_status
+		);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:ref:`ssh_channel_write_stderr<doxid-group__libssh__server_1ga76c7578b4e418f8105ba89471293b4c1>`(
+		ssh_channel channel,
+		const void* data,
+		uint32_t len
+		);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` :ref:`ssh_gssapi_creds<doxid-libssh_8h_1affc3a7d505747b757f988aad05163f1e>`
+	:ref:`ssh_gssapi_get_creds<doxid-group__libssh__server_1gab9ca89e12e290a701dced5f7c91bb677>`(ssh_session session);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:ref:`ssh_handle_key_exchange<doxid-group__libssh__server_1gab60c37350653eb3b65a99ac089c55830>`(ssh_session session);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` const char*
+	:ref:`ssh_message_auth_password<doxid-group__libssh__server_1gab434b45d3f542ab24735bba6432de85d>`(ssh_message msg);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` ssh_key
+	:ref:`ssh_message_auth_pubkey<doxid-group__libssh__server_1ga97e909b1d89b4c4747eb5b80ac9fd215>`(ssh_message msg);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` const char*
+	:ref:`ssh_message_auth_user<doxid-group__libssh__server_1gad05353966b70d7f04a3b7aed07a817cc>`(ssh_message msg);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:ref:`ssh_message_reply_default<doxid-group__libssh__server_1ga6e78c8f369333289d245931deed92573>`(ssh_message msg);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` void
+	:ref:`ssh_set_auth_methods<doxid-group__libssh__server_1gabbfb96c938e33a8dddebaff29f25e0c6>`(
+		ssh_session session,
+		int auth_methods
+		);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` void
+	:ref:`ssh_set_message_callback<doxid-group__libssh__server_1gaccad877b20fca2d4a7eda5bebc1f5af1>`(
+		ssh_session session,
+		int(*)(ssh_session session, ssh_message msg, void*data) ssh_bind_message_callback,
+		void* data
+		);
+
+	static
+	:ref:`socket_t<doxid-libssh_8h_1a30353f381f5fccbb956eea1f3a110b6c>`
+	:target:`bind_socket<doxid-group__libssh__server_1ga4992f5130d84651db66d220c69faa7f1>`(
+		ssh_bind sshbind,
+		const char* hostname,
+		int port
+		);
+
+	ssh_poll_handle
+	:target:`ssh_bind_get_poll<doxid-group__libssh__server_1ga30896ad964ce5b09b3b0068b1ed783e9>`(ssh_bind sshbind);
+
+	static
+	int
+	:target:`ssh_bind_import_keys<doxid-group__libssh__server_1gaaf746d12a2bfd7242ea566a0caba0535>`(ssh_bind sshbind);
+
+	static
+	int
+	:target:`ssh_bind_poll_callback<doxid-group__libssh__server_1ga2b217c6cd3aa4eb3c81b9193bc3a2daa>`(
+		ssh_poll_handle sshpoll,
+		:ref:`socket_t<doxid-libssh_8h_1a30353f381f5fccbb956eea1f3a110b6c>` fd,
+		int revents,
+		void* user
+		);
+
+	int
+	:target:`channel_write_stderr<doxid-group__libssh__server_1ga4df894b92717afb7f8791182f21a9a6c>`(
+		ssh_channel channel,
+		const void* data,
+		uint32_t len
+		);
+
+	int
+	:target:`ssh_accept<doxid-group__libssh__server_1ga53d5802c20e1fcdee5aedae59670e693>`(ssh_session session);
+
+	static
+	int
+	:target:`ssh_bind_set_key<doxid-group__libssh__server_1gaaaecf23e1dd8926e085a240725a7faa9>`(
+		ssh_bind sshbind,
+		char** key_loc,
+		const void* value
+		);
+
+	static
+	int
+	:target:`callback_receive_banner<doxid-group__libssh__server_1ga4c4c9ace93a9791515090ebc197dd736>`(
+		const void* data,
+		size_t len,
+		void* user
+		);
+
+	static
+	int
+	:target:`dh_handshake_server<doxid-group__libssh__server_1gaa348e427554a13245a24007d4590fe2f>`(ssh_session session);
+
+	static
+	int
+	:target:`server_set_kex<doxid-group__libssh__server_1ga2792d656ee8d3c5589ff2db4e1b5cf80>`(ssh_session session);
+
+	int
+	:target:`ssh_auth_reply_default<doxid-group__libssh__server_1gaa8a38b0ea0e5ee2bce17eab77dfc850c>`(
+		ssh_session session,
+		int partial
+		);
+
+	int
+	:target:`ssh_auth_reply_success<doxid-group__libssh__server_1gace0de62d8bdae327069fd81fdb1861d5>`(
+		ssh_session session,
+		int partial
+		);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:target:`ssh_execute_message_callbacks<doxid-group__libssh__server_1gac5c9893e27dad15af4bd2dd8abc4760c>`(ssh_session session);
+
+	int
+	:target:`ssh_get_key_params<doxid-group__libssh__server_1gae33b896210f4fba07009d0ff3772dcd8>`(
+		ssh_session session,
+		ssh_key* privkey
+		);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:target:`ssh_message_auth_interactive_request<doxid-group__libssh__server_1gaacbc31ce3b39ac93061164feec822c77>`(
+		ssh_message msg,
+		const char* name,
+		const char* instruction,
+		unsigned int num_prompts,
+		const char** prompts,
+		char* echo
+		);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:target:`ssh_message_auth_kbdint_is_response<doxid-group__libssh__server_1ga5132c82c49de985e9e10f51f393e52a4>`(ssh_message msg);
+
+	ssh_public_key
+	:target:`ssh_message_auth_publickey<doxid-group__libssh__server_1gaa5e80a5891527b2207dcb53efece1203>`(ssh_message msg);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` enum :ref:`ssh_publickey_state_e<doxid-libssh_8h_1a678ab8f3594510db5765fc626ed91e0e>`
+	:target:`ssh_message_auth_publickey_state<doxid-group__libssh__server_1gafcb928250ef8169f4823dadab217b4fe>`(ssh_message msg);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:target:`ssh_message_auth_reply_pk_ok<doxid-group__libssh__server_1ga2ce88786e073b36991fc96c8f6b58c09>`(
+		ssh_message msg,
+		ssh_string algo,
+		ssh_string pubkey
+		);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:target:`ssh_message_auth_reply_pk_ok_simple<doxid-group__libssh__server_1ga98321ead09cda145a08603d481a62a9e>`(ssh_message msg);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:target:`ssh_message_auth_reply_success<doxid-group__libssh__server_1gac338ce3b49e097a6b9b75b92666cac96>`(
+		ssh_message msg,
+		int partial
+		);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:target:`ssh_message_auth_set_methods<doxid-group__libssh__server_1gab993157d98e5b4b3399d216c9243effc>`(
+		ssh_message msg,
+		int methods
+		);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` ssh_channel
+	:target:`ssh_message_channel_request_channel<doxid-group__libssh__server_1ga813cf45163230416cd179cd1dadc4118>`(ssh_message msg);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` const char*
+	:target:`ssh_message_channel_request_command<doxid-group__libssh__server_1ga9042b6943d0b34efb8a7deb82a275c55>`(ssh_message msg);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` const char*
+	:target:`ssh_message_channel_request_env_name<doxid-group__libssh__server_1gaa42c1e6e4224ca04ee34d9be1296ff44>`(ssh_message msg);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` const char*
+	:target:`ssh_message_channel_request_env_value<doxid-group__libssh__server_1ga88cd6877143ea23c371b19eed3b94474>`(ssh_message msg);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` const char*
+	:target:`ssh_message_channel_request_open_destination<doxid-group__libssh__server_1ga42f8b0980f73c9af36a0b5e4e3ba7a04>`(ssh_message msg);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:target:`ssh_message_channel_request_open_destination_port<doxid-group__libssh__server_1gaf8b7350f50918f37f331efe2099ffa8b>`(ssh_message msg);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` const char*
+	:target:`ssh_message_channel_request_open_originator<doxid-group__libssh__server_1ga0df64acc64787532205f6e85e5fbc4fe>`(ssh_message msg);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:target:`ssh_message_channel_request_open_originator_port<doxid-group__libssh__server_1gaf24d0f28aca42d1b26e5a08fe4abc9fd>`(ssh_message msg);
+
+	static
+	int
+	:target:`ssh_message_channel_request_open_reply_default<doxid-group__libssh__server_1gaf7984c469e61e9d5f05c80d967970a1c>`(ssh_message msg);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:target:`ssh_message_channel_request_pty_height<doxid-group__libssh__server_1gac793c0d76e4b5856f15ad0ed0afaa1d5>`(ssh_message msg);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:target:`ssh_message_channel_request_pty_pxheight<doxid-group__libssh__server_1gacc10bc19a556898628ca239fb013d3b2>`(ssh_message msg);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:target:`ssh_message_channel_request_pty_pxwidth<doxid-group__libssh__server_1ga9fe9493be6347da72ec3d55d6d58b9c6>`(ssh_message msg);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` const char*
+	:target:`ssh_message_channel_request_pty_term<doxid-group__libssh__server_1ga06f1578033ad6f3741f1c3b8e2322d2d>`(ssh_message msg);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:target:`ssh_message_channel_request_pty_width<doxid-group__libssh__server_1ga6f96b1cee5ae05dabea404c5d40b50e7>`(ssh_message msg);
+
+	static
+	int
+	:target:`ssh_message_channel_request_reply_default<doxid-group__libssh__server_1ga79d82cfe686f9389bc74b95533f976d7>`(ssh_message msg);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` const char*
+	:target:`ssh_message_channel_request_subsystem<doxid-group__libssh__server_1gaf0f6570120b742f303b974f4fca3288a>`(ssh_message msg);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` const char*
+	:target:`ssh_message_channel_request_x11_auth_cookie<doxid-group__libssh__server_1ga2b0f472aaa4ac8ed8562c167505e2534>`(ssh_message msg);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` const char*
+	:target:`ssh_message_channel_request_x11_auth_protocol<doxid-group__libssh__server_1gaca48ee1e17dea412e136659f82051ef0>`(ssh_message msg);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:target:`ssh_message_channel_request_x11_screen_number<doxid-group__libssh__server_1gaf802b2a7e21e1026cc50c13133a33344>`(ssh_message msg);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:target:`ssh_message_channel_request_x11_single_connection<doxid-group__libssh__server_1gaa0e03d4be51727ff7341efb48d0e3f98>`(ssh_message msg);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` const char*
+	:target:`ssh_message_global_request_address<doxid-group__libssh__server_1ga4b06e2be400a34f8b99e913fffc6b994>`(ssh_message msg);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:target:`ssh_message_global_request_port<doxid-group__libssh__server_1ga2df15146bcf25bbf9e97bdd4b1728e40>`(ssh_message msg);
+
+	static
+	int
+	:target:`ssh_message_global_request_reply_default<doxid-group__libssh__server_1ga518a6b12d13cb2f4d74e261e43fc0129>`(ssh_message msg);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:target:`ssh_message_global_request_reply_success<doxid-group__libssh__server_1ga9c09466e299aff371b2fba996054a6a2>`(
+		ssh_message msg,
+		uint16_t bound_port
+		);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:target:`ssh_message_service_reply_success<doxid-group__libssh__server_1gad0bd348b84300149f017f5abbaff38f5>`(ssh_message msg);
+
+	static
+	int
+	:target:`ssh_message_service_request_reply_default<doxid-group__libssh__server_1ga6e63796d916bcc9a259e9863b2424cce>`(ssh_message msg);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` const char*
+	:target:`ssh_message_service_service<doxid-group__libssh__server_1ga9f9dedae252c1b786b1213c84ac90baa>`(ssh_message msg);
+
+	:target:`SSH_PACKET_CALLBACK<doxid-group__libssh__server_1ga872620a8d0aa300fe01626f1aea153cd>`(ssh_packet_kexdh_init);
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:target:`ssh_send_keepalive<doxid-group__libssh__server_1gaa1ac2e1b7fdc23fd7e253aa9f0a47e7a>`(ssh_session session);
+
+	static
+	void
+	:target:`ssh_server_connection_callback<doxid-group__libssh__server_1ga6b0057a0346a87ddd9b57bfbbc580d4d>`(ssh_session session);
+
+	static
+	int
+	:target:`ssh_server_kex_termination<doxid-group__libssh__server_1gaa18bae911e9533e48b33f63ac0c24cb6>`(void* s);
+
+	static
+	int
+	:target:`ssh_server_kexdh_init<doxid-group__libssh__server_1gae2f38dc415fde063d526f8e925575d6b>`(
+		ssh_session session,
+		ssh_buffer packet
+		);
+
+	// macros
+
+	#define :target:`SERVERBANNER<doxid-group__libssh__server_1ga5b7f830ef23bb1669a1118a78929e98d>`
+	#define :target:`SOCKOPT_TYPE_ARG4<doxid-group__libssh__server_1ga4d64ff113be928cf466b059604c1ca92>`
+
+.. _details-group__libssh__server:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+Typedefs
+--------
+
+.. index:: pair: typedef; ssh_bind_incoming_connection_callback
+.. _doxid-group__libssh__server_1ga76a8630e8ad9b00dd17518e324c407e0:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef void (*ssh_bind_incoming_connection_callback)(
+		ssh_bind sshbind,
+		void *userdata
+		)
+
+Incoming connection callback.
+
+This callback is called when a ssh_bind has a new incoming connection.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sshbind
+
+		- Current sshbind session handler
+
+	*
+		- userdata
+
+		- Userdata to be passed to the callback function.
+
+Global Functions
+----------------
+
+.. index:: pair: function; ssh_bind_accept
+.. _doxid-group__libssh__server_1ga6609243446f1650243101e0a779dc822:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	ssh_bind_accept(
+		ssh_bind ssh_bind_o,
+		ssh_session session
+		)
+
+Accept an incoming ssh connection and initialize the session.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ssh_bind_o
+
+		- The ssh server bind to accept a connection.
+
+	*
+		- session
+
+		- A preallocated ssh session
+
+
+
+.. rubric:: Returns:
+
+SSH_OK when a connection is established
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_new <doxid-group__libssh__session_1gaadadc0f9601547c30db7c4d62017d32c>`
+
+.. index:: pair: function; ssh_bind_accept_fd
+.. _doxid-group__libssh__server_1ga142f1e2f79f6623f14dcfa40dccaa061:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	ssh_bind_accept_fd(
+		ssh_bind ssh_bind_o,
+		ssh_session session,
+		:ref:`socket_t<doxid-libssh_8h_1a30353f381f5fccbb956eea1f3a110b6c>` fd
+		)
+
+Accept an incoming ssh connection on the given file descriptor and initialize the session.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ssh_bind_o
+
+		- The ssh server bind to accept a connection.
+
+	*
+		- session
+
+		- A preallocated ssh session
+
+	*
+		- fd
+
+		- A file descriptor of an already established TCP inbound connection
+
+
+
+.. rubric:: Returns:
+
+SSH_OK when a connection is established
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_new <doxid-group__libssh__session_1gaadadc0f9601547c30db7c4d62017d32c>`
+
+:ref:`ssh_bind_accept <doxid-group__libssh__server_1ga6609243446f1650243101e0a779dc822>`
+
+.. index:: pair: function; ssh_bind_fd_toaccept
+.. _doxid-group__libssh__server_1gab69593f009137ccabafc18a98bd55546:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` void
+	ssh_bind_fd_toaccept(ssh_bind ssh_bind_o)
+
+Allow the file descriptor to accept new sessions.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ssh_bind_o
+
+		- The ssh server bind to use.
+
+.. index:: pair: function; ssh_bind_free
+.. _doxid-group__libssh__server_1gaa7650d22d982a82bf328345c04948cdf:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` void
+	ssh_bind_free(ssh_bind ssh_bind_o)
+
+Free a ssh servers bind.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ssh_bind_o
+
+		- The ssh server bind to free.
+
+.. index:: pair: function; ssh_bind_get_fd
+.. _doxid-group__libssh__server_1ga2b0d1842bf3892ce8b5ebd6c0c7db735:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` :ref:`socket_t<doxid-libssh_8h_1a30353f381f5fccbb956eea1f3a110b6c>`
+	ssh_bind_get_fd(ssh_bind ssh_bind_o)
+
+Recover the file descriptor from the session.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ssh_bind_o
+
+		- The ssh server bind to get the fd from.
+
+
+
+.. rubric:: Returns:
+
+The file descriptor.
+
+.. index:: pair: function; ssh_bind_listen
+.. _doxid-group__libssh__server_1gaee5406f486d73aad765cab4c445f2f63:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	ssh_bind_listen(ssh_bind ssh_bind_o)
+
+Start listening to the socket.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ssh_bind_o
+
+		- The ssh server bind to use.
+
+
+
+.. rubric:: Returns:
+
+0 on success, < 0 on error.
+
+.. index:: pair: function; ssh_bind_new
+.. _doxid-group__libssh__server_1ga4e4edf0cfd185a335d08e6e610aed77e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` ssh_bind
+	ssh_bind_new(void)
+
+Creates a new SSH server bind.
+
+
+
+.. rubric:: Returns:
+
+A newly allocated ssh_bind session pointer.
+
+.. index:: pair: function; ssh_bind_options_set
+.. _doxid-group__libssh__server_1ga8fd4253643bc9cf33d6f41d170e83fff:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	ssh_bind_options_set(
+		ssh_bind sshbind,
+		enum :ref:`ssh_bind_options_e<doxid-group__libssh__server_1ga4c8b5efd4d5e280d59fb680cb7c5d3b8>` type,
+		const void* value
+		)
+
+Set options for an SSH server bind.
+
+* SSH_BIND_OPTIONS_HOSTKEY: Set the path to an ssh host key, regardless of type. Only one key from per key type (RSA, DSA, ECDSA) is allowed in an ssh_bind at a time, and later calls to this function with this option for the same key type will override prior calls (const char \*).
+
+* SSH_BIND_OPTIONS_BINDADDR: Set the IP address to bind (const char \*).
+
+* SSH_BIND_OPTIONS_BINDPORT: Set the port to bind (unsigned int \*).
+
+* SSH_BIND_OPTIONS_BINDPORT_STR: Set the port to bind (const char \*).
+
+* SSH_BIND_OPTIONS_LOG_VERBOSITY: Set the session logging verbosity (int \*). The logging verbosity should have one of the following values, which are listed in order of increasing verbosity. Every log message with verbosity less than or equal to the logging verbosity will be shown.
+  
+  * SSH_LOG_NOLOG: No logging
+  
+  * SSH_LOG_WARNING: Only warnings
+  
+  * SSH_LOG_PROTOCOL: High level protocol information
+  
+  * SSH_LOG_PACKET: Lower level protocol infomations, packet level
+  
+  * SSH_LOG_FUNCTIONS: Every function path
+
+* SSH_BIND_OPTIONS_LOG_VERBOSITY_STR: Set the session logging verbosity via a string that will be converted to a numerical value (e.g. "3") and interpreted according to the values of SSH_BIND_OPTIONS_LOG_VERBOSITY above (const char \*).
+
+* SSH_BIND_OPTIONS_DSAKEY: Set the path to the ssh host dsa key, SSHv2 only (const char \*).
+
+* SSH_BIND_OPTIONS_RSAKEY: Set the path to the ssh host rsa key, SSHv2 only (const char \*).
+
+* SSH_BIND_OPTIONS_ECDSAKEY: Set the path to the ssh host ecdsa key, SSHv2 only (const char \*).
+
+* SSH_BIND_OPTIONS_BANNER: Set the server banner sent to clients (const char \*).
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sshbind
+
+		- The ssh server bind to configure.
+
+	*
+		- type
+
+		- The option type to set. This should be one of the following:
+
+	*
+		- value
+
+		- The value to set. This is a generic pointer and the datatype which should be used is described at the corresponding value of type above.
+
+
+
+.. rubric:: Returns:
+
+0 on success, < 0 on error, invalid option, or parameter.
+
+.. index:: pair: function; ssh_bind_set_blocking
+.. _doxid-group__libssh__server_1gaf7e6f23c6934892d6a96011456b6c280:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` void
+	ssh_bind_set_blocking(
+		ssh_bind ssh_bind_o,
+		int blocking
+		)
+
+Set the session to blocking/nonblocking mode.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ssh_bind_o
+
+		- The ssh server bind to use.
+
+	*
+		- blocking
+
+		- Zero for nonblocking mode.
+
+.. index:: pair: function; ssh_bind_set_callbacks
+.. _doxid-group__libssh__server_1gaaa9bf406809735d4afc75ecd482ba89d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	ssh_bind_set_callbacks(
+		ssh_bind sshbind,
+		ssh_bind_callbacks callbacks,
+		void* userdata
+		)
+
+Set the callback for this bind.
+
+.. ref-code-block:: cpp
+
+	struct ssh_callbacks_struct cb = {
+	    .userdata = data,
+	    .auth_function = my_auth_function
+	};
+	ssh_callbacks_init(&cb);
+	ssh_bind_set_callbacks(session, &cb);
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sshbind
+
+		- The bind to set the callback on.
+
+	*
+		- callbacks
+
+		- An already set up ssh_bind_callbacks instance.
+
+	*
+		- userdata
+
+		- A pointer to private data to pass to the callbacks.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR if an error occured.
+
+.. index:: pair: function; ssh_bind_set_fd
+.. _doxid-group__libssh__server_1gacbba3e298a4493c7b9bfbee514df199c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` void
+	ssh_bind_set_fd(
+		ssh_bind ssh_bind_o,
+		:ref:`socket_t<doxid-libssh_8h_1a30353f381f5fccbb956eea1f3a110b6c>` fd
+		)
+
+Set the file descriptor for a session.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ssh_bind_o
+
+		- The ssh server bind to set the fd.
+
+	*
+		- fd
+
+		- The file descriptssh_bind B
+
+.. index:: pair: function; ssh_channel_open_reverse_forward
+.. _doxid-group__libssh__server_1gae372d2f97205d23493dd856eedf95f22:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	ssh_channel_open_reverse_forward(
+		ssh_channel channel,
+		const char* remotehost,
+		int remoteport,
+		const char* sourcehost,
+		int localport
+		)
+
+Open a TCP/IP reverse forwarding channel.
+
+This function does not bind the local port and does not automatically forward the content of a socket to the channel. You still have to use channel_read and channel_write for this.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- An allocated channel.
+
+	*
+		- remotehost
+
+		- The remote host to connected (host name or IP).
+
+	*
+		- remoteport
+
+		- The remote port.
+
+	*
+		- sourcehost
+
+		- The source host (your local computer). It's optional and for logging purpose.
+
+	*
+		- localport
+
+		- The source port (your local computer). It's optional and for logging purpose.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR if an error occurred, SSH_AGAIN if in nonblocking mode and call has to be done again.
+
+.. index:: pair: function; ssh_channel_open_x11
+.. _doxid-group__libssh__server_1gab3688d962a1865ae2d0df9eb1f83c8fb:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	ssh_channel_open_x11(
+		ssh_channel channel,
+		const char* orig_addr,
+		int orig_port
+		)
+
+Open a X11 channel.
+
+This function does not bind the local port and does not automatically forward the content of a socket to the channel. You still have to use channel_read and channel_write for this.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- An allocated channel.
+
+	*
+		- orig_addr
+
+		- The source host (the local server).
+
+	*
+		- orig_port
+
+		- The source port (the local server).
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR if an error occurred, SSH_AGAIN if in nonblocking mode and call has to be done again.
+
+.. index:: pair: function; ssh_channel_request_send_exit_signal
+.. _doxid-group__libssh__server_1gaca9d5a6b5d8d82496b46267337088a51:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	ssh_channel_request_send_exit_signal(
+		ssh_channel channel,
+		const char* signum,
+		int core,
+		const char* errmsg,
+		const char* lang
+		)
+
+Send an exit signal to remote process (RFC 4254, section 6.10).
+
+This sends the exit status of the remote process. Note, that remote system may not support signals concept. In such a case this request will be silently ignored. Only SSH-v2 is supported (I'm not sure about SSH-v1).
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to send signal.
+
+	*
+		- sig
+
+		- The signal to send (without SIG prefix) (e.g. "TERM" or "KILL").
+
+	*
+		- core
+
+		- A boolean to tell if a core was dumped
+
+	*
+		- errmsg
+
+		- A CRLF explanation text about the error condition
+
+	*
+		- lang
+
+		- The language used in the message (format: RFC 3066)
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR if an error occurred (including attempts to send signal via SSH-v1 session).
+
+.. index:: pair: function; ssh_channel_request_send_exit_status
+.. _doxid-group__libssh__server_1ga7325dd7617635e99f6e62921cb4e0406:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	ssh_channel_request_send_exit_status(
+		ssh_channel channel,
+		int exit_status
+		)
+
+Send the exit status to the remote process.
+
+Sends the exit status to the remote process (as described in RFC 4254, section 6.10). Only SSH-v2 is supported (I'm not sure about SSH-v1).
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to send exit status.
+
+	*
+		- exit_status
+
+		- The exit status to send
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR if an error occurred. (including attempts to send exit status via SSH-v1 session).
+
+.. index:: pair: function; ssh_channel_write_stderr
+.. _doxid-group__libssh__server_1ga76c7578b4e418f8105ba89471293b4c1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	ssh_channel_write_stderr(
+		ssh_channel channel,
+		const void* data,
+		uint32_t len
+		)
+
+Blocking write on a channel stderr.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to write to.
+
+	*
+		- data
+
+		- A pointer to the data to write.
+
+	*
+		- len
+
+		- The length of the buffer to write to.
+
+
+
+.. rubric:: Returns:
+
+The number of bytes written, SSH_ERROR on error.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_channel_read() <doxid-group__libssh__channel_1gac92381c4c5d4a7eab35f6e84686f033d>`
+
+.. index:: pair: function; ssh_gssapi_get_creds
+.. _doxid-group__libssh__server_1gab9ca89e12e290a701dced5f7c91bb677:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` :ref:`ssh_gssapi_creds<doxid-libssh_8h_1affc3a7d505747b757f988aad05163f1e>`
+	ssh_gssapi_get_creds(ssh_session session)
+
+returns the client credentials of the connected client.
+
+If the client has given a forwardable token, the SSH server will retrieve it.
+
+
+
+.. rubric:: Returns:
+
+gssapi credentials handle.
+
+NULL if no forwardable token is available.
+
+.. index:: pair: function; ssh_handle_key_exchange
+.. _doxid-group__libssh__server_1gab60c37350653eb3b65a99ac089c55830:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	ssh_handle_key_exchange(ssh_session session)
+
+Handles the key exchange and set up encryption.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- A connected ssh session
+
+
+
+.. rubric:: Returns:
+
+SSH_OK if the key exchange was successful
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_bind_accept <doxid-group__libssh__server_1ga6609243446f1650243101e0a779dc822>`
+
+.. index:: pair: function; ssh_message_auth_password
+.. _doxid-group__libssh__server_1gab434b45d3f542ab24735bba6432de85d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` const char*
+	ssh_message_auth_password(ssh_message msg)
+
+Get the password of the authenticated user.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- msg
+
+		- The message to get the password from.
+
+
+
+.. rubric:: Returns:
+
+The username or NULL if an error occured.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_message_get() <doxid-group__libssh__messages_1ga8e536b6f1c824b7ca43d0e8f954b3bd4>`
+
+:ref:`ssh_message_type() <doxid-group__libssh__messages_1ga20fc6e536f170b98c7d62ce3675d8cdb>`
+
+.. index:: pair: function; ssh_message_auth_pubkey
+.. _doxid-group__libssh__server_1ga97e909b1d89b4c4747eb5b80ac9fd215:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` ssh_key
+	ssh_message_auth_pubkey(ssh_message msg)
+
+Get the publickey of the authenticated user.
+
+If you need the key for later user you should duplicate it.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- msg
+
+		- The message to get the public key from.
+
+
+
+.. rubric:: Returns:
+
+The public key or NULL.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_key_dup() <doxid-group__libssh__pki_1gae0944d085d1a63c73b7eaf78924ddca8>`
+
+:ref:`ssh_key_cmp() <doxid-group__libssh__pki_1ga4dc33945294c2bbd671365a9d3db8e2f>`
+
+:ref:`ssh_message_get() <doxid-group__libssh__messages_1ga8e536b6f1c824b7ca43d0e8f954b3bd4>`
+
+:ref:`ssh_message_type() <doxid-group__libssh__messages_1ga20fc6e536f170b98c7d62ce3675d8cdb>`
+
+.. index:: pair: function; ssh_message_auth_user
+.. _doxid-group__libssh__server_1gad05353966b70d7f04a3b7aed07a817cc:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` const char*
+	ssh_message_auth_user(ssh_message msg)
+
+Get the name of the authenticated user.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- msg
+
+		- The message to get the username from.
+
+
+
+.. rubric:: Returns:
+
+The username or NULL if an error occured.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_message_get() <doxid-group__libssh__messages_1ga8e536b6f1c824b7ca43d0e8f954b3bd4>`
+
+:ref:`ssh_message_type() <doxid-group__libssh__messages_1ga20fc6e536f170b98c7d62ce3675d8cdb>`
+
+.. index:: pair: function; ssh_message_reply_default
+.. _doxid-group__libssh__server_1ga6e78c8f369333289d245931deed92573:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	ssh_message_reply_default(ssh_message msg)
+
+Reply with a standard reject message.
+
+Use this function if you don't know what to respond or if you want to reject a request.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- msg
+
+		- The message to use for the reply.
+
+
+
+.. rubric:: Returns:
+
+0 on success, -1 on error.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_message_get() <doxid-group__libssh__messages_1ga8e536b6f1c824b7ca43d0e8f954b3bd4>`
+
+.. index:: pair: function; ssh_set_auth_methods
+.. _doxid-group__libssh__server_1gabbfb96c938e33a8dddebaff29f25e0c6:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` void
+	ssh_set_auth_methods(
+		ssh_session session,
+		int auth_methods
+		)
+
+Set the acceptable authentication methods to be sent to client.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- the SSH server session
+
+	*
+		- auth_methods
+
+		- Bitfield of authentication methods to be accepted, e.g. SSH_AUTH_METHOD_PUBLICKEY
+
+.. index:: pair: function; ssh_set_message_callback
+.. _doxid-group__libssh__server_1gaccad877b20fca2d4a7eda5bebc1f5af1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` void
+	ssh_set_message_callback(
+		ssh_session session,
+		int(*)(ssh_session session, ssh_message msg, void*data) ssh_bind_message_callback,
+		void* data
+		)
+
+defines the ssh_message callback
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- the current ssh session
+
+	*
+		- ssh_bind_message_callback
+
+		- a function pointer to a callback taking the current ssh session and received message as parameters. the function returns 0 if the message has been parsed and treated successfully, 1 otherwise (libssh must take care of the response).
+
+	*
+		- data
+
+		- void pointer to be passed to callback functions
+

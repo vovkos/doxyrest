@@ -1,0 +1,2003 @@
+.. index:: pair: group; Network Routines
+.. _doxid-group__apr__network__io:
+
+Network Routines
+================
+
+.. toctree::
+	:hidden:
+
+	group_apr_mcast.rst
+	group_IP_Proto.rst
+	group_apr_sockopt.rst
+	enum_apr_interface_e.rst
+	enum_apr_shutdown_how_e.rst
+	struct_apr_hdtr_t.rst
+	struct_apr_sockaddr_t.rst
+
+Overview
+~~~~~~~~
+
+
+
+|	:ref:`IP Multicast<doxid-group__apr__mcast>`
+|	:ref:`IP Protocol Definitions for use when creating sockets<doxid-group___i_p___proto>`
+|	:ref:`Socket option definitions<doxid-group__apr__sockopt>`
+
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef struct :ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>` :ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`;
+	typedef struct :ref:`apr_hdtr_t<doxid-structapr__hdtr__t>` :ref:`apr_hdtr_t<doxid-group__apr__network__io_1ga97887d5358a9c79c241ccafab61d8ff5>`;
+	typedef struct in_addr :ref:`apr_in_addr_t<doxid-group__apr__network__io_1gad30d6c55a354a9a2e0a8747abb0c8176>`;
+	typedef struct :ref:`apr_ipsubnet_t<doxid-group__apr__network__io_1gac86ee04eb80f938902095d1d0a67c324>` :ref:`apr_ipsubnet_t<doxid-group__apr__network__io_1gac86ee04eb80f938902095d1d0a67c324>`;
+	typedef apr_uint16_t :ref:`apr_port_t<doxid-group__apr__network__io_1gaa670a71960f6eb4fe0d0de2a1e7aba03>`;
+	typedef struct :ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>` :ref:`apr_sockaddr_t<doxid-group__apr__network__io_1ga373fb6f32d0875c5deb648b779c8a709>`;
+
+	// enums
+
+	enum :ref:`apr_interface_e<doxid-group__apr__network__io_1ga1982f44f48fdf00a8bd754bc7b773edc>`;
+	enum :ref:`apr_shutdown_how_e<doxid-group__apr__network__io_1gae2130f1fa2d0db58c5c3c9c73d9b4009>`;
+
+	// structs
+
+	struct :ref:`apr_hdtr_t<doxid-structapr__hdtr__t>`;
+	struct :ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`;
+
+	// global functions
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_socket_create<doxid-group__apr__network__io_1ga46b81e267ef80e64510d4e83880a91bd>`(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`** new_sock,
+		int family,
+		int type,
+		int protocol,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_socket_shutdown<doxid-group__apr__network__io_1gac5aea857a50c493f840c48b930abc48e>`(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* thesocket,
+		:ref:`apr_shutdown_how_e<doxid-group__apr__network__io_1gae2130f1fa2d0db58c5c3c9c73d9b4009>` how
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_socket_close<doxid-group__apr__network__io_1ga88779f243ce19a2563544aee81894e6d>`(:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* thesocket);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_socket_bind<doxid-group__apr__network__io_1ga512882c9979c2b9cad7cbc2508516d65>`(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		:ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`* sa
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_socket_listen<doxid-group__apr__network__io_1ga154bcee918f6f01fe0373359dd74b0c4>`(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		apr_int32_t backlog
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_socket_accept<doxid-group__apr__network__io_1ga1d62711ca77ccc0f6413a298a47876da>`(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`** new_sock,
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* connection_pool
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_socket_connect<doxid-group__apr__network__io_1ga8e58bd8112ed2ce5004487918cd9275e>`(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		:ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`* sa
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_socket_atreadeof<doxid-group__apr__network__io_1gabfcb1fe4447921e5b86d395126b5d6f0>`(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		int* atreadeof
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_sockaddr_info_get<doxid-group__apr__network__io_1gaa2f399ca2b60b35c0abf7630298c6c9f>`(
+		:ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`** sa,
+		const char* hostname,
+		apr_int32_t family,
+		:ref:`apr_port_t<doxid-group__apr__network__io_1gaa670a71960f6eb4fe0d0de2a1e7aba03>` port,
+		apr_int32_t flags,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_getnameinfo<doxid-group__apr__network__io_1ga7a56fd9573b942753738ec30b887c9de>`(
+		char** hostname,
+		:ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`* sa,
+		apr_int32_t flags
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_parse_addr_port<doxid-group__apr__network__io_1ga90c31b2f012c6b1e2d842a96c4431de3>`(
+		char** addr,
+		char** scope_id,
+		:ref:`apr_port_t<doxid-group__apr__network__io_1gaa670a71960f6eb4fe0d0de2a1e7aba03>`* port,
+		const char* str,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_gethostname<doxid-group__apr__network__io_1ga6bd3d656ba935ca428075f477b8a6f8b>`(
+		char* buf,
+		int len,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_socket_data_get<doxid-group__apr__network__io_1gae76b48d0224a608b4ddb8bd00582eaa7>`(
+		void** data,
+		const char* key,
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_socket_data_set<doxid-group__apr__network__io_1gafec197f3aa9a495801cdf7892ff8dcb5>`(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		void* data,
+		const char* key,
+		:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`(*)(void*) cleanup
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_socket_send<doxid-group__apr__network__io_1ga943268245cf59f6ff8cf1458c9a9ba8d>`(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		const char* buf,
+		apr_size_t* len
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_socket_sendv<doxid-group__apr__network__io_1ga99ece70c34a7a332daa3941de3950c64>`(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		const struct iovec* vec,
+		apr_int32_t nvec,
+		apr_size_t* len
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_socket_sendto<doxid-group__apr__network__io_1ga03ae34bc5712dac2b3fdee39e5f87be3>`(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		:ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`* where,
+		apr_int32_t flags,
+		const char* buf,
+		apr_size_t* len
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_socket_recvfrom<doxid-group__apr__network__io_1ga80880312b41e86c9c266ede1a504e2ca>`(
+		:ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`* from,
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		apr_int32_t flags,
+		char* buf,
+		apr_size_t* len
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_socket_sendfile<doxid-group__apr__network__io_1ga3d93e6212c4c27f2390b0057f8f4a8be>`(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* file,
+		:ref:`apr_hdtr_t<doxid-structapr__hdtr__t>`* hdtr,
+		apr_off_t* offset,
+		apr_size_t* len,
+		apr_int32_t flags
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_socket_recv<doxid-group__apr__network__io_1gaa6ee00191f197f64b5a5409f4aff53d1>`(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		char* buf,
+		apr_size_t* len
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_socket_opt_set<doxid-group__apr__network__io_1ga08f5e505fa611005f56c12783269ffa9>`(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		apr_int32_t opt,
+		apr_int32_t on
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_socket_timeout_set<doxid-group__apr__network__io_1ga945bdbe807ec5635d65a6fd9ddb78c29>`(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		:ref:`apr_interval_time_t<doxid-group__apr__time_1gaae2129185a395cc393f76fabf4f43e47>` t
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_socket_opt_get<doxid-group__apr__network__io_1ga1934c2d5943efc8ce925f376f3c2e17e>`(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		apr_int32_t opt,
+		apr_int32_t* on
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_socket_timeout_get<doxid-group__apr__network__io_1gaa32313b54afed590367c8571075d2bc1>`(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		:ref:`apr_interval_time_t<doxid-group__apr__time_1gaae2129185a395cc393f76fabf4f43e47>`* t
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_socket_atmark<doxid-group__apr__network__io_1ga2389de257444870974b5ded91cf7a10c>`(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		int* atmark
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_socket_addr_get<doxid-group__apr__network__io_1gacad56b59eafc6ad2459bf6493c992515>`(
+		:ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`** sa,
+		:ref:`apr_interface_e<doxid-group__apr__network__io_1ga1982f44f48fdf00a8bd754bc7b773edc>` which,
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_sockaddr_ip_get<doxid-group__apr__network__io_1gab78fc9b9799c119f4a5517411458a660>`(
+		char** addr,
+		:ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`* sockaddr
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_sockaddr_ip_getbuf<doxid-group__apr__network__io_1ga8c88ae154304e30d47c2696f4370dc6d>`(
+		char* buf,
+		apr_size_t buflen,
+		:ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`* sockaddr
+		);
+
+	int
+	:ref:`apr_sockaddr_equal<doxid-group__apr__network__io_1ga1bf65369305ae352f3280af2acc684f5>`(
+		const :ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`* addr1,
+		const :ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`* addr2
+		);
+
+	int
+	:ref:`apr_sockaddr_is_wildcard<doxid-group__apr__network__io_1gab9e53832f95e39cb780345c2b7783830>`(const :ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`* addr);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_socket_type_get<doxid-group__apr__network__io_1ga8d23ee2db9a84af2e6408ef460613514>`(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		int* type
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_getservbyname<doxid-group__apr__network__io_1gad5b504c0fe4d578e72531e3ca0263654>`(
+		:ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`* sockaddr,
+		const char* servname
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_ipsubnet_create<doxid-group__apr__network__io_1ga34a3c7f1666427f4e381e857b9e9c298>`(
+		:ref:`apr_ipsubnet_t<doxid-group__apr__network__io_1gac86ee04eb80f938902095d1d0a67c324>`** ipsub,
+		const char* ipstr,
+		const char* mask_or_numbits,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		);
+
+	int
+	:ref:`apr_ipsubnet_test<doxid-group__apr__network__io_1gab74d21b8898b7c40bf7fd07ad3eb993d>`(
+		:ref:`apr_ipsubnet_t<doxid-group__apr__network__io_1gac86ee04eb80f938902095d1d0a67c324>`* ipsub,
+		:ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`* sa
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_socket_accept_filter<doxid-group__apr__network__io_1ga270b7c0835283fa2b85a05d295dd7ee5>`(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		char* name,
+		char* args
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_socket_protocol_get<doxid-group__apr__network__io_1gac402d9426de37b6cede18fa157020bd9>`(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		int* protocol
+		);
+
+	:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`*
+	:ref:`apr_socket_pool_get<doxid-group__apr__network__io_1ga4f109ecf176aee8fca8ecfa7f8b07d93>`(const :ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* thesocket);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_socket_inherit_set<doxid-group__apr__network__io_1ga8ae81c6a7acf90112ebcfb9221ccc649>`(:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* thesocket);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_socket_inherit_unset<doxid-group__apr__network__io_1ga5afabb2cee38c141d076b9c52a3f2ce1>`(:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* thesocket);
+
+	// macros
+
+	#define :ref:`APRMAXHOSTLEN<doxid-group__apr__network__io_1ga7f5b3882209106bb407b1d518d6ad59d>`
+	#define :ref:`APR_ANYADDR<doxid-group__apr__network__io_1gadce1131c46b897ec63e9e4316a4631dd>`
+	#define :ref:`APR_INADDR_NONE<doxid-group__apr__network__io_1ga16eb7ee55ff87a5093f2114ea5351217>`
+	#define :ref:`APR_INET<doxid-group__apr__network__io_1gaa96e8e8dbf92bc77643a4032017b3d67>`
+	#define :ref:`APR_INET6<doxid-group__apr__network__io_1gad09d9ea8995f50f35073ae0c77efb44f>`
+	#define :ref:`APR_IPV4_ADDR_OK<doxid-group__apr__network__io_1ga58aa30a94127b4a80f27fbf2e03fdfd8>`
+	#define :ref:`APR_IPV6_ADDR_OK<doxid-group__apr__network__io_1gaef1f70f9b969d25832a230f429837207>`
+	#define :ref:`APR_MAX_SECS_TO_LINGER<doxid-group__apr__network__io_1ga8311c84f6946742188a6b9a45e92ea8e>`
+	#define :ref:`APR_SENDFILE_DISCONNECT_SOCKET<doxid-group__apr__network__io_1gaca378d0e24b1588e3fdb143e4ea9090d>`
+	#define :ref:`APR_UNSPEC<doxid-group__apr__network__io_1gaa7a33b17a7d0820b09ef489bd3328f85>`
+	#define :ref:`apr_inet_addr<doxid-group__apr__network__io_1ga46a8b06887871cfd60a3e37385775e22>`
+
+.. _details-group__apr__network__io:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+Typedefs
+--------
+
+.. index:: pair: typedef; apr_socket_t
+.. _doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>` apr_socket_t
+
+A structure to represent sockets
+
+.. index:: pair: typedef; apr_hdtr_t
+.. _doxid-group__apr__network__io_1ga97887d5358a9c79c241ccafab61d8ff5:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_hdtr_t<doxid-structapr__hdtr__t>` apr_hdtr_t
+
+A structure to encapsulate headers and trailers for apr_socket_sendfile
+
+.. index:: pair: typedef; apr_in_addr_t
+.. _doxid-group__apr__network__io_1gad30d6c55a354a9a2e0a8747abb0c8176:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct in_addr apr_in_addr_t
+
+A structure to represent in_addr
+
+.. index:: pair: typedef; apr_ipsubnet_t
+.. _doxid-group__apr__network__io_1gac86ee04eb80f938902095d1d0a67c324:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_ipsubnet_t<doxid-group__apr__network__io_1gac86ee04eb80f938902095d1d0a67c324>` apr_ipsubnet_t
+
+A structure to represent an IP subnet
+
+.. index:: pair: typedef; apr_port_t
+.. _doxid-group__apr__network__io_1gaa670a71960f6eb4fe0d0de2a1e7aba03:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef apr_uint16_t apr_port_t
+
+use apr_uint16_t just in case some system has a short that isn't 16 bits...
+
+.. index:: pair: typedef; apr_sockaddr_t
+.. _doxid-group__apr__network__io_1ga373fb6f32d0875c5deb648b779c8a709:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>` apr_sockaddr_t
+
+It's defined here as I think it should all be platform safe...
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_sockaddr_t <doxid-structapr__sockaddr__t>`
+
+Global Functions
+----------------
+
+.. index:: pair: function; apr_socket_create
+.. _doxid-group__apr__network__io_1ga46b81e267ef80e64510d4e83880a91bd:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_socket_create(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`** new_sock,
+		int family,
+		int type,
+		int protocol,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		)
+
+Create a socket. The pool will be used by various functions that operate on the socket. The caller must ensure that it is not used by other threads at the same time.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- new_sock
+
+		- The new socket that has been set up.
+
+	*
+		- family
+
+		- The address family of the socket (e.g., APR_INET).
+
+	*
+		- type
+
+		- The type of the socket (e.g., SOCK_STREAM).
+
+	*
+		- protocol
+
+		- The protocol of the socket (e.g., APR_PROTO_TCP).
+
+	*
+		- cont
+
+		- The pool for the apr_socket_t and associated storage.
+
+.. index:: pair: function; apr_socket_shutdown
+.. _doxid-group__apr__network__io_1gac5aea857a50c493f840c48b930abc48e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_socket_shutdown(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* thesocket,
+		:ref:`apr_shutdown_how_e<doxid-group__apr__network__io_1gae2130f1fa2d0db58c5c3c9c73d9b4009>` how
+		)
+
+Shutdown either reading, writing, or both sides of a socket. This does not actually close the socket descriptor, it just controls which calls are still valid on the socket.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thesocket
+
+		- The socket to close
+
+	*
+		- how
+
+		- 
+		  How to shutdown the socket. One of:
+		  
+		  .. code-block:: none
+		  
+		  
+		  	APR_SHUTDOWN_READ         no longer allow read requests
+		  	APR_SHUTDOWN_WRITE        no longer allow write requests
+		  	APR_SHUTDOWN_READWRITE    no longer allow read or write requests
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_shutdown_how_e <doxid-group__apr__network__io_1gae2130f1fa2d0db58c5c3c9c73d9b4009>`
+
+.. index:: pair: function; apr_socket_close
+.. _doxid-group__apr__network__io_1ga88779f243ce19a2563544aee81894e6d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_socket_close(:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* thesocket)
+
+Close a socket.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thesocket
+
+		- The socket to close
+
+.. index:: pair: function; apr_socket_bind
+.. _doxid-group__apr__network__io_1ga512882c9979c2b9cad7cbc2508516d65:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_socket_bind(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		:ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`* sa
+		)
+
+Bind the socket to its associated port This may be where we will find out if there is any other process using the selected port.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sock
+
+		- The socket to bind
+
+	*
+		- sa
+
+		- The socket address to bind to
+
+.. index:: pair: function; apr_socket_listen
+.. _doxid-group__apr__network__io_1ga154bcee918f6f01fe0373359dd74b0c4:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_socket_listen(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		apr_int32_t backlog
+		)
+
+Listen to a bound socket for connections.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sock
+
+		- The socket to listen on
+
+	*
+		- backlog
+
+		- The number of outstanding connections allowed in the sockets listen queue. If this value is less than zero, the listen queue size is set to zero.
+
+.. index:: pair: function; apr_socket_accept
+.. _doxid-group__apr__network__io_1ga1d62711ca77ccc0f6413a298a47876da:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_socket_accept(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`** new_sock,
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* connection_pool
+		)
+
+Accept a new connection request The pool will be used by various functions that operate on the socket. The caller must ensure that it is not used by other threads at the same time.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- new_sock
+
+		- A copy of the socket that is connected to the socket that made the connection request. This is the socket which should be used for all future communication.
+
+	*
+		- sock
+
+		- The socket we are listening on.
+
+	*
+		- connection_pool
+
+		- The pool for the new socket.
+
+.. index:: pair: function; apr_socket_connect
+.. _doxid-group__apr__network__io_1ga8e58bd8112ed2ce5004487918cd9275e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_socket_connect(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		:ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`* sa
+		)
+
+Issue a connection request to a socket either on the same machine or a different one.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sock
+
+		- The socket we wish to use for our side of the connection
+
+	*
+		- sa
+
+		- The address of the machine we wish to connect to.
+
+.. index:: pair: function; apr_socket_atreadeof
+.. _doxid-group__apr__network__io_1gabfcb1fe4447921e5b86d395126b5d6f0:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_socket_atreadeof(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		int* atreadeof
+		)
+
+Determine whether the receive part of the socket has been closed by the peer (such that a subsequent call to apr_socket_read would return APR_EOF), if the socket's receive buffer is empty. This function does not block waiting for I/O.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sock
+
+		- The socket to check
+
+	*
+		- atreadeof
+
+		- If APR_SUCCESS is returned, \*atreadeof is set to non-zero if a subsequent read would return APR_EOF
+
+
+
+.. rubric:: Returns:
+
+an error is returned if it was not possible to determine the status, in which case \*atreadeof is not changed.
+
+.. index:: pair: function; apr_sockaddr_info_get
+.. _doxid-group__apr__network__io_1gaa2f399ca2b60b35c0abf7630298c6c9f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_sockaddr_info_get(
+		:ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`** sa,
+		const char* hostname,
+		apr_int32_t family,
+		:ref:`apr_port_t<doxid-group__apr__network__io_1gaa670a71960f6eb4fe0d0de2a1e7aba03>` port,
+		apr_int32_t flags,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		)
+
+Create :ref:`apr_sockaddr_t <doxid-structapr__sockaddr__t>` from hostname, address family, and port.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sa
+
+		- The new :ref:`apr_sockaddr_t <doxid-structapr__sockaddr__t>`.
+
+	*
+		- hostname
+
+		- The hostname or numeric address string to resolve/parse, or NULL to build an address that corresponds to ``0.0.0.0`` or ``::``
+
+	*
+		- family
+
+		- The address family to use, or APR_UNSPEC if the system should decide.
+
+	*
+		- port
+
+		- The port number.
+
+	*
+		- flags
+
+		- 
+		  Special processing flags:
+		  
+		  .. code-block:: none
+		  
+		  
+		  	APR_IPV4_ADDR_OK          first query for IPv4 addresses; only look
+		  	                          for IPv6 addresses if the first query failed;
+		  	                          only valid if family is APR_UNSPEC and hostname
+		  	                          isn't NULL; mutually exclusive with
+		  	                          APR_IPV6_ADDR_OK
+		  	APR_IPV6_ADDR_OK          first query for IPv6 addresses; only look
+		  	                          for IPv4 addresses if the first query failed;
+		  	                          only valid if family is APR_UNSPEC and hostname
+		  	                          isn't NULL and APR_HAVE_IPV6; mutually exclusive
+		  	                          with APR_IPV4_ADDR_OK
+
+	*
+		- p
+
+		- The pool for the :ref:`apr_sockaddr_t <doxid-structapr__sockaddr__t>` and associated storage.
+
+.. index:: pair: function; apr_getnameinfo
+.. _doxid-group__apr__network__io_1ga7a56fd9573b942753738ec30b887c9de:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_getnameinfo(
+		char** hostname,
+		:ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`* sa,
+		apr_int32_t flags
+		)
+
+Look up the host name from an :ref:`apr_sockaddr_t <doxid-structapr__sockaddr__t>`. Results can vary significantly between platforms when processing wildcard socket addresses.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hostname
+
+		- The hostname.
+
+	*
+		- sa
+
+		- The :ref:`apr_sockaddr_t <doxid-structapr__sockaddr__t>`.
+
+	*
+		- flags
+
+		- Special processing flags.
+
+.. index:: pair: function; apr_parse_addr_port
+.. _doxid-group__apr__network__io_1ga90c31b2f012c6b1e2d842a96c4431de3:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_parse_addr_port(
+		char** addr,
+		char** scope_id,
+		:ref:`apr_port_t<doxid-group__apr__network__io_1gaa670a71960f6eb4fe0d0de2a1e7aba03>`* port,
+		const char* str,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		)
+
+Parse hostname/IP address with scope id and port.
+
+Any of the following strings are accepted: 8080 (just the port number) www.apache.org (just the hostname) www.apache.org:8080 (hostname and port number)
+
+[fe80::1eth0] (IPv6 numeric address string and scope id)
+
+Invalid strings: (empty string) [abc] (not valid IPv6 numeric address string) abc:65536 (invalid port number)
+
+.. rubric:: return something besides zero if the port is missing.
+
+If scope id shouldn't be allowed, check for scope_id != NULL in addition to checking the return code. If addr/hostname should be required, check for addr == NULL in addition to checking the return code.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- addr
+
+		- The new buffer containing just the hostname. On output, \*addr will be NULL if no hostname/IP address was specfied.
+
+	*
+		- scope_id
+
+		- The new buffer containing just the scope id. On output, \*scope_id will be NULL if no scope id was specified.
+
+	*
+		- port
+
+		- 
+		  The port number. On output, \*port will be 0 if no port was specified.
+		  
+		  .. rubric:: FIXME: 0 is a legal port (per RFC 1700). this should
+
+	*
+		- str
+
+		- The input string to be parsed.
+
+	*
+		- p
+
+		- The pool from which \*addr and \*scope_id are allocated.
+
+.. index:: pair: function; apr_gethostname
+.. _doxid-group__apr__network__io_1ga6bd3d656ba935ca428075f477b8a6f8b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_gethostname(
+		char* buf,
+		int len,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cont
+		)
+
+Get name of the current machine If the buffer was not large enough, an error will be returned.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- buf
+
+		- A buffer to store the hostname in.
+
+	*
+		- len
+
+		- The maximum length of the hostname that can be stored in the buffer provided. The suggested length is APRMAXHOSTLEN + 1.
+
+	*
+		- cont
+
+		- The pool to use.
+
+.. index:: pair: function; apr_socket_data_get
+.. _doxid-group__apr__network__io_1gae76b48d0224a608b4ddb8bd00582eaa7:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_socket_data_get(
+		void** data,
+		const char* key,
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock
+		)
+
+Return the data associated with the current socket
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- data
+
+		- The user data associated with the socket.
+
+	*
+		- key
+
+		- The key to associate with the user data.
+
+	*
+		- sock
+
+		- The currently open socket.
+
+.. index:: pair: function; apr_socket_data_set
+.. _doxid-group__apr__network__io_1gafec197f3aa9a495801cdf7892ff8dcb5:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_socket_data_set(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		void* data,
+		const char* key,
+		:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`(*)(void*) cleanup
+		)
+
+Set the data associated with the current socket.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sock
+
+		- The currently open socket.
+
+	*
+		- data
+
+		- The user data to associate with the socket.
+
+	*
+		- key
+
+		- The key to associate with the data.
+
+	*
+		- cleanup
+
+		- The cleanup to call when the socket is destroyed.
+
+.. index:: pair: function; apr_socket_send
+.. _doxid-group__apr__network__io_1ga943268245cf59f6ff8cf1458c9a9ba8d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_socket_send(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		const char* buf,
+		apr_size_t* len
+		)
+
+Send data over a network... code-block:: none
+
+	
+	This functions acts like a blocking write by default.  To change 
+	this behavior, use :ref:`apr_socket_timeout_set() <doxid-group__apr__network__io_1ga945bdbe807ec5635d65a6fd9ddb78c29>` or the APR_SO_NONBLOCK
+	socket option.
+
+It is possible for both bytes to be sent and an error to be returned.
+
+.. code-block:: none
+
+	APR_EINTR is never returned.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sock
+
+		- The socket to send the data over.
+
+	*
+		- buf
+
+		- The buffer which contains the data to be sent.
+
+	*
+		- len
+
+		- On entry, the number of bytes to send; on exit, the number of bytes sent.
+
+.. index:: pair: function; apr_socket_sendv
+.. _doxid-group__apr__network__io_1ga99ece70c34a7a332daa3941de3950c64:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_socket_sendv(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		const struct iovec* vec,
+		apr_int32_t nvec,
+		apr_size_t* len
+		)
+
+Send multiple buffers over a network... code-block:: none
+
+	
+	This functions acts like a blocking write by default.  To change 
+	this behavior, use :ref:`apr_socket_timeout_set() <doxid-group__apr__network__io_1ga945bdbe807ec5635d65a6fd9ddb78c29>` or the APR_SO_NONBLOCK
+	socket option.
+	The number of bytes actually sent is stored in argument 4.
+
+It is possible for both bytes to be sent and an error to be returned.
+
+.. code-block:: none
+
+	APR_EINTR is never returned.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sock
+
+		- The socket to send the data over.
+
+	*
+		- vec
+
+		- The array of iovec structs containing the data to send
+
+	*
+		- nvec
+
+		- The number of iovec structs in the array
+
+	*
+		- len
+
+		- Receives the number of bytes actually written
+
+.. index:: pair: function; apr_socket_sendto
+.. _doxid-group__apr__network__io_1ga03ae34bc5712dac2b3fdee39e5f87be3:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_socket_sendto(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		:ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`* where,
+		apr_int32_t flags,
+		const char* buf,
+		apr_size_t* len
+		)
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sock
+
+		- The socket to send from
+
+	*
+		- where
+
+		- The :ref:`apr_sockaddr_t <doxid-structapr__sockaddr__t>` describing where to send the data
+
+	*
+		- flags
+
+		- The flags to use
+
+	*
+		- buf
+
+		- The data to send
+
+	*
+		- len
+
+		- The length of the data to send
+
+.. index:: pair: function; apr_socket_recvfrom
+.. _doxid-group__apr__network__io_1ga80880312b41e86c9c266ede1a504e2ca:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_socket_recvfrom(
+		:ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`* from,
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		apr_int32_t flags,
+		char* buf,
+		apr_size_t* len
+		)
+
+Read data from a socket. On success, the address of the peer from which the data was sent is copied into the *from* parameter, and the *len* parameter is updated to give the number of bytes written to *buf*.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- from
+
+		- Updated with the address from which the data was received
+
+	*
+		- sock
+
+		- The socket to use
+
+	*
+		- flags
+
+		- The flags to use
+
+	*
+		- buf
+
+		- The buffer to use
+
+	*
+		- len
+
+		- The length of the available buffer
+
+.. index:: pair: function; apr_socket_sendfile
+.. _doxid-group__apr__network__io_1ga3d93e6212c4c27f2390b0057f8f4a8be:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_socket_sendfile(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* file,
+		:ref:`apr_hdtr_t<doxid-structapr__hdtr__t>`* hdtr,
+		apr_off_t* offset,
+		apr_size_t* len,
+		apr_int32_t flags
+		)
+
+Send a file from an open file descriptor to a socket, along with optional headers and trailers This functions acts like a blocking write by default. To change this behavior, use :ref:`apr_socket_timeout_set() <doxid-group__apr__network__io_1ga945bdbe807ec5635d65a6fd9ddb78c29>` or the APR_SO_NONBLOCK socket option. The number of bytes actually sent is stored in the len parameter. The offset parameter is passed by reference for no reason; its value will never be modified by the :ref:`apr_socket_sendfile() <doxid-group__apr__network__io_1ga3d93e6212c4c27f2390b0057f8f4a8be>` function.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sock
+
+		- The socket to which we're writing
+
+	*
+		- file
+
+		- The open file from which to read
+
+	*
+		- hdtr
+
+		- A structure containing the headers and trailers to send
+
+	*
+		- offset
+
+		- Offset into the file where we should begin writing
+
+	*
+		- len
+
+		- (input) - Number of bytes to send from the file (output) - Number of bytes actually sent, including headers, file, and trailers
+
+	*
+		- flags
+
+		- APR flags that are mapped to OS specific flags
+
+.. index:: pair: function; apr_socket_recv
+.. _doxid-group__apr__network__io_1gaa6ee00191f197f64b5a5409f4aff53d1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_socket_recv(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		char* buf,
+		apr_size_t* len
+		)
+
+Read data from a network... code-block:: none
+
+	
+	This functions acts like a blocking read by default.  To change 
+	this behavior, use :ref:`apr_socket_timeout_set() <doxid-group__apr__network__io_1ga945bdbe807ec5635d65a6fd9ddb78c29>` or the APR_SO_NONBLOCK
+	socket option.
+	The number of bytes actually received is stored in argument 3.
+
+It is possible for both bytes to be received and an APR_EOF or other error to be returned.
+
+.. code-block:: none
+
+	APR_EINTR is never returned.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sock
+
+		- The socket to read the data from.
+
+	*
+		- buf
+
+		- The buffer to store the data in.
+
+	*
+		- len
+
+		- On entry, the number of bytes to receive; on exit, the number of bytes received.
+
+.. index:: pair: function; apr_socket_opt_set
+.. _doxid-group__apr__network__io_1ga08f5e505fa611005f56c12783269ffa9:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_socket_opt_set(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		apr_int32_t opt,
+		apr_int32_t on
+		)
+
+Setup socket options for the specified socket
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sock
+
+		- The socket to set up.
+
+	*
+		- opt
+
+		- 
+		  The option we would like to configure. One of:
+		  
+		  .. code-block:: none
+		  
+		  
+		  	APR_SO_DEBUG      --  turn on debugging information 
+		  	APR_SO_KEEPALIVE  --  keep connections active
+		  	APR_SO_LINGER     --  lingers on close if data is present
+		  	APR_SO_NONBLOCK   --  Turns blocking on/off for socket
+		  	                      When this option is enabled, use
+		  	                      the :ref:`APR_STATUS_IS_EAGAIN() <doxid-group___a_p_r___s_t_a_t_u_s___i_s_1ga9dd578bfcd76a2d997395608ae5b3a4e>` macro to
+		  	                      see if a send or receive function
+		  	                      could not transfer data without
+		  	                      blocking.
+		  	APR_SO_REUSEADDR  --  The rules used in validating addresses
+		  	                      supplied to bind should allow reuse
+		  	                      of local addresses.
+		  	APR_SO_SNDBUF     --  Set the SendBufferSize
+		  	APR_SO_RCVBUF     --  Set the ReceiveBufferSize
+
+	*
+		- on
+
+		- Value for the option.
+
+.. index:: pair: function; apr_socket_timeout_set
+.. _doxid-group__apr__network__io_1ga945bdbe807ec5635d65a6fd9ddb78c29:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_socket_timeout_set(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		:ref:`apr_interval_time_t<doxid-group__apr__time_1gaae2129185a395cc393f76fabf4f43e47>` t
+		)
+
+Setup socket timeout for the specified socket
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sock
+
+		- The socket to set up.
+
+	*
+		- t
+
+		- 
+		  Value for the timeout.
+		  
+		  .. code-block:: none
+		  
+		  
+		  	t > 0   read and write calls return APR_TIMEUP if specified time
+		  	          elapsess with no data read or written
+		  	t == 0  read and write calls never block
+		  	t < 0   read and write calls block
+
+.. index:: pair: function; apr_socket_opt_get
+.. _doxid-group__apr__network__io_1ga1934c2d5943efc8ce925f376f3c2e17e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_socket_opt_get(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		apr_int32_t opt,
+		apr_int32_t* on
+		)
+
+Query socket options for the specified socket
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sock
+
+		- The socket to query
+
+	*
+		- opt
+
+		- 
+		  The option we would like to query. One of:
+		  
+		  .. code-block:: none
+		  
+		  
+		  	APR_SO_DEBUG      --  turn on debugging information 
+		  	APR_SO_KEEPALIVE  --  keep connections active
+		  	APR_SO_LINGER     --  lingers on close if data is present
+		  	APR_SO_NONBLOCK   --  Turns blocking on/off for socket
+		  	APR_SO_REUSEADDR  --  The rules used in validating addresses
+		  	                      supplied to bind should allow reuse
+		  	                      of local addresses.
+		  	APR_SO_SNDBUF     --  Set the SendBufferSize
+		  	APR_SO_RCVBUF     --  Set the ReceiveBufferSize
+		  	APR_SO_DISCONNECTED -- Query the disconnected state of the socket.
+		  	                      (Currently only used on Windows)
+
+	*
+		- on
+
+		- Socket option returned on the call.
+
+.. index:: pair: function; apr_socket_timeout_get
+.. _doxid-group__apr__network__io_1gaa32313b54afed590367c8571075d2bc1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_socket_timeout_get(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		:ref:`apr_interval_time_t<doxid-group__apr__time_1gaae2129185a395cc393f76fabf4f43e47>`* t
+		)
+
+Query socket timeout for the specified socket
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sock
+
+		- The socket to query
+
+	*
+		- t
+
+		- Socket timeout returned from the query.
+
+.. index:: pair: function; apr_socket_atmark
+.. _doxid-group__apr__network__io_1ga2389de257444870974b5ded91cf7a10c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_socket_atmark(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		int* atmark
+		)
+
+Query the specified socket if at the OOB/Urgent data mark
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sock
+
+		- The socket to query
+
+	*
+		- atmark
+
+		- Is set to true if socket is at the OOB/urgent mark, otherwise is set to false.
+
+.. index:: pair: function; apr_socket_addr_get
+.. _doxid-group__apr__network__io_1gacad56b59eafc6ad2459bf6493c992515:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_socket_addr_get(
+		:ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`** sa,
+		:ref:`apr_interface_e<doxid-group__apr__network__io_1ga1982f44f48fdf00a8bd754bc7b773edc>` which,
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock
+		)
+
+Return an address associated with a socket; either the address to which the socket is bound locally or the address of the peer to which the socket is connected.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sa
+
+		- The returned :ref:`apr_sockaddr_t <doxid-structapr__sockaddr__t>`.
+
+	*
+		- which
+
+		- Whether to retrieve the local or remote address
+
+	*
+		- sock
+
+		- The socket to use
+
+.. index:: pair: function; apr_sockaddr_ip_get
+.. _doxid-group__apr__network__io_1gab78fc9b9799c119f4a5517411458a660:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_sockaddr_ip_get(
+		char** addr,
+		:ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`* sockaddr
+		)
+
+Return the IP address (in numeric address string format) in an APR socket address. APR will allocate storage for the IP address string from the pool of the :ref:`apr_sockaddr_t <doxid-structapr__sockaddr__t>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- addr
+
+		- The IP address.
+
+	*
+		- sockaddr
+
+		- The socket address to reference.
+
+.. index:: pair: function; apr_sockaddr_ip_getbuf
+.. _doxid-group__apr__network__io_1ga8c88ae154304e30d47c2696f4370dc6d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_sockaddr_ip_getbuf(
+		char* buf,
+		apr_size_t buflen,
+		:ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`* sockaddr
+		)
+
+Write the IP address (in numeric address string format) of the APR socket address *sockaddr* into the buffer *buf* (of size *buflen*).
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sockaddr
+
+		- The socket address to reference.
+
+.. index:: pair: function; apr_sockaddr_equal
+.. _doxid-group__apr__network__io_1ga1bf65369305ae352f3280af2acc684f5:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	apr_sockaddr_equal(
+		const :ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`* addr1,
+		const :ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`* addr2
+		)
+
+See if the IP addresses in two APR socket addresses are equivalent. Appropriate logic is present for comparing IPv4-mapped IPv6 addresses with IPv4 addresses.
+
+The return value will be non-zero if the addresses are equivalent.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- addr1
+
+		- One of the APR socket addresses.
+
+	*
+		- addr2
+
+		- The other APR socket address.
+
+.. index:: pair: function; apr_sockaddr_is_wildcard
+.. _doxid-group__apr__network__io_1gab9e53832f95e39cb780345c2b7783830:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	apr_sockaddr_is_wildcard(const :ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`* addr)
+
+See if the IP address in an APR socket address refers to the wildcard address for the protocol family (e.g., INADDR_ANY for IPv4).
+
+The return value will be non-zero if the address is initialized and is the wildcard address.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- addr
+
+		- The APR socket address to examine.
+
+.. index:: pair: function; apr_socket_type_get
+.. _doxid-group__apr__network__io_1ga8d23ee2db9a84af2e6408ef460613514:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_socket_type_get(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		int* type
+		)
+
+Return the type of the socket.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sock
+
+		- The socket to query.
+
+	*
+		- type
+
+		- The returned type (e.g., SOCK_STREAM).
+
+.. index:: pair: function; apr_getservbyname
+.. _doxid-group__apr__network__io_1gad5b504c0fe4d578e72531e3ca0263654:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_getservbyname(
+		:ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`* sockaddr,
+		const char* servname
+		)
+
+Given an :ref:`apr_sockaddr_t <doxid-structapr__sockaddr__t>` and a service name, set the port for the service
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sockaddr
+
+		- The :ref:`apr_sockaddr_t <doxid-structapr__sockaddr__t>` that will have its port set
+
+	*
+		- servname
+
+		- The name of the service you wish to use
+
+.. index:: pair: function; apr_ipsubnet_create
+.. _doxid-group__apr__network__io_1ga34a3c7f1666427f4e381e857b9e9c298:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_ipsubnet_create(
+		:ref:`apr_ipsubnet_t<doxid-group__apr__network__io_1gac86ee04eb80f938902095d1d0a67c324>`** ipsub,
+		const char* ipstr,
+		const char* mask_or_numbits,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		)
+
+Build an ip-subnet representation from an IP address and optional netmask or number-of-bits.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ipsub
+
+		- The new ip-subnet representation
+
+	*
+		- ipstr
+
+		- The input IP address string
+
+	*
+		- mask_or_numbits
+
+		- The input netmask or number-of-bits string, or NULL
+
+	*
+		- p
+
+		- The pool to allocate from
+
+.. index:: pair: function; apr_ipsubnet_test
+.. _doxid-group__apr__network__io_1gab74d21b8898b7c40bf7fd07ad3eb993d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	apr_ipsubnet_test(
+		:ref:`apr_ipsubnet_t<doxid-group__apr__network__io_1gac86ee04eb80f938902095d1d0a67c324>`* ipsub,
+		:ref:`apr_sockaddr_t<doxid-structapr__sockaddr__t>`* sa
+		)
+
+Test the IP address in an :ref:`apr_sockaddr_t <doxid-structapr__sockaddr__t>` against a pre-built ip-subnet representation.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ipsub
+
+		- The ip-subnet representation
+
+	*
+		- sa
+
+		- The socket address to test
+
+
+
+.. rubric:: Returns:
+
+non-zero if the socket address is within the subnet, 0 otherwise
+
+.. index:: pair: function; apr_socket_accept_filter
+.. _doxid-group__apr__network__io_1ga270b7c0835283fa2b85a05d295dd7ee5:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_socket_accept_filter(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		char* name,
+		char* args
+		)
+
+Set an OS level accept filter. Bug name and args should have been declared as const char \*, as they are in APR 2.0
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sock
+
+		- The socket to put the accept filter on.
+
+	*
+		- name
+
+		- The accept filter
+
+	*
+		- args
+
+		- Any extra args to the accept filter. Passing NULL here removes the accept filter.
+
+.. index:: pair: function; apr_socket_protocol_get
+.. _doxid-group__apr__network__io_1gac402d9426de37b6cede18fa157020bd9:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_socket_protocol_get(
+		:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* sock,
+		int* protocol
+		)
+
+Return the protocol of the socket.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sock
+
+		- The socket to query.
+
+	*
+		- protocol
+
+		- The returned protocol (e.g., APR_PROTO_TCP).
+
+.. index:: pair: function; apr_socket_pool_get
+.. _doxid-group__apr__network__io_1ga4f109ecf176aee8fca8ecfa7f8b07d93:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`*
+	apr_socket_pool_get(const :ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* thesocket)
+
+Get the pool used by the socket.
+
+.. index:: pair: function; apr_socket_inherit_set
+.. _doxid-group__apr__network__io_1ga8ae81c6a7acf90112ebcfb9221ccc649:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_socket_inherit_set(:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* thesocket)
+
+Set a socket to be inherited by child processes.
+
+.. index:: pair: function; apr_socket_inherit_unset
+.. _doxid-group__apr__network__io_1ga5afabb2cee38c141d076b9c52a3f2ce1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_socket_inherit_unset(:ref:`apr_socket_t<doxid-group__apr__network__io_1ga49262b223e7434746e1f1737659aa2c3>`* thesocket)
+
+Unset a socket from being inherited by child processes.
+
+Macros
+------
+
+.. index:: pair: define; APRMAXHOSTLEN
+.. _doxid-group__apr__network__io_1ga7f5b3882209106bb407b1d518d6ad59d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APRMAXHOSTLEN
+
+Maximum hostname length
+
+.. index:: pair: define; APR_ANYADDR
+.. _doxid-group__apr__network__io_1gadce1131c46b897ec63e9e4316a4631dd:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_ANYADDR
+
+Default 'any' address
+
+.. index:: pair: define; APR_INADDR_NONE
+.. _doxid-group__apr__network__io_1ga16eb7ee55ff87a5093f2114ea5351217:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_INADDR_NONE
+
+Not all platforms have a real INADDR_NONE. This macro replaces INADDR_NONE on all platforms.
+
+.. index:: pair: define; APR_INET
+.. _doxid-group__apr__network__io_1gaa96e8e8dbf92bc77643a4032017b3d67:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_INET
+
+Not all platforms have these defined, so we'll define them here The default values come from FreeBSD 4.1.1
+
+.. index:: pair: define; APR_INET6
+.. _doxid-group__apr__network__io_1gad09d9ea8995f50f35073ae0c77efb44f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_INET6
+
+IPv6 Address Family. Not all platforms may have this defined.
+
+.. index:: pair: define; APR_IPV4_ADDR_OK
+.. _doxid-group__apr__network__io_1ga58aa30a94127b4a80f27fbf2e03fdfd8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_IPV4_ADDR_OK
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_sockaddr_info_get() <doxid-group__apr__network__io_1gaa2f399ca2b60b35c0abf7630298c6c9f>`
+
+.. index:: pair: define; APR_IPV6_ADDR_OK
+.. _doxid-group__apr__network__io_1gaef1f70f9b969d25832a230f429837207:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_IPV6_ADDR_OK
+
+
+
+.. rubric:: See also:
+
+:ref:`apr_sockaddr_info_get() <doxid-group__apr__network__io_1gaa2f399ca2b60b35c0abf7630298c6c9f>`
+
+.. index:: pair: define; APR_MAX_SECS_TO_LINGER
+.. _doxid-group__apr__network__io_1ga8311c84f6946742188a6b9a45e92ea8e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_MAX_SECS_TO_LINGER
+
+Maximum seconds to linger
+
+.. index:: pair: define; APR_SENDFILE_DISCONNECT_SOCKET
+.. _doxid-group__apr__network__io_1gaca378d0e24b1588e3fdb143e4ea9090d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_SENDFILE_DISCONNECT_SOCKET
+
+Support reusing the socket on platforms which support it (from disconnect, specifically Win32. Optional flag passed into :ref:`apr_socket_sendfile() <doxid-group__apr__network__io_1ga3d93e6212c4c27f2390b0057f8f4a8be>`
+
+.. index:: pair: define; APR_UNSPEC
+.. _doxid-group__apr__network__io_1gaa7a33b17a7d0820b09ef489bd3328f85:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define APR_UNSPEC
+
+Let the system decide which address family to use
+
+.. index:: pair: define; apr_inet_addr
+.. _doxid-group__apr__network__io_1ga46a8b06887871cfd60a3e37385775e22:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define apr_inet_addr
+
+The specific declaration of inet_addr's ... some platforms fall back inet_network (this is not good, but necessary)
+

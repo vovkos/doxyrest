@@ -1,0 +1,2250 @@
+.. index:: pair: group; The SSH channel functions
+.. _doxid-group__libssh__channel:
+
+The SSH channel functions
+=========================
+
+.. toctree::
+	:hidden:
+
+	struct_ssh_channel_read_termination_struct.rst
+
+Overview
+~~~~~~~~
+
+Functions that manage a SSH channel. :ref:`More...<details-group__libssh__channel>`
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// structs
+
+	struct :ref:`ssh_channel_read_termination_struct<doxid-structssh__channel__read__termination__struct>`;
+
+	// global functions
+
+	ssh_channel
+	:ref:`ssh_channel_new<doxid-group__libssh__channel_1gada8ccda7bf65165fe145d3096a252dcc>`(ssh_session session);
+
+	:ref:`SSH_DEPRECATED<doxid-libssh_8h_1a005fdd197993c4a3728190e1ae8fb3ae>` :ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	:ref:`channel_read_buffer<doxid-group__libssh__channel_1gab391f5c978cb1bc8df3ebd061f38e8c5>`(
+		ssh_channel channel,
+		ssh_buffer buffer,
+		uint32_t count,
+		int is_stderr
+		);
+
+	ssh_channel
+	:ref:`ssh_channel_accept_forward<doxid-group__libssh__channel_1ga490e4b0a7adc022507b7f165b336afe4>`(
+		ssh_session session,
+		int timeout_ms,
+		int* destination_port
+		);
+
+	ssh_channel
+	:ref:`ssh_channel_accept_x11<doxid-group__libssh__channel_1ga548bd0f77a50b7c8180942544b375866>`(
+		ssh_channel channel,
+		int timeout_ms
+		);
+
+	int
+	:ref:`ssh_channel_cancel_forward<doxid-group__libssh__channel_1ga3bff751afc5ecb5bbf9d6447e4e5370f>`(
+		ssh_session session,
+		const char* address,
+		int port
+		);
+
+	int
+	:ref:`ssh_channel_change_pty_size<doxid-group__libssh__channel_1gaf5d55c90f3d98c583df23d21905c1127>`(
+		ssh_channel channel,
+		int cols,
+		int rows
+		);
+
+	int
+	:ref:`ssh_channel_close<doxid-group__libssh__channel_1ga238f07e0455456a5bfd8a49ead917732>`(ssh_channel channel);
+
+	void
+	:ref:`ssh_channel_free<doxid-group__libssh__channel_1gad1417f9eae8928fed20faafe2d9dbfff>`(ssh_channel channel);
+
+	int
+	:ref:`ssh_channel_get_exit_status<doxid-group__libssh__channel_1ga9eea019dd0bbaa8a817fff2c762d1a2d>`(ssh_channel channel);
+
+	ssh_session
+	:ref:`ssh_channel_get_session<doxid-group__libssh__channel_1ga747aa5315575aa7ac9d8367c7372d8dd>`(ssh_channel channel);
+
+	int
+	:ref:`ssh_channel_is_closed<doxid-group__libssh__channel_1gab2720b44cb7f1dfe2b38ffe07c2f45c7>`(ssh_channel channel);
+
+	int
+	:ref:`ssh_channel_is_eof<doxid-group__libssh__channel_1gab535264029443d77214c0615a0788b0a>`(ssh_channel channel);
+
+	int
+	:ref:`ssh_channel_is_open<doxid-group__libssh__channel_1gaaafcda943c96ddb91e5c28c0bdee7045>`(ssh_channel channel);
+
+	int
+	:ref:`ssh_channel_listen_forward<doxid-group__libssh__channel_1ga758cda957227751870c8772df46e5b39>`(
+		ssh_session session,
+		const char* address,
+		int port,
+		int* bound_port
+		);
+
+	int
+	:ref:`ssh_channel_open_auth_agent<doxid-group__libssh__channel_1ga6c4d4f5436dd5be58973606c6bcd8bb4>`(ssh_channel channel);
+
+	int
+	:ref:`ssh_channel_open_forward<doxid-group__libssh__channel_1gae86b0704a1f2bdebb268b55567f7f47b>`(
+		ssh_channel channel,
+		const char* remotehost,
+		int remoteport,
+		const char* sourcehost,
+		int localport
+		);
+
+	int
+	:ref:`ssh_channel_open_session<doxid-group__libssh__channel_1gaf051dd30d75bf6dc45d1a5088cf970bd>`(ssh_channel channel);
+
+	int
+	:ref:`ssh_channel_open_x11<doxid-group__libssh__channel_1gae4aa2cb2a96cfe13712150517d6a90da>`(
+		ssh_channel channel,
+		const char* orig_addr,
+		int orig_port
+		);
+
+	int
+	:ref:`ssh_channel_poll<doxid-group__libssh__channel_1ga157f7d1df5de07ec6c6976e2034ba6e2>`(
+		ssh_channel channel,
+		int is_stderr
+		);
+
+	int
+	:ref:`ssh_channel_poll_timeout<doxid-group__libssh__channel_1gab56c7b7959e4c23959f2989468811661>`(
+		ssh_channel channel,
+		int timeout,
+		int is_stderr
+		);
+
+	int
+	:ref:`ssh_channel_read<doxid-group__libssh__channel_1gac92381c4c5d4a7eab35f6e84686f033d>`(
+		ssh_channel channel,
+		void* dest,
+		uint32_t count,
+		int is_stderr
+		);
+
+	int
+	:ref:`ssh_channel_read_nonblocking<doxid-group__libssh__channel_1gaaca5a3fbe9839c3ffb37b746afc35f4c>`(
+		ssh_channel channel,
+		void* dest,
+		uint32_t count,
+		int is_stderr
+		);
+
+	int
+	:ref:`ssh_channel_read_timeout<doxid-group__libssh__channel_1ga3c1aa2ea4197626af7bf224b6a5aaff5>`(
+		ssh_channel channel,
+		void* dest,
+		uint32_t count,
+		int is_stderr,
+		int timeout_ms
+		);
+
+	int
+	:ref:`ssh_channel_request_env<doxid-group__libssh__channel_1ga7aede2f9af4c494ff9e41fc08a4572f1>`(
+		ssh_channel channel,
+		const char* name,
+		const char* value
+		);
+
+	int
+	:ref:`ssh_channel_request_exec<doxid-group__libssh__channel_1ga567d509183ade0a77190f390e2b5747d>`(
+		ssh_channel channel,
+		const char* cmd
+		);
+
+	int
+	:ref:`ssh_channel_request_pty<doxid-group__libssh__channel_1ga37c1cec33fe5a2f184768aba52e3a0db>`(ssh_channel channel);
+
+	int
+	:ref:`ssh_channel_request_pty_size<doxid-group__libssh__channel_1gabb175414352256e1602286e0ab50886c>`(
+		ssh_channel channel,
+		const char* term,
+		int cols,
+		int rows
+		);
+
+	int
+	:ref:`ssh_channel_request_send_signal<doxid-group__libssh__channel_1gaa98315fca818b561970a6950683f4053>`(
+		ssh_channel channel,
+		const char* signum
+		);
+
+	int
+	:ref:`ssh_channel_request_shell<doxid-group__libssh__channel_1gaed4c5fb30c9df2b2548421ccf4e81bf1>`(ssh_channel channel);
+
+	int
+	:ref:`ssh_channel_request_subsystem<doxid-group__libssh__channel_1ga06024b070f9b2a3d6964b79ae36695b7>`(
+		ssh_channel channel,
+		const char* subsystem
+		);
+
+	int
+	:ref:`ssh_channel_request_x11<doxid-group__libssh__channel_1gadfa34624c28164bd73453cd04aa64c1f>`(
+		ssh_channel channel,
+		int single_connection,
+		const char* protocol,
+		const char* cookie,
+		int screen_number
+		);
+
+	int
+	:ref:`ssh_channel_select<doxid-group__libssh__channel_1ga1026cfa48ecfc0b4898d4ea443acfc5d>`(
+		ssh_channel* readchans,
+		ssh_channel* writechans,
+		ssh_channel* exceptchans,
+		struct timeval* timeout
+		);
+
+	int
+	:ref:`ssh_channel_send_eof<doxid-group__libssh__channel_1ga072f82fdf3e50514f747653af2c99004>`(ssh_channel channel);
+
+	void
+	:ref:`ssh_channel_set_blocking<doxid-group__libssh__channel_1ga1c00ed18679d9a8c5b971260b5df13a2>`(
+		ssh_channel channel,
+		int blocking
+		);
+
+	void
+	:ref:`ssh_channel_set_counter<doxid-group__libssh__channel_1gab0649fe21b7a900b4a8e10ecb3401395>`(
+		ssh_channel channel,
+		ssh_counter counter
+		);
+
+	int
+	:ref:`ssh_channel_write<doxid-group__libssh__channel_1ga5d658df773ba854b35ff9f905341e2fb>`(
+		ssh_channel channel,
+		const void* data,
+		uint32_t len
+		);
+
+	int
+	:target:`channel_default_bufferize<doxid-group__libssh__channel_1ga6d4c7ef18a63d8b64bba2dc22d59b450>`(
+		ssh_channel channel,
+		void* data,
+		int len,
+		int is_stderr
+		);
+
+	static
+	ssh_channel
+	:target:`channel_from_msg<doxid-group__libssh__channel_1ga41254c9dd24ac1ae9ad9c0edd3825dee>`(
+		ssh_session session,
+		ssh_buffer packet
+		);
+
+	static
+	int
+	:target:`channel_open<doxid-group__libssh__channel_1ga8056ce5726220396565a77a1cca940f6>`(
+		ssh_channel channel,
+		const char* type,
+		int window,
+		int maxpacket,
+		ssh_buffer payload
+		);
+
+	static
+	int
+	:target:`channel_protocol_select<doxid-group__libssh__channel_1ga3a106d0c860b8ada098b4ed317c3cce4>`(
+		ssh_channel* rchans,
+		ssh_channel* wchans,
+		ssh_channel* echans,
+		ssh_channel* rout,
+		ssh_channel* wout,
+		ssh_channel* eout
+		);
+
+	static
+	int
+	:target:`channel_request<doxid-group__libssh__channel_1gaee35ccabe6998568d138d35f538765d9>`(
+		ssh_channel channel,
+		const char* request,
+		ssh_buffer buffer,
+		int reply
+		);
+
+	static
+	int
+	:target:`channel_write_common<doxid-group__libssh__channel_1ga918e9bde297309e977a872bc62c0d260>`(
+		ssh_channel channel,
+		const void* data,
+		uint32_t len,
+		int is_stderr
+		);
+
+	static
+	int
+	:target:`count_ptrs<doxid-group__libssh__channel_1ga160a55e20b7f7849e7e35b8df464eba0>`(ssh_channel* ptrs);
+
+	static
+	char*
+	:target:`generate_cookie<doxid-group__libssh__channel_1gad14fc6d15d825654af4312764a970d04>`(void);
+
+	static
+	int
+	:target:`global_request<doxid-group__libssh__channel_1gafd84abedd8ecc1f15a5f997434ef4368>`(
+		ssh_session session,
+		const char* request,
+		ssh_buffer buffer,
+		int reply
+		);
+
+	static
+	int
+	:target:`grow_window<doxid-group__libssh__channel_1gae37f8913e91ce15bcdc07d663e3fa9b8>`(
+		ssh_session session,
+		ssh_channel channel,
+		int minimumsize
+		);
+
+	static
+	ssh_channel
+	:target:`ssh_channel_accept<doxid-group__libssh__channel_1gac43bae56048b912205d102249b436eec>`(
+		ssh_session session,
+		int channeltype,
+		int timeout_ms,
+		int* destination_port
+		);
+
+	void
+	:target:`ssh_channel_do_free<doxid-group__libssh__channel_1ga1e7211251562c5e1ec64647236caa745>`(ssh_channel channel);
+
+	static
+	int
+	:target:`ssh_channel_exit_status_termination<doxid-group__libssh__channel_1gae6aa1eaafbacaa66577600e0c811ffd2>`(void* c);
+
+	int
+	:target:`ssh_channel_flush<doxid-group__libssh__channel_1gae61fe034965d58e1fb6da1bee98de191>`(ssh_channel channel);
+
+	ssh_channel
+	:target:`ssh_channel_from_local<doxid-group__libssh__channel_1ga4c25383c95b09d1b583ef0a9db4b08e2>`(
+		ssh_session session,
+		uint32_t id
+		);
+
+	uint32_t
+	:target:`ssh_channel_new_id<doxid-group__libssh__channel_1gabb9c8cd95c0aab1a293e91d7b05f8fc4>`(ssh_session session);
+
+	int
+	:ref:`ssh_channel_open_reverse_forward<doxid-group__libssh__channel_1ga9f66bf86a741ba17fe097dcb0594260e>`(
+		ssh_channel channel,
+		const char* remotehost,
+		int remoteport,
+		const char* sourcehost,
+		int localport
+		);
+
+	static
+	int
+	:target:`ssh_channel_open_termination<doxid-group__libssh__channel_1ga3c2fe7cf69c947046bbfae132afa7ff4>`(void* c);
+
+	static
+	int
+	:target:`ssh_channel_read_termination<doxid-group__libssh__channel_1ga7e90618e682963ae420321a16102d213>`(void* s);
+
+	int
+	:ref:`ssh_channel_request_send_exit_signal<doxid-group__libssh__channel_1gabd3a5c8ef800f6c6ffdcc5f62557434c>`(
+		ssh_channel channel,
+		const char* sig,
+		int core,
+		const char* errmsg,
+		const char* lang
+		);
+
+	int
+	:ref:`ssh_channel_request_send_exit_status<doxid-group__libssh__channel_1gadc35e456e45b92c1e1da0fff8b6dfec9>`(
+		ssh_channel channel,
+		int exit_status
+		);
+
+	int
+	:target:`ssh_channel_request_sftp<doxid-group__libssh__channel_1ga3d2a402cddd799036006294eb61649fe>`(ssh_channel channel);
+
+	static
+	int
+	:target:`ssh_channel_request_termination<doxid-group__libssh__channel_1gae3eefab282bb408e096fdeeeba676618>`(void* c);
+
+	static
+	int
+	:target:`ssh_channel_waitwindow_termination<doxid-group__libssh__channel_1gac85f6c47b96159e7e912f25c7ba5f2a1>`(void* c);
+
+	uint32_t
+	:target:`ssh_channel_window_size<doxid-group__libssh__channel_1gadf53c5a5b501086af26d06cba3f1491f>`(ssh_channel channel);
+
+	int
+	:ref:`ssh_channel_write_stderr<doxid-group__libssh__channel_1ga7ebd0ed490ee4485c6d5feb7d22bc162>`(
+		ssh_channel channel,
+		const void* data,
+		uint32_t len
+		);
+
+	ssh_channel
+	:target:`ssh_forward_accept<doxid-group__libssh__channel_1ga205d5ea76fb140075ebb1c20b8f193d3>`(
+		ssh_session session,
+		int timeout_ms
+		);
+
+	int
+	:target:`ssh_forward_cancel<doxid-group__libssh__channel_1gac474d071d80e725c8b5633cb1d35c010>`(
+		ssh_session session,
+		const char* address,
+		int port
+		);
+
+	int
+	:target:`ssh_forward_listen<doxid-group__libssh__channel_1ga041a495f0230bb017cdf7459e6773664>`(
+		ssh_session session,
+		const char* address,
+		int port,
+		int* bound_port
+		);
+
+	static
+	int
+	:target:`ssh_global_request_termination<doxid-group__libssh__channel_1gad181aa43648dc1a380051d55f53855ad>`(void* s);
+
+	:target:`SSH_PACKET_CALLBACK<doxid-group__libssh__channel_1ga1f817e943f01e76843f60f9f9ca970f9>`(ssh_packet_channel_open_conf);
+	:target:`SSH_PACKET_CALLBACK<doxid-group__libssh__channel_1ga18df7b076dd041ef43e8f174eecdc02a>`(ssh_packet_channel_open_fail);
+	:target:`SSH_PACKET_CALLBACK<doxid-group__libssh__channel_1ga9ddc86ac082a2b8992426c70c0b9e2ef>`(channel_rcv_change_window);
+	:target:`SSH_PACKET_CALLBACK<doxid-group__libssh__channel_1ga2a1924f01a292478aaf2f140a8a107e3>`(channel_rcv_data);
+	:target:`SSH_PACKET_CALLBACK<doxid-group__libssh__channel_1ga21f963dbe5ac591cc181244f00a6a396>`(channel_rcv_eof);
+	:target:`SSH_PACKET_CALLBACK<doxid-group__libssh__channel_1ga174d7f6268abeab5bc5d427d3ba0fc90>`(channel_rcv_close);
+	:target:`SSH_PACKET_CALLBACK<doxid-group__libssh__channel_1ga04a182f13550058a18b9ba97d8d63ded>`(channel_rcv_request);
+	:target:`SSH_PACKET_CALLBACK<doxid-group__libssh__channel_1ga198e96d111ee3dd2a0551fe10bd3ce16>`(ssh_packet_channel_success);
+	:target:`SSH_PACKET_CALLBACK<doxid-group__libssh__channel_1gad05566d70f79b960a8ffdddbd65600cb>`(ssh_packet_channel_failure);
+	:target:`SSH_PACKET_CALLBACK<doxid-group__libssh__channel_1gadf43d7b10268fb16127d1dc441bbd226>`(ssh_request_success);
+	:target:`SSH_PACKET_CALLBACK<doxid-group__libssh__channel_1ga8518f0b33a413a4b6d55d78816fb092d>`(ssh_request_denied);
+
+	static
+	int
+	:target:`ssh_waitsession_unblocked<doxid-group__libssh__channel_1gae8a61c46f07fc2b242a8b8cee0c50596>`(void* s);
+
+.. _details-group__libssh__channel:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+Functions that manage a SSH channel.
+
+Global Functions
+----------------
+
+.. index:: pair: function; ssh_channel_new
+.. _doxid-group__libssh__channel_1gada8ccda7bf65165fe145d3096a252dcc:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	ssh_channel
+	ssh_channel_new(ssh_session session)
+
+Allocate a new channel.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to use.
+
+
+
+.. rubric:: Returns:
+
+A pointer to a newly allocated channel, NULL on error.
+
+.. index:: pair: function; channel_read_buffer
+.. _doxid-group__libssh__channel_1gab391f5c978cb1bc8df3ebd061f38e8c5:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`SSH_DEPRECATED<doxid-libssh_8h_1a005fdd197993c4a3728190e1ae8fb3ae>` :ref:`LIBSSH_API<doxid-libssh_8h_1a2ba7f29ac0f2b5ef7134243d24888ac5>` int
+	channel_read_buffer(
+		ssh_channel channel,
+		ssh_buffer buffer,
+		uint32_t count,
+		int is_stderr
+		)
+
+Read data from a channel into a buffer.
+
+Deprecated Please use ssh_channel_read instead
+
+This function doesn't work in nonblocking/timeout mode
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to read from.
+
+	*
+		- buffer
+
+		- The buffer which will get the data.
+
+	*
+		- count
+
+		- The count of bytes to be read. If it is bigger than 0, the exact size will be read, else (bytes=0) it will return once anything is available.
+
+	*
+		- is_stderr
+
+		- A boolean value to mark reading from the stderr stream.
+
+
+
+.. rubric:: Returns:
+
+The number of bytes read, 0 on end of file or SSH_ERROR on error.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_channel_read <doxid-group__libssh__channel_1gac92381c4c5d4a7eab35f6e84686f033d>`
+
+.. index:: pair: function; ssh_channel_accept_forward
+.. _doxid-group__libssh__channel_1ga490e4b0a7adc022507b7f165b336afe4:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	ssh_channel
+	ssh_channel_accept_forward(
+		ssh_session session,
+		int timeout_ms,
+		int* destination_port
+		)
+
+Accept an incoming TCP/IP forwarding channel and get information about incomming connection.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to use.
+
+	*
+		- timeout_ms
+
+		- A timeout in milliseconds.
+
+	*
+		- destination_port
+
+		- A pointer to destination port or NULL.
+
+
+
+.. rubric:: Returns:
+
+Newly created channel, or NULL if no incoming channel request from the server
+
+.. index:: pair: function; ssh_channel_accept_x11
+.. _doxid-group__libssh__channel_1ga548bd0f77a50b7c8180942544b375866:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	ssh_channel
+	ssh_channel_accept_x11(
+		ssh_channel channel,
+		int timeout_ms
+		)
+
+Accept an X11 forwarding channel.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- An x11-enabled session channel.
+
+	*
+		- timeout_ms
+
+		- Timeout in milliseconds.
+
+
+
+.. rubric:: Returns:
+
+A newly created channel, or NULL if no X11 request from the server.
+
+.. index:: pair: function; ssh_channel_cancel_forward
+.. _doxid-group__libssh__channel_1ga3bff751afc5ecb5bbf9d6447e4e5370f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_cancel_forward(
+		ssh_session session,
+		const char* address,
+		int port
+		)
+
+Sends the "cancel-tcpip-forward" global request to ask the server to cancel the tcpip-forward request.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to send the request.
+
+	*
+		- address
+
+		- The bound address on the server.
+
+	*
+		- port
+
+		- The bound port on the server.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR if an error occurred, SSH_AGAIN if in nonblocking mode and call has to be done again.
+
+.. index:: pair: function; ssh_channel_change_pty_size
+.. _doxid-group__libssh__channel_1gaf5d55c90f3d98c583df23d21905c1127:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_change_pty_size(
+		ssh_channel channel,
+		int cols,
+		int rows
+		)
+
+Change the size of the terminal associated to a channel.
+
+Do not call it from a signal handler if you are not sure any other libssh function using the same channel/session is running at same time (not 100% threadsafe).
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to change the size.
+
+	*
+		- cols
+
+		- The new number of columns.
+
+	*
+		- rows
+
+		- The new number of rows.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR if an error occurred.
+
+.. index:: pair: function; ssh_channel_close
+.. _doxid-group__libssh__channel_1ga238f07e0455456a5bfd8a49ead917732:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_close(ssh_channel channel)
+
+Close a channel.
+
+This sends an end of file and then closes the channel. You won't be able to recover any data the server was going to send or was in buffers.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to close.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR if an error occurred.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_channel_free() <doxid-group__libssh__channel_1gad1417f9eae8928fed20faafe2d9dbfff>`
+
+:ref:`ssh_channel_is_eof() <doxid-group__libssh__channel_1gab535264029443d77214c0615a0788b0a>`
+
+.. index:: pair: function; ssh_channel_free
+.. _doxid-group__libssh__channel_1gad1417f9eae8928fed20faafe2d9dbfff:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	ssh_channel_free(ssh_channel channel)
+
+Close and free a channel.
+
+Any data unread on this channel will be lost.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to free.
+
+.. index:: pair: function; ssh_channel_get_exit_status
+.. _doxid-group__libssh__channel_1ga9eea019dd0bbaa8a817fff2c762d1a2d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_get_exit_status(ssh_channel channel)
+
+Get the exit status of the channel (error code from the executed instruction).
+
+This function may block until a timeout (or never) if the other side is not willing to close the channel.
+
+If you're looking for an async handling of this register a callback for the exit status.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to get the status from.
+
+
+
+.. rubric:: Returns:
+
+The exit status, -1 if no exit status has been returned (yet).
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_channel_exit_status_callback <doxid-group__libssh__callbacks_1ga6f834b43c812f871c7252bfbbb4ef6f4>`
+
+.. index:: pair: function; ssh_channel_get_session
+.. _doxid-group__libssh__channel_1ga747aa5315575aa7ac9d8367c7372d8dd:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	ssh_session
+	ssh_channel_get_session(ssh_channel channel)
+
+Recover the session in which belongs a channel.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to recover the session from.
+
+
+
+.. rubric:: Returns:
+
+The session pointer.
+
+.. index:: pair: function; ssh_channel_is_closed
+.. _doxid-group__libssh__channel_1gab2720b44cb7f1dfe2b38ffe07c2f45c7:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_is_closed(ssh_channel channel)
+
+Check if the channel is closed or not.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to check.
+
+
+
+.. rubric:: Returns:
+
+0 if channel is opened, nonzero otherwise.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_channel_is_open() <doxid-group__libssh__channel_1gaaafcda943c96ddb91e5c28c0bdee7045>`
+
+.. index:: pair: function; ssh_channel_is_eof
+.. _doxid-group__libssh__channel_1gab535264029443d77214c0615a0788b0a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_is_eof(ssh_channel channel)
+
+Check if remote has sent an EOF.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to check.
+
+
+
+.. rubric:: Returns:
+
+0 if there is no EOF, nonzero otherwise.
+
+.. index:: pair: function; ssh_channel_is_open
+.. _doxid-group__libssh__channel_1gaaafcda943c96ddb91e5c28c0bdee7045:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_is_open(ssh_channel channel)
+
+Check if the channel is open or not.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to check.
+
+
+
+.. rubric:: Returns:
+
+0 if channel is closed, nonzero otherwise.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_channel_is_closed() <doxid-group__libssh__channel_1gab2720b44cb7f1dfe2b38ffe07c2f45c7>`
+
+.. index:: pair: function; ssh_channel_listen_forward
+.. _doxid-group__libssh__channel_1ga758cda957227751870c8772df46e5b39:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_listen_forward(
+		ssh_session session,
+		const char* address,
+		int port,
+		int* bound_port
+		)
+
+Sends the "tcpip-forward" global request to ask the server to begin listening for inbound connections.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to send the request.
+
+	*
+		- address
+
+		- The address to bind to on the server. Pass NULL to bind to all available addresses on all protocol families supported by the server.
+
+	*
+		- port
+
+		- The port to bind to on the server. Pass 0 to ask the server to allocate the next available unprivileged port number
+
+	*
+		- bound_port
+
+		- The pointer to get actual bound port. Pass NULL to ignore.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR if an error occurred, SSH_AGAIN if in nonblocking mode and call has to be done again.
+
+.. index:: pair: function; ssh_channel_open_auth_agent
+.. _doxid-group__libssh__channel_1ga6c4d4f5436dd5be58973606c6bcd8bb4:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_open_auth_agent(ssh_channel channel)
+
+Open an agent authentication forwarding channel.
+
+This type of channel can be opened by a server towards a client in order to provide SSH-Agent services to the server-side process. This channel can only be opened if the client claimed support by sending a channel request beforehand.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- An allocated channel.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR if an error occurred, SSH_AGAIN if in nonblocking mode and call has to be done again.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_channel_open_forward() <doxid-group__libssh__channel_1gae86b0704a1f2bdebb268b55567f7f47b>`
+
+.. index:: pair: function; ssh_channel_open_forward
+.. _doxid-group__libssh__channel_1gae86b0704a1f2bdebb268b55567f7f47b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_open_forward(
+		ssh_channel channel,
+		const char* remotehost,
+		int remoteport,
+		const char* sourcehost,
+		int localport
+		)
+
+Open a TCP/IP forwarding channel.
+
+This function does not bind the local port and does not automatically forward the content of a socket to the channel. You still have to use channel_read and channel_write for this.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- An allocated channel.
+
+	*
+		- remotehost
+
+		- The remote host to connected (host name or IP).
+
+	*
+		- remoteport
+
+		- The remote port.
+
+	*
+		- sourcehost
+
+		- The numeric IP address of the machine from where the connection request originates. This is mostly for logging purposes.
+
+	*
+		- localport
+
+		- The port on the host from where the connection originated. This is mostly for logging purposes.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR if an error occurred, SSH_AGAIN if in nonblocking mode and call has to be done again.
+
+.. index:: pair: function; ssh_channel_open_session
+.. _doxid-group__libssh__channel_1gaf051dd30d75bf6dc45d1a5088cf970bd:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_open_session(ssh_channel channel)
+
+Open a session channel (suited for a shell, not TCP forwarding).
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- An allocated channel.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR if an error occurred, SSH_AGAIN if in nonblocking mode and call has to be done again.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_channel_open_forward() <doxid-group__libssh__channel_1gae86b0704a1f2bdebb268b55567f7f47b>`
+
+:ref:`ssh_channel_request_env() <doxid-group__libssh__channel_1ga7aede2f9af4c494ff9e41fc08a4572f1>`
+
+:ref:`ssh_channel_request_shell() <doxid-group__libssh__channel_1gaed4c5fb30c9df2b2548421ccf4e81bf1>`
+
+:ref:`ssh_channel_request_exec() <doxid-group__libssh__channel_1ga567d509183ade0a77190f390e2b5747d>`
+
+.. index:: pair: function; ssh_channel_open_x11
+.. _doxid-group__libssh__channel_1gae4aa2cb2a96cfe13712150517d6a90da:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_open_x11(
+		ssh_channel channel,
+		const char* orig_addr,
+		int orig_port
+		)
+
+Open a X11 channel.
+
+This function does not bind the local port and does not automatically forward the content of a socket to the channel. You still have to use channel_read and channel_write for this.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- An allocated channel.
+
+	*
+		- orig_addr
+
+		- The source host (the local server).
+
+	*
+		- orig_port
+
+		- The source port (the local server).
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR if an error occurred, SSH_AGAIN if in nonblocking mode and call has to be done again.
+
+.. index:: pair: function; ssh_channel_poll
+.. _doxid-group__libssh__channel_1ga157f7d1df5de07ec6c6976e2034ba6e2:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_poll(
+		ssh_channel channel,
+		int is_stderr
+		)
+
+Polls a channel for data to read.
+
+When the channel is in EOF state, the function returns SSH_EOF.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to poll.
+
+	*
+		- is_stderr
+
+		- A boolean to select the stderr stream.
+
+
+
+.. rubric:: Returns:
+
+The number of bytes available for reading, 0 if nothing is available or SSH_ERROR on error.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_channel_is_eof() <doxid-group__libssh__channel_1gab535264029443d77214c0615a0788b0a>`
+
+.. index:: pair: function; ssh_channel_poll_timeout
+.. _doxid-group__libssh__channel_1gab56c7b7959e4c23959f2989468811661:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_poll_timeout(
+		ssh_channel channel,
+		int timeout,
+		int is_stderr
+		)
+
+Polls a channel for data to read, waiting for a certain timeout.
+
+When the channel is in EOF state, the function returns SSH_EOF.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to poll.
+
+	*
+		- timeout
+
+		- Set an upper limit on the time for which this function will block, in milliseconds. Specifying a negative value means an infinite timeout. This parameter is passed to the poll() function.
+
+	*
+		- is_stderr
+
+		- A boolean to select the stderr stream.
+
+
+
+.. rubric:: Returns:
+
+The number of bytes available for reading, 0 if nothing is available (timeout elapsed), SSH_EOF on end of file, SSH_ERROR on error.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_channel_is_eof() <doxid-group__libssh__channel_1gab535264029443d77214c0615a0788b0a>`
+
+.. index:: pair: function; ssh_channel_read
+.. _doxid-group__libssh__channel_1gac92381c4c5d4a7eab35f6e84686f033d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_read(
+		ssh_channel channel,
+		void* dest,
+		uint32_t count,
+		int is_stderr
+		)
+
+Reads data from a channel.
+
+This function may return less than count bytes of data, and won't block until count bytes have been read.
+
+The read function using a buffer has been renamed to :ref:`channel_read_buffer() <doxid-group__libssh__channel_1gab391f5c978cb1bc8df3ebd061f38e8c5>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to read from.
+
+	*
+		- dest
+
+		- The destination buffer which will get the data.
+
+	*
+		- count
+
+		- The count of bytes to be read.
+
+	*
+		- is_stderr
+
+		- A boolean value to mark reading from the stderr flow.
+
+
+
+.. rubric:: Returns:
+
+The number of bytes read, 0 on end of file or SSH_ERROR on error. In nonblocking mode it Can return 0 if no data is available or SSH_AGAIN.
+
+.. index:: pair: function; ssh_channel_read_nonblocking
+.. _doxid-group__libssh__channel_1gaaca5a3fbe9839c3ffb37b746afc35f4c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_read_nonblocking(
+		ssh_channel channel,
+		void* dest,
+		uint32_t count,
+		int is_stderr
+		)
+
+Do a nonblocking read on the channel.
+
+A nonblocking read on the specified channel. it will return <= count bytes of data read atomically.
+
+Don't forget to check for EOF as it would return 0 here.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to read from.
+
+	*
+		- dest
+
+		- A pointer to a destination buffer.
+
+	*
+		- count
+
+		- The count of bytes of data to be read.
+
+	*
+		- is_stderr
+
+		- A boolean to select the stderr stream.
+
+
+
+.. rubric:: Returns:
+
+The number of bytes read, 0 if nothing is available or SSH_ERROR on error.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_channel_is_eof() <doxid-group__libssh__channel_1gab535264029443d77214c0615a0788b0a>`
+
+.. index:: pair: function; ssh_channel_read_timeout
+.. _doxid-group__libssh__channel_1ga3c1aa2ea4197626af7bf224b6a5aaff5:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_read_timeout(
+		ssh_channel channel,
+		void* dest,
+		uint32_t count,
+		int is_stderr,
+		int timeout_ms
+		)
+
+Reads data from a channel.
+
+This function may return less than count bytes of data, and won't block until count bytes have been read.
+
+The read function using a buffer has been renamed to :ref:`channel_read_buffer() <doxid-group__libssh__channel_1gab391f5c978cb1bc8df3ebd061f38e8c5>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to read from.
+
+	*
+		- dest
+
+		- The destination buffer which will get the data.
+
+	*
+		- count
+
+		- The count of bytes to be read.
+
+	*
+		- is_stderr
+
+		- A boolean value to mark reading from the stderr flow.
+
+	*
+		- timeout_ms
+
+		- A timeout in milliseconds. A value of -1 means infinite timeout.
+
+
+
+.. rubric:: Returns:
+
+The number of bytes read, 0 on end of file or SSH_ERROR on error. In nonblocking mode it Can return 0 if no data is available or SSH_AGAIN.
+
+.. index:: pair: function; ssh_channel_request_env
+.. _doxid-group__libssh__channel_1ga7aede2f9af4c494ff9e41fc08a4572f1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_request_env(
+		ssh_channel channel,
+		const char* name,
+		const char* value
+		)
+
+Set environment variables.
+
+Some environment variables may be refused by security reasons.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to set the environment variables.
+
+	*
+		- name
+
+		- The name of the variable.
+
+	*
+		- value
+
+		- The value to set.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR if an error occurred, SSH_AGAIN if in nonblocking mode and call has to be done again.
+
+.. index:: pair: function; ssh_channel_request_exec
+.. _doxid-group__libssh__channel_1ga567d509183ade0a77190f390e2b5747d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_request_exec(
+		ssh_channel channel,
+		const char* cmd
+		)
+
+Run a shell command without an interactive shell.
+
+This is similar to 'sh -c command'.
+
+Example:
+
+.. ref-code-block:: cpp
+
+	rc = channel_request_exec(channel, "ps aux");
+	if (rc > 0) {
+	    return -1;
+	}
+	
+	while ((rc = channel_read(channel, buffer, sizeof(buffer), 0)) > 0) {
+	    if (fwrite(buffer, 1, rc, stdout) != (unsigned int) rc) {
+	        return -1;
+	    }
+	}
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to execute the command.
+
+	*
+		- cmd
+
+		- The command to execute (e.g. "ls ~/ -al | grep -i reports").
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR if an error occurred, SSH_AGAIN if in nonblocking mode and call has to be done again.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_channel_request_shell() <doxid-group__libssh__channel_1gaed4c5fb30c9df2b2548421ccf4e81bf1>`
+
+.. index:: pair: function; ssh_channel_request_pty
+.. _doxid-group__libssh__channel_1ga37c1cec33fe5a2f184768aba52e3a0db:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_request_pty(ssh_channel channel)
+
+Request a PTY.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to send the request.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR if an error occurred, SSH_AGAIN if in nonblocking mode and call has to be done again.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_channel_request_pty_size() <doxid-group__libssh__channel_1gabb175414352256e1602286e0ab50886c>`
+
+.. index:: pair: function; ssh_channel_request_pty_size
+.. _doxid-group__libssh__channel_1gabb175414352256e1602286e0ab50886c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_request_pty_size(
+		ssh_channel channel,
+		const char* term,
+		int cols,
+		int rows
+		)
+
+Request a pty with a specific type and size.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to sent the request.
+
+	*
+		- terminal
+
+		- The terminal type ("vt100, xterm,...").
+
+	*
+		- col
+
+		- The number of columns.
+
+	*
+		- row
+
+		- The number of rows.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR if an error occurred, SSH_AGAIN if in nonblocking mode and call has to be done again.
+
+.. index:: pair: function; ssh_channel_request_send_signal
+.. _doxid-group__libssh__channel_1gaa98315fca818b561970a6950683f4053:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_request_send_signal(
+		ssh_channel channel,
+		const char* signum
+		)
+
+Send a signal to remote process (as described in RFC 4254, section 6.9).
+
+Sends a signal 'sig' to the remote process. Note, that remote system may not support signals concept. In such a case this request will be silently ignored. Only SSH-v2 is supported (I'm not sure about SSH-v1).
+
+OpenSSH doesn't support signals yet, see: `https://bugzilla.mindrot.org/show_bug.cgi?id=1424 <https://bugzilla.mindrot.org/show_bug.cgi?id=1424>`__
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to send signal.
+
+	*
+		- sig
+
+		- 
+		  The signal to send (without SIG prefix)
+		  
+		  
+		  
+		  SIGABRT -> ABRT
+		  
+		  SIGALRM -> ALRM
+		  
+		  SIGFPE -> FPE
+		  
+		  SIGHUP -> HUP
+		  
+		  SIGILL -> ILL
+		  
+		  SIGINT -> INT
+		  
+		  SIGKILL -> KILL
+		  
+		  SIGPIPE -> PIPE
+		  
+		  SIGQUIT -> QUIT
+		  
+		  SIGSEGV -> SEGV
+		  
+		  SIGTERM -> TERM
+		  
+		  SIGUSR1 -> USR1
+		  
+		  SIGUSR2 -> USR2
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR if an error occurred (including attempts to send signal via SSH-v1 session).
+
+.. index:: pair: function; ssh_channel_request_shell
+.. _doxid-group__libssh__channel_1gaed4c5fb30c9df2b2548421ccf4e81bf1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_request_shell(ssh_channel channel)
+
+Request a shell.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to send the request.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR if an error occurred, SSH_AGAIN if in nonblocking mode and call has to be done again.
+
+.. index:: pair: function; ssh_channel_request_subsystem
+.. _doxid-group__libssh__channel_1ga06024b070f9b2a3d6964b79ae36695b7:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_request_subsystem(
+		ssh_channel channel,
+		const char* subsystem
+		)
+
+Request a subsystem (for example "sftp").
+
+You normally don't have to call it for sftp, see :ref:`sftp_new() <doxid-group__libssh__sftp_1ga32c8e182e97352e1aa8a20443c320d7f>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to send the request.
+
+	*
+		- subsys
+
+		- The subsystem to request (for example "sftp").
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR if an error occurred, SSH_AGAIN if in nonblocking mode and call has to be done again.
+
+.. index:: pair: function; ssh_channel_request_x11
+.. _doxid-group__libssh__channel_1gadfa34624c28164bd73453cd04aa64c1f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_request_x11(
+		ssh_channel channel,
+		int single_connection,
+		const char* protocol,
+		const char* cookie,
+		int screen_number
+		)
+
+Sends the "x11-req" channel request over an existing session channel.
+
+This will enable redirecting the display of the remote X11 applications to local X server over an secure tunnel.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- An existing session channel where the remote X11 applications are going to be executed.
+
+	*
+		- single_connection
+
+		- A boolean to mark only one X11 app will be redirected.
+
+	*
+		- protocol
+
+		- A x11 authentication protocol. Pass NULL to use the default value MIT-MAGIC-COOKIE-1.
+
+	*
+		- cookie
+
+		- A x11 authentication cookie. Pass NULL to generate a random cookie.
+
+	*
+		- screen_number
+
+		- The screen number.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR if an error occurred, SSH_AGAIN if in nonblocking mode and call has to be done again.
+
+.. index:: pair: function; ssh_channel_select
+.. _doxid-group__libssh__channel_1ga1026cfa48ecfc0b4898d4ea443acfc5d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_select(
+		ssh_channel* readchans,
+		ssh_channel* writechans,
+		ssh_channel* exceptchans,
+		struct timeval* timeout
+		)
+
+Act like the standard select(2) on channels.
+
+The list of pointers are then actualized and will only contain pointers to channels that are respectively readable, writable or have an exception to trap.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- readchans
+
+		- A NULL pointer or an array of channel pointers, terminated by a NULL.
+
+	*
+		- writechans
+
+		- A NULL pointer or an array of channel pointers, terminated by a NULL.
+
+	*
+		- exceptchans
+
+		- A NULL pointer or an array of channel pointers, terminated by a NULL.
+
+	*
+		- timeout
+
+		- Timeout as defined by select(2).
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on a successful operation, SSH_EINTR if the select(2) syscall was interrupted, then relaunch the function.
+
+.. index:: pair: function; ssh_channel_send_eof
+.. _doxid-group__libssh__channel_1ga072f82fdf3e50514f747653af2c99004:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_send_eof(ssh_channel channel)
+
+Send an end of file on the channel.
+
+This doesn't close the channel. You may still read from it but not write.
+
+Example:
+
+.. ref-code-block:: cpp
+
+	rc = ssh_channel_send_eof(channel);
+	if (rc == SSH_ERROR) {
+	    return -1;
+	}
+	while(!ssh_channel_is_eof(channel)) {
+	    rc = ssh_channel_read(channel, buf, sizeof(buf), 0);
+	    if (rc == SSH_ERROR) {
+	        return -1;
+	    }
+	}
+	ssh_channel_close(channel);
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to send the eof to.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR if an error occurred.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_channel_close() <doxid-group__libssh__channel_1ga238f07e0455456a5bfd8a49ead917732>`
+
+:ref:`ssh_channel_free() <doxid-group__libssh__channel_1gad1417f9eae8928fed20faafe2d9dbfff>`
+
+:ref:`ssh_channel_is_eof() <doxid-group__libssh__channel_1gab535264029443d77214c0615a0788b0a>`
+
+.. index:: pair: function; ssh_channel_set_blocking
+.. _doxid-group__libssh__channel_1ga1c00ed18679d9a8c5b971260b5df13a2:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	ssh_channel_set_blocking(
+		ssh_channel channel,
+		int blocking
+		)
+
+Put the channel into blocking or nonblocking mode.
+
+A side-effect of this is to put the whole session in non-blocking mode.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to use.
+
+	*
+		- blocking
+
+		- A boolean for blocking or nonblocking.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_set_blocking() <doxid-group__libssh__session_1ga2a29cff08855611be84d050e5bec73bc>`
+
+.. index:: pair: function; ssh_channel_set_counter
+.. _doxid-group__libssh__channel_1gab0649fe21b7a900b4a8e10ecb3401395:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	ssh_channel_set_counter(
+		ssh_channel channel,
+		ssh_counter counter
+		)
+
+Set the channel data counter.
+
+.. ref-code-block:: cpp
+
+	struct ssh_counter_struct counter = {
+	    .in_bytes = 0,
+	    .out_bytes = 0,
+	    .in_packets = 0,
+	    .out_packets = 0
+	};
+	
+	ssh_channel_set_counter(channel, &counter);
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The SSH channel.
+
+	*
+		- counter
+
+		- Counter for bytes handled by the channel.
+
+.. index:: pair: function; ssh_channel_write
+.. _doxid-group__libssh__channel_1ga5d658df773ba854b35ff9f905341e2fb:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_write(
+		ssh_channel channel,
+		const void* data,
+		uint32_t len
+		)
+
+Blocking write on a channel.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to write to.
+
+	*
+		- data
+
+		- A pointer to the data to write.
+
+	*
+		- len
+
+		- The length of the buffer to write to.
+
+
+
+.. rubric:: Returns:
+
+The number of bytes written, SSH_ERROR on error.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_channel_read() <doxid-group__libssh__channel_1gac92381c4c5d4a7eab35f6e84686f033d>`
+
+.. index:: pair: function; ssh_channel_open_reverse_forward
+.. _doxid-group__libssh__channel_1ga9f66bf86a741ba17fe097dcb0594260e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_open_reverse_forward(
+		ssh_channel channel,
+		const char* remotehost,
+		int remoteport,
+		const char* sourcehost,
+		int localport
+		)
+
+Open a TCP/IP reverse forwarding channel.
+
+This function does not bind the local port and does not automatically forward the content of a socket to the channel. You still have to use channel_read and channel_write for this.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- An allocated channel.
+
+	*
+		- remotehost
+
+		- The remote host to connected (host name or IP).
+
+	*
+		- remoteport
+
+		- The remote port.
+
+	*
+		- sourcehost
+
+		- The source host (your local computer). It's optional and for logging purpose.
+
+	*
+		- localport
+
+		- The source port (your local computer). It's optional and for logging purpose.
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR if an error occurred, SSH_AGAIN if in nonblocking mode and call has to be done again.
+
+.. index:: pair: function; ssh_channel_request_send_exit_signal
+.. _doxid-group__libssh__channel_1gabd3a5c8ef800f6c6ffdcc5f62557434c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_request_send_exit_signal(
+		ssh_channel channel,
+		const char* sig,
+		int core,
+		const char* errmsg,
+		const char* lang
+		)
+
+Send an exit signal to remote process (RFC 4254, section 6.10).
+
+This sends the exit status of the remote process. Note, that remote system may not support signals concept. In such a case this request will be silently ignored. Only SSH-v2 is supported (I'm not sure about SSH-v1).
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to send signal.
+
+	*
+		- sig
+
+		- The signal to send (without SIG prefix) (e.g. "TERM" or "KILL").
+
+	*
+		- core
+
+		- A boolean to tell if a core was dumped
+
+	*
+		- errmsg
+
+		- A CRLF explanation text about the error condition
+
+	*
+		- lang
+
+		- The language used in the message (format: RFC 3066)
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR if an error occurred (including attempts to send signal via SSH-v1 session).
+
+.. index:: pair: function; ssh_channel_request_send_exit_status
+.. _doxid-group__libssh__channel_1gadc35e456e45b92c1e1da0fff8b6dfec9:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_request_send_exit_status(
+		ssh_channel channel,
+		int exit_status
+		)
+
+Send the exit status to the remote process.
+
+Sends the exit status to the remote process (as described in RFC 4254, section 6.10). Only SSH-v2 is supported (I'm not sure about SSH-v1).
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to send exit status.
+
+	*
+		- exit_status
+
+		- The exit status to send
+
+
+
+.. rubric:: Returns:
+
+SSH_OK on success, SSH_ERROR if an error occurred. (including attempts to send exit status via SSH-v1 session).
+
+.. index:: pair: function; ssh_channel_write_stderr
+.. _doxid-group__libssh__channel_1ga7ebd0ed490ee4485c6d5feb7d22bc162:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_channel_write_stderr(
+		ssh_channel channel,
+		const void* data,
+		uint32_t len
+		)
+
+Blocking write on a channel stderr.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- channel
+
+		- The channel to write to.
+
+	*
+		- data
+
+		- A pointer to the data to write.
+
+	*
+		- len
+
+		- The length of the buffer to write to.
+
+
+
+.. rubric:: Returns:
+
+The number of bytes written, SSH_ERROR on error.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_channel_read() <doxid-group__libssh__channel_1gac92381c4c5d4a7eab35f6e84686f033d>`
+

@@ -1,0 +1,2497 @@
+.. index:: pair: group; The libssh SFTP API
+.. _doxid-group__libssh__sftp:
+
+The libssh SFTP API
+===================
+
+.. toctree::
+	:hidden:
+
+	struct_sftp_attributes_struct.rst
+	struct_sftp_client_message_struct.rst
+	struct_sftp_dir_struct.rst
+	struct_sftp_file_struct.rst
+	struct_sftp_message_struct.rst
+	struct_sftp_packet_struct.rst
+	struct_sftp_request_queue_struct.rst
+	struct_sftp_session_struct.rst
+	struct_sftp_status_message_struct.rst
+	struct_sftp_statvfs_struct.rst
+
+Overview
+~~~~~~~~
+
+SFTP handling functions. :ref:`More...<details-group__libssh__sftp>`
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// structs
+
+	struct :ref:`sftp_attributes_struct<doxid-structsftp__attributes__struct>`;
+	struct :ref:`sftp_client_message_struct<doxid-structsftp__client__message__struct>`;
+	struct :ref:`sftp_dir_struct<doxid-structsftp__dir__struct>`;
+	struct :ref:`sftp_file_struct<doxid-structsftp__file__struct>`;
+	struct :ref:`sftp_message_struct<doxid-structsftp__message__struct>`;
+	struct :ref:`sftp_packet_struct<doxid-structsftp__packet__struct>`;
+	struct :ref:`sftp_request_queue_struct<doxid-structsftp__request__queue__struct>`;
+	struct :ref:`sftp_session_struct<doxid-structsftp__session__struct>`;
+	struct :ref:`sftp_status_message_struct<doxid-structsftp__status__message__struct>`;
+	struct :ref:`sftp_statvfs_struct<doxid-structsftp__statvfs__struct>`;
+
+	// global functions
+
+	int
+	:ref:`sftp_async_read<doxid-group__libssh__sftp_1ga4399c7ccd8b39a460265047f9d7bc9b1>`(
+		sftp_file file,
+		void* data,
+		uint32_t len,
+		uint32_t id
+		);
+
+	int
+	:ref:`sftp_async_read_begin<doxid-group__libssh__sftp_1ga4c2cca19b38c54d4b04bb3584b0517cd>`(
+		sftp_file file,
+		uint32_t len
+		);
+
+	void
+	:ref:`sftp_attributes_free<doxid-group__libssh__sftp_1gadee9f7af9fc1ad3a0a66c7d97bf7977c>`(sftp_attributes file);
+
+	char*
+	:ref:`sftp_canonicalize_path<doxid-group__libssh__sftp_1ga69b4d6f723565e3fcac2b37159262af5>`(
+		sftp_session sftp,
+		const char* path
+		);
+
+	int
+	:ref:`sftp_chmod<doxid-group__libssh__sftp_1ga311a4bc202d406c916c8b9ad5fe79ac7>`(
+		sftp_session sftp,
+		const char* file,
+		mode_t mode
+		);
+
+	int
+	:ref:`sftp_chown<doxid-group__libssh__sftp_1ga18abafba9db590408ee2301a27698f2c>`(
+		sftp_session sftp,
+		const char* file,
+		uid_t owner,
+		gid_t group
+		);
+
+	int
+	:ref:`sftp_close<doxid-group__libssh__sftp_1ga5878919249d4e8abe59b0ec699eed293>`(sftp_file file);
+
+	int
+	:ref:`sftp_closedir<doxid-group__libssh__sftp_1ga35551e5b28b192ef8035628d347f7d3e>`(sftp_dir dir);
+
+	int
+	:ref:`sftp_dir_eof<doxid-group__libssh__sftp_1gad60f8e71b06eb8fdae2b262bb58f8fec>`(sftp_dir dir);
+
+	int
+	:ref:`sftp_extension_supported<doxid-group__libssh__sftp_1ga190d0bb19ed8e571ab884d28ee82adfe>`(
+		sftp_session sftp,
+		const char* name,
+		const char* data
+		);
+
+	unsigned int
+	:ref:`sftp_extensions_get_count<doxid-group__libssh__sftp_1ga300723724353ccc490b9c0c55bbee668>`(sftp_session sftp);
+
+	const char*
+	:ref:`sftp_extensions_get_data<doxid-group__libssh__sftp_1gad7391f28160aaa883429a3b0aa87e339>`(
+		sftp_session sftp,
+		unsigned int indexn
+		);
+
+	const char*
+	:ref:`sftp_extensions_get_name<doxid-group__libssh__sftp_1ga8bcf9a99f395c86c5f99b9a8009e9533>`(
+		sftp_session sftp,
+		unsigned int indexn
+		);
+
+	void
+	:ref:`sftp_file_set_blocking<doxid-group__libssh__sftp_1gac97113f44b010c4e299aac9f304af1ba>`(sftp_file handle);
+
+	void
+	:ref:`sftp_file_set_nonblocking<doxid-group__libssh__sftp_1gac0ccac0257aece8197654bed83b7ec01>`(sftp_file handle);
+
+	void
+	:ref:`sftp_free<doxid-group__libssh__sftp_1ga155c66639cb3342c7e02a96c8dbf7501>`(sftp_session sftp);
+
+	sftp_attributes
+	:ref:`sftp_fstat<doxid-group__libssh__sftp_1gad9cc3609096b1fffa99f59c852415668>`(sftp_file file);
+
+	sftp_statvfs_t
+	:ref:`sftp_fstatvfs<doxid-group__libssh__sftp_1ga6f14490f71825904232dc418b7843b9f>`(sftp_file file);
+
+	int
+	:ref:`sftp_get_error<doxid-group__libssh__sftp_1ga1f7fca4091a0075d9e69e47c928f7494>`(sftp_session sftp);
+
+	int
+	:ref:`sftp_init<doxid-group__libssh__sftp_1ga6eb5a92e33493ec3d9a3576e1617da0d>`(sftp_session sftp);
+
+	sftp_attributes
+	:ref:`sftp_lstat<doxid-group__libssh__sftp_1ga7e4a3cd284ad72a1c5092c4cef72dfca>`(
+		sftp_session session,
+		const char* path
+		);
+
+	int
+	:ref:`sftp_mkdir<doxid-group__libssh__sftp_1ga9cc63cd3efe83edfa3f6a4c5314383cb>`(
+		sftp_session sftp,
+		const char* directory,
+		mode_t mode
+		);
+
+	sftp_session
+	:ref:`sftp_new<doxid-group__libssh__sftp_1ga32c8e182e97352e1aa8a20443c320d7f>`(ssh_session session);
+
+	sftp_session
+	:ref:`sftp_new_channel<doxid-group__libssh__sftp_1ga4d747364258c41a34bb3e5b47b431d0d>`(
+		ssh_session session,
+		ssh_channel channel
+		);
+
+	sftp_file
+	:ref:`sftp_open<doxid-group__libssh__sftp_1gab95cb5fe091efcc49dfa7729e4d48010>`(
+		sftp_session session,
+		const char* file,
+		int accesstype,
+		mode_t mode
+		);
+
+	sftp_dir
+	:ref:`sftp_opendir<doxid-group__libssh__sftp_1gab4290874bdb55796b2823496e0d9b7ec>`(
+		sftp_session session,
+		const char* path
+		);
+
+	ssize_t
+	:ref:`sftp_read<doxid-group__libssh__sftp_1ga6c2bfeb2e089f54c04afe1e484a7fff2>`(
+		sftp_file file,
+		void* buf,
+		size_t count
+		);
+
+	sftp_attributes
+	:ref:`sftp_readdir<doxid-group__libssh__sftp_1ga976ecf6f7d415856e1fd4a0f16ada9b8>`(
+		sftp_session session,
+		sftp_dir dir
+		);
+
+	char*
+	:ref:`sftp_readlink<doxid-group__libssh__sftp_1ga1ee06dcf214cb4b67195fa7f5ce5027c>`(
+		sftp_session sftp,
+		const char* path
+		);
+
+	int
+	:ref:`sftp_rename<doxid-group__libssh__sftp_1ga1175bc5bde655df5dbd925bc98379aef>`(
+		sftp_session sftp,
+		const char* original,
+		const char* newname
+		);
+
+	void
+	:ref:`sftp_rewind<doxid-group__libssh__sftp_1ga8d1ce157cf51b70bad82c23e082d5067>`(sftp_file file);
+
+	int
+	:ref:`sftp_rmdir<doxid-group__libssh__sftp_1gab6160ce33fc49d6c38e4a6a66ca0a0b6>`(
+		sftp_session sftp,
+		const char* directory
+		);
+
+	int
+	:ref:`sftp_seek<doxid-group__libssh__sftp_1ga0f6d52a8422524349efb4de23609e326>`(
+		sftp_file file,
+		uint32_t new_offset
+		);
+
+	int
+	:ref:`sftp_seek64<doxid-group__libssh__sftp_1ga4aa156b5cd180015632384d0f3c8a061>`(
+		sftp_file file,
+		uint64_t new_offset
+		);
+
+	int
+	:ref:`sftp_server_init<doxid-group__libssh__sftp_1ga40489d137b4b4cab242375f73d0e6396>`(sftp_session sftp);
+
+	sftp_session
+	:ref:`sftp_server_new<doxid-group__libssh__sftp_1ga9db6ed61354048752ad66c99fd1063c3>`(
+		ssh_session session,
+		ssh_channel chan
+		);
+
+	int
+	:ref:`sftp_server_version<doxid-group__libssh__sftp_1ga139e445d200c325007d852e52ee2fc78>`(sftp_session sftp);
+
+	int
+	:ref:`sftp_setstat<doxid-group__libssh__sftp_1gabac0bf3340d76857783c3ccfc8014c89>`(
+		sftp_session sftp,
+		const char* file,
+		sftp_attributes attr
+		);
+
+	sftp_attributes
+	:ref:`sftp_stat<doxid-group__libssh__sftp_1gaad3201367dab4378f71105a0c82ad37d>`(
+		sftp_session session,
+		const char* path
+		);
+
+	sftp_statvfs_t
+	:ref:`sftp_statvfs<doxid-group__libssh__sftp_1ga8654c581979d66fcf5cf1f1b67226cd2>`(
+		sftp_session sftp,
+		const char* path
+		);
+
+	void
+	:ref:`sftp_statvfs_free<doxid-group__libssh__sftp_1gae98c62de2f020bb54361a8a16189c398>`(sftp_statvfs_t statvfs_o);
+
+	int
+	:ref:`sftp_symlink<doxid-group__libssh__sftp_1ga010212bcabdccf36a34befe14c04a472>`(
+		sftp_session sftp,
+		const char* target,
+		const char* dest
+		);
+
+	unsigned long
+	:ref:`sftp_tell<doxid-group__libssh__sftp_1ga50e720c525e05226cb3852440a96c937>`(sftp_file file);
+
+	uint64_t
+	:ref:`sftp_tell64<doxid-group__libssh__sftp_1gaec69c525fcf3b89d6c754043d2513833>`(sftp_file file);
+
+	int
+	:ref:`sftp_unlink<doxid-group__libssh__sftp_1ga5fc1fa851dc7cde5dd070d5410edf6b1>`(
+		sftp_session sftp,
+		const char* file
+		);
+
+	int
+	:ref:`sftp_utimes<doxid-group__libssh__sftp_1gaf06b62c568c89b69cc31b119be2aee7b>`(
+		sftp_session sftp,
+		const char* file,
+		const struct timeval* times
+		);
+
+	ssize_t
+	:ref:`sftp_write<doxid-group__libssh__sftp_1ga744054eb0dcfb0feed5ba81ed01ad3c0>`(
+		sftp_file file,
+		const void* buf,
+		size_t count
+		);
+
+	int
+	:target:`buffer_add_attributes<doxid-group__libssh__sftp_1gad5e49d837eb0371b30519f25f62b382d>`(
+		ssh_buffer buffer,
+		sftp_attributes attr
+		);
+
+	void
+	:target:`sftp_packet_free<doxid-group__libssh__sftp_1ga7d29d3d7ae921059f53ca49b43a33b79>`(sftp_packet packet);
+
+	sftp_packet
+	:target:`sftp_packet_read<doxid-group__libssh__sftp_1ga3a3efbc8113813ca6fa8ebf2308c6a5b>`(sftp_session sftp);
+
+	int
+	:target:`sftp_packet_write<doxid-group__libssh__sftp_1gad46a769b2554df9a3cf1cc2ed458dba5>`(
+		sftp_session sftp,
+		uint8_t type,
+		ssh_buffer payload
+		);
+
+	sftp_attributes
+	:target:`sftp_parse_attr<doxid-group__libssh__sftp_1ga4113a4428200dee753ff829c6317c3c1>`(
+		sftp_session session,
+		ssh_buffer buf,
+		int expectname
+		);
+
+	void
+	:target:`sftp_client_message_free<doxid-group__libssh__sftp_1ga35e7a9f643b445c5941efb7b65e9f13f>`(sftp_client_message msg);
+
+	const char*
+	:target:`sftp_client_message_get_data<doxid-group__libssh__sftp_1ga1f923468c2c86b68959a88c8fc71962b>`(sftp_client_message msg);
+
+	const char*
+	:target:`sftp_client_message_get_filename<doxid-group__libssh__sftp_1ga4a7c93588770e75442deeb2530147496>`(sftp_client_message msg);
+
+	uint32_t
+	:target:`sftp_client_message_get_flags<doxid-group__libssh__sftp_1ga165fd110b672e4fd9006619db7bbbc38>`(sftp_client_message msg);
+
+	uint8_t
+	:target:`sftp_client_message_get_type<doxid-group__libssh__sftp_1gafbfe4b6f784243b63dce579d3c3a04e5>`(sftp_client_message msg);
+
+	void
+	:target:`sftp_client_message_set_filename<doxid-group__libssh__sftp_1gac898adba0ee7fc96a1ef7a9c8f1f82a7>`(
+		sftp_client_message msg,
+		const char* newname
+		);
+
+	sftp_client_message
+	:target:`sftp_get_client_message<doxid-group__libssh__sftp_1gaf69bf7238de4e804c2fd17f6a8a11001>`(sftp_session sftp);
+
+	void*
+	:target:`sftp_handle<doxid-group__libssh__sftp_1ga1d4cbf49abd0d54fe6ea8f7ee1529b0a>`(
+		sftp_session sftp,
+		ssh_string handle
+		);
+
+	ssh_string
+	:target:`sftp_handle_alloc<doxid-group__libssh__sftp_1ga9ecd7c670de9ceb8d02593974cc563f6>`(
+		sftp_session sftp,
+		void* info
+		);
+
+	void
+	:target:`sftp_handle_remove<doxid-group__libssh__sftp_1gace56dc327f841198048f89cf34382239>`(
+		sftp_session sftp,
+		void* handle
+		);
+
+	int
+	:target:`sftp_reply_attr<doxid-group__libssh__sftp_1gaa93891afd1d6050d543fbbb8ad878396>`(
+		sftp_client_message msg,
+		sftp_attributes attr
+		);
+
+	int
+	:target:`sftp_reply_data<doxid-group__libssh__sftp_1ga135d42b765dda7781367b2c446441580>`(
+		sftp_client_message msg,
+		const void* data,
+		int len
+		);
+
+	int
+	:target:`sftp_reply_handle<doxid-group__libssh__sftp_1gae4d374a63448952463acae5f26982aef>`(
+		sftp_client_message msg,
+		ssh_string handle
+		);
+
+	int
+	:target:`sftp_reply_name<doxid-group__libssh__sftp_1gaab10ad4962d89adf6f1ee7a2ae643476>`(
+		sftp_client_message msg,
+		const char* name,
+		sftp_attributes attr
+		);
+
+	int
+	:target:`sftp_reply_names<doxid-group__libssh__sftp_1gab41b4bb5a38a3afe6d8b8ee52ce7f294>`(sftp_client_message msg);
+
+	int
+	:target:`sftp_reply_names_add<doxid-group__libssh__sftp_1ga429f8854340d04d41da523150cffb9ae>`(
+		sftp_client_message msg,
+		const char* file,
+		const char* longname,
+		sftp_attributes attr
+		);
+
+	int
+	:target:`sftp_reply_status<doxid-group__libssh__sftp_1gaa9758584b26f520381ad119199b2813e>`(
+		sftp_client_message msg,
+		uint32_t status,
+		const char* message
+		);
+
+	int
+	:target:`sftp_send_client_message<doxid-group__libssh__sftp_1gaa4db10d155d6cc2e26e97e6731e111cc>`(
+		sftp_session sftp,
+		sftp_client_message msg
+		);
+
+	// macros
+
+	#define :target:`LIBSFTP_VERSION<doxid-group__libssh__sftp_1ga1cefaef544f95e8f1ba4404adb599ae9>`
+	#define :target:`SFTP_CLOSE<doxid-group__libssh__sftp_1ga4657edd503ec4eb10e40ee4e4498b65d>`
+	#define :target:`SFTP_FSETSTAT<doxid-group__libssh__sftp_1ga6b089da81af0b57306b20ffe4d295cdc>`
+	#define :target:`SFTP_FSTAT<doxid-group__libssh__sftp_1gadc72dbacba2af00cbc25c20fad127012>`
+	#define :target:`SFTP_HANDLES<doxid-group__libssh__sftp_1ga610888b9a7eb16acfdb653fb98070204>`
+	#define :target:`SFTP_LSTAT<doxid-group__libssh__sftp_1ga8b4b6b88f369e5d05c9f446c9e58d612>`
+	#define :target:`SFTP_MKDIR<doxid-group__libssh__sftp_1gaf4d0c6d99266d735e610fed1534c522f>`
+	#define :target:`SFTP_OPEN<doxid-group__libssh__sftp_1gac91ab9d812bf80c747343842d92a6d55>`
+	#define :target:`SFTP_OPENDIR<doxid-group__libssh__sftp_1ga62c5750df49f7103f130d271a543448b>`
+	#define :target:`SFTP_READ<doxid-group__libssh__sftp_1ga4f05abd79728d4588be731cb68c12b5a>`
+	#define :target:`SFTP_READDIR<doxid-group__libssh__sftp_1ga5adc31f5ff68e67d20c9bbe26cd9e708>`
+	#define :target:`SFTP_READLINK<doxid-group__libssh__sftp_1ga49b8bd38f99ec717bfa85b14ee458ce2>`
+	#define :target:`SFTP_REALPATH<doxid-group__libssh__sftp_1ga852a545a3145061467c3837fd0867c49>`
+	#define :target:`SFTP_REMOVE<doxid-group__libssh__sftp_1ga7699e25a5bb4e8e525ffd6eed32e031a>`
+	#define :target:`SFTP_RENAME<doxid-group__libssh__sftp_1ga29bdd6daab0b13b66bfa1ef0b375b3c6>`
+	#define :target:`SFTP_RMDIR<doxid-group__libssh__sftp_1ga1d3257b73bcce6fbf404bd39468677b7>`
+	#define :target:`SFTP_SETSTAT<doxid-group__libssh__sftp_1gaf4a39f511acecfc9c83705f34811de61>`
+	#define :target:`SFTP_STAT<doxid-group__libssh__sftp_1ga22129e40aeadc1c6e7703df437949c8f>`
+	#define :target:`SFTP_SYMLINK<doxid-group__libssh__sftp_1ga3cea97948dc2c719f741221d4af3b63d>`
+	#define :target:`SFTP_WRITE<doxid-group__libssh__sftp_1ga8a136f322c4f2b305e726b1941255a1c>`
+	#define :target:`SSH_FILEXFER_ATTR_ACCESSTIME<doxid-group__libssh__sftp_1ga1334160c59789edf7ff237fabd6a27ea>`
+	#define :target:`SSH_FILEXFER_ATTR_ACL<doxid-group__libssh__sftp_1gade12caaed64589df7c83912115fd4730>`
+	#define :target:`SSH_FILEXFER_ATTR_ACMODTIME<doxid-group__libssh__sftp_1gaba6b63d63a1c8491727b4b80988d2d2c>`
+	#define :target:`SSH_FILEXFER_ATTR_CREATETIME<doxid-group__libssh__sftp_1ga5b648ddeda823f49ecb9b83d40bc8015>`
+	#define :target:`SSH_FILEXFER_ATTR_EXTENDED<doxid-group__libssh__sftp_1ga37ff60e4891770ffd02ed9087c040bd7>`
+	#define :target:`SSH_FILEXFER_ATTR_MODIFYTIME<doxid-group__libssh__sftp_1gaa8e4c8ed98ffffaf2f2e17820e64c39a>`
+	#define :target:`SSH_FILEXFER_ATTR_OWNERGROUP<doxid-group__libssh__sftp_1ga8a0507f4c4e44ab78b941719d0f1ab00>`
+	#define :target:`SSH_FILEXFER_ATTR_PERMISSIONS<doxid-group__libssh__sftp_1ga7a8f5ae103b500e86f86c06c309492c7>`
+	#define :target:`SSH_FILEXFER_ATTR_SIZE<doxid-group__libssh__sftp_1ga75efb2cc6fce7c9df7ed3b8b7806d070>`
+	#define :target:`SSH_FILEXFER_ATTR_SUBSECOND_TIMES<doxid-group__libssh__sftp_1ga4817aa387133d6845b5d442ecdbef71a>`
+	#define :target:`SSH_FILEXFER_ATTR_UIDGID<doxid-group__libssh__sftp_1gac15f061718b8311de2e2cfaaa255f699>`
+	#define :target:`SSH_FILEXFER_TYPE_DIRECTORY<doxid-group__libssh__sftp_1ga32647381c474be9c6f7f24120083cf7b>`
+	#define :target:`SSH_FILEXFER_TYPE_REGULAR<doxid-group__libssh__sftp_1gaca55891e6600cbe1cff08fab647368ce>`
+	#define :target:`SSH_FILEXFER_TYPE_SPECIAL<doxid-group__libssh__sftp_1gadf97f0d8da54ebd0a62db9a8d99f91b7>`
+	#define :target:`SSH_FILEXFER_TYPE_SYMLINK<doxid-group__libssh__sftp_1gad7c231fa0241581b5648c22f1738b105>`
+	#define :target:`SSH_FILEXFER_TYPE_UNKNOWN<doxid-group__libssh__sftp_1gab503becb01bc41e439b6c890b11ff380>`
+	#define :target:`SSH_FXE_STATVFS_ST_NOSUID<doxid-group__libssh__sftp_1gaab2dafbf9698001a6b9e0ac8d451b61f>`
+	#define :target:`SSH_FXE_STATVFS_ST_RDONLY<doxid-group__libssh__sftp_1gacdd838faac2e61dccbfc4b0c4e6d8ba2>`
+	#define :target:`SSH_FXF_APPEND<doxid-group__libssh__sftp_1ga3f6b0d451dda1e34bdc5b05d0ae69862>`
+	#define :target:`SSH_FXF_CREAT<doxid-group__libssh__sftp_1gae31a8da5b9a4d9a242a3051d9cd27d9a>`
+	#define :target:`SSH_FXF_EXCL<doxid-group__libssh__sftp_1gab0eaa38813977df97f5fedb7a3ffb61c>`
+	#define :target:`SSH_FXF_READ<doxid-group__libssh__sftp_1gacb92f1bbbefb7b021fb8cd59fb9436fa>`
+	#define :target:`SSH_FXF_RENAME_ATOMIC<doxid-group__libssh__sftp_1gac4a8a714f9f29499d0c97aad81248153>`
+	#define :target:`SSH_FXF_RENAME_NATIVE<doxid-group__libssh__sftp_1ga9812a1bbfa637ae450d6c4b33def2519>`
+	#define :target:`SSH_FXF_RENAME_OVERWRITE<doxid-group__libssh__sftp_1ga818bf4b38f27ef4d8ae5697cc8cdd84c>`
+	#define :target:`SSH_FXF_TEXT<doxid-group__libssh__sftp_1ga9e502acd55724652633c4ed4edab6a00>`
+	#define :target:`SSH_FXF_TRUNC<doxid-group__libssh__sftp_1gad52e8aa28c8721c03f9a3db869295b56>`
+	#define :target:`SSH_FXF_WRITE<doxid-group__libssh__sftp_1ga45aa797e6c1c63b6abfe2a095641c22d>`
+	#define :target:`SSH_FXP_ATTRS<doxid-group__libssh__sftp_1ga6ffa68fcdd26926808262d7e3ba4990e>`
+	#define :target:`SSH_FXP_CLOSE<doxid-group__libssh__sftp_1ga13bd4f6cbc4f7f95242b34a937c802b3>`
+	#define :target:`SSH_FXP_DATA<doxid-group__libssh__sftp_1ga816645fbf0e78011ea5027742785f7f0>`
+	#define :target:`SSH_FXP_EXTENDED<doxid-group__libssh__sftp_1gad34823b8b34ad5d2f5cfd1287d09f624>`
+	#define :target:`SSH_FXP_EXTENDED_REPLY<doxid-group__libssh__sftp_1ga2069824d6f3bec4b3adbafe40e82d175>`
+	#define :target:`SSH_FXP_FSETSTAT<doxid-group__libssh__sftp_1ga2505dec6914aed04d6863d9ed1f7e6ec>`
+	#define :target:`SSH_FXP_FSTAT<doxid-group__libssh__sftp_1ga8716636e62d368bab2b17f8fb7d36a65>`
+	#define :target:`SSH_FXP_HANDLE<doxid-group__libssh__sftp_1ga8deaf05d4ebc65f9eeb5c8cec820ae2c>`
+	#define :target:`SSH_FXP_INIT<doxid-group__libssh__sftp_1ga2735102f8b4310ffa28891c1f9f5df5c>`
+	#define :target:`SSH_FXP_LSTAT<doxid-group__libssh__sftp_1gaa11aaec9bd356f2450556d4e38c352e8>`
+	#define :target:`SSH_FXP_MKDIR<doxid-group__libssh__sftp_1ga1c8f5349194111a9d54ff5fd12f09f8d>`
+	#define :target:`SSH_FXP_NAME<doxid-group__libssh__sftp_1gad27eff2cd7614eea50fd2f633dff22d9>`
+	#define :target:`SSH_FXP_OPEN<doxid-group__libssh__sftp_1ga8a1d425560d727bfbbd2a67826f4b4db>`
+	#define :target:`SSH_FXP_OPENDIR<doxid-group__libssh__sftp_1ga6aeff0301c1de330c9d8978c07fd3ce3>`
+	#define :target:`SSH_FXP_READ<doxid-group__libssh__sftp_1ga94d97d081a00c5a5ae09586bea908ca9>`
+	#define :target:`SSH_FXP_READDIR<doxid-group__libssh__sftp_1ga298e2cffc4bc55b03970ad36bc49e9df>`
+	#define :target:`SSH_FXP_READLINK<doxid-group__libssh__sftp_1ga7ac6bce4a26554e28d89de47e8c406a2>`
+	#define :target:`SSH_FXP_REALPATH<doxid-group__libssh__sftp_1ga1e4e90befe3702431488c3b96cc10512>`
+	#define :target:`SSH_FXP_REMOVE<doxid-group__libssh__sftp_1ga6eda9da523efdf64a1027e975fee83f3>`
+	#define :target:`SSH_FXP_RENAME<doxid-group__libssh__sftp_1gaf0e559bb1f636645b67556d9098f3fd9>`
+	#define :target:`SSH_FXP_RMDIR<doxid-group__libssh__sftp_1ga585e7cca7476b54f98efebd6b82520b5>`
+	#define :target:`SSH_FXP_SETSTAT<doxid-group__libssh__sftp_1ga1cfce7a58a0068e38f9209b76d2e69dd>`
+	#define :target:`SSH_FXP_STAT<doxid-group__libssh__sftp_1ga55eb606a3f8ca3c5e38cec2849236cd4>`
+	#define :target:`SSH_FXP_STATUS<doxid-group__libssh__sftp_1ga176c15ff171f0cb1a1fef35c7f5a7891>`
+	#define :target:`SSH_FXP_SYMLINK<doxid-group__libssh__sftp_1ga6ba0997dd5aaf750e9e784278e2afd6b>`
+	#define :target:`SSH_FXP_VERSION<doxid-group__libssh__sftp_1gaa26011682db895a8389da66c88c448e7>`
+	#define :target:`SSH_FXP_WRITE<doxid-group__libssh__sftp_1ga197b0512aec03c4df3bed291e44f9047>`
+	#define :ref:`SSH_FX_BAD_MESSAGE<doxid-group__libssh__sftp_1ga12cb3bf50e715473c2ca5ccb69965cf3>`
+	#define :ref:`SSH_FX_CONNECTION_LOST<doxid-group__libssh__sftp_1ga721ad225dfe6638384e388c5fe1cb42b>`
+	#define :ref:`SSH_FX_EOF<doxid-group__libssh__sftp_1ga9e0923585f3a60c782d483863799f01f>`
+	#define :ref:`SSH_FX_FAILURE<doxid-group__libssh__sftp_1gad01f42405d742709739ad708277004c3>`
+	#define :ref:`SSH_FX_FILE_ALREADY_EXISTS<doxid-group__libssh__sftp_1gabae8a18fd96320cc78ea052eb269ed38>`
+	#define :ref:`SSH_FX_INVALID_HANDLE<doxid-group__libssh__sftp_1gadb2010df724d8c8d0b5414a63b7ac859>`
+	#define :ref:`SSH_FX_NO_CONNECTION<doxid-group__libssh__sftp_1ga3da0fc47440139efceb8a9220e31875c>`
+	#define :ref:`SSH_FX_NO_MEDIA<doxid-group__libssh__sftp_1ga8e7ba323d3bd55c416d9b4529f8e8d82>`
+	#define :ref:`SSH_FX_NO_SUCH_FILE<doxid-group__libssh__sftp_1ga9bcfb9bfc410f1493424c4492fea8016>`
+	#define :ref:`SSH_FX_NO_SUCH_PATH<doxid-group__libssh__sftp_1ga473dd6f7267ff262441e8a2aab3c33c8>`
+	#define :ref:`SSH_FX_OK<doxid-group__libssh__sftp_1ga8db0fdad334ce6e77c7a698947c2f118>`
+	#define :ref:`SSH_FX_OP_UNSUPPORTED<doxid-group__libssh__sftp_1ga383f2d50fd2cae076c270f84ffe6c044>`
+	#define :ref:`SSH_FX_PERMISSION_DENIED<doxid-group__libssh__sftp_1ga75c7f502ec17cd22a5777997e0776694>`
+	#define :ref:`SSH_FX_WRITE_PROTECT<doxid-group__libssh__sftp_1ga0e734958d6410066f1b1adf503ce52d8>`
+
+.. _details-group__libssh__sftp:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+SFTP handling functions.
+
+SFTP commands are channeled by the ssh sftp subsystem. Every packet is sent/read using a sftp_packet type structure. Related to these packets, most of the server answers are messages having an ID and a message specific part. It is described by sftp_message when reading a message, the sftp system puts it into the queue, so the process having asked for it can fetch it, while continuing to read for other messages (it is unspecified in which order messages may be sent back to the client
+
+Global Functions
+----------------
+
+.. index:: pair: function; sftp_async_read
+.. _doxid-group__libssh__sftp_1ga4399c7ccd8b39a460265047f9d7bc9b1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	sftp_async_read(
+		sftp_file file,
+		void* data,
+		uint32_t len,
+		uint32_t id
+		)
+
+Wait for an asynchronous read to complete and save the data.
+
+A call to this function with an invalid identifier will never return.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- file
+
+		- The opened sftp file handle to be read from.
+
+	*
+		- data
+
+		- Pointer to buffer to recieve read data.
+
+	*
+		- len
+
+		- Size of the buffer in bytes. It should be bigger or equal to the length parameter of the :ref:`sftp_async_read_begin() <doxid-group__libssh__sftp_1ga4c2cca19b38c54d4b04bb3584b0517cd>` call.
+
+	*
+		- id
+
+		- The identifier returned by the :ref:`sftp_async_read_begin() <doxid-group__libssh__sftp_1ga4c2cca19b38c54d4b04bb3584b0517cd>` function.
+
+
+
+.. rubric:: Returns:
+
+Number of bytes read, 0 on EOF, SSH_ERROR if an error occured, SSH_AGAIN if the file is opened in nonblocking mode and the request hasn't been executed yet.
+
+
+
+.. rubric:: See also:
+
+:ref:`sftp_async_read_begin() <doxid-group__libssh__sftp_1ga4c2cca19b38c54d4b04bb3584b0517cd>`
+
+.. index:: pair: function; sftp_async_read_begin
+.. _doxid-group__libssh__sftp_1ga4c2cca19b38c54d4b04bb3584b0517cd:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	sftp_async_read_begin(
+		sftp_file file,
+		uint32_t len
+		)
+
+Start an asynchronous read from a file using an opened sftp file handle.
+
+Its goal is to avoid the slowdowns related to the request/response pattern of a synchronous read. To do so, you must call 2 functions:
+
+:ref:`sftp_async_read_begin() <doxid-group__libssh__sftp_1ga4c2cca19b38c54d4b04bb3584b0517cd>` and :ref:`sftp_async_read() <doxid-group__libssh__sftp_1ga4399c7ccd8b39a460265047f9d7bc9b1>`.
+
+The first step is to call :ref:`sftp_async_read_begin() <doxid-group__libssh__sftp_1ga4c2cca19b38c54d4b04bb3584b0517cd>`. This function returns a request identifier. The second step is to call :ref:`sftp_async_read() <doxid-group__libssh__sftp_1ga4399c7ccd8b39a460265047f9d7bc9b1>` using the returned identifier.
+
+When calling this function, the internal offset is updated corresponding to the len parameter.
+
+A call to :ref:`sftp_async_read_begin() <doxid-group__libssh__sftp_1ga4c2cca19b38c54d4b04bb3584b0517cd>` sends a request to the server. When the server answers, libssh allocates memory to store it until :ref:`sftp_async_read() <doxid-group__libssh__sftp_1ga4399c7ccd8b39a460265047f9d7bc9b1>` is called. Not calling :ref:`sftp_async_read() <doxid-group__libssh__sftp_1ga4399c7ccd8b39a460265047f9d7bc9b1>` will lead to memory leaks.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- file
+
+		- The opened sftp file handle to be read from.
+
+	*
+		- len
+
+		- Size to read in bytes.
+
+
+
+.. rubric:: Returns:
+
+An identifier corresponding to the sent request, < 0 on error.
+
+
+
+.. rubric:: See also:
+
+:ref:`sftp_async_read() <doxid-group__libssh__sftp_1ga4399c7ccd8b39a460265047f9d7bc9b1>`
+
+:ref:`sftp_open() <doxid-group__libssh__sftp_1gab95cb5fe091efcc49dfa7729e4d48010>`
+
+.. index:: pair: function; sftp_attributes_free
+.. _doxid-group__libssh__sftp_1gadee9f7af9fc1ad3a0a66c7d97bf7977c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	sftp_attributes_free(sftp_attributes file)
+
+Free a sftp attribute structure.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- file
+
+		- The sftp attribute structure to free.
+
+.. index:: pair: function; sftp_canonicalize_path
+.. _doxid-group__libssh__sftp_1ga69b4d6f723565e3fcac2b37159262af5:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	char*
+	sftp_canonicalize_path(
+		sftp_session sftp,
+		const char* path
+		)
+
+Canonicalize a sftp path.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sftp
+
+		- The sftp session handle.
+
+	*
+		- path
+
+		- The path to be canonicalized.
+
+
+
+.. rubric:: Returns:
+
+The canonicalize path, NULL on error.
+
+.. index:: pair: function; sftp_chmod
+.. _doxid-group__libssh__sftp_1ga311a4bc202d406c916c8b9ad5fe79ac7:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	sftp_chmod(
+		sftp_session sftp,
+		const char* file,
+		mode_t mode
+		)
+
+Change permissions of a file.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sftp
+
+		- The sftp session handle.
+
+	*
+		- file
+
+		- The file which owner and group should be changed.
+
+	*
+		- mode
+
+		- Specifies the permissions to use. It is modified by the process's umask in the usual way: The permissions of the created file are (mode & ~umask)
+
+
+
+.. rubric:: Returns:
+
+0 on success, < 0 on error with ssh and sftp error set.
+
+
+
+.. rubric:: See also:
+
+:ref:`sftp_get_error() <doxid-group__libssh__sftp_1ga1f7fca4091a0075d9e69e47c928f7494>`
+
+.. index:: pair: function; sftp_chown
+.. _doxid-group__libssh__sftp_1ga18abafba9db590408ee2301a27698f2c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	sftp_chown(
+		sftp_session sftp,
+		const char* file,
+		uid_t owner,
+		gid_t group
+		)
+
+Change the file owner and group.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sftp
+
+		- The sftp session handle.
+
+	*
+		- file
+
+		- The file which owner and group should be changed.
+
+	*
+		- owner
+
+		- The new owner which should be set.
+
+	*
+		- group
+
+		- The new group which should be set.
+
+
+
+.. rubric:: Returns:
+
+0 on success, < 0 on error with ssh and sftp error set.
+
+
+
+.. rubric:: See also:
+
+:ref:`sftp_get_error() <doxid-group__libssh__sftp_1ga1f7fca4091a0075d9e69e47c928f7494>`
+
+.. index:: pair: function; sftp_close
+.. _doxid-group__libssh__sftp_1ga5878919249d4e8abe59b0ec699eed293:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	sftp_close(sftp_file file)
+
+Close an open file handle.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- file
+
+		- The open sftp file handle to close.
+
+
+
+.. rubric:: Returns:
+
+Returns SSH_NO_ERROR or SSH_ERROR if an error occured.
+
+
+
+.. rubric:: See also:
+
+:ref:`sftp_open() <doxid-group__libssh__sftp_1gab95cb5fe091efcc49dfa7729e4d48010>`
+
+.. index:: pair: function; sftp_closedir
+.. _doxid-group__libssh__sftp_1ga35551e5b28b192ef8035628d347f7d3e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	sftp_closedir(sftp_dir dir)
+
+Close a directory handle opened by :ref:`sftp_opendir() <doxid-group__libssh__sftp_1gab4290874bdb55796b2823496e0d9b7ec>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dir
+
+		- The sftp directory handle to close.
+
+
+
+.. rubric:: Returns:
+
+Returns SSH_NO_ERROR or SSH_ERROR if an error occured.
+
+.. index:: pair: function; sftp_dir_eof
+.. _doxid-group__libssh__sftp_1gad60f8e71b06eb8fdae2b262bb58f8fec:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	sftp_dir_eof(sftp_dir dir)
+
+Tell if the directory has reached EOF (End Of File).
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dir
+
+		- The sftp directory handle.
+
+
+
+.. rubric:: Returns:
+
+1 if the directory is EOF, 0 if not.
+
+
+
+.. rubric:: See also:
+
+:ref:`sftp_readdir() <doxid-group__libssh__sftp_1ga976ecf6f7d415856e1fd4a0f16ada9b8>`
+
+.. index:: pair: function; sftp_extension_supported
+.. _doxid-group__libssh__sftp_1ga190d0bb19ed8e571ab884d28ee82adfe:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	sftp_extension_supported(
+		sftp_session sftp,
+		const char* name,
+		const char* data
+		)
+
+Check if the given extension is supported.
+
+Example:
+
+.. ref-code-block:: cpp
+
+	sftp_extension_supported(sftp, "statvfs@openssh.com", "2");
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sftp
+
+		- The sftp session to use.
+
+	*
+		- name
+
+		- The name of the extension.
+
+	*
+		- data
+
+		- The data of the extension.
+
+
+
+.. rubric:: Returns:
+
+1 if supported, 0 if not.
+
+.. index:: pair: function; sftp_extensions_get_count
+.. _doxid-group__libssh__sftp_1ga300723724353ccc490b9c0c55bbee668:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	unsigned int
+	sftp_extensions_get_count(sftp_session sftp)
+
+Get the count of extensions provided by the server.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sftp
+
+		- The sftp session to use.
+
+
+
+.. rubric:: Returns:
+
+The count of extensions provided by the server, 0 on error or not available.
+
+.. index:: pair: function; sftp_extensions_get_data
+.. _doxid-group__libssh__sftp_1gad7391f28160aaa883429a3b0aa87e339:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	sftp_extensions_get_data(
+		sftp_session sftp,
+		unsigned int indexn
+		)
+
+Get the data of the extension provided by the server.
+
+This is normally the version number of the extension.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sftp
+
+		- The sftp session to use.
+
+	*
+		- indexn
+
+		- The index number of the extension data you want.
+
+
+
+.. rubric:: Returns:
+
+The data of the extension.
+
+.. index:: pair: function; sftp_extensions_get_name
+.. _doxid-group__libssh__sftp_1ga8bcf9a99f395c86c5f99b9a8009e9533:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	sftp_extensions_get_name(
+		sftp_session sftp,
+		unsigned int indexn
+		)
+
+Get the name of the extension provided by the server.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sftp
+
+		- The sftp session to use.
+
+	*
+		- indexn
+
+		- The index number of the extension name you want.
+
+
+
+.. rubric:: Returns:
+
+The name of the extension.
+
+.. index:: pair: function; sftp_file_set_blocking
+.. _doxid-group__libssh__sftp_1gac97113f44b010c4e299aac9f304af1ba:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	sftp_file_set_blocking(sftp_file handle)
+
+Make the sftp communication for this file handle blocking.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- handle
+
+		- The file handle to set blocking.
+
+.. index:: pair: function; sftp_file_set_nonblocking
+.. _doxid-group__libssh__sftp_1gac0ccac0257aece8197654bed83b7ec01:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	sftp_file_set_nonblocking(sftp_file handle)
+
+Make the sftp communication for this file handle non blocking.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- handle
+
+		- The file handle to set non blocking.
+
+.. index:: pair: function; sftp_free
+.. _doxid-group__libssh__sftp_1ga155c66639cb3342c7e02a96c8dbf7501:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	sftp_free(sftp_session sftp)
+
+Close and deallocate a sftp session.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sftp
+
+		- The sftp session handle to free.
+
+.. index:: pair: function; sftp_fstat
+.. _doxid-group__libssh__sftp_1gad9cc3609096b1fffa99f59c852415668:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	sftp_attributes
+	sftp_fstat(sftp_file file)
+
+Get information about a file or directory from a file handle.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- file
+
+		- The sftp file handle to get the stat information.
+
+
+
+.. rubric:: Returns:
+
+The sftp attributes structure of the file or directory, NULL on error with ssh and sftp error set.
+
+
+
+.. rubric:: See also:
+
+:ref:`sftp_get_error() <doxid-group__libssh__sftp_1ga1f7fca4091a0075d9e69e47c928f7494>`
+
+.. index:: pair: function; sftp_fstatvfs
+.. _doxid-group__libssh__sftp_1ga6f14490f71825904232dc418b7843b9f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	sftp_statvfs_t
+	sftp_fstatvfs(sftp_file file)
+
+Get information about a mounted file system.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- file
+
+		- An opened file.
+
+
+
+.. rubric:: Returns:
+
+A statvfs structure or NULL on error.
+
+
+
+.. rubric:: See also:
+
+:ref:`sftp_get_error() <doxid-group__libssh__sftp_1ga1f7fca4091a0075d9e69e47c928f7494>`
+
+.. index:: pair: function; sftp_get_error
+.. _doxid-group__libssh__sftp_1ga1f7fca4091a0075d9e69e47c928f7494:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	sftp_get_error(sftp_session sftp)
+
+Get the last sftp error.
+
+Use this function to get the latest error set by a posix like sftp function.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sftp
+
+		- The sftp session where the error is saved.
+
+
+
+.. rubric:: Returns:
+
+The saved error (see server responses), < 0 if an error in the function occured.
+
+
+
+.. rubric:: See also:
+
+Server responses
+
+.. index:: pair: function; sftp_init
+.. _doxid-group__libssh__sftp_1ga6eb5a92e33493ec3d9a3576e1617da0d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	sftp_init(sftp_session sftp)
+
+Initialize the sftp session with the server.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sftp
+
+		- The sftp session to initialize.
+
+
+
+.. rubric:: Returns:
+
+0 on success, < 0 on error with ssh error set.
+
+
+
+.. rubric:: See also:
+
+:ref:`sftp_new() <doxid-group__libssh__sftp_1ga32c8e182e97352e1aa8a20443c320d7f>`
+
+.. index:: pair: function; sftp_lstat
+.. _doxid-group__libssh__sftp_1ga7e4a3cd284ad72a1c5092c4cef72dfca:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	sftp_attributes
+	sftp_lstat(
+		sftp_session session,
+		const char* path
+		)
+
+Get information about a file or directory.
+
+Identical to sftp_stat, but if the file or directory is a symbolic link, then the link itself is stated, not the file that it refers to.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The sftp session handle.
+
+	*
+		- path
+
+		- The path to the file or directory to obtain the information.
+
+
+
+.. rubric:: Returns:
+
+The sftp attributes structure of the file or directory, NULL on error with ssh and sftp error set.
+
+
+
+.. rubric:: See also:
+
+:ref:`sftp_get_error() <doxid-group__libssh__sftp_1ga1f7fca4091a0075d9e69e47c928f7494>`
+
+.. index:: pair: function; sftp_mkdir
+.. _doxid-group__libssh__sftp_1ga9cc63cd3efe83edfa3f6a4c5314383cb:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	sftp_mkdir(
+		sftp_session sftp,
+		const char* directory,
+		mode_t mode
+		)
+
+Create a directory.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sftp
+
+		- The sftp session handle.
+
+	*
+		- directory
+
+		- The directory to create.
+
+	*
+		- mode
+
+		- Specifies the permissions to use. It is modified by the process's umask in the usual way: The permissions of the created file are (mode & ~umask)
+
+
+
+.. rubric:: Returns:
+
+0 on success, < 0 on error with ssh and sftp error set.
+
+
+
+.. rubric:: See also:
+
+:ref:`sftp_get_error() <doxid-group__libssh__sftp_1ga1f7fca4091a0075d9e69e47c928f7494>`
+
+.. index:: pair: function; sftp_new
+.. _doxid-group__libssh__sftp_1ga32c8e182e97352e1aa8a20443c320d7f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	sftp_session
+	sftp_new(ssh_session session)
+
+Start a new sftp session.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to use.
+
+
+
+.. rubric:: Returns:
+
+A new sftp session or NULL on error.
+
+
+
+.. rubric:: See also:
+
+:ref:`sftp_free() <doxid-group__libssh__sftp_1ga155c66639cb3342c7e02a96c8dbf7501>`
+
+.. index:: pair: function; sftp_new_channel
+.. _doxid-group__libssh__sftp_1ga4d747364258c41a34bb3e5b47b431d0d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	sftp_session
+	sftp_new_channel(
+		ssh_session session,
+		ssh_channel channel
+		)
+
+Start a new sftp session with an existing channel.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to use.
+
+	*
+		- channel
+
+		- An open session channel with subsystem already allocated
+
+
+
+.. rubric:: Returns:
+
+A new sftp session or NULL on error.
+
+
+
+.. rubric:: See also:
+
+:ref:`sftp_free() <doxid-group__libssh__sftp_1ga155c66639cb3342c7e02a96c8dbf7501>`
+
+.. index:: pair: function; sftp_open
+.. _doxid-group__libssh__sftp_1gab95cb5fe091efcc49dfa7729e4d48010:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	sftp_file
+	sftp_open(
+		sftp_session session,
+		const char* file,
+		int accesstype,
+		mode_t mode
+		)
+
+Open a file on the server.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The sftp session handle.
+
+	*
+		- file
+
+		- The file to be opened.
+
+	*
+		- accesstype
+
+		- Is one of O_RDONLY, O_WRONLY or O_RDWR which request opening the file read-only,write-only or read/write. Acesss may also be bitwise-or'd with one or more of the following: O_CREAT - If the file does not exist it will be created. O_EXCL - When used with O_CREAT, if the file already exists it is an error and the open will fail. O_TRUNC - If the file already exists it will be truncated.
+
+	*
+		- mode
+
+		- Mode specifies the permissions to use if a new file is created. It is modified by the process's umask in the usual way: The permissions of the created file are (mode & ~umask)
+
+
+
+.. rubric:: Returns:
+
+A sftp file handle, NULL on error with ssh and sftp error set.
+
+
+
+.. rubric:: See also:
+
+:ref:`sftp_get_error() <doxid-group__libssh__sftp_1ga1f7fca4091a0075d9e69e47c928f7494>`
+
+.. index:: pair: function; sftp_opendir
+.. _doxid-group__libssh__sftp_1gab4290874bdb55796b2823496e0d9b7ec:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	sftp_dir
+	sftp_opendir(
+		sftp_session session,
+		const char* path
+		)
+
+Open a directory used to obtain directory entries.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The sftp session handle to open the directory.
+
+	*
+		- path
+
+		- The path of the directory to open.
+
+
+
+.. rubric:: Returns:
+
+A sftp directory handle or NULL on error with ssh and sftp error set.
+
+
+
+.. rubric:: See also:
+
+:ref:`sftp_readdir <doxid-group__libssh__sftp_1ga976ecf6f7d415856e1fd4a0f16ada9b8>`
+
+:ref:`sftp_closedir <doxid-group__libssh__sftp_1ga35551e5b28b192ef8035628d347f7d3e>`
+
+.. index:: pair: function; sftp_read
+.. _doxid-group__libssh__sftp_1ga6c2bfeb2e089f54c04afe1e484a7fff2:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	ssize_t
+	sftp_read(
+		sftp_file file,
+		void* buf,
+		size_t count
+		)
+
+Read from a file using an opened sftp file handle.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- file
+
+		- The opened sftp file handle to be read from.
+
+	*
+		- buf
+
+		- Pointer to buffer to recieve read data.
+
+	*
+		- count
+
+		- Size of the buffer in bytes.
+
+
+
+.. rubric:: Returns:
+
+Number of bytes written, < 0 on error with ssh and sftp error set.
+
+
+
+.. rubric:: See also:
+
+:ref:`sftp_get_error() <doxid-group__libssh__sftp_1ga1f7fca4091a0075d9e69e47c928f7494>`
+
+.. index:: pair: function; sftp_readdir
+.. _doxid-group__libssh__sftp_1ga976ecf6f7d415856e1fd4a0f16ada9b8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	sftp_attributes
+	sftp_readdir(
+		sftp_session session,
+		sftp_dir dir
+		)
+
+Get a single file attributes structure of a directory.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The sftp session handle to read the directory entry.
+
+	*
+		- dir
+
+		- The opened sftp directory handle to read from.
+
+
+
+.. rubric:: Returns:
+
+A file attribute structure or NULL at the end of the directory.
+
+
+
+.. rubric:: See also:
+
+:ref:`sftp_opendir() <doxid-group__libssh__sftp_1gab4290874bdb55796b2823496e0d9b7ec>`
+
+sftp_attribute_free()
+
+:ref:`sftp_closedir() <doxid-group__libssh__sftp_1ga35551e5b28b192ef8035628d347f7d3e>`
+
+.. index:: pair: function; sftp_readlink
+.. _doxid-group__libssh__sftp_1ga1ee06dcf214cb4b67195fa7f5ce5027c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	char*
+	sftp_readlink(
+		sftp_session sftp,
+		const char* path
+		)
+
+Read the value of a symbolic link.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sftp
+
+		- The sftp session handle.
+
+	*
+		- path
+
+		- Specifies the path name of the symlink to be read.
+
+
+
+.. rubric:: Returns:
+
+The target of the link, NULL on error.
+
+
+
+.. rubric:: See also:
+
+:ref:`sftp_get_error() <doxid-group__libssh__sftp_1ga1f7fca4091a0075d9e69e47c928f7494>`
+
+.. index:: pair: function; sftp_rename
+.. _doxid-group__libssh__sftp_1ga1175bc5bde655df5dbd925bc98379aef:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	sftp_rename(
+		sftp_session sftp,
+		const char* original,
+		const char* newname
+		)
+
+Rename or move a file or directory.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sftp
+
+		- The sftp session handle.
+
+	*
+		- original
+
+		- The original url (source url) of file or directory to be moved.
+
+	*
+		- newname
+
+		- The new url (destination url) of the file or directory after the move.
+
+
+
+.. rubric:: Returns:
+
+0 on success, < 0 on error with ssh and sftp error set.
+
+
+
+.. rubric:: See also:
+
+:ref:`sftp_get_error() <doxid-group__libssh__sftp_1ga1f7fca4091a0075d9e69e47c928f7494>`
+
+.. index:: pair: function; sftp_rewind
+.. _doxid-group__libssh__sftp_1ga8d1ce157cf51b70bad82c23e082d5067:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	sftp_rewind(sftp_file file)
+
+Rewinds the position of the file pointer to the beginning of the file.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- file
+
+		- Open sftp file handle.
+
+.. index:: pair: function; sftp_rmdir
+.. _doxid-group__libssh__sftp_1gab6160ce33fc49d6c38e4a6a66ca0a0b6:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	sftp_rmdir(
+		sftp_session sftp,
+		const char* directory
+		)
+
+Remove a directoy.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sftp
+
+		- The sftp session handle.
+
+	*
+		- directory
+
+		- The directory to remove.
+
+
+
+.. rubric:: Returns:
+
+0 on success, < 0 on error with ssh and sftp error set.
+
+
+
+.. rubric:: See also:
+
+:ref:`sftp_get_error() <doxid-group__libssh__sftp_1ga1f7fca4091a0075d9e69e47c928f7494>`
+
+.. index:: pair: function; sftp_seek
+.. _doxid-group__libssh__sftp_1ga0f6d52a8422524349efb4de23609e326:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	sftp_seek(
+		sftp_file file,
+		uint32_t new_offset
+		)
+
+Seek to a specific location in a file.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- file
+
+		- Open sftp file handle to seek in.
+
+	*
+		- new_offset
+
+		- Offset in bytes to seek.
+
+
+
+.. rubric:: Returns:
+
+0 on success, < 0 on error.
+
+.. index:: pair: function; sftp_seek64
+.. _doxid-group__libssh__sftp_1ga4aa156b5cd180015632384d0f3c8a061:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	sftp_seek64(
+		sftp_file file,
+		uint64_t new_offset
+		)
+
+Seek to a specific location in a file.
+
+This is the 64bit version.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- file
+
+		- Open sftp file handle to seek in.
+
+	*
+		- new_offset
+
+		- Offset in bytes to seek.
+
+
+
+.. rubric:: Returns:
+
+0 on success, < 0 on error.
+
+.. index:: pair: function; sftp_server_init
+.. _doxid-group__libssh__sftp_1ga40489d137b4b4cab242375f73d0e6396:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	sftp_server_init(sftp_session sftp)
+
+Intialize the sftp server.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sftp
+
+		- The sftp session to init.
+
+
+
+.. rubric:: Returns:
+
+0 on success, < 0 on error.
+
+.. index:: pair: function; sftp_server_new
+.. _doxid-group__libssh__sftp_1ga9db6ed61354048752ad66c99fd1063c3:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	sftp_session
+	sftp_server_new(
+		ssh_session session,
+		ssh_channel chan
+		)
+
+Create a new sftp server session.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to use.
+
+	*
+		- chan
+
+		- The ssh channel to use.
+
+
+
+.. rubric:: Returns:
+
+A new sftp server session.
+
+.. index:: pair: function; sftp_server_version
+.. _doxid-group__libssh__sftp_1ga139e445d200c325007d852e52ee2fc78:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	sftp_server_version(sftp_session sftp)
+
+Get the version of the SFTP protocol supported by the server.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sftp
+
+		- The sftp session handle.
+
+
+
+.. rubric:: Returns:
+
+The server version.
+
+.. index:: pair: function; sftp_setstat
+.. _doxid-group__libssh__sftp_1gabac0bf3340d76857783c3ccfc8014c89:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	sftp_setstat(
+		sftp_session sftp,
+		const char* file,
+		sftp_attributes attr
+		)
+
+Set file attributes on a file, directory or symbolic link.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sftp
+
+		- The sftp session handle.
+
+	*
+		- file
+
+		- The file which attributes should be changed.
+
+	*
+		- attr
+
+		- The file attributes structure with the attributes set which should be changed.
+
+
+
+.. rubric:: Returns:
+
+0 on success, < 0 on error with ssh and sftp error set.
+
+
+
+.. rubric:: See also:
+
+:ref:`sftp_get_error() <doxid-group__libssh__sftp_1ga1f7fca4091a0075d9e69e47c928f7494>`
+
+.. index:: pair: function; sftp_stat
+.. _doxid-group__libssh__sftp_1gaad3201367dab4378f71105a0c82ad37d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	sftp_attributes
+	sftp_stat(
+		sftp_session session,
+		const char* path
+		)
+
+Get information about a file or directory.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The sftp session handle.
+
+	*
+		- path
+
+		- The path to the file or directory to obtain the information.
+
+
+
+.. rubric:: Returns:
+
+The sftp attributes structure of the file or directory, NULL on error with ssh and sftp error set.
+
+
+
+.. rubric:: See also:
+
+:ref:`sftp_get_error() <doxid-group__libssh__sftp_1ga1f7fca4091a0075d9e69e47c928f7494>`
+
+.. index:: pair: function; sftp_statvfs
+.. _doxid-group__libssh__sftp_1ga8654c581979d66fcf5cf1f1b67226cd2:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	sftp_statvfs_t
+	sftp_statvfs(
+		sftp_session sftp,
+		const char* path
+		)
+
+Get information about a mounted file system.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sftp
+
+		- The sftp session handle.
+
+	*
+		- path
+
+		- The pathname of any file within the mounted file system.
+
+
+
+.. rubric:: Returns:
+
+A statvfs structure or NULL on error.
+
+
+
+.. rubric:: See also:
+
+:ref:`sftp_get_error() <doxid-group__libssh__sftp_1ga1f7fca4091a0075d9e69e47c928f7494>`
+
+.. index:: pair: function; sftp_statvfs_free
+.. _doxid-group__libssh__sftp_1gae98c62de2f020bb54361a8a16189c398:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	sftp_statvfs_free(sftp_statvfs_t statvfs_o)
+
+Free the memory of an allocated statvfs.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- statvfs_o
+
+		- The statvfs to free.
+
+.. index:: pair: function; sftp_symlink
+.. _doxid-group__libssh__sftp_1ga010212bcabdccf36a34befe14c04a472:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	sftp_symlink(
+		sftp_session sftp,
+		const char* target,
+		const char* dest
+		)
+
+Create a symbolic link.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sftp
+
+		- The sftp session handle.
+
+	*
+		- target
+
+		- Specifies the target of the symlink.
+
+	*
+		- dest
+
+		- Specifies the path name of the symlink to be created.
+
+
+
+.. rubric:: Returns:
+
+0 on success, < 0 on error with ssh and sftp error set.
+
+
+
+.. rubric:: See also:
+
+:ref:`sftp_get_error() <doxid-group__libssh__sftp_1ga1f7fca4091a0075d9e69e47c928f7494>`
+
+.. index:: pair: function; sftp_tell
+.. _doxid-group__libssh__sftp_1ga50e720c525e05226cb3852440a96c937:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	unsigned long
+	sftp_tell(sftp_file file)
+
+Report current byte position in file.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- file
+
+		- Open sftp file handle.
+
+
+
+.. rubric:: Returns:
+
+The offset of the current byte relative to the beginning of the file associated with the file descriptor. < 0 on error.
+
+.. index:: pair: function; sftp_tell64
+.. _doxid-group__libssh__sftp_1gaec69c525fcf3b89d6c754043d2513833:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	uint64_t
+	sftp_tell64(sftp_file file)
+
+Report current byte position in file.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- file
+
+		- Open sftp file handle.
+
+
+
+.. rubric:: Returns:
+
+The offset of the current byte relative to the beginning of the file associated with the file descriptor. < 0 on error.
+
+.. index:: pair: function; sftp_unlink
+.. _doxid-group__libssh__sftp_1ga5fc1fa851dc7cde5dd070d5410edf6b1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	sftp_unlink(
+		sftp_session sftp,
+		const char* file
+		)
+
+Unlink (delete) a file.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sftp
+
+		- The sftp session handle.
+
+	*
+		- file
+
+		- The file to unlink/delete.
+
+
+
+.. rubric:: Returns:
+
+0 on success, < 0 on error with ssh and sftp error set.
+
+
+
+.. rubric:: See also:
+
+:ref:`sftp_get_error() <doxid-group__libssh__sftp_1ga1f7fca4091a0075d9e69e47c928f7494>`
+
+.. index:: pair: function; sftp_utimes
+.. _doxid-group__libssh__sftp_1gaf06b62c568c89b69cc31b119be2aee7b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	sftp_utimes(
+		sftp_session sftp,
+		const char* file,
+		const struct timeval* times
+		)
+
+Change the last modification and access time of a file.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sftp
+
+		- The sftp session handle.
+
+	*
+		- file
+
+		- The file which owner and group should be changed.
+
+	*
+		- times
+
+		- A timeval structure which contains the desired access and modification time.
+
+
+
+.. rubric:: Returns:
+
+0 on success, < 0 on error with ssh and sftp error set.
+
+
+
+.. rubric:: See also:
+
+:ref:`sftp_get_error() <doxid-group__libssh__sftp_1ga1f7fca4091a0075d9e69e47c928f7494>`
+
+.. index:: pair: function; sftp_write
+.. _doxid-group__libssh__sftp_1ga744054eb0dcfb0feed5ba81ed01ad3c0:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	ssize_t
+	sftp_write(
+		sftp_file file,
+		const void* buf,
+		size_t count
+		)
+
+Write to a file using an opened sftp file handle.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- file
+
+		- Open sftp file handle to write to.
+
+	*
+		- buf
+
+		- Pointer to buffer to write data.
+
+	*
+		- count
+
+		- Size of buffer in bytes.
+
+
+
+.. rubric:: Returns:
+
+Number of bytes written, < 0 on error with ssh and sftp error set.
+
+
+
+.. rubric:: See also:
+
+:ref:`sftp_open() <doxid-group__libssh__sftp_1gab95cb5fe091efcc49dfa7729e4d48010>`
+
+:ref:`sftp_read() <doxid-group__libssh__sftp_1ga6c2bfeb2e089f54c04afe1e484a7fff2>`
+
+:ref:`sftp_close() <doxid-group__libssh__sftp_1ga5878919249d4e8abe59b0ec699eed293>`
+
+Macros
+------
+
+.. index:: pair: define; SSH_FX_BAD_MESSAGE
+.. _doxid-group__libssh__sftp_1ga12cb3bf50e715473c2ca5ccb69965cf3:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SSH_FX_BAD_MESSAGE
+
+Garbage received from server.
+
+.. index:: pair: define; SSH_FX_CONNECTION_LOST
+.. _doxid-group__libssh__sftp_1ga721ad225dfe6638384e388c5fe1cb42b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SSH_FX_CONNECTION_LOST
+
+There was a connection, but we lost it.
+
+.. index:: pair: define; SSH_FX_EOF
+.. _doxid-group__libssh__sftp_1ga9e0923585f3a60c782d483863799f01f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SSH_FX_EOF
+
+End-of-file encountered.
+
+.. index:: pair: define; SSH_FX_FAILURE
+.. _doxid-group__libssh__sftp_1gad01f42405d742709739ad708277004c3:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SSH_FX_FAILURE
+
+Generic failure.
+
+.. index:: pair: define; SSH_FX_FILE_ALREADY_EXISTS
+.. _doxid-group__libssh__sftp_1gabae8a18fd96320cc78ea052eb269ed38:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SSH_FX_FILE_ALREADY_EXISTS
+
+An attempt to create an already existing file or directory has been made.
+
+.. index:: pair: define; SSH_FX_INVALID_HANDLE
+.. _doxid-group__libssh__sftp_1gadb2010df724d8c8d0b5414a63b7ac859:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SSH_FX_INVALID_HANDLE
+
+Invalid file handle.
+
+.. index:: pair: define; SSH_FX_NO_CONNECTION
+.. _doxid-group__libssh__sftp_1ga3da0fc47440139efceb8a9220e31875c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SSH_FX_NO_CONNECTION
+
+No connection has been set up.
+
+.. index:: pair: define; SSH_FX_NO_MEDIA
+.. _doxid-group__libssh__sftp_1ga8e7ba323d3bd55c416d9b4529f8e8d82:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SSH_FX_NO_MEDIA
+
+No media in remote drive.
+
+.. index:: pair: define; SSH_FX_NO_SUCH_FILE
+.. _doxid-group__libssh__sftp_1ga9bcfb9bfc410f1493424c4492fea8016:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SSH_FX_NO_SUCH_FILE
+
+File doesn't exist.
+
+.. index:: pair: define; SSH_FX_NO_SUCH_PATH
+.. _doxid-group__libssh__sftp_1ga473dd6f7267ff262441e8a2aab3c33c8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SSH_FX_NO_SUCH_PATH
+
+No such file or directory path exists.
+
+.. index:: pair: define; SSH_FX_OK
+.. _doxid-group__libssh__sftp_1ga8db0fdad334ce6e77c7a698947c2f118:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SSH_FX_OK
+
+No error.
+
+.. index:: pair: define; SSH_FX_OP_UNSUPPORTED
+.. _doxid-group__libssh__sftp_1ga383f2d50fd2cae076c270f84ffe6c044:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SSH_FX_OP_UNSUPPORTED
+
+Operation not supported by the server.
+
+.. index:: pair: define; SSH_FX_PERMISSION_DENIED
+.. _doxid-group__libssh__sftp_1ga75c7f502ec17cd22a5777997e0776694:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SSH_FX_PERMISSION_DENIED
+
+Permission denied.
+
+.. index:: pair: define; SSH_FX_WRITE_PROTECT
+.. _doxid-group__libssh__sftp_1ga0e734958d6410066f1b1adf503ce52d8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SSH_FX_WRITE_PROTECT
+
+We are trying to write on a write-protected filesystem.
+

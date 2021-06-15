@@ -1,0 +1,456 @@
+.. index:: pair: group; Atomic Operations
+.. _doxid-group__apr__atomic:
+
+Atomic Operations
+=================
+
+.. toctree::
+	:hidden:
+
+Overview
+~~~~~~~~
+
+
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// global functions
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_atomic_init<doxid-group__apr__atomic_1gaa89b4022de39ca4d1c2ae6715e888e97>`(:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p);
+
+	apr_uint32_t
+	:ref:`apr_atomic_read32<doxid-group__apr__atomic_1gafba4de90e113d26536cff48418689771>`(volatile apr_uint32_t* mem);
+
+	void
+	:ref:`apr_atomic_set32<doxid-group__apr__atomic_1gac689de9df18c093f66959227359328bb>`(
+		volatile apr_uint32_t* mem,
+		apr_uint32_t val
+		);
+
+	apr_uint32_t
+	:ref:`apr_atomic_add32<doxid-group__apr__atomic_1ga3ef16e13b679710fafd5196713e17433>`(
+		volatile apr_uint32_t* mem,
+		apr_uint32_t val
+		);
+
+	void
+	:ref:`apr_atomic_sub32<doxid-group__apr__atomic_1ga4603396650e844bd987f01358ccb4df1>`(
+		volatile apr_uint32_t* mem,
+		apr_uint32_t val
+		);
+
+	apr_uint32_t
+	:ref:`apr_atomic_inc32<doxid-group__apr__atomic_1ga4af33da5aa6493ec321af14bedfc47a9>`(volatile apr_uint32_t* mem);
+
+	int
+	:ref:`apr_atomic_dec32<doxid-group__apr__atomic_1ga7a8d16335fdcd27f2baca90df35ad300>`(volatile apr_uint32_t* mem);
+
+	apr_uint32_t
+	:ref:`apr_atomic_cas32<doxid-group__apr__atomic_1gae45c529f14f8489102382bd3fd4cce22>`(
+		volatile apr_uint32_t* mem,
+		apr_uint32_t with,
+		apr_uint32_t cmp
+		);
+
+	apr_uint32_t
+	:ref:`apr_atomic_xchg32<doxid-group__apr__atomic_1ga50850e462d65e0409d5a93a6b4ec26c6>`(
+		volatile apr_uint32_t* mem,
+		apr_uint32_t val
+		);
+
+	void*
+	:ref:`apr_atomic_casptr<doxid-group__apr__atomic_1gafdd02b41cc39ade873daa2734597b0fa>`(
+		volatile void** mem,
+		void* with,
+		const void* cmp
+		);
+
+	void*
+	:ref:`apr_atomic_xchgptr<doxid-group__apr__atomic_1gaab4c1c5b8be70ded06dd31a1a4f65bf6>`(
+		volatile void** mem,
+		void* with
+		);
+
+.. _details-group__apr__atomic:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+Global Functions
+----------------
+
+.. index:: pair: function; apr_atomic_init
+.. _doxid-group__apr__atomic_1gaa89b4022de39ca4d1c2ae6715e888e97:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_atomic_init(:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p)
+
+this function is required on some platforms to initialize the atomic operation's internal structures Programs do NOT need to call this directly. APR will call this automatically from apr_initialize.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- p
+
+		- pool
+
+
+
+.. rubric:: Returns:
+
+APR_SUCCESS on successful completion
+
+.. index:: pair: function; apr_atomic_read32
+.. _doxid-group__apr__atomic_1gafba4de90e113d26536cff48418689771:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	apr_uint32_t
+	apr_atomic_read32(volatile apr_uint32_t* mem)
+
+atomically read an apr_uint32_t from memory
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mem
+
+		- the pointer
+
+.. index:: pair: function; apr_atomic_set32
+.. _doxid-group__apr__atomic_1gac689de9df18c093f66959227359328bb:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_atomic_set32(
+		volatile apr_uint32_t* mem,
+		apr_uint32_t val
+		)
+
+atomically set an apr_uint32_t in memory
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mem
+
+		- pointer to the object
+
+	*
+		- val
+
+		- value that the object will assume
+
+.. index:: pair: function; apr_atomic_add32
+.. _doxid-group__apr__atomic_1ga3ef16e13b679710fafd5196713e17433:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	apr_uint32_t
+	apr_atomic_add32(
+		volatile apr_uint32_t* mem,
+		apr_uint32_t val
+		)
+
+atomically add 'val' to an apr_uint32_t
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mem
+
+		- pointer to the object
+
+	*
+		- val
+
+		- amount to add
+
+
+
+.. rubric:: Returns:
+
+old value pointed to by mem
+
+.. index:: pair: function; apr_atomic_sub32
+.. _doxid-group__apr__atomic_1ga4603396650e844bd987f01358ccb4df1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_atomic_sub32(
+		volatile apr_uint32_t* mem,
+		apr_uint32_t val
+		)
+
+atomically subtract 'val' from an apr_uint32_t
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mem
+
+		- pointer to the object
+
+	*
+		- val
+
+		- amount to subtract
+
+.. index:: pair: function; apr_atomic_inc32
+.. _doxid-group__apr__atomic_1ga4af33da5aa6493ec321af14bedfc47a9:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	apr_uint32_t
+	apr_atomic_inc32(volatile apr_uint32_t* mem)
+
+atomically increment an apr_uint32_t by 1
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mem
+
+		- pointer to the object
+
+
+
+.. rubric:: Returns:
+
+old value pointed to by mem
+
+.. index:: pair: function; apr_atomic_dec32
+.. _doxid-group__apr__atomic_1ga7a8d16335fdcd27f2baca90df35ad300:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	apr_atomic_dec32(volatile apr_uint32_t* mem)
+
+atomically decrement an apr_uint32_t by 1
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mem
+
+		- pointer to the atomic value
+
+
+
+.. rubric:: Returns:
+
+zero if the value becomes zero on decrement, otherwise non-zero
+
+.. index:: pair: function; apr_atomic_cas32
+.. _doxid-group__apr__atomic_1gae45c529f14f8489102382bd3fd4cce22:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	apr_uint32_t
+	apr_atomic_cas32(
+		volatile apr_uint32_t* mem,
+		apr_uint32_t with,
+		apr_uint32_t cmp
+		)
+
+compare an apr_uint32_t's value with 'cmp'. If they are the same swap the value with 'with'
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mem
+
+		- pointer to the value
+
+	*
+		- with
+
+		- what to swap it with
+
+	*
+		- cmp
+
+		- the value to compare it to
+
+
+
+.. rubric:: Returns:
+
+the old value of \*mem
+
+.. index:: pair: function; apr_atomic_xchg32
+.. _doxid-group__apr__atomic_1ga50850e462d65e0409d5a93a6b4ec26c6:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	apr_uint32_t
+	apr_atomic_xchg32(
+		volatile apr_uint32_t* mem,
+		apr_uint32_t val
+		)
+
+exchange an apr_uint32_t's value with 'val'.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mem
+
+		- pointer to the value
+
+	*
+		- val
+
+		- what to swap it with
+
+
+
+.. rubric:: Returns:
+
+the old value of \*mem
+
+.. index:: pair: function; apr_atomic_casptr
+.. _doxid-group__apr__atomic_1gafdd02b41cc39ade873daa2734597b0fa:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void*
+	apr_atomic_casptr(
+		volatile void** mem,
+		void* with,
+		const void* cmp
+		)
+
+compare the pointer's value with cmp. If they are the same swap the value with 'with'
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mem
+
+		- pointer to the pointer
+
+	*
+		- with
+
+		- what to swap it with
+
+	*
+		- cmp
+
+		- the value to compare it to
+
+
+
+.. rubric:: Returns:
+
+the old value of the pointer
+
+.. index:: pair: function; apr_atomic_xchgptr
+.. _doxid-group__apr__atomic_1gaab4c1c5b8be70ded06dd31a1a4f65bf6:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void*
+	apr_atomic_xchgptr(
+		volatile void** mem,
+		void* with
+		)
+
+exchange a pair of pointer values
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- mem
+
+		- pointer to the pointer
+
+	*
+		- with
+
+		- what to swap it with
+
+
+
+.. rubric:: Returns:
+
+the old value of the pointer
+

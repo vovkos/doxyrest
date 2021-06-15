@@ -1,0 +1,367 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>PCM (digital audio) interface &#8212; ALSA Library Documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/target-highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="PCM (digital audio) plugins" href="page_pcm_plugins.html" />
+    <link rel="prev" title="Mixer interface" href="page_mixer.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="page_pcm_plugins.html" title="PCM (digital audio) plugins"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="page_mixer.html" title="Mixer interface"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ALSA Library Documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">PCM (digital audio) interface</a><ul>
+<li><a class="reference internal" href="#general-overview">General overview</a></li>
+<li><a class="reference internal" href="#transfer-methods-in-unix-environments">Transfer methods in UNIX environments</a><ul>
+<li><a class="reference internal" href="#standard-i-o-transfers">Standard I/O transfers</a></li>
+<li><a class="reference internal" href="#event-waiting-routines">Event waiting routines</a></li>
+<li><a class="reference internal" href="#asynchronous-notification">Asynchronous notification</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#blocked-and-non-blocked-open">Blocked and non-blocked open</a></li>
+<li><a class="reference internal" href="#asynchronous-mode">Asynchronous mode</a></li>
+<li><a class="reference internal" href="#handshake-between-application-and-library">Handshake between application and library</a></li>
+<li><a class="reference internal" href="#pcm-formats">PCM formats</a></li>
+<li><a class="reference internal" href="#alsa-transfers">ALSA transfers</a><ul>
+<li><a class="reference internal" href="#read-write-transfer">Read / Write transfer</a></li>
+<li><a class="reference internal" href="#direct-read-write-transfer-via-mmap-ed-areas">Direct Read / Write transfer (via mmap’ed areas)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#error-codes">Error codes</a></li>
+<li><a class="reference internal" href="#managing-parameters">Managing parameters</a><ul>
+<li><a class="reference internal" href="#hardware-related-parameters">Hardware related parameters</a></li>
+<li><a class="reference internal" href="#software-related-parameters">Software related parameters</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#obtaining-stream-status">Obtaining stream status</a><ul>
+<li><a class="reference internal" href="#obtaining-stream-state-fast-and-update-r-w-pointer">Obtaining stream state fast and update r/w pointer</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#managing-the-stream-state">Managing the stream state</a></li>
+<li><a class="reference internal" href="#streams-synchronization">Streams synchronization</a></li>
+<li><a class="reference internal" href="#thread-safety">Thread-safety</a></li>
+<li><a class="reference internal" href="#pcm-naming-conventions">PCM naming conventions</a><ul>
+<li><a class="reference internal" href="#default-device">Default device</a></li>
+<li><a class="reference internal" href="#hw-device">HW device</a></li>
+<li><a class="reference internal" href="#plug-hw-device">Plug-&gt;HW device</a></li>
+<li><a class="reference internal" href="#plug-device">Plug device</a></li>
+<li><a class="reference internal" href="#shared-memory-device">Shared memory device</a></li>
+<li><a class="reference internal" href="#tee-device">Tee device</a></li>
+<li><a class="reference internal" href="#file-device">File device</a></li>
+<li><a class="reference internal" href="#null-device">Null device</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="page_mixer.html"
+                        title="previous chapter">Mixer interface</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="page_pcm_plugins.html"
+                        title="next chapter">PCM (digital audio) plugins</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pcm-digital-audio-interface">
+<span id="doxid-pcm"></span><span id="index-0"></span><h1>PCM (digital audio) interface</h1>
+<p>Although abbreviation PCM stands for Pulse Code Modulation, we are understanding it as general digital audio processing with volume samples generated in continuous time periods.</p>
+<p>The analog signal is recorded via analog to digital converters (ADC). The digital value (de-facto a volume at a specific time) obtained from ADC can be further processed. The following picture shows a perfect sinus waveform:</p>
+<img alt="_images/wave1.gif" src="_images/wave1.gif" />
+<p>Next image shows digitized representation:</p>
+<img alt="_images/wave2.gif" src="_images/wave2.gif" />
+<p>As you may see, the quality of digital audio signal depends on the time (recording rate) and voltage resolution (usually in an linear integer representation with basic unit one bit).</p>
+<p>The stored digital signal can be converted back to voltage (analog) representation via digital to analog converters (DAC).</p>
+<p>One digital value is called sample. More samples are collected to frames (frame is terminology for ALSA) depending on count of converters used at one specific time. One frame might contain one sample (when only one converter is used - mono) or more samples (for example: stereo has signals from two converters recorded at same time). Digital audio stream contains collection of frames recorded at boundaries of continuous time periods.</p>
+<div class="section" id="general-overview">
+<span id="doxid-pcm-1pcm-general-overview"></span><h2>General overview</h2>
+<p>ALSA uses the ring buffer to store outgoing (playback) and incoming (capture, record) samples. There are two pointers being maintained to allow a precise communication between application and device pointing to current processed sample by hardware and last processed sample by application. The modern audio chips allow to program the transfer time periods. It means that the stream of samples is divided to small chunks. Device acknowledges to application when the transfer of a chunk is complete.</p>
+</div>
+<div class="section" id="transfer-methods-in-unix-environments">
+<span id="doxid-pcm-1pcm-transfer"></span><h2>Transfer methods in UNIX environments</h2>
+<p>In the UNIX environment, data chunk acknowledges are received via standard I/O calls or event waiting routines (poll or select function). To accomplish this list, the asynchronous notification of acknowledges should be listed here. The ALSA implementation for these methods is described in the <a class="reference internal" href="#doxid-pcm-1alsa-transfers"><span class="std std-ref">ALSA transfers</span></a> section.</p>
+<div class="section" id="standard-i-o-transfers">
+<span id="doxid-pcm-1pcm-transfer-io"></span><h3>Standard I/O transfers</h3>
+<p>The standard I/O transfers are using the read (see ‘man 2 read’) and write (see ‘man 2 write’) C functions. There are two basic behaviours of these functions - blocked and non-blocked (see the O_NONBLOCK flag for the standard C open function - see ‘man 2 open’). In non-blocked behaviour, these I/O functions never stops, they return -EAGAIN error code, when no data can be transferred (the ring buffer is full in our case). In blocked behaviour, these I/O functions stop and wait until there is a room in the ring buffer (playback) or until there are a new samples (capture). The ALSA implementation can be found in the <a class="reference internal" href="#doxid-pcm-1alsa-pcm-rw"><span class="std std-ref">Read / Write transfer</span></a> section.</p>
+</div>
+<div class="section" id="event-waiting-routines">
+<span id="doxid-pcm-1pcm-transfer-event"></span><h3>Event waiting routines</h3>
+<p>The poll or select functions (see ‘man 2 poll’ or ‘man 2 select’ for further details) allows to receive requests/events from the device while an application is waiting on events from other sources (like keyboard, screen, network etc.), too. <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga742e8705f6992fd0e36efc868e574f01"><span class="std std-ref">snd_pcm_poll_descriptors</span></a> can be used to get file descriptors to poll or select on (note that wait direction might be different than expected - do not use only returned file descriptors, but handle events member as well - see <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga742e8705f6992fd0e36efc868e574f01"><span class="std std-ref">snd_pcm_poll_descriptors</span></a> function description for more details and <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga7e561f305702c6f52dab49b6c84f7df7"><span class="std std-ref">snd_pcm_poll_descriptors_revents</span></a> for events demangling). The implemented transfer routines can be found in the <a class="reference internal" href="#doxid-pcm-1alsa-transfers"><span class="std std-ref">ALSA transfers</span></a> section.</p>
+</div>
+<div class="section" id="asynchronous-notification">
+<span id="doxid-pcm-1pcm-transfer-async"></span><h3>Asynchronous notification</h3>
+<p>ALSA driver and library knows to handle the asynchronous notifications over the SIGIO signal. This signal allows to interrupt application and transfer data in the signal handler. For further details see the sigaction function (‘man 2 sigaction’). The section <a class="reference internal" href="#doxid-pcm-1pcm-async"><span class="std std-ref">Asynchronous mode</span></a> describes the ALSA API for this extension. The implemented transfer routines can be found in the <a class="reference internal" href="#doxid-pcm-1alsa-transfers"><span class="std std-ref">ALSA transfers</span></a> section.</p>
+</div>
+</div>
+<div class="section" id="blocked-and-non-blocked-open">
+<span id="doxid-pcm-1pcm-open-behaviour"></span><h2>Blocked and non-blocked open</h2>
+<p>The ALSA PCM API uses a different behaviour when the device is opened with blocked or non-blocked mode. The mode can be specified with <em>mode</em> argument in <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga8340c7dc0ac37f37afe5e7c21d6c528b"><span class="std std-ref">snd_pcm_open()</span></a> function. The blocked mode is the default (without <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga6bd90de1d1527b5804090dcce51079ad"><span class="std std-ref">SND_PCM_NONBLOCK</span></a> mode). In this mode, the behaviour is that if the resources have already used with another application, then it blocks the caller, until resources are free. The non-blocked behaviour (with <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga6bd90de1d1527b5804090dcce51079ad"><span class="std std-ref">SND_PCM_NONBLOCK</span></a>) doesn’t block the caller in any way and returns -EBUSY error when the resources are not available. Note that the mode also determines the behaviour of standard I/O calls, returning -EAGAIN when non-blocked mode is used and the ring buffer is full (playback) or empty (capture). The operation mode for I/O calls can be changed later with the <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga8d9ed4a62c17402de0389fd31fc7dc1f"><span class="std std-ref">snd_pcm_nonblock()</span></a> function.</p>
+</div>
+<div class="section" id="asynchronous-mode">
+<span id="doxid-pcm-1pcm-async"></span><h2>Asynchronous mode</h2>
+<p>There is also possibility to receive asynchronous notification after specified time periods. You may see the <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga9b22351abf6c85ced128e2088f6f6a5c"><span class="std std-ref">SND_PCM_ASYNC</span></a> mode for <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga8340c7dc0ac37f37afe5e7c21d6c528b"><span class="std std-ref">snd_pcm_open()</span></a> function and <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga5a0c0da6d0d35a3ac9f6a97567ac3b63"><span class="std std-ref">snd_async_add_pcm_handler()</span></a> function for further details.</p>
+</div>
+<div class="section" id="handshake-between-application-and-library">
+<span id="doxid-pcm-1pcm-handshake"></span><h2>Handshake between application and library</h2>
+<p>The ALSA PCM API design uses the states to determine the communication phase between application and library. The actual state can be determined using <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga87896f6f17020fc19835790369e7ce75"><span class="std std-ref">snd_pcm_state()</span></a> call. There are these states:</p>
+<p>The PCM device is in the open state. After the <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga8340c7dc0ac37f37afe5e7c21d6c528b"><span class="std std-ref">snd_pcm_open()</span></a> open call, the device is in this state. Also, when <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga1ca0dc120a484965e26cabf966502330"><span class="std std-ref">snd_pcm_hw_params()</span></a> call fails, then this state is entered to force application calling <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga1ca0dc120a484965e26cabf966502330"><span class="std std-ref">snd_pcm_hw_params()</span></a> function to set right communication parameters.</p>
+<p>The PCM device has accepted communication parameters and it is waiting for <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga788d05de75f2d536f8443cb0306754d0"><span class="std std-ref">snd_pcm_prepare()</span></a> call to prepare the hardware for selected operation (playback or capture).</p>
+<p>The PCM device is prepared for operation. Application can use <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga6bdb88b68a9d9e66015d770f600c6aea"><span class="std std-ref">snd_pcm_start()</span></a> call, write or read data to start the operation.</p>
+<p>The PCM device has been started and is running. It processes the samples. The stream can be stopped using the <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga7000ca6010a1a2739daddff8e2fbb440"><span class="std std-ref">snd_pcm_drop()</span></a> or <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga49afc5b8527f30c33fafa476533c9f86"><span class="std std-ref">snd_pcm_drain()</span></a> calls.</p>
+<p>The PCM device reached overrun (capture) or underrun (playback). You can use the -EPIPE return code from I/O functions (<a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gabc748a500743713eafa960c7d104ca6f"><span class="std std-ref">snd_pcm_writei()</span></a>, <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gae599772ce3d0aa6a70de143abcf145e7"><span class="std std-ref">snd_pcm_writen()</span></a>, <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga4c2c7bd26cf221268d59dc3bbeb9c048"><span class="std std-ref">snd_pcm_readi()</span></a>, <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gafea175455f1a405f633a43484ded3d8a"><span class="std std-ref">snd_pcm_readn()</span></a>) to determine this state without checking the actual state via <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga87896f6f17020fc19835790369e7ce75"><span class="std std-ref">snd_pcm_state()</span></a> call. It is recommended to use the helper function <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga2157aaeb6fc14da3f040d76591f9d3b1"><span class="std std-ref">snd_pcm_recover()</span></a> to recover from this state, but you can also use <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga788d05de75f2d536f8443cb0306754d0"><span class="std std-ref">snd_pcm_prepare()</span></a>, <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga7000ca6010a1a2739daddff8e2fbb440"><span class="std std-ref">snd_pcm_drop()</span></a> or <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga49afc5b8527f30c33fafa476533c9f86"><span class="std std-ref">snd_pcm_drain()</span></a> calls.</p>
+<p>The device is in this state when application using the capture mode called <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga49afc5b8527f30c33fafa476533c9f86"><span class="std std-ref">snd_pcm_drain()</span></a> function. Until all data are read from the internal ring buffer using I/O routines (<a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga4c2c7bd26cf221268d59dc3bbeb9c048"><span class="std std-ref">snd_pcm_readi()</span></a>, <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gafea175455f1a405f633a43484ded3d8a"><span class="std std-ref">snd_pcm_readn()</span></a>), then the device stays in this state.</p>
+<p>The device is in this state when application called the <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gad711b582c7066bd4fffa1d08a04316b5"><span class="std std-ref">snd_pcm_pause()</span></a> function until the pause is released. Not all hardware supports this feature. Application should check the capability with the <a class="reference internal" href="group_PCM_HW_Params.html#doxid-group-p-c-m-h-w-params-1gaad4ba98b2f66baa5360b9a85f064a3e9"><span class="std std-ref">snd_pcm_hw_params_can_pause()</span></a>.</p>
+<p>The device is in the suspend state provoked with the power management system. The stream can be resumed using <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga13083ce2209aab9ea73831610bc61ab1"><span class="std std-ref">snd_pcm_resume()</span></a> call, but not all hardware supports this feature. Application should check the capability with the <a class="reference internal" href="group_PCM_HW_Params.html#doxid-group-p-c-m-h-w-params-1ga6b79539a34e6f51972f4c32b3296585a"><span class="std std-ref">snd_pcm_hw_params_can_resume()</span></a>. In other case, the calls <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga788d05de75f2d536f8443cb0306754d0"><span class="std std-ref">snd_pcm_prepare()</span></a>, <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga7000ca6010a1a2739daddff8e2fbb440"><span class="std std-ref">snd_pcm_drop()</span></a>, <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga49afc5b8527f30c33fafa476533c9f86"><span class="std std-ref">snd_pcm_drain()</span></a> can be used to leave this state.</p>
+<p>The device is physicaly disconnected. It does not accept any I/O calls in this state.</p>
+</div>
+<div class="section" id="pcm-formats">
+<span id="doxid-pcm-1pcm-formats"></span><h2>PCM formats</h2>
+<p>The full list of formats present the <a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a> type. The 24-bit linear samples use 32-bit physical space, but the sample is stored in the lower three bytes. Some hardware does not support processing of full range, thus you may get the significant bits for linear samples via <a class="reference internal" href="group_PCM_HW_Params.html#doxid-group-p-c-m-h-w-params-1ga8bb1180b62a4225f0e094b95ac5d3674"><span class="std std-ref">snd_pcm_hw_params_get_sbits()</span></a> function. The example: ICE1712 chips support 32-bit sample processing, but low byte is ignored (playback) or zero (capture). The function <a class="reference internal" href="group_PCM_HW_Params.html#doxid-group-p-c-m-h-w-params-1ga8bb1180b62a4225f0e094b95ac5d3674"><span class="std std-ref">snd_pcm_hw_params_get_sbits()</span></a> returns 24 in this case.</p>
+</div>
+<div class="section" id="alsa-transfers">
+<span id="doxid-pcm-1alsa-transfers"></span><h2>ALSA transfers</h2>
+<p>There are two methods to transfer samples in application. The first method is the standard read / write one. The second method, uses the direct audio buffer to communicate with the device while ALSA library manages this space itself. You can find examples of all communication schemes for playback in <a class="reference internal" href="#doxid-pcm-1example-test-pcm"><span class="std std-ref">Sine-wave generator example</span></a>. To complete the list, we should note that <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gad4d53d58b996a7cd9a5cbf1710b90375"><span class="std std-ref">snd_pcm_wait()</span></a> function contains embedded poll waiting implementation.</p>
+<div class="section" id="read-write-transfer">
+<span id="doxid-pcm-1alsa-pcm-rw"></span><h3>Read / Write transfer</h3>
+<p>There are two versions of read / write routines. The first expects the interleaved samples at input (<a class="reference internal" href="enum_snd_pcm_access_t.html#doxid-group-p-c-m-1gga661221ba5e8f1d6eaf4ab8e2da57cc1aa72a970ed6e676ab0fd9f3c3d36737e0a"><span class="std std-ref">SND_PCM_ACCESS_RW_INTERLEAVED</span></a> access method), and the second one expects non-interleaved (samples in separated buffers - <a class="reference internal" href="enum_snd_pcm_access_t.html#doxid-group-p-c-m-1gga661221ba5e8f1d6eaf4ab8e2da57cc1aae7ab128d10c32667f396933190435071"><span class="std std-ref">SND_PCM_ACCESS_RW_NONINTERLEAVED</span></a> access method) at input. There are these functions for interleaved transfers: <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gabc748a500743713eafa960c7d104ca6f"><span class="std std-ref">snd_pcm_writei()</span></a> <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga4c2c7bd26cf221268d59dc3bbeb9c048"><span class="std std-ref">snd_pcm_readi()</span></a>. For non-interleaved transfers, there are these functions: <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gae599772ce3d0aa6a70de143abcf145e7"><span class="std std-ref">snd_pcm_writen()</span></a> and <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gafea175455f1a405f633a43484ded3d8a"><span class="std std-ref">snd_pcm_readn()</span></a>.</p>
+</div>
+<div class="section" id="direct-read-write-transfer-via-mmap-ed-areas">
+<span id="doxid-pcm-1alsa-mmap-rw"></span><h3>Direct Read / Write transfer (via mmap’ed areas)</h3>
+<p>Three kinds of organization of ring buffer memory areas exist in ALSA API. Access <a class="reference internal" href="enum_snd_pcm_access_t.html#doxid-group-p-c-m-1gga661221ba5e8f1d6eaf4ab8e2da57cc1aa90a5dea527c5ae9a53f1448beb2dee6f"><span class="std std-ref">SND_PCM_ACCESS_MMAP_INTERLEAVED</span></a> has interleaved samples. Access <a class="reference internal" href="enum_snd_pcm_access_t.html#doxid-group-p-c-m-1gga661221ba5e8f1d6eaf4ab8e2da57cc1aa7de225785e05dd1d538203c5ece9036e"><span class="std std-ref">SND_PCM_ACCESS_MMAP_NONINTERLEAVED</span></a> expects continous sample areas for one channel. Access <a class="reference internal" href="enum_snd_pcm_access_t.html#doxid-group-p-c-m-1gga661221ba5e8f1d6eaf4ab8e2da57cc1aa26a4f161364cb539df4de5eeb9949121"><span class="std std-ref">SND_PCM_ACCESS_MMAP_COMPLEX</span></a> does not fit to interleaved and non-interleaved ring buffer organization.</p>
+<p>There are two functions for this kind of transfer. Application can get an access to memory areas via <a class="reference internal" href="group_PCM_Direct.html#doxid-group-p-c-m-direct-1ga6d4acf42de554d4d1177fb035d484ea4"><span class="std std-ref">snd_pcm_mmap_begin()</span></a> function. This function returns the areas (single area is equal to a channel) containing the direct pointers to memory and sample position description in <a class="reference internal" href="struct_snd_pcm_channel_area_t.html#doxid-structsnd-pcm-channel-area-t"><span class="std std-ref">snd_pcm_channel_area_t</span></a> structure. After application transfers the data in the memory areas, then it must be acknowledged the end of transfer via <a class="reference internal" href="group_PCM_Direct.html#doxid-group-p-c-m-direct-1gac306bd13c305825aa39dd9180a3ad520"><span class="std std-ref">snd_pcm_mmap_commit()</span></a> function to allow the ALSA library update the pointers to ring buffer. This kind of communication is also called “zero-copy”, because the device does not require to copy the samples from application to another place in system memory.</p>
+<p>If you like to use the compatibility functions in mmap mode, there are read / write routines equaling to standard read / write transfers. Using these functions discards the benefits of direct access to memory region. See the <a class="reference internal" href="group_PCM_Direct.html#doxid-group-p-c-m-direct-1ga24b6c538c8d7ddd0776ee65f8fb909eb"><span class="std std-ref">snd_pcm_mmap_readi()</span></a>, <a class="reference internal" href="group_PCM_Direct.html#doxid-group-p-c-m-direct-1ga5a9ee8e1e764b12da6d54dfa195f7c52"><span class="std std-ref">snd_pcm_mmap_writei()</span></a>, <a class="reference internal" href="group_PCM_Direct.html#doxid-group-p-c-m-direct-1ga29ce9af60eafb67f0303418a176bf3ea"><span class="std std-ref">snd_pcm_mmap_readn()</span></a> and <a class="reference internal" href="group_PCM_Direct.html#doxid-group-p-c-m-direct-1ga092b1a7f387e9fc2977649bfd43b0958"><span class="std std-ref">snd_pcm_mmap_writen()</span></a> functions. These functions use <a class="reference internal" href="group_PCM_Helpers.html#doxid-group-p-c-m-helpers-1gad57f8921f52ea2ffd870cafb2d076f2c"><span class="std std-ref">snd_pcm_areas_copy()</span></a> internally.</p>
+</div>
+</div>
+<div class="section" id="error-codes">
+<span id="doxid-pcm-1pcm-errors"></span><h2>Error codes</h2>
+<p>This error means xrun (underrun for playback or overrun for capture). The underrun can happen when an application does not feed new samples in time to alsa-lib (due CPU usage). The overrun can happen when an application does not take new captured samples in time from alsa-lib.</p>
+<p>This error means that system has suspended drivers. The application should wait in loop when <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga13083ce2209aab9ea73831610bc61ab1"><span class="std std-ref">snd_pcm_resume()</span></a>!= -EAGAIN and then call <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga788d05de75f2d536f8443cb0306754d0"><span class="std std-ref">snd_pcm_prepare()</span></a> when <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga13083ce2209aab9ea73831610bc61ab1"><span class="std std-ref">snd_pcm_resume()</span></a> return an error code. If <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga13083ce2209aab9ea73831610bc61ab1"><span class="std std-ref">snd_pcm_resume()</span></a> does not fail (a zero value is returned), driver supports resume and the <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga788d05de75f2d536f8443cb0306754d0"><span class="std std-ref">snd_pcm_prepare()</span></a> call can be ommited.</p>
+<p>This error means that the device is in a bad state. It means that the handskahe between application and alsa-lib is corrupted.</p>
+<p>This error can happen when device is physically removed (for example some hotplug devices like USB or PCMCIA, CardBus or ExpressCard can be removed on the fly).</p>
+</div>
+<div class="section" id="managing-parameters">
+<span id="doxid-pcm-1pcm-params"></span><h2>Managing parameters</h2>
+<p>The ALSA PCM device uses two groups of PCM related parameters. The hardware parameters contains the stream description like format, rate, count of channels, ring buffer size etc. The software parameters contains the software (driver) related parameters. The communication behaviour can be controlled via these parameters, like automatic start, automatic stop, interrupting (chunk acknowledge) etc. The software parameters can be modified at any time (when valid hardware parameters are set). It includes the running state as well.</p>
+<div class="section" id="hardware-related-parameters">
+<span id="doxid-pcm-1pcm-hw-params"></span><h3>Hardware related parameters</h3>
+<p>The ALSA PCM devices use the parameter refining system for hardware parameters - <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga65c737127994f0a980edad744e36dc40"><span class="std std-ref">snd_pcm_hw_params_t</span></a>. It means, that application choose the full-range of configurations at first and then application sets single parameters until all parameters are elementary (definite).</p>
+<p>ALSA knows about five access modes. The first three can be used for direct communication. The access mode <a class="reference internal" href="enum_snd_pcm_access_t.html#doxid-group-p-c-m-1gga661221ba5e8f1d6eaf4ab8e2da57cc1aa90a5dea527c5ae9a53f1448beb2dee6f"><span class="std std-ref">SND_PCM_ACCESS_MMAP_INTERLEAVED</span></a> determines the direct memory area and interleaved sample organization. Interleaved organization means, that samples from channels are mixed together. The access mode <a class="reference internal" href="enum_snd_pcm_access_t.html#doxid-group-p-c-m-1gga661221ba5e8f1d6eaf4ab8e2da57cc1aa7de225785e05dd1d538203c5ece9036e"><span class="std std-ref">SND_PCM_ACCESS_MMAP_NONINTERLEAVED</span></a> determines the direct memory area and non-interleaved sample organization. Each channel has a separate buffer in the case. The complex direct memory organization represents the <a class="reference internal" href="enum_snd_pcm_access_t.html#doxid-group-p-c-m-1gga661221ba5e8f1d6eaf4ab8e2da57cc1aa26a4f161364cb539df4de5eeb9949121"><span class="std std-ref">SND_PCM_ACCESS_MMAP_COMPLEX</span></a> access mode. The sample organization does not fit the interleaved or non-interleaved access modes in the case. The last two access modes describes the read / write access methods. The <a class="reference internal" href="enum_snd_pcm_access_t.html#doxid-group-p-c-m-1gga661221ba5e8f1d6eaf4ab8e2da57cc1aa72a970ed6e676ab0fd9f3c3d36737e0a"><span class="std std-ref">SND_PCM_ACCESS_RW_INTERLEAVED</span></a> access represents the read / write interleaved access and the <a class="reference internal" href="enum_snd_pcm_access_t.html#doxid-group-p-c-m-1gga661221ba5e8f1d6eaf4ab8e2da57cc1aae7ab128d10c32667f396933190435071"><span class="std std-ref">SND_PCM_ACCESS_RW_NONINTERLEAVED</span></a> represents the non-interleaved access.</p>
+<p>The full list of formats is available in <a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a> enumeration.</p>
+</div>
+<div class="section" id="software-related-parameters">
+<span id="doxid-pcm-1pcm-sw-params"></span><h3>Software related parameters</h3>
+<p>These parameters - <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga7e082d9ea701709270b0674a0be23b09"><span class="std std-ref">snd_pcm_sw_params_t</span></a> can be modified at any time including the running state.</p>
+<p>This parameter controls the wakeup point. If the count of available samples is equal or greater than this value, then application will be activated.</p>
+<p>The timestamp mode specifies, if timestamps are activated. Currently, only <a class="reference internal" href="enum_snd_pcm_tstamp_t.html#doxid-group-p-c-m-1gga695a9755880cf886c13d07938f92ea77af49a1c378583854b22ed6f6490f3b1ee"><span class="std std-ref">SND_PCM_TSTAMP_NONE</span></a> and <a class="reference internal" href="enum_snd_pcm_tstamp_t.html#doxid-group-p-c-m-1gga695a9755880cf886c13d07938f92ea77ab09196ab367636c4d365b5b6bcd391d8"><span class="std std-ref">SND_PCM_TSTAMP_MMAP</span></a> modes are known. The mmap mode means that timestamp is taken on every period time boundary. Corresponding position in the ring buffer assigned to timestamp can be obtained using <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga3946abd34178b3de60fd5329b71c189b"><span class="std std-ref">snd_pcm_htimestamp()</span></a> function.</p>
+<p>The read / write transfers can be aligned to this sample count. The modulo is ignored by device. Usually, this value is set to one (no align).</p>
+<p>The start threshold parameter is used to determine the start point in stream. For playback, if samples in ring buffer is equal or greater than the start threshold parameters and the stream is not running, the stream will be started automatically from the device. For capture, if the application wants to read count of samples equal or greater then the stream will be started. If you want to use explicit start (<a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga6bdb88b68a9d9e66015d770f600c6aea"><span class="std std-ref">snd_pcm_start</span></a>), you can set this value greater than ring buffer size (in samples), but use the constant MAXINT is not a bad idea.</p>
+<p>Similarly, the stop threshold parameter is used to automatically stop the running stream, when the available samples crosses this boundary. It means, for playback, the empty samples in ring buffer and for capture, the filled (used) samples in ring buffer.</p>
+<p>The silence threshold specifies count of samples filled with silence ahead of the current application pointer for playback. It is usable for applications when an overrun is possible (like tasks depending on network I/O etc.). If application wants to manage the ahead samples itself, the <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga6c66040dbe01797379436fdf36268fec"><span class="std std-ref">snd_pcm_rewind()</span></a> function allows to forget the last samples in the stream.</p>
+</div>
+</div>
+<div class="section" id="obtaining-stream-status">
+<span id="doxid-pcm-1pcm-status"></span><h2>Obtaining stream status</h2>
+<p>The stream status is stored in <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga902b87281c46910b469d5f7aaafc1890"><span class="std std-ref">snd_pcm_status_t</span></a> structure. These parameters can be obtained: the current stream state - <a class="reference internal" href="group_PCM_Status.html#doxid-group-p-c-m-status-1gabaae998f0d374c50195b3206d1e43659"><span class="std std-ref">snd_pcm_status_get_state()</span></a>, timestamp of trigger - <a class="reference internal" href="group_PCM_Status.html#doxid-group-p-c-m-status-1ga5eaeff98814e96c2ffd5f04c95b22c8d"><span class="std std-ref">snd_pcm_status_get_trigger_tstamp()</span></a>, timestamp of last pointer update <a class="reference internal" href="group_PCM_Status.html#doxid-group-p-c-m-status-1gaea54e0a110afa01dd42071a1ca43902e"><span class="std std-ref">snd_pcm_status_get_tstamp()</span></a>, delay in samples - <a class="reference internal" href="group_PCM_Status.html#doxid-group-p-c-m-status-1ga1fdce3985e64f66385a5805da1110f18"><span class="std std-ref">snd_pcm_status_get_delay()</span></a>, available count in samples - <a class="reference internal" href="group_PCM_Status.html#doxid-group-p-c-m-status-1ga91c110525060b925ad4f0c21c205b757"><span class="std std-ref">snd_pcm_status_get_avail()</span></a>, maximum available samples - <a class="reference internal" href="group_PCM_Status.html#doxid-group-p-c-m-status-1gac58d13e4d03c9420c57428ddffd94964"><span class="std std-ref">snd_pcm_status_get_avail_max()</span></a>, ADC over-range count in samples - <a class="reference internal" href="group_PCM_Status.html#doxid-group-p-c-m-status-1ga3f4bfd0a0327529abaa621b248b6b1aa"><span class="std std-ref">snd_pcm_status_get_overrange()</span></a>. The last two parameters - avail_max and overrange are reset to zero after the status call.</p>
+<div class="section" id="obtaining-stream-state-fast-and-update-r-w-pointer">
+<span id="doxid-pcm-1pcm-status-fast"></span><h3>Obtaining stream state fast and update r/w pointer</h3>
+<p>The function <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga8bb836bd0c414b59789d51a5f5379c08"><span class="std std-ref">snd_pcm_avail_update()</span></a> updates the current available count of samples for writing (playback) or filled samples for reading (capture). This call is mandatory for updating actual r/w pointer. Using standalone, it is a light method to obtain current stream position, because it does not require the user &lt;-&gt; kernel context switch, but the value is less accurate, because ring buffer pointers are updated in kernel drivers only when an interrupt occurs. If you want to get accurate stream state, use functions <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga577b4d51e08d94930a05bbe73291ed2a"><span class="std std-ref">snd_pcm_avail()</span></a>, <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga012e8b999070e72ab23514f25e7d6482"><span class="std std-ref">snd_pcm_delay()</span></a> or <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga170bc44da2607b5583cff5ab5a985d98"><span class="std std-ref">snd_pcm_avail_delay()</span></a>.</p>
+<p>The function <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga577b4d51e08d94930a05bbe73291ed2a"><span class="std std-ref">snd_pcm_avail()</span></a> reads the current hardware pointer in the ring buffer from hardware and calls <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga8bb836bd0c414b59789d51a5f5379c08"><span class="std std-ref">snd_pcm_avail_update()</span></a> then.</p>
+<p>The function <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga012e8b999070e72ab23514f25e7d6482"><span class="std std-ref">snd_pcm_delay()</span></a> returns the delay in samples. For playback, it means count of samples in the ring buffer before the next sample will be sent to DAC. For capture, it means count of samples in the ring buffer before the next sample will be captured from ADC. It works only when the stream is in the running or draining (playback only) state. Note that this function does not update the current r/w pointer for applications, so the function <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga8bb836bd0c414b59789d51a5f5379c08"><span class="std std-ref">snd_pcm_avail_update()</span></a> must be called afterwards before any read/write begin+commit operations.</p>
+<p>The function <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga170bc44da2607b5583cff5ab5a985d98"><span class="std std-ref">snd_pcm_avail_delay()</span></a> combines <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga577b4d51e08d94930a05bbe73291ed2a"><span class="std std-ref">snd_pcm_avail()</span></a> and <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga012e8b999070e72ab23514f25e7d6482"><span class="std std-ref">snd_pcm_delay()</span></a> and returns both values in sync.</p>
+</div>
+</div>
+<div class="section" id="managing-the-stream-state">
+<span id="doxid-pcm-1pcm-action"></span><h2>Managing the stream state</h2>
+<p>The following functions directly and indirectly affect the stream state:</p>
+<p>The <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga1ca0dc120a484965e26cabf966502330"><span class="std std-ref">snd_pcm_hw_params()</span></a> function brings the stream state to <a class="reference internal" href="enum_snd_pcm_state_t.html#doxid-group-p-c-m-1gga61ac499cb3701ce536d4d83725908860a58d9a0501aa1b2bd2607e1084c335672"><span class="std std-ref">SND_PCM_STATE_SETUP</span></a> if successfully finishes, otherwise the state <a class="reference internal" href="enum_snd_pcm_state_t.html#doxid-group-p-c-m-1gga61ac499cb3701ce536d4d83725908860a56cf8033b50561b57437232e243f3007"><span class="std std-ref">SND_PCM_STATE_OPEN</span></a> is entered. When it is brought to SETUP state, this function automatically calls <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga788d05de75f2d536f8443cb0306754d0"><span class="std std-ref">snd_pcm_prepare()</span></a> function to bring to the PREPARED state as below.</p>
+<p>The <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga788d05de75f2d536f8443cb0306754d0"><span class="std std-ref">snd_pcm_prepare()</span></a> function enters from <a class="reference internal" href="enum_snd_pcm_state_t.html#doxid-group-p-c-m-1gga61ac499cb3701ce536d4d83725908860a58d9a0501aa1b2bd2607e1084c335672"><span class="std std-ref">SND_PCM_STATE_SETUP</span></a> to the <a class="reference internal" href="enum_snd_pcm_state_t.html#doxid-group-p-c-m-1gga61ac499cb3701ce536d4d83725908860a3eb4a3b75c7d2adb22f1829f3f738b27"><span class="std std-ref">SND_PCM_STATE_PREPARED</span></a> after a successful finish.</p>
+<p>The <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga6bdb88b68a9d9e66015d770f600c6aea"><span class="std std-ref">snd_pcm_start()</span></a> function enters the <a class="reference internal" href="enum_snd_pcm_state_t.html#doxid-group-p-c-m-1gga61ac499cb3701ce536d4d83725908860a86f6fbc796881f19fde0e1957f878147"><span class="std std-ref">SND_PCM_STATE_RUNNING</span></a> after a successful finish.</p>
+<p>The <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga7000ca6010a1a2739daddff8e2fbb440"><span class="std std-ref">snd_pcm_drop()</span></a> function enters the <a class="reference internal" href="enum_snd_pcm_state_t.html#doxid-group-p-c-m-1gga61ac499cb3701ce536d4d83725908860a58d9a0501aa1b2bd2607e1084c335672"><span class="std std-ref">SND_PCM_STATE_SETUP</span></a> state.</p>
+<p>The <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga49afc5b8527f30c33fafa476533c9f86"><span class="std std-ref">snd_pcm_drain()</span></a> function enters the <a class="reference internal" href="enum_snd_pcm_state_t.html#doxid-group-p-c-m-1gga61ac499cb3701ce536d4d83725908860a86f88c2a4c8eedb5c91f3b6cb4879cfe"><span class="std std-ref">SND_PCM_STATE_DRAINING</span></a>, if the capture device has some samples in the ring buffer otherwise <a class="reference internal" href="enum_snd_pcm_state_t.html#doxid-group-p-c-m-1gga61ac499cb3701ce536d4d83725908860a58d9a0501aa1b2bd2607e1084c335672"><span class="std std-ref">SND_PCM_STATE_SETUP</span></a> state is entered.</p>
+<p>The <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gad711b582c7066bd4fffa1d08a04316b5"><span class="std std-ref">snd_pcm_pause()</span></a> function enters the <a class="reference internal" href="enum_snd_pcm_state_t.html#doxid-group-p-c-m-1gga61ac499cb3701ce536d4d83725908860a9fa0c5b43e5c924f87b50e22878a8952"><span class="std std-ref">SND_PCM_STATE_PAUSED</span></a> or <a class="reference internal" href="enum_snd_pcm_state_t.html#doxid-group-p-c-m-1gga61ac499cb3701ce536d4d83725908860a86f6fbc796881f19fde0e1957f878147"><span class="std std-ref">SND_PCM_STATE_RUNNING</span></a>.</p>
+<p>The <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gabc748a500743713eafa960c7d104ca6f"><span class="std std-ref">snd_pcm_writei()</span></a> and <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gae599772ce3d0aa6a70de143abcf145e7"><span class="std std-ref">snd_pcm_writen()</span></a> functions can conditionally start the stream - <a class="reference internal" href="enum_snd_pcm_state_t.html#doxid-group-p-c-m-1gga61ac499cb3701ce536d4d83725908860a86f6fbc796881f19fde0e1957f878147"><span class="std std-ref">SND_PCM_STATE_RUNNING</span></a>. They depend on the start threshold software parameter.</p>
+<p>The <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga4c2c7bd26cf221268d59dc3bbeb9c048"><span class="std std-ref">snd_pcm_readi()</span></a> and <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gafea175455f1a405f633a43484ded3d8a"><span class="std std-ref">snd_pcm_readn()</span></a> functions can conditionally start the stream - <a class="reference internal" href="enum_snd_pcm_state_t.html#doxid-group-p-c-m-1gga61ac499cb3701ce536d4d83725908860a86f6fbc796881f19fde0e1957f878147"><span class="std std-ref">SND_PCM_STATE_RUNNING</span></a>. They depend on the start threshold software parameter.</p>
+</div>
+<div class="section" id="streams-synchronization">
+<span id="doxid-pcm-1pcm-sync"></span><h2>Streams synchronization</h2>
+<p>There are two functions allowing link multiple streams together. In the case, the linking means that all operations are synchronized. Because the drivers cannot guarantee the synchronization (sample resolution) on hardware lacking this feature, the <a class="reference internal" href="group_PCM_Info.html#doxid-group-p-c-m-info-1ga4a46693c8a81912de84f814c3eecd06e"><span class="std std-ref">snd_pcm_info_get_sync()</span></a> function returns synchronization ID - <a class="reference internal" href="union_snd_pcm_sync_id_t.html#doxid-unionsnd-pcm-sync-id-t"><span class="std std-ref">snd_pcm_sync_id_t</span></a>, which is equal for hardware synchronized streams. When the <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gac6c33091b049985baa6466e8fe93917e"><span class="std std-ref">snd_pcm_link()</span></a> function is called, all operations managing the stream state for these two streams are joined. The opposite function is <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga0d3af5e30593dae857b4308aab5035cd"><span class="std std-ref">snd_pcm_unlink()</span></a>.</p>
+</div>
+<div class="section" id="thread-safety">
+<span id="doxid-pcm-1pcm-thread-safety"></span><h2>Thread-safety</h2>
+<p>When the library is configured with the proper option, some PCM functions (e.g. <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga8bb836bd0c414b59789d51a5f5379c08"><span class="std std-ref">snd_pcm_avail_update()</span></a>) are thread-safe and can be called concurrently from multiple threads. Meanwhile, some functions (e.g. <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga1ca0dc120a484965e26cabf966502330"><span class="std std-ref">snd_pcm_hw_params()</span></a>) aren’t thread-safe, and application needs to call them carefully when they are called from multiple threads. In general, all the functions that are often called during streaming are covered as thread-safe.</p>
+<p>This thread-safe behavior can be disabled also by passing 0 to the environment variable LIBASOUND_THREAD_SAFE, e.g.</p>
+<pre class="highlight literal-block">
+<span></span><span class="n">LIBASOUND_THREAD_SAFE</span><span class="o">=</span><span class="mi">0</span> <span class="n">aplay</span> <span class="n">foo</span><span class="p">.</span><span class="n">wav</span>
+</pre>
+<p>for making the debugging easier.</p>
+</div>
+<div class="section" id="pcm-naming-conventions">
+<span id="doxid-pcm-1pcm-dev-names"></span><h2>PCM naming conventions</h2>
+<p>The ALSA library uses a generic string representation for names of devices. The devices might be virtual, physical or a mix of both. The generic string is passed to <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga8340c7dc0ac37f37afe5e7c21d6c528b"><span class="std std-ref">snd_pcm_open()</span></a> or <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga88164d313d8ff9dc33c94815869cb677"><span class="std std-ref">snd_pcm_open_lconf()</span></a>. It contains two parts: device name and arguments. Devices and arguments are described in configuration files. The usual place for default definitions is at /usr/share/alsa/alsa.conf. For detailed descriptions about integrated PCM plugins look to <a class="reference internal" href="page_pcm_plugins.html#doxid-pcm-plugins"><span class="std std-ref">PCM (digital audio) plugins</span></a>.</p>
+<div class="section" id="default-device">
+<span id="doxid-pcm-1pcm-dev-names-default"></span><h3>Default device</h3>
+<p>The default device is equal to plug plugin with hw plugin as slave. The defaults are used:</p>
+<pre class="highlight literal-block">
+<span></span><span class="n">defaults</span><span class="p">.</span><span class="n">pcm</span><span class="p">.</span><span class="n">card</span> <span class="mi">0</span>
+<span class="n">defaults</span><span class="p">.</span><span class="n">pcm</span><span class="p">.</span><span class="n">device</span> <span class="mi">0</span>
+<span class="n">defaults</span><span class="p">.</span><span class="n">pcm</span><span class="p">.</span><span class="n">subdevice</span> <span class="o">-</span><span class="mi">1</span>
+</pre>
+<p>These defaults can be freely overwritten in local configuration files.</p>
+<p>Example:</p>
+<pre class="highlight literal-block">
+<span></span><span class="k">default</span>
+</pre>
+</div>
+<div class="section" id="hw-device">
+<span id="doxid-pcm-1pcm-dev-names-hw"></span><h3>HW device</h3>
+<p>The hw device description uses the hw plugin. The three arguments (in order: CARD,DEV,SUBDEV) specify card number or identifier, device number and subdevice number (-1 means any).</p>
+<p>Example:</p>
+<pre class="highlight literal-block">
+<span></span><span class="n">hw</span>
+<span class="nl">hw</span><span class="p">:</span><span class="mi">0</span>
+<span class="nl">hw</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span>
+<span class="nl">hw</span><span class="p">:</span><span class="n">supersonic</span><span class="p">,</span><span class="mi">1</span>
+<span class="nl">hw</span><span class="p">:</span><span class="n">soundwave</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span>
+<span class="nl">hw</span><span class="p">:</span><span class="n">DEV</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">CARD</span><span class="o">=</span><span class="n">soundwave</span><span class="p">,</span><span class="n">SUBDEV</span><span class="o">=</span><span class="mi">2</span>
+</pre>
+</div>
+<div class="section" id="plug-hw-device">
+<span id="doxid-pcm-1pcm-dev-names-plughw"></span><h3>Plug-&gt;HW device</h3>
+<p>The plughw device description uses the plug plugin and hw plugin as slave. The arguments are same as for hw device.</p>
+<p>Example:</p>
+<pre class="highlight literal-block">
+<span></span><span class="n">plughw</span>
+<span class="nl">plughw</span><span class="p">:</span><span class="mi">0</span>
+<span class="nl">plughw</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span>
+<span class="nl">plughw</span><span class="p">:</span><span class="n">supersonic</span><span class="p">,</span><span class="mi">1</span>
+<span class="nl">plughw</span><span class="p">:</span><span class="n">soundwave</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span>
+<span class="nl">plughw</span><span class="p">:</span><span class="n">DEV</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">CARD</span><span class="o">=</span><span class="n">soundwave</span><span class="p">,</span><span class="n">SUBDEV</span><span class="o">=</span><span class="mi">2</span>
+</pre>
+</div>
+<div class="section" id="plug-device">
+<span id="doxid-pcm-1pcm-dev-names-plug"></span><h3>Plug device</h3>
+<p>The plug device uses the plug plugin. The one SLAVE argument specifies the slave plugin.</p>
+<p>Example:</p>
+<pre class="highlight literal-block">
+<span></span><span class="nl">plug</span><span class="p">:</span><span class="n">mypcmdef</span>
+<span class="nl">plug</span><span class="p">:</span><span class="n">hw</span>
+<span class="nl">plug</span><span class="p">:</span><span class="sc">&#39;hw:0,0&#39;</span>
+<span class="nl">plug</span><span class="p">:</span><span class="n">SLAVE</span><span class="o">=</span><span class="n">hw</span>
+</pre>
+</div>
+<div class="section" id="shared-memory-device">
+<span id="doxid-pcm-1pcm-dev-names-shm"></span><h3>Shared memory device</h3>
+<p>The shm device uses the shm plugin. The two arguments (in order: SOCKET,PCM) specify UNIX socket name (for example /tmp/alsa.socket) for server communication and server’s PCM name.</p>
+<p>Example:</p>
+<pre class="highlight literal-block">
+<span></span><span class="nl">shm</span><span class="p">:</span><span class="sc">&#39;/tmp/alsa.sock&#39;</span><span class="p">,</span><span class="k">default</span>
+<span class="nl">shm</span><span class="p">:</span><span class="n">SOCKET</span><span class="o">=</span><span class="sc">&#39;/tmp/alsa.sock&#39;</span><span class="p">,</span><span class="n">PCM</span><span class="o">=</span><span class="k">default</span>
+</pre>
+</div>
+<div class="section" id="tee-device">
+<span id="doxid-pcm-1pcm-dev-names-tee"></span><h3>Tee device</h3>
+<p>The tee device stores contents of a stream to given file plus transfers it to given slave plugin. The three arguments (in order: SLAVE,FILE,FORMAT) specify slave plugin, filename and file format.</p>
+<p>Example:</p>
+<pre class="highlight literal-block">
+<span></span><span class="nl">tee</span><span class="p">:</span><span class="n">hw</span><span class="p">,</span><span class="sc">&#39;/tmp/out.raw&#39;</span><span class="p">,</span><span class="n">raw</span>
+</pre>
+</div>
+<div class="section" id="file-device">
+<span id="doxid-pcm-1pcm-dev-names-file"></span><h3>File device</h3>
+<p>The file device is file plugin with null plugin as slave. The arguments (in order: FILE,FORMAT) specify filename and file format.</p>
+<p>Example:</p>
+<pre class="highlight literal-block">
+<span></span><span class="nl">file</span><span class="p">:</span><span class="sc">&#39;/tmp/out.raw&#39;</span><span class="p">,</span><span class="n">raw</span>
+</pre>
+</div>
+<div class="section" id="null-device">
+<span id="doxid-pcm-1pcm-dev-names-null"></span><h3>Null device</h3>
+<p>The null device is null plugin. This device has not any arguments.</p>
+</div>
+</div>
+<div class="section" id="examples">
+<span id="doxid-pcm-1pcm-examples"></span><h2>Examples</h2>
+<p>The full featured examples with cross-links can be found in Examples section (see top of page):</p>
+<p><span class="target" id="doxid-pcm-1example-test-pcm"></span> alsa-lib/test/pcm.c example shows various transfer methods for the playback direction.</p>
+<p>alsa-lib/test/pcm_min.c example shows the minimal code to produce a sound.</p>
+<p>alsa-lib/test/latency.c example shows the measuring of minimal latency between capture and playback devices.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="page_pcm_plugins.html" title="PCM (digital audio) plugins"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="page_mixer.html" title="Mixer interface"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ALSA Library Documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 1998-2017, ALSA Library Maintainers.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    </div>
+  </body>
+</html>

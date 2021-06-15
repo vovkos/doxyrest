@@ -1,0 +1,324 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Chapter 6: The SCP subsystem &#8212; LibSSH Documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/target-highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Chapter 7: Forwarding connections (tunnel)" href="page_libssh_tutor_forwarding.html" />
+    <link rel="prev" title="Chapter 5: The SFTP subsystem" href="page_libssh_tutor_sftp.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="page_libssh_tutor_forwarding.html" title="Chapter 7: Forwarding connections (tunnel)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="page_libssh_tutor_sftp.html" title="Chapter 5: The SFTP subsystem"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LibSSH Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="page_libssh_tutorial.html" accesskey="U">The Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Chapter 6: The SCP subsystem</a><ul>
+<li><a class="reference internal" href="#the-scp-subsystem">The SCP subsystem</a><ul>
+<li><a class="reference internal" href="#opening-and-closing-a-scp-session">Opening and closing a SCP session</a></li>
+<li><a class="reference internal" href="#creating-files-and-directories">Creating files and directories</a></li>
+<li><a class="reference internal" href="#copying-full-directory-trees-to-the-remote-server">Copying full directory trees to the remote server</a></li>
+<li><a class="reference internal" href="#reading-files-and-directories">Reading files and directories</a></li>
+<li><a class="reference internal" href="#receiving-full-directory-trees-from-the-remote-server">Receiving full directory trees from the remote server</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="page_libssh_tutor_sftp.html"
+                        title="previous chapter">Chapter 5: The SFTP subsystem</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="page_libssh_tutor_forwarding.html"
+                        title="next chapter">Chapter 7: Forwarding connections (tunnel)</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="chapter-6-the-scp-subsystem">
+<span id="doxid-libssh-tutor-scp"></span><span id="index-0"></span><h1>Chapter 6: The SCP subsystem</h1>
+<div class="section" id="the-scp-subsystem">
+<span id="doxid-libssh-tutor-scp-1scp-subsystem"></span><h2>The SCP subsystem</h2>
+<p>The SCP subsystem has far less functionnality than the SFTP subsystem. However, if you only need to copy files from and to the remote system, it does its job.</p>
+<div class="section" id="opening-and-closing-a-scp-session">
+<span id="doxid-libssh-tutor-scp-1scp-session"></span><h3>Opening and closing a SCP session</h3>
+<p>Like in the SFTP subsystem, you don’t handle the SSH channels directly. Instead, you open a “SCP session”.</p>
+<p>When you open your SCP session, you have to choose between read or write mode. You can’t do both in the same session. So you specify either SSH_SCP_READ or SSH_SCP_WRITE as the second parameter of function <a class="reference internal" href="group_libssh_scp.html#doxid-group-libssh-scp-1ga9fcd39a2bb6438e39cf19ff859dc2f2e"><span class="std std-ref">ssh_scp_new()</span></a>.</p>
+<p>Another important mode flag for opening your SCP session is SSH_SCP_RECURSIVE. When you use SSH_SCP_RECURSIVE, you declare that you are willing to emulate the behaviour of “scp -r” command in your program, no matter it is for reading or for writing.</p>
+<p>Once your session is created, you initialize it with <a class="reference internal" href="group_libssh_scp.html#doxid-group-libssh-scp-1ga1db56dcb9dee01dd0b679b3b11151110"><span class="std std-ref">ssh_scp_init()</span></a>. When you have finished transferring files, you terminate the SCP connection with <a class="reference internal" href="group_libssh_scp.html#doxid-group-libssh-scp-1ga14d31059dcf6fb2325fb960da8e4474e"><span class="std std-ref">ssh_scp_close()</span></a>. Finally, you can dispose the SCP connection with <a class="reference internal" href="group_libssh_scp.html#doxid-group-libssh-scp-1gac29000cdb07c74d54251fbd838c0c661"><span class="std std-ref">ssh_scp_free()</span></a>.</p>
+<p>The example below does the maintenance work to open a SCP connection for writing in recursive mode:</p>
+<pre class="highlight literal-block">
+<span></span><span class="kt">int</span> <span class="nf">scp_write</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">rc</span><span class="p">;</span>
+
+  <span class="n">scp</span> <span class="o">=</span> <span class="n">ssh_scp_new</span>
+    <span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">SSH_SCP_WRITE</span> <span class="o">|</span> <span class="n">SSH_SCP_RECURSIVE</span><span class="p">,</span> <span class="s">&quot;.&quot;</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">scp</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Error allocating scp session: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+    <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_scp_init</span><span class="p">(</span><span class="n">scp</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_OK</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Error initializing scp session: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+    <span class="n">ssh_scp_free</span><span class="p">(</span><span class="n">scp</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="p">...</span>
+
+  <span class="n">ssh_scp_close</span><span class="p">(</span><span class="n">scp</span><span class="p">);</span>
+  <span class="n">ssh_scp_free</span><span class="p">(</span><span class="n">scp</span><span class="p">);</span>
+  <span class="k">return</span> <span class="n">SSH_OK</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+<p>The example below shows how to open a connection to read a single file:</p>
+<pre class="highlight literal-block">
+<span></span><span class="kt">int</span> <span class="nf">scp_read</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">rc</span><span class="p">;</span>
+
+  <span class="n">scp</span> <span class="o">=</span> <span class="n">ssh_scp_new</span>
+    <span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">SSH_SCP_READ</span><span class="p">,</span> <span class="s">&quot;helloworld/helloworld.txt&quot;</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">scp</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Error allocating scp session: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+    <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_scp_init</span><span class="p">(</span><span class="n">scp</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_OK</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Error initializing scp session: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+    <span class="n">ssh_scp_free</span><span class="p">(</span><span class="n">scp</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="p">...</span>
+
+  <span class="n">ssh_scp_close</span><span class="p">(</span><span class="n">scp</span><span class="p">);</span>
+  <span class="n">ssh_scp_free</span><span class="p">(</span><span class="n">scp</span><span class="p">);</span>
+  <span class="k">return</span> <span class="n">SSH_OK</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+</div>
+<div class="section" id="creating-files-and-directories">
+<span id="doxid-libssh-tutor-scp-1scp-write"></span><h3>Creating files and directories</h3>
+<p>You create directories with <a class="reference internal" href="group_libssh_scp.html#doxid-group-libssh-scp-1gaa584f03d4e3d582ac10a3a19818ec56d"><span class="std std-ref">ssh_scp_push_directory()</span></a>. In recursive mode, you are placed in this directory once it is created. If the directory already exists and if you are in recursive mode, you simply enter that directory.</p>
+<p>Creating files is done in two steps. First, you prepare the writing with <a class="reference internal" href="group_libssh_scp.html#doxid-group-libssh-scp-1ga544f4b9c525071910110ada94148adc6"><span class="std std-ref">ssh_scp_push_file()</span></a>. Then, you write the data with <a class="reference internal" href="group_libssh_scp.html#doxid-group-libssh-scp-1ga11f48e2cf62bcec20d9232ed3ca41752"><span class="std std-ref">ssh_scp_write()</span></a>. The length of the data to write must be identical between both function calls. There’s no need to “open” nor “close” the file, this is done automatically on the remote end. If the file already exists, it is overwritten and truncated.</p>
+<p>The following example creates a new directory named “helloworld/”, then creates a file named “helloworld.txt” in that directory:</p>
+<pre class="highlight literal-block">
+<span></span><span class="kt">int</span> <span class="nf">scp_helloworld</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span> <span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">helloworld</span> <span class="o">=</span> <span class="s">&quot;Hello, world!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">helloworld</span><span class="p">);</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_scp_push_directory</span><span class="p">(</span><span class="n">scp</span><span class="p">,</span> <span class="s">&quot;helloworld&quot;</span><span class="p">,</span> <span class="n">S_IRWXU</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_OK</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Can&#39;t create remote directory: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_scp_push_file</span>
+    <span class="p">(</span><span class="n">scp</span><span class="p">,</span> <span class="s">&quot;helloworld.txt&quot;</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">S_IRUSR</span> <span class="o">|</span>  <span class="n">S_IWUSR</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_OK</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Can&#39;t open remote file: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_scp_write</span><span class="p">(</span><span class="n">scp</span><span class="p">,</span> <span class="n">helloworld</span><span class="p">,</span> <span class="n">length</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_OK</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Can&#39;t write to remote file: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="n">SSH_OK</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+</div>
+<div class="section" id="copying-full-directory-trees-to-the-remote-server">
+<span id="doxid-libssh-tutor-scp-1scp-recursive-write"></span><h3>Copying full directory trees to the remote server</h3>
+<p>Let’s say you want to copy the following tree of files to the remote site:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>               +-- file1
+       +-- B --+
+       |       +-- file2
+-- A --+
+       |       +-- file3
+       +-- C --+
+               +-- file4
+</pre></div>
+</div>
+<p>You would do it that way:</p>
+<ul class="simple">
+<li>open the session in recursive mode</li>
+<li>enter directory A</li>
+<li>enter its subdirectory B</li>
+<li>create file1 in B</li>
+<li>create file2 in B</li>
+<li>leave directory B</li>
+<li>enter subdirectory C</li>
+<li>create file3 in C</li>
+<li>create file4 in C</li>
+<li>leave directory C</li>
+<li>leave directory A</li>
+</ul>
+<p>To leave a directory, call <a class="reference internal" href="group_libssh_scp.html#doxid-group-libssh-scp-1ga2ca698c1e49612c083d9f8a72df52188"><span class="std std-ref">ssh_scp_leave_directory()</span></a>.</p>
+</div>
+<div class="section" id="reading-files-and-directories">
+<span id="doxid-libssh-tutor-scp-1scp-read"></span><h3>Reading files and directories</h3>
+<p>To receive files, you pull requests from the other side with <a class="reference internal" href="group_libssh_scp.html#doxid-group-libssh-scp-1gaba59cd8cc77d219cac93f865445c6e47"><span class="std std-ref">ssh_scp_pull_request()</span></a>. If this function returns SSH_SCP_REQUEST_NEWFILE, then you must get ready for the reception. You can get the size of the data to receive with <a class="reference internal" href="group_libssh_scp.html#doxid-group-libssh-scp-1ga8b6f736a5b5af73cf59c7825d7e61966"><span class="std std-ref">ssh_scp_request_get_size()</span></a> and allocate a buffer accordingly. When you are ready, you accept the request with <a class="reference internal" href="group_libssh_scp.html#doxid-group-libssh-scp-1gad3bb38b15f02597cc1e155c526a51e51"><span class="std std-ref">ssh_scp_accept_request()</span></a>, then read the data with <a class="reference internal" href="group_libssh_scp.html#doxid-group-libssh-scp-1ga10bf627407959b51a7c39b37e8d46460"><span class="std std-ref">ssh_scp_read()</span></a>.</p>
+<p>The following example receives a single file. The name of the file to receive has been given earlier, when the scp session was opened:</p>
+<pre class="highlight literal-block">
+<span></span><span class="kt">int</span> <span class="nf">scp_receive</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span> <span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">size</span><span class="p">,</span> <span class="n">mode</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">filename</span><span class="p">,</span> <span class="o">*</span><span class="n">buffer</span><span class="p">;</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_scp_pull_request</span><span class="p">(</span><span class="n">scp</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_SCP_REQUEST_NEWFILE</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Error receiving information about file: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+    <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">size</span> <span class="o">=</span> <span class="n">ssh_scp_request_get_size</span><span class="p">(</span><span class="n">scp</span><span class="p">);</span>
+  <span class="n">filename</span> <span class="o">=</span> <span class="n">strdup</span><span class="p">(</span><span class="n">ssh_scp_request_get_filename</span><span class="p">(</span><span class="n">scp</span><span class="p">));</span>
+  <span class="n">mode</span> <span class="o">=</span> <span class="n">ssh_scp_request_get_permissions</span><span class="p">(</span><span class="n">scp</span><span class="p">);</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Receiving file %s, size %d, permisssions 0%o</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+          <span class="n">filename</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">mode</span><span class="p">);</span>
+  <span class="n">free</span><span class="p">(</span><span class="n">filename</span><span class="p">);</span>
+
+  <span class="n">buffer</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="n">size</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">buffer</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Memory allocation error</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">ssh_scp_accept_request</span><span class="p">(</span><span class="n">scp</span><span class="p">);</span>
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_scp_read</span><span class="p">(</span><span class="n">scp</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">==</span> <span class="n">SSH_ERROR</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Error receiving file data: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">buffer</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Done</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+
+  <span class="n">write</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
+  <span class="n">free</span><span class="p">(</span><span class="n">buffer</span><span class="p">);</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_scp_pull_request</span><span class="p">(</span><span class="n">scp</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_SCP_REQUEST_EOF</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Unexpected request: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+    <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="n">SSH_OK</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+<p>In this example, since we just requested a single file, we expect ssh_scp_request() to return SSH_SCP_REQUEST_NEWFILE first, then SSH_SCP_REQUEST_EOF. That’s quite a naive approach; for example, the remote server might send a warning as well (return code SSH_SCP_REQUEST_WARNING) and the example would fail. A more comprehensive reception program would receive the requests in a loop and analyze them carefully until SSH_SCP_REQUEST_EOF has been received.</p>
+</div>
+<div class="section" id="receiving-full-directory-trees-from-the-remote-server">
+<span id="doxid-libssh-tutor-scp-1scp-recursive-read"></span><h3>Receiving full directory trees from the remote server</h3>
+<p>If you opened the SCP session in recursive mode, the remote end will be telling you when to change directory.</p>
+<p>In that case, when <a class="reference internal" href="group_libssh_scp.html#doxid-group-libssh-scp-1gaba59cd8cc77d219cac93f865445c6e47"><span class="std std-ref">ssh_scp_pull_request()</span></a> answers SSH_SCP_REQUEST_NEWDIRECTORY, you should make that local directory (if it does not exist yet) and enter it. When <a class="reference internal" href="group_libssh_scp.html#doxid-group-libssh-scp-1gaba59cd8cc77d219cac93f865445c6e47"><span class="std std-ref">ssh_scp_pull_request()</span></a> answers SSH_SCP_REQUEST_ENDDIRECTORY, you should leave the current directory.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="page_libssh_tutor_forwarding.html" title="Chapter 7: Forwarding connections (tunnel)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="page_libssh_tutor_sftp.html" title="Chapter 5: The SFTP subsystem"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LibSSH Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="page_libssh_tutorial.html" >The Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2003-2017, LibSSH Maintainers.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    </div>
+  </body>
+</html>

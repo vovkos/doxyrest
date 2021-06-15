@@ -1,0 +1,173 @@
+.. index:: pair: group; Directory Manipulation Functions
+.. _doxid-group__apr__dir:
+
+Directory Manipulation Functions
+================================
+
+.. toctree::
+	:hidden:
+
+Overview
+~~~~~~~~
+
+
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// global functions
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_dir_open<doxid-group__apr__dir_1ga796002db3e3c7b7c9d5632efbcd4329c>`(
+		:ref:`apr_dir_t<doxid-group__apr__file__info_1ga92ed8cf52cba2abb42cf74087aa74da8>`** new_dir,
+		const char* dirname,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_dir_close<doxid-group__apr__dir_1ga57fef00ccea03e9244f6fa21da4d3359>`(:ref:`apr_dir_t<doxid-group__apr__file__info_1ga92ed8cf52cba2abb42cf74087aa74da8>`* thedir);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_dir_read<doxid-group__apr__dir_1ga3e4ee253e0c712160bee10bfb9c8e4a8>`(
+		:ref:`apr_finfo_t<doxid-structapr__finfo__t>`* finfo,
+		apr_int32_t wanted,
+		:ref:`apr_dir_t<doxid-group__apr__file__info_1ga92ed8cf52cba2abb42cf74087aa74da8>`* thedir
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_dir_rewind<doxid-group__apr__dir_1gab9b9f23e76128144d3fb953cabea6290>`(:ref:`apr_dir_t<doxid-group__apr__file__info_1ga92ed8cf52cba2abb42cf74087aa74da8>`* thedir);
+
+.. _details-group__apr__dir:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+Global Functions
+----------------
+
+.. index:: pair: function; apr_dir_open
+.. _doxid-group__apr__dir_1ga796002db3e3c7b7c9d5632efbcd4329c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_dir_open(
+		:ref:`apr_dir_t<doxid-group__apr__file__info_1ga92ed8cf52cba2abb42cf74087aa74da8>`** new_dir,
+		const char* dirname,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* pool
+		)
+
+Open the specified directory.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- new_dir
+
+		- The opened directory descriptor.
+
+	*
+		- dirname
+
+		- The full path to the directory (use / on all systems)
+
+	*
+		- pool
+
+		- The pool to use.
+
+.. index:: pair: function; apr_dir_close
+.. _doxid-group__apr__dir_1ga57fef00ccea03e9244f6fa21da4d3359:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_dir_close(:ref:`apr_dir_t<doxid-group__apr__file__info_1ga92ed8cf52cba2abb42cf74087aa74da8>`* thedir)
+
+close the specified directory.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thedir
+
+		- the directory descriptor to close.
+
+.. index:: pair: function; apr_dir_read
+.. _doxid-group__apr__dir_1ga3e4ee253e0c712160bee10bfb9c8e4a8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_dir_read(
+		:ref:`apr_finfo_t<doxid-structapr__finfo__t>`* finfo,
+		apr_int32_t wanted,
+		:ref:`apr_dir_t<doxid-group__apr__file__info_1ga92ed8cf52cba2abb42cf74087aa74da8>`* thedir
+		)
+
+Read the next entry from the specified directory. No ordering is guaranteed for the entries read.
+
+If ``APR_INCOMPLETE`` is returned all the fields in *finfo* may not be filled in, and you need to check the ``finfo->valid`` bitmask to verify that what you're looking for is there. When no more entries are available, APR_ENOENT is returned.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- finfo
+
+		- the file info structure and filled in by apr_dir_read
+
+	*
+		- wanted
+
+		- The desired :ref:`apr_finfo_t <doxid-structapr__finfo__t>` fields, as a bit flag of APR_FINFO\_ values
+
+	*
+		- thedir
+
+		- the directory descriptor returned from apr_dir_open
+
+.. index:: pair: function; apr_dir_rewind
+.. _doxid-group__apr__dir_1gab9b9f23e76128144d3fb953cabea6290:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_dir_rewind(:ref:`apr_dir_t<doxid-group__apr__file__info_1ga92ed8cf52cba2abb42cf74087aa74da8>`* thedir)
+
+Rewind the directory to the first entry.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- thedir
+
+		- the directory descriptor to rewind.
+

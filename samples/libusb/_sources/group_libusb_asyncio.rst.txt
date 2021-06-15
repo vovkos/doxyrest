@@ -1,0 +1,1607 @@
+.. index:: pair: group; Asynchronous device I/O
+.. _doxid-group__libusb__asyncio:
+
+Asynchronous device I/O
+=======================
+
+.. toctree::
+	:hidden:
+
+	enum_libusb_transfer_flags.rst
+	enum_libusb_transfer_status.rst
+	struct_libusb_control_setup.rst
+	struct_libusb_iso_packet_descriptor.rst
+	struct_libusb_transfer.rst
+
+Overview
+~~~~~~~~
+
+This page details libusb's asynchronous (non-blocking) API for USB device I/O. :ref:`More...<details-group__libusb__asyncio>`
+
+
+.. ref-code-block:: c
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef void (*:ref:`libusb_transfer_cb_fn<doxid-group__libusb__asyncio_1gac74874519794cd7aa40c0814702b0c88>`)(struct libusb_transfer *transfer);
+
+	// enums
+
+	enum :ref:`libusb_transfer_flags<doxid-group__libusb__asyncio_1ga1fb47dd0f7c209b60a3609ff0c03d56d>`;
+	enum :ref:`libusb_transfer_status<doxid-group__libusb__asyncio_1ga9fcb2aa23d342060ebda1d0cf7478856>`;
+
+	// structs
+
+	struct :ref:`libusb_control_setup<doxid-structlibusb__control__setup>`;
+	struct :ref:`libusb_iso_packet_descriptor<doxid-structlibusb__iso__packet__descriptor>`;
+	struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`;
+
+	// global functions
+
+	int
+	:ref:`libusb_alloc_streams<doxid-group__libusb__asyncio_1gad7e786c1bedd4a668887564465101981>`(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		uint32_t num_streams,
+		unsigned char* endpoints,
+		int num_endpoints
+		);
+
+	int
+	:ref:`libusb_free_streams<doxid-group__libusb__asyncio_1gab068de0fd203ccef5c620a8143526acb>`(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		unsigned char* endpoints,
+		int num_endpoints
+		);
+
+	unsigned char*
+	:ref:`libusb_dev_mem_alloc<doxid-group__libusb__asyncio_1ga47c492e750197f1a28874c7a0dee40e3>`(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		size_t length
+		);
+
+	int
+	:ref:`libusb_dev_mem_free<doxid-group__libusb__asyncio_1gad7575ff325f0159a5b74b7c0ee64eb62>`(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		unsigned char* buffer,
+		size_t length
+		);
+
+	struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`*
+	:ref:`libusb_alloc_transfer<doxid-group__libusb__asyncio_1ga13cc69ea40c702181c430c950121c000>`(int iso_packets);
+
+	void
+	:ref:`libusb_free_transfer<doxid-group__libusb__asyncio_1ga6ab8b2cff4de9091298a06b2f4b86cd6>`(struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer);
+
+	int
+	:ref:`libusb_submit_transfer<doxid-group__libusb__asyncio_1gabb0932601f2c7dad2fee4b27962848ce>`(struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer);
+
+	int
+	:ref:`libusb_cancel_transfer<doxid-group__libusb__asyncio_1ga685eb7731f9a0593f75beb99727bbe54>`(struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer);
+
+	void
+	:ref:`libusb_transfer_set_stream_id<doxid-group__libusb__asyncio_1gaeae2db23b9de811af317483afdeb230f>`(
+		struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer,
+		uint32_t stream_id
+		);
+
+	uint32_t
+	:ref:`libusb_transfer_get_stream_id<doxid-group__libusb__asyncio_1ga631653487273f3306925131cdc0a3ffc>`(struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer);
+
+	static
+	unsigned char*
+	:ref:`libusb_control_transfer_get_data<doxid-group__libusb__asyncio_1gadf9c633586dde54ce62a3d66a4d7554c>`(struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer);
+
+	static
+	struct :ref:`libusb_control_setup<doxid-structlibusb__control__setup>`*
+	:ref:`libusb_control_transfer_get_setup<doxid-group__libusb__asyncio_1ga6ab02f15e11b5b03b1174fbd7c3bc061>`(struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer);
+
+	static
+	void
+	:ref:`libusb_fill_control_setup<doxid-group__libusb__asyncio_1ga5447311149ec2bd954b5f1a640a8e231>`(
+		unsigned char* buffer,
+		uint8_t bmRequestType,
+		uint8_t bRequest,
+		uint16_t wValue,
+		uint16_t wIndex,
+		uint16_t wLength
+		);
+
+	static
+	void
+	:ref:`libusb_fill_control_transfer<doxid-group__libusb__asyncio_1ga3a8513ed87229fe2c9771ef0bf17206e>`(
+		struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer,
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		unsigned char* buffer,
+		:ref:`libusb_transfer_cb_fn<doxid-group__libusb__asyncio_1gac74874519794cd7aa40c0814702b0c88>` callback,
+		void* user_data,
+		unsigned int timeout
+		);
+
+	static
+	void
+	:ref:`libusb_fill_bulk_transfer<doxid-group__libusb__asyncio_1gad4ddb1a5c6c7fefc979a44d7300b95d7>`(
+		struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer,
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		unsigned char endpoint,
+		unsigned char* buffer,
+		int length,
+		:ref:`libusb_transfer_cb_fn<doxid-group__libusb__asyncio_1gac74874519794cd7aa40c0814702b0c88>` callback,
+		void* user_data,
+		unsigned int timeout
+		);
+
+	static
+	void
+	:ref:`libusb_fill_bulk_stream_transfer<doxid-group__libusb__asyncio_1gac2e84d8fb9218d3c67e6a4fd4ade5b10>`(
+		struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer,
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		unsigned char endpoint,
+		uint32_t stream_id,
+		unsigned char* buffer,
+		int length,
+		:ref:`libusb_transfer_cb_fn<doxid-group__libusb__asyncio_1gac74874519794cd7aa40c0814702b0c88>` callback,
+		void* user_data,
+		unsigned int timeout
+		);
+
+	static
+	void
+	:ref:`libusb_fill_interrupt_transfer<doxid-group__libusb__asyncio_1ga90f53cea1124a7566df1aa1202b77510>`(
+		struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer,
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		unsigned char endpoint,
+		unsigned char* buffer,
+		int length,
+		:ref:`libusb_transfer_cb_fn<doxid-group__libusb__asyncio_1gac74874519794cd7aa40c0814702b0c88>` callback,
+		void* user_data,
+		unsigned int timeout
+		);
+
+	static
+	void
+	:ref:`libusb_fill_iso_transfer<doxid-group__libusb__asyncio_1ga30fdce8c461e851f0aa4c851014e1aa7>`(
+		struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer,
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		unsigned char endpoint,
+		unsigned char* buffer,
+		int length,
+		int num_iso_packets,
+		:ref:`libusb_transfer_cb_fn<doxid-group__libusb__asyncio_1gac74874519794cd7aa40c0814702b0c88>` callback,
+		void* user_data,
+		unsigned int timeout
+		);
+
+	static
+	void
+	:ref:`libusb_set_iso_packet_lengths<doxid-group__libusb__asyncio_1gacbdecd6f50093f0c1d0e72ee35ace274>`(
+		struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer,
+		unsigned int length
+		);
+
+	static
+	unsigned char*
+	:ref:`libusb_get_iso_packet_buffer<doxid-group__libusb__asyncio_1ga7f6ea0eb35a216d19d984977e454a7b3>`(
+		struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer,
+		unsigned int packet
+		);
+
+	static
+	unsigned char*
+	:ref:`libusb_get_iso_packet_buffer_simple<doxid-group__libusb__asyncio_1ga3df9a28c4f5c8f1850181ddb5efd12fd>`(
+		struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer,
+		unsigned int packet
+		);
+
+.. _details-group__libusb__asyncio:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+This page details libusb's asynchronous (non-blocking) API for USB device I/O.
+
+This interface is very powerful but is also quite complex - you will need to read this page carefully to understand the necessary considerations and issues surrounding use of this interface. Simplistic applications may wish to consider the :ref:`synchronous I/O API <doxid-group__libusb__syncio>` instead.
+
+The asynchronous interface is built around the idea of separating transfer submission and handling of transfer completion (the synchronous model combines both of these into one). There may be a long delay between submission and completion, however the asynchronous submission function is non-blocking so will return control to your application during that potentially long delay.
+
+
+
+.. _doxid-group__libusb__asyncio_1asyncabstraction:
+
+Transfer abstraction
+~~~~~~~~~~~~~~~~~~~~
+
+For the asynchronous I/O, libusb implements the concept of a generic transfer entity for all types of I/O (control, bulk, interrupt, isochronous). The generic transfer object must be treated slightly differently depending on which type of I/O you are performing with it.
+
+This is represented by the public :ref:`libusb_transfer <doxid-structlibusb__transfer>` structure type.
+
+
+
+
+
+.. _doxid-group__libusb__asyncio_1asynctrf:
+
+Asynchronous transfers
+~~~~~~~~~~~~~~~~~~~~~~
+
+We can view asynchronous I/O as a 5 step process:
+
+#. **Allocation** : allocate a :ref:`libusb_transfer <doxid-structlibusb__transfer>`
+
+#. **Filling** : populate the :ref:`libusb_transfer <doxid-structlibusb__transfer>` instance with information about the transfer you wish to perform
+
+#. **Submission** : ask libusb to submit the transfer
+
+#. **Completion handling** : examine transfer results in the :ref:`libusb_transfer <doxid-structlibusb__transfer>` structure
+
+#. **Deallocation** : clean up resources
+
+
+
+.. _doxid-group__libusb__asyncio_1asyncalloc:
+
+Allocation
+----------
+
+This step involves allocating memory for a USB transfer. This is the generic transfer object mentioned above. At this stage, the transfer is "blank" with no details about what type of I/O it will be used for.
+
+Allocation is done with the :ref:`libusb_alloc_transfer() <doxid-group__libusb__asyncio_1ga13cc69ea40c702181c430c950121c000>` function. You must use this function rather than allocating your own transfers.
+
+
+
+
+
+.. _doxid-group__libusb__asyncio_1asyncfill:
+
+Filling
+-------
+
+This step is where you take a previously allocated transfer and fill it with information to determine the message type and direction, data buffer, callback function, etc.
+
+You can either fill the required fields yourself or you can use the helper functions: :ref:`libusb_fill_control_transfer() <doxid-group__libusb__asyncio_1ga3a8513ed87229fe2c9771ef0bf17206e>`, :ref:`libusb_fill_bulk_transfer() <doxid-group__libusb__asyncio_1gad4ddb1a5c6c7fefc979a44d7300b95d7>` and :ref:`libusb_fill_interrupt_transfer() <doxid-group__libusb__asyncio_1ga90f53cea1124a7566df1aa1202b77510>`.
+
+
+
+
+
+.. _doxid-group__libusb__asyncio_1asyncsubmit:
+
+Submission
+----------
+
+When you have allocated a transfer and filled it, you can submit it using :ref:`libusb_submit_transfer() <doxid-group__libusb__asyncio_1gabb0932601f2c7dad2fee4b27962848ce>`. This function returns immediately but can be regarded as firing off the I/O request in the background.
+
+
+
+
+
+.. _doxid-group__libusb__asyncio_1asynccomplete:
+
+Completion handling
+-------------------
+
+After a transfer has been submitted, one of four things can happen to it:
+
+* The transfer completes (i.e. some data was transferred)
+
+* The transfer has a timeout and the timeout expires before all data is transferred
+
+* The transfer fails due to an error
+
+* The transfer is cancelled
+
+Each of these will cause the user-specified transfer callback function to be invoked. It is up to the callback function to determine which of the above actually happened and to act accordingly.
+
+The user-specified callback is passed a pointer to the :ref:`libusb_transfer <doxid-structlibusb__transfer>` structure which was used to setup and submit the transfer. At completion time, libusb has populated this structure with results of the transfer: success or failure reason, number of bytes of data transferred, etc. See the :ref:`libusb_transfer <doxid-structlibusb__transfer>` structure documentation for more information.
+
+**Important Note** : The user-specified callback is called from an event handling context. It is therefore important that no calls are made into libusb that will attempt to perform any event handling. Examples of such functions are any listed in the :ref:`synchronous API <doxid-group__libusb__syncio>` and any of the blocking functions that retrieve :ref:`USB descriptors <doxid-group__libusb__desc>`.
+
+
+
+
+
+.. _doxid-group__libusb__asyncio_1Deallocation:
+
+Deallocation
+------------
+
+When a transfer has completed (i.e. the callback function has been invoked), you are advised to free the transfer (unless you wish to resubmit it, see below). Transfers are deallocated with :ref:`libusb_free_transfer() <doxid-group__libusb__asyncio_1ga6ab8b2cff4de9091298a06b2f4b86cd6>`.
+
+It is undefined behaviour to free a transfer which has not completed.
+
+
+
+
+
+
+
+.. _doxid-group__libusb__asyncio_1asyncresubmit:
+
+Resubmission
+~~~~~~~~~~~~
+
+You may be wondering why allocation, filling, and submission are all separated above where they could reasonably be combined into a single operation.
+
+The reason for separation is to allow you to resubmit transfers without having to allocate new ones every time. This is especially useful for common situations dealing with interrupt endpoints - you allocate one transfer, fill and submit it, and when it returns with results you just resubmit it for the next interrupt.
+
+
+
+
+
+.. _doxid-group__libusb__asyncio_1asynccancel:
+
+Cancellation
+~~~~~~~~~~~~
+
+Another advantage of using the asynchronous interface is that you have the ability to cancel transfers which have not yet completed. This is done by calling the :ref:`libusb_cancel_transfer() <doxid-group__libusb__asyncio_1ga685eb7731f9a0593f75beb99727bbe54>` function.
+
+:ref:`libusb_cancel_transfer() <doxid-group__libusb__asyncio_1ga685eb7731f9a0593f75beb99727bbe54>` is asynchronous/non-blocking in itself. When the cancellation actually completes, the transfer's callback function will be invoked, and the callback function should check the transfer status to determine that it was cancelled.
+
+Freeing the transfer after it has been cancelled but before cancellation has completed will result in undefined behaviour.
+
+When a transfer is cancelled, some of the data may have been transferred. libusb will communicate this to you in the transfer callback. Do not assume that no data was transferred.
+
+
+
+
+
+.. _doxid-group__libusb__asyncio_1bulk_overflows:
+
+Overflows on device-to-host bulk/interrupt endpoints
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If your device does not have predictable transfer sizes (or it misbehaves), your application may submit a request for data on an IN endpoint which is smaller than the data that the device wishes to send. In some circumstances this will cause an overflow, which is a nasty condition to deal with. See the :ref:`Packets and overflows <doxid-libusb_packetoverflow>` page for discussion.
+
+
+
+
+
+.. _doxid-group__libusb__asyncio_1asyncctrl:
+
+Considerations for control transfers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The ``:ref:`libusb_transfer <doxid-structlibusb__transfer>``` structure is generic and hence does not include specific fields for the control-specific setup packet structure.
+
+In order to perform a control transfer, you must place the 8-byte setup packet at the start of the data buffer. To simplify this, you could cast the buffer pointer to type struct :ref:`libusb_control_setup <doxid-structlibusb__control__setup>`, or you can use the helper function :ref:`libusb_fill_control_setup() <doxid-group__libusb__asyncio_1ga5447311149ec2bd954b5f1a640a8e231>`.
+
+The wLength field placed in the setup packet must be the length you would expect to be sent in the setup packet: the length of the payload that follows (or the expected maximum number of bytes to receive). However, the length field of the :ref:`libusb_transfer <doxid-structlibusb__transfer>` object must be the length of the data buffer - i.e. it should be wLength *plus* the size of the setup packet (LIBUSB_CONTROL_SETUP_SIZE).
+
+If you use the helper functions, this is simplified for you:
+
+#. Allocate a buffer of size LIBUSB_CONTROL_SETUP_SIZE plus the size of the data you are sending/requesting.
+
+#. Call :ref:`libusb_fill_control_setup() <doxid-group__libusb__asyncio_1ga5447311149ec2bd954b5f1a640a8e231>` on the data buffer, using the transfer request size as the wLength value (i.e. do not include the extra space you allocated for the control setup).
+
+#. If this is a host-to-device transfer, place the data to be transferred in the data buffer, starting at offset LIBUSB_CONTROL_SETUP_SIZE.
+
+#. Call :ref:`libusb_fill_control_transfer() <doxid-group__libusb__asyncio_1ga3a8513ed87229fe2c9771ef0bf17206e>` to associate the data buffer with the transfer (and to set the remaining details such as callback and timeout).
+   
+   * Note that there is no parameter to set the length field of the transfer. The length is automatically inferred from the wLength field of the setup packet.
+
+#. Submit the transfer.
+
+The multi-byte control setup fields (wValue, wIndex and wLength) must be given in little-endian byte order (the endianness of the USB bus). Endianness conversion is transparently handled by :ref:`libusb_fill_control_setup() <doxid-group__libusb__asyncio_1ga5447311149ec2bd954b5f1a640a8e231>` which is documented to accept host-endian values.
+
+Further considerations are needed when handling transfer completion in your callback function:
+
+* As you might expect, the setup packet will still be sitting at the start of the data buffer.
+
+* If this was a device-to-host transfer, the received data will be sitting at offset LIBUSB_CONTROL_SETUP_SIZE into the buffer.
+
+* The actual_length field of the transfer structure is relative to the wLength of the setup packet, rather than the size of the data buffer. So, if your wLength was 4, your transfer's ``length`` was 12, then you should expect an ``actual_length`` of 4 to indicate that the data was transferred in entirity.
+
+To simplify parsing of setup packets and obtaining the data from the correct offset, you may wish to use the :ref:`libusb_control_transfer_get_data() <doxid-group__libusb__asyncio_1gadf9c633586dde54ce62a3d66a4d7554c>` and :ref:`libusb_control_transfer_get_setup() <doxid-group__libusb__asyncio_1ga6ab02f15e11b5b03b1174fbd7c3bc061>` functions within your transfer callback.
+
+Even though control endpoints do not halt, a completed control transfer may have a LIBUSB_TRANSFER_STALL status code. This indicates the control request was not supported.
+
+
+
+
+
+.. _doxid-group__libusb__asyncio_1asyncintr:
+
+Considerations for interrupt transfers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+All interrupt transfers are performed using the polling interval presented by the bInterval value of the endpoint descriptor.
+
+
+
+
+
+.. _doxid-group__libusb__asyncio_1asynciso:
+
+Considerations for isochronous transfers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Isochronous transfers are more complicated than transfers to non-isochronous endpoints.
+
+To perform I/O to an isochronous endpoint, allocate the transfer by calling :ref:`libusb_alloc_transfer() <doxid-group__libusb__asyncio_1ga13cc69ea40c702181c430c950121c000>` with an appropriate number of isochronous packets.
+
+During filling, set :ref:`type <doxid-structlibusb__transfer_1a7c9fa575986fe9f23bbecb26b766dff1>` to :ref:`LIBUSB_TRANSFER_TYPE_ISOCHRONOUS <doxid-group__libusb__desc_1ggacb52027036a07de6ecc6c2bf07d07c71a40de9889554fc1785d784b3c31333300>`, and set :ref:`num_iso_packets <doxid-structlibusb__transfer_1a87d725a5521c26832fdc13611220014d>` to a value less than or equal to the number of packets you requested during allocation. :ref:`libusb_alloc_transfer() <doxid-group__libusb__asyncio_1ga13cc69ea40c702181c430c950121c000>` does not set either of these fields for you, given that you might not even use the transfer on an isochronous endpoint.
+
+Next, populate the length field for the first num_iso_packets entries in the :ref:`iso_packet_desc <doxid-structlibusb__transfer_1a0de0b13dfae411fc36217d35eb89b138>` array. Section 5.6.3 of the USB2 specifications describe how the maximum isochronous packet length is determined by the wMaxPacketSize field in the endpoint descriptor. Two functions can help you here:
+
+* :ref:`libusb_get_max_iso_packet_size() <doxid-group__libusb__dev_1gaec10b71c7209760db55ee0f8768bb4f0>` is an easy way to determine the max packet size for an isochronous endpoint. Note that the maximum packet size is actually the maximum number of bytes that can be transmitted in a single microframe, therefore this function multiplies the maximum number of bytes per transaction by the number of transaction opportunities per microframe.
+
+* :ref:`libusb_set_iso_packet_lengths() <doxid-group__libusb__asyncio_1gacbdecd6f50093f0c1d0e72ee35ace274>` assigns the same length to all packets within a transfer, which is usually what you want.
+
+For outgoing transfers, you'll obviously fill the buffer and populate the packet descriptors in hope that all the data gets transferred. For incoming transfers, you must ensure the buffer has sufficient capacity for the situation where all packets transfer the full amount of requested data.
+
+Completion handling requires some extra consideration. The :ref:`actual_length <doxid-structlibusb__transfer_1a7e858f07c48a271a62209d11376ae607>` field of the transfer is meaningless and should not be examined; instead you must refer to the :ref:`actual_length <doxid-structlibusb__iso__packet__descriptor_1a03fa4f4eaf8a8b4e5c05931809581a32>` field of each individual packet.
+
+The :ref:`status <doxid-structlibusb__transfer_1a64b2e70e76d52a7cd23daa3cd4fb397e>` field of the transfer is also a little misleading:
+
+* If the packets were submitted and the isochronous data microframes completed normally, status will have value :ref:`LIBUSB_TRANSFER_COMPLETED <doxid-group__libusb__asyncio_1gga9fcb2aa23d342060ebda1d0cf7478856a4595f6532aab12352a58a0fd4ce48363>`. Note that bus errors and software-incurred delays are not counted as transfer errors; the transfer.status field may indicate COMPLETED even if some or all of the packets failed. Refer to the :ref:`status <doxid-structlibusb__iso__packet__descriptor_1aab21ee2a5835a0e53d7ac5844ee34371>` field of each individual packet to determine packet failures.
+
+* The status field will have value :ref:`LIBUSB_TRANSFER_ERROR <doxid-group__libusb__asyncio_1gga9fcb2aa23d342060ebda1d0cf7478856aa8852ed719d03c2a3cc6f0312d919398>` only when serious errors were encountered.
+
+* Other transfer status codes occur with normal behaviour.
+
+The data for each packet will be found at an offset into the buffer that can be calculated as if each prior packet completed in full. The :ref:`libusb_get_iso_packet_buffer() <doxid-group__libusb__asyncio_1ga7f6ea0eb35a216d19d984977e454a7b3>` and :ref:`libusb_get_iso_packet_buffer_simple() <doxid-group__libusb__asyncio_1ga3df9a28c4f5c8f1850181ddb5efd12fd>` functions may help you here.
+
+**Note** : Some operating systems (e.g. Linux) may impose limits on the length of individual isochronous packets and/or the total length of the isochronous transfer. Such limits can be difficult for libusb to detect, so the library will simply try and submit the transfer as set up by you. If the transfer fails to submit because it is too large, :ref:`libusb_submit_transfer() <doxid-group__libusb__asyncio_1gabb0932601f2c7dad2fee4b27962848ce>` will return :ref:`LIBUSB_ERROR_INVALID_PARAM <doxid-group__libusb__misc_1ggab2323aa0f04bc22038e7e1740b2f29efa680e4bf39b66a36be3182be3ebf58062>`.
+
+
+
+
+
+.. _doxid-group__libusb__asyncio_1asyncmem:
+
+Memory caveats
+~~~~~~~~~~~~~~
+
+In most circumstances, it is not safe to use stack memory for transfer buffers. This is because the function that fired off the asynchronous transfer may return before libusb has finished using the buffer, and when the function returns it's stack gets destroyed. This is true for both host-to-device and device-to-host transfers.
+
+The only case in which it is safe to use stack memory is where you can guarantee that the function owning the stack space for the buffer does not return until after the transfer's callback function has completed. In every other case, you need to use heap memory instead.
+
+
+
+
+
+.. _doxid-group__libusb__asyncio_1asyncflags:
+
+Fine control
+~~~~~~~~~~~~
+
+Through using this asynchronous interface, you may find yourself repeating a few simple operations many times. You can apply a bitwise OR of certain flags to a transfer to simplify certain things:
+
+* :ref:`LIBUSB_TRANSFER_SHORT_NOT_OK <doxid-group__libusb__asyncio_1gga1fb47dd0f7c209b60a3609ff0c03d56dae4c0697c266819c51c1734b3456e7276>` results in transfers which transferred less than the requested amount of data being marked with status :ref:`LIBUSB_TRANSFER_ERROR <doxid-group__libusb__asyncio_1gga9fcb2aa23d342060ebda1d0cf7478856aa8852ed719d03c2a3cc6f0312d919398>` (they would normally be regarded as COMPLETED)
+
+* :ref:`LIBUSB_TRANSFER_FREE_BUFFER <doxid-group__libusb__asyncio_1gga1fb47dd0f7c209b60a3609ff0c03d56dae993a26f495ac9949118e23eafa19e86>` allows you to ask libusb to free the transfer buffer when freeing the transfer.
+
+* :ref:`LIBUSB_TRANSFER_FREE_TRANSFER <doxid-group__libusb__asyncio_1gga1fb47dd0f7c209b60a3609ff0c03d56dacf3f064997b283a14097c9f4d6f8ccc1>` causes libusb to automatically free the transfer after the transfer callback returns.
+
+
+
+
+
+.. _doxid-group__libusb__asyncio_1asyncevent:
+
+Event handling
+~~~~~~~~~~~~~~
+
+An asynchronous model requires that libusb perform work at various points in time - namely processing the results of previously-submitted transfers and invoking the user-supplied callback function.
+
+This gives rise to the :ref:`libusb_handle_events() <doxid-group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327>` function which your application must call into when libusb has work do to. This gives libusb the opportunity to reap pending transfers, invoke callbacks, etc.
+
+There are 2 different approaches to dealing with libusb_handle_events:
+
+#. Repeatedly call :ref:`libusb_handle_events() <doxid-group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327>` in blocking mode from a dedicated thread.
+
+#. Integrate libusb with your application's main event loop. libusb exposes a set of file descriptors which allow you to do this.
+
+The first approach has the big advantage that it will also work on Windows were libusb' poll API for select / poll integration is not available. So if you want to support Windows and use the async API, you must use this approach, see the :ref:`Using an event handling thread <doxid-group__libusb__asyncio_1eventthread>` section below for details.
+
+If you prefer a single threaded approach with a single central event loop, see the :ref:`polling and timing <doxid-group__libusb__poll>` section for how to integrate libusb into your application's main event loop.
+
+
+
+
+
+.. _doxid-group__libusb__asyncio_1eventthread:
+
+Using an event handling thread
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Lets begin with stating the obvious: If you're going to use a separate thread for libusb event handling, your callback functions MUST be threadsafe.
+
+Other then that doing event handling from a separate thread, is mostly simple. You can use an event thread function as follows:
+
+.. ref-code-block:: c
+
+	void *event_thread_func(void *ctx)
+	{
+	    while (event_thread_run)
+	        libusb_handle_events(ctx);
+	
+	    return NULL;
+	}
+
+There is one caveat though, stopping this thread requires setting the event_thread_run variable to 0, and after that :ref:`libusb_handle_events() <doxid-group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327>` needs to return control to event_thread_func. But unless some event happens, :ref:`libusb_handle_events() <doxid-group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327>` will not return.
+
+There are 2 different ways of dealing with this, depending on if your application uses libusb' :ref:`hotplug <doxid-libusb_hotplug>` support or not.
+
+Applications which do not use hotplug support, should not start the event thread until after their first call to :ref:`libusb_open() <doxid-group__libusb__dev_1ga3f184a8be4488a767b2e0ae07e76d1b0>`, and should stop the thread when closing the last open device as follows:
+
+.. ref-code-block:: c
+
+	void my_close_handle(libusb_device_handle *dev_handle)
+	{
+	    if (open_devs == 1)
+	        event_thread_run = 0;
+	
+	    libusb_close(dev_handle); // This wakes up libusb_handle_events()
+	
+	    if (open_devs == 1)
+	        pthread_join(event_thread);
+	
+	    open_devs--;
+	}
+
+Applications using hotplug support should start the thread at program init, after having successfully called :ref:`libusb_hotplug_register_callback() <doxid-group__libusb__hotplug_1ga00e0c69ddf1fb1b6774dc918192e8dc7>`, and should stop the thread at program exit as follows:
+
+.. ref-code-block:: c
+
+	void my_libusb_exit(void)
+	{
+	    event_thread_run = 0;
+	    libusb_hotplug_deregister_callback(ctx, hotplug_cb_handle); // This wakes up libusb_handle_events()
+	    pthread_join(event_thread);
+	    libusb_exit(ctx);
+	}
+
+Typedefs
+--------
+
+.. index:: pair: typedef; libusb_transfer_cb_fn
+.. _doxid-group__libusb__asyncio_1gac74874519794cd7aa40c0814702b0c88:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	typedef void (*libusb_transfer_cb_fn)(struct libusb_transfer *transfer)
+
+Asynchronous transfer callback function type.
+
+When submitting asynchronous transfers, you pass a pointer to a callback function of this type via the :ref:`callback <doxid-structlibusb__transfer_1a69c6df011ec23ff3e481cc98bfff0623>` member of the :ref:`libusb_transfer <doxid-structlibusb__transfer>` structure. libusb will call this function later, when the transfer has completed or failed. See :ref:`Asynchronous device I/O <doxid-group__libusb__asyncio>` for more information.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- transfer
+
+		- The :ref:`libusb_transfer <doxid-structlibusb__transfer>` struct the callback function is being notified about.
+
+Global Functions
+----------------
+
+.. index:: pair: function; libusb_alloc_streams
+.. _doxid-group__libusb__asyncio_1gad7e786c1bedd4a668887564465101981:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_alloc_streams(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		uint32_t num_streams,
+		unsigned char* endpoints,
+		int num_endpoints
+		)
+
+Allocate up to num_streams usb bulk streams on the specified endpoints.
+
+This function takes an array of endpoints rather then a single endpoint because some protocols require that endpoints are setup with similar stream ids. All endpoints passed in must belong to the same interface.
+
+Note this function may return less streams then requested. Also note that the same number of streams are allocated for each endpoint in the endpoint array.
+
+Stream id 0 is reserved, and should not be used to communicate with devices. If :ref:`libusb_alloc_streams() <doxid-group__libusb__asyncio_1gad7e786c1bedd4a668887564465101981>` returns with a value of N, you may use stream ids 1 to N.
+
+Since version 1.0.19, :ref:`LIBUSB_API_VERSION <doxid-group__libusb__misc_1gaabe4bc36a83358685d36a6c853cbb4de>`>= 0x01000103
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev_handle
+
+		- a device handle
+
+	*
+		- num_streams
+
+		- number of streams to try to allocate
+
+	*
+		- endpoints
+
+		- array of endpoints to allocate streams on
+
+	*
+		- num_endpoints
+
+		- length of the endpoints array
+
+
+
+.. rubric:: Returns:
+
+number of streams allocated, or a LIBUSB_ERROR code on failure
+
+.. index:: pair: function; libusb_free_streams
+.. _doxid-group__libusb__asyncio_1gab068de0fd203ccef5c620a8143526acb:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_free_streams(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		unsigned char* endpoints,
+		int num_endpoints
+		)
+
+Free usb bulk streams allocated with :ref:`libusb_alloc_streams() <doxid-group__libusb__asyncio_1gad7e786c1bedd4a668887564465101981>`.
+
+Note streams are automatically free-ed when releasing an interface.
+
+Since version 1.0.19, :ref:`LIBUSB_API_VERSION <doxid-group__libusb__misc_1gaabe4bc36a83358685d36a6c853cbb4de>`>= 0x01000103
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev_handle
+
+		- a device handle
+
+	*
+		- endpoints
+
+		- array of endpoints to free streams on
+
+	*
+		- num_endpoints
+
+		- length of the endpoints array
+
+
+
+.. rubric:: Returns:
+
+LIBUSB_SUCCESS, or a LIBUSB_ERROR code on failure
+
+.. index:: pair: function; libusb_dev_mem_alloc
+.. _doxid-group__libusb__asyncio_1ga47c492e750197f1a28874c7a0dee40e3:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	unsigned char*
+	libusb_dev_mem_alloc(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		size_t length
+		)
+
+Attempts to allocate a block of persistent DMA memory suitable for transfers against the given device.
+
+If successful, will return a block of memory that is suitable for use as "buffer" in :ref:`libusb_transfer <doxid-structlibusb__transfer>` against this device. Using this memory instead of regular memory means that the host controller can use DMA directly into the buffer to increase performance, and also that transfers can no longer fail due to kernel memory fragmentation.
+
+Note that this means you should not modify this memory (or even data on the same cache lines) when a transfer is in progress, although it is legal to have several transfers going on within the same memory block.
+
+Will return NULL on failure. Many systems do not support such zerocopy and will always return NULL. Memory allocated with this function must be freed with :ref:`libusb_dev_mem_free <doxid-group__libusb__asyncio_1gad7575ff325f0159a5b74b7c0ee64eb62>`. Specifically, this means that the flag :ref:`LIBUSB_TRANSFER_FREE_BUFFER <doxid-group__libusb__asyncio_1gga1fb47dd0f7c209b60a3609ff0c03d56dae993a26f495ac9949118e23eafa19e86>` cannot be used to free memory allocated with this function.
+
+Since version 1.0.21, :ref:`LIBUSB_API_VERSION <doxid-group__libusb__misc_1gaabe4bc36a83358685d36a6c853cbb4de>`>= 0x01000105
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev_handle
+
+		- a device handle
+
+	*
+		- length
+
+		- size of desired data buffer
+
+
+
+.. rubric:: Returns:
+
+a pointer to the newly allocated memory, or NULL on failure
+
+.. index:: pair: function; libusb_dev_mem_free
+.. _doxid-group__libusb__asyncio_1gad7575ff325f0159a5b74b7c0ee64eb62:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_dev_mem_free(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		unsigned char* buffer,
+		size_t length
+		)
+
+Free device memory allocated with :ref:`libusb_dev_mem_alloc() <doxid-group__libusb__asyncio_1ga47c492e750197f1a28874c7a0dee40e3>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev_handle
+
+		- a device handle
+
+	*
+		- buffer
+
+		- pointer to the previously allocated memory
+
+	*
+		- length
+
+		- size of previously allocated memory
+
+
+
+.. rubric:: Returns:
+
+LIBUSB_SUCCESS, or a LIBUSB_ERROR code on failure
+
+.. index:: pair: function; libusb_alloc_transfer
+.. _doxid-group__libusb__asyncio_1ga13cc69ea40c702181c430c950121c000:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`*
+	libusb_alloc_transfer(int iso_packets)
+
+Allocate a libusb transfer with a specified number of isochronous packet descriptors.
+
+The returned transfer is pre-initialized for you. When the new transfer is no longer needed, it should be freed with :ref:`libusb_free_transfer() <doxid-group__libusb__asyncio_1ga6ab8b2cff4de9091298a06b2f4b86cd6>`.
+
+Transfers intended for non-isochronous endpoints (e.g. control, bulk, interrupt) should specify an iso_packets count of zero.
+
+For transfers intended for isochronous endpoints, specify an appropriate number of packet descriptors to be allocated as part of the transfer. The returned transfer is not specially initialized for isochronous I/O; you are still required to set the :ref:`num_iso_packets <doxid-structlibusb__transfer_1a87d725a5521c26832fdc13611220014d>` and :ref:`type <doxid-structlibusb__transfer_1a7c9fa575986fe9f23bbecb26b766dff1>` fields accordingly.
+
+It is safe to allocate a transfer with some isochronous packets and then use it on a non-isochronous endpoint. If you do this, ensure that at time of submission, num_iso_packets is 0 and that type is set appropriately.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- iso_packets
+
+		- number of isochronous packet descriptors to allocate
+
+
+
+.. rubric:: Returns:
+
+a newly allocated transfer, or NULL on error
+
+.. index:: pair: function; libusb_free_transfer
+.. _doxid-group__libusb__asyncio_1ga6ab8b2cff4de9091298a06b2f4b86cd6:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	void
+	libusb_free_transfer(struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer)
+
+Free a transfer structure.
+
+This should be called for all transfers allocated with :ref:`libusb_alloc_transfer() <doxid-group__libusb__asyncio_1ga13cc69ea40c702181c430c950121c000>`.
+
+If the :ref:`LIBUSB_TRANSFER_FREE_BUFFER <doxid-group__libusb__asyncio_1gga1fb47dd0f7c209b60a3609ff0c03d56dae993a26f495ac9949118e23eafa19e86>` flag is set and the transfer buffer is non-NULL, this function will also free the transfer buffer using the standard system memory allocator (e.g. free()).
+
+It is legal to call this function with a NULL transfer. In this case, the function will simply return safely.
+
+It is not legal to free an active transfer (one which has been submitted and has not yet completed).
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- transfer
+
+		- the transfer to free
+
+.. index:: pair: function; libusb_submit_transfer
+.. _doxid-group__libusb__asyncio_1gabb0932601f2c7dad2fee4b27962848ce:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_submit_transfer(struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer)
+
+Submit a transfer.
+
+This function will fire off the USB transfer and then return immediately.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- transfer
+
+		- the transfer to submit
+
+
+
+.. rubric:: Returns:
+
+0 on success
+
+LIBUSB_ERROR_NO_DEVICE if the device has been disconnected
+
+LIBUSB_ERROR_BUSY if the transfer has already been submitted.
+
+LIBUSB_ERROR_NOT_SUPPORTED if the transfer flags are not supported by the operating system.
+
+LIBUSB_ERROR_INVALID_PARAM if the transfer size is larger than the operating system and/or hardware can support
+
+another LIBUSB_ERROR code on other failure
+
+.. index:: pair: function; libusb_cancel_transfer
+.. _doxid-group__libusb__asyncio_1ga685eb7731f9a0593f75beb99727bbe54:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_cancel_transfer(struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer)
+
+Asynchronously cancel a previously submitted transfer.
+
+This function returns immediately, but this does not indicate cancellation is complete. Your callback function will be invoked at some later time with a transfer status of :ref:`LIBUSB_TRANSFER_CANCELLED. <doxid-group__libusb__asyncio_1gga9fcb2aa23d342060ebda1d0cf7478856a8af1f19e46cccafdcf3feadce47e880b>`
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- transfer
+
+		- the transfer to cancel
+
+
+
+.. rubric:: Returns:
+
+0 on success
+
+LIBUSB_ERROR_NOT_FOUND if the transfer is not in progress, already complete, or already cancelled.
+
+a LIBUSB_ERROR code on failure
+
+.. index:: pair: function; libusb_transfer_set_stream_id
+.. _doxid-group__libusb__asyncio_1gaeae2db23b9de811af317483afdeb230f:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	void
+	libusb_transfer_set_stream_id(
+		struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer,
+		uint32_t stream_id
+		)
+
+Set a transfers bulk stream id.
+
+Note users are advised to use :ref:`libusb_fill_bulk_stream_transfer() <doxid-group__libusb__asyncio_1gac2e84d8fb9218d3c67e6a4fd4ade5b10>` instead of calling this function directly.
+
+Since version 1.0.19, :ref:`LIBUSB_API_VERSION <doxid-group__libusb__misc_1gaabe4bc36a83358685d36a6c853cbb4de>`>= 0x01000103
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- transfer
+
+		- the transfer to set the stream id for
+
+	*
+		- stream_id
+
+		- the stream id to set
+
+
+
+.. rubric:: See also:
+
+:ref:`libusb_alloc_streams() <doxid-group__libusb__asyncio_1gad7e786c1bedd4a668887564465101981>`
+
+.. index:: pair: function; libusb_transfer_get_stream_id
+.. _doxid-group__libusb__asyncio_1ga631653487273f3306925131cdc0a3ffc:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	uint32_t
+	libusb_transfer_get_stream_id(struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer)
+
+Get a transfers bulk stream id.
+
+Since version 1.0.19, :ref:`LIBUSB_API_VERSION <doxid-group__libusb__misc_1gaabe4bc36a83358685d36a6c853cbb4de>`>= 0x01000103
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- transfer
+
+		- the transfer to get the stream id for
+
+
+
+.. rubric:: Returns:
+
+the stream id for the transfer
+
+.. index:: pair: function; libusb_control_transfer_get_data
+.. _doxid-group__libusb__asyncio_1gadf9c633586dde54ce62a3d66a4d7554c:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	static
+	unsigned char*
+	libusb_control_transfer_get_data(struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer)
+
+Get the data section of a control transfer.
+
+This convenience function is here to remind you that the data does not start until 8 bytes into the actual buffer, as the setup packet comes first.
+
+Calling this function only makes sense from a transfer callback function, or situations where you have already allocated a suitably sized buffer at transfer->buffer.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- transfer
+
+		- a transfer
+
+
+
+.. rubric:: Returns:
+
+pointer to the first byte of the data section
+
+.. index:: pair: function; libusb_control_transfer_get_setup
+.. _doxid-group__libusb__asyncio_1ga6ab02f15e11b5b03b1174fbd7c3bc061:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	static
+	struct :ref:`libusb_control_setup<doxid-structlibusb__control__setup>`*
+	libusb_control_transfer_get_setup(struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer)
+
+Get the control setup packet of a control transfer.
+
+This convenience function is here to remind you that the control setup occupies the first 8 bytes of the transfer data buffer.
+
+Calling this function only makes sense from a transfer callback function, or situations where you have already allocated a suitably sized buffer at transfer->buffer.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- transfer
+
+		- a transfer
+
+
+
+.. rubric:: Returns:
+
+a casted pointer to the start of the transfer data buffer
+
+.. index:: pair: function; libusb_fill_control_setup
+.. _doxid-group__libusb__asyncio_1ga5447311149ec2bd954b5f1a640a8e231:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	static
+	void
+	libusb_fill_control_setup(
+		unsigned char* buffer,
+		uint8_t bmRequestType,
+		uint8_t bRequest,
+		uint16_t wValue,
+		uint16_t wIndex,
+		uint16_t wLength
+		)
+
+Helper function to populate the setup packet (first 8 bytes of the data buffer) for a control transfer.
+
+The wIndex, wValue and wLength values should be given in host-endian byte order.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- buffer
+
+		- buffer to output the setup packet into This pointer must be aligned to at least 2 bytes boundary.
+
+	*
+		- bmRequestType
+
+		- see the :ref:`bmRequestType <doxid-structlibusb__control__setup_1a39b148c231d675492ccd2383196926bf>` field of :ref:`libusb_control_setup <doxid-structlibusb__control__setup>`
+
+	*
+		- bRequest
+
+		- see the :ref:`bRequest <doxid-structlibusb__control__setup_1a1b80a28b8d4e8586fc54358194e70087>` field of :ref:`libusb_control_setup <doxid-structlibusb__control__setup>`
+
+	*
+		- wValue
+
+		- see the :ref:`wValue <doxid-structlibusb__control__setup_1abbb6daa01fe4b6a05dc43492e4e53a7d>` field of :ref:`libusb_control_setup <doxid-structlibusb__control__setup>`
+
+	*
+		- wIndex
+
+		- see the :ref:`wIndex <doxid-structlibusb__control__setup_1a70c2ae456344b200a19d434ace85ae2b>` field of :ref:`libusb_control_setup <doxid-structlibusb__control__setup>`
+
+	*
+		- wLength
+
+		- see the :ref:`wLength <doxid-structlibusb__control__setup_1a3c442c64fd7619b43b782367235766cc>` field of :ref:`libusb_control_setup <doxid-structlibusb__control__setup>`
+
+.. index:: pair: function; libusb_fill_control_transfer
+.. _doxid-group__libusb__asyncio_1ga3a8513ed87229fe2c9771ef0bf17206e:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	static
+	void
+	libusb_fill_control_transfer(
+		struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer,
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		unsigned char* buffer,
+		:ref:`libusb_transfer_cb_fn<doxid-group__libusb__asyncio_1gac74874519794cd7aa40c0814702b0c88>` callback,
+		void* user_data,
+		unsigned int timeout
+		)
+
+Helper function to populate the required :ref:`libusb_transfer <doxid-structlibusb__transfer>` fields for a control transfer.
+
+If you pass a transfer buffer to this function, the first 8 bytes will be interpreted as a control setup packet, and the wLength field will be used to automatically populate the :ref:`length <doxid-structlibusb__transfer_1a68c023e1f40b50aa8604a2495b6a391e>` field of the transfer. Therefore the recommended approach is:
+
+#. Allocate a suitably sized data buffer (including space for control setup)
+
+#. Call :ref:`libusb_fill_control_setup() <doxid-group__libusb__asyncio_1ga5447311149ec2bd954b5f1a640a8e231>`
+
+#. If this is a host-to-device transfer with a data stage, put the data in place after the setup packet
+
+#. Call this function
+
+#. Call :ref:`libusb_submit_transfer() <doxid-group__libusb__asyncio_1gabb0932601f2c7dad2fee4b27962848ce>`
+
+It is also legal to pass a NULL buffer to this function, in which case this function will not attempt to populate the length field. Remember that you must then populate the buffer and length fields later.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- transfer
+
+		- the transfer to populate
+
+	*
+		- dev_handle
+
+		- handle of the device that will handle the transfer
+
+	*
+		- buffer
+
+		- data buffer. If provided, this function will interpret the first 8 bytes as a setup packet and infer the transfer length from that. This pointer must be aligned to at least 2 bytes boundary.
+
+	*
+		- callback
+
+		- callback function to be invoked on transfer completion
+
+	*
+		- user_data
+
+		- user data to pass to callback function
+
+	*
+		- timeout
+
+		- timeout for the transfer in milliseconds
+
+.. index:: pair: function; libusb_fill_bulk_transfer
+.. _doxid-group__libusb__asyncio_1gad4ddb1a5c6c7fefc979a44d7300b95d7:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	static
+	void
+	libusb_fill_bulk_transfer(
+		struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer,
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		unsigned char endpoint,
+		unsigned char* buffer,
+		int length,
+		:ref:`libusb_transfer_cb_fn<doxid-group__libusb__asyncio_1gac74874519794cd7aa40c0814702b0c88>` callback,
+		void* user_data,
+		unsigned int timeout
+		)
+
+Helper function to populate the required :ref:`libusb_transfer <doxid-structlibusb__transfer>` fields for a bulk transfer.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- transfer
+
+		- the transfer to populate
+
+	*
+		- dev_handle
+
+		- handle of the device that will handle the transfer
+
+	*
+		- endpoint
+
+		- address of the endpoint where this transfer will be sent
+
+	*
+		- buffer
+
+		- data buffer
+
+	*
+		- length
+
+		- length of data buffer
+
+	*
+		- callback
+
+		- callback function to be invoked on transfer completion
+
+	*
+		- user_data
+
+		- user data to pass to callback function
+
+	*
+		- timeout
+
+		- timeout for the transfer in milliseconds
+
+.. index:: pair: function; libusb_fill_bulk_stream_transfer
+.. _doxid-group__libusb__asyncio_1gac2e84d8fb9218d3c67e6a4fd4ade5b10:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	static
+	void
+	libusb_fill_bulk_stream_transfer(
+		struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer,
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		unsigned char endpoint,
+		uint32_t stream_id,
+		unsigned char* buffer,
+		int length,
+		:ref:`libusb_transfer_cb_fn<doxid-group__libusb__asyncio_1gac74874519794cd7aa40c0814702b0c88>` callback,
+		void* user_data,
+		unsigned int timeout
+		)
+
+Helper function to populate the required :ref:`libusb_transfer <doxid-structlibusb__transfer>` fields for a bulk transfer using bulk streams.
+
+Since version 1.0.19, :ref:`LIBUSB_API_VERSION <doxid-group__libusb__misc_1gaabe4bc36a83358685d36a6c853cbb4de>`>= 0x01000103
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- transfer
+
+		- the transfer to populate
+
+	*
+		- dev_handle
+
+		- handle of the device that will handle the transfer
+
+	*
+		- endpoint
+
+		- address of the endpoint where this transfer will be sent
+
+	*
+		- stream_id
+
+		- bulk stream id for this transfer
+
+	*
+		- buffer
+
+		- data buffer
+
+	*
+		- length
+
+		- length of data buffer
+
+	*
+		- callback
+
+		- callback function to be invoked on transfer completion
+
+	*
+		- user_data
+
+		- user data to pass to callback function
+
+	*
+		- timeout
+
+		- timeout for the transfer in milliseconds
+
+.. index:: pair: function; libusb_fill_interrupt_transfer
+.. _doxid-group__libusb__asyncio_1ga90f53cea1124a7566df1aa1202b77510:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	static
+	void
+	libusb_fill_interrupt_transfer(
+		struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer,
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		unsigned char endpoint,
+		unsigned char* buffer,
+		int length,
+		:ref:`libusb_transfer_cb_fn<doxid-group__libusb__asyncio_1gac74874519794cd7aa40c0814702b0c88>` callback,
+		void* user_data,
+		unsigned int timeout
+		)
+
+Helper function to populate the required :ref:`libusb_transfer <doxid-structlibusb__transfer>` fields for an interrupt transfer.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- transfer
+
+		- the transfer to populate
+
+	*
+		- dev_handle
+
+		- handle of the device that will handle the transfer
+
+	*
+		- endpoint
+
+		- address of the endpoint where this transfer will be sent
+
+	*
+		- buffer
+
+		- data buffer
+
+	*
+		- length
+
+		- length of data buffer
+
+	*
+		- callback
+
+		- callback function to be invoked on transfer completion
+
+	*
+		- user_data
+
+		- user data to pass to callback function
+
+	*
+		- timeout
+
+		- timeout for the transfer in milliseconds
+
+.. index:: pair: function; libusb_fill_iso_transfer
+.. _doxid-group__libusb__asyncio_1ga30fdce8c461e851f0aa4c851014e1aa7:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	static
+	void
+	libusb_fill_iso_transfer(
+		struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer,
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		unsigned char endpoint,
+		unsigned char* buffer,
+		int length,
+		int num_iso_packets,
+		:ref:`libusb_transfer_cb_fn<doxid-group__libusb__asyncio_1gac74874519794cd7aa40c0814702b0c88>` callback,
+		void* user_data,
+		unsigned int timeout
+		)
+
+Helper function to populate the required :ref:`libusb_transfer <doxid-structlibusb__transfer>` fields for an isochronous transfer.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- transfer
+
+		- the transfer to populate
+
+	*
+		- dev_handle
+
+		- handle of the device that will handle the transfer
+
+	*
+		- endpoint
+
+		- address of the endpoint where this transfer will be sent
+
+	*
+		- buffer
+
+		- data buffer
+
+	*
+		- length
+
+		- length of data buffer
+
+	*
+		- num_iso_packets
+
+		- the number of isochronous packets
+
+	*
+		- callback
+
+		- callback function to be invoked on transfer completion
+
+	*
+		- user_data
+
+		- user data to pass to callback function
+
+	*
+		- timeout
+
+		- timeout for the transfer in milliseconds
+
+.. index:: pair: function; libusb_set_iso_packet_lengths
+.. _doxid-group__libusb__asyncio_1gacbdecd6f50093f0c1d0e72ee35ace274:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	static
+	void
+	libusb_set_iso_packet_lengths(
+		struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer,
+		unsigned int length
+		)
+
+Convenience function to set the length of all packets in an isochronous transfer, based on the num_iso_packets field in the transfer structure.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- transfer
+
+		- a transfer
+
+	*
+		- length
+
+		- the length to set in each isochronous packet descriptor
+
+
+
+.. rubric:: See also:
+
+:ref:`libusb_get_max_packet_size() <doxid-group__libusb__dev_1gac81968047e262409e78f3fe24321b604>`
+
+.. index:: pair: function; libusb_get_iso_packet_buffer
+.. _doxid-group__libusb__asyncio_1ga7f6ea0eb35a216d19d984977e454a7b3:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	static
+	unsigned char*
+	libusb_get_iso_packet_buffer(
+		struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer,
+		unsigned int packet
+		)
+
+Convenience function to locate the position of an isochronous packet within the buffer of an isochronous transfer.
+
+This is a thorough function which loops through all preceding packets, accumulating their lengths to find the position of the specified packet. Typically you will assign equal lengths to each packet in the transfer, and hence the above method is sub-optimal. You may wish to use :ref:`libusb_get_iso_packet_buffer_simple() <doxid-group__libusb__asyncio_1ga3df9a28c4f5c8f1850181ddb5efd12fd>` instead.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- transfer
+
+		- a transfer
+
+	*
+		- packet
+
+		- the packet to return the address of
+
+
+
+.. rubric:: Returns:
+
+the base address of the packet buffer inside the transfer buffer, or NULL if the packet does not exist.
+
+
+
+.. rubric:: See also:
+
+:ref:`libusb_get_iso_packet_buffer_simple() <doxid-group__libusb__asyncio_1ga3df9a28c4f5c8f1850181ddb5efd12fd>`
+
+.. index:: pair: function; libusb_get_iso_packet_buffer_simple
+.. _doxid-group__libusb__asyncio_1ga3df9a28c4f5c8f1850181ddb5efd12fd:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	static
+	unsigned char*
+	libusb_get_iso_packet_buffer_simple(
+		struct :ref:`libusb_transfer<doxid-structlibusb__transfer>`* transfer,
+		unsigned int packet
+		)
+
+Convenience function to locate the position of an isochronous packet within the buffer of an isochronous transfer, for transfers where each packet is of identical size.
+
+This function relies on the assumption that every packet within the transfer is of identical size to the first packet. Calculating the location of the packet buffer is then just a simple calculation: ``buffer + (packet_size * packet)``
+
+Do not use this function on transfers other than those that have identical packet lengths for each packet.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- transfer
+
+		- a transfer
+
+	*
+		- packet
+
+		- the packet to return the address of
+
+
+
+.. rubric:: Returns:
+
+the base address of the packet buffer inside the transfer buffer, or NULL if the packet does not exist.
+
+
+
+.. rubric:: See also:
+
+:ref:`libusb_get_iso_packet_buffer() <doxid-group__libusb__asyncio_1ga7f6ea0eb35a216d19d984977e454a7b3>`
+

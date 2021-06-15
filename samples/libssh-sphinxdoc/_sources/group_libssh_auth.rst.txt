@@ -1,0 +1,921 @@
+.. index:: pair: group; The SSH authentication functions.
+.. _doxid-group__libssh__auth:
+
+The SSH authentication functions.
+=================================
+
+.. toctree::
+	:hidden:
+
+	enum_ssh_agent_state_e.rst
+	enum_ssh_auth_auto_state_e.rst
+	struct_ssh_agent_state_struct.rst
+	struct_ssh_auth_auto_state_struct.rst
+
+Overview
+~~~~~~~~
+
+Functions to authenticate with a server. :ref:`More...<details-group__libssh__auth>`
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// enums
+
+	enum :ref:`ssh_agent_state_e<doxid-group__libssh__auth_1ga288d00c21fe2d652607792379d90b7cf>`;
+	enum :ref:`ssh_auth_auto_state_e<doxid-group__libssh__auth_1gac65f4923889fe6f2b91021872463b4c4>`;
+
+	// structs
+
+	struct :ref:`ssh_agent_state_struct<doxid-structssh__agent__state__struct>`;
+	struct :ref:`ssh_auth_auto_state_struct<doxid-structssh__auth__auto__state__struct>`;
+
+	// global functions
+
+	int
+	:ref:`ssh_userauth_agent<doxid-group__libssh__auth_1ga7d84f3f89f65455b80b10e2643d80719>`(
+		ssh_session session,
+		const char* username
+		);
+
+	int
+	:ref:`ssh_userauth_gssapi<doxid-group__libssh__auth_1ga2758b0e86a848fe0d1d3d263d2a34d28>`(ssh_session session);
+
+	int
+	:ref:`ssh_userauth_kbdint<doxid-group__libssh__auth_1ga6b3b1c2a045286d9476b0252791a07d2>`(
+		ssh_session session,
+		const char* user,
+		const char* submethods
+		);
+
+	const char*
+	:ref:`ssh_userauth_kbdint_getanswer<doxid-group__libssh__auth_1ga66f1634f9f839b42cd600753f032c7da>`(
+		ssh_session session,
+		unsigned int i
+		);
+
+	const char*
+	:ref:`ssh_userauth_kbdint_getinstruction<doxid-group__libssh__auth_1gaa757fbdbd4f95261bbbbc12b1ec33078>`(ssh_session session);
+
+	const char*
+	:ref:`ssh_userauth_kbdint_getname<doxid-group__libssh__auth_1gaf920b6f8ed1e3c53cc2a683230098657>`(ssh_session session);
+
+	int
+	:ref:`ssh_userauth_kbdint_getnanswers<doxid-group__libssh__auth_1ga3a98024f73a8bba6afed0b21de513bcd>`(ssh_session session);
+
+	int
+	:ref:`ssh_userauth_kbdint_getnprompts<doxid-group__libssh__auth_1gacb996ff4979670db009a71a90172ece9>`(ssh_session session);
+
+	const char*
+	:ref:`ssh_userauth_kbdint_getprompt<doxid-group__libssh__auth_1ga4e7466c30852a3339003af7046fab396>`(
+		ssh_session session,
+		unsigned int i,
+		char* echo
+		);
+
+	int
+	:ref:`ssh_userauth_kbdint_setanswer<doxid-group__libssh__auth_1ga75e44b1f27059a00080f80fac0107a20>`(
+		ssh_session session,
+		unsigned int i,
+		const char* answer
+		);
+
+	int
+	:ref:`ssh_userauth_list<doxid-group__libssh__auth_1ga35d44897a44b4bb3b7c01108c1812a37>`(
+		ssh_session session,
+		const char* username
+		);
+
+	int
+	:ref:`ssh_userauth_none<doxid-group__libssh__auth_1ga58e7c265236edbc97a2f117d3f23b4dd>`(
+		ssh_session session,
+		const char* username
+		);
+
+	int
+	:ref:`ssh_userauth_password<doxid-group__libssh__auth_1ga50c0c150f8c4703e7ee49b3e3e3ca215>`(
+		ssh_session session,
+		const char* username,
+		const char* password
+		);
+
+	int
+	:ref:`ssh_userauth_publickey<doxid-group__libssh__auth_1gaa38c4f3194ef36720da7eddb0aa99e23>`(
+		ssh_session session,
+		const char* username,
+		const ssh_key privkey
+		);
+
+	int
+	:ref:`ssh_userauth_publickey_auto<doxid-group__libssh__auth_1ga53e6771b250c061463ed98b6e5b6e0af>`(
+		ssh_session session,
+		const char* username,
+		const char* passphrase
+		);
+
+	int
+	:ref:`ssh_userauth_try_publickey<doxid-group__libssh__auth_1ga592f673c4d417a6a46cd4876ac8287aa>`(
+		ssh_session session,
+		const char* username,
+		const ssh_key pubkey
+		);
+
+	void
+	:target:`ssh_agent_state_free<doxid-group__libssh__auth_1ga7d4487088981015ec0b1c66befc1c7dd>`(void* data);
+
+	static
+	int
+	:target:`ssh_auth_response_termination<doxid-group__libssh__auth_1ga4eba018b5d45cc32999cb76b06440c55>`(void* user);
+
+	void
+	:target:`ssh_kbdint_clean<doxid-group__libssh__auth_1gac042e71960b1aa80d8245125feeb249a>`(ssh_kbdint kbd);
+
+	void
+	:target:`ssh_kbdint_free<doxid-group__libssh__auth_1ga43266010b4cc11e277658c4c6c4a5500>`(ssh_kbdint kbd);
+
+	ssh_kbdint
+	:target:`ssh_kbdint_new<doxid-group__libssh__auth_1gac17384e2e1723b50cd041d775c0175a8>`(void);
+
+	:target:`SSH_PACKET_CALLBACK<doxid-group__libssh__auth_1ga1fc1f11c7ba0469c866c42956450ebf7>`(ssh_packet_userauth_banner);
+	:target:`SSH_PACKET_CALLBACK<doxid-group__libssh__auth_1ga89e83a8f415d2d6783b25b5f96226208>`(ssh_packet_userauth_failure);
+	:target:`SSH_PACKET_CALLBACK<doxid-group__libssh__auth_1gadbd916c2423b2097647263645e0dd422>`(ssh_packet_userauth_success);
+	:target:`SSH_PACKET_CALLBACK<doxid-group__libssh__auth_1gabcd6b05236558e07e8dc564a68f0a4a6>`(ssh_packet_userauth_pk_ok);
+	:target:`SSH_PACKET_CALLBACK<doxid-group__libssh__auth_1ga09059b696a82df0fb633977d2749e10a>`(ssh_packet_userauth_info_request);
+
+	int
+	:target:`ssh_userauth_agent_pubkey<doxid-group__libssh__auth_1ga5cc49db459d6e27c8645a20bbd0f5f88>`(
+		ssh_session session,
+		const char* username,
+		ssh_public_key publickey
+		);
+
+	static
+	int
+	:target:`ssh_userauth_agent_publickey<doxid-group__libssh__auth_1ga691078be9ea2a55fed97c7488395af5a>`(
+		ssh_session session,
+		const char* username,
+		ssh_key pubkey
+		);
+
+	static
+	int
+	:target:`ssh_userauth_get_response<doxid-group__libssh__auth_1gabff6b3898d3bf45b62cc3ed3774eaa83>`(ssh_session session);
+
+	static
+	int
+	:target:`ssh_userauth_kbdint_init<doxid-group__libssh__auth_1gac689d3761c0dc4ebee9971ecc482d9a4>`(
+		ssh_session session,
+		const char* username,
+		const char* submethods
+		);
+
+	static
+	int
+	:target:`ssh_userauth_kbdint_send<doxid-group__libssh__auth_1gaaa68e6aec2da509b246b7cba071408d3>`(ssh_session session);
+
+	static
+	int
+	:target:`ssh_userauth_request_service<doxid-group__libssh__auth_1ga812fb86c3dd4a6245bc7d01beaa9cfe8>`(ssh_session session);
+
+.. _details-group__libssh__auth:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+Functions to authenticate with a server.
+
+Global Functions
+----------------
+
+.. index:: pair: function; ssh_userauth_agent
+.. _doxid-group__libssh__auth_1ga7d84f3f89f65455b80b10e2643d80719:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_userauth_agent(
+		ssh_session session,
+		const char* username
+		)
+
+Try to do public key authentication with ssh agent.
+
+Most server implementations do not permit changing the username during authentication. The username should only be set with :ref:`ssh_options_set() <doxid-group__libssh__session_1ga7a801b85800baa3f4e16f5b47db0a73d>` only before you connect to the server.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to use.
+
+	*
+		- username
+
+		- The username, this SHOULD be NULL.
+
+
+
+.. rubric:: Returns:
+
+SSH_AUTH_ERROR: A serious error happened.
+
+SSH_AUTH_DENIED: The server doesn't accept that public key as an authentication token. Try another key or another method.
+
+SSH_AUTH_PARTIAL: You've been partially authenticated, you still have to use another method.
+
+SSH_AUTH_SUCCESS: The public key is accepted, you want now to use :ref:`ssh_userauth_pubkey() <doxid-legacy_8h_1afb953cc1f6cccb9263b06543bfd30bba>`. SSH_AUTH_AGAIN: In nonblocking mode, you've got to call this again later.
+
+.. index:: pair: function; ssh_userauth_gssapi
+.. _doxid-group__libssh__auth_1ga2758b0e86a848fe0d1d3d263d2a34d28:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_userauth_gssapi(ssh_session session)
+
+Try to authenticate through the "gssapi-with-mic" method.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to use.
+
+
+
+.. rubric:: Returns:
+
+SSH_AUTH_ERROR: A serious error happened
+
+SSH_AUTH_DENIED: Authentication failed : use another method
+
+SSH_AUTH_PARTIAL: You've been partially authenticated, you still have to use another method
+
+SSH_AUTH_SUCCESS: Authentication success
+
+SSH_AUTH_AGAIN: In nonblocking mode, you've got to call this again later.
+
+.. index:: pair: function; ssh_userauth_kbdint
+.. _doxid-group__libssh__auth_1ga6b3b1c2a045286d9476b0252791a07d2:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_userauth_kbdint(
+		ssh_session session,
+		const char* user,
+		const char* submethods
+		)
+
+Try to authenticate through the "keyboard-interactive" method.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to use.
+
+	*
+		- user
+
+		- The username to authenticate. You can specify NULL if ssh_option_set_username() has been used. You cannot try two different logins in a row.
+
+	*
+		- submethods
+
+		- Undocumented. Set it to NULL.
+
+
+
+.. rubric:: Returns:
+
+SSH_AUTH_ERROR: A serious error happened
+
+SSH_AUTH_DENIED: Authentication failed : use another method
+
+SSH_AUTH_PARTIAL: You've been partially authenticated, you still have to use another method
+
+SSH_AUTH_SUCCESS: Authentication success
+
+SSH_AUTH_INFO: The server asked some questions. Use :ref:`ssh_userauth_kbdint_getnprompts() <doxid-group__libssh__auth_1gacb996ff4979670db009a71a90172ece9>` and such.
+
+SSH_AUTH_AGAIN: In nonblocking mode, you've got to call this again later.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_userauth_kbdint_getnprompts() <doxid-group__libssh__auth_1gacb996ff4979670db009a71a90172ece9>`
+
+:ref:`ssh_userauth_kbdint_getname() <doxid-group__libssh__auth_1gaf920b6f8ed1e3c53cc2a683230098657>`
+
+:ref:`ssh_userauth_kbdint_getinstruction() <doxid-group__libssh__auth_1gaa757fbdbd4f95261bbbbc12b1ec33078>`
+
+:ref:`ssh_userauth_kbdint_getprompt() <doxid-group__libssh__auth_1ga4e7466c30852a3339003af7046fab396>`
+
+:ref:`ssh_userauth_kbdint_setanswer() <doxid-group__libssh__auth_1ga75e44b1f27059a00080f80fac0107a20>`
+
+.. index:: pair: function; ssh_userauth_kbdint_getanswer
+.. _doxid-group__libssh__auth_1ga66f1634f9f839b42cd600753f032c7da:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	ssh_userauth_kbdint_getanswer(
+		ssh_session session,
+		unsigned int i
+		)
+
+Get the answer for a question from a message block.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to use.
+
+	*
+		- i
+
+		- index The number of the ith answer.
+
+
+
+.. rubric:: Returns:
+
+0 on success, < 0 on error.
+
+.. index:: pair: function; ssh_userauth_kbdint_getinstruction
+.. _doxid-group__libssh__auth_1gaa757fbdbd4f95261bbbbc12b1ec33078:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	ssh_userauth_kbdint_getinstruction(ssh_session session)
+
+Get the "instruction" of the message block.
+
+Once you have called :ref:`ssh_userauth_kbdint() <doxid-group__libssh__auth_1ga6b3b1c2a045286d9476b0252791a07d2>` and received SSH_AUTH_INFO return code, this function can be used to retrieve information about the keyboard interactive authentication questions sent by the remote host.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to use.
+
+
+
+.. rubric:: Returns:
+
+The instruction of the message block.
+
+.. index:: pair: function; ssh_userauth_kbdint_getname
+.. _doxid-group__libssh__auth_1gaf920b6f8ed1e3c53cc2a683230098657:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	ssh_userauth_kbdint_getname(ssh_session session)
+
+Get the "name" of the message block.
+
+Once you have called :ref:`ssh_userauth_kbdint() <doxid-group__libssh__auth_1ga6b3b1c2a045286d9476b0252791a07d2>` and received SSH_AUTH_INFO return code, this function can be used to retrieve information about the keyboard interactive authentication questions sent by the remote host.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to use.
+
+
+
+.. rubric:: Returns:
+
+The name of the message block. Do not free it.
+
+.. index:: pair: function; ssh_userauth_kbdint_getnanswers
+.. _doxid-group__libssh__auth_1ga3a98024f73a8bba6afed0b21de513bcd:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_userauth_kbdint_getnanswers(ssh_session session)
+
+Get the number of answers the client has given.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to use.
+
+
+
+.. rubric:: Returns:
+
+The number of answers.
+
+.. index:: pair: function; ssh_userauth_kbdint_getnprompts
+.. _doxid-group__libssh__auth_1gacb996ff4979670db009a71a90172ece9:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_userauth_kbdint_getnprompts(ssh_session session)
+
+Get the number of prompts (questions) the server has given.
+
+Once you have called :ref:`ssh_userauth_kbdint() <doxid-group__libssh__auth_1ga6b3b1c2a045286d9476b0252791a07d2>` and received SSH_AUTH_INFO return code, this function can be used to retrieve information about the keyboard interactive authentication questions sent by the remote host.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to use.
+
+
+
+.. rubric:: Returns:
+
+The number of prompts.
+
+.. index:: pair: function; ssh_userauth_kbdint_getprompt
+.. _doxid-group__libssh__auth_1ga4e7466c30852a3339003af7046fab396:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	ssh_userauth_kbdint_getprompt(
+		ssh_session session,
+		unsigned int i,
+		char* echo
+		)
+
+Get a prompt from a message block.
+
+Once you have called :ref:`ssh_userauth_kbdint() <doxid-group__libssh__auth_1ga6b3b1c2a045286d9476b0252791a07d2>` and received SSH_AUTH_INFO return code, this function can be used to retrieve information about the keyboard interactive authentication questions sent by the remote host.
+
+.. ref-code-block:: cpp
+
+	const char prompt;
+	char echo;
+	
+	prompt = ssh_userauth_kbdint_getprompt(session, 0, &echo);
+	if (echo) ...
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to use.
+
+	*
+		- i
+
+		- The index number of the i'th prompt.
+
+	*
+		- echo
+
+		- This is an optional variable. You can obtain a boolean if the user input should be echoed or hidden. For passwords it is usually hidden.
+
+
+
+.. rubric:: Returns:
+
+A pointer to the prompt. Do not free it.
+
+.. index:: pair: function; ssh_userauth_kbdint_setanswer
+.. _doxid-group__libssh__auth_1ga75e44b1f27059a00080f80fac0107a20:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_userauth_kbdint_setanswer(
+		ssh_session session,
+		unsigned int i,
+		const char* answer
+		)
+
+Set the answer for a question from a message block.
+
+If you have called :ref:`ssh_userauth_kbdint() <doxid-group__libssh__auth_1ga6b3b1c2a045286d9476b0252791a07d2>` and got SSH_AUTH_INFO, this function returns the questions from the server.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to use.
+
+	*
+		- i
+
+		- index The number of the ith prompt.
+
+	*
+		- answer
+
+		- The answer to give to the server. The answer MUST be encoded UTF-8. It is up to the server how to interpret the value and validate it. However, if you read the answer in some other encoding, you MUST convert it to UTF-8.
+
+
+
+.. rubric:: Returns:
+
+0 on success, < 0 on error.
+
+.. index:: pair: function; ssh_userauth_list
+.. _doxid-group__libssh__auth_1ga35d44897a44b4bb3b7c01108c1812a37:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_userauth_list(
+		ssh_session session,
+		const char* username
+		)
+
+Get available authentication methods from the server.
+
+This requires the function :ref:`ssh_userauth_none() <doxid-group__libssh__auth_1ga58e7c265236edbc97a2f117d3f23b4dd>` to be called before the methods are available. The server MAY return a list of methods that may continue.
+
+Other reserved flags may appear in future versions.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The SSH session.
+
+	*
+		- username
+
+		- Deprecated, set to NULL.
+
+
+
+.. rubric:: Returns:
+
+A bitfield of the fllowing values:
+
+* SSH_AUTH_METHOD_PASSWORD
+
+* SSH_AUTH_METHOD_PUBLICKEY
+
+* SSH_AUTH_METHOD_HOSTBASED
+
+* SSH_AUTH_METHOD_INTERACTIVE
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_userauth_none() <doxid-group__libssh__auth_1ga58e7c265236edbc97a2f117d3f23b4dd>`
+
+.. index:: pair: function; ssh_userauth_none
+.. _doxid-group__libssh__auth_1ga58e7c265236edbc97a2f117d3f23b4dd:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_userauth_none(
+		ssh_session session,
+		const char* username
+		)
+
+Try to authenticate through the "none" method.
+
+Most server implementations do not permit changing the username during authentication. The username should only be set with :ref:`ssh_options_set() <doxid-group__libssh__session_1ga7a801b85800baa3f4e16f5b47db0a73d>` only before you connect to the server.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to use.
+
+	*
+		- username
+
+		- The username, this SHOULD be NULL.
+
+
+
+.. rubric:: Returns:
+
+SSH_AUTH_ERROR: A serious error happened.
+
+SSH_AUTH_DENIED: Authentication failed: use another method
+
+SSH_AUTH_PARTIAL: You've been partially authenticated, you still have to use another method
+
+SSH_AUTH_SUCCESS: Authentication success
+
+SSH_AUTH_AGAIN: In nonblocking mode, you've got to call this again later.
+
+.. index:: pair: function; ssh_userauth_password
+.. _doxid-group__libssh__auth_1ga50c0c150f8c4703e7ee49b3e3e3ca215:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_userauth_password(
+		ssh_session session,
+		const char* username,
+		const char* password
+		)
+
+Try to authenticate by password.
+
+This authentication method is normally disabled on SSHv2 server. You should use keyboard-interactive mode.
+
+The 'password' value MUST be encoded UTF-8. It is up to the server how to interpret the password and validate it against the password database. However, if you read the password in some other encoding, you MUST convert the password to UTF-8.
+
+Most server implementations do not permit changing the username during authentication. The username should only be set with :ref:`ssh_options_set() <doxid-group__libssh__session_1ga7a801b85800baa3f4e16f5b47db0a73d>` only before you connect to the server.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The ssh session to use.
+
+	*
+		- username
+
+		- The username, this SHOULD be NULL.
+
+	*
+		- password
+
+		- The password to authenticate in UTF-8.
+
+
+
+.. rubric:: Returns:
+
+SSH_AUTH_ERROR: A serious error happened.
+
+SSH_AUTH_DENIED: Authentication failed: use another method
+
+SSH_AUTH_PARTIAL: You've been partially authenticated, you still have to use another method
+
+SSH_AUTH_SUCCESS: Authentication success
+
+SSH_AUTH_AGAIN: In nonblocking mode, you've got to call this again later.
+
+
+
+.. rubric:: See also:
+
+:ref:`ssh_userauth_none() <doxid-group__libssh__auth_1ga58e7c265236edbc97a2f117d3f23b4dd>`
+
+:ref:`ssh_userauth_kbdint() <doxid-group__libssh__auth_1ga6b3b1c2a045286d9476b0252791a07d2>`
+
+.. index:: pair: function; ssh_userauth_publickey
+.. _doxid-group__libssh__auth_1gaa38c4f3194ef36720da7eddb0aa99e23:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_userauth_publickey(
+		ssh_session session,
+		const char* username,
+		const ssh_key privkey
+		)
+
+Authenticate with public/private key.
+
+Most server implementations do not permit changing the username during authentication. The username should only be set with :ref:`ssh_options_set() <doxid-group__libssh__session_1ga7a801b85800baa3f4e16f5b47db0a73d>` only before you connect to the server.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The SSH session.
+
+	*
+		- username
+
+		- The username, this SHOULD be NULL.
+
+	*
+		- privkey
+
+		- The private key for authentication.
+
+
+
+.. rubric:: Returns:
+
+SSH_AUTH_ERROR: A serious error happened.
+
+SSH_AUTH_DENIED: The server doesn't accept that public key as an authentication token. Try another key or another method.
+
+SSH_AUTH_PARTIAL: You've been partially authenticated, you still have to use another method.
+
+SSH_AUTH_SUCCESS: The public key is accepted, you want now to use :ref:`ssh_userauth_pubkey() <doxid-legacy_8h_1afb953cc1f6cccb9263b06543bfd30bba>`. SSH_AUTH_AGAIN: In nonblocking mode, you've got to call this again later.
+
+.. index:: pair: function; ssh_userauth_publickey_auto
+.. _doxid-group__libssh__auth_1ga53e6771b250c061463ed98b6e5b6e0af:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_userauth_publickey_auto(
+		ssh_session session,
+		const char* username,
+		const char* passphrase
+		)
+
+Tries to automatically authenticate with public key and "none".
+
+It may fail, for instance it doesn't ask for a password and uses a default asker for passphrases (in case the private key is encrypted).
+
+Most server implementations do not permit changing the username during authentication. The username should only be set with :ref:`ssh_options_set() <doxid-group__libssh__session_1ga7a801b85800baa3f4e16f5b47db0a73d>` only before you connect to the server.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The SSH session.
+
+	*
+		- username
+
+		- The username, this SHOULD be NULL.
+
+	*
+		- passphrase
+
+		- Use this passphrase to unlock the privatekey. Use NULL if you don't want to use a passphrase or the user should be asked.
+
+
+
+.. rubric:: Returns:
+
+SSH_AUTH_ERROR: A serious error happened.
+
+SSH_AUTH_DENIED: The server doesn't accept that public key as an authentication token. Try another key or another method.
+
+SSH_AUTH_PARTIAL: You've been partially authenticated, you still have to use another method.
+
+SSH_AUTH_SUCCESS: The public key is accepted, you want now to use :ref:`ssh_userauth_pubkey() <doxid-legacy_8h_1afb953cc1f6cccb9263b06543bfd30bba>`. SSH_AUTH_AGAIN: In nonblocking mode, you've got to call this again later.
+
+.. index:: pair: function; ssh_userauth_try_publickey
+.. _doxid-group__libssh__auth_1ga592f673c4d417a6a46cd4876ac8287aa:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	ssh_userauth_try_publickey(
+		ssh_session session,
+		const char* username,
+		const ssh_key pubkey
+		)
+
+Try to authenticate with the given public key.
+
+To avoid unnecessary processing and user interaction, the following method is provided for querying whether authentication using the 'pubkey' would be possible.
+
+Most server implementations do not permit changing the username during authentication. The username should only be set with :ref:`ssh_options_set() <doxid-group__libssh__session_1ga7a801b85800baa3f4e16f5b47db0a73d>` only before you connect to the server.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- session
+
+		- The SSH session.
+
+	*
+		- username
+
+		- The username, this SHOULD be NULL.
+
+	*
+		- pubkey
+
+		- The public key to try.
+
+
+
+.. rubric:: Returns:
+
+SSH_AUTH_ERROR: A serious error happened.
+
+SSH_AUTH_DENIED: The server doesn't accept that public key as an authentication token. Try another key or another method.
+
+SSH_AUTH_PARTIAL: You've been partially authenticated, you still have to use another method.
+
+SSH_AUTH_SUCCESS: The public key is accepted, you want now to use :ref:`ssh_userauth_pubkey() <doxid-legacy_8h_1afb953cc1f6cccb9263b06543bfd30bba>`. SSH_AUTH_AGAIN: In nonblocking mode, you've got to call this again later.
+

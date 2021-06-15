@@ -1,0 +1,1311 @@
+.. index:: pair: group; MIDI Sequencer
+.. _doxid-group___sequencer:
+
+MIDI Sequencer
+==============
+
+.. toctree::
+	:hidden:
+
+	group_SeqClient.rst
+	group_SeqEvent.rst
+	group_SeqEvents.rst
+	group_SeqEvType.rst
+	group_SeqMiddle.rst
+	group_SeqMisc.rst
+	group_SeqPort.rst
+	group_SeqSubscribe.rst
+	group_SeqQueue.rst
+	group_MIDI_Event.rst
+	enum_snd_seq_type_t.rst
+
+Overview
+~~~~~~~~
+
+MIDI Sequencer Interface. :ref:`More...<details-group___sequencer>`
+
+|	:ref:`Sequencer Client Interface<doxid-group___seq_client>`
+|	:ref:`Sequencer Event API<doxid-group___seq_event>`
+|	:ref:`Sequencer Event Definitions<doxid-group___seq_events>`
+|	:ref:`Sequencer Event Type Checks<doxid-group___seq_ev_type>`
+|	:ref:`Sequencer Middle Level Interface<doxid-group___seq_middle>`
+|	:ref:`Sequencer Miscellaneous<doxid-group___seq_misc>`
+|	:ref:`Sequencer Port Interface<doxid-group___seq_port>`
+|	:ref:`Sequencer Port Subscription<doxid-group___seq_subscribe>`
+|	:ref:`Sequencer Queue Interface<doxid-group___seq_queue>`
+|	:ref:`Sequencer event \<-> MIDI byte stream coder<doxid-group___m_i_d_i___event>`
+
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef struct _snd_seq :ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`;
+	typedef struct _snd_seq_system_info :ref:`snd_seq_system_info_t<doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>`;
+
+	// enums
+
+	enum :ref:`snd_seq_type_t<doxid-group___sequencer_1ga95ee23dbfb14769db6a470875ed94807>`;
+
+	// global functions
+
+	int
+	:ref:`snd_seq_open<doxid-group___sequencer_1ga95462dc59c0319e186cda713ecfb4ed3>`(
+		:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`** handle,
+		const char* name,
+		int streams,
+		int mode
+		);
+
+	int
+	:ref:`snd_seq_open_lconf<doxid-group___sequencer_1ga03b68a24d0d2de303ee9ec04ed68c8b7>`(
+		:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`** handle,
+		const char* name,
+		int streams,
+		int mode,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* lconf
+		);
+
+	const char*
+	:ref:`snd_seq_name<doxid-group___sequencer_1ga8736d847fb7b3b6627f29f0eba907e30>`(:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`* seq);
+
+	:ref:`snd_seq_type_t<doxid-group___sequencer_1ga95ee23dbfb14769db6a470875ed94807>`
+	:ref:`snd_seq_type<doxid-group___sequencer_1ga1ff33a2d698836d879ac05f5176c58b3>`(:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`* seq);
+
+	int
+	:ref:`snd_seq_close<doxid-group___sequencer_1gab209cdcf6e1e1907f8c49d3148a4e0f6>`(:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`* handle);
+
+	int
+	:ref:`snd_seq_poll_descriptors_count<doxid-group___sequencer_1gaf281c1dddfc626124b9e61d2cad94f2d>`(
+		:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`* handle,
+		short events
+		);
+
+	int
+	:ref:`snd_seq_poll_descriptors<doxid-group___sequencer_1ga99851fa9ff4ec5be7414cd9defbcda89>`(
+		:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`* handle,
+		struct pollfd* pfds,
+		unsigned int space,
+		short events
+		);
+
+	int
+	:ref:`snd_seq_poll_descriptors_revents<doxid-group___sequencer_1gaae23b17b3c34639b7a2a8ed74880d364>`(
+		:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`* seq,
+		struct pollfd* pfds,
+		unsigned int nfds,
+		unsigned short* revents
+		);
+
+	int
+	:ref:`snd_seq_nonblock<doxid-group___sequencer_1gaa41faa2ad471677d1060f9e9a226ac52>`(
+		:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`* handle,
+		int nonblock
+		);
+
+	int
+	:ref:`snd_seq_client_id<doxid-group___sequencer_1ga2cdaded101f041b9a0930b665ac44b93>`(:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`* handle);
+
+	size_t
+	:ref:`snd_seq_get_output_buffer_size<doxid-group___sequencer_1ga02442682a361bc6f9faeff468cdebbad>`(:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`* handle);
+
+	size_t
+	:ref:`snd_seq_get_input_buffer_size<doxid-group___sequencer_1gacd207de4c08ffff3020b078de8e64cc5>`(:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`* handle);
+
+	int
+	:ref:`snd_seq_set_output_buffer_size<doxid-group___sequencer_1gae9a0931460444f130c5c1df9de57707a>`(
+		:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`* handle,
+		size_t size
+		);
+
+	int
+	:ref:`snd_seq_set_input_buffer_size<doxid-group___sequencer_1ga62cd9f5ea1d75db676d43da44596750e>`(
+		:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`* handle,
+		size_t size
+		);
+
+	size_t
+	:ref:`snd_seq_system_info_sizeof<doxid-group___sequencer_1ga1a036e739dd2daaa9952875528c2f763>`(void);
+
+	int
+	:ref:`snd_seq_system_info_malloc<doxid-group___sequencer_1gad49e5da1a851505e43dcfbf5fd00b0d9>`(:ref:`snd_seq_system_info_t<doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>`** ptr);
+
+	void
+	:ref:`snd_seq_system_info_free<doxid-group___sequencer_1gaf3876a29ae1e648d9fd8e6d067a56b6b>`(:ref:`snd_seq_system_info_t<doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>`* ptr);
+
+	void
+	:ref:`snd_seq_system_info_copy<doxid-group___sequencer_1ga8cbf6ad4d47837d0a5a1100ef0808ab7>`(
+		:ref:`snd_seq_system_info_t<doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>`* dst,
+		const :ref:`snd_seq_system_info_t<doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>`* src
+		);
+
+	int
+	:ref:`snd_seq_system_info_get_queues<doxid-group___sequencer_1ga63c9cfcc634c722350b55a6820461e9e>`(const :ref:`snd_seq_system_info_t<doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>`* info);
+
+	int
+	:ref:`snd_seq_system_info_get_clients<doxid-group___sequencer_1ga7fbb56a82dfef9224b411a659ba7d8f0>`(const :ref:`snd_seq_system_info_t<doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>`* info);
+
+	int
+	:ref:`snd_seq_system_info_get_ports<doxid-group___sequencer_1gae446559ff05dc0ed1967eab253921aa0>`(const :ref:`snd_seq_system_info_t<doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>`* info);
+
+	int
+	:ref:`snd_seq_system_info_get_channels<doxid-group___sequencer_1ga58fa1ff3d4ffafac092e5cffb7092ad1>`(const :ref:`snd_seq_system_info_t<doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>`* info);
+
+	int
+	:ref:`snd_seq_system_info_get_cur_clients<doxid-group___sequencer_1gaeb16d361d1fc92de95cc1986619eac8a>`(const :ref:`snd_seq_system_info_t<doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>`* info);
+
+	int
+	:ref:`snd_seq_system_info_get_cur_queues<doxid-group___sequencer_1ga5af096ec5db751e0d10ec0d998482c6a>`(const :ref:`snd_seq_system_info_t<doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>`* info);
+
+	int
+	:ref:`snd_seq_system_info<doxid-group___sequencer_1ga548a7ebe6c90e90f689cf8d862b81f9e>`(
+		:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`* handle,
+		:ref:`snd_seq_system_info_t<doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>`* info
+		);
+
+	// macros
+
+	#define :ref:`SND_SEQ_ADDRESS_BROADCAST<doxid-group___sequencer_1gafc9dd136f59487d09d2124cef09b8c3e>`
+	#define :ref:`SND_SEQ_ADDRESS_SUBSCRIBERS<doxid-group___sequencer_1ga383b235d2afbe48704952edfd3a33eed>`
+	#define :ref:`SND_SEQ_ADDRESS_UNKNOWN<doxid-group___sequencer_1ga79353f7f2482e98b5181f03df7c807ac>`
+	#define :ref:`SND_SEQ_CLIENT_SYSTEM<doxid-group___sequencer_1ga5437f98c59679c92ee4d940ac643169e>`
+	#define :ref:`SND_SEQ_DLSYM_VERSION<doxid-group___sequencer_1gad6233417c4c820a4c0aef4c379cf65a7>`
+	#define :ref:`SND_SEQ_NONBLOCK<doxid-group___sequencer_1gafb3bf2f7109d85d9226c64578e73d614>`
+	#define :ref:`SND_SEQ_OPEN_DUPLEX<doxid-group___sequencer_1ga61c3481e1d357bb38cc399f6b9884ac7>`
+	#define :ref:`SND_SEQ_OPEN_INPUT<doxid-group___sequencer_1gaaf1cded61cf90f4d37caf910192ef513>`
+	#define :ref:`SND_SEQ_OPEN_OUTPUT<doxid-group___sequencer_1ga1edd6d976f3dae5d921568f2107bd121>`
+	#define :ref:`snd_seq_system_info_alloca<doxid-group___sequencer_1gaf6343bc1e96ab067152b35b8ff6904ea>`(ptr)
+
+.. _details-group___sequencer:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+MIDI Sequencer Interface. See :ref:`Sequencer interface <doxid-seq>` page for more details.
+
+Typedefs
+--------
+
+.. index:: pair: typedef; snd_seq_t
+.. _doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct _snd_seq snd_seq_t
+
+Sequencer handle
+
+.. index:: pair: typedef; snd_seq_system_info_t
+.. _doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct _snd_seq_system_info snd_seq_system_info_t
+
+system information container
+
+Global Functions
+----------------
+
+.. index:: pair: function; snd_seq_open
+.. _doxid-group___sequencer_1ga95462dc59c0319e186cda713ecfb4ed3:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_seq_open(
+		:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`** handle,
+		const char* name,
+		int streams,
+		int mode
+		)
+
+Open the ALSA sequencer.
+
+Internally, these are translated to ``O_WRONLY``, ``O_RDONLY`` and ``O_RDWR`` respectively and used as the second argument to the C library open() call.
+
+Creates a new handle and opens a connection to the kernel sequencer interface. After a client is created successfully, an event with :ref:`SND_SEQ_EVENT_CLIENT_START <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40a7b77fe59af173ddfebb718da0859712e>` is broadcast to announce port.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- seqp
+
+		- Pointer to a snd_seq_t pointer. This pointer must be kept and passed to most of the other sequencer functions.
+
+	*
+		- name
+
+		- The sequencer's "name". This is *not* a name you make up for your own purposes; it has special significance to the ALSA library. Usually you need to pass ``"default"`` here.
+
+	*
+		- streams
+
+		- 
+		  The read/write mode of the sequencer. Can be one of three values:
+		  
+		  * :ref:`SND_SEQ_OPEN_OUTPUT <doxid-group___sequencer_1ga1edd6d976f3dae5d921568f2107bd121>` - open the sequencer for output only
+		  
+		  * :ref:`SND_SEQ_OPEN_INPUT <doxid-group___sequencer_1gaaf1cded61cf90f4d37caf910192ef513>` - open the sequencer for input only
+		  
+		  * :ref:`SND_SEQ_OPEN_DUPLEX <doxid-group___sequencer_1ga61c3481e1d357bb38cc399f6b9884ac7>` - open the sequencer for output and input
+
+	*
+		- mode
+
+		- Optional modifier. Can be either 0, or :ref:`SND_SEQ_NONBLOCK <doxid-group___sequencer_1gafb3bf2f7109d85d9226c64578e73d614>`, which will make read/write operations non-blocking. This can also be set later using :ref:`snd_seq_nonblock() <doxid-group___sequencer_1gaa41faa2ad471677d1060f9e9a226ac52>`.
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_seq_open_lconf() <doxid-group___sequencer_1ga03b68a24d0d2de303ee9ec04ed68c8b7>`, :ref:`snd_seq_close() <doxid-group___sequencer_1gab209cdcf6e1e1907f8c49d3148a4e0f6>`, :ref:`snd_seq_type() <doxid-group___sequencer_1ga1ff33a2d698836d879ac05f5176c58b3>`, :ref:`snd_seq_name() <doxid-group___sequencer_1ga8736d847fb7b3b6627f29f0eba907e30>`, :ref:`snd_seq_nonblock() <doxid-group___sequencer_1gaa41faa2ad471677d1060f9e9a226ac52>`, :ref:`snd_seq_client_id() <doxid-group___sequencer_1ga2cdaded101f041b9a0930b665ac44b93>`
+
+.. index:: pair: function; snd_seq_open_lconf
+.. _doxid-group___sequencer_1ga03b68a24d0d2de303ee9ec04ed68c8b7:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_seq_open_lconf(
+		:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`** handle,
+		const char* name,
+		int streams,
+		int mode,
+		:ref:`snd_config_t<doxid-group___config_1ga1c20905af775ae77d04d1a5696f67985>`* lconf
+		)
+
+Open the ALSA sequencer using local configuration.
+
+See the :ref:`snd_seq_open() <doxid-group___sequencer_1ga95462dc59c0319e186cda713ecfb4ed3>` function for further details. The extension is that the given configuration is used to resolve abstract name.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- seqp
+
+		- Pointer to a snd_seq_t pointer.
+
+	*
+		- name
+
+		- The name to open
+
+	*
+		- streams
+
+		- The read/write mode of the sequencer.
+
+	*
+		- mode
+
+		- Optional modifier
+
+	*
+		- lconf
+
+		- Local configuration
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_seq_open() <doxid-group___sequencer_1ga95462dc59c0319e186cda713ecfb4ed3>`
+
+.. index:: pair: function; snd_seq_name
+.. _doxid-group___sequencer_1ga8736d847fb7b3b6627f29f0eba907e30:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	snd_seq_name(:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`* seq)
+
+get identifier of sequencer handle
+
+Returns the ASCII identifier of the given sequencer handle. It's the same identifier specified in :ref:`snd_seq_open() <doxid-group___sequencer_1ga95462dc59c0319e186cda713ecfb4ed3>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- seq
+
+		- sequencer handle
+
+
+
+.. rubric:: Returns:
+
+ASCII identifier of sequencer handle
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_seq_open() <doxid-group___sequencer_1ga95462dc59c0319e186cda713ecfb4ed3>`
+
+.. index:: pair: function; snd_seq_type
+.. _doxid-group___sequencer_1ga1ff33a2d698836d879ac05f5176c58b3:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_seq_type_t<doxid-group___sequencer_1ga95ee23dbfb14769db6a470875ed94807>`
+	snd_seq_type(:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`* seq)
+
+get type of sequencer handle
+
+Returns the type :ref:`snd_seq_type_t <doxid-group___sequencer_1ga95ee23dbfb14769db6a470875ed94807>` of the given sequencer handle.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- seq
+
+		- sequencer handle
+
+
+
+.. rubric:: Returns:
+
+type of sequencer handle
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_seq_open() <doxid-group___sequencer_1ga95462dc59c0319e186cda713ecfb4ed3>`
+
+.. index:: pair: function; snd_seq_close
+.. _doxid-group___sequencer_1gab209cdcf6e1e1907f8c49d3148a4e0f6:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_seq_close(:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`* handle)
+
+Close the sequencer.
+
+Closes the sequencer client and releases its resources. After a client is closed, an event with :ref:`SND_SEQ_EVENT_CLIENT_EXIT <doxid-group___seq_events_1ggaef39e1f267006faf7abc91c3cb32ea40a0b3cb6ea4b789281399b4fb6561aa390>` is broadcast to announce port. The connection between other clients are disconnected. Call this just before exiting your program.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- seq
+
+		- Handle returned from :ref:`snd_seq_open() <doxid-group___sequencer_1ga95462dc59c0319e186cda713ecfb4ed3>`
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_seq_close() <doxid-group___sequencer_1gab209cdcf6e1e1907f8c49d3148a4e0f6>`
+
+.. index:: pair: function; snd_seq_poll_descriptors_count
+.. _doxid-group___sequencer_1gaf281c1dddfc626124b9e61d2cad94f2d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_seq_poll_descriptors_count(
+		:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`* handle,
+		short events
+		)
+
+Returns the number of poll descriptors.
+
+Get the number of poll descriptors. The polling events to be checked can be specified by the second argument. When both input and output are checked, pass ``POLLIN|POLLOUT``
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- seq
+
+		- sequencer handle
+
+	*
+		- events
+
+		- the poll events to be checked (``POLLIN`` and ``POLLOUT``)
+
+
+
+.. rubric:: Returns:
+
+the number of poll descriptors.
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_seq_poll_descriptors() <doxid-group___sequencer_1ga99851fa9ff4ec5be7414cd9defbcda89>`
+
+.. index:: pair: function; snd_seq_poll_descriptors
+.. _doxid-group___sequencer_1ga99851fa9ff4ec5be7414cd9defbcda89:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_seq_poll_descriptors(
+		:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`* handle,
+		struct pollfd* pfds,
+		unsigned int space,
+		short events
+		)
+
+Get poll descriptors.
+
+Get poll descriptors assigned to the sequencer handle. Since a sequencer handle can duplex streams, you need to set which direction(s) is/are polled in *events* argument. When ``POLLIN`` bit is specified, the incoming events to the ports are checked.
+
+To check the returned poll-events, call :ref:`snd_seq_poll_descriptors_revents() <doxid-group___sequencer_1gaae23b17b3c34639b7a2a8ed74880d364>` instead of reading the pollfd structs directly.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- seq
+
+		- sequencer handle
+
+	*
+		- pfds
+
+		- array of poll descriptors
+
+	*
+		- space
+
+		- space in the poll descriptor array
+
+	*
+		- events
+
+		- polling events to be checked (``POLLIN`` and ``POLLOUT``)
+
+
+
+.. rubric:: Returns:
+
+count of filled descriptors
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_seq_poll_descriptors_count() <doxid-group___sequencer_1gaf281c1dddfc626124b9e61d2cad94f2d>`, :ref:`snd_seq_poll_descriptors_revents() <doxid-group___sequencer_1gaae23b17b3c34639b7a2a8ed74880d364>`
+
+.. index:: pair: function; snd_seq_poll_descriptors_revents
+.. _doxid-group___sequencer_1gaae23b17b3c34639b7a2a8ed74880d364:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_seq_poll_descriptors_revents(
+		:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`* seq,
+		struct pollfd* pfds,
+		unsigned int nfds,
+		unsigned short* revents
+		)
+
+get returned events from poll descriptors
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- seq
+
+		- sequencer handle
+
+	*
+		- pfds
+
+		- array of poll descriptors
+
+	*
+		- nfds
+
+		- count of poll descriptors
+
+	*
+		- revents
+
+		- returned events
+
+
+
+.. rubric:: Returns:
+
+zero if success, otherwise a negative error code
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_seq_poll_descriptors() <doxid-group___sequencer_1ga99851fa9ff4ec5be7414cd9defbcda89>`
+
+.. index:: pair: function; snd_seq_nonblock
+.. _doxid-group___sequencer_1gaa41faa2ad471677d1060f9e9a226ac52:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_seq_nonblock(
+		:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`* handle,
+		int nonblock
+		)
+
+Set nonblock mode.
+
+Change the blocking mode of the given client. In block mode, the client falls into sleep when it fills the output memory pool with full events. The client will be woken up after a certain amount of free space becomes available.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- seq
+
+		- sequencer handle
+
+	*
+		- nonblock
+
+		- 0 = block, 1 = nonblock mode
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_seq_open() <doxid-group___sequencer_1ga95462dc59c0319e186cda713ecfb4ed3>`
+
+.. index:: pair: function; snd_seq_client_id
+.. _doxid-group___sequencer_1ga2cdaded101f041b9a0930b665ac44b93:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_seq_client_id(:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`* handle)
+
+Get the client id.
+
+Returns the id of the specified client. If an error occurs, function returns the negative error code. A client id is necessary to inquiry or to set the client information. A user client is assigned from 128 to 191.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- seq
+
+		- sequencer handle
+
+
+
+.. rubric:: Returns:
+
+the client id
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_seq_open() <doxid-group___sequencer_1ga95462dc59c0319e186cda713ecfb4ed3>`
+
+.. index:: pair: function; snd_seq_get_output_buffer_size
+.. _doxid-group___sequencer_1ga02442682a361bc6f9faeff468cdebbad:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	size_t
+	snd_seq_get_output_buffer_size(:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`* handle)
+
+Return the size of output buffer.
+
+Obtains the size of output buffer. This buffer is used to store decoded byte-stream of output events before transferring to sequencer.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- seq
+
+		- sequencer handle
+
+
+
+.. rubric:: Returns:
+
+the size of output buffer in bytes
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_seq_set_output_buffer_size() <doxid-group___sequencer_1gae9a0931460444f130c5c1df9de57707a>`
+
+.. index:: pair: function; snd_seq_get_input_buffer_size
+.. _doxid-group___sequencer_1gacd207de4c08ffff3020b078de8e64cc5:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	size_t
+	snd_seq_get_input_buffer_size(:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`* handle)
+
+Return the size of input buffer.
+
+Obtains the size of input buffer. This buffer is used to read byte-stream of input events from sequencer.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- seq
+
+		- sequencer handle
+
+
+
+.. rubric:: Returns:
+
+the size of input buffer in bytes
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_seq_set_input_buffer_size() <doxid-group___sequencer_1ga62cd9f5ea1d75db676d43da44596750e>`
+
+.. index:: pair: function; snd_seq_set_output_buffer_size
+.. _doxid-group___sequencer_1gae9a0931460444f130c5c1df9de57707a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_seq_set_output_buffer_size(
+		:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`* handle,
+		size_t size
+		)
+
+Change the size of output buffer.
+
+Changes the size of output buffer.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- seq
+
+		- sequencer handle
+
+	*
+		- size
+
+		- the size of output buffer to be changed in bytes
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_seq_get_output_buffer_size() <doxid-group___sequencer_1ga02442682a361bc6f9faeff468cdebbad>`
+
+.. index:: pair: function; snd_seq_set_input_buffer_size
+.. _doxid-group___sequencer_1ga62cd9f5ea1d75db676d43da44596750e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_seq_set_input_buffer_size(
+		:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`* handle,
+		size_t size
+		)
+
+Resize the input buffer.
+
+Changes the size of input buffer.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- seq
+
+		- sequencer handle
+
+	*
+		- size
+
+		- the size of input buffer to be changed in bytes
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_seq_get_input_buffer_size() <doxid-group___sequencer_1gacd207de4c08ffff3020b078de8e64cc5>`
+
+.. index:: pair: function; snd_seq_system_info_sizeof
+.. _doxid-group___sequencer_1ga1a036e739dd2daaa9952875528c2f763:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	size_t
+	snd_seq_system_info_sizeof(void)
+
+Get size of :ref:`snd_seq_system_info_t <doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>`.
+
+
+
+.. rubric:: Returns:
+
+size in bytes
+
+.. index:: pair: function; snd_seq_system_info_malloc
+.. _doxid-group___sequencer_1gad49e5da1a851505e43dcfbf5fd00b0d9:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_seq_system_info_malloc(:ref:`snd_seq_system_info_t<doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>`** ptr)
+
+Allocate an empty :ref:`snd_seq_system_info_t <doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>` using standard malloc.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- ptr
+
+		- returned pointer
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise negative error code
+
+.. index:: pair: function; snd_seq_system_info_free
+.. _doxid-group___sequencer_1gaf3876a29ae1e648d9fd8e6d067a56b6b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_seq_system_info_free(:ref:`snd_seq_system_info_t<doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>`* ptr)
+
+Frees a previously allocated :ref:`snd_seq_system_info_t <doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- obj
+
+		- pointer to object to free
+
+.. index:: pair: function; snd_seq_system_info_copy
+.. _doxid-group___sequencer_1ga8cbf6ad4d47837d0a5a1100ef0808ab7:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_seq_system_info_copy(
+		:ref:`snd_seq_system_info_t<doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>`* dst,
+		const :ref:`snd_seq_system_info_t<doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>`* src
+		)
+
+Copy one :ref:`snd_seq_system_info_t <doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>` to another.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dst
+
+		- pointer to destination
+
+	*
+		- src
+
+		- pointer to source
+
+.. index:: pair: function; snd_seq_system_info_get_queues
+.. _doxid-group___sequencer_1ga63c9cfcc634c722350b55a6820461e9e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_seq_system_info_get_queues(const :ref:`snd_seq_system_info_t<doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>`* info)
+
+Get maximum number of queues.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- info
+
+		- :ref:`snd_seq_system_info_t <doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>` container
+
+
+
+.. rubric:: Returns:
+
+maximum number of queues
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_seq_system_info() <doxid-group___sequencer_1ga548a7ebe6c90e90f689cf8d862b81f9e>`
+
+.. index:: pair: function; snd_seq_system_info_get_clients
+.. _doxid-group___sequencer_1ga7fbb56a82dfef9224b411a659ba7d8f0:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_seq_system_info_get_clients(const :ref:`snd_seq_system_info_t<doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>`* info)
+
+Get maximum number of clients.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- info
+
+		- :ref:`snd_seq_system_info_t <doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>` container
+
+
+
+.. rubric:: Returns:
+
+maximum number of clients
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_seq_system_info() <doxid-group___sequencer_1ga548a7ebe6c90e90f689cf8d862b81f9e>`
+
+.. index:: pair: function; snd_seq_system_info_get_ports
+.. _doxid-group___sequencer_1gae446559ff05dc0ed1967eab253921aa0:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_seq_system_info_get_ports(const :ref:`snd_seq_system_info_t<doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>`* info)
+
+Get maximum number of ports.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- info
+
+		- :ref:`snd_seq_system_info_t <doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>` container
+
+
+
+.. rubric:: Returns:
+
+maximum number of ports
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_seq_system_info() <doxid-group___sequencer_1ga548a7ebe6c90e90f689cf8d862b81f9e>`
+
+.. index:: pair: function; snd_seq_system_info_get_channels
+.. _doxid-group___sequencer_1ga58fa1ff3d4ffafac092e5cffb7092ad1:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_seq_system_info_get_channels(const :ref:`snd_seq_system_info_t<doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>`* info)
+
+Get maximum number of channels.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- info
+
+		- :ref:`snd_seq_system_info_t <doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>` container
+
+
+
+.. rubric:: Returns:
+
+maximum number of channels
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_seq_system_info() <doxid-group___sequencer_1ga548a7ebe6c90e90f689cf8d862b81f9e>`
+
+.. index:: pair: function; snd_seq_system_info_get_cur_clients
+.. _doxid-group___sequencer_1gaeb16d361d1fc92de95cc1986619eac8a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_seq_system_info_get_cur_clients(const :ref:`snd_seq_system_info_t<doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>`* info)
+
+Get the current number of clients.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- info
+
+		- :ref:`snd_seq_system_info_t <doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>` container
+
+
+
+.. rubric:: Returns:
+
+current number of clients
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_seq_system_info() <doxid-group___sequencer_1ga548a7ebe6c90e90f689cf8d862b81f9e>`
+
+.. index:: pair: function; snd_seq_system_info_get_cur_queues
+.. _doxid-group___sequencer_1ga5af096ec5db751e0d10ec0d998482c6a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_seq_system_info_get_cur_queues(const :ref:`snd_seq_system_info_t<doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>`* info)
+
+Get the current number of queues.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- info
+
+		- :ref:`snd_seq_system_info_t <doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>` container
+
+
+
+.. rubric:: Returns:
+
+current number of queues
+
+
+
+.. rubric:: See also:
+
+:ref:`snd_seq_system_info() <doxid-group___sequencer_1ga548a7ebe6c90e90f689cf8d862b81f9e>`
+
+.. index:: pair: function; snd_seq_system_info
+.. _doxid-group___sequencer_1ga548a7ebe6c90e90f689cf8d862b81f9e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_seq_system_info(
+		:ref:`snd_seq_t<doxid-group___sequencer_1gae141149958a7458806152ed5942a1acd>`* handle,
+		:ref:`snd_seq_system_info_t<doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>`* info
+		)
+
+obtain the sequencer system information
+
+Stores the global system information of ALSA sequencer system. The returned data contains the maximum available numbers of queues, clients, ports and channels.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- seq
+
+		- sequencer handle
+
+	*
+		- info
+
+		- the pointer to be stored
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+Macros
+------
+
+.. index:: pair: define; SND_SEQ_ADDRESS_BROADCAST
+.. _doxid-group___sequencer_1gafc9dd136f59487d09d2124cef09b8c3e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_SEQ_ADDRESS_BROADCAST
+
+send event to all queues/clients/ports/channels
+
+.. index:: pair: define; SND_SEQ_ADDRESS_SUBSCRIBERS
+.. _doxid-group___sequencer_1ga383b235d2afbe48704952edfd3a33eed:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_SEQ_ADDRESS_SUBSCRIBERS
+
+send event to all subscribed ports
+
+.. index:: pair: define; SND_SEQ_ADDRESS_UNKNOWN
+.. _doxid-group___sequencer_1ga79353f7f2482e98b5181f03df7c807ac:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_SEQ_ADDRESS_UNKNOWN
+
+special client (port) ids unknown source
+
+.. index:: pair: define; SND_SEQ_CLIENT_SYSTEM
+.. _doxid-group___sequencer_1ga5437f98c59679c92ee4d940ac643169e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_SEQ_CLIENT_SYSTEM
+
+known client numbers system client
+
+.. index:: pair: define; SND_SEQ_DLSYM_VERSION
+.. _doxid-group___sequencer_1gad6233417c4c820a4c0aef4c379cf65a7:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_SEQ_DLSYM_VERSION
+
+dlsym version for interface entry callback
+
+.. index:: pair: define; SND_SEQ_NONBLOCK
+.. _doxid-group___sequencer_1gafb3bf2f7109d85d9226c64578e73d614:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_SEQ_NONBLOCK
+
+sequencer opening modenon-blocking mode (flag to open mode)
+
+.. index:: pair: define; SND_SEQ_OPEN_DUPLEX
+.. _doxid-group___sequencer_1ga61c3481e1d357bb38cc399f6b9884ac7:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_SEQ_OPEN_DUPLEX
+
+open for both input and output (read/write)
+
+.. index:: pair: define; SND_SEQ_OPEN_INPUT
+.. _doxid-group___sequencer_1gaaf1cded61cf90f4d37caf910192ef513:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_SEQ_OPEN_INPUT
+
+open for input (read)
+
+.. index:: pair: define; SND_SEQ_OPEN_OUTPUT
+.. _doxid-group___sequencer_1ga1edd6d976f3dae5d921568f2107bd121:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_SEQ_OPEN_OUTPUT
+
+sequencer opening stream typesopen for output (write)
+
+.. index:: pair: define; snd_seq_system_info_alloca
+.. _doxid-group___sequencer_1gaf6343bc1e96ab067152b35b8ff6904ea:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define snd_seq_system_info_alloca(ptr)
+
+allocate a :ref:`snd_seq_system_info_t <doxid-group___sequencer_1ga2bcf0bf155f961b6294d556c654023e0>` container on stack
+

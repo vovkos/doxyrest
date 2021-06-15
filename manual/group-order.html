@@ -1,0 +1,274 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Ordering Groups &mdash; Doxyrest Manual</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/doxyrest-pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/doxyrest-sphinx_rtd_theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/target-highlight.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Subgroups" href="subgroups.html" />
+    <link rel="prev" title="Unnamed Structs/Unions" href="unnamed-structs.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Doxyrest Manual
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="motivation.html">Motivation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architectural Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic.html">Basic Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="advanced.html">Advanced Topics</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="unnamed-structs.html">Unnamed Structs/Unions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Ordering Groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="subgroups.html">Subgroups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="footnotes.html">Footnotes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styling.html">Styling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphs.html">Using embedded graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="samples.html">Samples</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Doxyrest Manual</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="advanced.html">Advanced Topics</a> &raquo;</li>
+        
+      <li>Ordering Groups</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="ordering-groups">
+<h1>Ordering Groups</h1>
+<p>Most times, you do not want to show Doxygen groups in random order or in alphabetic order – there’s always some desired logical sequence. With Doxygen, the only way to circumvent this issue is to place all group documentation <em>into the same</em> file and within it, sort groups manually.</p>
+<p>Doxyrest provides a much more elegant approach by (optionally) assigning each group a <em>sorting order value</em>. To use this facility, add the following custom command to you <code class="docutils literal notranslate"><span class="pre">Doxyfile</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ALIASES += &quot;grouporder{1}=\internal :grouporder(\1) \endinternal&quot;
+</pre></div>
+</div>
+<p>In your C/C++ code, you can now add this extra command to the documentation of your groups:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/*!</span>
+<span class="cm">    \defgroup group_a Group A</span>
+<span class="cm">    \grouporder 1</span>
+
+<span class="cm">    Documentation for group A goes here...</span>
+<span class="cm">*/</span>
+
+<span class="p">...</span>
+
+<span class="cm">/*!</span>
+<span class="cm">    \defgroup group_b Group B</span>
+<span class="cm">    \grouporder 2</span>
+
+<span class="cm">    Documentation for group B goes here...</span>
+<span class="cm">*/</span>
+
+<span class="p">...</span>
+
+<span class="cm">/*!</span>
+<span class="cm">    \defgroup group_c Group C</span>
+<span class="cm">    \grouporder 3</span>
+
+<span class="cm">    Documentation for group C goes here...</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+<p>This will ensure Group A is placed 1st, then Group B, then Group C – no matter the group titles, placement in files or declaration order.</p>
+<p>If the above approach is not used, groups will be sorted. By default, they are sorted by their title names. You can also sort groups by their <code class="docutils literal notranslate"><span class="pre">ID</span></code>-s. To do so, use add this to your <code class="docutils literal notranslate"><span class="pre">doxyrest-config.lua</span></code>:</p>
+<pre class="highlight literal-block">
+<a class="reference internal" href="group_frame-config.html#doxid-variable-sort-groups-by"><span class="std std-ref">SORT_GROUPS_BY</span></a><span></span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span>
+</pre>
+<p>If you want to leave groups <em>unsorted</em>, i.e. keep them in the same order as seen in the XML database (which is pretty much random, to begin with), use the following:</p>
+<pre class="highlight literal-block">
+<a class="reference internal" href="group_frame-config.html#doxid-variable-sort-groups-by"><span class="std std-ref">SORT_GROUPS_BY</span></a><span></span> <span class="o">=</span> <span class="s2">&quot;originalIdx&quot;</span>
+</pre>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If neither <code class="docutils literal notranslate"><span class="pre">grouporder</span></code> nor <code class="docutils literal notranslate"><span class="pre">SORT_GROUPS_BY</span></code> is specified, groups will be sorted by title.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="subgroups.html" class="btn btn-neutral float-right" title="Subgroups" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="unnamed-structs.html" class="btn btn-neutral float-left" title="Unnamed Structs/Unions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2016-2021, Tibbo Technology Inc.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

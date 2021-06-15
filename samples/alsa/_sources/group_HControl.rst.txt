@@ -1,0 +1,1771 @@
+.. index:: pair: group; High level Control Interface
+.. _doxid-group___h_control:
+
+High level Control Interface
+============================
+
+.. toctree::
+	:hidden:
+
+Overview
+~~~~~~~~
+
+The high level control interface. :ref:`More...<details-group___h_control>`
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef struct _snd_hctl_elem :ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`;
+	typedef struct _snd_hctl :ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`;
+
+	typedef int (*:ref:`snd_hctl_compare_t<doxid-group___h_control_1ga612e7c59d360ecc9334f7fe71377f9cc>`)(
+		const snd_hctl_elem_t *e1,
+		const snd_hctl_elem_t *e2
+		);
+
+	typedef int (*:ref:`snd_hctl_callback_t<doxid-group___h_control_1ga5e2b26a2cc8d696e2a9eacb6bbb2f417>`)(
+		snd_hctl_t *hctl,
+		unsigned int mask,
+		snd_hctl_elem_t *elem
+		);
+
+	typedef int (*:ref:`snd_hctl_elem_callback_t<doxid-group___h_control_1ga64ce2446d79c992547d3db8c7faa6143>`)(
+		snd_hctl_elem_t *elem,
+		unsigned int mask
+		);
+
+	// global functions
+
+	int
+	:ref:`snd_hctl_compare_fast<doxid-group___h_control_1gaaa17b28ebe0f1e0e4443182312af7408>`(
+		const :ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* c1,
+		const :ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* c2
+		);
+
+	int
+	:ref:`snd_hctl_open<doxid-group___h_control_1ga2a86455eaad4f2730a936d06c62cca29>`(
+		:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`** hctl,
+		const char* name,
+		int mode
+		);
+
+	int
+	:ref:`snd_hctl_open_ctl<doxid-group___h_control_1ga48b556b219e99c36d65efc6b8a97029c>`(
+		:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`** hctlp,
+		:ref:`snd_ctl_t<doxid-group___control_1ga06628f38def84a0fe3da74041db9d51f>`* ctl
+		);
+
+	int
+	:ref:`snd_hctl_close<doxid-group___h_control_1gae9537f6a56d663aa9714ccc82689ff1e>`(:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl);
+
+	int
+	:ref:`snd_hctl_nonblock<doxid-group___h_control_1ga3c3e66e230fc93c15f18568342725a43>`(
+		:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl,
+		int nonblock
+		);
+
+	static
+	__inline__ int
+	:target:`snd_hctl_abort<doxid-group___h_control_1gaf3b87e3225fb163fbdadf7fe203a1622>`(:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl);
+
+	int
+	:ref:`snd_hctl_poll_descriptors_count<doxid-group___h_control_1ga32238dba8935b2cb91fbad73aae9e3d4>`(:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl);
+
+	int
+	:ref:`snd_hctl_poll_descriptors<doxid-group___h_control_1ga7dd3894b55740cbdb8b2a0bef15af295>`(
+		:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl,
+		struct pollfd* pfds,
+		unsigned int space
+		);
+
+	int
+	:ref:`snd_hctl_poll_descriptors_revents<doxid-group___h_control_1ga704fd06286869e793e223956b186bfdf>`(
+		:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* ctl,
+		struct pollfd* pfds,
+		unsigned int nfds,
+		unsigned short* revents
+		);
+
+	unsigned int
+	:ref:`snd_hctl_get_count<doxid-group___h_control_1ga098944f4f2d7722550901bf6f80ee91c>`(:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl);
+
+	int
+	:ref:`snd_hctl_set_compare<doxid-group___h_control_1ga5917b8cbcdf5d44d8730027b18ff6172>`(
+		:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl,
+		:ref:`snd_hctl_compare_t<doxid-group___h_control_1ga612e7c59d360ecc9334f7fe71377f9cc>` hsort
+		);
+
+	:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`*
+	:ref:`snd_hctl_first_elem<doxid-group___h_control_1gaaa68ce403d30e4d152fe4ce82b6c02db>`(:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl);
+
+	:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`*
+	:ref:`snd_hctl_last_elem<doxid-group___h_control_1ga8b7270503d275040a391e05c991ec569>`(:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl);
+
+	:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`*
+	:ref:`snd_hctl_find_elem<doxid-group___h_control_1gaeee7f3f76cb71fd4b3456a9566529bd5>`(
+		:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl,
+		const :ref:`snd_ctl_elem_id_t<doxid-group___control_1gad6c3746f1925bfec6a4fd0e913430e55>`* id
+		);
+
+	void
+	:ref:`snd_hctl_set_callback<doxid-group___h_control_1ga9c0abde0c53cafb640bbd6e3b1c3d6c6>`(
+		:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl,
+		:ref:`snd_hctl_callback_t<doxid-group___h_control_1ga5e2b26a2cc8d696e2a9eacb6bbb2f417>` callback
+		);
+
+	void
+	:ref:`snd_hctl_set_callback_private<doxid-group___h_control_1gae678856658731969c884a4c9c810d799>`(
+		:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl,
+		void* data
+		);
+
+	void*
+	:ref:`snd_hctl_get_callback_private<doxid-group___h_control_1ga60c1606f4d423301355344e5373d5ccc>`(:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl);
+
+	int
+	:ref:`snd_hctl_load<doxid-group___h_control_1ga700017b7d9b8decb775702d5dc6fef85>`(:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl);
+
+	int
+	:ref:`snd_hctl_free<doxid-group___h_control_1ga1b3e936bba7a6127459af1244c7da454>`(:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl);
+
+	int
+	:ref:`snd_hctl_handle_events<doxid-group___h_control_1ga02d9dc1cdbdfe11880e3fe774f2034bd>`(:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl);
+
+	const char*
+	:ref:`snd_hctl_name<doxid-group___h_control_1gabd1208fbbe2061021494ea21ab382088>`(:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl);
+
+	int
+	:ref:`snd_hctl_wait<doxid-group___h_control_1ga2f0d0548f5d848b6557b2967d0e73494>`(
+		:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl,
+		int timeout
+		);
+
+	:ref:`snd_ctl_t<doxid-group___control_1ga06628f38def84a0fe3da74041db9d51f>`*
+	:ref:`snd_hctl_ctl<doxid-group___h_control_1ga93f19c0fb16337f72b6c413512b79f1a>`(:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl);
+
+	:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`*
+	:ref:`snd_hctl_elem_next<doxid-group___h_control_1gaf7c6b19c5feb2392f2d447bc3f54fd15>`(:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* elem);
+
+	:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`*
+	:ref:`snd_hctl_elem_prev<doxid-group___h_control_1ga89a720775cb955ee4069a45074e4b32f>`(:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* elem);
+
+	int
+	:ref:`snd_hctl_elem_info<doxid-group___h_control_1gae08b50b118461e6fcc55975e5530885c>`(
+		:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* elem,
+		:ref:`snd_ctl_elem_info_t<doxid-group___control_1ga2cae0bb76df919368e4ff9a7021dd3ab>`* info
+		);
+
+	int
+	:ref:`snd_hctl_elem_read<doxid-group___h_control_1ga86728d69cc5de843ed46ffb4f3b98e2c>`(
+		:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* elem,
+		:ref:`snd_ctl_elem_value_t<doxid-group___control_1ga266b478eb64f1cdd75e337df4b4b995e>`* value
+		);
+
+	int
+	:ref:`snd_hctl_elem_write<doxid-group___h_control_1gafaf6b88337fdc827c847e21a6fd0cd79>`(
+		:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* elem,
+		:ref:`snd_ctl_elem_value_t<doxid-group___control_1ga266b478eb64f1cdd75e337df4b4b995e>`* value
+		);
+
+	int
+	:ref:`snd_hctl_elem_tlv_read<doxid-group___h_control_1ga45fc0e8b3dfaeb2dfebce4f613b21297>`(
+		:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* elem,
+		unsigned int* tlv,
+		unsigned int tlv_size
+		);
+
+	int
+	:ref:`snd_hctl_elem_tlv_write<doxid-group___h_control_1gab5611090cee93ace74db2e744718ae25>`(
+		:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* elem,
+		const unsigned int* tlv
+		);
+
+	int
+	:ref:`snd_hctl_elem_tlv_command<doxid-group___h_control_1gaedec51e102fbf6161322553355439121>`(
+		:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* elem,
+		const unsigned int* tlv
+		);
+
+	:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`*
+	:ref:`snd_hctl_elem_get_hctl<doxid-group___h_control_1ga98660b650e7c060be8a574402e2f2257>`(:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* elem);
+
+	void
+	:ref:`snd_hctl_elem_get_id<doxid-group___h_control_1gac1c0ce6f627f2f1560c5db03a93caf5b>`(
+		const :ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* obj,
+		:ref:`snd_ctl_elem_id_t<doxid-group___control_1gad6c3746f1925bfec6a4fd0e913430e55>`* ptr
+		);
+
+	unsigned int
+	:ref:`snd_hctl_elem_get_numid<doxid-group___h_control_1gae5e86d487c6c964be8a59dfeddb2f36e>`(const :ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* obj);
+
+	:ref:`snd_ctl_elem_iface_t<doxid-group___control_1ga14baa0febb91cc4c5d72dcc825acf518>`
+	:ref:`snd_hctl_elem_get_interface<doxid-group___h_control_1gabe8c46cbe8b6a2612fa0eaeb1fa8fefb>`(const :ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* obj);
+
+	unsigned int
+	:ref:`snd_hctl_elem_get_device<doxid-group___h_control_1gae933e61025507ee572408138e935c63f>`(const :ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* obj);
+
+	unsigned int
+	:ref:`snd_hctl_elem_get_subdevice<doxid-group___h_control_1ga894c09354156fd12f8a089726449f6ac>`(const :ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* obj);
+
+	const char*
+	:ref:`snd_hctl_elem_get_name<doxid-group___h_control_1gab89b9d62f8575795fc52b86415373a49>`(const :ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* obj);
+
+	unsigned int
+	:ref:`snd_hctl_elem_get_index<doxid-group___h_control_1gaa2bad4d08aa1c8ea98f2a92435583e01>`(const :ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* obj);
+
+	void
+	:ref:`snd_hctl_elem_set_callback<doxid-group___h_control_1gacc10c18b636db3388e9b6383058fc757>`(
+		:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* obj,
+		:ref:`snd_hctl_elem_callback_t<doxid-group___h_control_1ga64ce2446d79c992547d3db8c7faa6143>` val
+		);
+
+	void*
+	:ref:`snd_hctl_elem_get_callback_private<doxid-group___h_control_1gac0aad0000d7eccde5d107b1b95f429e6>`(const :ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* obj);
+
+	void
+	:ref:`snd_hctl_elem_set_callback_private<doxid-group___h_control_1gaa9d511449fc220d09e69a05ae65f1ead>`(
+		:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* obj,
+		void* val
+		);
+
+.. _details-group___h_control:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+The high level control interface. See :ref:`High level control interface <doxid-hcontrol>` page for more details.
+
+Typedefs
+--------
+
+.. index:: pair: typedef; snd_hctl_elem_t
+.. _doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct _snd_hctl_elem snd_hctl_elem_t
+
+HCTL element handle
+
+.. index:: pair: typedef; snd_hctl_t
+.. _doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct _snd_hctl snd_hctl_t
+
+HCTL handle
+
+.. index:: pair: typedef; snd_hctl_compare_t
+.. _doxid-group___h_control_1ga612e7c59d360ecc9334f7fe71377f9cc:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef int (*snd_hctl_compare_t)(
+		const snd_hctl_elem_t *e1,
+		const snd_hctl_elem_t *e2
+		)
+
+Compare function for sorting HCTL elements.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- e1
+
+		- First element
+
+	*
+		- e2
+
+		- Second element
+
+
+
+.. rubric:: Returns:
+
+-1 if e1 < e2, 0 if e1 == e2, 1 if e1 > e2
+
+.. index:: pair: typedef; snd_hctl_callback_t
+.. _doxid-group___h_control_1ga5e2b26a2cc8d696e2a9eacb6bbb2f417:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef int (*snd_hctl_callback_t)(
+		snd_hctl_t *hctl,
+		unsigned int mask,
+		snd_hctl_elem_t *elem
+		)
+
+HCTL callback function.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hctl
+
+		- HCTL handle
+
+	*
+		- mask
+
+		- event mask
+
+	*
+		- elem
+
+		- related HCTL element (if any)
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: typedef; snd_hctl_elem_callback_t
+.. _doxid-group___h_control_1ga64ce2446d79c992547d3db8c7faa6143:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef int (*snd_hctl_elem_callback_t)(
+		snd_hctl_elem_t *elem,
+		unsigned int mask
+		)
+
+HCTL element callback function.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- elem
+
+		- HCTL element
+
+	*
+		- mask
+
+		- event mask
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+Global Functions
+----------------
+
+.. index:: pair: function; snd_hctl_compare_fast
+.. _doxid-group___h_control_1gaaa17b28ebe0f1e0e4443182312af7408:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_hctl_compare_fast(
+		const :ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* c1,
+		const :ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* c2
+		)
+
+A "don't care" fast compare functions that may be used with :ref:`snd_hctl_set_compare <doxid-group___h_control_1ga5917b8cbcdf5d44d8730027b18ff6172>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- c1
+
+		- First HCTL element
+
+	*
+		- c2
+
+		- Second HCTL element
+
+
+
+.. rubric:: Returns:
+
+-1 if c1 < c2, 0 if c1 == c2, 1 if c1 > c2
+
+.. index:: pair: function; snd_hctl_open
+.. _doxid-group___h_control_1ga2a86455eaad4f2730a936d06c62cca29:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_hctl_open(
+		:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`** hctl,
+		const char* name,
+		int mode
+		)
+
+Opens an HCTL.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hctlp
+
+		- Returned HCTL handle
+
+	*
+		- name
+
+		- ASCII identifier of the underlying CTL handle
+
+	*
+		- mode
+
+		- Open mode (see :ref:`SND_CTL_NONBLOCK <doxid-group___control_1gae8a46558414be5b5b3b7bed127ad4574>`, :ref:`SND_CTL_ASYNC <doxid-group___control_1gadcbc5a476ffaf2b8d4dfd29a2cfaab3d>`)
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_hctl_open_ctl
+.. _doxid-group___h_control_1ga48b556b219e99c36d65efc6b8a97029c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_hctl_open_ctl(
+		:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`** hctlp,
+		:ref:`snd_ctl_t<doxid-group___control_1ga06628f38def84a0fe3da74041db9d51f>`* ctl
+		)
+
+Opens an HCTL.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hctlp
+
+		- Returned HCTL handle
+
+	*
+		- ctl
+
+		- underlying CTL handle
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_hctl_close
+.. _doxid-group___h_control_1gae9537f6a56d663aa9714ccc82689ff1e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_hctl_close(:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl)
+
+close HCTL handle
+
+Closes the specified HCTL handle and frees all associated resources.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hctl
+
+		- HCTL handle
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_hctl_nonblock
+.. _doxid-group___h_control_1ga3c3e66e230fc93c15f18568342725a43:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_hctl_nonblock(
+		:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl,
+		int nonblock
+		)
+
+set nonblock mode
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hctl
+
+		- HCTL handle
+
+	*
+		- nonblock
+
+		- 0 = block, 1 = nonblock mode
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_hctl_poll_descriptors_count
+.. _doxid-group___h_control_1ga32238dba8935b2cb91fbad73aae9e3d4:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_hctl_poll_descriptors_count(:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl)
+
+get count of poll descriptors for HCTL handle
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hctl
+
+		- HCTL handle
+
+
+
+.. rubric:: Returns:
+
+count of poll descriptors
+
+.. index:: pair: function; snd_hctl_poll_descriptors
+.. _doxid-group___h_control_1ga7dd3894b55740cbdb8b2a0bef15af295:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_hctl_poll_descriptors(
+		:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl,
+		struct pollfd* pfds,
+		unsigned int space
+		)
+
+get poll descriptors
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hctl
+
+		- HCTL handle
+
+	*
+		- pfds
+
+		- array of poll descriptors
+
+	*
+		- space
+
+		- space in the poll descriptor array
+
+
+
+.. rubric:: Returns:
+
+count of filled descriptors
+
+.. index:: pair: function; snd_hctl_poll_descriptors_revents
+.. _doxid-group___h_control_1ga704fd06286869e793e223956b186bfdf:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_hctl_poll_descriptors_revents(
+		:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* ctl,
+		struct pollfd* pfds,
+		unsigned int nfds,
+		unsigned short* revents
+		)
+
+get returned events from poll descriptors
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hctl
+
+		- HCTL handle
+
+	*
+		- pfds
+
+		- array of poll descriptors
+
+	*
+		- nfds
+
+		- count of poll descriptors
+
+	*
+		- revents
+
+		- returned events
+
+
+
+.. rubric:: Returns:
+
+zero if success, otherwise a negative error code
+
+.. index:: pair: function; snd_hctl_get_count
+.. _doxid-group___h_control_1ga098944f4f2d7722550901bf6f80ee91c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	unsigned int
+	snd_hctl_get_count(:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl)
+
+Get number of loaded elements for an HCTL.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hctl
+
+		- HCTL handle
+
+
+
+.. rubric:: Returns:
+
+elements count
+
+.. index:: pair: function; snd_hctl_set_compare
+.. _doxid-group___h_control_1ga5917b8cbcdf5d44d8730027b18ff6172:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_hctl_set_compare(
+		:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl,
+		:ref:`snd_hctl_compare_t<doxid-group___h_control_1ga612e7c59d360ecc9334f7fe71377f9cc>` hsort
+		)
+
+Change HCTL compare function and reorder elements.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hctl
+
+		- HCTL handle
+
+	*
+		- compare
+
+		- Element compare function
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_hctl_first_elem
+.. _doxid-group___h_control_1gaaa68ce403d30e4d152fe4ce82b6c02db:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`*
+	snd_hctl_first_elem(:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl)
+
+get first element for an HCTL
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hctl
+
+		- HCTL handle
+
+
+
+.. rubric:: Returns:
+
+pointer to first element
+
+.. index:: pair: function; snd_hctl_last_elem
+.. _doxid-group___h_control_1ga8b7270503d275040a391e05c991ec569:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`*
+	snd_hctl_last_elem(:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl)
+
+get last element for an HCTL
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hctl
+
+		- HCTL handle
+
+
+
+.. rubric:: Returns:
+
+pointer to last element
+
+.. index:: pair: function; snd_hctl_find_elem
+.. _doxid-group___h_control_1gaeee7f3f76cb71fd4b3456a9566529bd5:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`*
+	snd_hctl_find_elem(
+		:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl,
+		const :ref:`snd_ctl_elem_id_t<doxid-group___control_1gad6c3746f1925bfec6a4fd0e913430e55>`* id
+		)
+
+Search an HCTL element.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hctl
+
+		- HCTL handle
+
+	*
+		- id
+
+		- Element identifier
+
+
+
+.. rubric:: Returns:
+
+pointer to found HCTL element or NULL if it does not exists
+
+.. index:: pair: function; snd_hctl_set_callback
+.. _doxid-group___h_control_1ga9c0abde0c53cafb640bbd6e3b1c3d6c6:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_hctl_set_callback(
+		:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl,
+		:ref:`snd_hctl_callback_t<doxid-group___h_control_1ga5e2b26a2cc8d696e2a9eacb6bbb2f417>` callback
+		)
+
+Set callback function for an HCTL.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hctl
+
+		- HCTL handle
+
+	*
+		- callback
+
+		- callback function
+
+.. index:: pair: function; snd_hctl_set_callback_private
+.. _doxid-group___h_control_1gae678856658731969c884a4c9c810d799:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_hctl_set_callback_private(
+		:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl,
+		void* data
+		)
+
+Set callback private value for an HCTL.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hctl
+
+		- HCTL handle
+
+	*
+		- callback_private
+
+		- callback private value
+
+.. index:: pair: function; snd_hctl_get_callback_private
+.. _doxid-group___h_control_1ga60c1606f4d423301355344e5373d5ccc:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void*
+	snd_hctl_get_callback_private(:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl)
+
+Get callback private value for an HCTL.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hctl
+
+		- HCTL handle
+
+
+
+.. rubric:: Returns:
+
+callback private value
+
+.. index:: pair: function; snd_hctl_load
+.. _doxid-group___h_control_1ga700017b7d9b8decb775702d5dc6fef85:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_hctl_load(:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl)
+
+Load an HCTL with all elements and sort them.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hctl
+
+		- HCTL handle
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_hctl_free
+.. _doxid-group___h_control_1ga1b3e936bba7a6127459af1244c7da454:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_hctl_free(:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl)
+
+free HCTL loaded elements
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hctl
+
+		- HCTL handle
+
+
+
+.. rubric:: Returns:
+
+0 on success otherwise a negative error code
+
+.. index:: pair: function; snd_hctl_handle_events
+.. _doxid-group___h_control_1ga02d9dc1cdbdfe11880e3fe774f2034bd:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_hctl_handle_events(:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl)
+
+Handle pending HCTL events invoking callbacks.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hctl
+
+		- HCTL handle
+
+
+
+.. rubric:: Returns:
+
+0 otherwise a negative error code on failure
+
+.. index:: pair: function; snd_hctl_name
+.. _doxid-group___h_control_1gabd1208fbbe2061021494ea21ab382088:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	snd_hctl_name(:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl)
+
+get identifier of HCTL handle
+
+Returns the ASCII identifier of given HCTL handle. It's the same identifier specified in :ref:`snd_hctl_open() <doxid-group___h_control_1ga2a86455eaad4f2730a936d06c62cca29>`.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hctl
+
+		- HCTL handle
+
+
+
+.. rubric:: Returns:
+
+ascii identifier of HCTL handle
+
+.. index:: pair: function; snd_hctl_wait
+.. _doxid-group___h_control_1ga2f0d0548f5d848b6557b2967d0e73494:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_hctl_wait(
+		:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl,
+		int timeout
+		)
+
+Wait for a HCTL to become ready (i.e. at least one event pending)
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hctl
+
+		- HCTL handle
+
+	*
+		- timeout
+
+		- maximum time in milliseconds to wait
+
+	*
+		- 0
+
+		- timeout occurred
+
+	*
+		- 1
+
+		- an event is pending
+
+
+
+.. rubric:: Returns:
+
+a positive value on success otherwise a negative error code
+
+.. index:: pair: function; snd_hctl_ctl
+.. _doxid-group___h_control_1ga93f19c0fb16337f72b6c413512b79f1a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_ctl_t<doxid-group___control_1ga06628f38def84a0fe3da74041db9d51f>`*
+	snd_hctl_ctl(:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`* hctl)
+
+Get a ctl handle associated to the given hctl handle.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- hctl
+
+		- HCTL handle
+
+
+
+.. rubric:: Returns:
+
+a ctl handle otherwise NULL
+
+.. index:: pair: function; snd_hctl_elem_next
+.. _doxid-group___h_control_1gaf7c6b19c5feb2392f2d447bc3f54fd15:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`*
+	snd_hctl_elem_next(:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* elem)
+
+get next HCTL element
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- elem
+
+		- HCTL element
+
+
+
+.. rubric:: Returns:
+
+pointer to next element
+
+.. index:: pair: function; snd_hctl_elem_prev
+.. _doxid-group___h_control_1ga89a720775cb955ee4069a45074e4b32f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`*
+	snd_hctl_elem_prev(:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* elem)
+
+get previous HCTL element
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- elem
+
+		- HCTL element
+
+
+
+.. rubric:: Returns:
+
+pointer to previous element
+
+.. index:: pair: function; snd_hctl_elem_info
+.. _doxid-group___h_control_1gae08b50b118461e6fcc55975e5530885c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_hctl_elem_info(
+		:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* elem,
+		:ref:`snd_ctl_elem_info_t<doxid-group___control_1ga2cae0bb76df919368e4ff9a7021dd3ab>`* info
+		)
+
+Get information for an HCTL element.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- elem
+
+		- HCTL element
+
+	*
+		- info
+
+		- HCTL element information
+
+
+
+.. rubric:: Returns:
+
+0 otherwise a negative error code on failure
+
+.. index:: pair: function; snd_hctl_elem_read
+.. _doxid-group___h_control_1ga86728d69cc5de843ed46ffb4f3b98e2c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_hctl_elem_read(
+		:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* elem,
+		:ref:`snd_ctl_elem_value_t<doxid-group___control_1ga266b478eb64f1cdd75e337df4b4b995e>`* value
+		)
+
+Get value for an HCTL element.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- elem
+
+		- HCTL element
+
+	*
+		- value
+
+		- HCTL element value
+
+
+
+.. rubric:: Returns:
+
+0 otherwise a negative error code on failure
+
+.. index:: pair: function; snd_hctl_elem_write
+.. _doxid-group___h_control_1gafaf6b88337fdc827c847e21a6fd0cd79:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_hctl_elem_write(
+		:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* elem,
+		:ref:`snd_ctl_elem_value_t<doxid-group___control_1ga266b478eb64f1cdd75e337df4b4b995e>`* value
+		)
+
+Set value for an HCTL element.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- elem
+
+		- HCTL element
+
+	*
+		- value
+
+		- HCTL element value
+
+	*
+		- 0
+
+		- on success
+
+	*
+		- >1
+
+		- on success when value was changed
+
+	*
+		- <0
+
+		- a negative error code on failure
+
+.. index:: pair: function; snd_hctl_elem_tlv_read
+.. _doxid-group___h_control_1ga45fc0e8b3dfaeb2dfebce4f613b21297:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_hctl_elem_tlv_read(
+		:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* elem,
+		unsigned int* tlv,
+		unsigned int tlv_size
+		)
+
+Get TLV value for an HCTL element.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- elem
+
+		- HCTL element
+
+	*
+		- tlv
+
+		- TLV array for value
+
+	*
+		- tlv_size
+
+		- size of TLV array in bytes
+
+
+
+.. rubric:: Returns:
+
+0 otherwise a negative error code on failure
+
+.. index:: pair: function; snd_hctl_elem_tlv_write
+.. _doxid-group___h_control_1gab5611090cee93ace74db2e744718ae25:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_hctl_elem_tlv_write(
+		:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* elem,
+		const unsigned int* tlv
+		)
+
+Set TLV value for an HCTL element.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- elem
+
+		- HCTL element
+
+	*
+		- tlv
+
+		- TLV array for value
+
+	*
+		- 0
+
+		- on success
+
+	*
+		- >1
+
+		- on success when value was changed
+
+	*
+		- <0
+
+		- a negative error code on failure
+
+.. index:: pair: function; snd_hctl_elem_tlv_command
+.. _doxid-group___h_control_1gaedec51e102fbf6161322553355439121:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_hctl_elem_tlv_command(
+		:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* elem,
+		const unsigned int* tlv
+		)
+
+Set TLV value for an HCTL element.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- elem
+
+		- HCTL element
+
+	*
+		- tlv
+
+		- TLV array for value
+
+	*
+		- 0
+
+		- on success
+
+	*
+		- >1
+
+		- on success when value was changed
+
+	*
+		- <0
+
+		- a negative error code on failure
+
+.. index:: pair: function; snd_hctl_elem_get_hctl
+.. _doxid-group___h_control_1ga98660b650e7c060be8a574402e2f2257:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_hctl_t<doxid-group___h_control_1ga13c9ad52c57ab7db06065a7f806b2369>`*
+	snd_hctl_elem_get_hctl(:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* elem)
+
+Get HCTL handle for an HCTL element.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- elem
+
+		- HCTL element
+
+
+
+.. rubric:: Returns:
+
+HCTL handle
+
+.. index:: pair: function; snd_hctl_elem_get_id
+.. _doxid-group___h_control_1gac1c0ce6f627f2f1560c5db03a93caf5b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_hctl_elem_get_id(
+		const :ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* obj,
+		:ref:`snd_ctl_elem_id_t<doxid-group___control_1gad6c3746f1925bfec6a4fd0e913430e55>`* ptr
+		)
+
+Get CTL element identifier of a CTL element id/value.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- obj
+
+		- CTL element id/value
+
+	*
+		- ptr
+
+		- Pointer to returned CTL element identifier
+
+.. index:: pair: function; snd_hctl_elem_get_numid
+.. _doxid-group___h_control_1gae5e86d487c6c964be8a59dfeddb2f36e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	unsigned int
+	snd_hctl_elem_get_numid(const :ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* obj)
+
+Get element numeric identifier of a CTL element id/value.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- obj
+
+		- CTL element id/value
+
+
+
+.. rubric:: Returns:
+
+element numeric identifier
+
+.. index:: pair: function; snd_hctl_elem_get_interface
+.. _doxid-group___h_control_1gabe8c46cbe8b6a2612fa0eaeb1fa8fefb:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_ctl_elem_iface_t<doxid-group___control_1ga14baa0febb91cc4c5d72dcc825acf518>`
+	snd_hctl_elem_get_interface(const :ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* obj)
+
+Get interface part of CTL element identifier of a CTL element id/value.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- obj
+
+		- CTL element id/value
+
+
+
+.. rubric:: Returns:
+
+interface part of element identifier
+
+.. index:: pair: function; snd_hctl_elem_get_device
+.. _doxid-group___h_control_1gae933e61025507ee572408138e935c63f:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	unsigned int
+	snd_hctl_elem_get_device(const :ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* obj)
+
+Get device part of CTL element identifier of a CTL element id/value.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- obj
+
+		- CTL element id/value
+
+
+
+.. rubric:: Returns:
+
+device part of element identifier
+
+.. index:: pair: function; snd_hctl_elem_get_subdevice
+.. _doxid-group___h_control_1ga894c09354156fd12f8a089726449f6ac:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	unsigned int
+	snd_hctl_elem_get_subdevice(const :ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* obj)
+
+Get subdevice part of CTL element identifier of a CTL element id/value.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- obj
+
+		- CTL element id/value
+
+
+
+.. rubric:: Returns:
+
+subdevice part of element identifier
+
+.. index:: pair: function; snd_hctl_elem_get_name
+.. _doxid-group___h_control_1gab89b9d62f8575795fc52b86415373a49:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	snd_hctl_elem_get_name(const :ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* obj)
+
+Get name part of CTL element identifier of a CTL element id/value.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- obj
+
+		- CTL element id/value
+
+
+
+.. rubric:: Returns:
+
+name part of element identifier
+
+.. index:: pair: function; snd_hctl_elem_get_index
+.. _doxid-group___h_control_1gaa2bad4d08aa1c8ea98f2a92435583e01:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	unsigned int
+	snd_hctl_elem_get_index(const :ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* obj)
+
+Get index part of CTL element identifier of a CTL element id/value.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- obj
+
+		- CTL element id/value
+
+
+
+.. rubric:: Returns:
+
+index part of element identifier
+
+.. index:: pair: function; snd_hctl_elem_set_callback
+.. _doxid-group___h_control_1gacc10c18b636db3388e9b6383058fc757:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_hctl_elem_set_callback(
+		:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* obj,
+		:ref:`snd_hctl_elem_callback_t<doxid-group___h_control_1ga64ce2446d79c992547d3db8c7faa6143>` val
+		)
+
+Set callback function for an HCTL element.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- obj
+
+		- HCTL element
+
+	*
+		- val
+
+		- callback function
+
+.. index:: pair: function; snd_hctl_elem_get_callback_private
+.. _doxid-group___h_control_1gac0aad0000d7eccde5d107b1b95f429e6:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void*
+	snd_hctl_elem_get_callback_private(const :ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* obj)
+
+Get callback private value for an HCTL element.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- obj
+
+		- HCTL element
+
+
+
+.. rubric:: Returns:
+
+callback private value
+
+.. index:: pair: function; snd_hctl_elem_set_callback_private
+.. _doxid-group___h_control_1gaa9d511449fc220d09e69a05ae65f1ead:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	snd_hctl_elem_set_callback_private(
+		:ref:`snd_hctl_elem_t<doxid-group___h_control_1gaddfb152863e87857d463c7008d72ad74>`* obj,
+		void* val
+		)
+
+Set callback private value for an HCTL element.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- obj
+
+		- HCTL element
+
+	*
+		- val
+
+		- callback private value
+

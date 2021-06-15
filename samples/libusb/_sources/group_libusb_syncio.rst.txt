@@ -1,0 +1,318 @@
+.. index:: pair: group; Synchronous device I/O
+.. _doxid-group__libusb__syncio:
+
+Synchronous device I/O
+======================
+
+.. toctree::
+	:hidden:
+
+Overview
+~~~~~~~~
+
+This page documents libusb's synchronous (blocking) API for USB device I/O. :ref:`More...<details-group__libusb__syncio>`
+
+
+.. ref-code-block:: c
+	:class: doxyrest-overview-code-block
+
+	
+	// global functions
+
+	int
+	:ref:`libusb_control_transfer<doxid-group__libusb__syncio_1gadb11f7a761bd12fc77a07f4568d56f38>`(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		uint8_t request_type,
+		uint8_t bRequest,
+		uint16_t wValue,
+		uint16_t wIndex,
+		unsigned char* data,
+		uint16_t wLength,
+		unsigned int timeout
+		);
+
+	int
+	:ref:`libusb_bulk_transfer<doxid-group__libusb__syncio_1gab8ae853ab492c22d707241dc26c8a805>`(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		unsigned char endpoint,
+		unsigned char* data,
+		int length,
+		int* actual_length,
+		unsigned int timeout
+		);
+
+	int
+	:ref:`libusb_interrupt_transfer<doxid-group__libusb__syncio_1gac412bda21b7ecf57e4c76877d78e6486>`(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		unsigned char endpoint,
+		unsigned char* data,
+		int length,
+		int* actual_length,
+		unsigned int timeout
+		);
+
+.. _details-group__libusb__syncio:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+This page documents libusb's synchronous (blocking) API for USB device I/O.
+
+This interface is easy to use but has some limitations. More advanced users may wish to consider using the :ref:`asynchronous I/O API <doxid-group__libusb__asyncio>` instead.
+
+Global Functions
+----------------
+
+.. index:: pair: function; libusb_control_transfer
+.. _doxid-group__libusb__syncio_1gadb11f7a761bd12fc77a07f4568d56f38:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_control_transfer(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		uint8_t request_type,
+		uint8_t bRequest,
+		uint16_t wValue,
+		uint16_t wIndex,
+		unsigned char* data,
+		uint16_t wLength,
+		unsigned int timeout
+		)
+
+Perform a USB control transfer.
+
+The direction of the transfer is inferred from the bmRequestType field of the setup packet.
+
+The wValue, wIndex and wLength fields values should be given in host-endian byte order.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev_handle
+
+		- a handle for the device to communicate with
+
+	*
+		- bmRequestType
+
+		- the request type field for the setup packet
+
+	*
+		- bRequest
+
+		- the request field for the setup packet
+
+	*
+		- wValue
+
+		- the value field for the setup packet
+
+	*
+		- wIndex
+
+		- the index field for the setup packet
+
+	*
+		- data
+
+		- a suitably-sized data buffer for either input or output (depending on direction bits within bmRequestType)
+
+	*
+		- wLength
+
+		- the length field for the setup packet. The data buffer should be at least this size.
+
+	*
+		- timeout
+
+		- timeout (in millseconds) that this function should wait before giving up due to no response being received. For an unlimited timeout, use value 0.
+
+
+
+.. rubric:: Returns:
+
+on success, the number of bytes actually transferred
+
+LIBUSB_ERROR_TIMEOUT if the transfer timed out
+
+LIBUSB_ERROR_PIPE if the control request was not supported by the device
+
+LIBUSB_ERROR_NO_DEVICE if the device has been disconnected
+
+LIBUSB_ERROR_BUSY if called from event handling context
+
+LIBUSB_ERROR_INVALID_PARAM if the transfer size is larger than the operating system and/or hardware can support
+
+another LIBUSB_ERROR code on other failures
+
+.. index:: pair: function; libusb_bulk_transfer
+.. _doxid-group__libusb__syncio_1gab8ae853ab492c22d707241dc26c8a805:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_bulk_transfer(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		unsigned char endpoint,
+		unsigned char* data,
+		int length,
+		int* actual_length,
+		unsigned int timeout
+		)
+
+Perform a USB bulk transfer.
+
+The direction of the transfer is inferred from the direction bits of the endpoint address.
+
+For bulk reads, the ``length`` field indicates the maximum length of data you are expecting to receive. If less data arrives than expected, this function will return that data, so be sure to check the ``transferred`` output parameter.
+
+You should also check the ``transferred`` parameter for bulk writes. Not all of the data may have been written.
+
+Also check ``transferred`` when dealing with a timeout error code. libusb may have to split your transfer into a number of chunks to satisfy underlying O/S requirements, meaning that the timeout may expire after the first few chunks have completed. libusb is careful not to lose any data that may have been transferred; do not assume that timeout conditions indicate a complete lack of I/O.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev_handle
+
+		- a handle for the device to communicate with
+
+	*
+		- endpoint
+
+		- the address of a valid endpoint to communicate with
+
+	*
+		- data
+
+		- a suitably-sized data buffer for either input or output (depending on endpoint)
+
+	*
+		- length
+
+		- for bulk writes, the number of bytes from data to be sent. for bulk reads, the maximum number of bytes to receive into the data buffer.
+
+	*
+		- transferred
+
+		- output location for the number of bytes actually transferred. Since version 1.0.21 (:ref:`LIBUSB_API_VERSION <doxid-group__libusb__misc_1gaabe4bc36a83358685d36a6c853cbb4de>`>= 0x01000105), it is legal to pass a NULL pointer if you do not wish to receive this information.
+
+	*
+		- timeout
+
+		- timeout (in millseconds) that this function should wait before giving up due to no response being received. For an unlimited timeout, use value 0.
+
+
+
+.. rubric:: Returns:
+
+0 on success (and populates ``transferred``)
+
+LIBUSB_ERROR_TIMEOUT if the transfer timed out (and populates ``transferred``)
+
+LIBUSB_ERROR_PIPE if the endpoint halted
+
+LIBUSB_ERROR_OVERFLOW if the device offered more data, see :ref:`Packets and overflows <doxid-libusb_packetoverflow>`
+
+LIBUSB_ERROR_NO_DEVICE if the device has been disconnected
+
+LIBUSB_ERROR_BUSY if called from event handling context
+
+another LIBUSB_ERROR code on other failures
+
+.. index:: pair: function; libusb_interrupt_transfer
+.. _doxid-group__libusb__syncio_1gac412bda21b7ecf57e4c76877d78e6486:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_interrupt_transfer(
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle,
+		unsigned char endpoint,
+		unsigned char* data,
+		int length,
+		int* actual_length,
+		unsigned int timeout
+		)
+
+Perform a USB interrupt transfer.
+
+The direction of the transfer is inferred from the direction bits of the endpoint address.
+
+For interrupt reads, the ``length`` field indicates the maximum length of data you are expecting to receive. If less data arrives than expected, this function will return that data, so be sure to check the ``transferred`` output parameter.
+
+You should also check the ``transferred`` parameter for interrupt writes. Not all of the data may have been written.
+
+Also check ``transferred`` when dealing with a timeout error code. libusb may have to split your transfer into a number of chunks to satisfy underlying O/S requirements, meaning that the timeout may expire after the first few chunks have completed. libusb is careful not to lose any data that may have been transferred; do not assume that timeout conditions indicate a complete lack of I/O.
+
+The default endpoint bInterval value is used as the polling interval.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- dev_handle
+
+		- a handle for the device to communicate with
+
+	*
+		- endpoint
+
+		- the address of a valid endpoint to communicate with
+
+	*
+		- data
+
+		- a suitably-sized data buffer for either input or output (depending on endpoint)
+
+	*
+		- length
+
+		- for bulk writes, the number of bytes from data to be sent. for bulk reads, the maximum number of bytes to receive into the data buffer.
+
+	*
+		- transferred
+
+		- output location for the number of bytes actually transferred. Since version 1.0.21 (:ref:`LIBUSB_API_VERSION <doxid-group__libusb__misc_1gaabe4bc36a83358685d36a6c853cbb4de>`>= 0x01000105), it is legal to pass a NULL pointer if you do not wish to receive this information.
+
+	*
+		- timeout
+
+		- timeout (in millseconds) that this function should wait before giving up due to no response being received. For an unlimited timeout, use value 0.
+
+
+
+.. rubric:: Returns:
+
+0 on success (and populates ``transferred``)
+
+LIBUSB_ERROR_TIMEOUT if the transfer timed out
+
+LIBUSB_ERROR_PIPE if the endpoint halted
+
+LIBUSB_ERROR_OVERFLOW if the device offered more data, see :ref:`Packets and overflows <doxid-libusb_packetoverflow>`
+
+LIBUSB_ERROR_NO_DEVICE if the device has been disconnected
+
+LIBUSB_ERROR_BUSY if called from event handling context
+
+another LIBUSB_ERROR code on other error
+

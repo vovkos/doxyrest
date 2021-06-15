@@ -1,0 +1,1742 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>The SSH session functions. &mdash; LibSSH Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/doxyrest-pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/doxyrest-sphinx_rtd_theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/target-highlight.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="The SSH string functions" href="group_libssh_string.html" />
+    <link rel="prev" title="The SSH scp functions" href="group_libssh_scp.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> LibSSH Documentation
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="page_libssh_linking.html">The Linking HowTo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_libssh_tutorial.html">The Tutorial</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="group_libssh.html">The libssh API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_pki.html">The SSH Public Key Infrastructure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_auth.html">The SSH authentication functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_buffer.html">The SSH buffer functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_channel.html">The SSH channel functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_error.html">The SSH error functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_misc.html">The SSH helper functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_log.html">The SSH logging functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_messages.html">The SSH message functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_poll.html">The SSH poll functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_scp.html">The SSH scp functions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">The SSH session functions.</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#global-functions">Global Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_string.html">The SSH string functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_threads.html">The SSH threading functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_callbacks.html">The libssh callbacks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh.html#detailed-documentation">Detailed Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="group_ssh_cpp.html">The libssh C++ wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libssh_sftp.html">The libssh SFTP API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libssh_server.html">The libssh server API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="page_bug.html">Bug List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_deprecated.html">Deprecated List</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LibSSH Documentation</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="group_libssh.html">The libssh API</a> &raquo;</li>
+        
+      <li>The SSH session functions.</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="the-ssh-session-functions">
+<span id="doxid-group-libssh-session"></span><span id="index-0"></span><h1>The SSH session functions.</h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="overview">
+<h2>Overview</h2>
+<p>Functions that manage a session. <a class="reference internal" href="#details-group-libssh-session"><span class="std std-ref">More…</span></a></p>
+<pre class="highlight doxyrest-overview-code-block literal-block">
+<span></span><span class="c1">// global functions</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga60da8e2c47897a209a455923c35d52d8"><span class="std std-ref">ssh_blocking_flush</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">timeout</span>
+    <span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga07827fd70a51ddc4030364f220eb4c9c"><span class="std std-ref">ssh_clean_pubkey_hash</span></a><span></span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="o">**</span> <span class="n">hash</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga032e07cbd8bc3f14cb2dd375db0b03d7"><span class="std std-ref">ssh_connect</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga0f048a4c0dbe02cfb7e9c5b6d0db0f27"><span class="std std-ref">ssh_disconnect</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1gae5af27a98a7488e9f5ded6b37c274156"><span class="std std-ref">ssh_free</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga81d8525f77c58d93ed0d320c38e62009"><span class="std std-ref">ssh_get_cipher_in</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga0a0b33868aec5337ba1d9aee8fee26d1"><span class="std std-ref">ssh_get_cipher_out</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga1e76a1fc03d1d16fb59b0bd5e9978aa0"><span class="std std-ref">ssh_get_clientbanner</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1gad19e368e35d48e02ba95970a7d1e87f5"><span class="std std-ref">ssh_get_disconnect_message</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<a class="reference internal" href="global.html#doxid-libssh-8h-1a30353f381f5fccbb956eea1f3a110b6c"><span class="std std-ref">socket_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-libssh-session-1gafe509fcea47714b5cd277d1e35e83276"><span class="std std-ref">ssh_get_fd</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga6ebcfc53884fdc5afb1607c94f8007d4"><span class="std std-ref">ssh_get_hexa</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">what</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">len</span>
+    <span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga293196b7f1b1653ff970b8206671def9"><span class="std std-ref">ssh_get_hmac_in</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga2fc37631d6a350d9c31dcb336b98a836"><span class="std std-ref">ssh_get_hmac_out</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga89864d4d5cc6d3d6ef1c39652f2a688f"><span class="std std-ref">ssh_get_issue_banner</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga3870bf9e03a2ac470ab202424224b15e"><span class="std std-ref">ssh_get_kex_algo</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1gac55d2895467a1e898ee75b4710d836a5"><span class="std std-ref">ssh_get_openssh_version</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1gae9d0104fbeca17bcfb0659ad718c4606"><span class="std std-ref">ssh_get_poll_flags</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1gaf8ff0e2236d54d964a82f68d7323a741"><span class="std std-ref">ssh_get_pubkey_hash</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">**</span> <span class="n">hash</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga839a93298aeff85adbaf4db815b58730"><span class="std std-ref">ssh_get_publickey</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_key</span><span class="o">*</span> <span class="n">key</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga7a7b16a4bed6d8d58f10bdb269172ff7"><span class="std std-ref">ssh_get_publickey_hash</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">ssh_key</span> <span class="n">key</span><span class="p">,</span>
+    <span class="k">enum</span> <a class="reference internal" href="enum_ssh_publickey_hash_type.html#doxid-libssh-8h-1a259d7cf33d738bfbc221aeac362c84c8"><span class="std std-ref">ssh_publickey_hash_type</span></a><span></span> <span class="n">type</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">**</span> <span class="n">hash</span><span class="p">,</span>
+    <span class="kt">size_t</span><span class="o">*</span> <span class="n">hlen</span>
+    <span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1gac89bcc9f438d031a32260926b04ea6b9"><span class="std std-ref">ssh_get_serverbanner</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1gac199314d1646372c566ef14b9b6dca53"><span class="std std-ref">ssh_get_status</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga8467735e4735165336f68ee82e24de0e"><span class="std std-ref">ssh_get_version</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga0c959bde817801ac5de2db1e64b52f26"><span class="std std-ref">ssh_is_blocking</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga49d8f413a3c7879070a112703de1d6e2"><span class="std std-ref">ssh_is_connected</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga6f37e3d7bb6b938b44d6a34a76fdfa0b"><span class="std std-ref">ssh_is_server_known</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="n">ssh_session</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1gaadadc0f9601547c30db7c4d62017d32c"><span class="std std-ref">ssh_new</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1gaead8cef1f39e785139bc510852ce1dff"><span class="std std-ref">ssh_options_copy</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">src</span><span class="p">,</span>
+    <span class="n">ssh_session</span><span class="o">*</span> <span class="n">dest</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1gaaa9d400920cad4d6e4a0fb09ff8c7b01"><span class="std std-ref">ssh_options_get</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">enum</span> <a class="reference internal" href="enum_ssh_options_e.html#doxid-libssh-8h-1af7093adacb08e7ee1e9b16e9c8b0f46c"><span class="std std-ref">ssh_options_e</span></a><span></span> <span class="n">type</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">**</span> <span class="n">value</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1gaa298d8445355420d80f2d968477ba86f"><span class="std std-ref">ssh_options_get_port</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span><span class="o">*</span> <span class="n">port_target</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga93f7f7159893f3ce62c9b178724eff75"><span class="std std-ref">ssh_options_getopt</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">argcptr</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga82371e723260c7572ea061edecc2e9f1"><span class="std std-ref">ssh_options_parse_config</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">filename</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga7a801b85800baa3f4e16f5b47db0a73d"><span class="std std-ref">ssh_options_set</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">enum</span> <a class="reference internal" href="enum_ssh_options_e.html#doxid-libssh-8h-1af7093adacb08e7ee1e9b16e9c8b0f46c"><span class="std std-ref">ssh_options_e</span></a><span></span> <span class="n">type</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">value</span>
+    <span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga39bf7936ed51361fe9cf3c3bbfc25514"><span class="std std-ref">ssh_print_hexa</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">descr</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">what</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">len</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga86cbf041bced56d18a2a5248c46cecb4"><span class="std std-ref">ssh_select</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_channel</span><span class="o">*</span> <span class="n">channels</span><span class="p">,</span>
+    <span class="n">ssh_channel</span><span class="o">*</span> <span class="n">outchannels</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-libssh-8h-1a30353f381f5fccbb956eea1f3a110b6c"><span class="std std-ref">socket_t</span></a><span></span> <span class="n">maxfd</span><span class="p">,</span>
+    <span class="n">fd_set</span><span class="o">*</span> <span class="n">readfds</span><span class="p">,</span>
+    <span class="k">struct</span> <span class="n">timeval</span><span class="o">*</span> <span class="n">timeout</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga5ffa2201152e29cc680c4b8e4a3f4fdf"><span class="std std-ref">ssh_send_debug</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">message</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">always_display</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1gab8827415fd19cf6cb64e7fc83c09e423"><span class="std std-ref">ssh_send_ignore</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">data</span>
+    <span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga2a29cff08855611be84d050e5bec73bc"><span class="std std-ref">ssh_set_blocking</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">blocking</span>
+    <span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga84d4ac53ac8582b70da9b63739df61ad"><span class="std std-ref">ssh_set_counters</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_counter</span> <span class="n">scounter</span><span class="p">,</span>
+    <span class="n">ssh_counter</span> <span class="n">rcounter</span>
+    <span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga06453278350fd9e940c5c1b0d5225f19"><span class="std std-ref">ssh_set_fd_except</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga0e05c91c6f475eabc8d221914d25a425"><span class="std std-ref">ssh_set_fd_toread</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga3f1b3c59662464eec3649d3d72a40543"><span class="std std-ref">ssh_set_fd_towrite</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1gae1bd16255ba373325adf76307d0c8c42"><span class="std std-ref">ssh_silent_disconnect</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1gaf61a9cfdc40c76ffce9f9a8543755d36"><span class="std std-ref">ssh_write_knownhost</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">void</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-session-1gafa8d153635a261e97870ab71d570149a"><span></span><span class="n">ssh_client_connection_callback</span></span><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-session-1gabca86e5dcb03e23c150b16f9655cd782"><span></span><span class="n">ssh_connect_termination</span></span><span></span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">user</span><span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-session-1gaffbc8276ff57983966ce108998df40bd"><span></span><span class="n">ssh_copyright</span></span><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-session-1gaed7aa63089bc78f3827115f476badab5"><span></span><span class="n">ssh_select_cb</span></span><span></span><span class="p">(</span>
+    <a class="reference internal" href="global.html#doxid-libssh-8h-1a30353f381f5fccbb956eea1f3a110b6c"><span class="std std-ref">socket_t</span></a><span></span> <span class="n">fd</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">revents</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">userdata</span>
+    <span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-session-1ga1a06292da7667385acb7181c17fb2aaf"><span></span><span class="n">alldigits</span></span><span></span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">s</span><span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga7c21df77bcd00b832e2f33c3afae64a0"><span class="std std-ref">check_public_key</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">**</span> <span class="n">tokens</span>
+    <span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-session-1ga8986fdab5f7b17935b21e96652f22cf8"><span class="std std-ref">match_hashed_host</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">host</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">sourcehash</span>
+    <span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">char</span><span class="o">**</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-session-1ga3d5f65b5769fb17797618a60f2b78101"><span></span><span class="n">ssh_get_knownhost_line</span></span><span></span><span class="p">(</span>
+    <span class="kt">FILE</span><span class="o">**</span> <span class="n">file</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">filename</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">**</span> <span class="n">found_type</span>
+    <span class="p">);</span>
+
+<span class="kt">char</span><span class="o">**</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-session-1ga0cdaf267ea18c4d7910864f7203842f3"><span></span><span class="n">ssh_knownhosts_algorithms</span></span><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">void</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-session-1ga4443531b37afa026f6a8cac3bf313166"><span></span><span class="n">tokens_free</span></span><span></span><span class="p">(</span><span class="kt">char</span><span class="o">**</span> <span class="n">tokens</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-session-1ga882e56c9ac92b2e860f055ac903e9c07"><span></span><span class="n">ssh_options_apply</span></span><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-session-1ga980c4ecd572fdb816d2f8b0a0479cea7"><span></span><span class="n">ssh_options_set_algo</span></span><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">algo</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">list</span>
+    <span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-session-1gac06e77d8cc7d3c9b3ce54cfd8db35afa"><span></span><span class="n">ssh_flush_termination</span></span><span></span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">c</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-session-1gaa0e04dc9e24d5112a5ca2b7bd68031d0"><span></span><span class="n">ssh_handle_packets</span></span><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">timeout</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-session-1gab3686ad27fa79078da6ad919ccff0fd5"><span></span><span class="n">ssh_handle_packets_termination</span></span><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">timeout</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-session-8h-1afe190fe0d01c9d8b63862d56b7f67ffa"><span class="std std-ref">ssh_termination_function</span></a><span></span> <span class="n">fct</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">user</span>
+    <span class="p">);</span>
+
+<span class="kt">void</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-session-1ga2635562d4c0bb8507e9a9f7274ff4729"><span></span><span class="n">ssh_socket_exception_callback</span></span><span></span><span class="p">(</span>
+    <span class="kt">int</span> <span class="n">code</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">errno_code</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">user</span>
+    <span class="p">);</span>
+
+<span class="c1">// macros</span>
+
+<span class="cp">#define </span><span class="doxyrest-code-target target" id="doxid-group-libssh-session-1gaf973d65853ac2ac2b0eb78b48c51e925"><span></span><span class="n">KNOWNHOSTS_MAXTYPES</span></span>
+</pre>
+</div>
+<div class="section" id="detailed-documentation">
+<span id="details-group-libssh-session"></span><h2>Detailed Documentation</h2>
+<p>Functions that manage a session.</p>
+<div class="section" id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga60da8e2c47897a209a455923c35d52d8">
+<span id="index-1"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_blocking_flush</span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">timeout</span>
+    <span class="p">)</span>
+</pre>
+<p>Blocking flush of the outgoing buffer.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The SSH session</td>
+</tr>
+<tr class="row-even"><td>timeout</td>
+<td>Set an upper limit on the time for which this function will block, in milliseconds. Specifying -1 means an infinite timeout. This parameter is passed to the poll() function.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK on success, SSH_AGAIN if timeout occurred, SSH_ERROR otherwise.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga07827fd70a51ddc4030364f220eb4c9c">
+<span id="index-2"></span><span></span><span class="kt">void</span>
+<span class="n">ssh_clean_pubkey_hash</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="o">**</span> <span class="n">hash</span><span class="p">)</span>
+</pre>
+<p>Deallocate the hash obtained by ssh_get_pubkey_hash.</p>
+<p>This is required under Microsoft platform as this library might use a different C library than your software, hence a different heap.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>hash</td>
+<td>The buffer to deallocate.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-libssh-session-1gaf8ff0e2236d54d964a82f68d7323a741"><span class="std std-ref">ssh_get_pubkey_hash()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga032e07cbd8bc3f14cb2dd375db0b03d7">
+<span id="index-3"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_connect</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>Connect to the ssh server.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The ssh session to connect.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK on success, SSH_ERROR on error.</p>
+<p>SSH_AGAIN, if the session is in nonblocking mode, and call must be done again.</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-libssh-session-1gaadadc0f9601547c30db7c4d62017d32c"><span class="std std-ref">ssh_new()</span></a></p>
+<p><a class="reference internal" href="#doxid-group-libssh-session-1ga0f048a4c0dbe02cfb7e9c5b6d0db0f27"><span class="std std-ref">ssh_disconnect()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga0f048a4c0dbe02cfb7e9c5b6d0db0f27">
+<span id="index-4"></span><span></span><span class="kt">void</span>
+<span class="n">ssh_disconnect</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>Disconnect from a session (client or server).</p>
+<p>The session can then be reused to open a new session.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The SSH session to use.</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1gae5af27a98a7488e9f5ded6b37c274156">
+<span id="index-5"></span><span></span><span class="kt">void</span>
+<span class="n">ssh_free</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>Deallocate a SSH session handle.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The SSH session to free.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-libssh-session-1ga0f048a4c0dbe02cfb7e9c5b6d0db0f27"><span class="std std-ref">ssh_disconnect()</span></a></p>
+<p><a class="reference internal" href="#doxid-group-libssh-session-1gaadadc0f9601547c30db7c4d62017d32c"><span class="std std-ref">ssh_new()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga81d8525f77c58d93ed0d320c38e62009">
+<span id="index-6"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">ssh_get_cipher_in</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>get the name of the input cipher for the given session.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The SSH session.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>Returns cipher name or NULL.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga0a0b33868aec5337ba1d9aee8fee26d1">
+<span id="index-7"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">ssh_get_cipher_out</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>get the name of the output cipher for the given session.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The SSH session.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>Returns cipher name or NULL.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga1e76a1fc03d1d16fb59b0bd5e9978aa0">
+<span id="index-8"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">ssh_get_clientbanner</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>get the client banner</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The SSH session</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>Returns the client banner string or NULL.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1gad19e368e35d48e02ba95970a7d1e87f5">
+<span id="index-9"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">ssh_get_disconnect_message</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>Get the disconnect message from the server.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The ssh session to use.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>The message sent by the server along with the disconnect, or NULL in which case the reason of the disconnect may be found with ssh_get_error.</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="group_libssh_error.html#doxid-group-libssh-error-1ga9241586665bf21f823806473fc386258"><span class="std std-ref">ssh_get_error()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1gafe509fcea47714b5cd277d1e35e83276">
+<span id="index-10"></span><a class="reference internal" href="global.html#doxid-libssh-8h-1a30353f381f5fccbb956eea1f3a110b6c"><span class="std std-ref">socket_t</span></a><span></span>
+<span class="n">ssh_get_fd</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>Get the fd of a connection.</p>
+<p>In case you’d need the file descriptor of the connection to the server/client.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The ssh session to use.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>The file descriptor of the connection, or -1 if it is not connected</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga6ebcfc53884fdc5afb1607c94f8007d4">
+<span id="index-11"></span><span></span><span class="kt">char</span><span class="o">*</span>
+<span class="n">ssh_get_hexa</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">what</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">len</span>
+    <span class="p">)</span>
+</pre>
+<p>Convert a buffer into a colon separated hex string.</p>
+<p>The caller has to free the memory.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>what</td>
+<td>What should be converted to a hex string.</td>
+</tr>
+<tr class="row-even"><td>len</td>
+<td>Length of the buffer to convert.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>The hex string or NULL on error.</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="group_libssh_string.html#doxid-group-libssh-string-1gafc10700722d6cafc468c2ee97585449a"><span class="std std-ref">ssh_string_free_char()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga293196b7f1b1653ff970b8206671def9">
+<span id="index-12"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">ssh_get_hmac_in</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>get the name of the input HMAC algorithm for the given session.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The SSH session.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>Returns HMAC algorithm name or NULL if unknown.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga2fc37631d6a350d9c31dcb336b98a836">
+<span id="index-13"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">ssh_get_hmac_out</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>get the name of the output HMAC algorithm for the given session.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The SSH session.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>Returns HMAC algorithm name or NULL if unknown.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga89864d4d5cc6d3d6ef1c39652f2a688f">
+<span id="index-14"></span><span></span><span class="kt">char</span><span class="o">*</span>
+<span class="n">ssh_get_issue_banner</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>Get the issue banner from the server.</p>
+<p>This is the banner showing a disclaimer to users who log in, typically their right or the fact that they will be monitored.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The SSH session to use.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>A newly allocated string with the banner, NULL on error.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga3870bf9e03a2ac470ab202424224b15e">
+<span id="index-15"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">ssh_get_kex_algo</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>get the name of the current key exchange algorithm.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The SSH session</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>Returns the key exchange algorithm string or NULL.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1gac55d2895467a1e898ee75b4710d836a5">
+<span id="index-16"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_get_openssh_version</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>Get the version of the OpenSSH server, if it is not an OpenSSH server then 0 will be returned.</p>
+<p>You can use the SSH_VERSION_INT macro to compare version numbers.</p>
+<pre class="highlight literal-block">
+<span></span><span class="kt">int</span> <span class="n">openssh</span> <span class="o">=</span> <span class="n">ssh_get_openssh_version</span><span class="p">();</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">openssh</span> <span class="o">==</span> <span class="n">SSH_INT_VERSION</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Version match!\m&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The SSH session to use.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>The version number if available, 0 otherwise.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1gae9d0104fbeca17bcfb0659ad718c4606">
+<span id="index-17"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_get_poll_flags</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>Get poll flags for an external mainloop.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The ssh session to use.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>A bitmask including SSH_READ_PENDING or SSH_WRITE_PENDING. For SSH_READ_PENDING, your invocation of poll() should include POLLIN. For SSH_WRITE_PENDING, your invocation of poll() should include POLLOUT.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1gaf8ff0e2236d54d964a82f68d7323a741">
+<span id="index-18"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_get_pubkey_hash</span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">**</span> <span class="n">hash</span>
+    <span class="p">)</span>
+</pre>
+<p>Deprecated Use <a class="reference internal" href="#doxid-group-libssh-session-1ga7a7b16a4bed6d8d58f10bdb269172ff7"><span class="std std-ref">ssh_get_publickey_hash()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga839a93298aeff85adbaf4db815b58730">
+<span id="index-19"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_get_publickey</span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_key</span><span class="o">*</span> <span class="n">key</span>
+    <span class="p">)</span>
+</pre>
+<p>Get the server public key from a session.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The session to get the key from.</td>
+</tr>
+<tr class="row-even"><td>key</td>
+<td>A pointer to store the allocated key. You need to free the key.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK on success, SSH_ERROR on errror.</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="group_libssh_pki.html#doxid-group-libssh-pki-1ga08808beb83a42ccd6f1c710ddeb1b4c2"><span class="std std-ref">ssh_key_free()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga7a7b16a4bed6d8d58f10bdb269172ff7">
+<span id="index-20"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_get_publickey_hash</span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">ssh_key</span> <span class="n">key</span><span class="p">,</span>
+    <span class="k">enum</span> <a class="reference internal" href="enum_ssh_publickey_hash_type.html#doxid-libssh-8h-1a259d7cf33d738bfbc221aeac362c84c8"><span class="std std-ref">ssh_publickey_hash_type</span></a><span></span> <span class="n">type</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">**</span> <span class="n">hash</span><span class="p">,</span>
+    <span class="kt">size_t</span><span class="o">*</span> <span class="n">hlen</span>
+    <span class="p">)</span>
+</pre>
+<p>Allocates a buffer with the hash of the public key.</p>
+<p>This function allows you to get a hash of the public key. You can then print this hash in a human-readable form to the user so that he is able to verify it. Use <a class="reference internal" href="#doxid-group-libssh-session-1ga6ebcfc53884fdc5afb1607c94f8007d4"><span class="std std-ref">ssh_get_hexa()</span></a> or <a class="reference internal" href="#doxid-group-libssh-session-1ga39bf7936ed51361fe9cf3c3bbfc25514"><span class="std std-ref">ssh_print_hexa()</span></a> to display it.</p>
+<p>It is very important that you verify at some moment that the hash matches a known server. If you don’t do it, cryptography wont help you at making things secure. OpenSSH uses SHA1 to print public key digests.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>key</td>
+<td>The public key to create the hash for.</td>
+</tr>
+<tr class="row-even"><td>type</td>
+<td>The type of the hash you want.</td>
+</tr>
+<tr class="row-odd"><td>hash</td>
+<td>A pointer to store the allocated buffer. It can be freed using <a class="reference internal" href="#doxid-group-libssh-session-1ga07827fd70a51ddc4030364f220eb4c9c"><span class="std std-ref">ssh_clean_pubkey_hash()</span></a>.</td>
+</tr>
+<tr class="row-even"><td>hlen</td>
+<td>The length of the hash.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success, -1 if an error occured.</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-libssh-session-1ga6f37e3d7bb6b938b44d6a34a76fdfa0b"><span class="std std-ref">ssh_is_server_known()</span></a></p>
+<p><a class="reference internal" href="#doxid-group-libssh-session-1ga6ebcfc53884fdc5afb1607c94f8007d4"><span class="std std-ref">ssh_get_hexa()</span></a></p>
+<p><a class="reference internal" href="#doxid-group-libssh-session-1ga39bf7936ed51361fe9cf3c3bbfc25514"><span class="std std-ref">ssh_print_hexa()</span></a></p>
+<p><a class="reference internal" href="#doxid-group-libssh-session-1ga07827fd70a51ddc4030364f220eb4c9c"><span class="std std-ref">ssh_clean_pubkey_hash()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1gac89bcc9f438d031a32260926b04ea6b9">
+<span id="index-21"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">ssh_get_serverbanner</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>get the server banner</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The SSH session</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>Returns the server banner string or NULL.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1gac199314d1646372c566ef14b9b6dca53">
+<span id="index-22"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_get_status</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>Get session status.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The ssh session to use.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>A bitmask including SSH_CLOSED, SSH_READ_PENDING, SSH_WRITE_PENDING or SSH_CLOSED_ERROR which respectively means the session is closed, has data to read on the connection socket and session was closed due to an error.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga8467735e4735165336f68ee82e24de0e">
+<span id="index-23"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_get_version</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>Get the protocol version of the session.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The ssh session to use.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>1 or 2, for ssh1 or ssh2, &lt; 0 on error.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga0c959bde817801ac5de2db1e64b52f26">
+<span id="index-24"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_is_blocking</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>Return the blocking mode of libssh.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The SSH session</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if the session is nonblocking,</p>
+<p>1 if the functions may block.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga49d8f413a3c7879070a112703de1d6e2">
+<span id="index-25"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_is_connected</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>Check if we are connected.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The session to check if it is connected.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>1 if we are connected, 0 if not.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga6f37e3d7bb6b938b44d6a34a76fdfa0b">
+<span id="index-26"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_is_server_known</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>Check if the server is known.</p>
+<p>Checks the user’s known host file for a previous connection to the current server.</p>
+<p>Bug There is no current way to remove or modify an entry into the known host table.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The SSH session to use.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_SERVER_KNOWN_OK: The server is known and has not changed.</p>
+<p>SSH_SERVER_KNOWN_CHANGED: The server key has changed. Either you are under attack or the administrator changed the key. You HAVE to warn the user about a possible attack.</p>
+<p>SSH_SERVER_FOUND_OTHER: The server gave use a key of a type while we had an other type recorded. It is a possible attack.</p>
+<p>SSH_SERVER_NOT_KNOWN: The server is unknown. User should confirm the MD5 is correct.</p>
+<p>SSH_SERVER_FILE_NOT_FOUND: The known host file does not exist. The host is thus unknown. File will be created if host key is accepted.</p>
+<p>SSH_SERVER_ERROR: Some error happened.</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-libssh-session-1gaf8ff0e2236d54d964a82f68d7323a741"><span class="std std-ref">ssh_get_pubkey_hash()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1gaadadc0f9601547c30db7c4d62017d32c">
+<span id="index-27"></span><span></span><span class="n">ssh_session</span>
+<span class="n">ssh_new</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</pre>
+<p>Create a new ssh session.</p>
+<p class="rubric">Returns:</p>
+<p>A new ssh_session pointer, NULL on error.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1gaead8cef1f39e785139bc510852ce1dff">
+<span id="index-28"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_options_copy</span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">src</span><span class="p">,</span>
+    <span class="n">ssh_session</span><span class="o">*</span> <span class="n">dest</span>
+    <span class="p">)</span>
+</pre>
+<p>Duplicate the options of a session structure.</p>
+<p>If you make several sessions with the same options this is useful. You cannot use twice the same option structure in ssh_session_connect.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>src</td>
+<td>The session to use to copy the options.</td>
+</tr>
+<tr class="row-even"><td>dest</td>
+<td>A pointer to store the allocated session with duplicated options. You have to free the memory.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on sucess, -1 on error with errno set.</p>
+<p class="rubric">See also:</p>
+<p>ssh_session_connect()</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1gaaa9d400920cad4d6e4a0fb09ff8c7b01">
+<span id="index-29"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_options_get</span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">enum</span> <a class="reference internal" href="enum_ssh_options_e.html#doxid-libssh-8h-1af7093adacb08e7ee1e9b16e9c8b0f46c"><span class="std std-ref">ssh_options_e</span></a><span></span> <span class="n">type</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">**</span> <span class="n">value</span>
+    <span class="p">)</span>
+</pre>
+<p>This function can get ssh options, it does not support all options provided for ssh options set, but mostly those which a user-space program may care about having trusted the ssh driver to infer these values from underlaying configuration files.</p>
+<p>It operates only on those SSH_OPTIONS_* which return char*. If you wish to receive the port then please use <a class="reference internal" href="#doxid-group-libssh-session-1gaa298d8445355420d80f2d968477ba86f"><span class="std std-ref">ssh_options_get_port()</span></a> which returns an unsigned int.</p>
+<ul>
+<li><p class="first">SSH_OPTIONS_HOST: The hostname or ip address to connect to (const char *).</p>
+</li>
+<li><p class="first">SSH_OPTIONS_USER: The username for authentication (const char *).</p>
+<p>when not explicitly set this will be inferred from the ~/.ssh/config file.</p>
+</li>
+<li><p class="first">SSH_OPTIONS_IDENTITY: Set the identity file name (const char *,format string).</p>
+<p>By default identity, id_dsa and id_rsa are checked.</p>
+<p>The identity file used authenticate with public key. It may include “%s” which will be replaced by the user home directory.</p>
+</li>
+<li><p class="first">SSH_OPTIONS_PROXYCOMMAND: Get the proxycommand necessary to log into the remote host. When not explicitly set, it will be read from the ~/.ssh/config file.</p>
+</li>
+</ul>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>An allocated SSH session structure.</td>
+</tr>
+<tr class="row-even"><td>type</td>
+<td>The option type to get. This could be one of the following:</td>
+</tr>
+<tr class="row-odd"><td>value</td>
+<td>The value to get into. As a char**, space will be allocated by the function for the value, it is your responsibility to free the memory using <a class="reference internal" href="group_libssh_string.html#doxid-group-libssh-string-1gafc10700722d6cafc468c2ee97585449a"><span class="std std-ref">ssh_string_free_char()</span></a>.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK on success, SSH_ERROR on error.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1gaa298d8445355420d80f2d968477ba86f">
+<span id="index-30"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_options_get_port</span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span><span class="o">*</span> <span class="n">port_target</span>
+    <span class="p">)</span>
+</pre>
+<p>This function can get ssh the ssh port.</p>
+<p>It must only be used on a valid ssh session. This function is useful when the session options have been automatically inferred from the environment or configuration files and one</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>An allocated SSH session structure.</td>
+</tr>
+<tr class="row-even"><td>port_target</td>
+<td>An unsigned integer into which the port will be set from the ssh session.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success, &lt; 0 on error.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga93f7f7159893f3ce62c9b178724eff75">
+<span id="index-31"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_options_getopt</span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">argcptr</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span>
+    <span class="p">)</span>
+</pre>
+<p>Parse command line arguments.</p>
+<p>This is a helper for your application to generate the appropriate options from the command line arguments.</p>
+<p>The argv array and argc value are changed so that the parsed arguments wont appear anymore in them.</p>
+<p>The single arguments (without switches) are not parsed. thus, myssh -l user localhost</p>
+<p>The command wont set the hostname value of options to localhost.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The session to configure.</td>
+</tr>
+<tr class="row-even"><td>argcptr</td>
+<td>The pointer to the argument count.</td>
+</tr>
+<tr class="row-odd"><td>argv</td>
+<td>The arguments list pointer.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success, &lt; 0 on error.</p>
+<p class="rubric">See also:</p>
+<p>ssh_session_new()</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga82371e723260c7572ea061edecc2e9f1">
+<span id="index-32"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_options_parse_config</span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">filename</span>
+    <span class="p">)</span>
+</pre>
+<p>Parse the ssh config file.</p>
+<p>This should be the last call of all options, it may overwrite options which are already set. It requires that the host name is already set with ssh_options_set_host().</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>SSH session handle</td>
+</tr>
+<tr class="row-even"><td>filename</td>
+<td>The options file to use, if NULL the default ~/.ssh/config will be used.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success, &lt; 0 on error.</p>
+<p class="rubric">See also:</p>
+<p>ssh_options_set_host()</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga7a801b85800baa3f4e16f5b47db0a73d">
+<span id="index-33"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_options_set</span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">enum</span> <a class="reference internal" href="enum_ssh_options_e.html#doxid-libssh-8h-1af7093adacb08e7ee1e9b16e9c8b0f46c"><span class="std std-ref">ssh_options_e</span></a><span></span> <span class="n">type</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">value</span>
+    <span class="p">)</span>
+</pre>
+<p>This function can set all possible ssh options.</p>
+<ul>
+<li><p class="first">SSH_OPTIONS_HOST: The hostname or ip address to connect to (const char *).</p>
+</li>
+<li><p class="first">SSH_OPTIONS_PORT: The port to connect to (unsigned int).</p>
+</li>
+<li><p class="first">SSH_OPTIONS_PORT_STR: The port to connect to (const char *).</p>
+</li>
+<li><p class="first">SSH_OPTIONS_FD: The file descriptor to use (socket_t).</p>
+<p>If you wish to open the socket yourself for a reason or another, set the file descriptor. Don’t forget to set the hostname as the hostname is used as a key in the known_host mechanism.</p>
+</li>
+<li><p class="first">SSH_OPTIONS_BINDADDR: The address to bind the client to (const char *).</p>
+</li>
+<li><p class="first">SSH_OPTIONS_USER: The username for authentication (const char *).</p>
+<p>If the value is NULL, the username is set to the default username.</p>
+</li>
+<li><p class="first">SSH_OPTIONS_SSH_DIR: Set the ssh directory (const char *,format string).</p>
+<p>If the value is NULL, the directory is set to the default ssh directory.</p>
+<p>The ssh directory is used for files like known_hosts and identity (private and public key). It may include “%s” which will be replaced by the user home directory.</p>
+</li>
+<li><p class="first">SSH_OPTIONS_KNOWNHOSTS: Set the known hosts file name (const char *,format string).</p>
+<p>If the value is NULL, the directory is set to the default known hosts file, normally ~/.ssh/known_hosts.</p>
+<p>The known hosts file is used to certify remote hosts are genuine. It may include “%s” which will be replaced by the user home directory.</p>
+</li>
+<li><p class="first">SSH_OPTIONS_IDENTITY: Set the identity file name (const char *,format string).</p>
+<p>By default identity, id_dsa and id_rsa are checked.</p>
+<p>The identity file used authenticate with public key. It may include “%s” which will be replaced by the user home directory.</p>
+</li>
+<li><p class="first">SSH_OPTIONS_TIMEOUT: Set a timeout for the connection in seconds (long).</p>
+</li>
+<li><p class="first">SSH_OPTIONS_TIMEOUT_USEC: Set a timeout for the connection in micro seconds (long).</p>
+</li>
+<li><p class="first">SSH_OPTIONS_SSH1: Allow or deny the connection to SSH1 servers (int, 0 is false).</p>
+</li>
+<li><p class="first">SSH_OPTIONS_SSH2: Allow or deny the connection to SSH2 servers (int, 0 is false).</p>
+</li>
+<li><p class="first">SSH_OPTIONS_LOG_VERBOSITY: Set the session logging verbosity (int).</p>
+<p>The verbosity of the messages. Every log smaller or equal to verbosity will be shown.</p>
+<ul class="simple">
+<li>SSH_LOG_NOLOG: No logging</li>
+<li>SSH_LOG_RARE: Rare conditions or warnings</li>
+<li>SSH_LOG_ENTRY: API-accessible entrypoints</li>
+<li>SSH_LOG_PACKET: Packet id and size</li>
+<li>SSH_LOG_FUNCTIONS: Function entering and leaving</li>
+</ul>
+</li>
+<li><p class="first">SSH_OPTIONS_LOG_VERBOSITY_STR: Set the session logging verbosity (const char *).</p>
+<p>The verbosity of the messages. Every log smaller or equal to verbosity will be shown.</p>
+<ul>
+<li><p class="first">SSH_LOG_NOLOG: No logging</p>
+</li>
+<li><p class="first">SSH_LOG_RARE: Rare conditions or warnings</p>
+</li>
+<li><p class="first">SSH_LOG_ENTRY: API-accessible entrypoints</p>
+</li>
+<li><p class="first">SSH_LOG_PACKET: Packet id and size</p>
+</li>
+<li><p class="first">SSH_LOG_FUNCTIONS: Function entering and leaving</p>
+<p>See the corresponding numbers in <code class="docutils literal notranslate"><span class="pre">libssh.h</span></code>.</p>
+</li>
+</ul>
+</li>
+<li><p class="first">SSH_OPTIONS_AUTH_CALLBACK: Set a callback to use your own authentication function (function pointer).</p>
+</li>
+<li><p class="first">SSH_OPTIONS_AUTH_USERDATA: Set the user data passed to the authentication function (generic pointer).</p>
+</li>
+<li><p class="first">SSH_OPTIONS_LOG_CALLBACK: Set a callback to use your own logging function (function pointer).</p>
+</li>
+<li><p class="first">SSH_OPTIONS_LOG_USERDATA: Set the user data passed to the logging function (generic pointer).</p>
+</li>
+<li><p class="first">SSH_OPTIONS_STATUS_CALLBACK: Set a callback to show connection status in realtime (function pointer).</p>
+<pre class="highlight literal-block">
+<span></span><span class="n">fn</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">arg</span><span class="p">,</span> <span class="kt">float</span> <span class="n">status</span><span class="p">)</span>
+</pre>
+<p>During <a class="reference internal" href="#doxid-group-libssh-session-1ga032e07cbd8bc3f14cb2dd375db0b03d7"><span class="std std-ref">ssh_connect()</span></a>, libssh will call the callback with status from 0.0 to 1.0.</p>
+</li>
+<li><p class="first">SSH_OPTIONS_STATUS_ARG: Set the status argument which should be passed to the status callback (generic pointer).</p>
+</li>
+<li><p class="first">SSH_OPTIONS_CIPHERS_C_S: Set the symmetric cipher client to server (const char *, comma-separated list).</p>
+</li>
+<li><p class="first">SSH_OPTIONS_CIPHERS_S_C: Set the symmetric cipher server to client (const char *, comma-separated list).</p>
+</li>
+<li><p class="first">SSH_OPTIONS_KEY_EXCHANGE: Set the key exchange method to be used (const char *, comma-separated list). ex: “ecdh-sha2-nistp256,diffie-hellman-group14-sha1,diffie-hellman-group1-sha1”</p>
+</li>
+<li><p class="first">SSH_OPTIONS_HOSTKEYS: Set the preferred server host key types (const char *, comma-separated list). ex: “ssh-rsa,ssh-dss,ecdh-sha2-nistp256”</p>
+</li>
+<li><p class="first">SSH_OPTIONS_COMPRESSION_C_S: Set the compression to use for client to server communication (const char *, “yes”, “no” or a specific algorithm name if needed (“zlib”,”<a class="reference external" href="mailto:zlib&#37;&#52;&#48;openssh&#46;com">zlib<span>&#64;</span>openssh<span>&#46;</span>com</a>”,”none”).</p>
+</li>
+<li><p class="first">SSH_OPTIONS_COMPRESSION_S_C: Set the compression to use for server to client communication (const char *, “yes”, “no” or a specific algorithm name if needed (“zlib”,”<a class="reference external" href="mailto:zlib&#37;&#52;&#48;openssh&#46;com">zlib<span>&#64;</span>openssh<span>&#46;</span>com</a>”,”none”).</p>
+</li>
+<li><p class="first">SSH_OPTIONS_COMPRESSION: Set the compression to use for both directions communication (const char *, “yes”, “no” or a specific algorithm name if needed (“zlib”,”<a class="reference external" href="mailto:zlib&#37;&#52;&#48;openssh&#46;com">zlib<span>&#64;</span>openssh<span>&#46;</span>com</a>”,”none”).</p>
+</li>
+<li><p class="first">SSH_OPTIONS_COMPRESSION_LEVEL: Set the compression level to use for zlib functions. (int, value from 1 to 9, 9 being the most efficient but slower).</p>
+</li>
+<li><p class="first">SSH_OPTIONS_STRICTHOSTKEYCHECK: Set the parameter StrictHostKeyChecking to avoid asking about a fingerprint (int, 0 = false).</p>
+</li>
+<li><p class="first">SSH_OPTIONS_PROXYCOMMAND: Set the command to be executed in order to connect to server (const char *).</p>
+</li>
+<li><p class="first">SSH_OPTIONS_GSSAPI_SERVER_IDENTITY Set it to specify the GSSAPI server identity that libssh should expect when connecting to the server (const char *).</p>
+</li>
+<li><p class="first">SSH_OPTIONS_GSSAPI_CLIENT_IDENTITY Set it to specify the GSSAPI client identity that libssh should expect when connecting to the server (const char *).</p>
+</li>
+<li><p class="first">SSH_OPTIONS_GSSAPI_DELEGATE_CREDENTIALS Set it to specify that GSSAPI should delegate credentials to the server (int, 0 = false).</p>
+</li>
+</ul>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>An allocated SSH session structure.</td>
+</tr>
+<tr class="row-even"><td>type</td>
+<td>The option type to set. This could be one of the following:</td>
+</tr>
+<tr class="row-odd"><td>value</td>
+<td>The value to set. This is a generic pointer and the datatype which is used should be set according to the type set.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success, &lt; 0 on error.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga39bf7936ed51361fe9cf3c3bbfc25514">
+<span id="index-34"></span><span></span><span class="kt">void</span>
+<span class="n">ssh_print_hexa</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">descr</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">what</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">len</span>
+    <span class="p">)</span>
+</pre>
+<p>Print a buffer as colon separated hex string.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>descr</td>
+<td>Description printed in front of the hex string.</td>
+</tr>
+<tr class="row-even"><td>what</td>
+<td>What should be converted to a hex string.</td>
+</tr>
+<tr class="row-odd"><td>len</td>
+<td>Length of the buffer to convert.</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga86cbf041bced56d18a2a5248c46cecb4">
+<span id="index-35"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_select</span><span class="p">(</span>
+    <span class="n">ssh_channel</span><span class="o">*</span> <span class="n">channels</span><span class="p">,</span>
+    <span class="n">ssh_channel</span><span class="o">*</span> <span class="n">outchannels</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-libssh-8h-1a30353f381f5fccbb956eea1f3a110b6c"><span class="std std-ref">socket_t</span></a><span></span> <span class="n">maxfd</span><span class="p">,</span>
+    <span class="n">fd_set</span><span class="o">*</span> <span class="n">readfds</span><span class="p">,</span>
+    <span class="k">struct</span> <span class="n">timeval</span><span class="o">*</span> <span class="n">timeout</span>
+    <span class="p">)</span>
+</pre>
+<p>A wrapper for the select syscall.</p>
+<p>This functions acts more or less like the select(2) syscall.</p>
+<p>There is no support for writing or exceptions.</p>
+<p>libssh is not reentrant here. That means that if a signal is caught during the processing of this function, you cannot call libssh functions on sessions that are busy with <a class="reference internal" href="#doxid-group-libssh-session-1ga86cbf041bced56d18a2a5248c46cecb4"><span class="std std-ref">ssh_select()</span></a>.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>channels</td>
+<td>Arrays of channels pointers terminated by a NULL. It is never rewritten.</td>
+</tr>
+<tr class="row-even"><td>outchannels</td>
+<td>Arrays of same size that “channels”, there is no need to initialize it.</td>
+</tr>
+<tr class="row-odd"><td>maxfd</td>
+<td>Maximum +1 file descriptor from readfds.</td>
+</tr>
+<tr class="row-even"><td>readfds</td>
+<td>A fd_set of file descriptors to be select’ed for reading.</td>
+</tr>
+<tr class="row-odd"><td>timeout</td>
+<td>The timeout in milliseconds.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK on success, SSH_ERROR on error, SSH_EINTR if it was interrupted. In that case, just restart it.</p>
+<p class="rubric">See also:</p>
+<p>select(2)</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga5ffa2201152e29cc680c4b8e4a3f4fdf">
+<span id="index-36"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_send_debug</span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">message</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">always_display</span>
+    <span class="p">)</span>
+</pre>
+<p>Send a debug message.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The SSH session</td>
+</tr>
+<tr class="row-even"><td>message</td>
+<td>Data to be sent</td>
+</tr>
+<tr class="row-odd"><td>always_display</td>
+<td>Message SHOULD be displayed by the server. It SHOULD NOT be displayed unless debugging information has been explicitly requested.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK on success, SSH_ERROR otherwise.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1gab8827415fd19cf6cb64e7fc83c09e423">
+<span id="index-37"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_send_ignore</span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">data</span>
+    <span class="p">)</span>
+</pre>
+<p>Send a message that should be ignored.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The SSH session</td>
+</tr>
+<tr class="row-even"><td>data</td>
+<td>Data to be sent</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK on success, SSH_ERROR otherwise.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga2a29cff08855611be84d050e5bec73bc">
+<span id="index-38"></span><span></span><span class="kt">void</span>
+<span class="n">ssh_set_blocking</span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">blocking</span>
+    <span class="p">)</span>
+</pre>
+<p>Set the session in blocking/nonblocking mode.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The ssh session to change.</td>
+</tr>
+<tr class="row-even"><td>blocking</td>
+<td>Zero for nonblocking mode.</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga84d4ac53ac8582b70da9b63739df61ad">
+<span id="index-39"></span><span></span><span class="kt">void</span>
+<span class="n">ssh_set_counters</span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_counter</span> <span class="n">scounter</span><span class="p">,</span>
+    <span class="n">ssh_counter</span> <span class="n">rcounter</span>
+    <span class="p">)</span>
+</pre>
+<p>Set the session data counters.</p>
+<p>This functions sets the counter structures to be used to calculate data which comes in and goes out through the session at different levels.</p>
+<pre class="highlight literal-block">
+<span></span><span class="k">struct</span> <span class="n">ssh_counter_struct</span> <span class="n">scounter</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">.</span><span class="n">in_bytes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="p">.</span><span class="n">out_bytes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="p">.</span><span class="n">in_packets</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="p">.</span><span class="n">out_packets</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="p">};</span>
+
+<span class="k">struct</span> <span class="n">ssh_counter_struct</span> <span class="n">rcounter</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">.</span><span class="n">in_bytes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="p">.</span><span class="n">out_bytes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="p">.</span><span class="n">in_packets</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="p">.</span><span class="n">out_packets</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="p">};</span>
+
+<span class="n">ssh_set_counters</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">scounter</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">rcounter</span><span class="p">);</span>
+</pre>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The SSH session.</td>
+</tr>
+<tr class="row-even"><td>scounter</td>
+<td>Counter for byte data handled by the session sockets.</td>
+</tr>
+<tr class="row-odd"><td>rcounter</td>
+<td>Counter for byte and packet data handled by the session, prior compression and SSH overhead.</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga06453278350fd9e940c5c1b0d5225f19">
+<span id="index-40"></span><span></span><span class="kt">void</span>
+<span class="n">ssh_set_fd_except</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>Tell the session it has an exception to catch on the file descriptor.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The ssh session to use.</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga0e05c91c6f475eabc8d221914d25a425">
+<span id="index-41"></span><span></span><span class="kt">void</span>
+<span class="n">ssh_set_fd_toread</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>Tell the session it has data to read on the file descriptor without blocking.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The ssh session to use.</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga3f1b3c59662464eec3649d3d72a40543">
+<span id="index-42"></span><span></span><span class="kt">void</span>
+<span class="n">ssh_set_fd_towrite</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>Tell the session it may write to the file descriptor without blocking.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The ssh session to use.</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1gae1bd16255ba373325adf76307d0c8c42">
+<span id="index-43"></span><span></span><span class="kt">void</span>
+<span class="n">ssh_silent_disconnect</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>Disconnect impolitely from a remote host by closing the socket.</p>
+<p>Suitable if you forked and want to destroy this session.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The SSH session to disconnect.</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1gaf61a9cfdc40c76ffce9f9a8543755d36">
+<span id="index-44"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_write_knownhost</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>Write the current server as known in the known hosts file.</p>
+<p>This will create the known hosts file if it does not exist. You generaly use it when <a class="reference internal" href="#doxid-group-libssh-session-1ga6f37e3d7bb6b938b44d6a34a76fdfa0b"><span class="std std-ref">ssh_is_server_known()</span></a> answered SSH_SERVER_NOT_KNOWN.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The ssh session to use.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK on success, SSH_ERROR on error.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga7c21df77bcd00b832e2f33c3afae64a0">
+<span id="index-45"></span><span></span><span class="k">static</span>
+<span class="kt">int</span>
+<span class="n">check_public_key</span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">**</span> <span class="n">tokens</span>
+    <span class="p">)</span>
+</pre>
+<p>Check the public key in the known host line matches the public key of the currently connected server.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The SSH session to use.</td>
+</tr>
+<tr class="row-even"><td>tokens</td>
+<td>A list of tokens in the known_hosts line.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>1 if the key matches, 0 if the key doesn’t match and -1 on error.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-session-1ga8986fdab5f7b17935b21e96652f22cf8">
+<span id="index-46"></span><span></span><span class="k">static</span>
+<span class="kt">int</span>
+<span class="n">match_hashed_host</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">host</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">sourcehash</span>
+    <span class="p">)</span>
+</pre>
+<p>Check if a hostname matches a openssh-style hashed known host.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>host</td>
+<td>The host to check.</td>
+</tr>
+<tr class="row-even"><td>hashed</td>
+<td>The hashed value.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>1 if it matches, 0 otherwise.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="group_libssh_string.html" class="btn btn-neutral float-right" title="The SSH string functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="group_libssh_scp.html" class="btn btn-neutral float-left" title="The SSH scp functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2003-2017, LibSSH Maintainers.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

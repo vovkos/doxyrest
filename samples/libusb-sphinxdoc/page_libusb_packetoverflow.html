@@ -1,0 +1,119 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Packets and overflows &#8212; LibUSB Documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/target-highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Synchronous and asynchronous device I/O" href="page_libusb_io.html" />
+    <link rel="prev" title="Multi-threaded applications and asynchronous I/O" href="page_libusb_mtasync.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="page_libusb_io.html" title="Synchronous and asynchronous device I/O"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="page_libusb_mtasync.html" title="Multi-threaded applications and asynchronous I/O"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LibUSB Documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Packets and overflows</a><ul>
+<li><a class="reference internal" href="#packet-abstraction">Packet abstraction</a></li>
+<li><a class="reference internal" href="#bulk-interrupt-transfer-overflows">Bulk/interrupt transfer overflows</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="page_libusb_mtasync.html"
+                        title="previous chapter">Multi-threaded applications and asynchronous I/O</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="page_libusb_io.html"
+                        title="next chapter">Synchronous and asynchronous device I/O</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="packets-and-overflows">
+<span id="doxid-libusb-packetoverflow"></span><span id="index-0"></span><h1>Packets and overflows</h1>
+<div class="section" id="packet-abstraction">
+<span id="doxid-libusb-packetoverflow-1packets"></span><h2>Packet abstraction</h2>
+<p>The USB specifications describe how data is transmitted in packets, with constraints on packet size defined by endpoint descriptors. The host must not send data payloads larger than the endpoint’s maximum packet size.</p>
+<p>libusb and the underlying OS abstract out the packet concept, allowing you to request transfers of any size. Internally, the request will be divided up into correctly-sized packets. You do not have to be concerned with packet sizes, but there is one exception when considering overflows.</p>
+</div>
+<div class="section" id="bulk-interrupt-transfer-overflows">
+<span id="doxid-libusb-packetoverflow-1overflow"></span><h2>Bulk/interrupt transfer overflows</h2>
+<p>When requesting data on a bulk endpoint, libusb requires you to supply a buffer and the maximum number of bytes of data that libusb can put in that buffer. However, the size of the buffer is not communicated to the device - the device is just asked to send any amount of data.</p>
+<p>There is no problem if the device sends an amount of data that is less than or equal to the buffer size. libusb reports this condition to you through the <a class="reference internal" href="struct_libusb_transfer.html#doxid-structlibusb-transfer-1a7e858f07c48a271a62209d11376ae607"><span class="std std-ref">libusb_transfer.actual_length</span></a> field.</p>
+<p>Problems may occur if the device attempts to send more data than can fit in the buffer. libusb reports LIBUSB_TRANSFER_OVERFLOW for this condition but other behaviour is largely undefined: actual_length may or may not be accurate, the chunk of data that can fit in the buffer (before overflow) may or may not have been transferred.</p>
+<p>Overflows are nasty, but can be avoided. Even though you were told to ignore packets above, think about the lower level details: each transfer is split into packets (typically small, with a maximum size of 512 bytes). Overflows can only happen if the final packet in an incoming data transfer is smaller than the actual packet that the device wants to transfer. Therefore, you will never see an overflow if your transfer buffer size is a multiple of the endpoint’s packet size: the final packet will either fill up completely or will be only partially filled.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="page_libusb_io.html" title="Synchronous and asynchronous device I/O"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="page_libusb_mtasync.html" title="Multi-threaded applications and asynchronous I/O"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LibUSB Documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2007-2017, LibUSB Maintainers.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    </div>
+  </body>
+</html>

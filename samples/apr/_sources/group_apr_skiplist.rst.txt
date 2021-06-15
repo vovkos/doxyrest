@@ -1,0 +1,834 @@
+.. index:: pair: group; Skip list implementation
+.. _doxid-group__apr__skiplist:
+
+Skip list implementation
+========================
+
+.. toctree::
+	:hidden:
+
+Overview
+~~~~~~~~
+
+Refer to `http://en.wikipedia.org/wiki/Skip_list <http://en.wikipedia.org/wiki/Skip_list>`__ for information about the purpose of and ideas behind skip lists. :ref:`More...<details-group__apr__skiplist>`
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef int (*:ref:`apr_skiplist_compare<doxid-group__apr__skiplist_1ga873aa114e692e48c6587277680ceba87>`)(
+		void *,
+		void *
+		);
+
+	typedef void (*:ref:`apr_skiplist_freefunc<doxid-group__apr__skiplist_1ga326fdccaf516e5296969fa03bbda3fca>`)(void *);
+	typedef struct :ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>` :ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`;
+	typedef struct :ref:`apr_skiplistnode<doxid-group__apr__skiplist_1gafb934f577d03de823aa4d62b41399bc0>` :ref:`apr_skiplistnode<doxid-group__apr__skiplist_1gafb934f577d03de823aa4d62b41399bc0>`;
+
+	// global functions
+
+	void*
+	:ref:`apr_skiplist_alloc<doxid-group__apr__skiplist_1ga42fd4de5a4239c988c3d57f88bd685d6>`(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		size_t size
+		);
+
+	void
+	:ref:`apr_skiplist_free<doxid-group__apr__skiplist_1ga9e799684f45cc8a1b673cc99ca935f2b>`(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		void* mem
+		);
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	:ref:`apr_skiplist_init<doxid-group__apr__skiplist_1ga53f636612f9d82ef2886a85d33c704ed>`(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`** sl,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		);
+
+	void
+	:ref:`apr_skiplist_set_compare<doxid-group__apr__skiplist_1ga61bebe90df16a4ea8a6ab6c6b6792e4a>`(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		:ref:`apr_skiplist_compare<doxid-group__apr__skiplist_1ga873aa114e692e48c6587277680ceba87>` XXX1,
+		:ref:`apr_skiplist_compare<doxid-group__apr__skiplist_1ga873aa114e692e48c6587277680ceba87>` XXX2
+		);
+
+	void
+	:ref:`apr_skiplist_add_index<doxid-group__apr__skiplist_1ga7f9e8bd8d1900d64c82ca5c9113621a8>`(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		:ref:`apr_skiplist_compare<doxid-group__apr__skiplist_1ga873aa114e692e48c6587277680ceba87>` XXX1,
+		:ref:`apr_skiplist_compare<doxid-group__apr__skiplist_1ga873aa114e692e48c6587277680ceba87>` XXX2
+		);
+
+	:ref:`apr_skiplistnode<doxid-group__apr__skiplist_1gafb934f577d03de823aa4d62b41399bc0>`*
+	:ref:`apr_skiplist_getlist<doxid-group__apr__skiplist_1ga2a4515bc1a4174fde279c2edc5dd2593>`(:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl);
+
+	void*
+	:ref:`apr_skiplist_find_compare<doxid-group__apr__skiplist_1gac1dc196aa51b1370cdc41e6258c36d7c>`(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		void* data,
+		:ref:`apr_skiplistnode<doxid-group__apr__skiplist_1gafb934f577d03de823aa4d62b41399bc0>`** iter,
+		:ref:`apr_skiplist_compare<doxid-group__apr__skiplist_1ga873aa114e692e48c6587277680ceba87>` func
+		);
+
+	void*
+	:ref:`apr_skiplist_find<doxid-group__apr__skiplist_1gab28a7376e3483ae1104f2665d9859b95>`(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		void* data,
+		:ref:`apr_skiplistnode<doxid-group__apr__skiplist_1gafb934f577d03de823aa4d62b41399bc0>`** iter
+		);
+
+	void*
+	:ref:`apr_skiplist_next<doxid-group__apr__skiplist_1gaca0e377b36847ed03c3a135f0f3f353e>`(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		:ref:`apr_skiplistnode<doxid-group__apr__skiplist_1gafb934f577d03de823aa4d62b41399bc0>`** iter
+		);
+
+	void*
+	:ref:`apr_skiplist_previous<doxid-group__apr__skiplist_1ga02ff03a8282b561edf01b3291c154af4>`(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		:ref:`apr_skiplistnode<doxid-group__apr__skiplist_1gafb934f577d03de823aa4d62b41399bc0>`** iter
+		);
+
+	:ref:`apr_skiplistnode<doxid-group__apr__skiplist_1gafb934f577d03de823aa4d62b41399bc0>`*
+	:ref:`apr_skiplist_insert_compare<doxid-group__apr__skiplist_1ga01b128d5160bc905f4b60a120ca10b2e>`(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		void* data,
+		:ref:`apr_skiplist_compare<doxid-group__apr__skiplist_1ga873aa114e692e48c6587277680ceba87>` comp
+		);
+
+	:ref:`apr_skiplistnode<doxid-group__apr__skiplist_1gafb934f577d03de823aa4d62b41399bc0>`*
+	:ref:`apr_skiplist_insert<doxid-group__apr__skiplist_1ga1aaaa029b9f166baf320bf43e6887b4d>`(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		void* data
+		);
+
+	int
+	:ref:`apr_skiplist_remove_compare<doxid-group__apr__skiplist_1ga9770c39604e7491da4c67282758690c2>`(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		void* data,
+		:ref:`apr_skiplist_freefunc<doxid-group__apr__skiplist_1ga326fdccaf516e5296969fa03bbda3fca>` myfree,
+		:ref:`apr_skiplist_compare<doxid-group__apr__skiplist_1ga873aa114e692e48c6587277680ceba87>` comp
+		);
+
+	int
+	:ref:`apr_skiplist_remove<doxid-group__apr__skiplist_1ga682f5e7dfcc4359097b9a4b96d053eff>`(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		void* data,
+		:ref:`apr_skiplist_freefunc<doxid-group__apr__skiplist_1ga326fdccaf516e5296969fa03bbda3fca>` myfree
+		);
+
+	void
+	:ref:`apr_skiplist_remove_all<doxid-group__apr__skiplist_1ga67d3e8a4a817bf85f1999f41d9d4ec11>`(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		:ref:`apr_skiplist_freefunc<doxid-group__apr__skiplist_1ga326fdccaf516e5296969fa03bbda3fca>` myfree
+		);
+
+	void
+	:ref:`apr_skiplist_destroy<doxid-group__apr__skiplist_1ga6d24c06537535773ad3b4d18c6efefc3>`(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		:ref:`apr_skiplist_freefunc<doxid-group__apr__skiplist_1ga326fdccaf516e5296969fa03bbda3fca>` myfree
+		);
+
+	void*
+	:ref:`apr_skiplist_pop<doxid-group__apr__skiplist_1ga237063a88253165f074c04ab9b0f17a3>`(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		:ref:`apr_skiplist_freefunc<doxid-group__apr__skiplist_1ga326fdccaf516e5296969fa03bbda3fca>` myfree
+		);
+
+	void*
+	:ref:`apr_skiplist_peek<doxid-group__apr__skiplist_1ga96068b644647e86139bd6fdb0fcfebf3>`(:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl);
+
+	:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`*
+	:ref:`apr_skiplist_merge<doxid-group__apr__skiplist_1gab54881447708cf725758860c88ba52a6>`(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl1,
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl2
+		);
+
+.. _details-group__apr__skiplist:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+Refer to `http://en.wikipedia.org/wiki/Skip_list <http://en.wikipedia.org/wiki/Skip_list>`__ for information about the purpose of and ideas behind skip lists.
+
+Typedefs
+--------
+
+.. index:: pair: typedef; apr_skiplist_compare
+.. _doxid-group__apr__skiplist_1ga873aa114e692e48c6587277680ceba87:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef int (*apr_skiplist_compare)(
+		void *,
+		void *
+		)
+
+apr_skiplist_compare is the function type that must be implemented per object type that is used in a skip list for comparisons to maintain order. A value <0 indicates placement after this node; a value of 0 indicates collision with this exact node; a value >0 indicates placement before this node.
+
+.. index:: pair: typedef; apr_skiplist_freefunc
+.. _doxid-group__apr__skiplist_1ga326fdccaf516e5296969fa03bbda3fca:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef void (*apr_skiplist_freefunc)(void *)
+
+apr_skiplist_freefunc is the function type that must be implemented to handle elements as they are removed from a skip list.
+
+.. index:: pair: typedef; apr_skiplist
+.. _doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>` apr_skiplist
+
+Opaque structure used to represent the skip list
+
+.. index:: pair: typedef; apr_skiplistnode
+.. _doxid-group__apr__skiplist_1gafb934f577d03de823aa4d62b41399bc0:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef struct :ref:`apr_skiplistnode<doxid-group__apr__skiplist_1gafb934f577d03de823aa4d62b41399bc0>` apr_skiplistnode
+
+Opaque structure
+
+Global Functions
+----------------
+
+.. index:: pair: function; apr_skiplist_alloc
+.. _doxid-group__apr__skiplist_1ga42fd4de5a4239c988c3d57f88bd685d6:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void*
+	apr_skiplist_alloc(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		size_t size
+		)
+
+Allocate memory using the same mechanism as the skip list. If a pool was provided to :ref:`apr_skiplist_init() <doxid-group__apr__skiplist_1ga53f636612f9d82ef2886a85d33c704ed>`, memory will be allocated from the pool or from a free list maintained with the skip list. Otherwise, memory will be allocated using the C standard library heap functions.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sl
+
+		- The skip list
+
+	*
+		- size
+
+		- The amount to allocate
+
+.. index:: pair: function; apr_skiplist_free
+.. _doxid-group__apr__skiplist_1ga9e799684f45cc8a1b673cc99ca935f2b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_skiplist_free(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		void* mem
+		)
+
+Free memory using the same mechanism as the skip list. If a pool was provided to :ref:`apr_skiplist_init() <doxid-group__apr__skiplist_1ga53f636612f9d82ef2886a85d33c704ed>`, memory will be added to a free list maintained with the skip list and be available to operations on the skip list or to other calls to :ref:`apr_skiplist_alloc() <doxid-group__apr__skiplist_1ga42fd4de5a4239c988c3d57f88bd685d6>`. Otherwise, memory will be freed using the C standard library heap functions.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sl
+
+		- The skip list
+
+	*
+		- mem
+
+		- The object to free
+
+.. index:: pair: function; apr_skiplist_init
+.. _doxid-group__apr__skiplist_1ga53f636612f9d82ef2886a85d33c704ed:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_status_t<doxid-group__apr__errno_1gaf76ee4543247e9fb3f3546203e590a6c>`
+	apr_skiplist_init(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`** sl,
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* p
+		)
+
+Allocate a new skip list Unlike most APR functions, a pool is optional. If no pool is provided, the C standard library heap functions will be used instead.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sl
+
+		- The pointer in which to return the newly created skip list
+
+	*
+		- p
+
+		- The pool from which to allocate the skip list (optional).
+
+.. index:: pair: function; apr_skiplist_set_compare
+.. _doxid-group__apr__skiplist_1ga61bebe90df16a4ea8a6ab6c6b6792e4a:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_skiplist_set_compare(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		:ref:`apr_skiplist_compare<doxid-group__apr__skiplist_1ga873aa114e692e48c6587277680ceba87>` XXX1,
+		:ref:`apr_skiplist_compare<doxid-group__apr__skiplist_1ga873aa114e692e48c6587277680ceba87>` XXX2
+		)
+
+Set the comparison functions to be used for searching the skip list. If existing comparison functions are being replaced, the index will be replaced during this call. That is a potentially expensive operation.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sl
+
+		- The skip list
+
+	*
+		- XXX1
+
+		- FIXME
+
+	*
+		- XXX2
+
+		- FIXME
+
+.. index:: pair: function; apr_skiplist_add_index
+.. _doxid-group__apr__skiplist_1ga7f9e8bd8d1900d64c82ca5c9113621a8:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_skiplist_add_index(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		:ref:`apr_skiplist_compare<doxid-group__apr__skiplist_1ga873aa114e692e48c6587277680ceba87>` XXX1,
+		:ref:`apr_skiplist_compare<doxid-group__apr__skiplist_1ga873aa114e692e48c6587277680ceba87>` XXX2
+		)
+
+Set the indexing functions to the specified comparison functions and rebuild the index. If an index already exists, it will not be replaced and the comparison functions will not be changed.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sl
+
+		- The skip list
+
+	*
+		- XXX1
+
+		- FIXME
+
+	*
+		- XXX2
+
+		- FIXME
+
+.. index:: pair: function; apr_skiplist_getlist
+.. _doxid-group__apr__skiplist_1ga2a4515bc1a4174fde279c2edc5dd2593:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_skiplistnode<doxid-group__apr__skiplist_1gafb934f577d03de823aa4d62b41399bc0>`*
+	apr_skiplist_getlist(:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl)
+
+Return the list maintained by the skip list abstraction.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sl
+
+		- The skip list
+
+.. index:: pair: function; apr_skiplist_find_compare
+.. _doxid-group__apr__skiplist_1gac1dc196aa51b1370cdc41e6258c36d7c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void*
+	apr_skiplist_find_compare(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		void* data,
+		:ref:`apr_skiplistnode<doxid-group__apr__skiplist_1gafb934f577d03de823aa4d62b41399bc0>`** iter,
+		:ref:`apr_skiplist_compare<doxid-group__apr__skiplist_1ga873aa114e692e48c6587277680ceba87>` func
+		)
+
+Return the next matching element in the skip list using the specified comparison function.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sl
+
+		- The skip list
+
+	*
+		- data
+
+		- The value to search for
+
+	*
+		- iter
+
+		- A pointer to the returned skip list node representing the element found
+
+	*
+		- func
+
+		- The comparison function to use
+
+.. index:: pair: function; apr_skiplist_find
+.. _doxid-group__apr__skiplist_1gab28a7376e3483ae1104f2665d9859b95:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void*
+	apr_skiplist_find(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		void* data,
+		:ref:`apr_skiplistnode<doxid-group__apr__skiplist_1gafb934f577d03de823aa4d62b41399bc0>`** iter
+		)
+
+Return the next matching element in the skip list using the current comparison function.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sl
+
+		- The skip list
+
+	*
+		- data
+
+		- The value to search for
+
+	*
+		- iter
+
+		- A pointer to the returned skip list node representing the element found
+
+.. index:: pair: function; apr_skiplist_next
+.. _doxid-group__apr__skiplist_1gaca0e377b36847ed03c3a135f0f3f353e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void*
+	apr_skiplist_next(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		:ref:`apr_skiplistnode<doxid-group__apr__skiplist_1gafb934f577d03de823aa4d62b41399bc0>`** iter
+		)
+
+Return the next element in the skip list. If iter points to a NULL value on entry, NULL will be returned.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sl
+
+		- The skip list
+
+	*
+		- iter
+
+		- On entry, a pointer to the skip list node to start with; on return, a pointer to the skip list node representing the element returned
+
+.. index:: pair: function; apr_skiplist_previous
+.. _doxid-group__apr__skiplist_1ga02ff03a8282b561edf01b3291c154af4:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void*
+	apr_skiplist_previous(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		:ref:`apr_skiplistnode<doxid-group__apr__skiplist_1gafb934f577d03de823aa4d62b41399bc0>`** iter
+		)
+
+Return the previous element in the skip list. If iter points to a NULL value on entry, NULL will be returned.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sl
+
+		- The skip list
+
+	*
+		- iter
+
+		- On entry, a pointer to the skip list node to start with; on return, a pointer to the skip list node representing the element returned
+
+.. index:: pair: function; apr_skiplist_insert_compare
+.. _doxid-group__apr__skiplist_1ga01b128d5160bc905f4b60a120ca10b2e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_skiplistnode<doxid-group__apr__skiplist_1gafb934f577d03de823aa4d62b41399bc0>`*
+	apr_skiplist_insert_compare(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		void* data,
+		:ref:`apr_skiplist_compare<doxid-group__apr__skiplist_1ga873aa114e692e48c6587277680ceba87>` comp
+		)
+
+Insert an element into the skip list using the specified comparison function if it does not already exist.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sl
+
+		- The skip list
+
+	*
+		- data
+
+		- The element to insert
+
+	*
+		- comp
+
+		- The comparison function to use for placement into the skip list
+
+.. index:: pair: function; apr_skiplist_insert
+.. _doxid-group__apr__skiplist_1ga1aaaa029b9f166baf320bf43e6887b4d:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_skiplistnode<doxid-group__apr__skiplist_1gafb934f577d03de823aa4d62b41399bc0>`*
+	apr_skiplist_insert(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		void* data
+		)
+
+Insert an element into the skip list using the existing comparison function if it does not already exist (as determined by the comparison function) If no comparison function has been set for the skip list, the element will not be inserted and NULL will be returned.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sl
+
+		- The skip list
+
+	*
+		- data
+
+		- The element to insert
+
+.. index:: pair: function; apr_skiplist_remove_compare
+.. _doxid-group__apr__skiplist_1ga9770c39604e7491da4c67282758690c2:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	apr_skiplist_remove_compare(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		void* data,
+		:ref:`apr_skiplist_freefunc<doxid-group__apr__skiplist_1ga326fdccaf516e5296969fa03bbda3fca>` myfree,
+		:ref:`apr_skiplist_compare<doxid-group__apr__skiplist_1ga873aa114e692e48c6587277680ceba87>` comp
+		)
+
+Remove an element from the skip list using the specified comparison function for locating the element. In the case of duplicates, the 1st entry will be removed. If the element is not found, 0 will be returned. Otherwise, the heightXXX will be returned.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sl
+
+		- The skip list
+
+	*
+		- data
+
+		- The element to remove
+
+	*
+		- myfree
+
+		- A function to be called for each removed element
+
+	*
+		- comp
+
+		- The comparison function to use for placement into the skip list
+
+.. index:: pair: function; apr_skiplist_remove
+.. _doxid-group__apr__skiplist_1ga682f5e7dfcc4359097b9a4b96d053eff:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	apr_skiplist_remove(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		void* data,
+		:ref:`apr_skiplist_freefunc<doxid-group__apr__skiplist_1ga326fdccaf516e5296969fa03bbda3fca>` myfree
+		)
+
+Remove an element from the skip list using the existing comparison function for locating the element. In the case of duplicates, the 1st entry will be removed. If the element is not found, 0 will be returned. Otherwise, the heightXXX will be returned.
+
+If no comparison function has been set for the skip list, the element will not be removed and 0 will be returned.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sl
+
+		- The skip list
+
+	*
+		- data
+
+		- The element to remove
+
+	*
+		- myfree
+
+		- A function to be called for each removed element
+
+.. index:: pair: function; apr_skiplist_remove_all
+.. _doxid-group__apr__skiplist_1ga67d3e8a4a817bf85f1999f41d9d4ec11:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_skiplist_remove_all(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		:ref:`apr_skiplist_freefunc<doxid-group__apr__skiplist_1ga326fdccaf516e5296969fa03bbda3fca>` myfree
+		)
+
+Remove all elements from the skip list.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sl
+
+		- The skip list
+
+	*
+		- myfree
+
+		- A function to be called for each removed element
+
+.. index:: pair: function; apr_skiplist_destroy
+.. _doxid-group__apr__skiplist_1ga6d24c06537535773ad3b4d18c6efefc3:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void
+	apr_skiplist_destroy(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		:ref:`apr_skiplist_freefunc<doxid-group__apr__skiplist_1ga326fdccaf516e5296969fa03bbda3fca>` myfree
+		)
+
+Remove each element from the skip list.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sl
+
+		- The skip list
+
+	*
+		- myfree
+
+		- A function to be called for each removed element
+
+.. index:: pair: function; apr_skiplist_pop
+.. _doxid-group__apr__skiplist_1ga237063a88253165f074c04ab9b0f17a3:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void*
+	apr_skiplist_pop(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl,
+		:ref:`apr_skiplist_freefunc<doxid-group__apr__skiplist_1ga326fdccaf516e5296969fa03bbda3fca>` myfree
+		)
+
+Return the first element in the skip list, removing the element from the skip list. NULL will be returned if there are no elements
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sl
+
+		- The skip list
+
+	*
+		- myfree
+
+		- A function to be called for the removed element
+
+.. index:: pair: function; apr_skiplist_peek
+.. _doxid-group__apr__skiplist_1ga96068b644647e86139bd6fdb0fcfebf3:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void*
+	apr_skiplist_peek(:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl)
+
+Return the first element in the skip list, leaving the element in the skip list. NULL will be returned if there are no elements
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sl
+
+		- The skip list
+
+.. index:: pair: function; apr_skiplist_merge
+.. _doxid-group__apr__skiplist_1gab54881447708cf725758860c88ba52a6:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`*
+	apr_skiplist_merge(
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl1,
+		:ref:`apr_skiplist<doxid-group__apr__skiplist_1gac79ddf14bb5cb5b6d35961309eadec48>`* sl2
+		)
+
+Merge two skip lists. XXX SEMANTICS
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- sl1
+
+		- One of two skip lists to be merged
+
+	*
+		- sl2
+
+		- The other of two skip lists to be merged
+

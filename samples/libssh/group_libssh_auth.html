@@ -1,0 +1,898 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>The SSH authentication functions. &mdash; LibSSH Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/doxyrest-pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/doxyrest-sphinx_rtd_theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/target-highlight.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="enum ssh_agent_state_e" href="enum_ssh_agent_state_e.html" />
+    <link rel="prev" title="The SSH Public Key Infrastructure" href="group_libssh_pki.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> LibSSH Documentation
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="page_libssh_linking.html">The Linking HowTo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_libssh_tutorial.html">The Tutorial</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="group_libssh.html">The libssh API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_pki.html">The SSH Public Key Infrastructure</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">The SSH authentication functions.</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="enum_ssh_agent_state_e.html">enum ssh_agent_state_e</a></li>
+<li class="toctree-l3"><a class="reference internal" href="enum_ssh_auth_auto_state_e.html">enum ssh_auth_auto_state_e</a></li>
+<li class="toctree-l3"><a class="reference internal" href="struct_ssh_agent_state_struct.html">struct ssh_agent_state_struct</a></li>
+<li class="toctree-l3"><a class="reference internal" href="struct_ssh_auth_auto_state_struct.html">struct ssh_auth_auto_state_struct</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#global-functions">Global Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_buffer.html">The SSH buffer functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_channel.html">The SSH channel functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_error.html">The SSH error functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_misc.html">The SSH helper functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_log.html">The SSH logging functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_messages.html">The SSH message functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_poll.html">The SSH poll functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_scp.html">The SSH scp functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_session.html">The SSH session functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_string.html">The SSH string functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_threads.html">The SSH threading functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_callbacks.html">The libssh callbacks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh.html#detailed-documentation">Detailed Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="group_ssh_cpp.html">The libssh C++ wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libssh_sftp.html">The libssh SFTP API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libssh_server.html">The libssh server API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="page_bug.html">Bug List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_deprecated.html">Deprecated List</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LibSSH Documentation</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="group_libssh.html">The libssh API</a> &raquo;</li>
+        
+      <li>The SSH authentication functions.</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="the-ssh-authentication-functions">
+<span id="doxid-group-libssh-auth"></span><span id="index-0"></span><h1>The SSH authentication functions.</h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="overview">
+<h2>Overview</h2>
+<p>Functions to authenticate with a server. <a class="reference internal" href="#details-group-libssh-auth"><span class="std std-ref">More…</span></a></p>
+<pre class="highlight doxyrest-overview-code-block literal-block">
+<span></span><span class="c1">// enums</span>
+
+<span class="k">enum</span> <a class="reference internal" href="enum_ssh_agent_state_e.html#doxid-group-libssh-auth-1ga288d00c21fe2d652607792379d90b7cf"><span class="std std-ref">ssh_agent_state_e</span></a><span></span><span class="p">;</span>
+<span class="k">enum</span> <a class="reference internal" href="enum_ssh_auth_auto_state_e.html#doxid-group-libssh-auth-1gac65f4923889fe6f2b91021872463b4c4"><span class="std std-ref">ssh_auth_auto_state_e</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// structs</span>
+
+<span class="k">struct</span> <a class="reference internal" href="struct_ssh_agent_state_struct.html#doxid-structssh-agent-state-struct"><span class="std std-ref">ssh_agent_state_struct</span></a><span></span><span class="p">;</span>
+<span class="k">struct</span> <a class="reference internal" href="struct_ssh_auth_auto_state_struct.html#doxid-structssh-auth-auto-state-struct"><span class="std std-ref">ssh_auth_auto_state_struct</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// global functions</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-auth-1ga7d84f3f89f65455b80b10e2643d80719"><span class="std std-ref">ssh_userauth_agent</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">username</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-auth-1ga2758b0e86a848fe0d1d3d263d2a34d28"><span class="std std-ref">ssh_userauth_gssapi</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-auth-1ga6b3b1c2a045286d9476b0252791a07d2"><span class="std std-ref">ssh_userauth_kbdint</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">user</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">submethods</span>
+    <span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libssh-auth-1ga66f1634f9f839b42cd600753f032c7da"><span class="std std-ref">ssh_userauth_kbdint_getanswer</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span>
+    <span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libssh-auth-1gaa757fbdbd4f95261bbbbc12b1ec33078"><span class="std std-ref">ssh_userauth_kbdint_getinstruction</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libssh-auth-1gaf920b6f8ed1e3c53cc2a683230098657"><span class="std std-ref">ssh_userauth_kbdint_getname</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-auth-1ga3a98024f73a8bba6afed0b21de513bcd"><span class="std std-ref">ssh_userauth_kbdint_getnanswers</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-auth-1gacb996ff4979670db009a71a90172ece9"><span class="std std-ref">ssh_userauth_kbdint_getnprompts</span></a><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libssh-auth-1ga4e7466c30852a3339003af7046fab396"><span class="std std-ref">ssh_userauth_kbdint_getprompt</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">echo</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-auth-1ga75e44b1f27059a00080f80fac0107a20"><span class="std std-ref">ssh_userauth_kbdint_setanswer</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">answer</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-auth-1ga35d44897a44b4bb3b7c01108c1812a37"><span class="std std-ref">ssh_userauth_list</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">username</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-auth-1ga58e7c265236edbc97a2f117d3f23b4dd"><span class="std std-ref">ssh_userauth_none</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">username</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-auth-1ga50c0c150f8c4703e7ee49b3e3e3ca215"><span class="std std-ref">ssh_userauth_password</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">username</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">password</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-auth-1gaa38c4f3194ef36720da7eddb0aa99e23"><span class="std std-ref">ssh_userauth_publickey</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">username</span><span class="p">,</span>
+    <span class="k">const</span> <span class="n">ssh_key</span> <span class="n">privkey</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-auth-1ga53e6771b250c061463ed98b6e5b6e0af"><span class="std std-ref">ssh_userauth_publickey_auto</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">username</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">passphrase</span>
+    <span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-auth-1ga592f673c4d417a6a46cd4876ac8287aa"><span class="std std-ref">ssh_userauth_try_publickey</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">username</span><span class="p">,</span>
+    <span class="k">const</span> <span class="n">ssh_key</span> <span class="n">pubkey</span>
+    <span class="p">);</span>
+
+<span class="kt">void</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-auth-1ga7d4487088981015ec0b1c66befc1c7dd"><span></span><span class="n">ssh_agent_state_free</span></span><span></span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-auth-1ga4eba018b5d45cc32999cb76b06440c55"><span></span><span class="n">ssh_auth_response_termination</span></span><span></span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">user</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-auth-1gac042e71960b1aa80d8245125feeb249a"><span></span><span class="n">ssh_kbdint_clean</span></span><span></span><span class="p">(</span><span class="n">ssh_kbdint</span> <span class="n">kbd</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-auth-1ga43266010b4cc11e277658c4c6c4a5500"><span></span><span class="n">ssh_kbdint_free</span></span><span></span><span class="p">(</span><span class="n">ssh_kbdint</span> <span class="n">kbd</span><span class="p">);</span>
+
+<span class="n">ssh_kbdint</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-auth-1gac17384e2e1723b50cd041d775c0175a8"><span></span><span class="n">ssh_kbdint_new</span></span><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="doxyrest-code-target target" id="doxid-group-libssh-auth-1ga1fc1f11c7ba0469c866c42956450ebf7"><span></span><span class="n">SSH_PACKET_CALLBACK</span></span><span></span><span class="p">(</span><span class="n">ssh_packet_userauth_banner</span><span class="p">);</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-auth-1ga89e83a8f415d2d6783b25b5f96226208"><span></span><span class="n">SSH_PACKET_CALLBACK</span></span><span></span><span class="p">(</span><span class="n">ssh_packet_userauth_failure</span><span class="p">);</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-auth-1gadbd916c2423b2097647263645e0dd422"><span></span><span class="n">SSH_PACKET_CALLBACK</span></span><span></span><span class="p">(</span><span class="n">ssh_packet_userauth_success</span><span class="p">);</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-auth-1gabcd6b05236558e07e8dc564a68f0a4a6"><span></span><span class="n">SSH_PACKET_CALLBACK</span></span><span></span><span class="p">(</span><span class="n">ssh_packet_userauth_pk_ok</span><span class="p">);</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-auth-1ga09059b696a82df0fb633977d2749e10a"><span></span><span class="n">SSH_PACKET_CALLBACK</span></span><span></span><span class="p">(</span><span class="n">ssh_packet_userauth_info_request</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-auth-1ga5cc49db459d6e27c8645a20bbd0f5f88"><span></span><span class="n">ssh_userauth_agent_pubkey</span></span><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">username</span><span class="p">,</span>
+    <span class="n">ssh_public_key</span> <span class="n">publickey</span>
+    <span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-auth-1ga691078be9ea2a55fed97c7488395af5a"><span></span><span class="n">ssh_userauth_agent_publickey</span></span><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">username</span><span class="p">,</span>
+    <span class="n">ssh_key</span> <span class="n">pubkey</span>
+    <span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-auth-1gabff6b3898d3bf45b62cc3ed3774eaa83"><span></span><span class="n">ssh_userauth_get_response</span></span><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-auth-1gac689d3761c0dc4ebee9971ecc482d9a4"><span></span><span class="n">ssh_userauth_kbdint_init</span></span><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">username</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">submethods</span>
+    <span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-auth-1gaaa68e6aec2da509b246b7cba071408d3"><span></span><span class="n">ssh_userauth_kbdint_send</span></span><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-auth-1ga812fb86c3dd4a6245bc7d01beaa9cfe8"><span></span><span class="n">ssh_userauth_request_service</span></span><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+</pre>
+</div>
+<div class="section" id="detailed-documentation">
+<span id="details-group-libssh-auth"></span><h2>Detailed Documentation</h2>
+<p>Functions to authenticate with a server.</p>
+<div class="section" id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-auth-1ga7d84f3f89f65455b80b10e2643d80719">
+<span id="index-1"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_userauth_agent</span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">username</span>
+    <span class="p">)</span>
+</pre>
+<p>Try to do public key authentication with ssh agent.</p>
+<p>Most server implementations do not permit changing the username during authentication. The username should only be set with <a class="reference internal" href="group_libssh_session.html#doxid-group-libssh-session-1ga7a801b85800baa3f4e16f5b47db0a73d"><span class="std std-ref">ssh_options_set()</span></a> only before you connect to the server.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The ssh session to use.</td>
+</tr>
+<tr class="row-even"><td>username</td>
+<td>The username, this SHOULD be NULL.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_AUTH_ERROR: A serious error happened.</p>
+<p>SSH_AUTH_DENIED: The server doesn’t accept that public key as an authentication token. Try another key or another method.</p>
+<p>SSH_AUTH_PARTIAL: You’ve been partially authenticated, you still have to use another method.</p>
+<p>SSH_AUTH_SUCCESS: The public key is accepted, you want now to use <a class="reference internal" href="global.html#doxid-legacy-8h-1afb953cc1f6cccb9263b06543bfd30bba"><span class="std std-ref">ssh_userauth_pubkey()</span></a>. SSH_AUTH_AGAIN: In nonblocking mode, you’ve got to call this again later.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-auth-1ga2758b0e86a848fe0d1d3d263d2a34d28">
+<span id="index-2"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_userauth_gssapi</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>Try to authenticate through the “gssapi-with-mic” method.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The ssh session to use.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_AUTH_ERROR: A serious error happened</p>
+<p>SSH_AUTH_DENIED: Authentication failed : use another method</p>
+<p>SSH_AUTH_PARTIAL: You’ve been partially authenticated, you still have to use another method</p>
+<p>SSH_AUTH_SUCCESS: Authentication success</p>
+<p>SSH_AUTH_AGAIN: In nonblocking mode, you’ve got to call this again later.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-auth-1ga6b3b1c2a045286d9476b0252791a07d2">
+<span id="index-3"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_userauth_kbdint</span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">user</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">submethods</span>
+    <span class="p">)</span>
+</pre>
+<p>Try to authenticate through the “keyboard-interactive” method.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The ssh session to use.</td>
+</tr>
+<tr class="row-even"><td>user</td>
+<td>The username to authenticate. You can specify NULL if ssh_option_set_username() has been used. You cannot try two different logins in a row.</td>
+</tr>
+<tr class="row-odd"><td>submethods</td>
+<td>Undocumented. Set it to NULL.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_AUTH_ERROR: A serious error happened</p>
+<p>SSH_AUTH_DENIED: Authentication failed : use another method</p>
+<p>SSH_AUTH_PARTIAL: You’ve been partially authenticated, you still have to use another method</p>
+<p>SSH_AUTH_SUCCESS: Authentication success</p>
+<p>SSH_AUTH_INFO: The server asked some questions. Use <a class="reference internal" href="#doxid-group-libssh-auth-1gacb996ff4979670db009a71a90172ece9"><span class="std std-ref">ssh_userauth_kbdint_getnprompts()</span></a> and such.</p>
+<p>SSH_AUTH_AGAIN: In nonblocking mode, you’ve got to call this again later.</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-libssh-auth-1gacb996ff4979670db009a71a90172ece9"><span class="std std-ref">ssh_userauth_kbdint_getnprompts()</span></a></p>
+<p><a class="reference internal" href="#doxid-group-libssh-auth-1gaf920b6f8ed1e3c53cc2a683230098657"><span class="std std-ref">ssh_userauth_kbdint_getname()</span></a></p>
+<p><a class="reference internal" href="#doxid-group-libssh-auth-1gaa757fbdbd4f95261bbbbc12b1ec33078"><span class="std std-ref">ssh_userauth_kbdint_getinstruction()</span></a></p>
+<p><a class="reference internal" href="#doxid-group-libssh-auth-1ga4e7466c30852a3339003af7046fab396"><span class="std std-ref">ssh_userauth_kbdint_getprompt()</span></a></p>
+<p><a class="reference internal" href="#doxid-group-libssh-auth-1ga75e44b1f27059a00080f80fac0107a20"><span class="std std-ref">ssh_userauth_kbdint_setanswer()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-auth-1ga66f1634f9f839b42cd600753f032c7da">
+<span id="index-4"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">ssh_userauth_kbdint_getanswer</span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span>
+    <span class="p">)</span>
+</pre>
+<p>Get the answer for a question from a message block.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The ssh session to use.</td>
+</tr>
+<tr class="row-even"><td>i</td>
+<td>index The number of the ith answer.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success, &lt; 0 on error.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-auth-1gaa757fbdbd4f95261bbbbc12b1ec33078">
+<span id="index-5"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">ssh_userauth_kbdint_getinstruction</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>Get the “instruction” of the message block.</p>
+<p>Once you have called <a class="reference internal" href="#doxid-group-libssh-auth-1ga6b3b1c2a045286d9476b0252791a07d2"><span class="std std-ref">ssh_userauth_kbdint()</span></a> and received SSH_AUTH_INFO return code, this function can be used to retrieve information about the keyboard interactive authentication questions sent by the remote host.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The ssh session to use.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>The instruction of the message block.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-auth-1gaf920b6f8ed1e3c53cc2a683230098657">
+<span id="index-6"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">ssh_userauth_kbdint_getname</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>Get the “name” of the message block.</p>
+<p>Once you have called <a class="reference internal" href="#doxid-group-libssh-auth-1ga6b3b1c2a045286d9476b0252791a07d2"><span class="std std-ref">ssh_userauth_kbdint()</span></a> and received SSH_AUTH_INFO return code, this function can be used to retrieve information about the keyboard interactive authentication questions sent by the remote host.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The ssh session to use.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>The name of the message block. Do not free it.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-auth-1ga3a98024f73a8bba6afed0b21de513bcd">
+<span id="index-7"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_userauth_kbdint_getnanswers</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>Get the number of answers the client has given.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The ssh session to use.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>The number of answers.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-auth-1gacb996ff4979670db009a71a90172ece9">
+<span id="index-8"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_userauth_kbdint_getnprompts</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+</pre>
+<p>Get the number of prompts (questions) the server has given.</p>
+<p>Once you have called <a class="reference internal" href="#doxid-group-libssh-auth-1ga6b3b1c2a045286d9476b0252791a07d2"><span class="std std-ref">ssh_userauth_kbdint()</span></a> and received SSH_AUTH_INFO return code, this function can be used to retrieve information about the keyboard interactive authentication questions sent by the remote host.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The ssh session to use.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>The number of prompts.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-auth-1ga4e7466c30852a3339003af7046fab396">
+<span id="index-9"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">ssh_userauth_kbdint_getprompt</span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">echo</span>
+    <span class="p">)</span>
+</pre>
+<p>Get a prompt from a message block.</p>
+<p>Once you have called <a class="reference internal" href="#doxid-group-libssh-auth-1ga6b3b1c2a045286d9476b0252791a07d2"><span class="std std-ref">ssh_userauth_kbdint()</span></a> and received SSH_AUTH_INFO return code, this function can be used to retrieve information about the keyboard interactive authentication questions sent by the remote host.</p>
+<pre class="highlight literal-block">
+<span></span><span class="k">const</span> <span class="kt">char</span> <span class="n">prompt</span><span class="p">;</span>
+<span class="kt">char</span> <span class="n">echo</span><span class="p">;</span>
+
+<span class="n">prompt</span> <span class="o">=</span> <span class="n">ssh_userauth_kbdint_getprompt</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">echo</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">echo</span><span class="p">)</span> <span class="p">...</span>
+</pre>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The ssh session to use.</td>
+</tr>
+<tr class="row-even"><td>i</td>
+<td>The index number of the i’th prompt.</td>
+</tr>
+<tr class="row-odd"><td>echo</td>
+<td>This is an optional variable. You can obtain a boolean if the user input should be echoed or hidden. For passwords it is usually hidden.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>A pointer to the prompt. Do not free it.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-auth-1ga75e44b1f27059a00080f80fac0107a20">
+<span id="index-10"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_userauth_kbdint_setanswer</span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">answer</span>
+    <span class="p">)</span>
+</pre>
+<p>Set the answer for a question from a message block.</p>
+<p>If you have called <a class="reference internal" href="#doxid-group-libssh-auth-1ga6b3b1c2a045286d9476b0252791a07d2"><span class="std std-ref">ssh_userauth_kbdint()</span></a> and got SSH_AUTH_INFO, this function returns the questions from the server.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The ssh session to use.</td>
+</tr>
+<tr class="row-even"><td>i</td>
+<td>index The number of the ith prompt.</td>
+</tr>
+<tr class="row-odd"><td>answer</td>
+<td>The answer to give to the server. The answer MUST be encoded UTF-8. It is up to the server how to interpret the value and validate it. However, if you read the answer in some other encoding, you MUST convert it to UTF-8.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success, &lt; 0 on error.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-auth-1ga35d44897a44b4bb3b7c01108c1812a37">
+<span id="index-11"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_userauth_list</span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">username</span>
+    <span class="p">)</span>
+</pre>
+<p>Get available authentication methods from the server.</p>
+<p>This requires the function <a class="reference internal" href="#doxid-group-libssh-auth-1ga58e7c265236edbc97a2f117d3f23b4dd"><span class="std std-ref">ssh_userauth_none()</span></a> to be called before the methods are available. The server MAY return a list of methods that may continue.</p>
+<p>Other reserved flags may appear in future versions.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The SSH session.</td>
+</tr>
+<tr class="row-even"><td>username</td>
+<td>Deprecated, set to NULL.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>A bitfield of the fllowing values:</p>
+<ul class="simple">
+<li>SSH_AUTH_METHOD_PASSWORD</li>
+<li>SSH_AUTH_METHOD_PUBLICKEY</li>
+<li>SSH_AUTH_METHOD_HOSTBASED</li>
+<li>SSH_AUTH_METHOD_INTERACTIVE</li>
+</ul>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-libssh-auth-1ga58e7c265236edbc97a2f117d3f23b4dd"><span class="std std-ref">ssh_userauth_none()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-auth-1ga58e7c265236edbc97a2f117d3f23b4dd">
+<span id="index-12"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_userauth_none</span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">username</span>
+    <span class="p">)</span>
+</pre>
+<p>Try to authenticate through the “none” method.</p>
+<p>Most server implementations do not permit changing the username during authentication. The username should only be set with <a class="reference internal" href="group_libssh_session.html#doxid-group-libssh-session-1ga7a801b85800baa3f4e16f5b47db0a73d"><span class="std std-ref">ssh_options_set()</span></a> only before you connect to the server.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The ssh session to use.</td>
+</tr>
+<tr class="row-even"><td>username</td>
+<td>The username, this SHOULD be NULL.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_AUTH_ERROR: A serious error happened.</p>
+<p>SSH_AUTH_DENIED: Authentication failed: use another method</p>
+<p>SSH_AUTH_PARTIAL: You’ve been partially authenticated, you still have to use another method</p>
+<p>SSH_AUTH_SUCCESS: Authentication success</p>
+<p>SSH_AUTH_AGAIN: In nonblocking mode, you’ve got to call this again later.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-auth-1ga50c0c150f8c4703e7ee49b3e3e3ca215">
+<span id="index-13"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_userauth_password</span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">username</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">password</span>
+    <span class="p">)</span>
+</pre>
+<p>Try to authenticate by password.</p>
+<p>This authentication method is normally disabled on SSHv2 server. You should use keyboard-interactive mode.</p>
+<p>The ‘password’ value MUST be encoded UTF-8. It is up to the server how to interpret the password and validate it against the password database. However, if you read the password in some other encoding, you MUST convert the password to UTF-8.</p>
+<p>Most server implementations do not permit changing the username during authentication. The username should only be set with <a class="reference internal" href="group_libssh_session.html#doxid-group-libssh-session-1ga7a801b85800baa3f4e16f5b47db0a73d"><span class="std std-ref">ssh_options_set()</span></a> only before you connect to the server.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The ssh session to use.</td>
+</tr>
+<tr class="row-even"><td>username</td>
+<td>The username, this SHOULD be NULL.</td>
+</tr>
+<tr class="row-odd"><td>password</td>
+<td>The password to authenticate in UTF-8.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_AUTH_ERROR: A serious error happened.</p>
+<p>SSH_AUTH_DENIED: Authentication failed: use another method</p>
+<p>SSH_AUTH_PARTIAL: You’ve been partially authenticated, you still have to use another method</p>
+<p>SSH_AUTH_SUCCESS: Authentication success</p>
+<p>SSH_AUTH_AGAIN: In nonblocking mode, you’ve got to call this again later.</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-libssh-auth-1ga58e7c265236edbc97a2f117d3f23b4dd"><span class="std std-ref">ssh_userauth_none()</span></a></p>
+<p><a class="reference internal" href="#doxid-group-libssh-auth-1ga6b3b1c2a045286d9476b0252791a07d2"><span class="std std-ref">ssh_userauth_kbdint()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-auth-1gaa38c4f3194ef36720da7eddb0aa99e23">
+<span id="index-14"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_userauth_publickey</span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">username</span><span class="p">,</span>
+    <span class="k">const</span> <span class="n">ssh_key</span> <span class="n">privkey</span>
+    <span class="p">)</span>
+</pre>
+<p>Authenticate with public/private key.</p>
+<p>Most server implementations do not permit changing the username during authentication. The username should only be set with <a class="reference internal" href="group_libssh_session.html#doxid-group-libssh-session-1ga7a801b85800baa3f4e16f5b47db0a73d"><span class="std std-ref">ssh_options_set()</span></a> only before you connect to the server.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The SSH session.</td>
+</tr>
+<tr class="row-even"><td>username</td>
+<td>The username, this SHOULD be NULL.</td>
+</tr>
+<tr class="row-odd"><td>privkey</td>
+<td>The private key for authentication.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_AUTH_ERROR: A serious error happened.</p>
+<p>SSH_AUTH_DENIED: The server doesn’t accept that public key as an authentication token. Try another key or another method.</p>
+<p>SSH_AUTH_PARTIAL: You’ve been partially authenticated, you still have to use another method.</p>
+<p>SSH_AUTH_SUCCESS: The public key is accepted, you want now to use <a class="reference internal" href="global.html#doxid-legacy-8h-1afb953cc1f6cccb9263b06543bfd30bba"><span class="std std-ref">ssh_userauth_pubkey()</span></a>. SSH_AUTH_AGAIN: In nonblocking mode, you’ve got to call this again later.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-auth-1ga53e6771b250c061463ed98b6e5b6e0af">
+<span id="index-15"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_userauth_publickey_auto</span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">username</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">passphrase</span>
+    <span class="p">)</span>
+</pre>
+<p>Tries to automatically authenticate with public key and “none”.</p>
+<p>It may fail, for instance it doesn’t ask for a password and uses a default asker for passphrases (in case the private key is encrypted).</p>
+<p>Most server implementations do not permit changing the username during authentication. The username should only be set with <a class="reference internal" href="group_libssh_session.html#doxid-group-libssh-session-1ga7a801b85800baa3f4e16f5b47db0a73d"><span class="std std-ref">ssh_options_set()</span></a> only before you connect to the server.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The SSH session.</td>
+</tr>
+<tr class="row-even"><td>username</td>
+<td>The username, this SHOULD be NULL.</td>
+</tr>
+<tr class="row-odd"><td>passphrase</td>
+<td>Use this passphrase to unlock the privatekey. Use NULL if you don’t want to use a passphrase or the user should be asked.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_AUTH_ERROR: A serious error happened.</p>
+<p>SSH_AUTH_DENIED: The server doesn’t accept that public key as an authentication token. Try another key or another method.</p>
+<p>SSH_AUTH_PARTIAL: You’ve been partially authenticated, you still have to use another method.</p>
+<p>SSH_AUTH_SUCCESS: The public key is accepted, you want now to use <a class="reference internal" href="global.html#doxid-legacy-8h-1afb953cc1f6cccb9263b06543bfd30bba"><span class="std std-ref">ssh_userauth_pubkey()</span></a>. SSH_AUTH_AGAIN: In nonblocking mode, you’ve got to call this again later.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-auth-1ga592f673c4d417a6a46cd4876ac8287aa">
+<span id="index-16"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_userauth_try_publickey</span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">username</span><span class="p">,</span>
+    <span class="k">const</span> <span class="n">ssh_key</span> <span class="n">pubkey</span>
+    <span class="p">)</span>
+</pre>
+<p>Try to authenticate with the given public key.</p>
+<p>To avoid unnecessary processing and user interaction, the following method is provided for querying whether authentication using the ‘pubkey’ would be possible.</p>
+<p>Most server implementations do not permit changing the username during authentication. The username should only be set with <a class="reference internal" href="group_libssh_session.html#doxid-group-libssh-session-1ga7a801b85800baa3f4e16f5b47db0a73d"><span class="std std-ref">ssh_options_set()</span></a> only before you connect to the server.</p>
+<p class="rubric">Parameters:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>session</td>
+<td>The SSH session.</td>
+</tr>
+<tr class="row-even"><td>username</td>
+<td>The username, this SHOULD be NULL.</td>
+</tr>
+<tr class="row-odd"><td>pubkey</td>
+<td>The public key to try.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_AUTH_ERROR: A serious error happened.</p>
+<p>SSH_AUTH_DENIED: The server doesn’t accept that public key as an authentication token. Try another key or another method.</p>
+<p>SSH_AUTH_PARTIAL: You’ve been partially authenticated, you still have to use another method.</p>
+<p>SSH_AUTH_SUCCESS: The public key is accepted, you want now to use <a class="reference internal" href="global.html#doxid-legacy-8h-1afb953cc1f6cccb9263b06543bfd30bba"><span class="std std-ref">ssh_userauth_pubkey()</span></a>. SSH_AUTH_AGAIN: In nonblocking mode, you’ve got to call this again later.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="enum_ssh_agent_state_e.html" class="btn btn-neutral float-right" title="enum ssh_agent_state_e" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="group_libssh_pki.html" class="btn btn-neutral float-left" title="The SSH Public Key Infrastructure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2003-2017, LibSSH Maintainers.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

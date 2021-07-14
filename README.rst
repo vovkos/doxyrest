@@ -11,12 +11,10 @@
 
 Doxyrest
 ========
-.. image:: https://travis-ci.org/vovkos/doxyrest.svg?branch=master
-	:target: https://travis-ci.org/vovkos/doxyrest
+.. image:: https://github.com/vovkos/doxyrest/actions/workflows/ci.yml/badge.svg
+	:target: https://github.com/vovkos/doxyrest/actions/workflows/ci.yml
 .. image:: https://ci.appveyor.com/api/projects/status/n41qiwei26t7o0pq?svg=true
 	:target: https://ci.appveyor.com/project/vovkos/doxyrest
-.. image:: https://codecov.io/gh/vovkos/doxyrest/branch/master/graph/badge.svg
-	:target: https://codecov.io/gh/vovkos/doxyrest
 .. image:: https://img.shields.io/badge/donate-@jancy.org-blue.svg
 	:align: right
 	:target: http://jancy.org/donate.html?donate=doxyrest

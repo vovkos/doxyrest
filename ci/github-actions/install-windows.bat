@@ -11,6 +11,7 @@
 
 @echo off
 
+set THIS_DIR=%CD%
 set DOWNLOAD_DIR=c:\downloads
 set DOWNLOAD_DIR_CMAKE=%DOWNLOAD_DIR:\=/%
 
@@ -47,8 +48,8 @@ echo set (LUA_LIB_NAME %LUA_LIB_NAME%) >> paths.cmake
 echo Downloading Expat...
 
 powershell "Invoke-WebRequest -Uri %EXPAT_DOWNLOAD_URL% -OutFile %DOWNLOAD_DIR%\%EXPAT_DOWNLOAD_FILE%"
-7z x -y %DOWNLOAD_DIR%\%EXPAT_DOWNLOAD_FILE% -o%DOWNLOAD_DIR%
-7z x -y %DOWNLOAD_DIR%\expat-%EXPAT_VERSION%.tar -o%DOWNLOAD_DIR%
-ren %DOWNLOAD_DIR%\expat-%EXPAT_VERSION% expat
+7z x -y %DOWNLOAD_DIR%\%EXPAT_DOWNLOAD_FILE% -o%THIS_DIR%
+7z x -y %THIS_DIR%\expat-%EXPAT_VERSION%.tar -o%THIS_DIR%
+ren %THIS_DIR%\expat-%EXPAT_VERSION% expat
 
 :: . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .

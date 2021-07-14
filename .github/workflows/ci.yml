@@ -36,20 +36,11 @@ jobs:
                 set CONFIGURATION=${{matrix.CONFIGURATION}}
                 set THIS_DIR=%CD%
                 set THIS_DIR_CMAKE=%THIS_DIR:\=/%
-                set DOWNLOAD_DIR=c:\downloads
-                set DOWNLOAD_DIR_CMAKE=%DOWNLOAD_DIR:\=/%
 
                 call ci\github-actions\set-env.bat msvc15 ${{matrix.TARGET_CPU}}
 
-                dir C:\
-                dir C:\downloads
-                dir C:\downloads\expat
-                dir %DOWNLOAD_DIR%\expat
-
-                mkdir %DOWNLOAD_DIR%\expat\build
-                cd %DOWNLOAD_DIR%\expat\build
-                echo %CD%
-
+                mkdir expat\build
+                cd expat\build
                 cmake .. %CMAKE_CONFIGURE_FLAGS% %EXPAT_CMAKE_FLAGS% || exit
                 cmake --build . %CMAKE_BUILD_FLAGS% || exit
 

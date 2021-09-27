@@ -20,17 +20,14 @@ DoxygenIndexType::create(
 	DoxyXmlParser* parser,
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	m_parser = parser;
 
 	Module* module = m_parser->getModule();
 
-	while (*attributes)
-	{
+	while (*attributes) {
 		IndexAttrKind attrKind = IndexAttrKindMap::findValue(attributes[0], IndexAttrKind_Undefined);
-		switch (attrKind)
-		{
+		switch (attrKind) {
 		case IndexAttrKind_Version:
 			module->m_version = attributes[1];
 			break;
@@ -46,11 +43,9 @@ bool
 DoxygenIndexType::onStartElement(
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	IndexElemKind elemKind = IndexElemKindMap::findValue(name, IndexElemKind_Undefined);
-	switch (elemKind)
-	{
+	switch (elemKind) {
 	case IndexElemKind_Compound:
 		return onCompound(name, attributes);
 	}
@@ -62,16 +57,13 @@ bool
 DoxygenIndexType::onCompound(
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	sl::String refId;
 	CompoundKind compoundKind;
 
-	while (*attributes)
-	{
+	while (*attributes) {
 		CompoundAttrKind attrKind = CompoundAttrKindMap::findValue(attributes[0], CompoundAttrKind_Undefined);
-		switch (attrKind)
-		{
+		switch (attrKind) {
 		case CompoundAttrKind_RefId:
 			refId = attributes[1];
 			break;
@@ -84,8 +76,7 @@ DoxygenIndexType::onCompound(
 		attributes += 2;
 	}
 
-	if (refId.isEmpty())
-	{
+	if (refId.isEmpty()) {
 		err::setError("missing 'refid' attribute");
 		return false;
 	}
@@ -94,8 +85,7 @@ DoxygenIndexType::onCompound(
 }
 
 bool
-DoxygenIndexType::parseCompound(const char* refId)
-{
+DoxygenIndexType::parseCompound(const char* refId) {
 	sl::String filePath = m_parser->getBaseDir() + "/" + refId + ".xml";
 
 	DoxyXmlParser parser;
@@ -103,7 +93,7 @@ DoxygenIndexType::parseCompound(const char* refId)
 		m_parser->getModule(),
 		DoxyXmlFileKind_Compound,
 		filePath
-		);
+	);
 }
 
 //..............................................................................
@@ -113,24 +103,18 @@ DoxygenCompoundType::create(
 	DoxyXmlParser* parser,
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	m_parser = parser;
 
 	Module* module = m_parser->getModule();
 
-	while (*attributes)
-	{
+	while (*attributes) {
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
-		switch (attrKind)
-		{
+		switch (attrKind) {
 		case AttrKind_Version:
-			if (module->m_version.isEmpty())
-			{
+			if (module->m_version.isEmpty()) {
 				module->m_version = attributes[1];
-			}
-			else if (module->m_version != attributes[1])
-			{
+			} else if (module->m_version != attributes[1]) {
 				// handle version mismatch
 			}
 
@@ -147,11 +131,9 @@ bool
 DoxygenCompoundType::onStartElement(
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	ElemKind elemKind = ElemKindMap::findValue(name, ElemKind_Undefined);
-	switch (elemKind)
-	{
+	switch (elemKind) {
 	case ElemKind_CompoundDef:
 		return m_parser->pushType<CompoundDefType>(name, attributes);
 	}
@@ -166,8 +148,7 @@ CompoundDefType::create(
 	DoxyXmlParser* parser,
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	Module* module = parser->getModule();
 
 	m_parser = parser;
@@ -177,20 +158,15 @@ CompoundDefType::create(
 
 	sl::StringHashTableIterator<Compound*> mapIt;
 
-	while (*attributes)
-	{
+	while (*attributes) {
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
-		switch (attrKind)
-		{
+		switch (attrKind) {
 		case AttrKind_Id:
 			m_compound->m_id = attributes[1];
 			mapIt = module->m_compoundMap.visit(m_compound->m_id);
-			if (!mapIt->m_value)
-			{
+			if (!mapIt->m_value) {
 				mapIt->m_value = m_compound;
-			}
-			else
-			{
+			} else {
 				Compound* prevCompound = mapIt->m_value;
 				fprintf(
 					stderr,
@@ -199,16 +175,13 @@ CompoundDefType::create(
 					m_compound->m_id.sz(),
 					getCompoundKindString(prevCompound->m_compoundKind),
 					prevCompound->m_name.sz()
-					);
+				);
 
-				if (prevCompound->m_detailedDescription.isEmpty() && prevCompound->m_briefDescription.isEmpty())
-				{
+				if (prevCompound->m_detailedDescription.isEmpty() && prevCompound->m_briefDescription.isEmpty()) {
 					fprintf(stderr, "  replacing old compound as it has no documentation\n");
 					mapIt->m_value = m_compound;
 					prevCompound->m_isDuplicate = true;
-				}
-				else
-				{
+				} else {
 					m_compound->m_isDuplicate = true;
 				}
 			}
@@ -243,8 +216,7 @@ CompoundDefType::create(
 		attributes += 2;
 	}
 
-	switch (m_compound->m_compoundKind)
-	{
+	switch (m_compound->m_compoundKind) {
 	case CompoundKind_Group:
 		module->m_groupArray.append(m_compound);
 		break;
@@ -277,13 +249,11 @@ bool
 CompoundDefType::onStartElement(
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	sl::BoxIterator<sl::String> stringIt;
 
 	ElemKind elemKind = ElemKindMap::findValue(name, ElemKind_Undefined);
-	switch (elemKind)
-	{
+	switch (elemKind) {
 	case ElemKind_CompoundName:
 		m_parser->pushType<StringType>(&m_compound->m_name, name, attributes);
 		break;
@@ -350,8 +320,7 @@ CompoundDefType::onStartElement(
 }
 
 void
-CompoundDefType::onPopType()
-{
+CompoundDefType::onPopType() {
 	ASSERT(m_parser);
 	Compound* prevCompound = m_parser->popCompound();
 	ASSERT(prevCompound == m_compound);
@@ -365,17 +334,14 @@ RefType::create(
 	sl::List<Ref>* list,
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	m_parser = parser;
 	m_ref = AXL_MEM_NEW(Ref);
 	list->insertTail(m_ref);
 
-	while (*attributes)
-	{
+	while (*attributes) {
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
-		switch (attrKind)
-		{
+		switch (attrKind) {
 		case AttrKind_RefId:
 			m_ref->m_id = attributes[1];
 			break;
@@ -407,18 +373,15 @@ SectionDefType::create(
 	Compound* parent,
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	m_parser = parser;
 	m_parent = parent;
 
 	SectionKind sectionKind = SectionKind_Undefined;
 
-	while (*attributes)
-	{
+	while (*attributes) {
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
-		switch (attrKind)
-		{
+		switch (attrKind) {
 		case AttrKind_Kind:
 			sectionKind = SectionKindMap::findValue(attributes[1], SectionKind_Undefined);
 			break;
@@ -434,11 +397,9 @@ bool
 SectionDefType::onStartElement(
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	ElemKind elemKind = ElemKindMap::findValue(name, ElemKind_Undefined);
-	switch (elemKind)
-	{
+	switch (elemKind) {
 	case ElemKind_Header:
 		break;
 
@@ -461,8 +422,7 @@ MemberDefType::create(
 	Compound* parent,
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	Module* module = parser->getModule();
 
 	m_parser = parser;
@@ -471,11 +431,9 @@ MemberDefType::create(
 	parent->m_memberList.insertTail(m_member);
 
 	sl::StringHashTableIterator<Member*> mapIt;
-	while (*attributes)
-	{
+	while (*attributes) {
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
-		switch (attrKind)
-		{
+		switch (attrKind) {
 		case AttrKind_Kind:
 			m_member->m_memberKind = MemberKindMap::findValue(attributes[1], MemberKind_Undefined);
 			break;
@@ -486,12 +444,9 @@ MemberDefType::create(
 				break; // doxy groups contain duplicated definitions of members
 
 			mapIt = module->m_memberMap.visit(m_member->m_id);
-			if (!mapIt->m_value)
-			{
+			if (!mapIt->m_value) {
 				mapIt->m_value = m_member;
-			}
-			else
-			{
+			} else {
 				Member* prevMember = mapIt->m_value;
 				fprintf(
 					stderr,
@@ -500,16 +455,13 @@ MemberDefType::create(
 					m_member->m_id.sz(),
 					getMemberKindString(prevMember->m_memberKind),
 					prevMember->m_name.sz()
-					);
+				);
 
-				if (prevMember->m_detailedDescription.isEmpty() && prevMember->m_briefDescription.isEmpty())
-				{
+				if (prevMember->m_detailedDescription.isEmpty() && prevMember->m_briefDescription.isEmpty()) {
 					fprintf(stderr, "  replacing old member as it has no documentation\n");
 					mapIt->m_value = m_member;
 					prevMember->m_flags |= MemberFlag_Duplicate;
-				}
-				else
-				{
+				} else {
 					m_member->m_flags |= MemberFlag_Duplicate;
 				}
 			}
@@ -680,13 +632,11 @@ bool
 MemberDefType::onStartElement(
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	sl::BoxIterator<sl::String> stringIt;
 
 	ElemKind elemKind = ElemKindMap::findValue(name, ElemKind_Undefined);
-	switch (elemKind)
-	{
+	switch (elemKind) {
 	case ElemKind_Includes:
 		stringIt = m_member->m_importList.insertTail();
 		m_parser->pushType<StringType>(stringIt.p(), name, attributes);
@@ -776,8 +726,7 @@ DescriptionType::create(
 	Description* description,
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	m_parser = parser;
 	m_description = description;
 	return true;
@@ -787,11 +736,9 @@ bool
 DescriptionType::onStartElement(
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	ElemKind elemKind = ElemKindMap::findValue(name, ElemKind_Undefined);
-	switch (elemKind)
-	{
+	switch (elemKind) {
 	case ElemKind_Title:
 		m_parser->pushType<StringType>(&m_description->m_title, name, attributes);
 		break;
@@ -817,14 +764,11 @@ LocationType::create(
 	Location* location,
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	sl::StringHashTableIterator<Member*> mapIt;
-	while (*attributes)
-	{
+	while (*attributes) {
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
-		switch (attrKind)
-		{
+		switch (attrKind) {
 		case AttrKind_File:
 			location->m_file = attributes[1];
 			break;
@@ -864,18 +808,15 @@ DocSectionBlockType::create(
 	sl::List<DocBlock>* list,
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	m_parser = parser;
 	m_sectionBlock = AXL_MEM_NEW(DocSectionBlock);
 	m_sectionBlock->m_blockKind = name;
 	list->insertTail(m_sectionBlock);
 
-	while (*attributes)
-	{
+	while (*attributes) {
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
-		switch (attrKind)
-		{
+		switch (attrKind) {
 		case AttrKind_Id:
 			m_sectionBlock->m_id = attributes[1];
 			break;
@@ -891,11 +832,9 @@ bool
 DocSectionBlockType::onStartElement(
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	ElemKind elemKind = ElemKindMap::findValue(name, ElemKind_Undefined);
-	switch (elemKind)
-	{
+	switch (elemKind) {
 	case ElemKind_Title:
 		m_parser->pushType<StringType>(&m_sectionBlock->m_title, name, attributes);
 		break;
@@ -924,8 +863,7 @@ EnumValueType::create(
 	Member* member,
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	Module* module = parser->getModule();
 
 	m_parser = parser;
@@ -934,11 +872,9 @@ EnumValueType::create(
 	member->m_enumValueList.insertTail(m_enumValue);
 
 	sl::StringHashTableIterator<EnumValue*> mapIt;
-	while (*attributes)
-	{
+	while (*attributes) {
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
-		switch (attrKind)
-		{
+		switch (attrKind) {
 		case AttrKind_Id:
 			m_enumValue->m_id = attributes[1];
 			ASSERT(member->m_parentCompound);
@@ -946,12 +882,9 @@ EnumValueType::create(
 				break; // doxy groups contain duplicated definitions of members
 
 			mapIt = module->m_enumValueMap.visit(m_enumValue->m_id);
-			if (!mapIt->m_value)
-			{
+			if (!mapIt->m_value) {
 				mapIt->m_value = m_enumValue;
-			}
-			else
-			{
+			} else {
 				EnumValue* prevEnumValue = mapIt->m_value;
 				fprintf(
 					stderr,
@@ -959,16 +892,13 @@ EnumValueType::create(
 					parser->getLocationString().sz(),
 					m_enumValue->m_id.sz(),
 					prevEnumValue->m_name.sz()
-					);
+				);
 
-				if (prevEnumValue->m_detailedDescription.isEmpty() && prevEnumValue->m_briefDescription.isEmpty())
-				{
+				if (prevEnumValue->m_detailedDescription.isEmpty() && prevEnumValue->m_briefDescription.isEmpty()) {
 					fprintf(stderr, "  replacing old enum value as it has no documentation\n");
 					mapIt->m_value = m_enumValue;
 					prevEnumValue->m_isDuplicate = true;
-				}
-				else
-				{
+				} else {
 					m_enumValue->m_isDuplicate = true;
 				}
 			}
@@ -990,11 +920,9 @@ bool
 EnumValueType::onStartElement(
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	ElemKind elemKind = ElemKindMap::findValue(name, ElemKind_Undefined);
-	switch (elemKind)
-	{
+	switch (elemKind) {
 	case ElemKind_Name:
 		m_parser->pushType<StringType>(&m_enumValue->m_name, name, attributes);
 		break;
@@ -1023,8 +951,7 @@ TemplateParamListType::create(
 	sl::List<Param>* list,
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	m_parser = parser;
 	m_list = list;
 	return true;
@@ -1034,11 +961,9 @@ bool
 TemplateParamListType::onStartElement(
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	ElemKind elemKind = ElemKindMap::findValue(name, ElemKind_Undefined);
-	switch (elemKind)
-	{
+	switch (elemKind) {
 	case ElemKind_Param:
 		m_parser->pushType<ParamType>(m_list, name, attributes);
 		break;
@@ -1055,8 +980,7 @@ ParamType::create(
 	sl::List<Param>* list,
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	m_parser = parser;
 	m_param = AXL_MEM_NEW(Param);
 	list->insertTail(m_param);
@@ -1068,11 +992,9 @@ bool
 ParamType::onStartElement(
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	ElemKind elemKind = ElemKindMap::findValue(name, ElemKind_Undefined);
-	switch (elemKind)
-	{
+	switch (elemKind) {
 	case ElemKind_Type:
 		m_parser->pushType<LinkedTextType>(&m_param->m_type, name, attributes);
 		break;
@@ -1113,8 +1035,7 @@ LinkedTextType::create(
 	LinkedText* linkedText,
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	m_parser = parser;
 	m_linkedText = linkedText;
 	m_refText = AXL_MEM_NEW(RefText);
@@ -1127,11 +1048,9 @@ bool
 LinkedTextType::onStartElement(
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	ElemKind elemKind = ElemKindMap::findValue(name, ElemKind_Undefined);
-	switch (elemKind)
-	{
+	switch (elemKind) {
 	case ElemKind_Ref:
 		m_parser->pushType<RefTextType>(m_linkedText, name, attributes);
 		break;
@@ -1150,17 +1069,14 @@ RefTextType::create(
 	LinkedText* linkedText,
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	m_parser = parser;
 	m_refText = AXL_MEM_NEW(RefText);
 	linkedText->m_refTextList.insertTail(m_refText);
 
-	while (*attributes)
-	{
+	while (*attributes) {
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
-		switch (attrKind)
-		{
+		switch (attrKind) {
 		case AttrKind_RefId:
 			m_refText->m_id = attributes[1];
 			break;
@@ -1192,8 +1108,7 @@ DocParaType::create(
 	sl::List<DocBlock>* blockList,
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	m_parser = parser;
 	m_paragraphBlock = AXL_MEM_NEW(DocBlock);
 	m_paragraphBlock->m_blockKind = name;
@@ -1209,11 +1124,9 @@ bool
 DocParaType::onStartElement(
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	ElemKind elemKind = ElemKindMap::findValue(name, ElemKind_Undefined);
-	switch (elemKind)
-	{
+	switch (elemKind) {
 	case ElemKind_Ref:
 		m_parser->pushType<DocRefTextType>(&m_paragraphBlock->m_childBlockList, name, attributes);
 		break;
@@ -1255,19 +1168,16 @@ DocRefTextType::create(
 	sl::List<DocBlock>* list,
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	m_parser = parser;
 	m_refBlock = AXL_MEM_NEW(DocRefBlock);
 	m_refBlock->m_module = m_parser->getModule();
 	m_refBlock->m_blockKind = name;
 	list->insertTail(m_refBlock);
 
-	while (*attributes)
-	{
+	while (*attributes) {
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
-		switch (attrKind)
-		{
+		switch (attrKind) {
 		case AttrKind_RefId:
 			m_refBlock->m_id = attributes[1];
 			break;
@@ -1295,18 +1205,15 @@ DocAnchorType::create(
 	sl::List<DocBlock>* list,
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	m_parser = parser;
 	m_anchorBlock = AXL_MEM_NEW(DocAnchorBlock);
 	m_anchorBlock->m_blockKind = name;
 	list->insertTail(m_anchorBlock);
 
-	while (*attributes)
-	{
+	while (*attributes) {
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
-		switch (attrKind)
-		{
+		switch (attrKind) {
 		case AttrKind_Id:
 			m_anchorBlock->m_id = attributes[1];
 			break;
@@ -1331,18 +1238,15 @@ DocImageType::create(
 	sl::List<DocBlock>* list,
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	m_parser = parser;
 	m_imageBlock = AXL_MEM_NEW(DocImageBlock);
 	m_imageBlock->m_blockKind = name;
 	list->insertTail(m_imageBlock);
 
-	while (*attributes)
-	{
+	while (*attributes) {
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
-		switch (attrKind)
-		{
+		switch (attrKind) {
 		case AttrKind_Type:
 			m_imageBlock->m_imageKind = ImageKindMap::findValue(attributes[1], ImageKind_Undefined);
 			break;
@@ -1374,18 +1278,15 @@ DocUlinkType::create(
 		sl::List<DocBlock>* list,
 		const char* name,
 		const char** attributes
-		)
-{
+	) {
 	m_parser = parser;
 	m_ulinkBlock = AXL_MEM_NEW(DocUlinkBlock);
 	m_ulinkBlock->m_blockKind = name;
 	list->insertTail(m_ulinkBlock);
 
-	while (*attributes)
-	{
+	while (*attributes) {
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
-		switch (attrKind)
-		{
+		switch (attrKind) {
 			case AttrKind_Url:
 				m_ulinkBlock->m_url = attributes[1];
 				break;
@@ -1407,18 +1308,15 @@ DocHeadingType::create(
 		sl::List<DocBlock>* list,
 		const char* name,
 		const char** attributes
-		)
-{
+	) {
 	m_parser = parser;
 	m_headingBlock = AXL_MEM_NEW(DocHeadingBlock);
 	m_headingBlock->m_blockKind = name;
 	list->insertTail(m_headingBlock);
 
-	while (*attributes)
-	{
+	while (*attributes) {
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
-		switch (attrKind)
-		{
+		switch (attrKind) {
 			case AttrKind_Level:
 				m_headingBlock->m_level = atoi(attributes[1]);
 				break;
@@ -1439,18 +1337,15 @@ DocSimpleSectionType::create(
 	sl::List<DocBlock>* list,
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	m_parser = parser;
 	m_sectionBlock = AXL_MEM_NEW(DocSimpleSectionBlock);
 	m_sectionBlock->m_blockKind = name;
 	list->insertTail(m_sectionBlock);
 
-	while (*attributes)
-	{
+	while (*attributes) {
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
-		switch (attrKind)
-		{
+		switch (attrKind) {
 		case AttrKind_Kind:
 			m_sectionBlock->m_simpleSectionKind = attributes[1];
 			break;
@@ -1466,11 +1361,9 @@ bool
 DocSimpleSectionType::onStartElement(
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	ElemKind elemKind = ElemKindMap::findValue(name, ElemKind_Undefined);
-	switch (elemKind)
-	{
+	switch (elemKind) {
 	case ElemKind_Para:
 		m_parser->pushType<DocParaType>(&m_sectionBlock->m_childBlockList, name, attributes);
 		break;

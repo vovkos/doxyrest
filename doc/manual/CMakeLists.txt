@@ -35,7 +35,7 @@ set(
 	-o ${XML_DIR}/index.xml
 	-S ${CMAKE_CURRENT_LIST_DIR}/lua
 	${DOXYREST_FRAME_DIR}/doxyrest-config.lua
-	)
+)
 
 set(
 	DOXYREST_CMD_LINE
@@ -45,7 +45,7 @@ set(
 	-F ${DOXYREST_FRAME_DIR}/lua
 	-F ${DOXYREST_FRAME_DIR}/common
 	-f index.rst.in
-	)
+)
 
 set(
 	SPHINX_HTML_CMD_LINE
@@ -54,7 +54,7 @@ set(
 	-c ${CMAKE_CURRENT_BINARY_DIR}
 	${RST_DIR}
 	${HTML_DIR}
-	)
+)
 
 set(
 	SPHINX_TEX_CMD_LINE
@@ -63,7 +63,7 @@ set(
 	-c ${CMAKE_CURRENT_BINARY_DIR}
 	${RST_DIR}
 	${TEX_DIR}
-	)
+)
 
 set(
 	PDFLATEX_MIKTEX_CMD_LINE
@@ -71,14 +71,14 @@ set(
 	-output-directory=${PDF_DIR}
 	-aux-directory=${TMP_DIR}
 	${TEX_FILE_NAME}
-	)
+)
 
 set(
 	PDFLATEX_TEXLIVE_CMD_LINE
 	-interaction=batchmode
 	-output-directory=${TMP_DIR}
 	${TEX_FILE_NAME}
-	)
+)
 
 #. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
@@ -91,7 +91,7 @@ set(
 	SPHINX_TEX_CMD_LINE
 	PDFLATEX_MIKTEX_CMD_LINE
 	PDFLATEX_TEXLIVE_CMD_LINE
-	)
+)
 
 foreach(_VAR ${CMD_LINE_VAR_LIST})
 	string(
@@ -99,7 +99,7 @@ foreach(_VAR ${CMD_LINE_VAR_LIST})
 		";" " "
 		${_VAR}
 		"${${_VAR}}"
-		)
+	)
 endforeach()
 
 #. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -109,7 +109,7 @@ file(COPY images DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 configure_file(
 	conf.py.in
 	conf.py
-	)
+)
 
 if(WIN32)
 	string(REPLACE "$(Configuration)" "%1" XMLGEN_EXE "${XMLGEN_EXE}")
@@ -118,22 +118,22 @@ if(WIN32)
 	configure_file(
 		${AXL_DOC_SHARE_DIR}/sh/build-xml.bat.in
 		build-xml.bat
-		)
+	)
 
 	configure_file(
 		${AXL_DOC_SHARE_DIR}/sh/build-rst.bat.in
 		build-rst.bat
-		)
+	)
 
 	configure_file(
 		${AXL_DOC_SHARE_DIR}/sh/build-html.bat.in
 		build-html.bat
-		)
+	)
 
 	configure_file(
 		${AXL_DOC_SHARE_DIR}/sh/build-pdf.bat.in
 		build-pdf.bat
-		)
+	)
 else()
 	axl_configure_file_w_permissions(
 		${AXL_DOC_SHARE_DIR}/sh/build-xml.sh.in
@@ -141,7 +141,7 @@ else()
 		OWNER_READ OWNER_WRITE OWNER_EXECUTE
 		GROUP_READ GROUP_WRITE GROUP_EXECUTE
 		WORLD_READ WORLD_WRITE WORLD_EXECUTE
-		)
+	)
 
 	axl_configure_file_w_permissions(
 		${AXL_DOC_SHARE_DIR}/sh/build-rst.sh.in
@@ -149,7 +149,7 @@ else()
 		OWNER_READ OWNER_WRITE OWNER_EXECUTE
 		GROUP_READ GROUP_WRITE GROUP_EXECUTE
 		WORLD_READ WORLD_WRITE WORLD_EXECUTE
-		)
+	)
 
 	axl_configure_file_w_permissions(
 		${AXL_DOC_SHARE_DIR}/sh/build-html.sh.in
@@ -157,7 +157,7 @@ else()
 		OWNER_READ OWNER_WRITE OWNER_EXECUTE
 		GROUP_READ GROUP_WRITE GROUP_EXECUTE
 		WORLD_READ WORLD_WRITE WORLD_EXECUTE
-		)
+	)
 
 	axl_configure_file_w_permissions(
 		${AXL_DOC_SHARE_DIR}/sh/build-pdf.sh.in
@@ -165,7 +165,7 @@ else()
 		OWNER_READ OWNER_WRITE OWNER_EXECUTE
 		GROUP_READ GROUP_WRITE GROUP_EXECUTE
 		WORLD_READ WORLD_WRITE WORLD_EXECUTE
-		)
+	)
 endif()
 
 #...............................................................................

@@ -13,8 +13,7 @@
 
 //..............................................................................
 
-enum BoolKind
-{
+enum BoolKind {
 	BoolKind_Undefined = 0,
 	BoolKind_Yes,
 	BoolKind_No,
@@ -30,8 +29,7 @@ getBoolKindString(BoolKind boolKind);
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-enum LanguageKind
-{
+enum LanguageKind {
 	LanguageKind_Undefined = 0,
 	LanguageKind_Unknown,
 	LanguageKind_Idl,
@@ -79,8 +77,7 @@ getLanguageKindString(LanguageKind languageKind);
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-enum MemberKind
-{
+enum MemberKind {
 	MemberKind_Undefined = 0,
 	MemberKind_Define,
 	MemberKind_Property,
@@ -126,8 +123,7 @@ getMemberKindString(MemberKind memberKind);
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-enum ProtectionKind
-{
+enum ProtectionKind {
 	ProtectionKind_Undefined = 0,
 	ProtectionKind_Public,
 	ProtectionKind_Protected,
@@ -147,8 +143,7 @@ getProtectionKindString(ProtectionKind protectionKind);
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-enum VirtualKind
-{
+enum VirtualKind {
 	VirtualKind_Undefined = 0,
 	VirtualKind_NonVirtual,
 	VirtualKind_Virtual,
@@ -170,8 +165,7 @@ getVirtualKindString(VirtualKind virtualKind);
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-enum RefKind
-{
+enum RefKind {
 	RefKind_Undefined = 0,
 	RefKind_Compound,
 	RefKind_Member,
@@ -187,8 +181,7 @@ getRefKindString(RefKind refKind);
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-enum GraphRelationKind
-{
+enum GraphRelationKind {
 	GraphRelationKind_Undefined = 0,
 	GraphRelationKind_Include,
 	GraphRelationKind_Usage,
@@ -214,8 +207,7 @@ getGraphRelationKindString(GraphRelationKind graphRelationKind);
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-enum CompoundKind
-{
+enum CompoundKind {
 	CompoundKind_Undefined = 0,
 	CompoundKind_Class,
 	CompoundKind_Struct,
@@ -257,8 +249,7 @@ getCompoundKindString(CompoundKind compoundKind);
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-enum SectionKind
-{
+enum SectionKind {
 	SectionKind_Undefined = 0,
 	SectionKind_UserDefined,
 	SectionKind_PublicType,
@@ -342,8 +333,7 @@ getSectionKindString(SectionKind sectionKind);
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-enum ImageKind
-{
+enum ImageKind {
 	ImageKind_Undefined = 0,
 	ImageKind_Html,
 	ImageKind_Latex,
@@ -361,8 +351,7 @@ getImageKindString(ImageKind imageKind);
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-enum ParamListKind
-{
+enum ParamListKind {
 	ParamListKind_Undefined = 0,
 	ParamListKind_Param,
 	ParamListKind_RetVal,
@@ -382,8 +371,7 @@ getParamListKindString(ParamListKind paramListKind);
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-enum ParamDirKind
-{
+enum ParamDirKind {
 	ParamDirKind_Undefined = 0,
 	ParamDirKind_In,
 	ParamDirKind_Out,
@@ -401,8 +389,7 @@ getParamDirKindString(ParamDirKind paramDirKind);
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-enum AccessorKind
-{
+enum AccessorKind {
 	AccessorKind_Undefined = 0,
 	AccessorKind_Retain,
 	AccessorKind_Copy,

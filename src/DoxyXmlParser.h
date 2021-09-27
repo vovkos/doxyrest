@@ -18,27 +18,23 @@
 
 //..............................................................................
 
-enum DoxyXmlFileKind
-{
+enum DoxyXmlFileKind {
 	DoxyXmlFileKind_Index,
 	DoxyXmlFileKind_Compound,
 };
 
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-class DoxyXmlParser: public xml::ExpatParser<DoxyXmlParser>
-{
+class DoxyXmlParser: public xml::ExpatParser<DoxyXmlParser> {
 	friend class xml::ExpatParser<DoxyXmlParser>;
 
 protected:
-	struct TypeStackEntry
-	{
+	struct TypeStackEntry {
 		DoxyXmlType* m_type;
 		size_t m_depth;
 	};
 
-	enum ElemKind
-	{
+	enum ElemKind {
 		ElemKind_Undefined,
 		ElemKind_DoxygenIndex,
 		ElemKind_DoxygenCompound,
@@ -64,26 +60,22 @@ protected:
 public:
 	DoxyXmlParser();
 
-	~DoxyXmlParser()
-	{
+	~DoxyXmlParser() {
 		clear();
 	}
 
 	Module*
-	getModule()
-	{
+	getModule() {
 		return m_module;
 	}
 
 	const sl::String&
-	getFilePath()
-	{
+	getFilePath() {
 		return m_filePath;
 	}
 
 	const sl::String&
-	getBaseDir()
-	{
+	getBaseDir() {
 		return m_baseDir;
 	}
 
@@ -93,15 +85,14 @@ public:
 		DoxyXmlFileKind fileKind,
 		const sl::StringRef& fileName,
 		size_t blockSize = -1
-		);
+	);
 
 	bool
 	parseFile(
 		Module* module,
 		const sl::StringRef& fileName,
 		size_t blockSize = -1
-		)
-	{
+	) {
 		return parseFile(module, DoxyXmlFileKind_Index, fileName, blockSize);
 	}
 
@@ -109,8 +100,7 @@ public:
 	clear();
 
 	sl::String
-	getLocationString() const
-	{
+	getLocationString() const {
 		return sl::formatString("%s(%d)", m_filePath.sz(), getLineNumber());
 	}
 
@@ -119,8 +109,7 @@ public:
 	pushType(
 		const char* name,
 		const char** attributes
-		)
-	{
+	) {
 		T* type = AXL_MEM_NEW(T);
 		TypeStackEntry entry = { type, 0 };
 		m_typeStack.append(entry);
@@ -130,14 +119,13 @@ public:
 	template <
 		typename T,
 		typename Context
-		>
+	>
 	bool
 	pushType(
 		Context* context,
 		const char* name,
 		const char** attributes
-		)
-	{
+	) {
 		T* type = AXL_MEM_NEW(T);
 		TypeStackEntry entry = { type, 0 };
 		m_typeStack.append(entry);
@@ -145,20 +133,17 @@ public:
 	}
 
 	Compound*
-	getCurrentCompound()
-	{
+	getCurrentCompound() {
 		return !m_compoundStack.isEmpty() ? m_compoundStack.getBack() : NULL;
 	}
 
 	size_t
-	pushCompound(Compound* compound)
-	{
+	pushCompound(Compound* compound) {
 		return m_compoundStack.append(compound);
 	}
 
 	Compound*
-	popCompound()
-	{
+	popCompound() {
 		return m_compoundStack.getBackAndPop();
 	}
 
@@ -167,7 +152,7 @@ protected:
 	onStartElement(
 		const char* name,
 		const char** attributes
-		);
+	);
 
 	void
 	onEndElement(const char* name);
@@ -176,15 +161,14 @@ protected:
 	onCharacterData(
 		const char* string,
 		size_t length
-		);
+	);
 
 	void
 	popType();
 
 private:
 	void
-	printLastError()
-	{
+	printLastError() {
 		fprintf(stderr, "%s: warning: %s\n", getLocationString().sz(), err::getLastErrorDescription().sz());
 	}
 
@@ -196,7 +180,7 @@ private:
 	printElement(
 		const char* name,
 		const char** attributes
-		);
+	);
 #endif
 };
 

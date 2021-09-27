@@ -21,7 +21,7 @@ set(
 	LUADOXYXML_EXE
 	SPHINX_BUILD_EXE
 	PDFLATEX_EXE
-	)
+)
 
 set(
 	AXL_IMPORT_LIST
@@ -39,6 +39,6 @@ set(
 set(
 	AXL_IMPORT_DIR_LIST
 	${CMAKE_CURRENT_LIST_DIR}/cmake
-	)
+)
 
 #...............................................................................

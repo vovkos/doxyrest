@@ -32,7 +32,7 @@ set(
 	-c ${CMAKE_CURRENT_BINARY_DIR}
 	${RST_DIR}
 	${HTML_DIR}
-	)
+)
 
 set(
 	SPHINX_TEX_CMD_LINE
@@ -41,7 +41,7 @@ set(
 	-c ${CMAKE_CURRENT_BINARY_DIR}
 	${RST_DIR}
 	${TEX_DIR}
-	)
+)
 
 set(
 	PDFLATEX_MIKTEX_CMD_LINE
@@ -49,14 +49,14 @@ set(
 	-output-directory=${PDF_DIR}
 	-aux-directory=${TMP_DIR}
 	${TEX_FILE_NAME}
-	)
+)
 
 set(
 	PDFLATEX_TEXLIVE_CMD_LINE
 	-interaction=batchmode
 	-output-directory=${TMP_DIR}
 	${TEX_FILE_NAME}
-	)
+)
 
 #. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
@@ -67,7 +67,7 @@ set(
 	SPHINX_TEX_CMD_LINE
 	PDFLATEX_MIKTEX_CMD_LINE
 	PDFLATEX_TEXLIVE_CMD_LINE
-	)
+)
 
 foreach(_VAR ${CMD_LINE_VAR_LIST})
 	string(
@@ -75,7 +75,7 @@ foreach(_VAR ${CMD_LINE_VAR_LIST})
 		";" " "
 		${_VAR}
 		"${${_VAR}}"
-		)
+	)
 endforeach()
 
 #. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -83,18 +83,18 @@ endforeach()
 configure_file(
 	conf.py.in
 	conf.py
-	)
+)
 
 if(WIN32)
 	configure_file(
 		${AXL_DOC_SHARE_DIR}/sh/build-html.bat.in
 		build-html.bat
-		)
+	)
 
 	configure_file(
 		${AXL_DOC_SHARE_DIR}/sh/build-pdf.bat.in
 		build-pdf.bat
-		)
+	)
 else()
 	axl_configure_file_w_permissions(
 		${AXL_DOC_SHARE_DIR}/sh/build-html.sh.in
@@ -102,7 +102,7 @@ else()
 		OWNER_READ OWNER_WRITE OWNER_EXECUTE
 		GROUP_READ GROUP_WRITE GROUP_EXECUTE
 		WORLD_READ WORLD_WRITE WORLD_EXECUTE
-		)
+	)
 
 	axl_configure_file_w_permissions(
 		${AXL_DOC_SHARE_DIR}/sh/build-pdf.sh.in
@@ -110,7 +110,7 @@ else()
 		OWNER_READ OWNER_WRITE OWNER_EXECUTE
 		GROUP_READ GROUP_WRITE GROUP_EXECUTE
 		WORLD_READ WORLD_WRITE WORLD_EXECUTE
-		)
+	)
 endif()
 
 #...............................................................................

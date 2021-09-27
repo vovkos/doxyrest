@@ -13,7 +13,7 @@ option(
 	BUILD_DOXYREST_SAMPLES
 	"Build example documentation for a bunch of opensource projects(used for testing as well)"
 	ON
-	)
+)
 
 if(BUILD_DOXYREST_SAMPLES)
 	set(DOXYREST_SAMPLE_SH_DIR "${CMAKE_CURRENT_LIST_DIR}/sh")

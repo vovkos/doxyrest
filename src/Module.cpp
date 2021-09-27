@@ -19,8 +19,7 @@ sl::String
 createPath(
 	const sl::StringRef& name,
 	Namespace* parentNamespace
-	)
-{
+) {
 	if (!parentNamespace)
 		return name;
 
@@ -35,13 +34,11 @@ createPath(
 
 template <typename T>
 void
-removeDuplicates(sl::List<T>* list)
-{
+removeDuplicates(sl::List<T>* list) {
 	sl::DuckTypePtrHashTable<T, bool> map;
 
 	sl::Iterator<T> it = list->getHead();
-	while (it)
-	{
+	while (it) {
 		sl::Iterator<T> next = it.getNext();
 		bool result = map.addIfNotExists(*it, true) != NULL;
 		if (!result)
@@ -53,11 +50,9 @@ removeDuplicates(sl::List<T>* list)
 
 template <>
 void
-removeDuplicates<EnumValue>(sl::List<EnumValue>* list)
-{
+removeDuplicates<EnumValue>(sl::List<EnumValue>* list) {
 	sl::Iterator<EnumValue> it = list->getHead();
-	while (it)
-	{
+	while (it) {
 		sl::Iterator<EnumValue> next = it.getNext();
 		if (it->m_isDuplicate)
 			list->erase(it);
@@ -67,8 +62,7 @@ removeDuplicates<EnumValue>(sl::List<EnumValue>* list)
 }
 
 void
-removeSubPages(sl::Array<Compound*>* pageArray)
-{
+removeSubPages(sl::Array<Compound*>* pageArray) {
 	Compound** p = *pageArray;
 	size_t count = pageArray->getCount();
 
@@ -77,11 +71,9 @@ removeSubPages(sl::Array<Compound*>* pageArray)
 		i++;
 
 	size_t j = i;
-	for (i++; i < count; i++)
-	{
+	for (i++; i < count; i++) {
 		Compound* compound = p[i];
-		if (!compound->m_isSubPage)
-		{
+		if (!compound->m_isSubPage) {
 			p[j] = p[i];
 			j++;
 		}
@@ -93,8 +85,7 @@ removeSubPages(sl::Array<Compound*>* pageArray)
 //..............................................................................
 
 void
-RefText::luaExport(lua::LuaState* luaState)
-{
+RefText::luaExport(lua::LuaState* luaState) {
 	luaState->createTable();
 
 	luaState->setMemberString("refKind", getRefKindString(m_refKind));
@@ -107,8 +98,7 @@ RefText::luaExport(lua::LuaState* luaState)
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 void
-LinkedText::luaExport(lua::LuaState* luaState)
-{
+LinkedText::luaExport(lua::LuaState* luaState) {
 	normalize();
 
 	luaState->createTable();
@@ -121,20 +111,15 @@ LinkedText::luaExport(lua::LuaState* luaState)
 }
 
 void
-LinkedText::normalize()
-{
+LinkedText::normalize() {
 	m_plainText.clear();
 
 	sl::Iterator<RefText> it = m_refTextList.getHead();
-	while (it)
-	{
-		if (!it->m_text.isEmpty())
-		{
+	while (it) {
+		if (!it->m_text.isEmpty()) {
 			m_plainText += it->m_text;
 			it++;
-		}
-		else
-		{
+		} else {
 			sl::Iterator<RefText> next = it.getNext();
 			m_refTextList.erase(it);
 			it = next;
@@ -145,8 +130,7 @@ LinkedText::normalize()
 //..............................................................................
 
 void
-DocBlock::luaExportMembers(lua::LuaState* luaState)
-{
+DocBlock::luaExportMembers(lua::LuaState* luaState) {
 	luaState->setMemberString("blockKind", m_blockKind);
 	luaState->setMemberString("title", m_title);
 	luaState->setMemberString("text", m_text);
@@ -156,8 +140,7 @@ DocBlock::luaExportMembers(lua::LuaState* luaState)
 }
 
 void
-DocBlock::luaExport(lua::LuaState* luaState)
-{
+DocBlock::luaExport(lua::LuaState* luaState) {
 	luaState->createTable();
 
 	DocBlock::luaExportMembers(luaState);
@@ -166,15 +149,12 @@ DocBlock::luaExport(lua::LuaState* luaState)
 //.............................................................................
 
 void
-DocRefBlock::luaExport(lua::LuaState* luaState)
-{
+DocRefBlock::luaExport(lua::LuaState* luaState) {
 	luaState->createTable();
 
-	if (m_refKind == RefKind_Compound)
-	{
+	if (m_refKind == RefKind_Compound) {
 		Compound* compound = m_module->m_compoundMap.findValue(m_id, NULL);
-		if (compound && compound->m_compoundKind == CompoundKind_File) // we don't export files, so remove reference
-		{
+		if (compound && compound->m_compoundKind == CompoundKind_File) { // we don't export files, so remove reference
 			m_blockKind = "computeroutput";
 			DocBlock::luaExportMembers(luaState);
 			return;
@@ -191,8 +171,7 @@ DocRefBlock::luaExport(lua::LuaState* luaState)
 //.............................................................................
 
 void
-DocAnchorBlock::luaExport(lua::LuaState* luaState)
-{
+DocAnchorBlock::luaExport(lua::LuaState* luaState) {
 	luaState->createTable();
 
 	DocBlock::luaExportMembers(luaState);
@@ -202,16 +181,14 @@ DocAnchorBlock::luaExport(lua::LuaState* luaState)
 
 //.............................................................................
 
-DocImageBlock::DocImageBlock()
-{
+DocImageBlock::DocImageBlock() {
 	m_imageKind = ImageKind_Undefined;
 	m_width = 0;
 	m_height = 0;
 }
 
 void
-DocImageBlock::luaExport(lua::LuaState* luaState)
-{
+DocImageBlock::luaExport(lua::LuaState* luaState) {
 	luaState->createTable();
 
 	DocBlock::luaExportMembers(luaState);
@@ -225,8 +202,7 @@ DocImageBlock::luaExport(lua::LuaState* luaState)
 //.............................................................................
 
 void
-DocUlinkBlock::luaExport(lua::LuaState* luaState)
-{
+DocUlinkBlock::luaExport(lua::LuaState* luaState) {
 	luaState->createTable();
 
 	DocBlock::luaExportMembers(luaState);
@@ -237,8 +213,7 @@ DocUlinkBlock::luaExport(lua::LuaState* luaState)
 //.............................................................................
 
 void
-DocHeadingBlock::luaExport(lua::LuaState* luaState)
-{
+DocHeadingBlock::luaExport(lua::LuaState* luaState) {
 	luaState->createTable();
 
 	DocBlock::luaExportMembers(luaState);
@@ -249,8 +224,7 @@ DocHeadingBlock::luaExport(lua::LuaState* luaState)
 //.............................................................................
 
 void
-DocSectionBlock::luaExport(lua::LuaState* luaState)
-{
+DocSectionBlock::luaExport(lua::LuaState* luaState) {
 	luaState->createTable();
 
 	DocBlock::luaExportMembers(luaState);
@@ -261,8 +235,7 @@ DocSectionBlock::luaExport(lua::LuaState* luaState)
 //.............................................................................
 
 void
-DocSimpleSectionBlock::luaExport(lua::LuaState* luaState)
-{
+DocSimpleSectionBlock::luaExport(lua::LuaState* luaState) {
 	luaState->createTable();
 
 	DocBlock::luaExportMembers(luaState);
@@ -273,8 +246,7 @@ DocSimpleSectionBlock::luaExport(lua::LuaState* luaState)
 //.............................................................................
 
 void
-Description::luaExport(lua::LuaState* luaState)
-{
+Description::luaExport(lua::LuaState* luaState) {
 	luaState->createTable();
 
 	luaState->setMemberBoolean("isEmpty", isEmpty ());
@@ -285,8 +257,7 @@ Description::luaExport(lua::LuaState* luaState)
 
 //.............................................................................
 
-Location::Location()
-{
+Location::Location() {
 	m_line = 0;
 	m_column = 0;
 	m_bodyStartLine = 0;
@@ -294,8 +265,7 @@ Location::Location()
 }
 
 void
-Location::luaExport(lua::LuaState* luaState)
-{
+Location::luaExport(lua::LuaState* luaState) {
 	luaState->createTable();
 
 	luaState->setMemberString("file", m_file);
@@ -309,8 +279,7 @@ Location::luaExport(lua::LuaState* luaState)
 //..............................................................................
 
 void
-Param::luaExport(lua::LuaState* luaState)
-{
+Param::luaExport(lua::LuaState* luaState) {
 	luaState->createTable();
 
 	luaState->setMemberString("declarationName", m_declarationName);
@@ -332,16 +301,14 @@ Param::luaExport(lua::LuaState* luaState)
 
 //..............................................................................
 
-EnumValue::EnumValue()
-{
+EnumValue::EnumValue() {
 	m_protectionKind = ProtectionKind_Undefined;
 	m_parentEnum = NULL;
 	m_isDuplicate = false;
 }
 
 void
-EnumValue::luaExport(lua::LuaState* luaState)
-{
+EnumValue::luaExport(lua::LuaState* luaState) {
 	luaState->createTable();
 
 	luaState->setMemberString("protectionKind", getProtectionKindString(m_protectionKind));
@@ -370,10 +337,8 @@ EnumValue::luaExport(lua::LuaState* luaState)
 //..............................................................................
 
 const char*
-getMemberFlagString(MemberFlag flag)
-{
-	const char* stringTable[] =
-	{
+getMemberFlagString(MemberFlag flag) {
+	const char* stringTable[] = {
 		"static",          // MemberFlag_Static        = 0x00000001,
 		"const",           // MemberFlag_Const         = 0x00000002,
 		"explicit",        // MemberFlag_Explicit      = 0x00000004,
@@ -415,21 +380,18 @@ getMemberFlagString(MemberFlag flag)
 
 inline
 MemberFlag
-getFirstMemberFlag(uint_t flags)
-{
+getFirstMemberFlag(uint_t flags) {
 	return (MemberFlag)(1 << sl::getLoBitIdx(flags));
 }
 
 sl::String
-getMemberFlagString(uint_t flags)
-{
+getMemberFlagString(uint_t flags) {
 	if (!flags)
 		return sl::String();
 
 	sl::String string;
 
-	while (flags)
-	{
+	while (flags) {
 		MemberFlag flag = getFirstMemberFlag(flags);
 		flags &= ~flag;
 
@@ -443,8 +405,7 @@ getMemberFlagString(uint_t flags)
 
 //..............................................................................
 
-Member::Member()
-{
+Member::Member() {
 	m_parentNamespace = NULL;
 	m_parentCompound = NULL;
 	m_groupCompound = NULL;
@@ -456,10 +417,8 @@ Member::Member()
 }
 
 void
-Member::luaExport(lua::LuaState* luaState)
-{
-	if (m_cacheIdx != -1)
-	{
+Member::luaExport(lua::LuaState* luaState) {
+	if (m_cacheIdx != -1) {
 		luaState->getGlobalArrayElement("g_exportCache", m_cacheIdx);
 		return;
 	}
@@ -482,8 +441,7 @@ Member::luaExport(lua::LuaState* luaState)
 	luaState->setMemberString("name", m_name);
 	luaState->setMemberString("modifiers", m_modifiers);
 
-	if (m_groupCompound)
-	{
+	if (m_groupCompound) {
 		m_groupCompound->luaExport(luaState);
 		luaState->setMember("group");
 	}
@@ -494,8 +452,7 @@ Member::luaExport(lua::LuaState* luaState)
 	preparePath();
 	luaState->setMemberString("path",  m_path);
 
-	switch (m_memberKind)
-	{
+	switch (m_memberKind) {
 	case MemberKind_Typedef:
 		m_type.luaExport(luaState);
 		luaState->setMember("type");
@@ -593,8 +550,7 @@ Member::luaExport(lua::LuaState* luaState)
 
 //..............................................................................
 
-Compound::Compound()
-{
+Compound::Compound() {
 	m_selfNamespace = NULL;
 	m_parentNamespace = NULL;
 	m_groupCompound = NULL;
@@ -612,10 +568,8 @@ Compound::Compound()
 }
 
 void
-Compound::luaExport(lua::LuaState* luaState)
-{
-	if (m_cacheIdx != -1)
-	{
+Compound::luaExport(lua::LuaState* luaState) {
+	if (m_cacheIdx != -1) {
 		luaState->getGlobalArrayElement("g_exportCache", m_cacheIdx);
 		return;
 	}
@@ -638,8 +592,7 @@ Compound::luaExport(lua::LuaState* luaState)
 	if (!m_importId.isEmpty())
 		luaState->setMemberString("importId", m_importId);
 
-	if (m_groupCompound)
-	{
+	if (m_groupCompound) {
 		m_groupCompound->luaExport(luaState);
 		luaState->setMember("group");
 	}
@@ -652,8 +605,7 @@ Compound::luaExport(lua::LuaState* luaState)
 
 	size_t count;
 
-	switch (m_compoundKind)
-	{
+	switch (m_compoundKind) {
 	case CompoundKind_Group:
 		luaState->setMemberBoolean("hasGlobalNamespace", m_hasGlobalNamespace);
 		break;
@@ -720,16 +672,13 @@ Compound::luaExport(lua::LuaState* luaState)
 }
 
 void
-Compound::unqualifyName()
-{
+Compound::unqualifyName() {
 	const char* unqualifiedName = m_name;
 	const char* p = m_name;
 	const char* end = p + m_name.getLength();
 
-	for (; p < end; p++)
-	{
-		switch (*p)
-		{
+	for (; p < end; p++) {
+		switch (*p) {
 		case '<':
 			p = end;
 			break;
@@ -746,8 +695,7 @@ Compound::unqualifyName()
 }
 
 void
-Compound::unspecializeName()
-{
+Compound::unspecializeName() {
 	size_t i = m_name.find('<');
 	if (i == -1)
 		return;
@@ -760,18 +708,15 @@ Compound::unspecializeName()
 	const char* p0 = p;
 	size_t level = 0;
 
-	for (; p < end; p++)
-	{
-		switch (*p)
-		{
+	for (; p < end; p++) {
+		switch (*p) {
 		case '<':
 			level++;
 			break;
 
 		case '>':
 			level--;
-			if (level == -1)
-			{
+			if (level == -1) {
 				createTemplateSpecParam(sl::StringRef(p0, p - p0));
 				p = end; // outta here
 			}
@@ -779,8 +724,7 @@ Compound::unspecializeName()
 			break;
 
 		case ',':
-			if (!level)
-			{
+			if (!level) {
 				createTemplateSpecParam(sl::StringRef(p0, p - p0));
 				p0 = p + 1;
 			}
@@ -798,8 +742,7 @@ Compound::unspecializeName()
 }
 
 Param*
-Compound::createTemplateSpecParam(const sl::StringRef& name)
-{
+Compound::createTemplateSpecParam(const sl::StringRef& name) {
 	Param* param = AXL_MEM_NEW(Param);
 	param->m_declarationName = name;
 	param->m_declarationName.trim();
@@ -811,13 +754,11 @@ Compound::createTemplateSpecParam(const sl::StringRef& name)
 //..............................................................................
 
 bool
-NamespaceContents::add(Compound* compound)
-{
+NamespaceContents::add(Compound* compound) {
 	if (compound->m_isDuplicate)
 		return false;
 
-	switch (compound->m_compoundKind)
-	{
+	switch (compound->m_compoundKind) {
 	case CompoundKind_Namespace:
 		ASSERT(compound->m_selfNamespace);
 		m_namespaceArray.append(compound->m_selfNamespace);
@@ -887,8 +828,7 @@ bool
 isCppDestructorName(
 	const sl::StringRef& memberName,
 	const sl::StringRef& compoundName
-	)
-{
+) {
 	return
 		!memberName.isEmpty() &&
 		memberName[0] == '~' &&
@@ -899,13 +839,11 @@ bool
 NamespaceContents::add(
 	Member* member,
 	Compound* thisCompound
-	)
-{
+) {
 	if (member->m_flags & MemberFlag_Duplicate)
 		return false;
 
-	enum FunctionKind
-	{
+	enum FunctionKind {
 		FunctionKind_Normal = 0,
 		FunctionKind_Constructor,
 		FunctionKind_Destructor,
@@ -913,8 +851,7 @@ NamespaceContents::add(
 
 	FunctionKind functionKind;
 
-	switch (member->m_memberKind)
-	{
+	switch (member->m_memberKind) {
 	case MemberKind_Property:
 		m_propertyArray.append(member);
 		break;
@@ -939,8 +876,7 @@ NamespaceContents::add(
 		functionKind = FunctionKind_Normal;
 
 		if (thisCompound)
-			switch (thisCompound->m_languageKind)
-			{
+			switch (thisCompound->m_languageKind) {
 			case LanguageKind_Cpp:
 			case LanguageKind_Java:
 				if (member->m_name == thisCompound->m_name)
@@ -997,8 +933,7 @@ NamespaceContents::add(
 }
 
 void
-NamespaceContents::luaExportMembers(lua::LuaState* luaState)
-{
+NamespaceContents::luaExportMembers(lua::LuaState* luaState) {
 	luaExportArray(luaState, m_groupArray);
 	luaState->setMember("groupArray");
 
@@ -1041,8 +976,7 @@ NamespaceContents::luaExportMembers(lua::LuaState* luaState)
 	luaExportArray(luaState, m_constructorArray);
 	luaState->setMember("constructorArray");
 
-	if (m_destructor)
-	{
+	if (m_destructor) {
 		m_destructor->luaExport(luaState);
 		luaState->setMember("destructor");
 	}
@@ -1069,8 +1003,7 @@ NamespaceContents::luaExportMembers(lua::LuaState* luaState)
 //..............................................................................
 
 void
-GlobalNamespace::clear()
-{
+GlobalNamespace::clear() {
 	m_groupArray.clear();
 	m_namespaceArray.clear();
 	m_enumArray.clear();
@@ -1091,22 +1024,17 @@ GlobalNamespace::build(
 	Module* module,
 	const sl::StringRef& auxCompoundId,
 	const sl::StringRef& footnoteMemberPrefix
-	)
-{
+) {
 	clear();
 
 	// convert footnote members
 
-	if (!footnoteMemberPrefix.isEmpty())
-	{
+	if (!footnoteMemberPrefix.isEmpty()) {
 		sl::Iterator<Compound> compoundIt = module->m_compoundList.getHead();
-		for (; compoundIt; compoundIt++)
-		{
+		for (; compoundIt; compoundIt++) {
 			sl::Iterator<Member> memberIt = compoundIt->m_memberList.getHead();
-			for (; memberIt; memberIt++)
-			{
-				if (memberIt->m_name.isPrefix(footnoteMemberPrefix))
-				{
+			for (; memberIt; memberIt++) {
+				if (memberIt->m_name.isPrefix(footnoteMemberPrefix)) {
 					memberIt->m_memberKind = MemberKind_Footnote;
 					memberIt->m_name.remove(0, footnoteMemberPrefix.getLength());
 				}
@@ -1117,21 +1045,16 @@ GlobalNamespace::build(
 	// assign groups
 
 	size_t count = module->m_groupArray.getCount();
-	for (size_t i = 0; i < count; i++)
-	{
+	for (size_t i = 0; i < count; i++) {
 		Compound* compound = module->m_groupArray[i];
 		if (compound->m_groupOriginalIdx == -1)
 			compound->m_groupOriginalIdx = i;
 
 		sl::Iterator<Member> memberIt = compound->m_memberList.getHead();
-		for (; memberIt; memberIt++)
-		{
-			if (memberIt->m_memberKind == MemberKind_Footnote)
-			{
+		for (; memberIt; memberIt++) {
+			if (memberIt->m_memberKind == MemberKind_Footnote) {
 				compound->m_groupFootnoteArray.append(*memberIt);
-			}
-			else
-			{
+			} else {
 				Member* member = module->m_memberMap.findValue(memberIt->m_id, NULL);
 				if (member && member->m_parentCompound->isMemberGroupAllowed())
 					member->m_groupCompound = compound;
@@ -1139,19 +1062,16 @@ GlobalNamespace::build(
 		}
 
 		sl::Iterator<Ref> refIt = compound->m_innerRefList.getHead();
-		for (size_t j = 0; refIt; refIt++)
-		{
+		for (size_t j = 0; refIt; refIt++) {
 			Compound* innerCompound = module->m_compoundMap.findValue(refIt->m_id, NULL);
-			if (innerCompound)
-			{
+			if (innerCompound) {
 				innerCompound->m_groupCompound = compound;
 				innerCompound->m_groupOriginalIdx = j++;
 			}
 		}
 	}
 
-	if (!auxCompoundId.isEmpty())
-	{
+	if (!auxCompoundId.isEmpty()) {
 		m_auxCompound = module->m_compoundMap.findValue(auxCompoundId, NULL);
 		if (m_auxCompound && m_auxCompound->m_groupCompound)
 			m_auxCompound->m_groupCompound->m_hasGlobalNamespace = true;
@@ -1162,8 +1082,7 @@ GlobalNamespace::build(
 	// initialize namespaces (including classes, structs, unions)
 
 	count = module->m_namespaceArray.getCount();
-	for (size_t i = 0; i < count; i++)
-	{
+	for (size_t i = 0; i < count; i++) {
 		Compound* compound = module->m_namespaceArray[i];
 
 		Namespace* nspace = AXL_MEM_NEW(Namespace);
@@ -1174,8 +1093,7 @@ GlobalNamespace::build(
 
 	// resolve inner, base and derived references and add members
 
-	for (size_t i = 0; i < count; i++)
-	{
+	for (size_t i = 0; i < count; i++) {
 		Compound* compound = module->m_namespaceArray[i];
 		Namespace* nspace = compound->m_selfNamespace;
 		ASSERT(nspace);
@@ -1186,12 +1104,10 @@ GlobalNamespace::build(
 		compound->unspecializeName();
 
 		sl::Iterator<Member> memberIt = compound->m_memberList.getHead();
-		for (; memberIt; memberIt++)
-		{
+		for (; memberIt; memberIt++) {
 			Compound* memberCompound;
 
-			switch (memberIt->m_memberKind)
-			{
+			switch (memberIt->m_memberKind) {
 			case MemberKind_Interface:
 			case MemberKind_Service:
 				memberCompound = createMemberCompound(module, *memberIt);
@@ -1199,8 +1115,7 @@ GlobalNamespace::build(
 				nspace->add(memberCompound);
 				memberCompound->m_parentNamespace = nspace; // namespace, not group!
 
-				if (memberCompound->m_groupCompound)
-				{
+				if (memberCompound->m_groupCompound) {
 					Namespace* groupNspace = getGroupNamespace(module, memberCompound->m_groupCompound);
 					groupNspace->add(memberCompound);
 				}
@@ -1211,8 +1126,7 @@ GlobalNamespace::build(
 				nspace->add(*memberIt, compound);
 				memberIt->m_parentNamespace = nspace; // namespace, not group!
 
-				if (memberIt->m_groupCompound)
-				{
+				if (memberIt->m_groupCompound) {
 					Namespace* groupNspace = getGroupNamespace(module, memberIt->m_groupCompound);
 					groupNspace->add(*memberIt, compound);
 				}
@@ -1220,11 +1134,9 @@ GlobalNamespace::build(
 		}
 
 		sl::Iterator<Ref> refIt = compound->m_innerRefList.getHead();
-		for (; refIt; refIt++)
-		{
+		for (; refIt; refIt++) {
 			Compound* innerCompound = module->m_compoundMap.findValue(refIt->m_id, NULL);
-			if (!innerCompound)
-			{
+			if (!innerCompound) {
 				fprintf(stderr, "warning: can't find inner compound refid: %s\n", refIt->m_id.sz());
 				continue;
 			}
@@ -1232,15 +1144,11 @@ GlobalNamespace::build(
 			nspace->add(innerCompound);
 			innerCompound->m_parentNamespace = nspace; // namespace, not group!
 
-			if (innerCompound->m_groupCompound)
-			{
-				if (compound->isMemberGroupAllowed())
-				{
+			if (innerCompound->m_groupCompound) {
+				if (compound->isMemberGroupAllowed()) {
 					Namespace* groupNspace = getGroupNamespace(module, innerCompound->m_groupCompound);
 					groupNspace->add(innerCompound);
-				}
-				else
-				{
+				} else {
 					innerCompound->m_groupCompound = NULL;
 				}
 			}
@@ -1250,23 +1158,18 @@ GlobalNamespace::build(
 		removeDuplicates(&compound->m_derivedRefList);
 
 		refIt = compound->m_baseRefList.getHead();
-		for (; refIt; refIt++)
-		{
+		for (; refIt; refIt++) {
 			Compound* baseCompound;
 
-			if (refIt->m_id.isEmpty() || !refIt->m_importId.isEmpty()) // template or imported base
-			{
+			if (refIt->m_id.isEmpty() || !refIt->m_importId.isEmpty()) { // template or imported base
 				baseCompound = AXL_MEM_NEW(Compound);
 				baseCompound->m_id = refIt->m_id;
 				baseCompound->m_importId = refIt->m_importId;
 				baseCompound->m_name = refIt->m_text;
 				module->m_compoundList.insertTail(baseCompound);
-			}
-			else
-			{
+			} else {
 				baseCompound = module->m_compoundMap.findValue(refIt->m_id, NULL);
-				if (!baseCompound)
-				{
+				if (!baseCompound) {
 					err::setFormatStringError("can't find base compound refid: %s\n", refIt->m_id.sz());
 					return false;
 				}
@@ -1281,14 +1184,12 @@ GlobalNamespace::build(
 		sl::StringHashTable<bool> idMap; // derivedcompoundref may specify the same class multiple types -- we don't want that
 
 		refIt = compound->m_derivedRefList.getHead();
-		for (; refIt; refIt++)
-		{
+		for (; refIt; refIt++) {
 			if (!idMap.addIfNotExists(refIt->m_id, true))
 				continue;
 
 			Compound* derivedCompound = module->m_compoundMap.findValue(refIt->m_id, NULL);
-			if (!derivedCompound)
-			{
+			if (!derivedCompound) {
 				fprintf(stderr, "warning: can't find derived compound refid: %s\n", refIt->m_id.sz());
 				continue;
 			}
@@ -1300,16 +1201,13 @@ GlobalNamespace::build(
 	// resolve sub pages
 
 	count = module->m_pageArray.getCount();
-	for (size_t i = 0; i < count; i++)
-	{
+	for (size_t i = 0; i < count; i++) {
 		Compound* compound = module->m_pageArray[i];
 
 		sl::Iterator<Ref> refIt = compound->m_innerRefList.getHead();
-		for (; refIt; refIt++)
-		{
+		for (; refIt; refIt++) {
 			Compound* subPage = module->m_compoundMap.findValue(refIt->m_id, NULL);
-			if (!subPage)
-			{
+			if (!subPage) {
 				fprintf(stderr, "warning: can't find subpage refid: %s\n", refIt->m_id.sz());
 				continue;
 			}
@@ -1324,12 +1222,10 @@ GlobalNamespace::build(
 	// add leftovers to the global namespace
 
 	sl::Iterator<Compound> compoundIt = module->m_compoundList.getHead();
-	for (; compoundIt; compoundIt++)
-	{
+	for (; compoundIt; compoundIt++) {
 		sl::Iterator<Member> memberIt;
 
-		switch (compoundIt->m_compoundKind)
-		{
+		switch (compoundIt->m_compoundKind) {
 		case CompoundKind_Undefined: // template base type or incomplete compound
 			break;
 
@@ -1344,22 +1240,19 @@ GlobalNamespace::build(
 		case CompoundKind_File:
 			memberIt = compoundIt->m_memberList.getHead();
 
-			for (; memberIt; memberIt++)
-			{
+			for (; memberIt; memberIt++) {
 				Compound* memberCompound;
 
 				if (memberIt->m_flags & MemberFlag_Duplicate)
 					continue;
 
-				switch (memberIt->m_memberKind)
-				{
+				switch (memberIt->m_memberKind) {
 				case MemberKind_Interface:
 				case MemberKind_Service:
 					memberCompound = createMemberCompound(module, *memberIt);
 					add(memberCompound);
 
-					if (memberCompound->m_groupCompound)
-					{
+					if (memberCompound->m_groupCompound) {
 						Namespace* groupNspace = getGroupNamespace(module, memberCompound->m_groupCompound);
 						groupNspace->add(memberCompound);
 					}
@@ -1368,8 +1261,7 @@ GlobalNamespace::build(
 
 				default:
 					add(*memberIt, NULL);
-					if (memberIt->m_groupCompound)
-					{
+					if (memberIt->m_groupCompound) {
 						Namespace* groupNspace = getGroupNamespace(module, memberIt->m_groupCompound);
 						groupNspace->add(*memberIt, NULL);
 					}
@@ -1378,11 +1270,9 @@ GlobalNamespace::build(
 			break;
 
 		default:
-			if (!compoundIt->m_parentNamespace)
-			{
+			if (!compoundIt->m_parentNamespace) {
 				add(*compoundIt);
-				if (compoundIt->m_groupCompound)
-				{
+				if (compoundIt->m_groupCompound) {
 					Namespace* groupNspace = getGroupNamespace(module, compoundIt->m_groupCompound);
 					groupNspace->add(*compoundIt);
 				}
@@ -1394,8 +1284,7 @@ GlobalNamespace::build(
 }
 
 void
-GlobalNamespace::luaExport(lua::LuaState* luaState)
-{
+GlobalNamespace::luaExport(lua::LuaState* luaState) {
 	luaState->createTable();
 	luaExportMembers(luaState);
 
@@ -1403,8 +1292,7 @@ GlobalNamespace::luaExport(lua::LuaState* luaState)
 	luaState->setMemberString("id", "global");
 	luaState->setMemberString("compoundKind", "namespace");
 
-	if (m_auxCompound)
-	{
+	if (m_auxCompound) {
 		if (!m_auxCompound->m_title.isEmpty())
 			luaState->setMemberString("title", m_auxCompound->m_title);
 
@@ -1413,9 +1301,7 @@ GlobalNamespace::luaExport(lua::LuaState* luaState)
 
 		m_auxCompound->m_detailedDescription.luaExport(luaState);
 		luaState->setMember("detailedDescription");
-	}
-	else
-	{
+	} else {
 		// we still want valid m_briefDescription/m_detailedDescription
 
 		Description emptyDescription;
@@ -1432,8 +1318,7 @@ Namespace*
 GlobalNamespace::getGroupNamespace(
 	Module* module,
 	Compound* groupCompound
-	)
-{
+) {
 	if (groupCompound->m_selfNamespace)
 		return groupCompound->m_selfNamespace;
 
@@ -1443,12 +1328,9 @@ GlobalNamespace::getGroupNamespace(
 	nspace->m_footnoteArray = groupCompound->m_groupFootnoteArray;
 	groupCompound->m_selfNamespace = nspace;
 
-	if (!groupCompound->m_groupCompound)
-	{
+	if (!groupCompound->m_groupCompound) {
 		module->m_groupArray.append(groupCompound);
-	}
-	else
-	{
+	} else {
 		Namespace* parentGroupNspace = getGroupNamespace(module, groupCompound->m_groupCompound);
 		groupCompound->m_parentNamespace = parentGroupNspace;
 		parentGroupNspace->m_groupArray.append(nspace);
@@ -1461,8 +1343,7 @@ Compound*
 GlobalNamespace::createMemberCompound(
 	Module* module,
 	Member* member
-	)
-{
+) {
 	Compound* compound = AXL_MEM_NEW(Compound);
 	compound->m_compoundKind = member->m_memberKind == MemberKind_Service ? CompoundKind_Service : CompoundKind_Interface;
 	compound->m_name = member->m_name;

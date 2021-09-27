@@ -15,8 +15,7 @@
 
 //..............................................................................
 
-DoxyXmlParser::DoxyXmlParser()
-{
+DoxyXmlParser::DoxyXmlParser() {
 	m_module = NULL;
 	m_fileKind = DoxyXmlFileKind_Index;
 
@@ -31,8 +30,7 @@ DoxyXmlParser::parseFile(
 	DoxyXmlFileKind fileKind,
 	const sl::StringRef& fileName,
 	size_t blockSize
-	)
-{
+) {
 	m_module = module;
 	m_fileKind = fileKind;
 	m_filePath = io::getFullFilePath(fileName);
@@ -42,11 +40,9 @@ DoxyXmlParser::parseFile(
 }
 
 void
-DoxyXmlParser::clear()
-{
+DoxyXmlParser::clear() {
 	size_t count = m_typeStack.getCount();
-	for (size_t i = 0; i < count; i++)
-	{
+	for (size_t i = 0; i < count; i++) {
 		DoxyXmlType* type = m_typeStack[i].m_type;
 		AXL_MEM_DELETE(type);
 	}
@@ -55,8 +51,7 @@ DoxyXmlParser::clear()
 }
 
 void
-DoxyXmlParser::popType()
-{
+DoxyXmlParser::popType() {
 	ASSERT(!m_typeStack.isEmpty());
 
 	DoxyXmlType* type = m_typeStack.getBack().m_type;
@@ -70,18 +65,15 @@ void
 DoxyXmlParser::onStartElement(
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 #if (_PRINT_XML)
 	printElement(name, attributes);
 	m_indent++;
 #endif
 
-	if (m_typeStack.isEmpty())
-	{
+	if (m_typeStack.isEmpty()) {
 		ElemKind elemKind = ElemKindMap::findValue(name, ElemKind_Undefined);
-		switch (elemKind)
-		{
+		switch (elemKind) {
 		case ElemKind_DoxygenIndex:
 			pushType<DoxygenIndexType>(name, attributes);
 			break;
@@ -90,17 +82,12 @@ DoxyXmlParser::onStartElement(
 			pushType<DoxygenCompoundType>(name, attributes);
 			break;
 		}
-	}
-	else
-	{
+	} else {
 		TypeStackEntry* entry = &m_typeStack.getBack();
 
-		if (entry->m_depth != 0)
-		{
+		if (entry->m_depth != 0) {
 			entry->m_depth++;
-		}
-		else
-		{
+		} else {
 			bool result = entry->m_type->onStartElement(name, attributes);
 			if (!result)
 				printLastError();
@@ -112,8 +99,7 @@ DoxyXmlParser::onStartElement(
 }
 
 void
-DoxyXmlParser::onEndElement(const char* name)
-{
+DoxyXmlParser::onEndElement(const char* name) {
 #if (_PRINT_XML)
 	m_indent--;
 	printIndent();
@@ -124,12 +110,9 @@ DoxyXmlParser::onEndElement(const char* name)
 		return;
 
 	TypeStackEntry* entry = &m_typeStack.getBack();
-	if (entry->m_depth != 0)
-	{
+	if (entry->m_depth != 0) {
 		entry->m_depth--;
-	}
-	else
-	{
+	} else {
 		bool result = entry->m_type->onEndElement(name);
 		if (!result)
 			printLastError();
@@ -142,8 +125,7 @@ void
 DoxyXmlParser::onCharacterData(
 	const char* string,
 	size_t length
-	)
-{
+) {
 #if (_PRINT_XML)
 	printIndent();
 	printf("%s\n", sl::String(string, length).sz());
@@ -153,8 +135,7 @@ DoxyXmlParser::onCharacterData(
 		return;
 
 	TypeStackEntry* entry = &m_typeStack.getBack();
-	if (entry->m_depth == 0)
-	{
+	if (entry->m_depth == 0) {
 		bool result = entry->m_type->onCharacterData(string, length);
 		if (!result)
 			printLastError();
@@ -163,8 +144,7 @@ DoxyXmlParser::onCharacterData(
 
 #if (_PRINT_XML)
 void
-DoxyXmlParser::printIndent()
-{
+DoxyXmlParser::printIndent() {
 	for (size_t i = 0; i < m_indent; i++)
 		printf("  ");
 }
@@ -173,18 +153,15 @@ void
 DoxyXmlParser::printElement(
 	const char* name,
 	const char** attributes
-	)
-{
+) {
 	printIndent();
 	printf("<%s", name);
 
-	if (*attributes)
-	{
+	if (*attributes) {
 		printf("\n");
 		m_indent++;
 
-		while (*attributes)
-		{
+		while (*attributes) {
 			printIndent();
 			printf("%s = %s\n", attributes [0], attributes [1]);
 			attributes += 2;

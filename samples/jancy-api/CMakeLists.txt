@@ -33,7 +33,7 @@ set(
 	-F ${DOXYREST_FRAME_DIR}/cfamily
 	-F ${DOXYREST_FRAME_DIR}/common
 	-f index.rst.in
-	)
+)
 
 set(
 	SPHINX_HTML_CMD_LINE
@@ -42,7 +42,7 @@ set(
 	-c ${CMAKE_CURRENT_BINARY_DIR}
 	${RST_DIR}
 	${HTML_DIR}
-	)
+)
 
 #. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
@@ -51,7 +51,7 @@ set(
 
 	DOXYREST_CMD_LINE
 	SPHINX_HTML_CMD_LINE
-	)
+)
 
 foreach(_VAR ${CMD_LINE_VAR_LIST})
 	string(
@@ -59,7 +59,7 @@ foreach(_VAR ${CMD_LINE_VAR_LIST})
 		";" " "
 		${_VAR}
 		"${${_VAR}}"
-		)
+	)
 endforeach()
 
 #. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -67,7 +67,7 @@ endforeach()
 configure_file(
 	conf.py.in
 	conf.py
-	)
+)
 
 if(WIN32)
 	string(REPLACE "$(Configuration)" "%1" DOXYREST_EXE "${DOXYREST_EXE}")
@@ -75,28 +75,28 @@ if(WIN32)
 	configure_file(
 		${DOXYREST_SAMPLE_SH_DIR}/unpack-xml.bat.in
 		unpack-xml.bat
-		)
+	)
 
 	configure_file(
 		${DOXYREST_SAMPLE_SH_DIR}/test.bat.in
 		test.bat
-		)
+	)
 
 	configure_file(
 		${AXL_DOC_SHARE_DIR}/sh/build-rst.bat.in
 		build-rst.bat
-		)
+	)
 
 	configure_file(
 		${AXL_DOC_SHARE_DIR}/sh/build-html.bat.in
 		build-html.bat
-		)
+	)
 
 	add_test(
 		NAME sample-jancy-api
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 		COMMAND test.bat $<CONFIGURATION>
-		)
+	)
 else()
 	axl_configure_file_w_permissions(
 		${DOXYREST_SAMPLE_SH_DIR}/unpack-xml.sh.in
@@ -104,7 +104,7 @@ else()
 		OWNER_READ OWNER_WRITE OWNER_EXECUTE
 		GROUP_READ GROUP_WRITE GROUP_EXECUTE
 		WORLD_READ WORLD_WRITE WORLD_EXECUTE
-		)
+	)
 
 	axl_configure_file_w_permissions(
 		${DOXYREST_SAMPLE_SH_DIR}/test.sh.in
@@ -112,7 +112,7 @@ else()
 		OWNER_READ OWNER_WRITE OWNER_EXECUTE
 		GROUP_READ GROUP_WRITE GROUP_EXECUTE
 		WORLD_READ WORLD_WRITE WORLD_EXECUTE
-		)
+	)
 
 	axl_configure_file_w_permissions(
 		${AXL_DOC_SHARE_DIR}/sh/build-rst.sh.in
@@ -120,7 +120,7 @@ else()
 		OWNER_READ OWNER_WRITE OWNER_EXECUTE
 		GROUP_READ GROUP_WRITE GROUP_EXECUTE
 		WORLD_READ WORLD_WRITE WORLD_EXECUTE
-		)
+	)
 
 	axl_configure_file_w_permissions(
 		${AXL_DOC_SHARE_DIR}/sh/build-html.sh.in
@@ -128,13 +128,13 @@ else()
 		OWNER_READ OWNER_WRITE OWNER_EXECUTE
 		GROUP_READ GROUP_WRITE GROUP_EXECUTE
 		WORLD_READ WORLD_WRITE WORLD_EXECUTE
-		)
+	)
 
 	add_test(
 		NAME sample-jancy-api
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 		COMMAND ./test.sh
-		)
+	)
 endif()
 
 #...............................................................................

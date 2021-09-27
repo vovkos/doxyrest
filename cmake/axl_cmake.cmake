@@ -36,7 +36,7 @@ axl_find_file
 	_RESULT
 	_FILE_NAME
 	# ...
-	)
+)
 
 	set(_DIR_LIST ${ARGN})
 
@@ -57,7 +57,7 @@ axl_find_file_recurse_parent_dirs
 	_RESULT
 	_FILE_NAME
 	_START_DIR
-	)
+)
 
 	set(_DIR ${_START_DIR})
 

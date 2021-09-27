@@ -22,7 +22,7 @@ set(
 	DoxyXmlType.h
 	DoxyXmlParser.h
 	version.h.in
-	)
+)
 
 set(
 	APP_CPP_LIST
@@ -33,14 +33,14 @@ set(
 	DoxyXmlEnum.cpp
 	DoxyXmlType.cpp
 	DoxyXmlParser.cpp
-	)
+)
 
 source_group(
 	app
 	FILES
 	${APP_H_LIST}
 	${APP_CPP_LIST}
-	)
+)
 
 #. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 #
@@ -50,13 +50,13 @@ source_group(
 file(
 	GLOB FRAME_LIST
 	${DOXYREST_ROOT_DIR}/frame/*.*
-	)
+)
 
 source_group(
 	frame
 	FILES
 	${FRAME_LIST}
-	)
+)
 
 #. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 #
@@ -66,13 +66,13 @@ source_group(
 set(
 	RES_RC_LIST
 	res.rc
-	)
+)
 
 source_group(
 	res
 	FILES
 	${RES_RC_LIST}
-	)
+)
 
 #. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 #
@@ -87,12 +87,12 @@ axl_push_and_set(CMAKE_CURRENT_BINARY_DIR ${GEN_DIR})
 configure_file(
 	version.h.in
 	${GEN_DIR}/version.h
-	)
+)
 
 set(
 	GEN_H_LIST
 	${GEN_DIR}/version.h
-	)
+)
 
 axl_pop(CMAKE_CURRENT_BINARY_DIR)
 
@@ -100,7 +100,7 @@ source_group(
 	gen
 	FILES
 	${GEN_H_LIST}
-	)
+)
 
 #. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 #
@@ -115,7 +115,7 @@ source_group(
 	FILES
 	${PCH_H}
 	${PCH_CPP}
-	)
+)
 
 #...............................................................................
 #
@@ -127,13 +127,13 @@ include_directories(
 	${LUA_INC_DIR}
 	${AXL_INC_DIR}
 	${GEN_DIR}
-	)
+)
 
 link_directories(
 	${EXPAT_LIB_DIR}
 	${LUA_LIB_DIR}
 	${AXL_LIB_DIR}
-	)
+)
 
 add_executable(
 	doxyrest
@@ -144,13 +144,13 @@ add_executable(
 	${FRAME_LIST}
 	${RES_RC_LIST}
 	${GEN_H_LIST}
-	)
+)
 
 axl_set_pch(
 	doxyrest
 	${PCH_H}
 	${PCH_CPP}
-	)
+)
 
 target_link_libraries(
 	doxyrest
@@ -162,20 +162,20 @@ target_link_libraries(
 	axl_core
 	expat
 	${LUA_LIB_NAME}
-	)
+)
 
 if(UNIX)
 	target_link_libraries(
 		doxyrest
 		pthread
 		dl
-		)
+	)
 
 	if(NOT APPLE)
 		target_link_libraries(
 			doxyrest
 			rt
-			)
+		)
 	endif()
 endif()
 
@@ -207,7 +207,7 @@ if(WIN32)
 		install(
 			FILES ${_INSTALL_DLL_LIST}
 			DESTINATION ${DOXYREST_INSTALL_BIN_SUBDIR}
-			)
+		)
 	endif()
 endif()
 
@@ -216,6 +216,6 @@ endif()
 install(
 	TARGETS doxyrest
 	DESTINATION ${DOXYREST_INSTALL_BIN_SUBDIR}
-	)
+)
 
 #...............................................................................

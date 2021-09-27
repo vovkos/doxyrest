@@ -57,17 +57,17 @@ install(
 	DESTINATION ${DOXYREST_INSTALL_SPHINX_SUBDIR}
 	PATTERN "*.pyc" EXCLUDE
 	PATTERN "__pycache__" EXCLUDE
-	)
+)
 
 install(
 	DIRECTORY frame/
 	DESTINATION ${DOXYREST_INSTALL_FRAME_SUBDIR}
-	)
+)
 
 install(
 	DIRECTORY license/
 	DESTINATION ${DOXYREST_INSTALL_LICENSE_SUBDIR}
-	)
+)
 
 #...............................................................................
 

@@ -18,8 +18,7 @@ class GlobalNamespace;
 
 //..............................................................................
 
-class Generator
-{
+class Generator {
 protected:
 	st::LuaStringTemplate m_stringTemplate;
 	sl::String m_frameFilePath;
@@ -34,8 +33,7 @@ public:
 	create(const CmdLine* cmdLine);
 
 	sl::String
-	getConfigValue(const sl::StringRef& name)
-	{
+	getConfigValue(const sl::StringRef& name) {
 		return m_stringTemplate.m_luaState.getGlobalString(name);
 	}
 
@@ -43,11 +41,10 @@ public:
 	luaExport(
 		Module* module,
 		GlobalNamespace* globalNamespace
-		);
+	);
 
 	bool
-	generate()
-	{
+	generate() {
 		return generate(m_outputFileName, m_frameFileName);
 	}
 
@@ -55,7 +52,7 @@ public:
 	generate(
 		const sl::StringRef& targetFileName,
 		const sl::StringRef& frameFileName
-		);
+	);
 
 protected:
 	static
@@ -76,7 +73,7 @@ protected:
 		const sl::StringRef& targetFileName,
 		const sl::StringRef& frameFileName,
 		size_t baseArgCount
-		);
+	);
 };
 
 //..............................................................................

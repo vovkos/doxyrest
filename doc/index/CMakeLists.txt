@@ -26,27 +26,27 @@ set(
 	-c ${CMAKE_CURRENT_BINARY_DIR}
 	${RST_DIR}
 	${HTML_DIR}
-	)
+)
 
 string(
 	REPLACE
 	";" " "
 	SPHINX_HTML_CMD_LINE
 	"${SPHINX_HTML_CMD_LINE}"
-	)
+)
 
 #. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 configure_file(
 	conf.py.in
 	conf.py
-	)
+)
 
 if(WIN32)
 	configure_file(
 		${AXL_DOC_SHARE_DIR}/sh/build-html.bat.in
 		build-html.bat
-		)
+	)
 else()
 	axl_configure_file_w_permissions(
 		${AXL_DOC_SHARE_DIR}/sh/build-html.sh.in
@@ -54,7 +54,7 @@ else()
 		OWNER_READ OWNER_WRITE OWNER_EXECUTE
 		GROUP_READ GROUP_WRITE GROUP_EXECUTE
 		WORLD_READ WORLD_WRITE WORLD_EXECUTE
-		)
+	)
 endif()
 
 #...............................................................................

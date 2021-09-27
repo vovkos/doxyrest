@@ -15,10 +15,8 @@
 //..............................................................................
 
 const char*
-getBoolKindString(BoolKind boolKind)
-{
-	const char* stringTable[] =
-	{
+getBoolKindString(BoolKind boolKind) {
+	const char* stringTable[] = {
 		"<undefined>", // BoolKind_Undefined
 		"yes",         // BoolKind_Yes
 		"no",          // BoolKind_No
@@ -30,10 +28,8 @@ getBoolKindString(BoolKind boolKind)
 }
 
 const char*
-getLanguageKindString(LanguageKind languageKind)
-{
-	const char* stringTable[] =
-	{
+getLanguageKindString(LanguageKind languageKind) {
+	const char* stringTable[] = {
 		"<undefined>", // LanguageKind_Undefined
 		"Unknown",     // LanguageKind_Unknown
 		"IDL",         // LanguageKind_Idl
@@ -61,10 +57,8 @@ getLanguageKindString(LanguageKind languageKind)
 }
 
 const char*
-getMemberKindString(MemberKind memberKind)
-{
-	const char* stringTable[] =
-	{
+getMemberKindString(MemberKind memberKind) {
+	const char* stringTable[] = {
 		"<undefined>", // MemberKind_Undefined
 		"define",      // MemberKind_Define
 		"property",    // MemberKind_Property
@@ -91,10 +85,8 @@ getMemberKindString(MemberKind memberKind)
 }
 
 const char*
-getProtectionKindString(ProtectionKind protectionKind)
-{
-	const char* stringTable[] =
-	{
+getProtectionKindString(ProtectionKind protectionKind) {
+	const char* stringTable[] = {
 		"<undefined>", // ProtectionKind_Undefined
 		"public",      // ProtectionKind_Public
 		"protected",   // ProtectionKind_Protected
@@ -108,10 +100,8 @@ getProtectionKindString(ProtectionKind protectionKind)
 }
 
 const char*
-getVirtualKindString(VirtualKind virtualKind)
-{
-	const char* stringTable[] =
-	{
+getVirtualKindString(VirtualKind virtualKind) {
+	const char* stringTable[] = {
 		"<undefined>",  // VirtualKind_Undefined
 		"non-virtual",  // VirtualKind_NonVirtual
 		"virtual",      // VirtualKind_Virtual
@@ -126,10 +116,8 @@ getVirtualKindString(VirtualKind virtualKind)
 }
 
 const char*
-getRefKindString(RefKind refKind)
-{
-	const char* stringTable[] =
-	{
+getRefKindString(RefKind refKind) {
+	const char* stringTable[] = {
 		"<undefined>", // RefKind_Undefined
 		"compound",    // RefKind_Compound
 		"member",      // RefKind_Member
@@ -141,10 +129,8 @@ getRefKindString(RefKind refKind)
 }
 
 const char*
-getGraphRelationKindString(GraphRelationKind graphRelationKind)
-{
-	const char* stringTable[] =
-	{
+getGraphRelationKindString(GraphRelationKind graphRelationKind) {
+	const char* stringTable[] = {
 		"<undefined>",           // GraphRelationKind_Undefined
 		"include",               // GraphRelationKind_Include
 		"usage",                 // GraphRelationKind_Usage
@@ -161,10 +147,8 @@ getGraphRelationKindString(GraphRelationKind graphRelationKind)
 }
 
 const char*
-getCompoundKindString(CompoundKind compoundKind)
-{
-	const char* stringTable[] =
-	{
+getCompoundKindString(CompoundKind compoundKind) {
+	const char* stringTable[] = {
 		"<undefined>", // CompoundKind_Undefined
 		"class",       // CompoundKind_Class
 		"struct",      // CompoundKind_Struct
@@ -189,10 +173,8 @@ getCompoundKindString(CompoundKind compoundKind)
 }
 
 const char*
-getSectionKindString(SectionKind sectionKind)
-{
-	const char* stringTable[] =
-	{
+getSectionKindString(SectionKind sectionKind) {
+	const char* stringTable[] = {
 		"<undefined>",             // SectionKind_Undefined
 		"user-defined",            // SectionKind_UserDefined
 		"public-type",             // SectionKind_PublicType
@@ -238,10 +220,8 @@ getSectionKindString(SectionKind sectionKind)
 }
 
 const char*
-getImageKindString(ImageKind imageKind)
-{
-	const char* stringTable[] =
-	{
+getImageKindString(ImageKind imageKind) {
+	const char* stringTable[] = {
 		"<undefined>", // ImageKind_Undefined
 		"html",        // ImageKind_Html
 		"latex",       // ImageKind_Latex
@@ -254,10 +234,8 @@ getImageKindString(ImageKind imageKind)
 }
 
 const char*
-getParamListKindString(ParamListKind paramListKind)
-{
-	const char* stringTable[] =
-	{
+getParamListKindString(ParamListKind paramListKind) {
+	const char* stringTable[] = {
 		"<undefined>",   // ParamListKind_Undefined
 		"param",         // ParamListKind_Param
 		"retval",        // ParamListKind_RetVal
@@ -271,10 +249,8 @@ getParamListKindString(ParamListKind paramListKind)
 }
 
 const char*
-getParamDirKindString(ParamDirKind paramDirKind)
-{
-	const char* stringTable[] =
-	{
+getParamDirKindString(ParamDirKind paramDirKind) {
+	const char* stringTable[] = {
 		"<undefined>", // ParamDirKind_Undefined
 		"in",          // ParamDirKind_In
 		"out",         // ParamDirKind_Out
@@ -287,10 +263,8 @@ getParamDirKindString(ParamDirKind paramDirKind)
 }
 
 const char*
-getAccessorKindString(AccessorKind accessorKind)
-{
-	const char* stringTable[] =
-	{
+getAccessorKindString(AccessorKind accessorKind) {
+	const char* stringTable[] = {
 		"<undefined>", // AccessorKind_Undefined
 		"retain",      // AccessorKind_Retain
 		"copy",        // AccessorKind_Copy

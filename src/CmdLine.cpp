@@ -18,10 +18,8 @@ bool
 CmdLineParser::onSwitch(
 	SwitchKind switchKind,
 	const sl::StringRef& value
-	)
-{
-	switch (switchKind)
-	{
+) {
+	switch (switchKind) {
 	case CmdLineSwitchKind_Help:
 		m_cmdLine->m_flags |= CmdLineFlag_Help;
 		break;
@@ -50,12 +48,9 @@ CmdLineParser::onSwitch(
 		Define* define = AXL_MEM_NEW(Define);
 		size_t i = value.find('=');
 
-		if (i == -1)
-		{
+		if (i == -1) {
 			define->m_name = value;
-		}
-		else
-		{
+		} else {
 			define->m_name = value.getSubString(0, i);
 			define->m_value = value.getSubString(i + 1);
 			define->m_hasValue = true; // even if value empty
@@ -69,8 +64,7 @@ CmdLineParser::onSwitch(
 }
 
 bool
-CmdLineParser::finalize()
-{
+CmdLineParser::finalize() {
 	if (m_cmdLine->m_configFileName.isEmpty())
 		if (io::doesFileExist(g_defaultConfigFileName))
 			m_cmdLine->m_configFileName = g_defaultConfigFileName;

@@ -16,22 +16,19 @@
 //..............................................................................
 
 bool
-Generator::create(const CmdLine* cmdLine)
-{
+Generator::create(const CmdLine* cmdLine) {
 	bool result = m_stringTemplate.create();
 	if (!result)
 		return false;
 
-	if (!cmdLine->m_configFileName.isEmpty())
-	{
+	if (!cmdLine->m_configFileName.isEmpty()) {
 		result = m_stringTemplate.m_luaState.doFile(cmdLine->m_configFileName);
 		if (!result)
 			return false;
 	}
 
 	sl::ConstIterator<Define> it = cmdLine->m_defineList.getHead();
-	for (; it; it++)
-	{
+	for (; it; it++) {
 		const Define* define = *it;
 		if (define->m_hasValue)
 			m_stringTemplate.m_luaState.setGlobalString(define->m_name, define->m_value);
@@ -41,8 +38,7 @@ Generator::create(const CmdLine* cmdLine)
 
 	m_stringTemplate.m_luaState.getGlobal("FRAME_DIR_LIST");
 	size_t count = m_stringTemplate.m_luaState.getRawLen();
-	for (size_t i = 1; i <= count; i++)
-	{
+	for (size_t i = 1; i <= count; i++) {
 		m_stringTemplate.m_luaState.getArrayElement(i);
 		sl::String dir = m_stringTemplate.m_luaState.popString();
 		m_frameDirList.insertTail(dir);
@@ -61,8 +57,7 @@ Generator::create(const CmdLine* cmdLine)
 	if (m_frameFileName.isEmpty())
 		m_frameFileName = g_defaultFrameFileName;
 
-	if (!io::findFilePath(m_frameFileName, &m_frameDirList))
-	{
+	if (!io::findFilePath(m_frameFileName, &m_frameDirList)) {
 		err::setFormatStringError("master frame file %s name missing", m_frameFileName.sz());
 		return false;
 	}
@@ -81,8 +76,7 @@ bool
 Generator::luaExport(
 	Module* module,
 	GlobalNamespace* globalNamespace
-	)
-{
+) {
 	m_stringTemplate.m_luaState.registerFunction("includeFile", includeFile_lua, this);
 	m_stringTemplate.m_luaState.registerFunction("includeFileWithIndent", includeFileWithIndent_lua, this);
 	m_stringTemplate.m_luaState.registerFunction("generateFile", generateFile_lua, this);
@@ -112,13 +106,11 @@ bool
 Generator::generate(
 	const sl::StringRef& targetFileName,
 	const sl::StringRef& frameFileName
-	)
-{
+) {
 	bool result;
 
 	sl::String frameFilePath = io::findFilePath(frameFileName, &m_frameDirList);
-	if (frameFilePath.isEmpty())
-	{
+	if (frameFilePath.isEmpty()) {
 		err::setFormatStringError("frame file '%s' not found", frameFileName.sz());
 		return false;
 	}
@@ -144,13 +136,11 @@ Generator::processFile(
 	const sl::StringRef& targetFileName,
 	const sl::StringRef& frameFileName,
 	size_t baseArgCount
-	)
-{
+) {
 	bool result;
 
 	sl::String frameFilePath = io::findFilePath(frameFileName, m_frameDir, &m_frameDirList);
-	if (frameFilePath.isEmpty())
-	{
+	if (frameFilePath.isEmpty()) {
 		err::setFormatStringError("frame '%s' not found", frameFileName.sz());
 		return false;
 	}
@@ -164,8 +154,7 @@ Generator::processFile(
 	ASSERT((size_t)top >= baseArgCount);
 	m_stringTemplate.setArgCount(top - baseArgCount);
 
-	if (!targetFileName.isEmpty())
-	{
+	if (!targetFileName.isEmpty()) {
 		sl::String prevTargetFileName = m_stringTemplate.m_luaState.getGlobalString("g_targetFileName");
 		m_stringTemplate.m_luaState.setGlobalString("g_targetFileName", targetFileName);
 
@@ -175,9 +164,7 @@ Generator::processFile(
 			return false;
 
 		m_stringTemplate.m_luaState.setGlobalString("g_targetFileName", prevTargetFileName);
-	}
-	else if (!indent.isEmpty())
-	{
+	} else if (!indent.isEmpty()) {
 		sl::String contents;
 		result = m_stringTemplate.processFile(&contents, frameFilePath);
 		if (!result)
@@ -185,8 +172,7 @@ Generator::processFile(
 
 		size_t offset = 0;
 
-		for (;;)
-		{
+		for (;;) {
 			contents.insert(offset, indent);
 			offset = contents.find('\n', offset + indent.getLength());
 			if (offset >= contents.getLength() - 1) // don't indent pre-eof
@@ -196,9 +182,7 @@ Generator::processFile(
 		}
 
 		m_stringTemplate.append(contents);
-	}
-	else
-	{
+	} else {
 		result = m_stringTemplate.processFile(NULL, frameFilePath);
 		if (!result)
 			return false;
@@ -211,8 +195,7 @@ Generator::processFile(
 }
 
 int
-Generator::includeFile_lua(lua_State* h)
-{
+Generator::includeFile_lua(lua_State* h) {
 	lua::LuaNonOwnerState luaState(h);
 	Generator* self = (Generator*)luaState.getContext();
 	ASSERT(self->m_stringTemplate.m_luaState == h);
@@ -220,8 +203,7 @@ Generator::includeFile_lua(lua_State* h)
 	sl::StringRef fileName = luaState.getString(1);
 
 	bool result = self->processFile(NULL, NULL, fileName, 1);
-	if (!result)
-	{
+	if (!result) {
 		luaState.prepareLastErrorString();
 		luaState.error();
 		ASSERT(false);
@@ -232,8 +214,7 @@ Generator::includeFile_lua(lua_State* h)
 }
 
 int
-Generator::includeFileWithIndent_lua(lua_State* h)
-{
+Generator::includeFileWithIndent_lua(lua_State* h) {
 	lua::LuaNonOwnerState luaState(h);
 	Generator* self = (Generator*)luaState.getContext();
 	ASSERT(self->m_stringTemplate.m_luaState == h);
@@ -243,8 +224,7 @@ Generator::includeFileWithIndent_lua(lua_State* h)
 
 	sl::String contents;
 	bool result = self->processFile(indent, NULL, fileName, 2);
-	if (!result)
-	{
+	if (!result) {
 		luaState.prepareLastErrorString();
 		luaState.error();
 		ASSERT(false);
@@ -255,8 +235,7 @@ Generator::includeFileWithIndent_lua(lua_State* h)
 }
 
 int
-Generator::generateFile_lua(lua_State* h)
-{
+Generator::generateFile_lua(lua_State* h) {
 	lua::LuaNonOwnerState luaState(h);
 	Generator* self = (Generator*)luaState.getContext();
 	ASSERT(self->m_stringTemplate.m_luaState == h);
@@ -265,8 +244,7 @@ Generator::generateFile_lua(lua_State* h)
 	sl::StringRef frameFileName = luaState.getString(2);
 
 	bool result = self->processFile(NULL, targetFileName, frameFileName, 2);
-	if (!result)
-	{
+	if (!result) {
 		luaState.prepareLastErrorString();
 		luaState.error();
 		ASSERT(false);

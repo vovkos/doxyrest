@@ -18,16 +18,14 @@ class DoxyXmlParser;
 
 //..............................................................................
 
-class DoxyXmlType
-{
+class DoxyXmlType {
 	friend class DoxyXmlParser;
 
 protected:
 	DoxyXmlParser* m_parser;
 
 public:
-	DoxyXmlType()
-	{
+	DoxyXmlType() {
 		m_parser = NULL;
 	}
 
@@ -36,8 +34,7 @@ public:
 		DoxyXmlParser* parser,
 		const char* name,
 		const char** attributes
-		)
-	{
+	) {
 		m_parser = parser;
 		return true;
 	}
@@ -47,15 +44,13 @@ public:
 	onStartElement(
 		const char* name,
 		const char** attributes
-		)
-	{
+	) {
 		return true;
 	}
 
 	virtual
 	bool
-	onEndElement(const char* name)
-	{
+	onEndElement(const char* name) {
 		return true;
 	}
 
@@ -64,28 +59,23 @@ public:
 	onCharacterData(
 		const char* string,
 		size_t length
-		)
-	{
+	) {
 		return true;
 	}
 
 	virtual
 	void
-	onPopType()
-	{
-	}
+	onPopType() {}
 };
 
 //..............................................................................
 
-class StringType: public DoxyXmlType
-{
+class StringType: public DoxyXmlType {
 protected:
 	sl::String* m_string;
 
 public:
-	StringType()
-	{
+	StringType() {
 		m_string = NULL;
 	}
 
@@ -95,8 +85,7 @@ public:
 		sl::String* string,
 		const char* name,
 		const char** attributes
-		)
-	{
+	) {
 		m_string = string;
 		return true;
 	}
@@ -106,8 +95,7 @@ public:
 	onCharacterData(
 		const char* string,
 		size_t length
-		)
-	{
+	) {
 		m_string->append(string, length);
 		return true;
 	}
@@ -115,23 +103,19 @@ public:
 
 //..............................................................................
 
-class DoxygenIndexType: public DoxyXmlType
-{
+class DoxygenIndexType: public DoxyXmlType {
 protected:
-	enum IndexElemKind
-	{
+	enum IndexElemKind {
 		IndexElemKind_Undefined = 0,
 		IndexElemKind_Compound,
 	};
 
-	enum IndexAttrKind
-	{
+	enum IndexAttrKind {
 		IndexAttrKind_Undefined = 0,
 		IndexAttrKind_Version,
 	};
 
-	enum CompoundAttrKind
-	{
+	enum CompoundAttrKind {
 		CompoundAttrKind_Undefined = 0,
 		CompoundAttrKind_RefId,
 		CompoundAttrKind_Kind,
@@ -156,21 +140,21 @@ public:
 		DoxyXmlParser* parser,
 		const char* name,
 		const char** attributes
-		);
+	);
 
 	virtual
 	bool
 	onStartElement(
 		const char* name,
 		const char** attributes
-		);
+	);
 
 protected:
 	bool
 	onCompound(
 		const char* name,
 		const char** attributes
-		);
+	);
 
 	bool
 	parseCompound(const char* refId);
@@ -178,17 +162,14 @@ protected:
 
 //..............................................................................
 
-class DoxygenCompoundType: public DoxyXmlType
-{
+class DoxygenCompoundType: public DoxyXmlType {
 protected:
-	enum ElemKind
-	{
+	enum ElemKind {
 		ElemKind_Undefined = 0,
 		ElemKind_CompoundDef,
 	};
 
-	enum AttrKind
-	{
+	enum AttrKind {
 		AttrKind_Undefined = 0,
 		AttrKind_Version,
 	};
@@ -207,23 +188,21 @@ public:
 		DoxyXmlParser* parser,
 		const char* name,
 		const char** attributes
-		);
+	);
 
 	virtual
 	bool
 	onStartElement(
 		const char* name,
 		const char** attributes
-		);
+	);
 };
 
 //..............................................................................
 
-class CompoundDefType: public DoxyXmlType
-{
+class CompoundDefType: public DoxyXmlType {
 protected:
-	enum ElemKind
-	{
+	enum ElemKind {
 		ElemKind_Undefined = 0,
 		ElemKind_CompoundName,
 		ElemKind_Title,
@@ -250,8 +229,7 @@ protected:
 		ElemKind_ListOfAllMembers,
 	};
 
-	enum AttrKind
-	{
+	enum AttrKind {
 		AttrKind_Undefined = 0,
 		AttrKind_Id,
 		AttrKind_Kind,
@@ -302,8 +280,7 @@ protected:
 	Compound* m_compound;
 
 public:
-	CompoundDefType()
-	{
+	CompoundDefType() {
 		m_compound = NULL;
 	}
 
@@ -312,14 +289,14 @@ public:
 		DoxyXmlParser* parser,
 		const char* name,
 		const char** attributes
-		);
+	);
 
 	virtual
 	bool
 	onStartElement(
 		const char* name,
 		const char** attributes
-		);
+	);
 
 	virtual
 	void
@@ -328,11 +305,9 @@ public:
 
 //..............................................................................
 
-class ListOfAllMembersType: public DoxyXmlType
-{
+class ListOfAllMembersType: public DoxyXmlType {
 protected:
-	enum ElemKind
-	{
+	enum ElemKind {
 		ElemKind_Undefined = 0,
 		ElemKind_Member,
 	};
@@ -346,18 +321,15 @@ public:
 
 //..............................................................................
 
-class MemberRefType: public DoxyXmlType
-{
+class MemberRefType: public DoxyXmlType {
 protected:
-	enum ElemKind
-	{
+	enum ElemKind {
 		ElemKind_Undefined = 0,
 		ElemKind_Scope,
 		ElemKind_Name,
 	};
 
-	enum AttrKind
-	{
+	enum AttrKind {
 		AttrKind_Undefined = 0,
 		AttrKind_RefId,
 		AttrKind_Prot,
@@ -382,11 +354,9 @@ public:
 
 //..............................................................................
 
-class CompoundRefType: public DoxyXmlType
-{
+class CompoundRefType: public DoxyXmlType {
 protected:
-	enum AttrKind
-	{
+	enum AttrKind {
 		AttrKind_Undefined = 0,
 		AttrKind_RefId,
 		AttrKind_Prot,
@@ -406,26 +376,22 @@ public:
 
 // ReimplementType
 
-enum ReimplementAttr
-{
+enum ReimplementAttr {
 	ReimplementAttrKind_RefId,
 };
 
 // IncType
 
-enum IncAttr
-{
+enum IncAttr {
 	IncAttrKind_RefId,
 	IncAttrKind_Local,
 };
 
 //..............................................................................
 
-class RefType: public DoxyXmlType
-{
+class RefType: public DoxyXmlType {
 protected:
-	enum AttrKind
-	{
+	enum AttrKind {
 		AttrKind_Undefined,
 		AttrKind_RefId,
 		AttrKind_ImportId,
@@ -444,8 +410,7 @@ protected:
 	Ref* m_ref;
 
 public:
-	RefType()
-	{
+	RefType() {
 		m_ref = NULL;
 	}
 
@@ -455,15 +420,14 @@ public:
 		sl::List<Ref>* list,
 		const char* name,
 		const char** attributes
-		);
+	);
 
 	virtual
 	bool
 	onCharacterData(
 		const char* string,
 		size_t length
-		)
-	{
+	) {
 		m_ref->m_text.append(string, length);
 		return true;
 	}
@@ -471,19 +435,16 @@ public:
 
 //..............................................................................
 
-class SectionDefType: public DoxyXmlType
-{
+class SectionDefType: public DoxyXmlType {
 protected:
-	enum ElemKind
-	{
+	enum ElemKind {
 		ElemKind_Undefined,
 		ElemKind_Header,
 		ElemKind_Description,
 		ElemKind_MemberDef,
 	};
 
-	enum AttrKind
-	{
+	enum AttrKind {
 		AttrKind_Undefined,
 		AttrKind_Kind,
 	};
@@ -502,8 +463,7 @@ protected:
 	Compound* m_parent;
 
 public:
-	SectionDefType()
-	{
+	SectionDefType() {
 		m_parent = NULL;
 	}
 
@@ -513,23 +473,21 @@ public:
 		Compound* parent,
 		const char* name,
 		const char** attributes
-		);
+	);
 
 	virtual
 	bool
 	onStartElement(
 		const char* name,
 		const char** attributes
-		);
+	);
 };
 
 //..............................................................................
 
-class MemberDefType: public DoxyXmlType
-{
+class MemberDefType: public DoxyXmlType {
 protected:
-	enum ElemKind
-	{
+	enum ElemKind {
 		ElemKind_Undefined,
 		ElemKind_TemplateParamList,
 		ElemKind_Type,
@@ -555,8 +513,7 @@ protected:
 		ElemKind_Includes,
 	};
 
-	enum AttrKind
-	{
+	enum AttrKind {
 		AttrKind_Undefined,
 		AttrKind_Kind,
 		AttrKind_Id,
@@ -660,8 +617,7 @@ protected:
 	Member* m_member;
 
 public:
-	MemberDefType()
-	{
+	MemberDefType() {
 		m_member = NULL;
 	}
 
@@ -671,23 +627,21 @@ public:
 		Compound* parent,
 		const char* name,
 		const char** attributes
-		);
+	);
 
 	virtual
 	bool
 	onStartElement(
 		const char* name,
 		const char** attributes
-		);
+	);
 };
 
 //..............................................................................
 
-class LocationType: public DoxyXmlType
-{
+class LocationType: public DoxyXmlType {
 protected:
-	enum AttrKind
-	{
+	enum AttrKind {
 		AttrKind_Undefined,
 		AttrKind_File,
 		AttrKind_Line,
@@ -713,16 +667,14 @@ public:
 		Location* location,
 		const char* name,
 		const char** attributes
-		);
+	);
 };
 
 //..............................................................................
 
-class DescriptionType: public DoxyXmlType
-{
+class DescriptionType: public DoxyXmlType {
 protected:
-	enum ElemKind
-	{
+	enum ElemKind {
 		ElemKind_Undefined,
 		ElemKind_Title,
 		ElemKind_Para,
@@ -747,23 +699,21 @@ public:
 		Description* description,
 		const char* name,
 		const char** attributes
-		);
+	);
 
 	virtual
 	bool
 	onStartElement(
 		const char* name,
 		const char** attributes
-		);
+	);
 };
 
 //..............................................................................
 
-class DocSectionBlockType: public DoxyXmlType
-{
+class DocSectionBlockType: public DoxyXmlType {
 protected:
-	enum ElemKind
-	{
+	enum ElemKind {
 		ElemKind_Undefined,
 		ElemKind_Title,
 		ElemKind_Para,
@@ -774,8 +724,7 @@ protected:
 		ElemKind_Internal,
 	};
 
-	enum AttrKind
-	{
+	enum AttrKind {
 		AttrKind_Undefined,
 		AttrKind_Id,
 	};
@@ -804,23 +753,21 @@ public:
 		sl::List<DocBlock>* list,
 		const char* name,
 		const char** attributes
-		);
+	);
 
 	virtual
 	bool
 	onStartElement(
 		const char* name,
 		const char** attributes
-		);
+	);
 };
 
 //..............................................................................
 
-class EnumValueType: public DoxyXmlType
-{
+class EnumValueType: public DoxyXmlType {
 protected:
-	enum ElemKind
-	{
+	enum ElemKind {
 		ElemKind_Undefined,
 		ElemKind_Name,
 		ElemKind_Initializer,
@@ -828,8 +775,7 @@ protected:
 		ElemKind_DetailedDescription,
 	};
 
-	enum AttrKind
-	{
+	enum AttrKind {
 		AttrKind_Undefined,
 		AttrKind_Id,
 		AttrKind_Prot,
@@ -851,8 +797,7 @@ protected:
 	EnumValue* m_enumValue;
 
 public:
-	EnumValueType()
-	{
+	EnumValueType() {
 		m_enumValue = NULL;
 	}
 
@@ -862,23 +807,21 @@ public:
 		Member* member,
 		const char* name,
 		const char** attributes
-		);
+	);
 
 	virtual
 	bool
 	onStartElement(
 		const char* name,
 		const char** attributes
-		);
+	);
 };
 
 //..............................................................................
 
-class TemplateParamListType: public DoxyXmlType
-{
+class TemplateParamListType: public DoxyXmlType {
 protected:
-	enum ElemKind
-	{
+	enum ElemKind {
 		ElemKind_Undefined,
 		ElemKind_Param,
 	};
@@ -891,8 +834,7 @@ protected:
 	sl::List<Param>* m_list;
 
 public:
-	TemplateParamListType()
-	{
+	TemplateParamListType() {
 		m_list = NULL;
 	}
 
@@ -902,30 +844,28 @@ public:
 		sl::List<Param>* list,
 		const char* name,
 		const char** attributes
-		);
+	);
 
 	bool
 	create(
 		DoxyXmlParser* parser,
 		const char* name,
 		const char** attributes
-		);
+	);
 
 	virtual
 	bool
 	onStartElement(
 		const char* name,
 		const char** attributes
-		);
+	);
 };
 
 //..............................................................................
 
-class ParamType: public DoxyXmlType
-{
+class ParamType: public DoxyXmlType {
 protected:
-	enum ElemKind
-	{
+	enum ElemKind {
 		ElemKind_Undefined,
 		ElemKind_Type,
 		ElemKind_DeclName,
@@ -950,8 +890,7 @@ protected:
 	Param* m_param;
 
 public:
-	ParamType()
-	{
+	ParamType() {
 		m_param = NULL;
 	}
 
@@ -961,23 +900,21 @@ public:
 		sl::List<Param>* list,
 		const char* name,
 		const char** attributes
-		);
+	);
 
 	virtual
 	bool
 	onStartElement(
 		const char* name,
 		const char** attributes
-		);
+	);
 };
 
 //..............................................................................
 
-class LinkedTextType: public DoxyXmlType
-{
+class LinkedTextType: public DoxyXmlType {
 protected:
-	enum ElemKind
-	{
+	enum ElemKind {
 		ElemKind_Undefined,
 		ElemKind_Ref,
 	};
@@ -991,8 +928,7 @@ protected:
 	RefText* m_refText;
 
 public:
-	LinkedTextType()
-	{
+	LinkedTextType() {
 		m_linkedText = NULL;
 		m_refText = NULL;
 	}
@@ -1003,22 +939,21 @@ public:
 		LinkedText* linkedText,
 		const char* name,
 		const char** attributes
-		);
+	);
 
 	virtual
 	bool
 	onStartElement(
 		const char* name,
 		const char** attributes
-		);
+	);
 
 	virtual
 	bool
 	onCharacterData(
 		const char* string,
 		size_t length
-		)
-	{
+	) {
 		m_refText->m_text.append(string, length);
 		return true;
 	}
@@ -1026,11 +961,9 @@ public:
 
 //..............................................................................
 
-class RefTextType: public DoxyXmlType
-{
+class RefTextType: public DoxyXmlType {
 protected:
-	enum AttrKind
-	{
+	enum AttrKind {
 		AttrKind_Undefined,
 		AttrKind_RefId,
 		AttrKind_KindRef,
@@ -1049,8 +982,7 @@ protected:
 	RefText* m_refText;
 
 public:
-	RefTextType()
-	{
+	RefTextType() {
 		m_refText = NULL;
 	}
 
@@ -1060,15 +992,14 @@ public:
 		LinkedText* linkedText,
 		const char* name,
 		const char** attributes
-		);
+	);
 
 	virtual
 	bool
 	onCharacterData(
 		const char* string,
 		size_t length
-		)
-	{
+	) {
 		m_refText->m_text.append(string, length);
 		return true;
 	}
@@ -1076,11 +1007,9 @@ public:
 
 //..............................................................................
 
-class DocParaType: public DoxyXmlType
-{
+class DocParaType: public DoxyXmlType {
 protected:
-	enum ElemKind
-	{
+	enum ElemKind {
 		ElemKind_Undefined,
 		ElemKind_Ref,
 		ElemKind_Anchor,
@@ -1106,8 +1035,7 @@ protected:
 	DocBlock* m_textBlock;
 
 public:
-	DocParaType()
-	{
+	DocParaType() {
 		m_paragraphBlock = NULL;
 		m_textBlock = NULL;
 	}
@@ -1118,22 +1046,21 @@ public:
 		sl::List<DocBlock>* blockList,
 		const char* name,
 		const char** attributes
-		);
+	);
 
 	virtual
 	bool
 	onStartElement(
 		const char* name,
 		const char** attributes
-		);
+	);
 
 	virtual
 	bool
 	onCharacterData(
 		const char* string,
 		size_t length
-		)
-	{
+	) {
 		m_textBlock->m_text.append(string, length);
 		return true;
 	}
@@ -1141,11 +1068,9 @@ public:
 
 //..............................................................................
 
-class DocRefTextType: public DoxyXmlType
-{
+class DocRefTextType: public DoxyXmlType {
 protected:
-	enum AttrKind
-	{
+	enum AttrKind {
 		AttrKind_Undefined,
 		AttrKind_RefId,
 		AttrKind_KindRef,
@@ -1162,8 +1087,7 @@ protected:
 	DocRefBlock* m_refBlock;
 
 public:
-	DocRefTextType()
-	{
+	DocRefTextType() {
 		m_refBlock = NULL;
 	}
 
@@ -1173,15 +1097,14 @@ public:
 		sl::List<DocBlock>* list,
 		const char* name,
 		const char** attributes
-		);
+	);
 
 	virtual
 	bool
 	onCharacterData(
 		const char* string,
 		size_t length
-		)
-	{
+	) {
 		m_refBlock->m_text.append(string, length);
 		return true;
 	}
@@ -1189,11 +1112,9 @@ public:
 
 //..............................................................................
 
-class DocAnchorType: public DoxyXmlType
-{
+class DocAnchorType: public DoxyXmlType {
 protected:
-	enum AttrKind
-	{
+	enum AttrKind {
 		AttrKind_Undefined,
 		AttrKind_Id,
 	};
@@ -1206,8 +1127,7 @@ protected:
 	DocAnchorBlock* m_anchorBlock;
 
 public:
-	DocAnchorType()
-	{
+	DocAnchorType() {
 		m_anchorBlock = NULL;
 	}
 
@@ -1217,15 +1137,14 @@ public:
 		sl::List<DocBlock>* list,
 		const char* name,
 		const char** attributes
-		);
+	);
 
 	virtual
 	bool
 	onCharacterData(
 		const char* string,
 		size_t length
-		)
-	{
+	) {
 		m_anchorBlock->m_text.append(string, length);
 		return true;
 	}
@@ -1233,11 +1152,9 @@ public:
 
 //..............................................................................
 
-class DocImageType: public DoxyXmlType
-{
+class DocImageType: public DoxyXmlType {
 protected:
-	enum AttrKind
-	{
+	enum AttrKind {
 		AttrKind_Undefined,
 		AttrKind_Type,
 		AttrKind_Name,
@@ -1256,8 +1173,7 @@ protected:
 	DocImageBlock* m_imageBlock;
 
 public:
-	DocImageType()
-	{
+	DocImageType() {
 		m_imageBlock = NULL;
 	}
 
@@ -1267,15 +1183,14 @@ public:
 		sl::List<DocBlock>* list,
 		const char* name,
 		const char** attributes
-		);
+	);
 
 	virtual
 	bool
 	onCharacterData(
 		const char* string,
 		size_t length
-		)
-	{
+	) {
 		m_imageBlock->m_text.append(string, length);
 		return true;
 	}
@@ -1283,11 +1198,9 @@ public:
 
 //..............................................................................
 
-class DocUlinkType: public DoxyXmlType
-{
+class DocUlinkType: public DoxyXmlType {
 protected:
-	enum AttrKind
-	{
+	enum AttrKind {
 		AttrKind_Undefined,
 		AttrKind_Url,
 	};
@@ -1300,8 +1213,7 @@ protected:
 	DocUlinkBlock* m_ulinkBlock;
 
 public:
-	DocUlinkType()
-	{
+	DocUlinkType() {
 		m_ulinkBlock = NULL;
 	}
 
@@ -1311,15 +1223,14 @@ public:
 		sl::List<DocBlock>* list,
 		const char* name,
 		const char** attributes
-		);
+	);
 
 	virtual
 	bool
 	onCharacterData(
 		const char* string,
 		size_t length
-		)
-	{
+	) {
 		m_ulinkBlock->m_text.append(string, length);
 		return true;
 	}
@@ -1327,11 +1238,9 @@ public:
 
 //..............................................................................
 
-class DocHeadingType: public DoxyXmlType
-{
+class DocHeadingType: public DoxyXmlType {
 protected:
-	enum AttrKind
-	{
+	enum AttrKind {
 		AttrKind_Undefined,
 		AttrKind_Level,
 	};
@@ -1344,8 +1253,7 @@ protected:
 	DocHeadingBlock* m_headingBlock;
 
 public:
-	DocHeadingType()
-	{
+	DocHeadingType() {
 		m_headingBlock = NULL;
 	}
 
@@ -1355,15 +1263,14 @@ public:
 		sl::List<DocBlock>* list,
 		const char* name,
 		const char** attributes
-		);
+	);
 
 	virtual
 	bool
 	onCharacterData(
 		const char* string,
 		size_t length
-		)
-	{
+	) {
 		m_headingBlock->m_text.append(string, length);
 		return true;
 	}
@@ -1371,17 +1278,14 @@ public:
 
 //..............................................................................
 
-class DocSimpleSectionType: public DoxyXmlType
-{
+class DocSimpleSectionType: public DoxyXmlType {
 protected:
-	enum ElemKind
-	{
+	enum ElemKind {
 		ElemKind_Undefined,
 		ElemKind_Para,
 	};
 
-	enum AttrKind
-	{
+	enum AttrKind {
 		AttrKind_Undefined,
 		AttrKind_Kind,
 	};
@@ -1404,56 +1308,50 @@ public:
 		sl::List<DocBlock>* list,
 		const char* name,
 		const char** attributes
-		);
+	);
 
 	virtual
 	bool
 	onStartElement(
 		const char* name,
 		const char** attributes
-		);
+	);
 };
 
 //..............................................................................
 
 // GraphType
 
-enum GraphElem
-{
+enum GraphElem {
 	GraphElemKind_Node,
 };
 
 // NodeType
 
-enum NodeElem
-{
+enum NodeElem {
 	NodeElemKind_Label,
 	NodeElemKind_Link,
 	NodeElemKind_ChildNode,
 };
 
-enum NodeAttr
-{
+enum NodeAttr {
 	NodeAttrKind_Id,
 };
 
 // NodeType
 
-enum ChildNodeElem
-{
+enum ChildNodeElem {
 	ChildNodeElemKind_EdgeLabel,
 };
 
-enum ChildNodeAttr
-{
+enum ChildNodeAttr {
 	ChildNodeAttrKind_RefId,
 	ChildNodeAttrKind_Relation
 };
 
 // LinkType
 
-enum LinkTypeAttr
-{
+enum LinkTypeAttr {
 	LinkTypeAttrKind_RefId,
 	LinkTypeAttrKind_External,
 };

@@ -783,8 +783,9 @@ function filterDefineArray(defineArray)
 
 		local isExcluded =
 			isItemExcludedByLocationFilter(item) or
-			EXCLUDE_EMPTY_DEFINES and item.initializer.isEmpty or
-			EXCLUDE_DEFINE_PATTERN and string.match(item.name, EXCLUDE_DEFINE_PATTERN)
+			EXCLUDE_DEFINE_PATTERN and string.match(item.name, EXCLUDE_DEFINE_PATTERN) or
+			EXCLUDE_EMPTY_DEFINES and item.initializer.isEmpty and
+			item.briefDescription.isEmpty and item.detailedDescription.isEmpty
 
 		if isExcluded then
 			table.remove(defineArray, i)

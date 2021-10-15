@@ -15,8 +15,13 @@
 
 import os
 import sys
+from packaging import version
+from sphinx import __version__ as sphinx_version_string
 
+
+sphinx_version = version.parse(sphinx_version_string)
 sys.path.insert(1, os.path.abspath('${AXL_DOC_SHARE_DIR}/sphinx'))
+
 
 # -- General configuration ------------------------------------------------
 
@@ -30,7 +35,10 @@ sys.path.insert(1, os.path.abspath('${AXL_DOC_SHARE_DIR}/sphinx'))
 extensions = ['axl']
 
 # disable permalinks
-html_add_permalinks = ''
+if sphinx_version < version.parse('3.5.0'):
+    html_add_permalinks = ''
+else:
+    html_permalinks = False
 
 # Add any paths that contain templates here, relative to this directory.
 # templates_path = []

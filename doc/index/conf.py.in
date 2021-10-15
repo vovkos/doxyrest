@@ -12,8 +12,15 @@
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
+
 import os
 import sys
+from packaging import version
+from sphinx import __version__ as sphinx_version_string
+
+
+sphinx_version = version.parse(sphinx_version_string)
+
 
 # -- General configuration ------------------------------------------------
 
@@ -27,7 +34,10 @@ import sys
 extensions = []
 
 # disable permalinks
-html_add_permalinks = ''
+if sphinx_version < version.parse('3.5.0'):
+    html_add_permalinks = ''
+else:
+    html_permalinks = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['${CMAKE_CURRENT_LIST_DIR}/templates']

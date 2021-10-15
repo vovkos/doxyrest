@@ -318,31 +318,6 @@ function formatDocBlock_sect(block, context, level)
 	return s .. "\n\n" .. text .. "\n\n"
 end
 
-function formatDocBlock_simplesect(block, context)
-	local s = ""
-	local text = getDocBlockText(block, context)
-
-	if block.simpleSectionKind == "return" then
-		if not context.returnSection then
-			context.returnSection = {}
-		end
-
-		local count = #context.returnSection
-		context.returnSection[count + 1] = text
-	elseif block.simpleSectionKind == "see" then
-		if not context.seeSection then
-			context.seeSection = {}
-		end
-
-		local count = #context.seeSection
-		context.seeSection[count + 1] = text
-	else
-		s = text
-	end
-
-	return s
-end
-
 function formatDocBlock_ulink(block, context)
 	return "`" .. block.text .. " <" .. block.url .. ">`__"
 end
@@ -408,6 +383,56 @@ function formatDocBlock_graph(block, context, graphtype)
 	code = trimTrailingWhitespace(code)
 
 	return "\n\n.. " .. graphtype .. "::\n\n" .. code .. "\n\n"
+end
+
+-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+function formatSimpleSectionBlock_return(block, context)
+	if not context.returnSection then
+		context.returnSection = {}
+	end
+
+	local count = #context.returnSection
+	context.returnSection[count + 1] = getDocBlockText(block, context)
+	return ""
+end
+
+function formatSimpleSectionBlock_see(block, context)
+	if not context.seeSection then
+		context.seeSection = {}
+	end
+
+	local count = #context.seeSection
+	context.seeSection[count + 1] = getDocBlockText(block, context)
+	return ""
+end
+
+function formatSimpleSectionBlock_admonition(block, context, kind)
+	local text = getDocBlockText(block, context)
+	text = replaceCommonSpacePrefix(text, "\t")
+	text = trimTrailingWhitespace(text)
+	return "\n\n.. " .. kind .. "::\n\n" .. text .. "\n\n"
+end
+
+-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+g_simpleSectblockKindFormatMap =
+{
+	["return"]    = formatSimpleSectionBlock_return,
+	["sa"]        = formatSimpleSectionBlock_see,
+	["see"]       = formatSimpleSectionBlock_see,
+	["note"]      = formatSimpleSectionBlock_admonition,
+	["attention"] = formatSimpleSectionBlock_admonition,
+	["warning"]   = formatSimpleSectionBlock_admonition,
+}
+
+function formatDocBlock_simplesect(block, context)
+	format = g_simpleSectblockKindFormatMap[block.simpleSectionKind]
+	if format then
+		return format(block, context, block.simpleSectionKind)
+	else
+		return getDocBlockText(block, context)
+	end
 end
 
 -- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

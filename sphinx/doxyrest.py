@@ -29,13 +29,27 @@ sphinx_version = version.parse(sphinx_version_string)
 this_dir = os.path.dirname(os.path.realpath(__file__))
 url_re_prog = re.compile('(ftp|https?)://')
 crefdb = {}
+cref_w_target_re_prog = re.compile('(.+?)\s*<([^<>]*)>$')
 
-def get_cref_target(text):
-    if text in crefdb:
-        return crefdb[text]
+def get_cref_target(text, target=None):
+    if not target:
+        target = text
 
-    warnings.warn('target not found for cref: ' + text, Warning, 2)
+    if target in crefdb:
+        return crefdb[target]
+
+    warnings.warn('target not found for cref: ' + target, Warning, 2)
     return None
+
+def get_cref_target_ex(text):
+    match = cref_w_target_re_prog.match(text)
+    if match:
+        text = match.group(1)
+        target = match.group(2)
+    else:
+        target = text
+
+    return get_cref_target(text, target), text
 
 # Sphinx.add_javascript was renamed to add_js_file in 1.8.0
 # Sphinx.add_stylesheet was renamed to add_css_file in 1.8.0
@@ -186,7 +200,6 @@ class RefCodeBlock(Directive):
             role = match.group(1)
             text = match.group(2)
             target = match.group(4)
-
             pos = match.end()
 
             if text:
@@ -212,7 +225,7 @@ class RefCodeBlock(Directive):
 
             else:
                 if not role or role == ':cref:':
-                    target = get_cref_target(target if target else text)
+                    target = get_cref_target(text, target)
                 elif not target:
                     target = text
 
@@ -279,7 +292,7 @@ class RefTransform(Transform):
                 target = match.group(4)
 
                 if not role or role == ':cref:':
-                    target = get_cref_target(text)
+                    target = get_cref_target(text, target)
 
                 node += create_ref_node(raw_text, text, target)
                 pos = match.end()
@@ -291,7 +304,7 @@ class RefTransform(Transform):
 #
 
 def cref_role(typ, raw_text, text, lineno, inliner, options={}, content=[]):
-    target = get_cref_target(text)
+    target, text = get_cref_target_ex(text)
 
     if text.find(' ') == -1:
         node = nodes.literal(raw_text, '')
@@ -320,7 +333,7 @@ class DoxyrestDomain(Domain):
         pass # as to avoid errors on parallel builds
 
     def resolve_any_xref(self, env, fromdocname, builder, target, node, contnode):
-        cref_target = get_cref_target(target)
+        cref_target = get_cref_target(target, target)
         if not cref_target:
             return []
 

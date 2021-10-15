@@ -305,12 +305,7 @@ class RefTransform(Transform):
 
 def cref_role(typ, raw_text, text, lineno, inliner, options={}, content=[]):
     target, text = get_cref_target_ex(text)
-
-    if text.find(' ') == -1:
-        node = nodes.literal(raw_text, '')
-    else:
-        node = nodes.inline(raw_text, '')
-
+    node = nodes.literal(raw_text, '')
     node['classes'] += ['doxyrest-cref']
     node += create_ref_node(raw_text, text, target)
     return [node], []

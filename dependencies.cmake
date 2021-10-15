@@ -34,7 +34,7 @@ set(
 		luadoxyxml
 		sphinx
 		latex
-	)
+)
 
 set(
 	AXL_IMPORT_DIR_LIST

@@ -341,7 +341,7 @@ PRE_OPERATOR_PARAM_LIST_SPACE = true
 		}
 ]]
 
-PRE_BODY_NL = true
+PRE_BODY_NL = false
 
 --[[!
 	Use multi-line parameter lists in function declarations if parameter count is

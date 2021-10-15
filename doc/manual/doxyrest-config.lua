@@ -11,5 +11,5 @@
 
 GLOBAL_AUX_COMPOUND_ID = "group_global"
 SORT_GLOBAL_MEMBERS = true
-PRE_BODY_NL = true
+PRE_BODY_NL = false
 CREF_DB = true

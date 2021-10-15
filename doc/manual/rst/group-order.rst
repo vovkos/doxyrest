@@ -18,6 +18,7 @@ Doxyrest provides a much more elegant approach by (optionally) assigning each gr
 
 .. code-block:: none
 
+	INTERNAL_DOCS = YES
 	ALIASES += "grouporder{1}=\internal :grouporder(\1) \endinternal"
 
 In your C/C++ code, you can now add this extra command to the documentation of your groups:
@@ -26,7 +27,7 @@ In your C/C++ code, you can now add this extra command to the documentation of y
 
 	/*!
 		\defgroup group_a Group A
-		\grouporder 1
+		\grouporder{1}
 
 		Documentation for group A goes here...
 	*/
@@ -35,7 +36,7 @@ In your C/C++ code, you can now add this extra command to the documentation of y
 
 	/*!
 		\defgroup group_b Group B
-		\grouporder 2
+		\grouporder{2}
 
 		Documentation for group B goes here...
 	*/
@@ -44,7 +45,7 @@ In your C/C++ code, you can now add this extra command to the documentation of y
 
 	/*!
 		\defgroup group_c Group C
-		\grouporder 3
+		\grouporder{3}
 
 		Documentation for group C goes here...
 	*/

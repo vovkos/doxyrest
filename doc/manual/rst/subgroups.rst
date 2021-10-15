@@ -20,6 +20,7 @@ In your ``Doxyfile``, add this alias:
 
 .. code-block:: none
 
+	INTERNAL_DOCS = YES
 	ALIASES += "subgroup=\internal :subgroup: \endinternal"
 
 In your C/C++ code, add this special comment to the very first member in the subgroup:

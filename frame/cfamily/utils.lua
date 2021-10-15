@@ -207,18 +207,19 @@ function getParamArrayString_ml(paramArray, isRef, lbrace, rbrace, indent, nl)
 	elseif count == 1  then
 		s = lbrace .. getParamString(paramArray[1], isRef) .. rbrace
 	else
-		s = lbrace .. nl .. indent .. "\t"
+		s = lbrace .. nl
 
 		for i = 1, count do
-			s = s .. getParamString(paramArray[i], isRef)
+			s = s .. indent .. "\t" .. getParamString(paramArray[i], isRef)
 
 			if i ~= count then
 				s = s .. ","
 			end
 
-			s = s .. nl .. indent .. "\t"
+			s = s .. nl
 		end
-		s = s .. rbrace
+
+		s = s .. indent .. rbrace
 	end
 
 	return s

@@ -142,6 +142,20 @@ function getLinkedTextString(text, isRef)
 	return s
 end
 
+function findLinkedTextEnum(text)
+	for i = 1, #text.refTextArray do
+		local refText = text.refTextArray[i]
+		if refText.id ~= "" then
+			local member = findMemberById(refText.id)
+			if member ~= nil and member.memberKind == "enum" then
+				return member
+			end
+		end
+	end
+
+	return nil
+end
+
 -------------------------------------------------------------------------------
 
 -- param array formatting

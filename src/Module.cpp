@@ -463,6 +463,9 @@ Member::luaExport(lua::LuaState* luaState) {
 		break;
 
 	case MemberKind_Enum:
+		m_type.luaExport(luaState);
+		luaState->setMember("baseType");
+
 		removeDuplicates(&m_enumValueList);
 		luaExportList(luaState, m_enumValueList);
 		luaState->setMember("enumValueArray");

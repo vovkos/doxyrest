@@ -67,6 +67,14 @@ protected:
 	int
 	generateFile_lua(lua_State* h);
 
+	static
+	int
+	findMemberById_lua(lua_State* h);
+
+	static
+	int
+	findCompoundById_lua(lua_State* h);
+
 	bool
 	processFile(
 		const sl::StringRef& indent,

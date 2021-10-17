@@ -80,6 +80,8 @@ Generator::luaExport(
 	m_stringTemplate.m_luaState.registerFunction("includeFile", includeFile_lua, this);
 	m_stringTemplate.m_luaState.registerFunction("includeFileWithIndent", includeFileWithIndent_lua, this);
 	m_stringTemplate.m_luaState.registerFunction("generateFile", generateFile_lua, this);
+	m_stringTemplate.m_luaState.registerFunction("findMemberById", findMemberById_lua, module);
+	m_stringTemplate.m_luaState.registerFunction("findCompoundById", findCompoundById_lua, module);
 
 	m_stringTemplate.m_luaState.createTable();
 	m_stringTemplate.m_luaState.setGlobal("g_exportCache");
@@ -95,9 +97,6 @@ Generator::luaExport(
 
 	luaExportArray(&m_stringTemplate.m_luaState, module->m_exampleArray);
 	m_stringTemplate.m_luaState.setGlobal("g_exampleArray");
-
-	m_stringTemplate.m_luaState.pushNil(); // export cache is only needed during export-time
-	m_stringTemplate.m_luaState.setGlobal("g_exportCache");
 
 	return true;
 }
@@ -252,6 +251,40 @@ Generator::generateFile_lua(lua_State* h) {
 	}
 
 	return 0;
+}
+
+int
+Generator::findMemberById_lua(lua_State* h) {
+	lua::LuaNonOwnerState luaState(h);
+	Module* module = (Module*)luaState.getContext();
+
+	sl::StringRef id = luaState.getString(1);
+	Member* member = module->m_memberMap.findValue(id, NULL);
+	if (!member)
+		luaState.pushNil(); // not found
+	else {
+		ASSERT(member->m_cacheIdx != -1); // should already be in the cache
+		member->luaExport(&luaState);
+	}
+
+	return 1;
+}
+
+int
+Generator::findCompoundById_lua(lua_State* h) {
+	lua::LuaNonOwnerState luaState(h);
+	Module* module = (Module*)luaState.getContext();
+
+	sl::StringRef id = luaState.getString(1);
+	Compound* compound = module->m_compoundMap.findValue(id, NULL);
+	if (!compound)
+		luaState.pushNil(); // not found
+	else {
+		ASSERT(compound->m_cacheIdx != -1); // should already be in the cache
+		compound->luaExport(&luaState);
+	}
+
+	return 1;
 }
 
 //..............................................................................

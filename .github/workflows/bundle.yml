@@ -1,0 +1,37 @@
+name: Update Bundle-repo
+
+on:
+    workflow_run:
+        workflows: ["GitHub CI"]
+        branches: [master]
+        types: [completed]
+
+jobs:
+    updateBundle:
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        runs-on: ubuntu-latest
+        env:
+            DOXYREST_B_ID_RSA: ${{secrets.DOXYREST_B_ID_RSA}}
+        steps:
+        -   name: Update doxyrest_b
+            run: |
+                mkdir -p ~/.ssh
+                echo "$DOXYREST_B_ID_RSA" > ~/.ssh/id_rsa
+                chmod 600 ~/.ssh/id_rsa
+
+                git clone git@github.com:vovkos/doxyrest_b
+                cd doxyrest_b
+
+                git submodule update --init
+                git submodule foreach git checkout master
+
+                COMMIT_MESSAGE=$(perl ./doxyrest/ci/github-actions/get-submodule-update-commit-message.pl)
+                if [[ "$COMMIT_MESSAGE" == "" ]]; then
+                    echo "nothing to commit, submodules are up-to-date."
+                    exit 0
+                fi
+
+                git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                git config user.name "GitHub Actions"
+                git commit --all --message "$COMMIT_MESSAGE"
+                git push

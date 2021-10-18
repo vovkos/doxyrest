@@ -1,0 +1,231 @@
+name: GitHub CI
+
+on:
+-   push
+-   pull_request
+
+jobs:
+    windowsBuild:
+        name: Windows Build
+        runs-on: windows-2016
+
+        strategy:
+            fail-fast: false
+            matrix:
+                CONFIGURATION:
+                -   Debug
+                -   Release
+
+                TARGET_CPU:
+                -   x86
+                -   amd64
+
+        defaults:
+            run:
+                shell: cmd
+
+        steps:
+        -   name: Checkout repo
+            uses: actions/checkout@v2
+
+        -   name: Install
+            run: |
+                set CONFIGURATION=${{matrix.CONFIGURATION}}
+                set LLVM_VERSION=${{matrix.LLVM_VERSION}}
+                call ci\github-actions\set-env.bat msvc15 ${{matrix.TARGET_CPU}}
+                call ci\github-actions\install-windows.bat
+                git clone --depth 1 https://github.com/vovkos/axl
+
+        -   name: Build and test
+            run: |
+                set CONFIGURATION=${{matrix.CONFIGURATION}}
+                set LLVM_VERSION=${{matrix.LLVM_VERSION}}
+                set DOWNLOAD_DIR=%CD:~0,2%\downloads
+                set DOWNLOAD_DIR_CMAKE=%DOWNLOAD_DIR:\=/%
+                set THIS_DIR=%CD%
+                set THIS_DIR_CMAKE=%THIS_DIR:\=/%
+
+                call ci\github-actions\set-env.bat msvc15 ${{matrix.TARGET_CPU}}
+
+                echo building expat now...
+                dir %DOWNLOAD_DIR%
+                echo now in: %CD%
+
+                mkdir %DOWNLOAD_DIR%\expat\build
+                cd %DOWNLOAD_DIR%\expat\build
+
+                echo now in: %CD%
+
+                cmake .. %CMAKE_CONFIGURE_FLAGS% %EXPAT_CMAKE_FLAGS% || exit
+                cmake --build . %CMAKE_BUILD_FLAGS% || exit
+                
+                cd %THIS_DIR%
+                echo set (EXPAT_INC_DIR %DOWNLOAD_DIR_CMAKE%/expat/lib) >> paths.cmake
+                echo set (EXPAT_LIB_DIR %DOWNLOAD_DIR_CMAKE%/expat/build/%CONFIGURATION%) >> paths.cmake
+
+                mkdir axl\build
+                cd axl\build
+                cmake .. %CMAKE_CONFIGURE_FLAGS% || exit
+                cmake --build . %CMAKE_BUILD_FLAGS% || exit
+
+                cd %THIS_DIR%
+                echo set (AXL_CMAKE_DIR %THIS_DIR_CMAKE%/axl/cmake %THIS_DIR_CMAKE%/axl/build/cmake) >> paths.cmake
+
+                mkdir build
+                cd build
+                cmake .. %CMAKE_CONFIGURE_FLAGS% || exit
+                cmake --build . %CMAKE_BUILD_FLAGS% || exit
+                ctest --output-on-failure -C %CONFIGURATION% || exit
+
+    linuxBuild:
+        name: Linux Build
+        runs-on: ubuntu-18.04
+
+        strategy:
+            fail-fast: false
+            matrix:
+                CONFIGURATION:
+                -   Debug
+                -   Release
+
+                TARGET_CPU:
+                -   x86
+                -   amd64
+
+                COMPILER:
+                -   gcc
+                -   clang
+
+        env:
+            # BUILD_DOC: ${{ github.ref == 'refs/heads/master' && matrix.CONFIGURATION == 'Release' && matrix.TARGET_CPU == 'amd64' && matrix.COMPILER == 'gcc' }}
+            BUILD_DOC: ${{ matrix.CONFIGURATION == 'Release' && matrix.TARGET_CPU == 'amd64' && matrix.COMPILER == 'gcc' }}
+
+        defaults:
+            run:
+                shell: bash
+
+        steps:
+        -   name: Checkout repo
+            uses: actions/checkout@v2
+
+        -   name: Install
+            run: |
+                export TARGET_CPU=${{matrix.TARGET_CPU}}
+                source ./ci/github-actions/install-linux.sh
+                git clone --depth 1 https://github.com/vovkos/axl
+
+        -   name: Install documentation tools
+            if: ${{ env.BUILD_DOC == 'true' }}
+            run: |
+                git clone --depth 1 https://github.com/vovkos/graco
+                git clone --depth 1 https://github.com/vovkos/luadoxyxml
+
+        -   name: Build and test
+            run: |
+                THIS_DIR=$(pwd)
+                export CC=$(which ${{matrix.COMPILER}})
+                export CXX=$(which ${{matrix.COMPILER}}++)
+
+                mkdir axl/build
+                pushd axl/build
+                cmake .. -DTARGET_CPU=${{matrix.TARGET_CPU}} -DCMAKE_BUILD_TYPE=${{matrix.CONFIGURATION}}
+                make
+                popd
+
+                echo "set (AXL_CMAKE_DIR $THIS_DIR/axl/cmake $THIS_DIR/axl/build/cmake)" >> paths.cmake
+
+                mkdir build
+                pushd build
+                cmake .. -DTARGET_CPU=${{matrix.TARGET_CPU}} -DCMAKE_BUILD_TYPE=${{matrix.CONFIGURATION}}
+                make
+                ctest --output-on-failure
+                popd
+
+        -   name: Build documentation tools
+            if: ${{ env.BUILD_DOC == 'true' }}
+            run: |
+                THIS_DIR=$(pwd)
+
+                mkdir graco/build
+                pushd graco/build
+                cmake .. -DTARGET_CPU=${{matrix.TARGET_CPU}} -DCMAKE_BUILD_TYPE=${{matrix.CONFIGURATION}}
+                make
+                popd
+
+                echo "set(GRACO_CMAKE_DIR $THIS_DIR/graco/cmake $THIS_DIR/graco/build/cmake)" >> paths.cmake
+
+                mkdir luadoxyxml/build
+                pushd luadoxyxml/build
+                cmake .. -DTARGET_CPU=${{matrix.TARGET_CPU}} -DCMAKE_BUILD_TYPE=${{matrix.CONFIGURATION}}
+                make
+                popd
+
+                echo "set(LUADOXYXML_EXE $THIS_DIR/luadoxyxml/build/bin/${{matrix.CONFIGURATION}}/luadoxyxml)" >> paths.cmake
+
+                pushd build
+                cmake .
+                popd
+
+        -   name: Build documentation
+            if: ${{ env.BUILD_DOC == 'true' }}
+            run: |
+                pushd build/doc
+                source index/build-html.sh
+                source build-guide/build-html.sh
+                source manual/build-xml.sh
+                source manual/build-rst.sh
+                source manual/build-html.sh
+                touch html/.nojekyll
+                popd
+
+        -   name: Deploy to GitHub pages
+            if: ${{ env.BUILD_DOC == 'true' }}
+            uses: peaceiris/actions-gh-pages@v3
+            with:
+                github_token: ${{secrets.GITHUB_TOKEN}}
+                publish_dir: build/doc/html
+                force_orphan: true
+
+    macOsBuild:
+        name: macOS Build
+        runs-on: macos-10.15
+
+        strategy:
+            fail-fast: false
+            matrix:
+                CONFIGURATION:
+                -   Debug
+                -   Release
+
+        defaults:
+            run:
+                shell: bash
+
+        steps:
+        -   name: Checkout repo
+            uses: actions/checkout@v2
+
+        -   name: Install
+            run: |
+                pwd
+                source ./ci/github-actions/install-osx.sh
+                git clone --depth 1 https://github.com/vovkos/axl
+
+        -   name: Build and test
+            run: |
+                THIS_DIR=$(pwd)
+
+                mkdir axl/build
+                pushd axl/build
+                cmake .. -DCMAKE_BUILD_TYPE=${{matrix.CONFIGURATION}}
+                make
+                popd
+
+                echo "set (AXL_CMAKE_DIR $THIS_DIR/axl/cmake $THIS_DIR/axl/build/cmake)" >> paths.cmake
+
+                mkdir build
+                pushd build
+                cmake .. -DCMAKE_BUILD_TYPE=${{matrix.CONFIGURATION}}
+                make
+                ctest --output-on-failure
+                popd

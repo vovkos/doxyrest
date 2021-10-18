@@ -49,7 +49,6 @@ matrix:
         -   image: Visual Studio 2017
             TOOLCHAIN: msvc14
 
-
 install:
     - call ci\appveyor\set-env.bat %TOOLCHAIN% %PLATFORM%
     - call ci\appveyor\install.bat
@@ -61,29 +60,3 @@ build_script:
 
 test_script:
     - ctest -C %CONFIGURATION% --output-on-failure
-
-notifications:
-    -   provider: Webhook
-        on_build_success: true
-        on_build_failure: false
-
-        url: http://jancy.org:5005/appveyor-ci
-
-artifacts:
-    -   path: $(DOXYREST_PACKAGE_FILE)
-        name: doxyrest_package
-
-deploy:
-    description: '$(APPVEYOR_REPO_TAG_NAME)'
-    provider: GitHub
-
-    auth_token:
-        secure: jpZmZjs4rexF7ix1wvN56hvAac2tGVAffQGsygfqMfR34Ls1SkvC1DQaf4On7RTB
-
-    artifact: doxyrest_package
-    force_update: true
-
-    on:
-        appveyor_repo_tag: true
-        toolchain: msvc10
-        configuration: Release

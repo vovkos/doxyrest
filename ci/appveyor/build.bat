@@ -34,7 +34,7 @@ cd build
 cmake .. %CMAKE_CONFIGURE_FLAGS%
 cmake --build . %CMAKE_BUILD_FLAGS%
 
-if not "%BUILD_PACKAGE%" == "" (call :package)
+:: if not "%BUILD_PACKAGE%" == "" (call :package)
 
 goto :eof
 

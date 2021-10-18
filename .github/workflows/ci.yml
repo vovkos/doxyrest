@@ -20,6 +20,9 @@ jobs:
                 -   x86
                 -   amd64
 
+        env:
+            RELEASE: ${{ startsWith(github.ref, 'refs/tags/') && matrix.CONFIGURATION == 'Release' }}
+
         defaults:
             run:
                 shell: cmd
@@ -47,15 +50,8 @@ jobs:
 
                 call ci\github-actions\set-env.bat msvc15 ${{matrix.TARGET_CPU}}
 
-                echo building expat now...
-                dir %DOWNLOAD_DIR%
-                echo now in: %CD%
-
                 mkdir %DOWNLOAD_DIR%\expat\build
                 cd %DOWNLOAD_DIR%\expat\build
-
-                echo now in: %CD%
-
                 cmake .. %CMAKE_CONFIGURE_FLAGS% %EXPAT_CMAKE_FLAGS% || exit
                 cmake --build . %CMAKE_BUILD_FLAGS% || exit
                 
@@ -77,6 +73,29 @@ jobs:
                 cmake --build . %CMAKE_BUILD_FLAGS% || exit
                 ctest --output-on-failure -C %CONFIGURATION% || exit
 
+        -   name: Package
+            id: PACKAGE
+            if: ${{ env.RELEASE == 'true' }}
+            run: |
+                set THIS_DIR=%CD%
+                set THIS_DIR_CMAKE=%THIS_DIR:\=/%
+
+                cd build
+                cpack -G 7Z -C Release
+
+                for /f "usebackq tokens=*" %%i in (`cmake -P print-package-file-name.cmake 2^>^&1`) do (set CPACK_PACKAGE_FILE_NAME=%%i)
+                set DEPLOY_FILE=build/%CPACK_PACKAGE_FILE_NAME%.7z
+
+                echo ::set-output name=DEPLOY_FILE::%DEPLOY_FILE%
+
+        -   name: Deploy to GitHub Releases
+            uses: softprops/action-gh-release@v1
+            if: ${{ env.RELEASE == 'true' }}
+            env:
+                GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+            with:
+                files: ${{steps.PACKAGE.outputs.DEPLOY_FILE}}
+
     linuxBuild:
         name: Linux Build
         runs-on: ubuntu-18.04
@@ -97,8 +116,8 @@ jobs:
                 -   clang
 
         env:
-            # BUILD_DOC: ${{ github.ref == 'refs/heads/master' && matrix.CONFIGURATION == 'Release' && matrix.TARGET_CPU == 'amd64' && matrix.COMPILER == 'gcc' }}
-            BUILD_DOC: ${{ matrix.CONFIGURATION == 'Release' && matrix.TARGET_CPU == 'amd64' && matrix.COMPILER == 'gcc' }}
+            RELEASE: ${{ startsWith(github.ref, 'refs/tags/') && matrix.CONFIGURATION == 'Release' && matrix.COMPILER == 'gcc' }}
+            BUILD_DOC: ${{ github.ref == 'refs/heads/master' && matrix.CONFIGURATION == 'Release' && matrix.TARGET_CPU == 'amd64' && matrix.COMPILER == 'gcc' }}
 
         defaults:
             run:
@@ -178,7 +197,30 @@ jobs:
                 touch html/.nojekyll
                 popd
 
-        -   name: Deploy to GitHub pages
+        -   name: Package
+            id: PACKAGE
+            if: ${{ env.RELEASE == 'true' }}
+            run: |
+                set THIS_DIR=%CD%
+                set THIS_DIR_CMAKE=%THIS_DIR:\=/%
+
+                cd build
+                cpack -G TXZ -C Release
+
+                CPACK_PACKAGE_FILE_NAME=$(cmake -P print-package-file-name.cmake)
+                DEPLOY_FILE=build/%CPACK_PACKAGE_FILE_NAME.tar.xz
+
+                echo ::set-output name=DEPLOY_FILE::$DEPLOY_FILE
+
+        -   name: Deploy to GitHub Releases
+            if: ${{ env.RELEASE == 'true' }}
+            uses: softprops/action-gh-release@v1
+            env:
+                GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+            with:
+                files: ${{steps.PACKAGE.outputs.DEPLOY_FILE}}
+
+        -   name: Deploy to GitHub Pages
             if: ${{ env.BUILD_DOC == 'true' }}
             uses: peaceiris/actions-gh-pages@v3
             with:
@@ -196,6 +238,9 @@ jobs:
                 CONFIGURATION:
                 -   Debug
                 -   Release
+
+        env:
+            RELEASE: ${{ startsWith(github.ref, 'refs/tags/') && matrix.CONFIGURATION == 'Release' }}
 
         defaults:
             run:
@@ -229,3 +274,26 @@ jobs:
                 make
                 ctest --output-on-failure
                 popd
+
+        -   name: Package
+            id: PACKAGE
+            if: ${{ env.RELEASE == 'true' }}
+            run: |
+                set THIS_DIR=%CD%
+                set THIS_DIR_CMAKE=%THIS_DIR:\=/%
+
+                cd build
+                cpack -G TXZ -C Release
+
+                CPACK_PACKAGE_FILE_NAME=$(cmake -P print-package-file-name.cmake)
+                DEPLOY_FILE=build/%CPACK_PACKAGE_FILE_NAME.tar.xz
+
+                echo ::set-output name=DEPLOY_FILE::$DEPLOY_FILE
+
+        -   name: Deploy to GitHub Releases
+            if: ${{ env.RELEASE == 'true' }}
+            uses: softprops/action-gh-release@v1
+            env:
+                GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+            with:
+                files: ${{steps.PACKAGE.outputs.DEPLOY_FILE}}

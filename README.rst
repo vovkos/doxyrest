@@ -104,7 +104,7 @@ New in Doxyrest 2
 					void bar(
 						int a,
 						int b
-						);
+					);
 
 \... and many `other settings <https://vovkos.github.io/doxyrest/manual/group_frame-config.html>`__. Or -- create a *completely custom* style by editing frames!
 

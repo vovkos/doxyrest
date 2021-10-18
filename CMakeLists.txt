@@ -95,7 +95,7 @@ endif()
 include(CPack)
 
 configure_file(
-	${CMAKE_CURRENT_LIST_DIR}/ci/print-package-file-name.cmake
+	${CMAKE_CURRENT_LIST_DIR}/ci/github-actions/print-package-file-name.cmake
 	${CMAKE_CURRENT_BINARY_DIR}/print-package-file-name.cmake
 	COPYONLY
 )

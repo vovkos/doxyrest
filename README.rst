@@ -33,7 +33,7 @@ This elaborate pipeline allows building beautiful documentation for C/C++ APIs w
 Latest Release
 --------------
 
-`Doxyrest 2.1.2 <https://github.com/vovkos/doxyrest/releases/tag/doxyrest-2.1.2>`__
+`Doxyrest 2.1.3 <https://github.com/vovkos/doxyrest/releases/tag/doxyrest-2.1.3>`__
 
 New in Doxyrest 2
 -----------------

@@ -737,7 +737,7 @@ Compound::unspecializeName() {
 
 	}
 
-	m_name.setReducedLength(unspecializedNameLength);
+	m_name.overrideLength(unspecializedNameLength);
 	m_name.trimRight();
 
 	const char* x = strchr(m_name, '>');

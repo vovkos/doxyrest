@@ -104,7 +104,7 @@ set EXPAT_CMAKE_FLAGS= ^
 
 set RAGEL_DOWNLOAD_URL=https://github.com/eloraiby/ragel-windows/raw/master/ragel.exe
 
-set CMAKE_CONFIGURE_FLAGS=-G "%CMAKE_GENERATOR%" %CMAKE_ARCH_OPTIONS%
+set CMAKE_CONFIGURE_FLAGS=-G "%CMAKE_GENERATOR%" %CMAKE_OPTIONS%
 
 set CMAKE_BUILD_FLAGS= ^
 	--config %CONFIGURATION% ^

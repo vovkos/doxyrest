@@ -1242,7 +1242,6 @@ DocImageType::create(
 	m_parser = parser;
 	m_imageBlock = AXL_MEM_NEW(DocImageBlock);
 	m_imageBlock->m_blockKind = name;
-	list->insertTail(m_imageBlock);
 
 	while (*attributes) {
 		AttrKind attrKind = AttrKindMap::findValue(attributes[0], AttrKind_Undefined);
@@ -1265,6 +1264,10 @@ DocImageType::create(
 		}
 
 		attributes += 2;
+	}
+
+	if (m_imageBlock->m_imageKind == ImageKind_Html) {
+		list->insertTail(m_imageBlock);
 	}
 
 	return true;

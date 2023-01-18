@@ -127,9 +127,14 @@ public:
 		const char** attributes
 	) {
 		T* type = AXL_MEM_NEW(T);
-		TypeStackEntry entry = { type, 0 };
-		m_typeStack.append(entry);
-		return type->create(this, context, name, attributes);
+		if (type->create(this, context, name, attributes)) {
+			TypeStackEntry entry = { type, 0 };
+			m_typeStack.append(entry);
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	Compound*

@@ -39,6 +39,7 @@ echo set (LUA_INC_DIR %DOWNLOAD_DIR_CMAKE%/lua/include) >> paths.cmake
 echo set (LUA_LIB_DIR %DOWNLOAD_DIR_CMAKE%/lua) >> paths.cmake
 echo set (LUA_DLL_DIR %DOWNLOAD_DIR_CMAKE%/lua) >> paths.cmake
 echo set (LUA_LIB_NAME %LUA_LIB_NAME%) >> paths.cmake
+echo set (OPENSSL_INC_DIR DISABLED) >> paths.cmake
 
 :: . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 

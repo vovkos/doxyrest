@@ -157,6 +157,7 @@ target_link_libraries(
 	axl_lex
 	axl_xml
 	axl_io
+	axl_mem_new
 	axl_core
 	expat
 	${LUA_LIB_NAME}

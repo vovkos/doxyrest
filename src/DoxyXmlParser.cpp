@@ -44,7 +44,7 @@ DoxyXmlParser::clear() {
 	size_t count = m_typeStack.getCount();
 	for (size_t i = 0; i < count; i++) {
 		DoxyXmlType* type = m_typeStack[i].m_type;
-		AXL_MEM_DELETE(type);
+		delete type;
 	}
 
 	m_typeStack.clear();
@@ -56,7 +56,7 @@ DoxyXmlParser::popType() {
 
 	DoxyXmlType* type = m_typeStack.getBack().m_type;
 	type->onPopType();
-	AXL_MEM_DELETE(type);
+	delete type;
 
 	m_typeStack.pop();
 }

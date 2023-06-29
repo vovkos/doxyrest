@@ -152,7 +152,7 @@ CompoundDefType::create(
 	Module* module = parser->getModule();
 
 	m_parser = parser;
-	m_compound = AXL_MEM_NEW(Compound);
+	m_compound = new Compound;
 	module->m_compoundList.insertTail(m_compound);
 	parser->pushCompound(m_compound);
 
@@ -336,7 +336,7 @@ RefType::create(
 	const char** attributes
 ) {
 	m_parser = parser;
-	m_ref = AXL_MEM_NEW(Ref);
+	m_ref = new Ref;
 	list->insertTail(m_ref);
 
 	while (*attributes) {
@@ -426,7 +426,7 @@ MemberDefType::create(
 	Module* module = parser->getModule();
 
 	m_parser = parser;
-	m_member = AXL_MEM_NEW(Member);
+	m_member = new Member;
 	m_member->m_parentCompound = parent;
 	parent->m_memberList.insertTail(m_member);
 
@@ -810,7 +810,7 @@ DocSectionBlockType::create(
 	const char** attributes
 ) {
 	m_parser = parser;
-	m_sectionBlock = AXL_MEM_NEW(DocSectionBlock);
+	m_sectionBlock = new DocSectionBlock;
 	m_sectionBlock->m_blockKind = name;
 	list->insertTail(m_sectionBlock);
 
@@ -867,7 +867,7 @@ EnumValueType::create(
 	Module* module = parser->getModule();
 
 	m_parser = parser;
-	m_enumValue = AXL_MEM_NEW(EnumValue);
+	m_enumValue = new EnumValue;
 	m_enumValue->m_parentEnum = member;
 	member->m_enumValueList.insertTail(m_enumValue);
 
@@ -982,7 +982,7 @@ ParamType::create(
 	const char** attributes
 ) {
 	m_parser = parser;
-	m_param = AXL_MEM_NEW(Param);
+	m_param = new Param;
 	list->insertTail(m_param);
 
 	return true;
@@ -1038,7 +1038,7 @@ LinkedTextType::create(
 ) {
 	m_parser = parser;
 	m_linkedText = linkedText;
-	m_refText = AXL_MEM_NEW(RefText);
+	m_refText = new RefText;
 	m_linkedText->m_refTextList.insertTail(m_refText);
 
 	return true;
@@ -1056,7 +1056,7 @@ LinkedTextType::onStartElement(
 		break;
 	}
 
-	m_refText = AXL_MEM_NEW(RefText);
+	m_refText = new RefText;
 	m_linkedText->m_refTextList.insertTail(m_refText);
 	return true;
 }
@@ -1071,7 +1071,7 @@ RefTextType::create(
 	const char** attributes
 ) {
 	m_parser = parser;
-	m_refText = AXL_MEM_NEW(RefText);
+	m_refText = new RefText;
 	linkedText->m_refTextList.insertTail(m_refText);
 
 	while (*attributes) {
@@ -1110,11 +1110,11 @@ DocParaType::create(
 	const char** attributes
 ) {
 	m_parser = parser;
-	m_paragraphBlock = AXL_MEM_NEW(DocBlock);
+	m_paragraphBlock = new DocBlock;
 	m_paragraphBlock->m_blockKind = name;
 	blockList->insertTail(m_paragraphBlock);
 
-	m_textBlock = AXL_MEM_NEW(DocBlock);
+	m_textBlock = new DocBlock;
 	m_paragraphBlock->m_childBlockList.insertTail(m_textBlock);
 
 	return true;
@@ -1155,7 +1155,7 @@ DocParaType::onStartElement(
 		m_parser->pushType<DocParaType>(&m_paragraphBlock->m_childBlockList, name, attributes);
 	}
 
-	m_textBlock = AXL_MEM_NEW(DocBlock);
+	m_textBlock = new DocBlock;
 	m_paragraphBlock->m_childBlockList.insertTail(m_textBlock);
 	return true;
 }
@@ -1170,7 +1170,7 @@ DocRefTextType::create(
 	const char** attributes
 ) {
 	m_parser = parser;
-	m_refBlock = AXL_MEM_NEW(DocRefBlock);
+	m_refBlock = new DocRefBlock;
 	m_refBlock->m_module = m_parser->getModule();
 	m_refBlock->m_blockKind = name;
 	list->insertTail(m_refBlock);
@@ -1207,7 +1207,7 @@ DocAnchorType::create(
 	const char** attributes
 ) {
 	m_parser = parser;
-	m_anchorBlock = AXL_MEM_NEW(DocAnchorBlock);
+	m_anchorBlock = new DocAnchorBlock;
 	m_anchorBlock->m_blockKind = name;
 	list->insertTail(m_anchorBlock);
 
@@ -1240,7 +1240,7 @@ DocImageType::create(
 	const char** attributes
 ) {
 	m_parser = parser;
-	m_imageBlock = AXL_MEM_NEW(DocImageBlock);
+	m_imageBlock = new DocImageBlock;
 	m_imageBlock->m_blockKind = name;
 	list->insertTail(m_imageBlock);
 
@@ -1280,7 +1280,7 @@ DocUlinkType::create(
 		const char** attributes
 	) {
 	m_parser = parser;
-	m_ulinkBlock = AXL_MEM_NEW(DocUlinkBlock);
+	m_ulinkBlock = new DocUlinkBlock;
 	m_ulinkBlock->m_blockKind = name;
 	list->insertTail(m_ulinkBlock);
 
@@ -1310,7 +1310,7 @@ DocHeadingType::create(
 		const char** attributes
 	) {
 	m_parser = parser;
-	m_headingBlock = AXL_MEM_NEW(DocHeadingBlock);
+	m_headingBlock = new DocHeadingBlock;
 	m_headingBlock->m_blockKind = name;
 	list->insertTail(m_headingBlock);
 
@@ -1339,7 +1339,7 @@ DocSimpleSectionType::create(
 	const char** attributes
 ) {
 	m_parser = parser;
-	m_sectionBlock = AXL_MEM_NEW(DocSimpleSectionBlock);
+	m_sectionBlock = new DocSimpleSectionBlock;
 	m_sectionBlock->m_blockKind = name;
 	list->insertTail(m_sectionBlock);
 

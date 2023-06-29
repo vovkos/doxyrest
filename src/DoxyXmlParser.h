@@ -110,7 +110,7 @@ public:
 		const char* name,
 		const char** attributes
 	) {
-		T* type = AXL_MEM_NEW(T);
+		T* type = new T;
 		TypeStackEntry entry = { type, 0 };
 		m_typeStack.append(entry);
 		return type->create(this, name, attributes);
@@ -126,7 +126,7 @@ public:
 		const char* name,
 		const char** attributes
 	) {
-		T* type = AXL_MEM_NEW(T);
+		T* type = new T;
 		TypeStackEntry entry = { type, 0 };
 		m_typeStack.append(entry);
 		return type->create(this, context, name, attributes);

@@ -746,7 +746,7 @@ Compound::unspecializeName() {
 
 Param*
 Compound::createTemplateSpecParam(const sl::StringRef& name) {
-	Param* param = AXL_MEM_NEW(Param);
+	Param* param = new Param;
 	param->m_declarationName = name;
 	param->m_declarationName.trim();
 
@@ -1088,7 +1088,7 @@ GlobalNamespace::build(
 	for (size_t i = 0; i < count; i++) {
 		Compound* compound = module->m_namespaceArray[i];
 
-		Namespace* nspace = AXL_MEM_NEW(Namespace);
+		Namespace* nspace = new Namespace;
 		m_namespaceList.insertTail(nspace);
 		nspace->m_compound = compound;
 		compound->m_selfNamespace = nspace;
@@ -1165,7 +1165,7 @@ GlobalNamespace::build(
 			Compound* baseCompound;
 
 			if (refIt->m_id.isEmpty() || !refIt->m_importId.isEmpty()) { // template or imported base
-				baseCompound = AXL_MEM_NEW(Compound);
+				baseCompound = new Compound;
 				baseCompound->m_id = refIt->m_id;
 				baseCompound->m_importId = refIt->m_importId;
 				baseCompound->m_name = refIt->m_text;
@@ -1325,7 +1325,7 @@ GlobalNamespace::getGroupNamespace(
 	if (groupCompound->m_selfNamespace)
 		return groupCompound->m_selfNamespace;
 
-	Namespace* nspace = AXL_MEM_NEW(Namespace);
+	Namespace* nspace = new Namespace;
 	m_namespaceList.insertTail(nspace);
 	nspace->m_compound = groupCompound;
 	nspace->m_footnoteArray = groupCompound->m_groupFootnoteArray;
@@ -1347,14 +1347,14 @@ GlobalNamespace::createMemberCompound(
 	Module* module,
 	Member* member
 ) {
-	Compound* compound = AXL_MEM_NEW(Compound);
+	Compound* compound = new Compound;
 	compound->m_compoundKind = member->m_memberKind == MemberKind_Service ? CompoundKind_Service : CompoundKind_Interface;
 	compound->m_name = member->m_name;
 	compound->m_id = member->m_id;
 	compound->m_groupCompound = member->m_groupCompound;
 	sl::takeOver(&compound->m_briefDescription, &member->m_briefDescription);
 	sl::takeOver(&compound->m_detailedDescription, &member->m_detailedDescription);
-	compound->m_selfNamespace = AXL_MEM_NEW(Namespace);
+	compound->m_selfNamespace = new Namespace;
 	compound->m_selfNamespace->m_compound = compound;
 	m_namespaceList.insertTail(compound->m_selfNamespace);
 	module->m_compoundList.insertTail(compound);

@@ -45,7 +45,7 @@ CmdLineParser::onSwitch(
 		break;
 
 	case CmdLineSwitchKind_Define:
-		Define* define = AXL_MEM_NEW(Define);
+		Define* define = new Define;
 		size_t i = value.find('=');
 
 		if (i == -1) {

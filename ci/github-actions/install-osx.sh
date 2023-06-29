@@ -9,7 +9,6 @@
 #
 #...............................................................................
 
-brew update
 brew install lua
 brew install ragel
 brew install expat

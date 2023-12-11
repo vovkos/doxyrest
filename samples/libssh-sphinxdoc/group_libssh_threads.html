@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>The SSH threading functions. &#8212; LibSSH Documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=0a676766" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css?v=3785b6ce" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=840eb146"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="The libssh callbacks" href="group_libssh_callbacks.html" />
+    <link rel="prev" title="The SSH string functions" href="group_libssh_string.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="group_libssh_callbacks.html" title="The libssh callbacks"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="group_libssh_string.html" title="The SSH string functions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LibSSH Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="group_libssh.html" accesskey="U">The libssh API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">The SSH threading functions.</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="the-ssh-threading-functions">
+<span id="doxid-group-libssh-threads"></span><span id="index-0"></span><h1>The SSH threading functions.</h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="overview">
+<h2>Overview</h2>
+<p>Threading with libssh. <a class="reference internal" href="#details-group-libssh-threads"><span class="std std-ref">More…</span></a></p>
+<pre class="highlight doxyrest-overview-code-block literal-block"><span></span><span class="c1">// global variables</span>
+
+<span class="k">static</span> <span class="kt">void</span><span class="o">**</span> <span class="doxyrest-code-target target" id="doxid-group-libssh-threads-1ga721baef37bce744f820cd2ae598615bb"><span></span><span class="n">libcrypto_mutexes</span></span><span></span><span class="p">;</span>
+<span class="k">static</span> <span class="k">struct</span> <a class="reference internal" href="struct_ssh_threads_callbacks_struct.html#doxid-structssh-threads-callbacks-struct"><span class="std std-ref">ssh_threads_callbacks_struct</span></a><span></span> <span class="doxyrest-code-target target" id="doxid-group-libssh-threads-1ga3381df5358757a32636727fb0081976c"><span></span><span class="n">ssh_threads_noop</span></span><span></span> <span class="o">=</span> <span class="p">{</span>     <span class="s">&quot;threads_noop&quot;</span><span class="p">,</span>     <span class="n">threads_noop</span><span class="p">,</span>     <span class="n">threads_noop</span><span class="p">,</span>     <span class="n">threads_noop</span><span class="p">,</span>     <span class="n">threads_noop</span><span class="p">,</span>     <span class="n">threads_id_noop</span> <span class="p">};</span>
+<span class="k">static</span> <span class="k">struct</span> <a class="reference internal" href="struct_ssh_threads_callbacks_struct.html#doxid-structssh-threads-callbacks-struct"><span class="std std-ref">ssh_threads_callbacks_struct</span></a><span></span><span class="o">*</span> <span class="doxyrest-code-target target" id="doxid-group-libssh-threads-1gadb5d9b7e2606d95be69a5ad23fc4d073"><span></span><span class="n">user_callbacks</span></span><span></span> <span class="o">=&amp;</span><span class="n">ssh_threads_noop</span><span class="p">;</span>
+
+<span class="c1">// global functions</span>
+
+<a class="reference internal" href="global.html#doxid-libssh-8h-1a2ba7f29ac0f2b5ef7134243d24888ac5"><span class="std std-ref">LIBSSH_API</span></a><span></span> <span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-threads-1gaf473af3fbae6f1bb0e249fd1d079ff68"><span class="std std-ref">ssh_threads_set_callbacks</span></a><span></span><span class="p">(</span><span class="k">struct</span> <a class="reference internal" href="struct_ssh_threads_callbacks_struct.html#doxid-structssh-threads-callbacks-struct"><span class="std std-ref">ssh_threads_callbacks_struct</span></a><span></span><span class="o">*</span> <span class="n">cb</span><span class="p">);</span>
+
+<a class="reference internal" href="global.html#doxid-libssh-8h-1a2ba7f29ac0f2b5ef7134243d24888ac5"><span class="std std-ref">LIBSSH_API</span></a><span></span> <span class="k">struct</span> <a class="reference internal" href="struct_ssh_threads_callbacks_struct.html#doxid-structssh-threads-callbacks-struct"><span class="std std-ref">ssh_threads_callbacks_struct</span></a><span></span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libssh-threads-1gaed3006dbae78414fa3b82c8d9af69a88"><span class="std std-ref">ssh_threads_get_noop</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">void</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-threads-1gaa1f1de653448e7aea5be684daa208785"><span></span><span class="n">libcrypto_lock_callback</span></span><span></span><span class="p">(</span>
+    <span class="kt">int</span> <span class="n">mode</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">file</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">line</span>
+<span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">void</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-threads-1ga6b00f27ae935a3239dc87e5356b7078b"><span></span><span class="n">libcrypto_thread_finalize</span></span><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-threads-1gaf24fe91a8fa9e20e3ef1e2b1ebf0d6e3"><span></span><span class="n">libcrypto_thread_init</span></span><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-threads-1ga892b23f2f4ffe4e33290a83802faa265"><span></span><span class="n">ssh_threads_finalize</span></span><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-threads-1gac9431f068584276377498dea938cf951"><span></span><span class="n">ssh_threads_get_type</span></span><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-threads-1ga93b7aed4984dbd58a270f1f7eb37f5cd"><span></span><span class="n">ssh_threads_init</span></span><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">unsigned</span> <span class="kt">long</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-threads-1gab410830e69e7f4c910547071ea338037"><span></span><span class="n">threads_id_noop</span></span><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-threads-1ga8644d8daa52d4911cfcce76bbdeba4f6"><span></span><span class="n">threads_noop</span></span><span></span><span class="p">(</span><span class="kt">void</span><span class="o">**</span> <span class="n">lock</span><span class="p">);</span></pre>
+</section>
+<section id="detailed-documentation">
+<span id="details-group-libssh-threads"></span><h2>Detailed Documentation</h2>
+<p>Threading with libssh.</p>
+<section id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-threads-1gaf473af3fbae6f1bb0e249fd1d079ff68"><span id="index-1"></span><a class="reference internal" href="global.html#doxid-libssh-8h-1a2ba7f29ac0f2b5ef7134243d24888ac5"><span class="std std-ref">LIBSSH_API</span></a><span></span> <span class="kt">int</span>
+<span class="n">ssh_threads_set_callbacks</span><span class="p">(</span><span class="k">struct</span> <a class="reference internal" href="struct_ssh_threads_callbacks_struct.html#doxid-structssh-threads-callbacks-struct"><span class="std std-ref">ssh_threads_callbacks_struct</span></a><span></span><span class="o">*</span> <span class="n">cb</span><span class="p">)</span></pre>
+<p>Set the thread callbacks structure.</p>
+<p>This is necessary if your program is using libssh in a multithreaded fashion. This function must be called first, outside of any threading context (in your main() function for instance), before you call <a class="reference internal" href="group_libssh.html#doxid-group-libssh-1ga3ebf8d6920e563f3b032e3cd5277598e"><span class="std std-ref">ssh_init()</span></a>.</p>
+<p>Bug libgcrypt 1.6 and bigger backend does not support custom callback. Using anything else than pthreads here will fail.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>cb</p></td>
+<td><p>A pointer to a <a class="reference internal" href="struct_ssh_threads_callbacks_struct.html#doxid-structssh-threads-callbacks-struct"><span class="std std-ref">ssh_threads_callbacks_struct</span></a> structure, which contains the different callbacks to be set.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>Always returns SSH_OK.</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="struct_ssh_threads_callbacks_struct.html#doxid-structssh-threads-callbacks-struct"><span class="std std-ref">ssh_threads_callbacks_struct</span></a></p>
+<p>SSH_THREADS_PTHREAD</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-threads-1gaed3006dbae78414fa3b82c8d9af69a88"><span id="index-2"></span><a class="reference internal" href="global.html#doxid-libssh-8h-1a2ba7f29ac0f2b5ef7134243d24888ac5"><span class="std std-ref">LIBSSH_API</span></a><span></span> <span class="k">struct</span> <a class="reference internal" href="struct_ssh_threads_callbacks_struct.html#doxid-structssh-threads-callbacks-struct"><span class="std std-ref">ssh_threads_callbacks_struct</span></a><span></span><span class="o">*</span>
+<span class="n">ssh_threads_get_noop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></pre>
+<p>Get the noop threads callbacks structure.</p>
+<p>This can be used with ssh_threads_set_callbacks. These callbacks do nothing and are being used by default.</p>
+<p class="rubric">Returns:</p>
+<p>Always returns a valid pointer to the noop callbacks structure.</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-libssh-threads-1gaf473af3fbae6f1bb0e249fd1d079ff68"><span class="std std-ref">ssh_threads_set_callbacks</span></a></p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">The SSH threading functions.</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li><a class="reference internal" href="#global-functions">Global Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="group_libssh_string.html"
+                          title="previous chapter">The SSH string functions</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="group_libssh_callbacks.html"
+                          title="next chapter">The libssh callbacks</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="group_libssh_callbacks.html" title="The libssh callbacks"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="group_libssh_string.html" title="The SSH string functions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LibSSH Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="group_libssh.html" >The libssh API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">The SSH threading functions.</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2003-2017, LibSSH Maintainers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,102 @@
+.. index:: pair: page; Runtime arguments in configuration files
+.. _doxid-confarg:
+
+Runtime arguments in configuration files
+========================================
+
+The ALSA library can accept runtime arguments for some configuration blocks. This extension is built on top of the basic configuration file syntax.
+
+
+
+.. _doxid-confarg_1confarg_define:
+
+Defining arguments
+~~~~~~~~~~~~~~~~~~
+
+Arguments are defined using the id (key) ``@args`` and array values containing the string names of the arguments:
+
+.. ref-code-block:: cpp
+
+	@args [ CARD ]  # or
+	@args.0 CARD
+
+
+
+
+
+.. _doxid-confarg_1confarg_type:
+
+Defining argument types and default values
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+An argument's type is specified with the id (key) ``@args`` and the argument name. The type and the default value are specified in the compound block:
+
+.. ref-code-block:: cpp
+
+	@args.CARD {
+	  type string
+	  default "abcd"
+	}
+
+
+
+
+
+.. _doxid-confarg_1confarg_refer:
+
+Referring to arguments
+~~~~~~~~~~~~~~~~~~~~~~
+
+Arguments are referred to with a dollar-sign ($) and the name of the argument:
+
+.. ref-code-block:: cpp
+
+	card $CARD
+
+
+
+
+
+.. _doxid-confarg_1confarg_usage:
+
+Usage
+~~~~~
+
+To use a block with arguments, write the argument values after the key, separated with a colon (:). For example, all these names for PCM interfaces give the same result:
+
+.. ref-code-block:: cpp
+
+	hw:0,1
+	hw:CARD=0,DEV=1
+	hw:{CARD 0 DEV 1}
+	plug:"hw:0,1"
+	plug:{SLAVE="hw:{CARD 0 DEV 1}"}
+
+As you see, arguments can be specified in their proper order or by name. Note that arguments enclosed in braces are parsed in the same way as in configuration files, but using the override method by default.
+
+
+
+
+
+.. _doxid-confarg_1confarg_example:
+
+Example
+~~~~~~~
+
+.. ref-code-block:: cpp
+
+	pcm.demo {
+	    @args [ CARD DEVICE ]
+	    @args.CARD {
+	        type string
+	        default "supersonic"
+	    }
+	    @args.DEVICE {
+	        type integer
+	        default 0
+	    }
+	    type hw
+	    card $CARD
+	    device $DEVICE
+	}
+

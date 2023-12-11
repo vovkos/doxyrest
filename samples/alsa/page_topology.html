@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ALSA Topology Interface &mdash; ALSA Library Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinx_rtd_theme.css?v=b6ca47bd" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=e9012143"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ALSA Use Case Interface" href="page_Usecase.html" />
+    <link rel="prev" title="Use Case Interface" href="group_ucm.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            ALSA Library Documentation
+          </a>
+              <div class="version">
+                1.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="group_Config.html">Configuration Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Digital_Audio_Interface.html">Constants for Digital Audio Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_MIDI_Interface.html">Constants for MIDI v1.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Control.html">Control Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Error.html">Error handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_CtlPlugin_SDK.html">External Control Plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Plugin_SDK.html">External PCM plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Global.html">Global defines and functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_HwDep.html">Hardware Dependant Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Input.html">Input Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Sequencer.html">MIDI Sequencer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Mixer.html">Mixer Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Output.html">Output Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_PCM.html">PCM Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_RawMidi.html">RawMidi Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Timer.html">Timer Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_topology.html">Topology Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_ucm.html">Use Case Interface</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ALSA Topology Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#topology-file-format">Topology File Format</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#controls">Controls</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#control-operations">Control Operations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#control-access">Control Access</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#control-tlv-data">Control TLV Data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#control-channel-mapping">Control Channel Mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#control-private-data">Control Private Data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#how-to-define-an-element-with-private-data">How to define an element with private data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mixer-controls">Mixer Controls</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#byte-controls">Byte Controls</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enumerated-controls">Enumerated Controls</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#dapm-graph">DAPM Graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dapm-widgets">DAPM Widgets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#widget-private-data">Widget Private Data</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pcm-capabilities">PCM Capabilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pcm-configurations">PCM Configurations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pcm-front-end-dai-dai-link">PCM (Front-end DAI &amp; DAI link)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#physical-dai-link-configurations">Physical DAI Link Configurations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#physical-dai">Physical DAI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#manifest-private-data">Manifest Private Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#include-other-files">Include other files</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="page_Usecase.html">ALSA Use Case Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_bug.html">Bug List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_conf.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_control.html">Control interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_deprecated.html">Deprecated List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_ctl_external_plugins.html">External Control Plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_hcontrol.html">High level control interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_confhooks.html">Hooks in configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_mixer.html">Mixer interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_pcm.html">PCM (digital audio) interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_pcm_plugins.html">PCM (digital audio) plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_pcm_external_plugins.html">PCM External Plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_rawmidi.html">RawMidi interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_confarg.html">Runtime arguments in configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_conffunc.html">Runtime functions in configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_seq.html">Sequencer interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_timer.html">Timer interface</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="example__test_latency.c.html">/test/latency.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_pcm.c.html">/test/pcm.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_pcm_min.c.html">/test/pcm_min.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_rawmidi.c.html">/test/rawmidi.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_timer.c.html">/test/timer.c</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ALSA Library Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ALSA Topology Interface</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="alsa-topology-interface">
+<span id="doxid-group-topology-topology"></span><span id="index-0"></span><h1>ALSA Topology Interface</h1>
+<p>The topology interface allows developers to define DSP topologies in a text file format and to convert the text topology to a binary topology representation that can be understood by the kernel. The topology core currently recognises the following object types :-</p>
+<ul class="simple">
+<li><p>Controls (mixer, enumerated and byte) including TLV data.</p></li>
+<li><p>PCMs (Front End DAI &amp; DAI link)</p></li>
+<li><p>DAPM widgets</p></li>
+<li><p>DAPM graph elements.</p></li>
+<li><p>Physical DAI &amp; DAI links</p></li>
+<li><p>Private data for each object type.</p></li>
+<li><p>Manifest (containing count of each object type)</p></li>
+</ul>
+<section id="topology-file-format">
+<h2>Topology File Format</h2>
+<p>The topology text format uses the standard ALSA configuration file format to describe each topology object type. This allows topology objects to include other topology objects as part of their definition. i.e. a TLV data object can be shared amongst many control objects that use the same TLV data.</p>
+<section id="controls">
+<h3>Controls</h3>
+<p>Topology audio controls can belong to three different types :-</p>
+<ul class="simple">
+<li><p>Mixer control</p></li>
+<li><p>Enumerated control</p></li>
+<li><p>Byte control</p></li>
+</ul>
+<p>Each control type can contain TLV data, private data, operations and also belong to widget objects.</p>
+<section id="control-operations">
+<h4>Control Operations</h4>
+<p>Driver Kcontrol callback info(), get() and put() operations are mapped with the CTL ops section in topology configuration files. The ctl ops section can assign operations using the standard names (listed below) for the standard kcontrol types or use ID numbers (&gt;256) to map to bespoke driver controls.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ops.&quot;ctl&quot; {
+    info &quot;volsw&quot;
+    get &quot;257&quot;
+    put &quot;257&quot;
+}
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<p>This mapping shows info() using the standard “volsw” info callback whilst the get() and put() are mapped to bespoke driver callbacks.</p>
+<p>The Standard operations names for control get(), put() and info calls are :-</p>
+<ul class="simple">
+<li><p>volsw</p></li>
+<li><p>volsw_sx</p></li>
+<li><p>volsw_xr_sx</p></li>
+<li><p>enum</p></li>
+<li><p>bytes</p></li>
+<li><p>enum_value</p></li>
+<li><p>range</p></li>
+<li><p>strobe</p></li>
+</ul>
+</section>
+<section id="control-access">
+<h4>Control Access</h4>
+<p>Controls access can be specified using the “access” section. If no “access” section is defined then default RW access flags are set for normal and TLV controls.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>access [
+    read
+    write
+    tlv_command
+]
+</pre></div>
+</div>
+<p>The standard access flags are as follows :-</p>
+<ul class="simple">
+<li><p>read</p></li>
+<li><p>write</p></li>
+<li><p>read_write</p></li>
+<li><p>volatile</p></li>
+<li><p>timestamp</p></li>
+<li><p>tlv_read</p></li>
+<li><p>tlv_write</p></li>
+<li><p>tlv_read_write</p></li>
+<li><p>tlv_command</p></li>
+<li><p>inactive</p></li>
+<li><p>lock</p></li>
+<li><p>owner</p></li>
+<li><p>tlv_callback</p></li>
+<li><p>user</p></li>
+</ul>
+</section>
+<section id="control-tlv-data">
+<h4>Control TLV Data</h4>
+<p>Controls can also use TLV data to represent dB information. This can be done by defining a TLV section and using the TLV section within the control. The TLV data for DBScale types are defined as follows :-</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>scale {
+    min &quot;-9000&quot;
+    step &quot;300&quot;
+    mute &quot;1&quot;
+}
+</pre></div>
+</div>
+<p>Where the meanings and values for min, step and mute are exactly the same as defined in driver code.</p>
+</section>
+<section id="control-channel-mapping">
+<h4>Control Channel Mapping</h4>
+<p>Controls can also specify which channels they are mapped with. This is useful for userspace as it allows applications to determine the correct control channel for Left and Right etc. Channel maps are defined as follows :-</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>channel.&quot;name&quot; {
+    reg &quot;0&quot;
+    shift &quot;0&quot;
+}
+</pre></div>
+</div>
+<p>The channel map reg is the register offset for the control, shift is the bit shift within the register for the channel and the section name is the channel name and can be one of the following :-</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>* mono        # mono stream
+* fl      # front left
+* fr      # front right
+* rl      # rear left
+* rr      # rear right
+* fc      # front center
+* lfe     # LFE
+* sl      # side left
+* sr      # side right
+* rc      # rear center
+* flc     # front left center
+* frc     # front right center
+* rlc     # rear left center
+* rrc     # rear right center
+* flw     # front left wide
+* frw     # front right wide
+* flh     # front left high
+* fch     # front center high
+* frh     # front right high
+* tc      # top center
+* tfl     # top front left
+* tfr     # top front right
+* tfc     # top front center
+* trl     # top rear left
+* trr     # top rear right
+* trc     # top rear center
+* tflc        # top front left center
+* tfrc        # top front right center
+* tsl     # top side left
+* tsr     # top side right
+* llfe        # left LFE
+* rlfe        # right LFE
+* bc      # bottom center
+* blc     # bottom left center
+* brc     # bottom right center
+</pre></div>
+</div>
+</section>
+<section id="control-private-data">
+<h4>Control Private Data</h4>
+<p>Controls can also have private data. This can be done by defining a private data section and including the section within the control. The private data section is defined as follows :-</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>SectionData.&quot;pdata for EQU1&quot; {
+   file &quot;/path/to/file&quot;
+   bytes &quot;0x12,0x34,0x56,0x78&quot;
+   shorts &quot;0x1122,0x3344,0x5566,0x7788&quot;
+   words &quot;0xaabbccdd,0x11223344,0x66aa77bb,0xefef1234&quot;
+   tuples &quot;section id of the vendor tuples&quot;
+};
+</pre></div>
+</div>
+<p>The file, bytes, shorts, words and tuples keywords are all mutually exclusive as the private data should only be taken from one source. The private data can either be read from a separate file or defined in the topology file using the bytes, shorts, words or tuples keywords. The keyword tuples is to define vendor specific tuples. Please refer to section Vendor Tokens and Vendor tuples.</p>
+</section>
+<section id="how-to-define-an-element-with-private-data">
+<h4>How to define an element with private data</h4>
+<p>An element can refer to a single data section or multiple data sections.</p>
+<section id="to-refer-to-a-single-data-section">
+<h5>To refer to a single data section:</h5>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Sectionxxx.&quot;element name&quot; {
+   ...
+   data &quot;name of data section&quot;     # optional private data
+}
+</pre></div>
+</div>
+</section>
+<section id="to-refer-to-multiple-data-sections">
+<h5>To refer to multiple data sections:</h5>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Sectionxxx.&quot;element name&quot; {
+   ...
+   data [                      # optional private data
+       &quot;name of 1st data section&quot;
+       &quot;name of 2nd data section&quot;
+       ...
+   ]
+}
+</pre></div>
+</div>
+<p>And data of these sections will be merged in the same order as they are in the list, as the element’s private data for kernel.</p>
+</section>
+<section id="vendor-tokens">
+<h5>Vendor Tokens</h5>
+<p>A vendor token list is defined as a new section. Each token element is a pair of string ID and integer value. And both the ID and value are vendor-specific.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>SectionVendorTokens.&quot;id of the vendor tokens&quot; {
+   comment &quot;optional comments&quot;
+   VENDOR_TOKEN_ID1 &quot;1&quot;
+   VENDOR_TOKEN_ID2 &quot;2&quot;
+   VENDOR_TOKEN_ID3 &quot;3&quot;
+   ...
+}
+</pre></div>
+</div>
+</section>
+<section id="vendor-tuples">
+<h5>Vendor Tuples</h5>
+<p>Vendor tuples are defined as a new section. It contains a reference to a vendor token list and several tuple arrays. All arrays share a vendor token list, defined by the tokens keyword. Each tuple array is for a specific type, defined by the string following the tuples keyword. Supported types are: string, uuid, bool, byte, short and word.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>SectionVendorTuples.&quot;id of the vendor tuples&quot; {
+   tokens &quot;id of the vendor tokens&quot;
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>tuples.&quot;string&quot; {
+    VENDOR_TOKEN_ID1 &quot;character string&quot;
+    ...
+}
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>tuples.&quot;uuid&quot; {         # 16 characters separated by commas
+    VENDOR_TOKEN_ID2 &quot;0x01,0x02,...,0x0f&quot;
+    ...
+}
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>tuples.&quot;bool&quot; {
+    VENDOR_TOKEN_ID3 &quot;true/false&quot;
+    ...
+}
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>tuples.&quot;byte&quot; {
+    VENDOR_TOKEN_ID4 &quot;0x11&quot;
+    VENDOR_TOKEN_ID5 &quot;0x22&quot;
+    ...
+}
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>tuples.&quot;short&quot; {
+    VENDOR_TOKEN_ID6 &quot;0x1122&quot;
+    VENDOR_TOKEN_ID7 &quot;0x3344&quot;
+    ...
+}
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>   tuples.&quot;word&quot; {
+       VENDOR_TOKEN_ID8 &quot;0x11223344&quot;
+       VENDOR_TOKEN_ID9 &quot;0x55667788&quot;
+       ...
+   }
+}
+</pre></div>
+</div>
+<p>To define multiple vendor tuples of same type, please append some characters after the type string (“string”, “uuid”, “bool”, “byte”, “short” or “word”), to avoid ID duplication in the SectionVendorTuples.</p>
+<p>The parser will check the first few characters in ID to get the tuple type. Here is an example:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>SectionVendorTuples.&quot;id of the vendor tuples&quot; {
+   ...
+   tuples.&quot;word.module0&quot; {
+       VENDOR_TOKEN_PARAM_ID1 &quot;0x00112233&quot;
+       VENDOR_TOKEN_PARAM_ID2 &quot;0x44556677&quot;
+       ...
+   }
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>   tuples.&quot;word.module2&quot; {
+       VENDOR_TOKEN_PARAM_ID1 &quot;0x11223344&quot;
+       VENDOR_TOKEN_PARAM_ID2 &quot;0x55667788&quot;
+       ...
+   }
+   ...
+}
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="mixer-controls">
+<h4>Mixer Controls</h4>
+<p>A mixer control is defined as a new section that can include channel mapping, TLV data, callback operations and private data. The mixer section also includes a few other config options that are shown here :-</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>SectionControlMixer.&quot;mixer name&quot; {
+   comment &quot;optional comments&quot;
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>index &quot;1&quot;           # Index number
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>channel.&quot;name&quot; {        # Channel maps
+   ....
+}
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ops.&quot;ctl&quot; {         # Ops callback functions
+   ....
+}
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>max &quot;32&quot;            # Max control value
+invert &quot;0&quot;          # Whether control values are inverted
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>tlv &quot;tld_data&quot;          # optional TLV data
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>   data &quot;pdata for mixer1&quot;     # optional private data
+}
+</pre></div>
+</div>
+<p>The section name is used to define the mixer name. The index number can be used to identify topology objects groups. This allows driver operations on objects with index number N and can be used to add/remove pipelines of objects whilst other objects are unaffected.</p>
+</section>
+<section id="byte-controls">
+<h4>Byte Controls</h4>
+<p>A byte control is defined as a new section that can include channel mapping, TLV data, callback operations and private data. The bytes section also includes a few other config options that are shown here :-</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>SectionControlBytes.&quot;name&quot; {
+   comment &quot;optional comments&quot;
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>index &quot;1&quot;           # Index number
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>channel.&quot;name&quot; {        # Channel maps
+   ....
+}
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ops.&quot;ctl&quot; {         # Ops callback functions
+   ....
+}
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>base &quot;0&quot;            # Register base
+num_regs &quot;16&quot;           # Number of registers
+mask &quot;0xff&quot;         # Mask
+max &quot;255&quot;           # Maximum value
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>tlv &quot;tld_data&quot;          # optional TLV data
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>   data &quot;pdata for mixer1&quot;     # optional private data
+}
+</pre></div>
+</div>
+</section>
+<section id="enumerated-controls">
+<h4>Enumerated Controls</h4>
+<p>A enumerated control is defined as a new section (like mixer and byte) that can include channel mapping, callback operations, private data and text strings to represent the enumerated control options.</p>
+<p>The text strings for the enumerated controls are defined in a separate section as follows :-</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>SectionText.&quot;name&quot; {
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>       Values [
+           &quot;value1&quot;
+           &quot;value2&quot;
+       &quot;value3&quot;
+       ]
+}
+</pre></div>
+</div>
+<p>All the enumerated text values are listed in the values list.</p>
+<p>The enumerated control is similar to the other controls and defined as follows :-</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>SectionControlMixer.&quot;name&quot; {
+   comment &quot;optional comments&quot;
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>index &quot;1&quot;           # Index number
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>texts &quot;EQU1&quot;            # Enumerated text items
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>channel.&quot;name&quot; {        # Channel maps
+   ....
+}
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ops.&quot;ctl&quot; {         # Ops callback functions
+   ....
+}
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>   data &quot;pdata for mixer1&quot;     # optional private data
+}
+</pre></div>
+</div>
+</section>
+</section>
+<section id="dapm-graph">
+<h3>DAPM Graph</h3>
+<p>DAPM graphs can easily be defined using the topology file. The format is very similar to the DAPM graph kernel format. :-</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>SectionGraph.&quot;dsp&quot; {
+   index &quot;1&quot;           # Index number
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>   lines [
+       &quot;sink1, control, source1&quot;
+       &quot;sink2, , source2&quot;
+   ]
+}
+</pre></div>
+</div>
+<p>The lines in the graph are defined as a variable size list of sinks, controls and sources. The control name is optional as some graph lines have no associated controls. The section name can be used to differentiate the graph with other graphs, it’s not used by the kernel atm.</p>
+</section>
+<section id="dapm-widgets">
+<h3>DAPM Widgets</h3>
+<p>DAPM widgets are similar to controls in that they can include many other objects. Widgets can contain private data, mixer controls and enum controls.</p>
+<p>The following widget types are supported and match the driver types :-</p>
+<ul class="simple">
+<li><p>input</p></li>
+<li><p>output</p></li>
+<li><p>mux</p></li>
+<li><p>mixer</p></li>
+<li><p>pga</p></li>
+<li><p>out_drv</p></li>
+<li><p>adc</p></li>
+<li><p>dac</p></li>
+<li><p>switch</p></li>
+<li><p>pre</p></li>
+<li><p>post</p></li>
+<li><p>aif_in</p></li>
+<li><p>aif_out</p></li>
+<li><p>dai_in</p></li>
+<li><p>dai_out</p></li>
+<li><p>dai_link</p></li>
+</ul>
+<p>Widgets are defined as follows :-</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>SectionWidget.&quot;name&quot; {
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>index &quot;1&quot;           # Index number
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>type &quot;aif_in&quot;           # Widget type - detailed above
+stream_name &quot;name&quot;      # Stream name
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>no_pm &quot;true&quot;            # No PM control bit.
+reg &quot;20&quot;            # PM bit register offset
+shift &quot;0&quot;           # PM bit register shift
+invert &quot;1           # PM bit is inverted
+subseq &quot;8&quot;          # subsequence number
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>event_type &quot;1&quot;          # DAPM widget event type
+event_flags &quot;1&quot;         # DAPM widget event flags
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mixer &quot;name&quot;            # Optional Mixer Control
+enum &quot;name&quot;         # Optional Enum Control
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>   data &quot;name&quot;         # optional private data
+}
+</pre></div>
+</div>
+<p>The section name is the widget name. The mixer and enum fields are mutually exclusive and used to include controls into the widget. The index and data fields are the same for widgets as they are for controls whilst the other fields map on very closely to the driver widget fields.</p>
+<section id="widget-private-data">
+<h4>Widget Private Data</h4>
+<p>Widget can have private data. For the format of the private data, please refer to section Control Private Data.</p>
+</section>
+</section>
+<section id="pcm-capabilities">
+<h3>PCM Capabilities</h3>
+<p>Topology can also define the PCM capabilities of front end or physical DAIs. Capabilities can be defined with the following section :-</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>SectionPCMCapabilities.&quot;name&quot; {
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>   formats &quot;S24_LE,S16_LE&quot;     # Supported formats
+   rate_min &quot;48000&quot;        # Max supported sample rate
+   rate_max &quot;48000&quot;        # Min supported sample rate
+   channels_min &quot;2&quot;        # Min number of channels
+   channels_max &quot;2&quot;        # max number of channels
+}
+</pre></div>
+</div>
+<p>The supported formats use the same naming convention as the driver macros. The PCM capabilities name can be referred to and included by PCM and physical DAI sections.</p>
+</section>
+<section id="pcm-configurations">
+<h3>PCM Configurations</h3>
+<p>PCM runtime configurations can be defined for playback and capture stream directions with the following section :-</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>SectionPCMConfig.&quot;name&quot; {
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>config.&quot;playback&quot; {     # playback config
+    format &quot;S16_LE&quot;     # playback format
+    rate &quot;48000&quot;        # playback sample rate
+    channels &quot;2&quot;        # playback channels
+    tdm_slot &quot;0xf&quot;      # playback TDM slot
+}
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>   config.&quot;capture&quot; {      # capture config
+       format &quot;S16_LE&quot;     # capture format
+       rate &quot;48000&quot;        # capture sample rate
+       channels &quot;2&quot;        # capture channels
+       tdm_slot &quot;0xf&quot;      # capture TDM slot
+   }
+}
+</pre></div>
+</div>
+<p>The supported formats use the same naming convention as the driver macros. The PCM configuration name can be referred to and included by PCM and physical link sections.</p>
+</section>
+<section id="pcm-front-end-dai-dai-link">
+<h3>PCM (Front-end DAI &amp; DAI link)</h3>
+<p>PCM sections define the supported capabilities and configurations for supported playback and capture streams, names and flags for front end DAI &amp; DAI links. Topology kernel driver will use a PCM object to create a pair of FE DAI &amp; DAI links.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>SectionPCM.&quot;name&quot; {
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>index &quot;1&quot;           # Index number
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>id &quot;0&quot;              # used for binding to the PCM
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>dai.&quot;name of front-end DAI&quot; {
+    id &quot;0&quot;      # used for binding to the front-end DAI
+}
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pcm.&quot;playback&quot; {
+    capabilities &quot;capabilities1&quot;    # capabilities for playback
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    configs [       # supported configs for playback
+        &quot;config1&quot;
+        &quot;config2&quot;
+    ]
+}
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pcm.&quot;capture&quot; {
+    capabilities &quot;capabilities2&quot;    # capabilities for capture
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    configs [       # supported configs for capture
+        &quot;config1&quot;
+        &quot;config2&quot;
+        &quot;config3&quot;
+    ]
+}
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Optional boolean flags
+symmetric_rates         &quot;true&quot;
+symmetric_channels      &quot;true&quot;
+symmetric_sample_bits       &quot;false&quot;
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>   data &quot;name&quot;         # optional private data
+}
+</pre></div>
+</div>
+</section>
+<section id="physical-dai-link-configurations">
+<h3>Physical DAI Link Configurations</h3>
+<p>The runtime configurations of a physical DAI link can be defined by SectionLink.</p>
+<p>Backend DAI links belong to physical links, and can be configured by either SectionLink or SectionBE, with same syntax. But SectionBE is deprecated atm since the internal processing is actually same.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>SectionLink.&quot;name&quot; {
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>index &quot;1&quot;           # Index number
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>id &quot;0&quot;              # used for binding to the link
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>stream_name &quot;name&quot;      # used for binding to the link
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>hw_configs [    # runtime supported HW configurations, optional
+    &quot;config1&quot;
+    &quot;config2&quot;
+    ...
+]
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>default_hw_conf_id &quot;1&quot;      #default HW config ID for init
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Optional boolean flags
+symmetric_rates         &quot;true&quot;
+symmetric_channels      &quot;false&quot;
+symmetric_sample_bits       &quot;true&quot;
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>   data &quot;name&quot;         # optional private data
+}
+</pre></div>
+</div>
+<p>A physical link can refer to multiple runtime supported hardware configurations, which is defined by SectionHWConfig.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>SectionHWConfig.&quot;name&quot; {
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>   id &quot;1&quot;              # used for binding to the config
+   format &quot;I2S&quot;            # physical audio format.
+   bclk   &quot;master&quot;         # Platform is master of bit clock
+   fsync  &quot;slave&quot;          # Platform is slave of fsync
+}
+</pre></div>
+</div>
+</section>
+<section id="physical-dai">
+<h3>Physical DAI</h3>
+<p>A physical DAI (e.g. backend DAI for DPCM) is defined as a new section that can include a unique ID, playback and capture stream capabilities, optional flags, and private data.</p>
+<p>Its PCM stream capablities are same as those for PCM objects, please refer to section ‘PCM Capabilities’.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>SectionDAI.&quot;name&quot; {
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>index &quot;1&quot;           # Index number
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>id &quot;0&quot;              # used for binding to the Backend DAI
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pcm.&quot;playback&quot; {
+    capabilities &quot;capabilities1&quot;    # capabilities for playback
+}
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pcm.&quot;capture&quot; {
+    capabilities &quot;capabilities2&quot;    # capabilities for capture
+}
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>symmetric_rates &quot;true&quot;          # optional flags
+symmetric_channels &quot;true&quot;
+symmetric_sample_bits &quot;false&quot;
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>   data &quot;name&quot;         # optional private data
+}
+</pre></div>
+</div>
+</section>
+<section id="manifest-private-data">
+<h3>Manifest Private Data</h3>
+<p>Manfiest may have private data. Users need to define a manifest section and add the references to 1 or multiple data sections. Please refer to section ‘How to define an element with private data’.</p>
+<p>And the text conf file can have at most 1 manifest section.</p>
+<p>Manifest section is defined as follows :-</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>SectionManifest&quot;name&quot; {
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>   data &quot;name&quot;         # optional private data
+}
+</pre></div>
+</div>
+</section>
+<section id="include-other-files">
+<h3>Include other files</h3>
+<p>Users may include other files in a text conf file via alsaconf syntax &lt;path/to/configuration-file&gt;. This allows users to define common info in separate files (e.g. vendor tokens, tuples) and share them for different platforms, thus save the total size of config files.</p>
+<p>Users can also specifiy additional configuraiton directories relative to “/usr/share/alsa/” to search the included files, via alsaconf syntax &lt;searchfdir:/relative-path/to/usr/share/alsa&gt;.</p>
+<p>For example, file A and file B are two text conf files for platform X, they will be installed to /usr/share/alsa/topology/platformx. If we need file A to include file B, in file A we can add:</p>
+<p>&lt;searchdir:topology/platformx&gt;</p>
+<p>&lt;name-of-file-B&gt;</p>
+<p>ALSA conf will search and open an included file in the following order of priority:</p>
+<ol class="arabic simple">
+<li><p>directly open the file by its name;</p></li>
+<li><p>search for the file name in “/usr/share/alsa”;</p></li>
+<li><p>search for the file name in user specified subdirectories under “/usr/share/alsa”.</p></li>
+</ol>
+<p>The order of the included files need not to be same as their dependencies, since the topology library will load them all before parsing their dependencies.</p>
+<p>The configuration directories defined by a file will only be used to search the files included by this file.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="group_ucm.html" class="btn btn-neutral float-left" title="Use Case Interface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="page_Usecase.html" class="btn btn-neutral float-right" title="ALSA Use Case Interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 1998-2017, ALSA Library Maintainers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

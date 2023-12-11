@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>struct apr_mmap_t &#8212; Apache Portable Runtime Documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=0a676766" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css?v=3785b6ce" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=515d8a7f"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Memory Pool Functions" href="group_apr_pools.html" />
+    <link rel="prev" title="MMAP (Memory Map) Routines" href="group_apr_mmap.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="group_apr_pools.html" title="Memory Pool Functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="group_apr_mmap.html" title="MMAP (Memory Map) Routines"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Apache Portable Runtime Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="group_APR.html" >Apache Portability Runtime library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="group_apr_mmap.html" accesskey="U">MMAP (Memory Map) Routines</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">struct apr_mmap_t</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="struct-apr-mmap-t">
+<span id="doxid-structapr-mmap-t"></span><span id="index-0"></span><h1>struct apr_mmap_t</h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="overview">
+<h2>Overview</h2>
+<p>As far as I can tell the only really sane way to store an MMAP is as a void * and a length. <a class="reference internal" href="#details-structapr-mmap-t"><span class="std std-ref">More…</span></a></p>
+<pre class="highlight doxyrest-overview-code-block literal-block"><span></span><span class="cp">#include</span> <span class="cpf">&lt;apr_mmap.h&gt;</span>
+
+<span class="k">struct</span> <span class="n">apr_mmap_t</span> <span class="p">{</span>
+    <span class="c1">// fields</span>
+
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <a class="reference internal" href="#doxid-structapr-mmap-t-1a42d01080278bbc9bad26728f9a71c492"><span class="std std-ref">cntxt</span></a><span></span><span class="p">;</span>
+    <span class="kt">void</span><span class="o">*</span> <a class="reference internal" href="#doxid-structapr-mmap-t-1abcc62d7e7c8187311e6619faf0d44f19"><span class="std std-ref">mm</span></a><span></span><span class="p">;</span>
+    <span class="n">apr_size_t</span> <a class="reference internal" href="#doxid-structapr-mmap-t-1a274aea0906a4b674e1642ac9e81966c7"><span class="std std-ref">size</span></a><span></span><span class="p">;</span>
+
+    <span class="c1">// methods</span>
+
+    <a class="reference internal" href="#doxid-structapr-mmap-t-1aeca30aed7539548d31b7c0115020af62"><span class="std std-ref">APR_RING_ENTRY</span></a><span></span><span class="p">(</span><span class="n">apr_mmap_t</span><span class="p">);</span>
+<span class="p">};</span></pre>
+</section>
+<section id="detailed-documentation">
+<span id="details-structapr-mmap-t"></span><h2>Detailed Documentation</h2>
+<p>As far as I can tell the only really sane way to store an MMAP is as a void * and a length. BeOS requires this area_id, but that’s just a little something extra. I am exposing this type, because it doesn’t make much sense to keep it private, and opening it up makes some stuff easier in Apache.The MMAP structure</p>
+<section id="fields">
+<h3>Fields</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-structapr-mmap-t-1a42d01080278bbc9bad26728f9a71c492"><span id="index-1"></span><a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">cntxt</span></pre>
+<p>The pool the mmap structure was allocated out of.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-structapr-mmap-t-1abcc62d7e7c8187311e6619faf0d44f19"><span id="index-2"></span><span></span><span class="kt">void</span><span class="o">*</span> <span class="n">mm</span></pre>
+<p>The start of the memory mapped area</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-structapr-mmap-t-1a274aea0906a4b674e1642ac9e81966c7"><span id="index-3"></span><span></span><span class="n">apr_size_t</span> <span class="n">size</span></pre>
+<p>The amount of data in the mmap</p>
+</section>
+<section id="methods">
+<h3>Methods</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-structapr-mmap-t-1aeca30aed7539548d31b7c0115020af62"><span id="index-4"></span><span></span><span class="n">APR_RING_ENTRY</span><span class="p">(</span><span class="n">apr_mmap_t</span><span class="p">)</span></pre>
+<p>ring of <a class="reference internal" href="#doxid-structapr-mmap-t"><span class="std std-ref">apr_mmap_t</span></a> ‘s that reference the same mmap’ed region; acts in place of a reference count</p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">struct apr_mmap_t</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li><a class="reference internal" href="#fields">Fields</a></li>
+<li><a class="reference internal" href="#methods">Methods</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="group_apr_mmap.html"
+                          title="previous chapter">MMAP (Memory Map) Routines</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="group_apr_pools.html"
+                          title="next chapter">Memory Pool Functions</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="group_apr_pools.html" title="Memory Pool Functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="group_apr_mmap.html" title="MMAP (Memory Map) Routines"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Apache Portable Runtime Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="group_APR.html" >Apache Portability Runtime library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="group_apr_mmap.html" >MMAP (Memory Map) Routines</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">struct apr_mmap_t</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2008-2017, Apache Portable Runtime Maintainers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    </div>
+  </body>
+</html>

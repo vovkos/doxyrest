@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Reader/Writer Lock Routines &#8212; Apache Portable Runtime Documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=0a676766" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css?v=3785b6ce" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=515d8a7f"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Ring Macro Implementations" href="group_apr_ring.html" />
+    <link rel="prev" title="struct apr_crypto_hash_t" href="struct_apr_crypto_hash_t.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="group_apr_ring.html" title="Ring Macro Implementations"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="struct_apr_crypto_hash_t.html" title="struct apr_crypto_hash_t"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Apache Portable Runtime Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="group_APR.html" accesskey="U">Apache Portability Runtime library</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Reader/Writer Lock Routines</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="reader-writer-lock-routines">
+<span id="doxid-group-apr-thread-rwlock"></span><span id="index-0"></span><h1>Reader/Writer Lock Routines</h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="overview">
+<h2>Overview</h2>
+<pre class="highlight doxyrest-overview-code-block literal-block"><span></span><span class="c1">// typedefs</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-thread-rwlock-1gaede9b908e3d9e6a8aed7bd10d0ae0498"><span class="std std-ref">apr_thread_rwlock_t</span></a><span></span> <a class="reference internal" href="#doxid-group-apr-thread-rwlock-1gaede9b908e3d9e6a8aed7bd10d0ae0498"><span class="std std-ref">apr_thread_rwlock_t</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// global functions</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-rwlock-1gadae9c87ad957112406b48947cb1f0e93"><span class="std std-ref">apr_thread_rwlock_create</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-rwlock-1gaede9b908e3d9e6a8aed7bd10d0ae0498"><span class="std std-ref">apr_thread_rwlock_t</span></a><span></span><span class="o">**</span> <span class="n">rwlock</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-rwlock-1gad44a106cd9a81eef362d31837ca7018f"><span class="std std-ref">apr_thread_rwlock_rdlock</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-thread-rwlock-1gaede9b908e3d9e6a8aed7bd10d0ae0498"><span class="std std-ref">apr_thread_rwlock_t</span></a><span></span><span class="o">*</span> <span class="n">rwlock</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-rwlock-1ga2bbbc137f5c610e31bf87fd0a60c428e"><span class="std std-ref">apr_thread_rwlock_tryrdlock</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-thread-rwlock-1gaede9b908e3d9e6a8aed7bd10d0ae0498"><span class="std std-ref">apr_thread_rwlock_t</span></a><span></span><span class="o">*</span> <span class="n">rwlock</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-rwlock-1ga91543c9f97a6a1265524a5a8f55fef31"><span class="std std-ref">apr_thread_rwlock_wrlock</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-thread-rwlock-1gaede9b908e3d9e6a8aed7bd10d0ae0498"><span class="std std-ref">apr_thread_rwlock_t</span></a><span></span><span class="o">*</span> <span class="n">rwlock</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-rwlock-1ga54c04596f8a1f44630bdda5a25578d63"><span class="std std-ref">apr_thread_rwlock_trywrlock</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-thread-rwlock-1gaede9b908e3d9e6a8aed7bd10d0ae0498"><span class="std std-ref">apr_thread_rwlock_t</span></a><span></span><span class="o">*</span> <span class="n">rwlock</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-rwlock-1gac7b31112d972abfcac30252e622eb040"><span class="std std-ref">apr_thread_rwlock_unlock</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-thread-rwlock-1gaede9b908e3d9e6a8aed7bd10d0ae0498"><span class="std std-ref">apr_thread_rwlock_t</span></a><span></span><span class="o">*</span> <span class="n">rwlock</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-rwlock-1ga136118166f50091fb30011d837a4cdcc"><span class="std std-ref">apr_thread_rwlock_destroy</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-thread-rwlock-1gaede9b908e3d9e6a8aed7bd10d0ae0498"><span class="std std-ref">apr_thread_rwlock_t</span></a><span></span><span class="o">*</span> <span class="n">rwlock</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-thread-rwlock-1ga3e78c5d8f2e7f4cdad46e912e68edd33"><span class="std std-ref">apr_thread_rwlock_pool_get</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-apr-thread-rwlock-1gaede9b908e3d9e6a8aed7bd10d0ae0498"><span class="std std-ref">apr_thread_rwlock_t</span></a><span></span><span class="o">*</span> <span class="n">thethread_rwlock</span><span class="p">);</span></pre>
+</section>
+<section id="detailed-documentation">
+<span id="details-group-apr-thread-rwlock"></span><h2>Detailed Documentation</h2>
+<section id="typedefs">
+<h3>Typedefs</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-rwlock-1gaede9b908e3d9e6a8aed7bd10d0ae0498"><span id="index-1"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-thread-rwlock-1gaede9b908e3d9e6a8aed7bd10d0ae0498"><span class="std std-ref">apr_thread_rwlock_t</span></a><span></span> <span class="n">apr_thread_rwlock_t</span></pre>
+<p>Opaque read-write thread-safe lock.</p>
+</section>
+<section id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-rwlock-1gadae9c87ad957112406b48947cb1f0e93"><span id="index-2"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_thread_rwlock_create</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-rwlock-1gaede9b908e3d9e6a8aed7bd10d0ae0498"><span class="std std-ref">apr_thread_rwlock_t</span></a><span></span><span class="o">**</span> <span class="n">rwlock</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">)</span></pre>
+<p>Note: The following operations have undefined results: unlocking a read-write lock which is not locked in the calling thread; write locking a read-write lock which is already locked by the calling thread; destroying a read-write lock more than once; clearing or destroying the pool from which a <strong>locked</strong> read-write lock is allocated. Create and initialize a read-write lock that can be used to synchronize threads.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>rwlock</p></td>
+<td><p>the memory address where the newly created readwrite lock will be stored.</p></td>
+</tr>
+<tr class="row-even"><td><p>pool</p></td>
+<td><p>the pool from which to allocate the mutex.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-rwlock-1gad44a106cd9a81eef362d31837ca7018f"><span id="index-3"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_thread_rwlock_rdlock</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-thread-rwlock-1gaede9b908e3d9e6a8aed7bd10d0ae0498"><span class="std std-ref">apr_thread_rwlock_t</span></a><span></span><span class="o">*</span> <span class="n">rwlock</span><span class="p">)</span></pre>
+<p>Acquire a shared-read lock on the given read-write lock. This will allow multiple threads to enter the same critical section while they have acquired the read lock.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>rwlock</p></td>
+<td><p>the read-write lock on which to acquire the shared read.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-rwlock-1ga2bbbc137f5c610e31bf87fd0a60c428e"><span id="index-4"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_thread_rwlock_tryrdlock</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-thread-rwlock-1gaede9b908e3d9e6a8aed7bd10d0ae0498"><span class="std std-ref">apr_thread_rwlock_t</span></a><span></span><span class="o">*</span> <span class="n">rwlock</span><span class="p">)</span></pre>
+<p>Attempt to acquire the shared-read lock on the given read-write lock. This is the same as <a class="reference internal" href="#doxid-group-apr-thread-rwlock-1gad44a106cd9a81eef362d31837ca7018f"><span class="std std-ref">apr_thread_rwlock_rdlock()</span></a>, only that the function fails if there is another thread holding the write lock, or if there are any write threads blocking on the lock. If the function fails for this case, APR_EBUSY will be returned. Note: it is important that the <a class="reference internal" href="group_APR_STATUS_IS.html#doxid-group-a-p-r-s-t-a-t-u-s-i-s-1gabb92ad7b6ef304132de70e9e5cbaa896"><span class="std std-ref">APR_STATUS_IS_EBUSY(s)</span></a> macro be used to determine if the return value was APR_EBUSY, for portability reasons.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>rwlock</p></td>
+<td><p>the rwlock on which to attempt the shared read.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-rwlock-1ga91543c9f97a6a1265524a5a8f55fef31"><span id="index-5"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_thread_rwlock_wrlock</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-thread-rwlock-1gaede9b908e3d9e6a8aed7bd10d0ae0498"><span class="std std-ref">apr_thread_rwlock_t</span></a><span></span><span class="o">*</span> <span class="n">rwlock</span><span class="p">)</span></pre>
+<p>Acquire an exclusive-write lock on the given read-write lock. This will allow only one single thread to enter the critical sections. If there are any threads currently holding the read-lock, this thread is put to sleep until it can have exclusive access to the lock.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>rwlock</p></td>
+<td><p>the read-write lock on which to acquire the exclusive write.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-rwlock-1ga54c04596f8a1f44630bdda5a25578d63"><span id="index-6"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_thread_rwlock_trywrlock</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-thread-rwlock-1gaede9b908e3d9e6a8aed7bd10d0ae0498"><span class="std std-ref">apr_thread_rwlock_t</span></a><span></span><span class="o">*</span> <span class="n">rwlock</span><span class="p">)</span></pre>
+<p>Attempt to acquire the exclusive-write lock on the given read-write lock. This is the same as <a class="reference internal" href="#doxid-group-apr-thread-rwlock-1ga91543c9f97a6a1265524a5a8f55fef31"><span class="std std-ref">apr_thread_rwlock_wrlock()</span></a>, only that the function fails if there is any other thread holding the lock (for reading or writing), in which case the function will return APR_EBUSY. Note: it is important that the <a class="reference internal" href="group_APR_STATUS_IS.html#doxid-group-a-p-r-s-t-a-t-u-s-i-s-1gabb92ad7b6ef304132de70e9e5cbaa896"><span class="std std-ref">APR_STATUS_IS_EBUSY(s)</span></a> macro be used to determine if the return value was APR_EBUSY, for portability reasons.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>rwlock</p></td>
+<td><p>the rwlock on which to attempt the exclusive write.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-rwlock-1gac7b31112d972abfcac30252e622eb040"><span id="index-7"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_thread_rwlock_unlock</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-thread-rwlock-1gaede9b908e3d9e6a8aed7bd10d0ae0498"><span class="std std-ref">apr_thread_rwlock_t</span></a><span></span><span class="o">*</span> <span class="n">rwlock</span><span class="p">)</span></pre>
+<p>Release either the read or write lock currently held by the calling thread associated with the given read-write lock.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>rwlock</p></td>
+<td><p>the read-write lock to be released (unlocked).</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-rwlock-1ga136118166f50091fb30011d837a4cdcc"><span id="index-8"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_thread_rwlock_destroy</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-thread-rwlock-1gaede9b908e3d9e6a8aed7bd10d0ae0498"><span class="std std-ref">apr_thread_rwlock_t</span></a><span></span><span class="o">*</span> <span class="n">rwlock</span><span class="p">)</span></pre>
+<p>Destroy the read-write lock and free the associated memory.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>rwlock</p></td>
+<td><p>the rwlock to destroy.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-rwlock-1ga3e78c5d8f2e7f4cdad46e912e68edd33"><span id="index-9"></span><a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span>
+<span class="n">apr_thread_rwlock_pool_get</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-apr-thread-rwlock-1gaede9b908e3d9e6a8aed7bd10d0ae0498"><span class="std std-ref">apr_thread_rwlock_t</span></a><span></span><span class="o">*</span> <span class="n">thethread_rwlock</span><span class="p">)</span></pre>
+<p>Get the pool used by this thread_rwlock.</p>
+<p class="rubric">Returns:</p>
+<p>apr_pool_t the pool</p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Reader/Writer Lock Routines</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li><a class="reference internal" href="#global-functions">Global Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="struct_apr_crypto_hash_t.html"
+                          title="previous chapter">struct apr_crypto_hash_t</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="group_apr_ring.html"
+                          title="next chapter">Ring Macro Implementations</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="group_apr_ring.html" title="Ring Macro Implementations"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="struct_apr_crypto_hash_t.html" title="struct apr_crypto_hash_t"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Apache Portable Runtime Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="group_APR.html" >Apache Portability Runtime library</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Reader/Writer Lock Routines</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2008-2017, Apache Portable Runtime Maintainers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    </div>
+  </body>
+</html>

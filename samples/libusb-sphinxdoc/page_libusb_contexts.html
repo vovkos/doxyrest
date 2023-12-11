@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Contexts &#8212; LibUSB Documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=0a676766" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css?v=3785b6ce" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=46733111"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Device hotplug event notification" href="page_libusb_hotplug.html" />
+    <link rel="prev" title="Caveats" href="page_libusb_caveats.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="page_libusb_hotplug.html" title="Device hotplug event notification"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="page_libusb_caveats.html" title="Caveats"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LibUSB Documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Contexts</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="contexts">
+<span id="doxid-libusb-contexts"></span><span id="index-0"></span><h1>Contexts</h1>
+<p>It is possible that libusb may be used simultaneously from two independent libraries linked into the same executable.</p>
+<p>For example, if your application has a plugin-like system which allows the user to dynamically load a range of modules into your program, it is feasible that two independently developed modules may both use libusb.</p>
+<p>libusb is written to allow for these multiple user scenarios. The two “instances” of libusb will not interfere: <a class="reference internal" href="group_libusb_lib.html#doxid-group-libusb-lib-1ga5f8376b7a863a5a8d5b8824feb8a427a"><span class="std std-ref">libusb_set_debug()</span></a> calls from one user will not affect the same settings for other users, other users can continue using libusb after one of them calls <a class="reference internal" href="group_libusb_lib.html#doxid-group-libusb-lib-1ga86532f222d4f1332a5f8f5eef9a92da9"><span class="std std-ref">libusb_exit()</span></a>, etc.</p>
+<p>This is made possible through libusb’s <em>context</em> concept. When you call <a class="reference internal" href="group_libusb_lib.html#doxid-group-libusb-lib-1ga9517c37281bba0b51cc62eba728be48b"><span class="std std-ref">libusb_init()</span></a>, you are (optionally) given a context. You can then pass this context pointer back into future libusb functions.</p>
+<p>In order to keep things simple for more simplistic applications, it is legal to pass NULL to all functions requiring a context pointer (as long as you’re sure no other code will attempt to use libusb from the same process). When you pass NULL, the default context will be used. The default context is created the first time a process calls <a class="reference internal" href="group_libusb_lib.html#doxid-group-libusb-lib-1ga9517c37281bba0b51cc62eba728be48b"><span class="std std-ref">libusb_init()</span></a> when no other context is alive. Contexts are destroyed during <a class="reference internal" href="group_libusb_lib.html#doxid-group-libusb-lib-1ga86532f222d4f1332a5f8f5eef9a92da9"><span class="std std-ref">libusb_exit()</span></a>.</p>
+<p>The default context is reference-counted and can be shared. That means that if libusb_init(NULL) is called twice within the same process, the two users end up sharing the same context. The deinitialization and freeing of the default context will only happen when the last user calls <a class="reference internal" href="group_libusb_lib.html#doxid-group-libusb-lib-1ga86532f222d4f1332a5f8f5eef9a92da9"><span class="std std-ref">libusb_exit()</span></a>. In other words, the default context is created and initialized when its reference count goes from 0 to 1, and is deinitialized and destroyed when its reference count goes from 1 to 0.</p>
+<p>You may be wondering why only a subset of libusb functions require a context pointer in their function definition. Internally, libusb stores context pointers in other objects (e.g. libusb_device instances) and hence can infer the context from those objects.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="page_libusb_caveats.html"
+                          title="previous chapter">Caveats</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="page_libusb_hotplug.html"
+                          title="next chapter">Device hotplug event notification</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="page_libusb_hotplug.html" title="Device hotplug event notification"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="page_libusb_caveats.html" title="Caveats"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LibUSB Documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Contexts</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2007-2017, LibUSB Maintainers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Bug List &#8212; Apache Portable Runtime Documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=0a676766" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css?v=3785b6ce" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=515d8a7f"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Deprecated List" href="page_deprecated.html" />
+    <link rel="prev" title="ctype functions" href="group_apr_ctype.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="page_deprecated.html" title="Deprecated List"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="group_apr_ctype.html" title="ctype functions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Apache Portable Runtime Documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Bug List</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="bug-list">
+<span id="doxid-bug"></span><span id="index-0"></span><h1>Bug List</h1>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><span class="target" id="doxid-bug-1-bug000001"></span> Global <a class="reference internal" href="group_apr_dso.html#doxid-group-apr-dso-1gaedc8609c2bb76e5c43f2df2281a9d8b6"><span class="std std-ref">apr_dso_load</span></a> (apr_dso_handle_t **res_handle, const char *path, apr_pool_t *ctx)</p></td>
+<td><p>We aught to provide an alternative to RTLD_GLOBAL, which is the only supported method of loading DSOs today.</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="target" id="doxid-bug-1-bug000003"></span> Global <a class="reference internal" href="group_apr_file_io.html#doxid-group-apr-file-io-1gaae3b81342d239c58c351cf11190740ed"><span class="std std-ref">apr_file_pipe_create</span></a> (apr_file_t **in, apr_file_t **out, apr_pool_t *pool)</p></td>
+<td><p>Some platforms cannot toggle between blocking and nonblocking, and when passing a pipe as a standard handle to an application which does not expect it, a non-blocking stream will fluxor the client app.</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="target" id="doxid-bug-1-bug000002"></span> Global <a class="reference internal" href="group_apr_filepath.html#doxid-group-apr-filepath-1gabb57ce7b23caf512d7f64b92a662ab3d"><span class="std std-ref">APR_FILEPATH_NOTABOVEROOT</span></a></p></td>
+<td><p>in APR 0.9 and 1.x, this flag’s behavior is undefined if the rootpath is NULL or empty. In APR 2.0 this should be changed to imply NOTABSOLUTE if the rootpath is NULL or empty.</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="target" id="doxid-bug-1-bug000010"></span> Global <a class="reference internal" href="group_apr_thread_proc.html#doxid-group-apr-thread-proc-1gaf8d2be452a819161aa4cd6205a17761e"><span class="std std-ref">apr_proc_other_child_register</span></a> (<a class="reference internal" href="struct_apr_proc_t.html#doxid-structapr-proc-t"><span class="std std-ref">apr_proc_t</span></a> *proc, void(*maintenance)(int reason, void *, int status), void *data, apr_file_t *write_fd, apr_pool_t *p)</p></td>
+<td><p>write_fd duplicates the proc-&gt;out stream, it’s really redundant and should be replaced in the APR 1.0 API with a bitflag of which proc-&gt;in/out/err handles should be health checked.</p>
+<p>no platform currently tests the pipes health.</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p><span class="target" id="doxid-bug-1-bug000011"></span> Global <a class="reference internal" href="struct_apr_proc_t.html#doxid-structapr-proc-t-1a72ed1c58c3f08ffa7202fa80e870cd54"><span class="std std-ref">apr_proc_t::invoked</span></a></p></td>
+<td><p>This should either always or never be present in release builds - since it breaks binary compatibility. We may enable it always in APR 1.0 yet leave it undefined in most cases.</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="target" id="doxid-bug-1-bug000009"></span> Global <a class="reference internal" href="group_apr_thread_proc.html#doxid-group-apr-thread-proc-1ga506183074e8413c3ff597539e4768ea4"><span class="std std-ref">apr_proc_wait_all_procs</span></a> (<a class="reference internal" href="struct_apr_proc_t.html#doxid-structapr-proc-t"><span class="std std-ref">apr_proc_t</span></a> *proc, int *exitcode, apr_exit_why_e *exitwhy, apr_wait_how_e waithow, apr_pool_t *p)</p></td>
+<td><p>Passing proc as a *proc rather than **proc was an odd choice for some platforms… this should be revisited in 1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="target" id="doxid-bug-1-bug000008"></span> Global <a class="reference internal" href="group_apr_thread_proc.html#doxid-group-apr-thread-proc-1ga6fad364c6c820e37c0915435cfb3921f"><span class="std std-ref">apr_procattr_child_err_set</span></a> (struct apr_procattr_t *attr, apr_file_t *child_err, apr_file_t *parent_err)</p></td>
+<td><p>Note that calling this function with two NULL files on some platforms creates an APR_FULL_BLOCK pipe, but this behavior is neither portable nor is it supported.</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="target" id="doxid-bug-1-bug000006"></span> Global <a class="reference internal" href="group_apr_thread_proc.html#doxid-group-apr-thread-proc-1ga24f40119b1aa07dd45a681a44915cb1b"><span class="std std-ref">apr_procattr_child_in_set</span></a> (struct apr_procattr_t *attr, apr_file_t *child_in, apr_file_t *parent_in)</p></td>
+<td><p>Note that calling this function with two NULL files on some platforms creates an APR_FULL_BLOCK pipe, but this behavior is neither portable nor is it supported.</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="target" id="doxid-bug-1-bug000007"></span> Global <a class="reference internal" href="group_apr_thread_proc.html#doxid-group-apr-thread-proc-1gabb97e9a49021ab4452ae3f1a281c977f"><span class="std std-ref">apr_procattr_child_out_set</span></a> (struct apr_procattr_t *attr, apr_file_t *child_out, apr_file_t *parent_out)</p></td>
+<td><p>Note that calling this function with two NULL files on some platforms creates an APR_FULL_BLOCK pipe, but this behavior is neither portable nor is it supported.</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="target" id="doxid-bug-1-bug000004"></span> Global <a class="reference internal" href="group_apr_network_io.html#doxid-group-apr-network-io-1ga270b7c0835283fa2b85a05d295dd7ee5"><span class="std std-ref">apr_socket_accept_filter</span></a> (apr_socket_t *sock, char *name, char *args)</p></td>
+<td><p>name and args should have been declared as const char *, as they are in APR 2.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="target" id="doxid-bug-1-bug000005"></span> Global <a class="reference internal" href="group_apr_strings.html#doxid-group-apr-strings-1ga1583688e0777398174f62e46a522ae8f"><span class="std std-ref">apr_strtoff</span></a> (apr_off_t *offset, const char *buf, char **end, int base)</p></td>
+<td><p>*end breaks type safety; where *buf is const, *end needs to be declared as const in APR 2.0</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="group_apr_ctype.html"
+                          title="previous chapter">ctype functions</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="page_deprecated.html"
+                          title="next chapter">Deprecated List</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="page_deprecated.html" title="Deprecated List"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="group_apr_ctype.html" title="ctype functions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Apache Portable Runtime Documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Bug List</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2008-2017, Apache Portable Runtime Maintainers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    </div>
+  </body>
+</html>

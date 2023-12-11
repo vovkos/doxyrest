@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Output Interface &#8212; ALSA Library Documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=0a676766" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css?v=3785b6ce" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=e9012143"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="enum snd_output_type_t" href="enum_snd_output_type_t.html" />
+    <link rel="prev" title="enum snd_mixer_elem_type_t" href="enum_snd_mixer_elem_type_t.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="enum_snd_output_type_t.html" title="enum snd_output_type_t"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="enum_snd_mixer_elem_type_t.html" title="enum snd_mixer_elem_type_t"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ALSA Library Documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Output Interface</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="output-interface">
+<span id="doxid-group-output"></span><span id="index-0"></span><h1>Output Interface</h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="overview">
+<h2>Overview</h2>
+<p>The output functions present an interface similar to the stdio functions on top of different underlying output destinations. <a class="reference internal" href="#details-group-output"><span class="std std-ref">More…</span></a></p>
+<pre class="highlight doxyrest-overview-code-block literal-block"><span></span><span class="c1">// typedefs</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_output</span> <a class="reference internal" href="#doxid-group-output-1ga49729cc6454539495c1f5b6e95cd474a"><span class="std std-ref">snd_output_t</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// enums</span>
+
+<span class="k">enum</span> <a class="reference internal" href="enum_snd_output_type_t.html#doxid-group-output-1ga7217dd8d10e2491388e866d3354a4b29"><span class="std std-ref">snd_output_type_t</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// global functions</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-output-1gae7b87e8cfcc2d46b124b2ad221ed6435"><span class="std std-ref">snd_output_stdio_open</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-output-1ga49729cc6454539495c1f5b6e95cd474a"><span class="std std-ref">snd_output_t</span></a><span></span><span class="o">**</span> <span class="n">outputp</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">file</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">mode</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-output-1gaca78d01bf6d081274650794861373c7d"><span class="std std-ref">snd_output_stdio_attach</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-output-1ga49729cc6454539495c1f5b6e95cd474a"><span class="std std-ref">snd_output_t</span></a><span></span><span class="o">**</span> <span class="n">outputp</span><span class="p">,</span>
+    <span class="kt">FILE</span><span class="o">*</span> <span class="n">fp</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">_close</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-output-1gafb4d1ae52ed7148b0abab0de3257fae1"><span class="std std-ref">snd_output_buffer_open</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-output-1ga49729cc6454539495c1f5b6e95cd474a"><span class="std std-ref">snd_output_t</span></a><span></span><span class="o">**</span> <span class="n">outputp</span><span class="p">);</span>
+
+<span class="kt">size_t</span>
+<a class="reference internal" href="#doxid-group-output-1gaae66e163bd719593b6787d922546a055"><span class="std std-ref">snd_output_buffer_string</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-output-1ga49729cc6454539495c1f5b6e95cd474a"><span class="std std-ref">snd_output_t</span></a><span></span><span class="o">*</span> <span class="n">output</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">**</span> <span class="n">buf</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-output-1gab4be4e572d2a0d0f2f46faf8d45aa35d"><span class="std std-ref">snd_output_close</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-output-1ga49729cc6454539495c1f5b6e95cd474a"><span class="std std-ref">snd_output_t</span></a><span></span><span class="o">*</span> <span class="n">output</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-output-1ga5dd8e7d3089a82d8449a9dff221caf1c"><span class="std std-ref">snd_output_printf</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-output-1ga49729cc6454539495c1f5b6e95cd474a"><span class="std std-ref">snd_output_t</span></a><span></span><span class="o">*</span> <span class="n">output</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">format</span><span class="p">,</span>
+    <span class="p">...</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-output-1gae01572ae47fd3ead25ffd6856118780f"><span class="std std-ref">snd_output_vprintf</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-output-1ga49729cc6454539495c1f5b6e95cd474a"><span class="std std-ref">snd_output_t</span></a><span></span><span class="o">*</span> <span class="n">output</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">format</span><span class="p">,</span>
+    <span class="kt">va_list</span> <span class="n">args</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-output-1gaa370cff392c8fdaf03e08c667561d4ec"><span class="std std-ref">snd_output_puts</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-output-1ga49729cc6454539495c1f5b6e95cd474a"><span class="std std-ref">snd_output_t</span></a><span></span><span class="o">*</span> <span class="n">output</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">str</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-output-1ga7b2b8c27042964a5b57acabe0af6e30b"><span class="std std-ref">snd_output_putc</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-output-1ga49729cc6454539495c1f5b6e95cd474a"><span class="std std-ref">snd_output_t</span></a><span></span><span class="o">*</span> <span class="n">output</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">c</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-output-1ga9d188a05400c944bc1f70d757c179226"><span class="std std-ref">snd_output_flush</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-output-1ga49729cc6454539495c1f5b6e95cd474a"><span class="std std-ref">snd_output_t</span></a><span></span><span class="o">*</span> <span class="n">output</span><span class="p">);</span></pre>
+</section>
+<section id="detailed-documentation">
+<span id="details-group-output"></span><h2>Detailed Documentation</h2>
+<p>The output functions present an interface similar to the stdio functions on top of different underlying output destinations.</p>
+<p>Many PCM debugging functions (<code class="docutils literal notranslate"><span class="pre">snd_pcm_xxx_dump_xxx</span></code>) use such an output handle to be able to write not only to the screen but also to other destinations, e.g. to files or to memory buffers.</p>
+<section id="typedefs">
+<h3>Typedefs</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-output-1ga49729cc6454539495c1f5b6e95cd474a"><span id="index-1"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_output</span> <span class="n">snd_output_t</span></pre>
+<p>Internal structure for an output object.</p>
+<p>The ALSA library uses a pointer to this structure as a handle to an output object. Applications don’t access its contents directly.</p>
+</section>
+<section id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-output-1gae7b87e8cfcc2d46b124b2ad221ed6435"><span id="index-2"></span><span></span><span class="kt">int</span>
+<span class="n">snd_output_stdio_open</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-output-1ga49729cc6454539495c1f5b6e95cd474a"><span class="std std-ref">snd_output_t</span></a><span></span><span class="o">**</span> <span class="n">outputp</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">file</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">mode</span>
+<span class="p">)</span></pre>
+<p>Creates a new output object writing to a file.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>outputp</p></td>
+<td><p>The function puts the pointer to the new output object at the address specified by <code class="docutils literal notranslate"><span class="pre">outputp</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>file</p></td>
+<td><p>The name of the file to open.</p></td>
+</tr>
+<tr class="row-odd"><td><p>mode</p></td>
+<td><p>The open mode, like <code class="docutils literal notranslate"><span class="pre">fopen(3)</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>Zero if successful, otherwise a negative error code.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-output-1gaca78d01bf6d081274650794861373c7d"><span id="index-3"></span><span></span><span class="kt">int</span>
+<span class="n">snd_output_stdio_attach</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-output-1ga49729cc6454539495c1f5b6e95cd474a"><span class="std std-ref">snd_output_t</span></a><span></span><span class="o">**</span> <span class="n">outputp</span><span class="p">,</span>
+    <span class="kt">FILE</span><span class="o">*</span> <span class="n">fp</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">_close</span>
+<span class="p">)</span></pre>
+<p>Creates a new output object using an existing stdio <code class="docutils literal notranslate"><span class="pre">FILE</span></code> pointer.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>outputp</p></td>
+<td><p>The function puts the pointer to the new output object at the address specified by <code class="docutils literal notranslate"><span class="pre">outputp</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>fp</p></td>
+<td><p>The <code class="docutils literal notranslate"><span class="pre">FILE</span></code> pointer to write to. Characters are written to the file starting at the current file position.</p></td>
+</tr>
+<tr class="row-odd"><td><p>_close</p></td>
+<td><p>Close flag. Set this to 1 if <a class="reference internal" href="#doxid-group-output-1gab4be4e572d2a0d0f2f46faf8d45aa35d"><span class="std std-ref">snd_output_close</span></a> should close <code class="docutils literal notranslate"><span class="pre">fp</span></code> by calling <code class="docutils literal notranslate"><span class="pre">fclose</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>Zero if successful, otherwise a negative error code.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-output-1gafb4d1ae52ed7148b0abab0de3257fae1"><span id="index-4"></span><span></span><span class="kt">int</span>
+<span class="n">snd_output_buffer_open</span><span class="p">(</span><a class="reference internal" href="#doxid-group-output-1ga49729cc6454539495c1f5b6e95cd474a"><span class="std std-ref">snd_output_t</span></a><span></span><span class="o">**</span> <span class="n">outputp</span><span class="p">)</span></pre>
+<p>Creates a new output object with an auto-extending memory buffer.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>outputp</p></td>
+<td><p>The function puts the pointer to the new output object at the address specified by <code class="docutils literal notranslate"><span class="pre">outputp</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>Zero if successful, otherwise a negative error code.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-output-1gaae66e163bd719593b6787d922546a055"><span id="index-5"></span><span></span><span class="kt">size_t</span>
+<span class="n">snd_output_buffer_string</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-output-1ga49729cc6454539495c1f5b6e95cd474a"><span class="std std-ref">snd_output_t</span></a><span></span><span class="o">*</span> <span class="n">output</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">**</span> <span class="n">buf</span>
+<span class="p">)</span></pre>
+<p>Returns the address of the buffer of a <a class="reference internal" href="enum_snd_output_type_t.html#doxid-group-output-1gga7217dd8d10e2491388e866d3354a4b29a5630f21823bbe05e6547b8cc27af4e37"><span class="std std-ref">SND_OUTPUT_BUFFER</span></a> output handle.</p>
+<p>The address of the buffer may become invalid when output functions or <a class="reference internal" href="#doxid-group-output-1gab4be4e572d2a0d0f2f46faf8d45aa35d"><span class="std std-ref">snd_output_close</span></a> are called.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>output</p></td>
+<td><p>The output handle.</p></td>
+</tr>
+<tr class="row-even"><td><p>buf</p></td>
+<td><p>The functions puts the current address of the buffer at the address specified by <code class="docutils literal notranslate"><span class="pre">buf</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>The current size of valid data in the buffer.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-output-1gab4be4e572d2a0d0f2f46faf8d45aa35d"><span id="index-6"></span><span></span><span class="kt">int</span>
+<span class="n">snd_output_close</span><span class="p">(</span><a class="reference internal" href="#doxid-group-output-1ga49729cc6454539495c1f5b6e95cd474a"><span class="std std-ref">snd_output_t</span></a><span></span><span class="o">*</span> <span class="n">output</span><span class="p">)</span></pre>
+<p>Closes an output handle.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>output</p></td>
+<td><p>The output handle to be closed.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>Zero if successful, otherwise a negative error code.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-output-1ga5dd8e7d3089a82d8449a9dff221caf1c"><span id="index-7"></span><span></span><span class="kt">int</span>
+<span class="n">snd_output_printf</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-output-1ga49729cc6454539495c1f5b6e95cd474a"><span class="std std-ref">snd_output_t</span></a><span></span><span class="o">*</span> <span class="n">output</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">format</span><span class="p">,</span>
+    <span class="p">...</span>
+<span class="p">)</span></pre>
+<p>Writes formatted output (like <code class="docutils literal notranslate"><span class="pre">fprintf(3)</span></code>) to an output handle.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>output</p></td>
+<td><p>The output handle.</p></td>
+</tr>
+<tr class="row-even"><td><p>format</p></td>
+<td><p>Format string in <code class="docutils literal notranslate"><span class="pre">fprintf</span></code> format.</p></td>
+</tr>
+<tr class="row-odd"><td><p>…</p></td>
+<td><p>Other <code class="docutils literal notranslate"><span class="pre">fprintf</span></code> arguments.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>The number of characters written, or a negative error code.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-output-1gae01572ae47fd3ead25ffd6856118780f"><span id="index-8"></span><span></span><span class="kt">int</span>
+<span class="n">snd_output_vprintf</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-output-1ga49729cc6454539495c1f5b6e95cd474a"><span class="std std-ref">snd_output_t</span></a><span></span><span class="o">*</span> <span class="n">output</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">format</span><span class="p">,</span>
+    <span class="kt">va_list</span> <span class="n">args</span>
+<span class="p">)</span></pre>
+<p>Writes formatted output (like <code class="docutils literal notranslate"><span class="pre">fprintf(3)</span></code>) to an output handle.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>output</p></td>
+<td><p>The output handle.</p></td>
+</tr>
+<tr class="row-even"><td><p>format</p></td>
+<td><p>Format string in <code class="docutils literal notranslate"><span class="pre">fprintf</span></code> format.</p></td>
+</tr>
+<tr class="row-odd"><td><p>args</p></td>
+<td><p>Other <code class="docutils literal notranslate"><span class="pre">fprintf</span></code> arguments.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>The number of characters written, or a negative error code.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-output-1gaa370cff392c8fdaf03e08c667561d4ec"><span id="index-9"></span><span></span><span class="kt">int</span>
+<span class="n">snd_output_puts</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-output-1ga49729cc6454539495c1f5b6e95cd474a"><span class="std std-ref">snd_output_t</span></a><span></span><span class="o">*</span> <span class="n">output</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">str</span>
+<span class="p">)</span></pre>
+<p>Writes a string to an output handle (like <code class="docutils literal notranslate"><span class="pre">fputs(3)</span></code>).</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>output</p></td>
+<td><p>The output handle.</p></td>
+</tr>
+<tr class="row-even"><td><p>str</p></td>
+<td><p>Pointer to the string.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>Zero if successful, otherwise a negative error code or <code class="docutils literal notranslate"><span class="pre">EOF</span></code>.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-output-1ga7b2b8c27042964a5b57acabe0af6e30b"><span id="index-10"></span><span></span><span class="kt">int</span>
+<span class="n">snd_output_putc</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-output-1ga49729cc6454539495c1f5b6e95cd474a"><span class="std std-ref">snd_output_t</span></a><span></span><span class="o">*</span> <span class="n">output</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">c</span>
+<span class="p">)</span></pre>
+<p>Writes a character to an output handle (like <code class="docutils literal notranslate"><span class="pre">putc(3)</span></code>).</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>output</p></td>
+<td><p>The output handle.</p></td>
+</tr>
+<tr class="row-even"><td><p>c</p></td>
+<td><p>The character.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>Zero if successful, otherwise a negative error code or <code class="docutils literal notranslate"><span class="pre">EOF</span></code>.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-output-1ga9d188a05400c944bc1f70d757c179226"><span id="index-11"></span><span></span><span class="kt">int</span>
+<span class="n">snd_output_flush</span><span class="p">(</span><a class="reference internal" href="#doxid-group-output-1ga49729cc6454539495c1f5b6e95cd474a"><span class="std std-ref">snd_output_t</span></a><span></span><span class="o">*</span> <span class="n">output</span><span class="p">)</span></pre>
+<p>Flushes an output handle (like fflush(3)).</p>
+<p>If the underlying destination is a stdio stream, this function calls <code class="docutils literal notranslate"><span class="pre">fflush</span></code>. If the underlying destination is a memory buffer, the write position is reset to the beginning of the buffer. <code class="docutils literal notranslate"><span class="pre">=</span></code> :-o</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>output</p></td>
+<td><p>The output handle.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>Zero if successful, otherwise <code class="docutils literal notranslate"><span class="pre">EOF</span></code>.</p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Output Interface</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li><a class="reference internal" href="#global-functions">Global Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="enum_snd_mixer_elem_type_t.html"
+                          title="previous chapter">enum snd_mixer_elem_type_t</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="enum_snd_output_type_t.html"
+                          title="next chapter">enum snd_output_type_t</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="enum_snd_output_type_t.html" title="enum snd_output_type_t"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="enum_snd_mixer_elem_type_t.html" title="enum snd_mixer_elem_type_t"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ALSA Library Documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Output Interface</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 1998-2017, ALSA Library Maintainers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    </div>
+  </body>
+</html>

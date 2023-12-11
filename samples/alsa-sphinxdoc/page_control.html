@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Control interface &#8212; ALSA Library Documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=0a676766" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css?v=3785b6ce" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=e9012143"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Deprecated List" href="page_deprecated.html" />
+    <link rel="prev" title="Configuration files" href="page_conf.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="page_deprecated.html" title="Deprecated List"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="page_conf.html" title="Configuration files"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ALSA Library Documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Control interface</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="control-interface">
+<span id="doxid-control"></span><span id="index-0"></span><h1>Control interface</h1>
+<p>Control interface is designed to access primitive controls. There is also interface notifying about control and structure changes.</p>
+<section id="general-overview">
+<span id="doxid-control-1control-general-overview"></span><h2>General overview</h2>
+<p>In ALSA control feature, each sound card can have control elements. The elements are managed according to below model.</p>
+<ul class="simple">
+<li><p>element set</p>
+<ul>
+<li><p>A set of elements with the same attribute (i.e. name, get/put operations). Some element sets can be added to a sound card by drivers in kernel and userspace applications.</p></li>
+</ul>
+</li>
+<li><p>element</p>
+<ul>
+<li><p>An element can be identified by userspace applications. Each element has own identical information.</p></li>
+</ul>
+</li>
+<li><p>member</p>
+<ul>
+<li><p>An element includes some members to have a value. The value of each member can be changed by both of userspace applications and drivers in kernel.</p></li>
+</ul>
+</li>
+</ul>
+<p>Each element can be identified by two ways; a combination of name and index, or numerical number (numid).</p>
+<p>The type of element set is one of integer, integerr64, boolean, enumerators, bytes and IEC958 structure. This indicates the type of value for each member in elements included in the element set.</p>
+<p>When the value of member is changed, corresponding events are transferred to userspace applications. The applications should subscribe any events in advance.</p>
+</section>
+<section id="supplemental-data-for-elements-in-an-element-set">
+<span id="doxid-control-1tlv-blob"></span><h2>Supplemental data for elements in an element set</h2>
+<p>TLV feature is designed to transfer data in a shape of Type/Length/Value, between a driver and any userspace applications. The main purpose is to attach supplement information for elements to an element set; e.g. dB range.</p>
+<p>At first, this feature was implemented to add pre-defined data readable to userspace applications. Soon, it was extended to handle several operations; read, write and command. The original implementation remains as the read operation. The command operation allows drivers to have own implementations against requests from userspace applications.</p>
+<p>This feature was introduced to ALSA control feature in 2006, at commit c7a0708a2362, corresponding to a series of work for Linux kernel (42750b04c5ba and 8aa9b586e420).</p>
+<p>There’s no limitation about maximum size of the data, therefore it can be used to deliver quite large arbitrary data from userspace to in-kernel drivers via ALSA control character device. Focusing on this nature, as of 2016, some in-kernel implementations utilize this feature for I/O operations. This is against the original design.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Control interface</a><ul>
+<li><a class="reference internal" href="#general-overview">General overview</a></li>
+<li><a class="reference internal" href="#supplemental-data-for-elements-in-an-element-set">Supplemental data for elements in an element set</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="page_conf.html"
+                          title="previous chapter">Configuration files</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="page_deprecated.html"
+                          title="next chapter">Deprecated List</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="page_deprecated.html" title="Deprecated List"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="page_conf.html" title="Configuration files"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ALSA Library Documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Control interface</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 1998-2017, ALSA Library Maintainers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    </div>
+  </body>
+</html>

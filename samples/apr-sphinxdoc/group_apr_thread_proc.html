@@ -1,0 +1,1736 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Threads and Process Functions &#8212; Apache Portable Runtime Documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=0a676766" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css?v=3785b6ce" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=515d8a7f"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Other Child Flags" href="group_APR_OC.html" />
+    <link rel="prev" title="Thread Mutex Routines" href="group_apr_thread_mutex.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="group_APR_OC.html" title="Other Child Flags"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="group_apr_thread_mutex.html" title="Thread Mutex Routines"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Apache Portable Runtime Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="group_APR.html" accesskey="U">Apache Portability Runtime library</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Threads and Process Functions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="threads-and-process-functions">
+<span id="doxid-group-apr-thread-proc"></span><span id="index-0"></span><h1>Threads and Process Functions</h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="overview">
+<h2>Overview</h2>
+<div class="line-block">
+<div class="line"><a class="reference internal" href="group_APR_OC.html#doxid-group-a-p-r-o-c"><span class="std std-ref">Other Child Flags</span></a></div>
+</div>
+<pre class="highlight doxyrest-overview-code-block literal-block"><span></span><span class="c1">// typedefs</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="struct_apr_proc_t.html#doxid-structapr-proc-t"><span class="std std-ref">apr_proc_t</span></a><span></span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1gada60ec0f833048291d98e66f21f4c4c4"><span class="std std-ref">apr_proc_t</span></a><span></span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="kt">void</span><span class="p">()</span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga1feae4cf7ed6f156a0db10172e228e2d"><span class="std std-ref">apr_child_errfn_t</span></a><span></span><span class="p">(</span>
+    <span class="n">apr_pool_t</span> <span class="o">*</span><span class="n">proc</span><span class="p">,</span>
+    <span class="n">apr_status_t</span> <span class="n">err</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">description</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga646c71351e723d84f8cc8c8d1d5937be"><span class="std std-ref">apr_thread_t</span></a><span></span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga646c71351e723d84f8cc8c8d1d5937be"><span class="std std-ref">apr_thread_t</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga35de571e9944871c10b38d8feef885ac"><span class="std std-ref">apr_threadattr_t</span></a><span></span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga35de571e9944871c10b38d8feef885ac"><span class="std std-ref">apr_threadattr_t</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga91841bcf20d0579e8e6acc6d3c220ac1"><span class="std std-ref">apr_thread_once_t</span></a><span></span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga91841bcf20d0579e8e6acc6d3c220ac1"><span class="std std-ref">apr_thread_once_t</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga337c9c1bd2d47740022071a5c41f2edb"><span class="std std-ref">apr_threadkey_t</span></a><span></span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga337c9c1bd2d47740022071a5c41f2edb"><span class="std std-ref">apr_threadkey_t</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1gafc52ee8b19a7b222278d31ebb3f11a71"><span class="std std-ref">apr_other_child_rec_t</span></a><span></span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1gafc52ee8b19a7b222278d31ebb3f11a71"><span class="std std-ref">apr_other_child_rec_t</span></a><span></span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="kt">void</span><span class="o">*</span><span class="p">(</span><a class="reference internal" href="group_apr_platform.html#doxid-group-apr-platform-1gade8f829f9bd98fd4386894acf72edd7c"><span class="std std-ref">APR_THREAD_FUNC</span></a><span></span><span class="o">*</span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1gaa1f88d2a6fe971ac200e466cae5f63e0"><span class="std std-ref">apr_thread_start_t</span></a><span></span><span class="p">)(</span>
+    <span class="n">apr_thread_t</span> <span class="o">*</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span>
+    <span class="p">);</span>
+
+<span class="c1">// enums</span>
+
+<span class="k">enum</span> <a class="reference internal" href="enum_apr_cmdtype_e.html#doxid-group-apr-thread-proc-1gadcb981d7748c580eb69ac11dbf709060"><span class="std std-ref">apr_cmdtype_e</span></a><span></span><span class="p">;</span>
+<span class="k">enum</span> <a class="reference internal" href="enum_apr_exit_why_e.html#doxid-group-apr-thread-proc-1gac097b4fa41e67024711c5983446d0951"><span class="std std-ref">apr_exit_why_e</span></a><span></span><span class="p">;</span>
+<span class="k">enum</span> <a class="reference internal" href="enum_apr_kill_conditions_e.html#doxid-group-apr-thread-proc-1ga3eaec78633742e7e0cb9480a21477aff"><span class="std std-ref">apr_kill_conditions_e</span></a><span></span><span class="p">;</span>
+<span class="k">enum</span> <a class="reference internal" href="enum_apr_wait_how_e.html#doxid-group-apr-thread-proc-1ga5e52d786644f3b66d6180571e68c7260"><span class="std std-ref">apr_wait_how_e</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// structs</span>
+
+<span class="k">struct</span> <a class="reference internal" href="struct_apr_proc_t.html#doxid-structapr-proc-t"><span class="std std-ref">apr_proc_t</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// global functions</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga66c2f55e5dff9ac37bd32e9febd38da5"><span class="std std-ref">apr_threadattr_create</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga35de571e9944871c10b38d8feef885ac"><span class="std std-ref">apr_threadattr_t</span></a><span></span><span class="o">**</span> <span class="n">new_attr</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">cont</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga85d44b3b021f28116122d5e40e024648"><span class="std std-ref">apr_threadattr_detach_set</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga35de571e9944871c10b38d8feef885ac"><span class="std std-ref">apr_threadattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">on</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1gae5b7cdb3de542d1b7b52fe5d9d8cb00b"><span class="std std-ref">apr_threadattr_detach_get</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga35de571e9944871c10b38d8feef885ac"><span class="std std-ref">apr_threadattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga7849e0d637338a18cb44f66f11f28ed1"><span class="std std-ref">apr_threadattr_stacksize_set</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga35de571e9944871c10b38d8feef885ac"><span class="std std-ref">apr_threadattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <span class="n">apr_size_t</span> <span class="n">stacksize</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga2e732f2913291180c0c484f57d727140"><span class="std std-ref">apr_threadattr_guardsize_set</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga35de571e9944871c10b38d8feef885ac"><span class="std std-ref">apr_threadattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <span class="n">apr_size_t</span> <span class="n">guardsize</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1gaeba6593f43f1de94c2b4495dd72b0e9f"><span class="std std-ref">apr_thread_create</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga646c71351e723d84f8cc8c8d1d5937be"><span class="std std-ref">apr_thread_t</span></a><span></span><span class="o">**</span> <span class="n">new_thread</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga35de571e9944871c10b38d8feef885ac"><span class="std std-ref">apr_threadattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1gaa1f88d2a6fe971ac200e466cae5f63e0"><span class="std std-ref">apr_thread_start_t</span></a><span></span> <span class="n">func</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">cont</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0e35365e530578bca1b4bea522ac8c85"><span class="std std-ref">apr_thread_exit</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga646c71351e723d84f8cc8c8d1d5937be"><span class="std std-ref">apr_thread_t</span></a><span></span><span class="o">*</span> <span class="n">thd</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span> <span class="n">retval</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga1b950f36fa5bcd5a64887073f46f6d13"><span class="std std-ref">apr_thread_join</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span><span class="o">*</span> <span class="n">retval</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga646c71351e723d84f8cc8c8d1d5937be"><span class="std std-ref">apr_thread_t</span></a><span></span><span class="o">*</span> <span class="n">thd</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1gacd69fb862c069cb6f297f65d64b5c102"><span class="std std-ref">apr_thread_yield</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga63f3bf667151053e45d5a2029daeda0d"><span class="std std-ref">apr_thread_once_init</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga91841bcf20d0579e8e6acc6d3c220ac1"><span class="std std-ref">apr_thread_once_t</span></a><span></span><span class="o">**</span> <span class="n">control</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga8f3645ee52ff07566c92181b4ce732d8"><span class="std std-ref">apr_thread_once</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga91841bcf20d0579e8e6acc6d3c220ac1"><span class="std std-ref">apr_thread_once_t</span></a><span></span><span class="o">*</span> <span class="n">control</span><span class="p">,</span>
+    <span class="kt">void</span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="p">)</span> <span class="n">func</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1gadbd186912d5f6f2a19a175e1e02ba10e"><span class="std std-ref">apr_thread_detach</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga646c71351e723d84f8cc8c8d1d5937be"><span class="std std-ref">apr_thread_t</span></a><span></span><span class="o">*</span> <span class="n">thd</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1gad799c8140ed068a12f1dbe134423eae7"><span class="std std-ref">apr_thread_data_get</span></a><span></span><span class="p">(</span>
+    <span class="kt">void</span><span class="o">**</span> <span class="n">data</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">key</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga646c71351e723d84f8cc8c8d1d5937be"><span class="std std-ref">apr_thread_t</span></a><span></span><span class="o">*</span> <span class="kr">thread</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1gaa90d79c9935692db4f27a6573f437221"><span class="std std-ref">apr_thread_data_set</span></a><span></span><span class="p">(</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">key</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">cleanup</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga646c71351e723d84f8cc8c8d1d5937be"><span class="std std-ref">apr_thread_t</span></a><span></span><span class="o">*</span> <span class="kr">thread</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1gacb9553b2b3165388bfc0a54b1148804a"><span class="std std-ref">apr_threadkey_private_create</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga337c9c1bd2d47740022071a5c41f2edb"><span class="std std-ref">apr_threadkey_t</span></a><span></span><span class="o">**</span> <span class="n">key</span><span class="p">,</span>
+    <span class="kt">void</span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">dest</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">cont</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga371c87c122cc3df0b7ad0031f6e11167"><span class="std std-ref">apr_threadkey_private_get</span></a><span></span><span class="p">(</span>
+    <span class="kt">void</span><span class="o">**</span> <span class="n">new_mem</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga337c9c1bd2d47740022071a5c41f2edb"><span class="std std-ref">apr_threadkey_t</span></a><span></span><span class="o">*</span> <span class="n">key</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga63501a064ca7f1818aa056b40146aa0b"><span class="std std-ref">apr_threadkey_private_set</span></a><span></span><span class="p">(</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">priv</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga337c9c1bd2d47740022071a5c41f2edb"><span class="std std-ref">apr_threadkey_t</span></a><span></span><span class="o">*</span> <span class="n">key</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga20b9b79892a6532784fff023a4ebd8cf"><span class="std std-ref">apr_threadkey_private_delete</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga337c9c1bd2d47740022071a5c41f2edb"><span class="std std-ref">apr_threadkey_t</span></a><span></span><span class="o">*</span> <span class="n">key</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1gae203664972dfc5c555620ae1788f5b48"><span class="std std-ref">apr_threadkey_data_get</span></a><span></span><span class="p">(</span>
+    <span class="kt">void</span><span class="o">**</span> <span class="n">data</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">key</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga337c9c1bd2d47740022071a5c41f2edb"><span class="std std-ref">apr_threadkey_t</span></a><span></span><span class="o">*</span> <span class="n">threadkey</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga1059158f34dded87f21ba82af1211951"><span class="std std-ref">apr_threadkey_data_set</span></a><span></span><span class="p">(</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">key</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">cleanup</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga337c9c1bd2d47740022071a5c41f2edb"><span class="std std-ref">apr_threadkey_t</span></a><span></span><span class="o">*</span> <span class="n">threadkey</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga90f8ef684e601c110daad9b63da53cf3"><span class="std std-ref">apr_procattr_create</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">**</span> <span class="n">new_attr</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">cont</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga2b1598bc6f5ab0bfcf2e55096d563c98"><span class="std std-ref">apr_procattr_io_set</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">in</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">out</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">err</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga24f40119b1aa07dd45a681a44915cb1b"><span class="std std-ref">apr_procattr_child_in_set</span></a><span></span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_io.html#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">child_in</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_io.html#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">parent_in</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1gabb97e9a49021ab4452ae3f1a281c977f"><span class="std std-ref">apr_procattr_child_out_set</span></a><span></span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_io.html#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">child_out</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_io.html#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">parent_out</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga6fad364c6c820e37c0915435cfb3921f"><span class="std std-ref">apr_procattr_child_err_set</span></a><span></span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_io.html#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">child_err</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_io.html#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">parent_err</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga97766f50b0ae083a2f8a28e698a59baa"><span class="std std-ref">apr_procattr_dir_set</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">dir</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga1426acc5bdd96385769e7b42bfa6ebbd"><span class="std std-ref">apr_procattr_cmdtype_set</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <a class="reference internal" href="enum_apr_cmdtype_e.html#doxid-group-apr-thread-proc-1gadcb981d7748c580eb69ac11dbf709060"><span class="std std-ref">apr_cmdtype_e</span></a><span></span> <span class="n">cmd</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga3ccca55041f648f00f0605673d4e0fdc"><span class="std std-ref">apr_procattr_detach_set</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">detach</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga4de85cfd54d27476dbb943955c1b0a2a"><span class="std std-ref">apr_procattr_limit_set</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">what</span><span class="p">,</span>
+    <span class="k">struct</span> <span class="n">rlimit</span><span class="o">*</span> <span class="n">limit</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1gaa39deba0837e0772754ad41589b733cf"><span class="std std-ref">apr_procattr_child_errfn_set</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga1feae4cf7ed6f156a0db10172e228e2d"><span class="std std-ref">apr_child_errfn_t</span></a><span></span><span class="o">*</span> <span class="n">errfn</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga24076f050e9385af09ad8c3931d8dc43"><span class="std std-ref">apr_procattr_error_check_set</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">chk</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0f1dd02408995767efcb9c0d9c775620"><span class="std std-ref">apr_procattr_addrspace_set</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">addrspace</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga741ed3dc047b935b091a21528c49bb19"><span class="std std-ref">apr_procattr_user_set</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">username</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">password</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga391f0d3831a5894ea2118762789a395d"><span class="std std-ref">apr_procattr_group_set</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">groupname</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga3d0415bf69b0a629a929833e82758b85"><span class="std std-ref">apr_proc_fork</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="struct_apr_proc_t.html#doxid-structapr-proc-t"><span class="std std-ref">apr_proc_t</span></a><span></span><span class="o">*</span> <span class="n">proc</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">cont</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1gab51dd90b98d365a969f0ec5c7bef4e14"><span class="std std-ref">apr_proc_create</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="struct_apr_proc_t.html#doxid-structapr-proc-t"><span class="std std-ref">apr_proc_t</span></a><span></span><span class="o">*</span> <span class="n">new_proc</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">progname</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span><span class="k">const</span><span class="o">*</span> <span class="n">args</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span><span class="k">const</span><span class="o">*</span> <span class="n">env</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0936f7a7fe7e2d5e08979c9f343a5a1b"><span class="std std-ref">apr_proc_wait</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="struct_apr_proc_t.html#doxid-structapr-proc-t"><span class="std std-ref">apr_proc_t</span></a><span></span><span class="o">*</span> <span class="n">proc</span><span class="p">,</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">exitcode</span><span class="p">,</span>
+    <a class="reference internal" href="enum_apr_exit_why_e.html#doxid-group-apr-thread-proc-1gac097b4fa41e67024711c5983446d0951"><span class="std std-ref">apr_exit_why_e</span></a><span></span><span class="o">*</span> <span class="n">exitwhy</span><span class="p">,</span>
+    <a class="reference internal" href="enum_apr_wait_how_e.html#doxid-group-apr-thread-proc-1ga5e52d786644f3b66d6180571e68c7260"><span class="std std-ref">apr_wait_how_e</span></a><span></span> <span class="n">waithow</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga506183074e8413c3ff597539e4768ea4"><span class="std std-ref">apr_proc_wait_all_procs</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="struct_apr_proc_t.html#doxid-structapr-proc-t"><span class="std std-ref">apr_proc_t</span></a><span></span><span class="o">*</span> <span class="n">proc</span><span class="p">,</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">exitcode</span><span class="p">,</span>
+    <a class="reference internal" href="enum_apr_exit_why_e.html#doxid-group-apr-thread-proc-1gac097b4fa41e67024711c5983446d0951"><span class="std std-ref">apr_exit_why_e</span></a><span></span><span class="o">*</span> <span class="n">exitwhy</span><span class="p">,</span>
+    <a class="reference internal" href="enum_apr_wait_how_e.html#doxid-group-apr-thread-proc-1ga5e52d786644f3b66d6180571e68c7260"><span class="std std-ref">apr_wait_how_e</span></a><span></span> <span class="n">waithow</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga56c2b005792752b63d804f2021596406"><span class="std std-ref">apr_proc_detach</span></a><span></span><span class="p">(</span><span class="kt">int</span> <span class="n">daemonize</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1gaf8d2be452a819161aa4cd6205a17761e"><span class="std std-ref">apr_proc_other_child_register</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="struct_apr_proc_t.html#doxid-structapr-proc-t"><span class="std std-ref">apr_proc_t</span></a><span></span><span class="o">*</span> <span class="n">proc</span><span class="p">,</span>
+    <span class="kt">void</span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">int</span> <span class="n">reason</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span><span class="p">,</span> <span class="kt">int</span> <span class="n">status</span><span class="p">)</span> <span class="n">maintenance</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_io.html#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">write_fd</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga10b1a4b224566c03c97f100ac8a2c830"><span class="std std-ref">apr_proc_other_child_unregister</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga88701979c4e5ac4b94966c73e0159efd"><span class="std std-ref">apr_proc_other_child_alert</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="struct_apr_proc_t.html#doxid-structapr-proc-t"><span class="std std-ref">apr_proc_t</span></a><span></span><span class="o">*</span> <span class="n">proc</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">reason</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">status</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga74a905d90a3476a611adeeb304931a6c"><span class="std std-ref">apr_proc_other_child_refresh</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1gafc52ee8b19a7b222278d31ebb3f11a71"><span class="std std-ref">apr_other_child_rec_t</span></a><span></span><span class="o">*</span> <span class="n">ocr</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">reason</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1gacff5e867a92619d30c4e78f9ad2a58e3"><span class="std std-ref">apr_proc_other_child_refresh_all</span></a><span></span><span class="p">(</span><span class="kt">int</span> <span class="n">reason</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga4a5ff2fce2c68460281b0cb3ee0365d5"><span class="std std-ref">apr_proc_kill</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="struct_apr_proc_t.html#doxid-structapr-proc-t"><span class="std std-ref">apr_proc_t</span></a><span></span><span class="o">*</span> <span class="n">proc</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">sig</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1gacbe3fd9491fa35149de28cebcae22f87"><span class="std std-ref">apr_pool_note_subprocess</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">a</span><span class="p">,</span>
+    <a class="reference internal" href="struct_apr_proc_t.html#doxid-structapr-proc-t"><span class="std std-ref">apr_proc_t</span></a><span></span><span class="o">*</span> <span class="n">proc</span><span class="p">,</span>
+    <a class="reference internal" href="enum_apr_kill_conditions_e.html#doxid-group-apr-thread-proc-1ga3eaec78633742e7e0cb9480a21477aff"><span class="std std-ref">apr_kill_conditions_e</span></a><span></span> <span class="n">how</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga7adc09cd24568666266edce81cfffbed"><span class="std std-ref">apr_setup_signal_thread</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga2e53fa76ff725749c7affe6c81faa9e5"><span class="std std-ref">apr_signal_thread</span></a><span></span><span class="p">(</span><span class="kt">int</span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">int</span> <span class="n">signum</span><span class="p">)</span> <span class="n">signal_handler</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-thread-proc-1ga089b70ae9d6c64d2675a1fd1e9cd0d0d"><span class="std std-ref">apr_thread_pool_get</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga646c71351e723d84f8cc8c8d1d5937be"><span class="std std-ref">apr_thread_t</span></a><span></span><span class="o">*</span> <span class="n">thethread</span><span class="p">);</span>
+
+<span class="c1">// macros</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-thread-proc-1gacad9da4db7a22f46715e50fb8ec1c939"><span class="std std-ref">APR_CHILD_BLOCK</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga646af57314e71f4647243f36dd03e5ea"><span class="std std-ref">APR_FULL_BLOCK</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-thread-proc-1gae0707f76da785490830fc3491093767c"><span class="std std-ref">APR_FULL_NONBLOCK</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-thread-proc-1gaad8a94c7ac2be58fe035b2fd6efec84f"><span class="std std-ref">APR_LIMIT_CPU</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga6dbb01bb357b078acff8fd87e9c494e8"><span class="std std-ref">APR_LIMIT_MEM</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga18d73099d66988698a9ad2aebdce2c9f"><span class="std std-ref">APR_LIMIT_NOFILE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga72e9be453a20f4e78bc6d7bd95d7c333"><span class="std std-ref">APR_LIMIT_NPROC</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga597fb6a501c20cc3a597fe6c613f4310"><span class="std std-ref">APR_NO_FILE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-thread-proc-1gab7cfcb8ed24e6c0a76cd41b5b113ae95"><span class="std std-ref">APR_NO_PIPE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga8653bab028b1c2b98754babc2547f988"><span class="std std-ref">APR_PARENT_BLOCK</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga2249e96191b5d98d33fb7875bce49410"><span class="std std-ref">APR_PROC_CHECK_CORE_DUMP</span></a><span></span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga689b0f3953cde83a4092931bad8b7183"><span class="std std-ref">APR_PROC_CHECK_EXIT</span></a><span></span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-thread-proc-1gaa0a8a0b8785cc9392059c7accd71f5f6"><span class="std std-ref">APR_PROC_CHECK_SIGNALED</span></a><span></span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-thread-proc-1gab4de7134fcc66c4127ae65b68631f846"><span class="std std-ref">APR_PROC_DETACH_DAEMONIZE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-thread-proc-1gab57b448a464ac299c03d6127781df152"><span class="std std-ref">APR_PROC_DETACH_FOREGROUND</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-thread-proc-1gaf8295548cb0821ee02249d6de8336bcb"><span class="std std-ref">APR_READ_BLOCK</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga36ff2de9664ad6995bd488b4ac715c9c"><span class="std std-ref">APR_WRITE_BLOCK</span></a></pre>
+</section>
+<section id="detailed-documentation">
+<span id="details-group-apr-thread-proc"></span><h2>Detailed Documentation</h2>
+<section id="typedefs">
+<h3>Typedefs</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1gada60ec0f833048291d98e66f21f4c4c4"><span id="index-1"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="struct_apr_proc_t.html#doxid-structapr-proc-t"><span class="std std-ref">apr_proc_t</span></a><span></span> <span class="n">apr_proc_t</span></pre>
+<p>The APR process type</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga1feae4cf7ed6f156a0db10172e228e2d"><span id="index-2"></span><span></span><span class="k">typedef</span> <span class="kt">void</span><span class="p">()</span> <span class="n">apr_child_errfn_t</span><span class="p">(</span>
+    <span class="n">apr_pool_t</span> <span class="o">*</span><span class="n">proc</span><span class="p">,</span>
+    <span class="n">apr_status_t</span> <span class="n">err</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">description</span>
+    <span class="p">)</span></pre>
+<p>The prototype for APR child errfn functions. (See the description of <a class="reference internal" href="#doxid-group-apr-thread-proc-1gaa39deba0837e0772754ad41589b733cf"><span class="std std-ref">apr_procattr_child_errfn_set()</span></a> for more information.) It is passed the following parameters:</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>pool</p></td>
+<td><p>Pool associated with the <a class="reference internal" href="struct_apr_proc_t.html#doxid-structapr-proc-t"><span class="std std-ref">apr_proc_t</span></a>. If your child error function needs user data, associate it with this pool.</p></td>
+</tr>
+<tr class="row-even"><td><p>err</p></td>
+<td><p>APR error code describing the error</p></td>
+</tr>
+<tr class="row-odd"><td><p>description</p></td>
+<td><p>Text description of type of processing which failed</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga646c71351e723d84f8cc8c8d1d5937be"><span id="index-3"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga646c71351e723d84f8cc8c8d1d5937be"><span class="std std-ref">apr_thread_t</span></a><span></span> <span class="n">apr_thread_t</span></pre>
+<p>Opaque Thread structure.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga35de571e9944871c10b38d8feef885ac"><span id="index-4"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga35de571e9944871c10b38d8feef885ac"><span class="std std-ref">apr_threadattr_t</span></a><span></span> <span class="n">apr_threadattr_t</span></pre>
+<p>Opaque Thread attributes structure.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span id="index-5"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span> <span class="n">apr_procattr_t</span></pre>
+<p>Opaque Process attributes structure.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga91841bcf20d0579e8e6acc6d3c220ac1"><span id="index-6"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga91841bcf20d0579e8e6acc6d3c220ac1"><span class="std std-ref">apr_thread_once_t</span></a><span></span> <span class="n">apr_thread_once_t</span></pre>
+<p>Opaque control variable for one-time atomic variables.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga337c9c1bd2d47740022071a5c41f2edb"><span id="index-7"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga337c9c1bd2d47740022071a5c41f2edb"><span class="std std-ref">apr_threadkey_t</span></a><span></span> <span class="n">apr_threadkey_t</span></pre>
+<p>Opaque thread private address space.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1gafc52ee8b19a7b222278d31ebb3f11a71"><span id="index-8"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1gafc52ee8b19a7b222278d31ebb3f11a71"><span class="std std-ref">apr_other_child_rec_t</span></a><span></span> <span class="n">apr_other_child_rec_t</span></pre>
+<p>Opaque record of child process.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1gaa1f88d2a6fe971ac200e466cae5f63e0"><span id="index-9"></span><span></span><span class="k">typedef</span> <span class="kt">void</span><span class="o">*</span><span class="p">(</span><a class="reference internal" href="group_apr_platform.html#doxid-group-apr-platform-1gade8f829f9bd98fd4386894acf72edd7c"><span class="std std-ref">APR_THREAD_FUNC</span></a><span></span><span class="o">*</span> <span class="n">apr_thread_start_t</span><span class="p">)(</span>
+    <span class="n">apr_thread_t</span> <span class="o">*</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span>
+    <span class="p">)</span></pre>
+<p>The prototype for any APR thread worker functions.</p>
+</section>
+<section id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga66c2f55e5dff9ac37bd32e9febd38da5"><span id="index-10"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_threadattr_create</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga35de571e9944871c10b38d8feef885ac"><span class="std std-ref">apr_threadattr_t</span></a><span></span><span class="o">**</span> <span class="n">new_attr</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">cont</span>
+<span class="p">)</span></pre>
+<p>Create and initialize a new threadattr variable</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>new_attr</p></td>
+<td><p>The newly created threadattr.</p></td>
+</tr>
+<tr class="row-even"><td><p>cont</p></td>
+<td><p>The pool to use</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga85d44b3b021f28116122d5e40e024648"><span id="index-11"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_threadattr_detach_set</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga35de571e9944871c10b38d8feef885ac"><span class="std std-ref">apr_threadattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">on</span>
+<span class="p">)</span></pre>
+<p>Set if newly created threads should be created in detached state.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>attr</p></td>
+<td><p>The threadattr to affect</p></td>
+</tr>
+<tr class="row-even"><td><p>on</p></td>
+<td><p>Non-zero if detached threads should be created.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1gae5b7cdb3de542d1b7b52fe5d9d8cb00b"><span id="index-12"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_threadattr_detach_get</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga35de571e9944871c10b38d8feef885ac"><span class="std std-ref">apr_threadattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">)</span></pre>
+<p>Get the detach state for this threadattr.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>attr</p></td>
+<td><p>The threadattr to reference</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>APR_DETACH if threads are to be detached, or APR_NOTDETACH if threads are to be joinable.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga7849e0d637338a18cb44f66f11f28ed1"><span id="index-13"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_threadattr_stacksize_set</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga35de571e9944871c10b38d8feef885ac"><span class="std std-ref">apr_threadattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <span class="n">apr_size_t</span> <span class="n">stacksize</span>
+<span class="p">)</span></pre>
+<p>Set the stack size of newly created threads.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>attr</p></td>
+<td><p>The threadattr to affect</p></td>
+</tr>
+<tr class="row-even"><td><p>stacksize</p></td>
+<td><p>The stack size in bytes</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga2e732f2913291180c0c484f57d727140"><span id="index-14"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_threadattr_guardsize_set</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga35de571e9944871c10b38d8feef885ac"><span class="std std-ref">apr_threadattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <span class="n">apr_size_t</span> <span class="n">guardsize</span>
+<span class="p">)</span></pre>
+<p>Set the stack guard area size of newly created threads.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Thread library implementations commonly use a “guard area” after each thread’s stack which is not readable or writable such that stack overflows cause a segfault; this consumes e.g. 4K of memory and increases memory management overhead. Setting the guard area size to zero hence trades off reliable behaviour on stack overflow for performance.</p>
+</div>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>attr</p></td>
+<td><p>The threadattr to affect</p></td>
+</tr>
+<tr class="row-even"><td><p>guardsize</p></td>
+<td><p>The stack guard area size in bytes</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1gaeba6593f43f1de94c2b4495dd72b0e9f"><span id="index-15"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_thread_create</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga646c71351e723d84f8cc8c8d1d5937be"><span class="std std-ref">apr_thread_t</span></a><span></span><span class="o">**</span> <span class="n">new_thread</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga35de571e9944871c10b38d8feef885ac"><span class="std std-ref">apr_threadattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1gaa1f88d2a6fe971ac200e466cae5f63e0"><span class="std std-ref">apr_thread_start_t</span></a><span></span> <span class="n">func</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">cont</span>
+<span class="p">)</span></pre>
+<p>Create a new thread of execution</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>new_thread</p></td>
+<td><p>The newly created thread handle.</p></td>
+</tr>
+<tr class="row-even"><td><p>attr</p></td>
+<td><p>The threadattr to use to determine how to create the thread</p></td>
+</tr>
+<tr class="row-odd"><td><p>func</p></td>
+<td><p>The function to start the new thread in</p></td>
+</tr>
+<tr class="row-even"><td><p>data</p></td>
+<td><p>Any data to be passed to the starting function</p></td>
+</tr>
+<tr class="row-odd"><td><p>cont</p></td>
+<td><p>The pool to use</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga0e35365e530578bca1b4bea522ac8c85"><span id="index-16"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_thread_exit</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga646c71351e723d84f8cc8c8d1d5937be"><span class="std std-ref">apr_thread_t</span></a><span></span><span class="o">*</span> <span class="n">thd</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span> <span class="n">retval</span>
+<span class="p">)</span></pre>
+<p>stop the current thread</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>thd</p></td>
+<td><p>The thread to stop</p></td>
+</tr>
+<tr class="row-even"><td><p>retval</p></td>
+<td><p>The return value to pass back to any thread that cares</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga1b950f36fa5bcd5a64887073f46f6d13"><span id="index-17"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_thread_join</span><span class="p">(</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span><span class="o">*</span> <span class="n">retval</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga646c71351e723d84f8cc8c8d1d5937be"><span class="std std-ref">apr_thread_t</span></a><span></span><span class="o">*</span> <span class="n">thd</span>
+<span class="p">)</span></pre>
+<p>block until the desired thread stops executing.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>retval</p></td>
+<td><p>The return value from the dead thread.</p></td>
+</tr>
+<tr class="row-even"><td><p>thd</p></td>
+<td><p>The thread to join</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1gacd69fb862c069cb6f297f65d64b5c102"><span id="index-18"></span><span></span><span class="kt">void</span>
+<span class="n">apr_thread_yield</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></pre>
+<p>force the current thread to yield the processor</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga63f3bf667151053e45d5a2029daeda0d"><span id="index-19"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_thread_once_init</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga91841bcf20d0579e8e6acc6d3c220ac1"><span class="std std-ref">apr_thread_once_t</span></a><span></span><span class="o">**</span> <span class="n">control</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">)</span></pre>
+<p>Initialize the control variable for apr_thread_once. If this isn’t called, apr_initialize won’t work.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>control</p></td>
+<td><p>The control variable to initialize</p></td>
+</tr>
+<tr class="row-even"><td><p>p</p></td>
+<td><p>The pool to allocate data from.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga8f3645ee52ff07566c92181b4ce732d8"><span id="index-20"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_thread_once</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga91841bcf20d0579e8e6acc6d3c220ac1"><span class="std std-ref">apr_thread_once_t</span></a><span></span><span class="o">*</span> <span class="n">control</span><span class="p">,</span>
+    <span class="kt">void</span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="p">)</span> <span class="n">func</span>
+<span class="p">)</span></pre>
+<p>Run the specified function one time, regardless of how many threads call it.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>control</p></td>
+<td><p>The control variable. The same variable should be passed in each time the function is tried to be called. This is how the underlying functions determine if the function has ever been called before.</p></td>
+</tr>
+<tr class="row-even"><td><p>func</p></td>
+<td><p>The function to call.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1gadbd186912d5f6f2a19a175e1e02ba10e"><span id="index-21"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_thread_detach</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga646c71351e723d84f8cc8c8d1d5937be"><span class="std std-ref">apr_thread_t</span></a><span></span><span class="o">*</span> <span class="n">thd</span><span class="p">)</span></pre>
+<p>detach a thread</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>thd</p></td>
+<td><p>The thread to detach</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1gad799c8140ed068a12f1dbe134423eae7"><span id="index-22"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_thread_data_get</span><span class="p">(</span>
+    <span class="kt">void</span><span class="o">**</span> <span class="n">data</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">key</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga646c71351e723d84f8cc8c8d1d5937be"><span class="std std-ref">apr_thread_t</span></a><span></span><span class="o">*</span> <span class="kr">thread</span>
+<span class="p">)</span></pre>
+<p>Return user data associated with the current thread.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>data</p></td>
+<td><p>The user data associated with the thread.</p></td>
+</tr>
+<tr class="row-even"><td><p>key</p></td>
+<td><p>The key to associate with the data</p></td>
+</tr>
+<tr class="row-odd"><td><p>thread</p></td>
+<td><p>The currently open thread.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1gaa90d79c9935692db4f27a6573f437221"><span id="index-23"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_thread_data_set</span><span class="p">(</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">key</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">cleanup</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga646c71351e723d84f8cc8c8d1d5937be"><span class="std std-ref">apr_thread_t</span></a><span></span><span class="o">*</span> <span class="kr">thread</span>
+<span class="p">)</span></pre>
+<p>Set user data associated with the current thread.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>data</p></td>
+<td><p>The user data to associate with the thread.</p></td>
+</tr>
+<tr class="row-even"><td><p>key</p></td>
+<td><p>The key to use for associating the data with the thread</p></td>
+</tr>
+<tr class="row-odd"><td><p>cleanup</p></td>
+<td><p>The cleanup routine to use when the thread is destroyed.</p></td>
+</tr>
+<tr class="row-even"><td><p>thread</p></td>
+<td><p>The currently open thread.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1gacb9553b2b3165388bfc0a54b1148804a"><span id="index-24"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_threadkey_private_create</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga337c9c1bd2d47740022071a5c41f2edb"><span class="std std-ref">apr_threadkey_t</span></a><span></span><span class="o">**</span> <span class="n">key</span><span class="p">,</span>
+    <span class="kt">void</span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">dest</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">cont</span>
+<span class="p">)</span></pre>
+<p>Create and initialize a new thread private address space</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>key</p></td>
+<td><p>The thread private handle.</p></td>
+</tr>
+<tr class="row-even"><td><p>dest</p></td>
+<td><p>The destructor to use when freeing the private memory.</p></td>
+</tr>
+<tr class="row-odd"><td><p>cont</p></td>
+<td><p>The pool to use</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga371c87c122cc3df0b7ad0031f6e11167"><span id="index-25"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_threadkey_private_get</span><span class="p">(</span>
+    <span class="kt">void</span><span class="o">**</span> <span class="n">new_mem</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga337c9c1bd2d47740022071a5c41f2edb"><span class="std std-ref">apr_threadkey_t</span></a><span></span><span class="o">*</span> <span class="n">key</span>
+<span class="p">)</span></pre>
+<p>Get a pointer to the thread private memory</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>new_mem</p></td>
+<td><p>The data stored in private memory</p></td>
+</tr>
+<tr class="row-even"><td><p>key</p></td>
+<td><p>The handle for the desired thread private memory</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga63501a064ca7f1818aa056b40146aa0b"><span id="index-26"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_threadkey_private_set</span><span class="p">(</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">priv</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga337c9c1bd2d47740022071a5c41f2edb"><span class="std std-ref">apr_threadkey_t</span></a><span></span><span class="o">*</span> <span class="n">key</span>
+<span class="p">)</span></pre>
+<p>Set the data to be stored in thread private memory</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>priv</p></td>
+<td><p>The data to be stored in private memory</p></td>
+</tr>
+<tr class="row-even"><td><p>key</p></td>
+<td><p>The handle for the desired thread private memory</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga20b9b79892a6532784fff023a4ebd8cf"><span id="index-27"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_threadkey_private_delete</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga337c9c1bd2d47740022071a5c41f2edb"><span class="std std-ref">apr_threadkey_t</span></a><span></span><span class="o">*</span> <span class="n">key</span><span class="p">)</span></pre>
+<p>Free the thread private memory</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>key</p></td>
+<td><p>The handle for the desired thread private memory</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1gae203664972dfc5c555620ae1788f5b48"><span id="index-28"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_threadkey_data_get</span><span class="p">(</span>
+    <span class="kt">void</span><span class="o">**</span> <span class="n">data</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">key</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga337c9c1bd2d47740022071a5c41f2edb"><span class="std std-ref">apr_threadkey_t</span></a><span></span><span class="o">*</span> <span class="n">threadkey</span>
+<span class="p">)</span></pre>
+<p>Return the pool associated with the current threadkey.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>data</p></td>
+<td><p>The user data associated with the threadkey.</p></td>
+</tr>
+<tr class="row-even"><td><p>key</p></td>
+<td><p>The key associated with the data</p></td>
+</tr>
+<tr class="row-odd"><td><p>threadkey</p></td>
+<td><p>The currently open threadkey.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga1059158f34dded87f21ba82af1211951"><span id="index-29"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_threadkey_data_set</span><span class="p">(</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">key</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">cleanup</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga337c9c1bd2d47740022071a5c41f2edb"><span class="std std-ref">apr_threadkey_t</span></a><span></span><span class="o">*</span> <span class="n">threadkey</span>
+<span class="p">)</span></pre>
+<p>Return the pool associated with the current threadkey.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>data</p></td>
+<td><p>The data to set.</p></td>
+</tr>
+<tr class="row-even"><td><p>key</p></td>
+<td><p>The key to associate with the data.</p></td>
+</tr>
+<tr class="row-odd"><td><p>cleanup</p></td>
+<td><p>The cleanup routine to use when the file is destroyed.</p></td>
+</tr>
+<tr class="row-even"><td><p>threadkey</p></td>
+<td><p>The currently open threadkey.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga90f8ef684e601c110daad9b63da53cf3"><span id="index-30"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_procattr_create</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">**</span> <span class="n">new_attr</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">cont</span>
+<span class="p">)</span></pre>
+<p>Create and initialize a new procattr variable</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>new_attr</p></td>
+<td><p>The newly created procattr.</p></td>
+</tr>
+<tr class="row-even"><td><p>cont</p></td>
+<td><p>The pool to use</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga2b1598bc6f5ab0bfcf2e55096d563c98"><span id="index-31"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_procattr_io_set</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">in</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">out</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">err</span>
+<span class="p">)</span></pre>
+<p>Determine if any of stdin, stdout, or stderr should be linked to pipes when starting a child process.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If APR_NO_PIPE, there will be no special channel, the child inherits the parent’s corresponding stdio stream. If APR_NO_FILE is specified, that corresponding stream is closed in the child (and will be INVALID_HANDLE_VALUE when inspected on Win32). This can have ugly side effects, as the next file opened in the child on Unix will fall into the stdio stream fd slot!</p>
+</div>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>attr</p></td>
+<td><p>The procattr we care about.</p></td>
+</tr>
+<tr class="row-even"><td><p>in</p></td>
+<td><p>Should stdin be a pipe back to the parent?</p></td>
+</tr>
+<tr class="row-odd"><td><p>out</p></td>
+<td><p>Should stdout be a pipe back to the parent?</p></td>
+</tr>
+<tr class="row-even"><td><p>err</p></td>
+<td><p>Should stderr be a pipe back to the parent?</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga24f40119b1aa07dd45a681a44915cb1b"><span id="index-32"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_procattr_child_in_set</span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_io.html#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">child_in</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_io.html#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">parent_in</span>
+<span class="p">)</span></pre>
+<p>Set the child_in and/or parent_in values to existing apr_file_t values. This is NOT a required initializer function. This is useful if you have already opened a pipe (or multiple files) that you wish to use, perhaps persistently across multiple process invocations - such as a log file. You can save some extra function calls by not creating your own pipe since this creates one in the process space for you.</p>
+<p>Bug Note that calling this function with two NULL files on some platforms creates an APR_FULL_BLOCK pipe, but this behavior is neither portable nor is it supported.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>attr</p></td>
+<td><p>The procattr we care about.</p></td>
+</tr>
+<tr class="row-even"><td><p>child_in</p></td>
+<td><p>apr_file_t value to use as child_in. Must be a valid file.</p></td>
+</tr>
+<tr class="row-odd"><td><p>parent_in</p></td>
+<td><p>apr_file_t value to use as parent_in. Must be a valid file.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga2b1598bc6f5ab0bfcf2e55096d563c98"><span class="std std-ref">apr_procattr_io_set</span></a> instead for simple pipes.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1gabb97e9a49021ab4452ae3f1a281c977f"><span id="index-33"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_procattr_child_out_set</span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_io.html#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">child_out</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_io.html#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">parent_out</span>
+<span class="p">)</span></pre>
+<p>Set the child_out and parent_out values to existing apr_file_t values. This is NOT a required initializer function. This is useful if you have already opened a pipe (or multiple files) that you wish to use, perhaps persistently across multiple process invocations - such as a log file.</p>
+<p>Bug Note that calling this function with two NULL files on some platforms creates an APR_FULL_BLOCK pipe, but this behavior is neither portable nor is it supported.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>attr</p></td>
+<td><p>The procattr we care about.</p></td>
+</tr>
+<tr class="row-even"><td><p>child_out</p></td>
+<td><p>apr_file_t value to use as child_out. Must be a valid file.</p></td>
+</tr>
+<tr class="row-odd"><td><p>parent_out</p></td>
+<td><p>apr_file_t value to use as parent_out. Must be a valid file.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga2b1598bc6f5ab0bfcf2e55096d563c98"><span class="std std-ref">apr_procattr_io_set</span></a> instead for simple pipes.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga6fad364c6c820e37c0915435cfb3921f"><span id="index-34"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_procattr_child_err_set</span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_io.html#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">child_err</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_io.html#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">parent_err</span>
+<span class="p">)</span></pre>
+<p>Set the child_err and parent_err values to existing apr_file_t values. This is NOT a required initializer function. This is useful if you have already opened a pipe (or multiple files) that you wish to use, perhaps persistently across multiple process invocations - such as a log file.</p>
+<p>Bug Note that calling this function with two NULL files on some platforms creates an APR_FULL_BLOCK pipe, but this behavior is neither portable nor is it supported.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>attr</p></td>
+<td><p>The procattr we care about.</p></td>
+</tr>
+<tr class="row-even"><td><p>child_err</p></td>
+<td><p>apr_file_t value to use as child_err. Must be a valid file.</p></td>
+</tr>
+<tr class="row-odd"><td><p>parent_err</p></td>
+<td><p>apr_file_t value to use as parent_err. Must be a valid file.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga2b1598bc6f5ab0bfcf2e55096d563c98"><span class="std std-ref">apr_procattr_io_set</span></a> instead for simple pipes.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga97766f50b0ae083a2f8a28e698a59baa"><span id="index-35"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_procattr_dir_set</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">dir</span>
+<span class="p">)</span></pre>
+<p>Set which directory the child process should start executing in.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>attr</p></td>
+<td><p>The procattr we care about.</p></td>
+</tr>
+<tr class="row-even"><td><p>dir</p></td>
+<td><p>Which dir to start in. By default, this is the same dir as the parent currently resides in, when the createprocess call is made.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga1426acc5bdd96385769e7b42bfa6ebbd"><span id="index-36"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_procattr_cmdtype_set</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <a class="reference internal" href="enum_apr_cmdtype_e.html#doxid-group-apr-thread-proc-1gadcb981d7748c580eb69ac11dbf709060"><span class="std std-ref">apr_cmdtype_e</span></a><span></span> <span class="n">cmd</span>
+<span class="p">)</span></pre>
+<p>Set what type of command the child process will call.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>attr</p></td>
+<td><p>The procattr we care about.</p></td>
+</tr>
+<tr class="row-even"><td><p>cmd</p></td>
+<td><p>The type of command. One of:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>APR_SHELLCMD       Anything that the shell can handle
+APR_PROGRAM        Executable program   (default)
+APR_PROGRAM_ENV    Executable program, copy environment
+APR_PROGRAM_PATH   Executable program on PATH, copy env
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga3ccca55041f648f00f0605673d4e0fdc"><span id="index-37"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_procattr_detach_set</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">detach</span>
+<span class="p">)</span></pre>
+<p>Determine if the child should start in detached state.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>attr</p></td>
+<td><p>The procattr we care about.</p></td>
+</tr>
+<tr class="row-even"><td><p>detach</p></td>
+<td><p>Should the child start in detached state? Default is no.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga4de85cfd54d27476dbb943955c1b0a2a"><span id="index-38"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_procattr_limit_set</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">what</span><span class="p">,</span>
+    <span class="k">struct</span> <span class="n">rlimit</span><span class="o">*</span> <span class="n">limit</span>
+<span class="p">)</span></pre>
+<p>Set the Resource Utilization limits when starting a new process.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>attr</p></td>
+<td><p>The procattr we care about.</p></td>
+</tr>
+<tr class="row-even"><td><p>what</p></td>
+<td><p>Which limit to set, one of:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>APR_LIMIT_CPU
+APR_LIMIT_MEM
+APR_LIMIT_NPROC
+APR_LIMIT_NOFILE
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>limit</p></td>
+<td><p>Value to set the limit to.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1gaa39deba0837e0772754ad41589b733cf"><span id="index-39"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_procattr_child_errfn_set</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga1feae4cf7ed6f156a0db10172e228e2d"><span class="std std-ref">apr_child_errfn_t</span></a><span></span><span class="o">*</span> <span class="n">errfn</span>
+<span class="p">)</span></pre>
+<p>Specify an error function to be called in the child process if APR encounters an error in the child prior to running the specified program. At the present time, it will only be called from <a class="reference internal" href="#doxid-group-apr-thread-proc-1gab51dd90b98d365a969f0ec5c7bef4e14"><span class="std std-ref">apr_proc_create()</span></a> on platforms where fork() is used. It will never be called on other platforms, on those platforms <a class="reference internal" href="#doxid-group-apr-thread-proc-1gab51dd90b98d365a969f0ec5c7bef4e14"><span class="std std-ref">apr_proc_create()</span></a> will return the error in the parent process rather than invoke the callback in the now-forked child process.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>attr</p></td>
+<td><p>The procattr describing the child process to be created.</p></td>
+</tr>
+<tr class="row-even"><td><p>errfn</p></td>
+<td><p>The function to call in the child process.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga24076f050e9385af09ad8c3931d8dc43"><span id="index-40"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_procattr_error_check_set</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">chk</span>
+<span class="p">)</span></pre>
+<p>Specify that <a class="reference internal" href="#doxid-group-apr-thread-proc-1gab51dd90b98d365a969f0ec5c7bef4e14"><span class="std std-ref">apr_proc_create()</span></a> should do whatever it can to report failures to the caller of <a class="reference internal" href="#doxid-group-apr-thread-proc-1gab51dd90b98d365a969f0ec5c7bef4e14"><span class="std std-ref">apr_proc_create()</span></a>, rather than find out in the child. This flag only affects <a class="reference internal" href="#doxid-group-apr-thread-proc-1gab51dd90b98d365a969f0ec5c7bef4e14"><span class="std std-ref">apr_proc_create()</span></a> on platforms where fork() is used. This leads to extra overhead in the calling process, but that may help the application handle such errors more gracefully.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>attr</p></td>
+<td><p>The procattr describing the child process to be created.</p></td>
+</tr>
+<tr class="row-even"><td><p>chk</p></td>
+<td><p>Flag to indicate whether or not extra work should be done to try to report failures to the caller.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga0f1dd02408995767efcb9c0d9c775620"><span id="index-41"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_procattr_addrspace_set</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">addrspace</span>
+<span class="p">)</span></pre>
+<p>Determine if the child should start in its own address space or using the current one from its parent</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>attr</p></td>
+<td><p>The procattr we care about.</p></td>
+</tr>
+<tr class="row-even"><td><p>addrspace</p></td>
+<td><p>Should the child start in its own address space? Default is no on NetWare and yes on other platforms.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga741ed3dc047b935b091a21528c49bb19"><span id="index-42"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_procattr_user_set</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">username</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">password</span>
+<span class="p">)</span></pre>
+<p>Set the username used for running process</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>attr</p></td>
+<td><p>The procattr we care about.</p></td>
+</tr>
+<tr class="row-even"><td><p>username</p></td>
+<td><p>The username used</p></td>
+</tr>
+<tr class="row-odd"><td><p>password</p></td>
+<td><p>User password if needed. Password is needed on WIN32 or any other platform having APR_PROCATTR_USER_SET_REQUIRES_PASSWORD set.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga391f0d3831a5894ea2118762789a395d"><span id="index-43"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_procattr_group_set</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">groupname</span>
+<span class="p">)</span></pre>
+<p>Set the group used for running process</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>attr</p></td>
+<td><p>The procattr we care about.</p></td>
+</tr>
+<tr class="row-even"><td><p>groupname</p></td>
+<td><p>The group name used</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga3d0415bf69b0a629a929833e82758b85"><span id="index-44"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_proc_fork</span><span class="p">(</span>
+    <a class="reference internal" href="struct_apr_proc_t.html#doxid-structapr-proc-t"><span class="std std-ref">apr_proc_t</span></a><span></span><span class="o">*</span> <span class="n">proc</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">cont</span>
+<span class="p">)</span></pre>
+<p>This is currently the only non-portable call in APR. This executes a standard unix fork. returns APR_INCHILD for the child, and APR_INPARENT for the parent or an error.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>proc</p></td>
+<td><p>The resulting process handle.</p></td>
+</tr>
+<tr class="row-even"><td><p>cont</p></td>
+<td><p>The pool to use.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1gab51dd90b98d365a969f0ec5c7bef4e14"><span id="index-45"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_proc_create</span><span class="p">(</span>
+    <a class="reference internal" href="struct_apr_proc_t.html#doxid-structapr-proc-t"><span class="std std-ref">apr_proc_t</span></a><span></span><span class="o">*</span> <span class="n">new_proc</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">progname</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span><span class="k">const</span><span class="o">*</span> <span class="n">args</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span><span class="k">const</span><span class="o">*</span> <span class="n">env</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga0d83919a6a0dd609598a864917f8b339"><span class="std std-ref">apr_procattr_t</span></a><span></span><span class="o">*</span> <span class="n">attr</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">)</span></pre>
+<p>Create a new process and execute a new program within that process.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function returns without waiting for the new process to terminate; use apr_proc_wait for that.</p>
+</div>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>new_proc</p></td>
+<td><p>The resulting process handle.</p></td>
+</tr>
+<tr class="row-even"><td><p>progname</p></td>
+<td><p>The program to run</p></td>
+</tr>
+<tr class="row-odd"><td><p>args</p></td>
+<td><p>the arguments to pass to the new program. The first one should be the program name.</p></td>
+</tr>
+<tr class="row-even"><td><p>env</p></td>
+<td><p>The new environment table for the new process. This should be a list of NULL-terminated strings. This argument is ignored for APR_PROGRAM_ENV, APR_PROGRAM_PATH, and APR_SHELLCMD_ENV types of commands.</p></td>
+</tr>
+<tr class="row-odd"><td><p>attr</p></td>
+<td><p>the procattr we should use to determine how to create the new process</p></td>
+</tr>
+<tr class="row-even"><td><p>pool</p></td>
+<td><p>The pool to use.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga0936f7a7fe7e2d5e08979c9f343a5a1b"><span id="index-46"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_proc_wait</span><span class="p">(</span>
+    <a class="reference internal" href="struct_apr_proc_t.html#doxid-structapr-proc-t"><span class="std std-ref">apr_proc_t</span></a><span></span><span class="o">*</span> <span class="n">proc</span><span class="p">,</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">exitcode</span><span class="p">,</span>
+    <a class="reference internal" href="enum_apr_exit_why_e.html#doxid-group-apr-thread-proc-1gac097b4fa41e67024711c5983446d0951"><span class="std std-ref">apr_exit_why_e</span></a><span></span><span class="o">*</span> <span class="n">exitwhy</span><span class="p">,</span>
+    <a class="reference internal" href="enum_apr_wait_how_e.html#doxid-group-apr-thread-proc-1ga5e52d786644f3b66d6180571e68c7260"><span class="std std-ref">apr_wait_how_e</span></a><span></span> <span class="n">waithow</span>
+<span class="p">)</span></pre>
+<p>Wait for a child process to die The child’s status is in the return code to this process. It is one of:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>APR_CHILD_DONE      child is no longer running.
+APR_CHILD_NOTDONE   child is still running.
+</pre></div>
+</div>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>proc</p></td>
+<td><p>The process handle that corresponds to the desired child process</p></td>
+</tr>
+<tr class="row-even"><td><p>exitcode</p></td>
+<td><p>The returned exit status of the child, if a child process dies, or the signal that caused the child to die. On platforms that don’t support obtaining this information, the status parameter will be returned as APR_ENOTIMPL.</p></td>
+</tr>
+<tr class="row-odd"><td><p>exitwhy</p></td>
+<td><p>Why the child died, the bitwise or of:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>APR_PROC_EXIT         -- process terminated normally
+APR_PROC_SIGNAL       -- process was killed by a signal
+APR_PROC_SIGNAL_CORE  -- process was killed by a signal, and
+                         generated a core dump.
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>waithow</p></td>
+<td><p>How should we wait. One of:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>APR_WAIT   -- block until the child process dies.
+APR_NOWAIT -- return immediately regardless of if the
+              child is dead or not.
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga506183074e8413c3ff597539e4768ea4"><span id="index-47"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_proc_wait_all_procs</span><span class="p">(</span>
+    <a class="reference internal" href="struct_apr_proc_t.html#doxid-structapr-proc-t"><span class="std std-ref">apr_proc_t</span></a><span></span><span class="o">*</span> <span class="n">proc</span><span class="p">,</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">exitcode</span><span class="p">,</span>
+    <a class="reference internal" href="enum_apr_exit_why_e.html#doxid-group-apr-thread-proc-1gac097b4fa41e67024711c5983446d0951"><span class="std std-ref">apr_exit_why_e</span></a><span></span><span class="o">*</span> <span class="n">exitwhy</span><span class="p">,</span>
+    <a class="reference internal" href="enum_apr_wait_how_e.html#doxid-group-apr-thread-proc-1ga5e52d786644f3b66d6180571e68c7260"><span class="std std-ref">apr_wait_how_e</span></a><span></span> <span class="n">waithow</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">)</span></pre>
+<p>Wait for any current child process to die and return information about that child. Bug Passing proc as a *proc rather than **proc was an odd choice for some platforms… this should be revisited in 1.0</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>proc</p></td>
+<td><p>Pointer to NULL on entry, will be filled out with child’s information</p></td>
+</tr>
+<tr class="row-even"><td><p>exitcode</p></td>
+<td><p>The returned exit status of the child, if a child process dies, or the signal that caused the child to die. On platforms that don’t support obtaining this information, the status parameter will be returned as APR_ENOTIMPL.</p></td>
+</tr>
+<tr class="row-odd"><td><p>exitwhy</p></td>
+<td><p>Why the child died, the bitwise or of:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>APR_PROC_EXIT         -- process terminated normally
+APR_PROC_SIGNAL       -- process was killed by a signal
+APR_PROC_SIGNAL_CORE  -- process was killed by a signal, and
+                         generated a core dump.
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>waithow</p></td>
+<td><p>How should we wait. One of:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>APR_WAIT   -- block until the child process dies.
+APR_NOWAIT -- return immediately regardless of if the
+              child is dead or not.
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>Pool to allocate child information out of.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga56c2b005792752b63d804f2021596406"><span id="index-48"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_proc_detach</span><span class="p">(</span><span class="kt">int</span> <span class="n">daemonize</span><span class="p">)</span></pre>
+<p>Detach the process from the controlling terminal.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>daemonize</p></td>
+<td><p>set to non-zero if the process should daemonize and become a background process, else it will stay in the foreground.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1gaf8d2be452a819161aa4cd6205a17761e"><span id="index-49"></span><span></span><span class="kt">void</span>
+<span class="n">apr_proc_other_child_register</span><span class="p">(</span>
+    <a class="reference internal" href="struct_apr_proc_t.html#doxid-structapr-proc-t"><span class="std std-ref">apr_proc_t</span></a><span></span><span class="o">*</span> <span class="n">proc</span><span class="p">,</span>
+    <span class="kt">void</span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">int</span> <span class="n">reason</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span><span class="p">,</span> <span class="kt">int</span> <span class="n">status</span><span class="p">)</span> <span class="n">maintenance</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_io.html#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">write_fd</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">)</span></pre>
+<p>Register an other_child a child associated to its registered maintence callback. This callback is invoked when the process dies, is disconnected or disappears. Bug write_fd duplicates the proc-&gt;out stream, it’s really redundant and should be replaced in the APR 1.0 API with a bitflag of which proc-&gt;in/out/err handles should be health checked.</p>
+<p>no platform currently tests the pipes health.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>proc</p></td>
+<td><p>The child process to register.</p></td>
+</tr>
+<tr class="row-even"><td><p>maintenance</p></td>
+<td><p>maintenance is a function that is invoked with a reason and the data pointer passed here.</p></td>
+</tr>
+<tr class="row-odd"><td><p>data</p></td>
+<td><p>Opaque context data passed to the maintenance function.</p></td>
+</tr>
+<tr class="row-even"><td><p>write_fd</p></td>
+<td><p>An fd that is probed for writing. If it is ever unwritable then the maintenance is invoked with reason OC_REASON_UNWRITABLE.</p></td>
+</tr>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>The pool to use for allocating memory.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga10b1a4b224566c03c97f100ac8a2c830"><span id="index-50"></span><span></span><span class="kt">void</span>
+<span class="n">apr_proc_other_child_unregister</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">)</span></pre>
+<p>Stop watching the specified other child.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Since this can be called by a maintenance function while we’re scanning the other_children list, all scanners should protect themself by loading ocr-&gt;next before calling any maintenance function.</p>
+</div>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>data</p></td>
+<td><p>The data to pass to the maintenance function. This is used to find the process to unregister.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga88701979c4e5ac4b94966c73e0159efd"><span id="index-51"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_proc_other_child_alert</span><span class="p">(</span>
+    <a class="reference internal" href="struct_apr_proc_t.html#doxid-structapr-proc-t"><span class="std std-ref">apr_proc_t</span></a><span></span><span class="o">*</span> <span class="n">proc</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">reason</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">status</span>
+<span class="p">)</span></pre>
+<p>Notify the maintenance callback of a registered other child process that application has detected an event, such as death. An example of code using this behavior;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>rv = apr_proc_wait_all_procs(&amp;proc, &amp;exitcode, &amp;status, APR_WAIT, p);
+if (:ref:`APR_STATUS_IS_CHILD_DONE(rv) &lt;doxid-group___a_p_r___s_t_a_t_u_s___i_s_1ga1e6539dfa172cef4026105ca33b2b208&gt;`) {
+#if APR_HAS_OTHER_CHILD
+    if (apr_proc_other_child_alert(&amp;proc, APR_OC_REASON_DEATH, status)
+            == APR_SUCCESS) {
+        ;  (already handled)
+    }
+    else
+#endif
+        [... handling non-otherchild processes death ...]
+</pre></div>
+</div>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>proc</p></td>
+<td><p>The process to check</p></td>
+</tr>
+<tr class="row-even"><td><p>reason</p></td>
+<td><p>The reason code to pass to the maintenance function</p></td>
+</tr>
+<tr class="row-odd"><td><p>status</p></td>
+<td><p>The status to pass to the maintenance function</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga74a905d90a3476a611adeeb304931a6c"><span id="index-52"></span><span></span><span class="kt">void</span>
+<span class="n">apr_proc_other_child_refresh</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-thread-proc-1gafc52ee8b19a7b222278d31ebb3f11a71"><span class="std std-ref">apr_other_child_rec_t</span></a><span></span><span class="o">*</span> <span class="n">ocr</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">reason</span>
+<span class="p">)</span></pre>
+<p>Test one specific other child processes and invoke the maintenance callback with the appropriate reason code, if still running, or the appropriate reason code if the process is no longer healthy.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ocr</p></td>
+<td><p>The registered other child</p></td>
+</tr>
+<tr class="row-even"><td><p>reason</p></td>
+<td><p>The reason code (e.g. APR_OC_REASON_RESTART) if still running</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1gacff5e867a92619d30c4e78f9ad2a58e3"><span id="index-53"></span><span></span><span class="kt">void</span>
+<span class="n">apr_proc_other_child_refresh_all</span><span class="p">(</span><span class="kt">int</span> <span class="n">reason</span><span class="p">)</span></pre>
+<p>Test all registered other child processes and invoke the maintenance callback with the appropriate reason code, if still running, or the appropriate reason code if the process is no longer healthy.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>reason</p></td>
+<td><p>The reason code (e.g. APR_OC_REASON_RESTART) to running processes</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga4a5ff2fce2c68460281b0cb3ee0365d5"><span id="index-54"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_proc_kill</span><span class="p">(</span>
+    <a class="reference internal" href="struct_apr_proc_t.html#doxid-structapr-proc-t"><span class="std std-ref">apr_proc_t</span></a><span></span><span class="o">*</span> <span class="n">proc</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">sig</span>
+<span class="p">)</span></pre>
+<p>Terminate a process.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>proc</p></td>
+<td><p>The process to terminate.</p></td>
+</tr>
+<tr class="row-even"><td><p>sig</p></td>
+<td><p>How to kill the process.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1gacbe3fd9491fa35149de28cebcae22f87"><span id="index-55"></span><span></span><span class="kt">void</span>
+<span class="n">apr_pool_note_subprocess</span><span class="p">(</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">a</span><span class="p">,</span>
+    <a class="reference internal" href="struct_apr_proc_t.html#doxid-structapr-proc-t"><span class="std std-ref">apr_proc_t</span></a><span></span><span class="o">*</span> <span class="n">proc</span><span class="p">,</span>
+    <a class="reference internal" href="enum_apr_kill_conditions_e.html#doxid-group-apr-thread-proc-1ga3eaec78633742e7e0cb9480a21477aff"><span class="std std-ref">apr_kill_conditions_e</span></a><span></span> <span class="n">how</span>
+<span class="p">)</span></pre>
+<p>Register a process to be killed when a pool dies.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>a</p></td>
+<td><p>The pool to use to define the processes lifetime</p></td>
+</tr>
+<tr class="row-even"><td><p>proc</p></td>
+<td><p>The process to register</p></td>
+</tr>
+<tr class="row-odd"><td><p>how</p></td>
+<td><p>How to kill the process, one of:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>APR_KILL_NEVER          process is never sent any signals
+APR_KILL_ALWAYS         process is sent SIGKILL on apr_pool_t cleanup
+APR_KILL_AFTER_TIMEOUT  SIGTERM, wait 3 seconds, SIGKILL
+APR_JUST_WAIT           wait forever for the process to complete
+APR_KILL_ONLY_ONCE      send SIGTERM and then wait
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga7adc09cd24568666266edce81cfffbed"><span id="index-56"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_setup_signal_thread</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></pre>
+<p>Setup the process for a single thread to be used for all signal handling.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This must be called before any threads are created</p>
+</div>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga2e53fa76ff725749c7affe6c81faa9e5"><span id="index-57"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_signal_thread</span><span class="p">(</span><span class="kt">int</span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">int</span> <span class="n">signum</span><span class="p">)</span> <span class="n">signal_handler</span><span class="p">)</span></pre>
+<p>Make the current thread listen for signals. This thread will loop forever, calling a provided function whenever it receives a signal. That functions should return 1 if the signal has been handled, 0 otherwise.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>signal_handler</p></td>
+<td><p>The function to call when a signal is received apr_status_t apr_signal_thread((int)(*signal_handler)(int signum))</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga089b70ae9d6c64d2675a1fd1e9cd0d0d"><span id="index-58"></span><a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span>
+<span class="n">apr_thread_pool_get</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-apr-thread-proc-1ga646c71351e723d84f8cc8c8d1d5937be"><span class="std std-ref">apr_thread_t</span></a><span></span><span class="o">*</span> <span class="n">thethread</span><span class="p">)</span></pre>
+<p>Get the child-pool used by the thread from the thread info.</p>
+<p class="rubric">Returns:</p>
+<p>apr_pool_t the pool</p>
+</section>
+<section id="macros">
+<h3>Macros</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1gacad9da4db7a22f46715e50fb8ec1c939"><span id="index-59"></span><span></span><span class="cp">#define APR_CHILD_BLOCK</span></pre>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga2b1598bc6f5ab0bfcf2e55096d563c98"><span class="std std-ref">apr_procattr_io_set</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga646af57314e71f4647243f36dd03e5ea"><span id="index-60"></span><span></span><span class="cp">#define APR_FULL_BLOCK</span></pre>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga2b1598bc6f5ab0bfcf2e55096d563c98"><span class="std std-ref">apr_procattr_io_set</span></a> and <a class="reference internal" href="group_apr_file_io.html#doxid-group-apr-file-io-1ga2fbbae715bee0e0ca9adadd66ac65e96"><span class="std std-ref">apr_file_pipe_create_ex</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1gae0707f76da785490830fc3491093767c"><span id="index-61"></span><span></span><span class="cp">#define APR_FULL_NONBLOCK</span></pre>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga2b1598bc6f5ab0bfcf2e55096d563c98"><span class="std std-ref">apr_procattr_io_set</span></a> and <a class="reference internal" href="group_apr_file_io.html#doxid-group-apr-file-io-1ga2fbbae715bee0e0ca9adadd66ac65e96"><span class="std std-ref">apr_file_pipe_create_ex</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1gaad8a94c7ac2be58fe035b2fd6efec84f"><span id="index-62"></span><span></span><span class="cp">#define APR_LIMIT_CPU</span></pre>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga4de85cfd54d27476dbb943955c1b0a2a"><span class="std std-ref">apr_procattr_limit_set</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga6dbb01bb357b078acff8fd87e9c494e8"><span id="index-63"></span><span></span><span class="cp">#define APR_LIMIT_MEM</span></pre>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga4de85cfd54d27476dbb943955c1b0a2a"><span class="std std-ref">apr_procattr_limit_set</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga18d73099d66988698a9ad2aebdce2c9f"><span id="index-64"></span><span></span><span class="cp">#define APR_LIMIT_NOFILE</span></pre>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga4de85cfd54d27476dbb943955c1b0a2a"><span class="std std-ref">apr_procattr_limit_set</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga72e9be453a20f4e78bc6d7bd95d7c333"><span id="index-65"></span><span></span><span class="cp">#define APR_LIMIT_NPROC</span></pre>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga4de85cfd54d27476dbb943955c1b0a2a"><span class="std std-ref">apr_procattr_limit_set</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga597fb6a501c20cc3a597fe6c613f4310"><span id="index-66"></span><span></span><span class="cp">#define APR_NO_FILE</span></pre>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Win32 only effective with version 1.2.12, portably introduced in 1.3.0</p>
+</div>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga2b1598bc6f5ab0bfcf2e55096d563c98"><span class="std std-ref">apr_procattr_io_set</span></a></p>
+<p><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga2b1598bc6f5ab0bfcf2e55096d563c98"><span class="std std-ref">apr_procattr_io_set</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1gab7cfcb8ed24e6c0a76cd41b5b113ae95"><span id="index-67"></span><span></span><span class="cp">#define APR_NO_PIPE</span></pre>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga2b1598bc6f5ab0bfcf2e55096d563c98"><span class="std std-ref">apr_procattr_io_set</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga8653bab028b1c2b98754babc2547f988"><span id="index-68"></span><span></span><span class="cp">#define APR_PARENT_BLOCK</span></pre>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-thread-proc-1ga2b1598bc6f5ab0bfcf2e55096d563c98"><span class="std std-ref">apr_procattr_io_set</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga2249e96191b5d98d33fb7875bce49410"><span id="index-69"></span><span></span><span class="cp">#define APR_PROC_CHECK_CORE_DUMP(x)</span></pre>
+<p>did we get core</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga689b0f3953cde83a4092931bad8b7183"><span id="index-70"></span><span></span><span class="cp">#define APR_PROC_CHECK_EXIT(x)</span></pre>
+<p>did we exit the process</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1gaa0a8a0b8785cc9392059c7accd71f5f6"><span id="index-71"></span><span></span><span class="cp">#define APR_PROC_CHECK_SIGNALED(x)</span></pre>
+<p>did we get a signal</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1gab4de7134fcc66c4127ae65b68631f846"><span id="index-72"></span><span></span><span class="cp">#define APR_PROC_DETACH_DAEMONIZE</span></pre>
+<p>Detach</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1gab57b448a464ac299c03d6127781df152"><span id="index-73"></span><span></span><span class="cp">#define APR_PROC_DETACH_FOREGROUND</span></pre>
+<p>Do not detach</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1gaf8295548cb0821ee02249d6de8336bcb"><span id="index-74"></span><span></span><span class="cp">#define APR_READ_BLOCK</span></pre>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="group_apr_file_io.html#doxid-group-apr-file-io-1ga2fbbae715bee0e0ca9adadd66ac65e96"><span class="std std-ref">apr_file_pipe_create_ex</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-thread-proc-1ga36ff2de9664ad6995bd488b4ac715c9c"><span id="index-75"></span><span></span><span class="cp">#define APR_WRITE_BLOCK</span></pre>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="group_apr_file_io.html#doxid-group-apr-file-io-1ga2fbbae715bee0e0ca9adadd66ac65e96"><span class="std std-ref">apr_file_pipe_create_ex</span></a></p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Threads and Process Functions</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li><a class="reference internal" href="#global-functions">Global Functions</a></li>
+<li><a class="reference internal" href="#macros">Macros</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="group_apr_thread_mutex.html"
+                          title="previous chapter">Thread Mutex Routines</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="group_APR_OC.html"
+                          title="next chapter">Other Child Flags</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="group_APR_OC.html" title="Other Child Flags"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="group_apr_thread_mutex.html" title="Thread Mutex Routines"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Apache Portable Runtime Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="group_APR.html" >Apache Portability Runtime library</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Threads and Process Functions</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2008-2017, Apache Portable Runtime Maintainers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    </div>
+  </body>
+</html>

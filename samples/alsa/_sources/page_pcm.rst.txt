@@ -1,0 +1,505 @@
+.. index:: pair: page; PCM (digital audio) interface
+.. _doxid-pcm:
+
+PCM (digital audio) interface
+=============================
+
+Although abbreviation PCM stands for Pulse Code Modulation, we are understanding it as general digital audio processing with volume samples generated in continuous time periods.
+
+The analog signal is recorded via analog to digital converters (ADC). The digital value (de-facto a volume at a specific time) obtained from ADC can be further processed. The following picture shows a perfect sinus waveform:
+
+.. image:: wave1.gif
+
+Next image shows digitized representation:
+
+.. image:: wave2.gif
+
+As you may see, the quality of digital audio signal depends on the time (recording rate) and voltage resolution (usually in an linear integer representation with basic unit one bit).
+
+The stored digital signal can be converted back to voltage (analog) representation via digital to analog converters (DAC).
+
+One digital value is called sample. More samples are collected to frames (frame is terminology for ALSA) depending on count of converters used at one specific time. One frame might contain one sample (when only one converter is used - mono) or more samples (for example: stereo has signals from two converters recorded at same time). Digital audio stream contains collection of frames recorded at boundaries of continuous time periods.
+
+
+
+.. _doxid-pcm_1pcm_general_overview:
+
+General overview
+~~~~~~~~~~~~~~~~
+
+ALSA uses the ring buffer to store outgoing (playback) and incoming (capture, record) samples. There are two pointers being maintained to allow a precise communication between application and device pointing to current processed sample by hardware and last processed sample by application. The modern audio chips allow to program the transfer time periods. It means that the stream of samples is divided to small chunks. Device acknowledges to application when the transfer of a chunk is complete.
+
+
+
+
+
+.. _doxid-pcm_1pcm_transfer:
+
+Transfer methods in UNIX environments
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In the UNIX environment, data chunk acknowledges are received via standard I/O calls or event waiting routines (poll or select function). To accomplish this list, the asynchronous notification of acknowledges should be listed here. The ALSA implementation for these methods is described in the :ref:`ALSA transfers <doxid-pcm_1alsa_transfers>` section.
+
+
+
+.. _doxid-pcm_1pcm_transfer_io:
+
+Standard I/O transfers
+----------------------
+
+The standard I/O transfers are using the read (see 'man 2 read') and write (see 'man 2 write') C functions. There are two basic behaviours of these functions - blocked and non-blocked (see the O_NONBLOCK flag for the standard C open function - see 'man 2 open'). In non-blocked behaviour, these I/O functions never stops, they return -EAGAIN error code, when no data can be transferred (the ring buffer is full in our case). In blocked behaviour, these I/O functions stop and wait until there is a room in the ring buffer (playback) or until there are a new samples (capture). The ALSA implementation can be found in the :ref:`Read / Write transfer <doxid-pcm_1alsa_pcm_rw>` section.
+
+
+
+
+
+.. _doxid-pcm_1pcm_transfer_event:
+
+Event waiting routines
+----------------------
+
+The poll or select functions (see 'man 2 poll' or 'man 2 select' for further details) allows to receive requests/events from the device while an application is waiting on events from other sources (like keyboard, screen, network etc.), too. :ref:`snd_pcm_poll_descriptors <doxid-group___p_c_m_1ga742e8705f6992fd0e36efc868e574f01>` can be used to get file descriptors to poll or select on (note that wait direction might be different than expected - do not use only returned file descriptors, but handle events member as well - see :ref:`snd_pcm_poll_descriptors <doxid-group___p_c_m_1ga742e8705f6992fd0e36efc868e574f01>` function description for more details and :ref:`snd_pcm_poll_descriptors_revents <doxid-group___p_c_m_1ga7e561f305702c6f52dab49b6c84f7df7>` for events demangling). The implemented transfer routines can be found in the :ref:`ALSA transfers <doxid-pcm_1alsa_transfers>` section.
+
+
+
+
+
+.. _doxid-pcm_1pcm_transfer_async:
+
+Asynchronous notification
+-------------------------
+
+ALSA driver and library knows to handle the asynchronous notifications over the SIGIO signal. This signal allows to interrupt application and transfer data in the signal handler. For further details see the sigaction function ('man 2 sigaction'). The section :ref:`Asynchronous mode <doxid-pcm_1pcm_async>` describes the ALSA API for this extension. The implemented transfer routines can be found in the :ref:`ALSA transfers <doxid-pcm_1alsa_transfers>` section.
+
+
+
+
+
+
+
+.. _doxid-pcm_1pcm_open_behaviour:
+
+Blocked and non-blocked open
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The ALSA PCM API uses a different behaviour when the device is opened with blocked or non-blocked mode. The mode can be specified with *mode* argument in :ref:`snd_pcm_open() <doxid-group___p_c_m_1ga8340c7dc0ac37f37afe5e7c21d6c528b>` function. The blocked mode is the default (without :ref:`SND_PCM_NONBLOCK <doxid-group___p_c_m_1ga6bd90de1d1527b5804090dcce51079ad>` mode). In this mode, the behaviour is that if the resources have already used with another application, then it blocks the caller, until resources are free. The non-blocked behaviour (with :ref:`SND_PCM_NONBLOCK <doxid-group___p_c_m_1ga6bd90de1d1527b5804090dcce51079ad>`) doesn't block the caller in any way and returns -EBUSY error when the resources are not available. Note that the mode also determines the behaviour of standard I/O calls, returning -EAGAIN when non-blocked mode is used and the ring buffer is full (playback) or empty (capture). The operation mode for I/O calls can be changed later with the :ref:`snd_pcm_nonblock() <doxid-group___p_c_m_1ga8d9ed4a62c17402de0389fd31fc7dc1f>` function.
+
+
+
+
+
+.. _doxid-pcm_1pcm_async:
+
+Asynchronous mode
+~~~~~~~~~~~~~~~~~
+
+There is also possibility to receive asynchronous notification after specified time periods. You may see the :ref:`SND_PCM_ASYNC <doxid-group___p_c_m_1ga9b22351abf6c85ced128e2088f6f6a5c>` mode for :ref:`snd_pcm_open() <doxid-group___p_c_m_1ga8340c7dc0ac37f37afe5e7c21d6c528b>` function and :ref:`snd_async_add_pcm_handler() <doxid-group___p_c_m_1ga5a0c0da6d0d35a3ac9f6a97567ac3b63>` function for further details.
+
+
+
+
+
+.. _doxid-pcm_1pcm_handshake:
+
+Handshake between application and library
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The ALSA PCM API design uses the states to determine the communication phase between application and library. The actual state can be determined using :ref:`snd_pcm_state() <doxid-group___p_c_m_1ga87896f6f17020fc19835790369e7ce75>` call. There are these states:
+
+The PCM device is in the open state. After the :ref:`snd_pcm_open() <doxid-group___p_c_m_1ga8340c7dc0ac37f37afe5e7c21d6c528b>` open call, the device is in this state. Also, when :ref:`snd_pcm_hw_params() <doxid-group___p_c_m_1ga1ca0dc120a484965e26cabf966502330>` call fails, then this state is entered to force application calling :ref:`snd_pcm_hw_params() <doxid-group___p_c_m_1ga1ca0dc120a484965e26cabf966502330>` function to set right communication parameters.
+
+The PCM device has accepted communication parameters and it is waiting for :ref:`snd_pcm_prepare() <doxid-group___p_c_m_1ga788d05de75f2d536f8443cb0306754d0>` call to prepare the hardware for selected operation (playback or capture).
+
+The PCM device is prepared for operation. Application can use :ref:`snd_pcm_start() <doxid-group___p_c_m_1ga6bdb88b68a9d9e66015d770f600c6aea>` call, write or read data to start the operation.
+
+The PCM device has been started and is running. It processes the samples. The stream can be stopped using the :ref:`snd_pcm_drop() <doxid-group___p_c_m_1ga7000ca6010a1a2739daddff8e2fbb440>` or :ref:`snd_pcm_drain() <doxid-group___p_c_m_1ga49afc5b8527f30c33fafa476533c9f86>` calls.
+
+The PCM device reached overrun (capture) or underrun (playback). You can use the -EPIPE return code from I/O functions (:ref:`snd_pcm_writei() <doxid-group___p_c_m_1gabc748a500743713eafa960c7d104ca6f>`, :ref:`snd_pcm_writen() <doxid-group___p_c_m_1gae599772ce3d0aa6a70de143abcf145e7>`, :ref:`snd_pcm_readi() <doxid-group___p_c_m_1ga4c2c7bd26cf221268d59dc3bbeb9c048>`, :ref:`snd_pcm_readn() <doxid-group___p_c_m_1gafea175455f1a405f633a43484ded3d8a>`) to determine this state without checking the actual state via :ref:`snd_pcm_state() <doxid-group___p_c_m_1ga87896f6f17020fc19835790369e7ce75>` call. It is recommended to use the helper function :ref:`snd_pcm_recover() <doxid-group___p_c_m_1ga2157aaeb6fc14da3f040d76591f9d3b1>` to recover from this state, but you can also use :ref:`snd_pcm_prepare() <doxid-group___p_c_m_1ga788d05de75f2d536f8443cb0306754d0>`, :ref:`snd_pcm_drop() <doxid-group___p_c_m_1ga7000ca6010a1a2739daddff8e2fbb440>` or :ref:`snd_pcm_drain() <doxid-group___p_c_m_1ga49afc5b8527f30c33fafa476533c9f86>` calls.
+
+The device is in this state when application using the capture mode called :ref:`snd_pcm_drain() <doxid-group___p_c_m_1ga49afc5b8527f30c33fafa476533c9f86>` function. Until all data are read from the internal ring buffer using I/O routines (:ref:`snd_pcm_readi() <doxid-group___p_c_m_1ga4c2c7bd26cf221268d59dc3bbeb9c048>`, :ref:`snd_pcm_readn() <doxid-group___p_c_m_1gafea175455f1a405f633a43484ded3d8a>`), then the device stays in this state.
+
+The device is in this state when application called the :ref:`snd_pcm_pause() <doxid-group___p_c_m_1gad711b582c7066bd4fffa1d08a04316b5>` function until the pause is released. Not all hardware supports this feature. Application should check the capability with the :ref:`snd_pcm_hw_params_can_pause() <doxid-group___p_c_m___h_w___params_1gaad4ba98b2f66baa5360b9a85f064a3e9>`.
+
+The device is in the suspend state provoked with the power management system. The stream can be resumed using :ref:`snd_pcm_resume() <doxid-group___p_c_m_1ga13083ce2209aab9ea73831610bc61ab1>` call, but not all hardware supports this feature. Application should check the capability with the :ref:`snd_pcm_hw_params_can_resume() <doxid-group___p_c_m___h_w___params_1ga6b79539a34e6f51972f4c32b3296585a>`. In other case, the calls :ref:`snd_pcm_prepare() <doxid-group___p_c_m_1ga788d05de75f2d536f8443cb0306754d0>`, :ref:`snd_pcm_drop() <doxid-group___p_c_m_1ga7000ca6010a1a2739daddff8e2fbb440>`, :ref:`snd_pcm_drain() <doxid-group___p_c_m_1ga49afc5b8527f30c33fafa476533c9f86>` can be used to leave this state.
+
+The device is physicaly disconnected. It does not accept any I/O calls in this state.
+
+
+
+
+
+.. _doxid-pcm_1pcm_formats:
+
+PCM formats
+~~~~~~~~~~~
+
+The full list of formats present the :ref:`snd_pcm_format_t <doxid-group___p_c_m_1gaa14b7f26877a812acbb39811364177f8>` type. The 24-bit linear samples use 32-bit physical space, but the sample is stored in the lower three bytes. Some hardware does not support processing of full range, thus you may get the significant bits for linear samples via :ref:`snd_pcm_hw_params_get_sbits() <doxid-group___p_c_m___h_w___params_1ga8bb1180b62a4225f0e094b95ac5d3674>` function. The example: ICE1712 chips support 32-bit sample processing, but low byte is ignored (playback) or zero (capture). The function :ref:`snd_pcm_hw_params_get_sbits() <doxid-group___p_c_m___h_w___params_1ga8bb1180b62a4225f0e094b95ac5d3674>` returns 24 in this case.
+
+
+
+
+
+.. _doxid-pcm_1alsa_transfers:
+
+ALSA transfers
+~~~~~~~~~~~~~~
+
+There are two methods to transfer samples in application. The first method is the standard read / write one. The second method, uses the direct audio buffer to communicate with the device while ALSA library manages this space itself. You can find examples of all communication schemes for playback in :ref:`Sine-wave generator example <doxid-pcm_1example_test_pcm>`. To complete the list, we should note that :ref:`snd_pcm_wait() <doxid-group___p_c_m_1gad4d53d58b996a7cd9a5cbf1710b90375>` function contains embedded poll waiting implementation.
+
+
+
+.. _doxid-pcm_1alsa_pcm_rw:
+
+Read / Write transfer
+---------------------
+
+There are two versions of read / write routines. The first expects the interleaved samples at input (:ref:`SND_PCM_ACCESS_RW_INTERLEAVED <doxid-group___p_c_m_1gga661221ba5e8f1d6eaf4ab8e2da57cc1aa72a970ed6e676ab0fd9f3c3d36737e0a>` access method), and the second one expects non-interleaved (samples in separated buffers - :ref:`SND_PCM_ACCESS_RW_NONINTERLEAVED <doxid-group___p_c_m_1gga661221ba5e8f1d6eaf4ab8e2da57cc1aae7ab128d10c32667f396933190435071>` access method) at input. There are these functions for interleaved transfers: :ref:`snd_pcm_writei() <doxid-group___p_c_m_1gabc748a500743713eafa960c7d104ca6f>` :ref:`snd_pcm_readi() <doxid-group___p_c_m_1ga4c2c7bd26cf221268d59dc3bbeb9c048>`. For non-interleaved transfers, there are these functions: :ref:`snd_pcm_writen() <doxid-group___p_c_m_1gae599772ce3d0aa6a70de143abcf145e7>` and :ref:`snd_pcm_readn() <doxid-group___p_c_m_1gafea175455f1a405f633a43484ded3d8a>`.
+
+
+
+
+
+.. _doxid-pcm_1alsa_mmap_rw:
+
+Direct Read / Write transfer (via mmap'ed areas)
+------------------------------------------------
+
+Three kinds of organization of ring buffer memory areas exist in ALSA API. Access :ref:`SND_PCM_ACCESS_MMAP_INTERLEAVED <doxid-group___p_c_m_1gga661221ba5e8f1d6eaf4ab8e2da57cc1aa90a5dea527c5ae9a53f1448beb2dee6f>` has interleaved samples. Access :ref:`SND_PCM_ACCESS_MMAP_NONINTERLEAVED <doxid-group___p_c_m_1gga661221ba5e8f1d6eaf4ab8e2da57cc1aa7de225785e05dd1d538203c5ece9036e>` expects continous sample areas for one channel. Access :ref:`SND_PCM_ACCESS_MMAP_COMPLEX <doxid-group___p_c_m_1gga661221ba5e8f1d6eaf4ab8e2da57cc1aa26a4f161364cb539df4de5eeb9949121>` does not fit to interleaved and non-interleaved ring buffer organization.
+
+There are two functions for this kind of transfer. Application can get an access to memory areas via :ref:`snd_pcm_mmap_begin() <doxid-group___p_c_m___direct_1ga6d4acf42de554d4d1177fb035d484ea4>` function. This function returns the areas (single area is equal to a channel) containing the direct pointers to memory and sample position description in :ref:`snd_pcm_channel_area_t <doxid-structsnd__pcm__channel__area__t>` structure. After application transfers the data in the memory areas, then it must be acknowledged the end of transfer via :ref:`snd_pcm_mmap_commit() <doxid-group___p_c_m___direct_1gac306bd13c305825aa39dd9180a3ad520>` function to allow the ALSA library update the pointers to ring buffer. This kind of communication is also called "zero-copy", because the device does not require to copy the samples from application to another place in system memory.
+
+If you like to use the compatibility functions in mmap mode, there are read / write routines equaling to standard read / write transfers. Using these functions discards the benefits of direct access to memory region. See the :ref:`snd_pcm_mmap_readi() <doxid-group___p_c_m___direct_1ga24b6c538c8d7ddd0776ee65f8fb909eb>`, :ref:`snd_pcm_mmap_writei() <doxid-group___p_c_m___direct_1ga5a9ee8e1e764b12da6d54dfa195f7c52>`, :ref:`snd_pcm_mmap_readn() <doxid-group___p_c_m___direct_1ga29ce9af60eafb67f0303418a176bf3ea>` and :ref:`snd_pcm_mmap_writen() <doxid-group___p_c_m___direct_1ga092b1a7f387e9fc2977649bfd43b0958>` functions. These functions use :ref:`snd_pcm_areas_copy() <doxid-group___p_c_m___helpers_1gad57f8921f52ea2ffd870cafb2d076f2c>` internally.
+
+
+
+
+
+
+
+.. _doxid-pcm_1pcm_errors:
+
+Error codes
+~~~~~~~~~~~
+
+This error means xrun (underrun for playback or overrun for capture). The underrun can happen when an application does not feed new samples in time to alsa-lib (due CPU usage). The overrun can happen when an application does not take new captured samples in time from alsa-lib.
+
+This error means that system has suspended drivers. The application should wait in loop when :ref:`snd_pcm_resume() <doxid-group___p_c_m_1ga13083ce2209aab9ea73831610bc61ab1>`!= -EAGAIN and then call :ref:`snd_pcm_prepare() <doxid-group___p_c_m_1ga788d05de75f2d536f8443cb0306754d0>` when :ref:`snd_pcm_resume() <doxid-group___p_c_m_1ga13083ce2209aab9ea73831610bc61ab1>` return an error code. If :ref:`snd_pcm_resume() <doxid-group___p_c_m_1ga13083ce2209aab9ea73831610bc61ab1>` does not fail (a zero value is returned), driver supports resume and the :ref:`snd_pcm_prepare() <doxid-group___p_c_m_1ga788d05de75f2d536f8443cb0306754d0>` call can be ommited.
+
+This error means that the device is in a bad state. It means that the handskahe between application and alsa-lib is corrupted.
+
+This error can happen when device is physically removed (for example some hotplug devices like USB or PCMCIA, CardBus or ExpressCard can be removed on the fly).
+
+
+
+
+
+.. _doxid-pcm_1pcm_params:
+
+Managing parameters
+~~~~~~~~~~~~~~~~~~~
+
+The ALSA PCM device uses two groups of PCM related parameters. The hardware parameters contains the stream description like format, rate, count of channels, ring buffer size etc. The software parameters contains the software (driver) related parameters. The communication behaviour can be controlled via these parameters, like automatic start, automatic stop, interrupting (chunk acknowledge) etc. The software parameters can be modified at any time (when valid hardware parameters are set). It includes the running state as well.
+
+
+
+.. _doxid-pcm_1pcm_hw_params:
+
+Hardware related parameters
+---------------------------
+
+The ALSA PCM devices use the parameter refining system for hardware parameters - :ref:`snd_pcm_hw_params_t <doxid-group___p_c_m_1ga65c737127994f0a980edad744e36dc40>`. It means, that application choose the full-range of configurations at first and then application sets single parameters until all parameters are elementary (definite).
+
+ALSA knows about five access modes. The first three can be used for direct communication. The access mode :ref:`SND_PCM_ACCESS_MMAP_INTERLEAVED <doxid-group___p_c_m_1gga661221ba5e8f1d6eaf4ab8e2da57cc1aa90a5dea527c5ae9a53f1448beb2dee6f>` determines the direct memory area and interleaved sample organization. Interleaved organization means, that samples from channels are mixed together. The access mode :ref:`SND_PCM_ACCESS_MMAP_NONINTERLEAVED <doxid-group___p_c_m_1gga661221ba5e8f1d6eaf4ab8e2da57cc1aa7de225785e05dd1d538203c5ece9036e>` determines the direct memory area and non-interleaved sample organization. Each channel has a separate buffer in the case. The complex direct memory organization represents the :ref:`SND_PCM_ACCESS_MMAP_COMPLEX <doxid-group___p_c_m_1gga661221ba5e8f1d6eaf4ab8e2da57cc1aa26a4f161364cb539df4de5eeb9949121>` access mode. The sample organization does not fit the interleaved or non-interleaved access modes in the case. The last two access modes describes the read / write access methods. The :ref:`SND_PCM_ACCESS_RW_INTERLEAVED <doxid-group___p_c_m_1gga661221ba5e8f1d6eaf4ab8e2da57cc1aa72a970ed6e676ab0fd9f3c3d36737e0a>` access represents the read / write interleaved access and the :ref:`SND_PCM_ACCESS_RW_NONINTERLEAVED <doxid-group___p_c_m_1gga661221ba5e8f1d6eaf4ab8e2da57cc1aae7ab128d10c32667f396933190435071>` represents the non-interleaved access.
+
+The full list of formats is available in :ref:`snd_pcm_format_t <doxid-group___p_c_m_1gaa14b7f26877a812acbb39811364177f8>` enumeration.
+
+
+
+
+
+.. _doxid-pcm_1pcm_sw_params:
+
+Software related parameters
+---------------------------
+
+These parameters - :ref:`snd_pcm_sw_params_t <doxid-group___p_c_m_1ga7e082d9ea701709270b0674a0be23b09>` can be modified at any time including the running state.
+
+This parameter controls the wakeup point. If the count of available samples is equal or greater than this value, then application will be activated.
+
+The timestamp mode specifies, if timestamps are activated. Currently, only :ref:`SND_PCM_TSTAMP_NONE <doxid-group___p_c_m_1gga695a9755880cf886c13d07938f92ea77af49a1c378583854b22ed6f6490f3b1ee>` and :ref:`SND_PCM_TSTAMP_MMAP <doxid-group___p_c_m_1gga695a9755880cf886c13d07938f92ea77ab09196ab367636c4d365b5b6bcd391d8>` modes are known. The mmap mode means that timestamp is taken on every period time boundary. Corresponding position in the ring buffer assigned to timestamp can be obtained using :ref:`snd_pcm_htimestamp() <doxid-group___p_c_m_1ga3946abd34178b3de60fd5329b71c189b>` function.
+
+The read / write transfers can be aligned to this sample count. The modulo is ignored by device. Usually, this value is set to one (no align).
+
+The start threshold parameter is used to determine the start point in stream. For playback, if samples in ring buffer is equal or greater than the start threshold parameters and the stream is not running, the stream will be started automatically from the device. For capture, if the application wants to read count of samples equal or greater then the stream will be started. If you want to use explicit start (:ref:`snd_pcm_start <doxid-group___p_c_m_1ga6bdb88b68a9d9e66015d770f600c6aea>`), you can set this value greater than ring buffer size (in samples), but use the constant MAXINT is not a bad idea.
+
+Similarly, the stop threshold parameter is used to automatically stop the running stream, when the available samples crosses this boundary. It means, for playback, the empty samples in ring buffer and for capture, the filled (used) samples in ring buffer.
+
+The silence threshold specifies count of samples filled with silence ahead of the current application pointer for playback. It is usable for applications when an overrun is possible (like tasks depending on network I/O etc.). If application wants to manage the ahead samples itself, the :ref:`snd_pcm_rewind() <doxid-group___p_c_m_1ga6c66040dbe01797379436fdf36268fec>` function allows to forget the last samples in the stream.
+
+
+
+
+
+
+
+.. _doxid-pcm_1pcm_status:
+
+Obtaining stream status
+~~~~~~~~~~~~~~~~~~~~~~~
+
+The stream status is stored in :ref:`snd_pcm_status_t <doxid-group___p_c_m_1ga902b87281c46910b469d5f7aaafc1890>` structure. These parameters can be obtained: the current stream state - :ref:`snd_pcm_status_get_state() <doxid-group___p_c_m___status_1gabaae998f0d374c50195b3206d1e43659>`, timestamp of trigger - :ref:`snd_pcm_status_get_trigger_tstamp() <doxid-group___p_c_m___status_1ga5eaeff98814e96c2ffd5f04c95b22c8d>`, timestamp of last pointer update :ref:`snd_pcm_status_get_tstamp() <doxid-group___p_c_m___status_1gaea54e0a110afa01dd42071a1ca43902e>`, delay in samples - :ref:`snd_pcm_status_get_delay() <doxid-group___p_c_m___status_1ga1fdce3985e64f66385a5805da1110f18>`, available count in samples - :ref:`snd_pcm_status_get_avail() <doxid-group___p_c_m___status_1ga91c110525060b925ad4f0c21c205b757>`, maximum available samples - :ref:`snd_pcm_status_get_avail_max() <doxid-group___p_c_m___status_1gac58d13e4d03c9420c57428ddffd94964>`, ADC over-range count in samples - :ref:`snd_pcm_status_get_overrange() <doxid-group___p_c_m___status_1ga3f4bfd0a0327529abaa621b248b6b1aa>`. The last two parameters - avail_max and overrange are reset to zero after the status call.
+
+
+
+.. _doxid-pcm_1pcm_status_fast:
+
+Obtaining stream state fast and update r/w pointer
+--------------------------------------------------
+
+The function :ref:`snd_pcm_avail_update() <doxid-group___p_c_m_1ga8bb836bd0c414b59789d51a5f5379c08>` updates the current available count of samples for writing (playback) or filled samples for reading (capture). This call is mandatory for updating actual r/w pointer. Using standalone, it is a light method to obtain current stream position, because it does not require the user <-> kernel context switch, but the value is less accurate, because ring buffer pointers are updated in kernel drivers only when an interrupt occurs. If you want to get accurate stream state, use functions :ref:`snd_pcm_avail() <doxid-group___p_c_m_1ga577b4d51e08d94930a05bbe73291ed2a>`, :ref:`snd_pcm_delay() <doxid-group___p_c_m_1ga012e8b999070e72ab23514f25e7d6482>` or :ref:`snd_pcm_avail_delay() <doxid-group___p_c_m_1ga170bc44da2607b5583cff5ab5a985d98>`.
+
+The function :ref:`snd_pcm_avail() <doxid-group___p_c_m_1ga577b4d51e08d94930a05bbe73291ed2a>` reads the current hardware pointer in the ring buffer from hardware and calls :ref:`snd_pcm_avail_update() <doxid-group___p_c_m_1ga8bb836bd0c414b59789d51a5f5379c08>` then.
+
+The function :ref:`snd_pcm_delay() <doxid-group___p_c_m_1ga012e8b999070e72ab23514f25e7d6482>` returns the delay in samples. For playback, it means count of samples in the ring buffer before the next sample will be sent to DAC. For capture, it means count of samples in the ring buffer before the next sample will be captured from ADC. It works only when the stream is in the running or draining (playback only) state. Note that this function does not update the current r/w pointer for applications, so the function :ref:`snd_pcm_avail_update() <doxid-group___p_c_m_1ga8bb836bd0c414b59789d51a5f5379c08>` must be called afterwards before any read/write begin+commit operations.
+
+The function :ref:`snd_pcm_avail_delay() <doxid-group___p_c_m_1ga170bc44da2607b5583cff5ab5a985d98>` combines :ref:`snd_pcm_avail() <doxid-group___p_c_m_1ga577b4d51e08d94930a05bbe73291ed2a>` and :ref:`snd_pcm_delay() <doxid-group___p_c_m_1ga012e8b999070e72ab23514f25e7d6482>` and returns both values in sync.
+
+
+
+
+
+
+
+.. _doxid-pcm_1pcm_action:
+
+Managing the stream state
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The following functions directly and indirectly affect the stream state:
+
+The :ref:`snd_pcm_hw_params() <doxid-group___p_c_m_1ga1ca0dc120a484965e26cabf966502330>` function brings the stream state to :ref:`SND_PCM_STATE_SETUP <doxid-group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a58d9a0501aa1b2bd2607e1084c335672>` if successfully finishes, otherwise the state :ref:`SND_PCM_STATE_OPEN <doxid-group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a56cf8033b50561b57437232e243f3007>` is entered. When it is brought to SETUP state, this function automatically calls :ref:`snd_pcm_prepare() <doxid-group___p_c_m_1ga788d05de75f2d536f8443cb0306754d0>` function to bring to the PREPARED state as below.
+
+The :ref:`snd_pcm_prepare() <doxid-group___p_c_m_1ga788d05de75f2d536f8443cb0306754d0>` function enters from :ref:`SND_PCM_STATE_SETUP <doxid-group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a58d9a0501aa1b2bd2607e1084c335672>` to the :ref:`SND_PCM_STATE_PREPARED <doxid-group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a3eb4a3b75c7d2adb22f1829f3f738b27>` after a successful finish.
+
+The :ref:`snd_pcm_start() <doxid-group___p_c_m_1ga6bdb88b68a9d9e66015d770f600c6aea>` function enters the :ref:`SND_PCM_STATE_RUNNING <doxid-group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a86f6fbc796881f19fde0e1957f878147>` after a successful finish.
+
+The :ref:`snd_pcm_drop() <doxid-group___p_c_m_1ga7000ca6010a1a2739daddff8e2fbb440>` function enters the :ref:`SND_PCM_STATE_SETUP <doxid-group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a58d9a0501aa1b2bd2607e1084c335672>` state.
+
+The :ref:`snd_pcm_drain() <doxid-group___p_c_m_1ga49afc5b8527f30c33fafa476533c9f86>` function enters the :ref:`SND_PCM_STATE_DRAINING <doxid-group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a86f88c2a4c8eedb5c91f3b6cb4879cfe>`, if the capture device has some samples in the ring buffer otherwise :ref:`SND_PCM_STATE_SETUP <doxid-group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a58d9a0501aa1b2bd2607e1084c335672>` state is entered.
+
+The :ref:`snd_pcm_pause() <doxid-group___p_c_m_1gad711b582c7066bd4fffa1d08a04316b5>` function enters the :ref:`SND_PCM_STATE_PAUSED <doxid-group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a9fa0c5b43e5c924f87b50e22878a8952>` or :ref:`SND_PCM_STATE_RUNNING <doxid-group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a86f6fbc796881f19fde0e1957f878147>`.
+
+The :ref:`snd_pcm_writei() <doxid-group___p_c_m_1gabc748a500743713eafa960c7d104ca6f>` and :ref:`snd_pcm_writen() <doxid-group___p_c_m_1gae599772ce3d0aa6a70de143abcf145e7>` functions can conditionally start the stream - :ref:`SND_PCM_STATE_RUNNING <doxid-group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a86f6fbc796881f19fde0e1957f878147>`. They depend on the start threshold software parameter.
+
+The :ref:`snd_pcm_readi() <doxid-group___p_c_m_1ga4c2c7bd26cf221268d59dc3bbeb9c048>` and :ref:`snd_pcm_readn() <doxid-group___p_c_m_1gafea175455f1a405f633a43484ded3d8a>` functions can conditionally start the stream - :ref:`SND_PCM_STATE_RUNNING <doxid-group___p_c_m_1gga61ac499cb3701ce536d4d83725908860a86f6fbc796881f19fde0e1957f878147>`. They depend on the start threshold software parameter.
+
+
+
+
+
+.. _doxid-pcm_1pcm_sync:
+
+Streams synchronization
+~~~~~~~~~~~~~~~~~~~~~~~
+
+There are two functions allowing link multiple streams together. In the case, the linking means that all operations are synchronized. Because the drivers cannot guarantee the synchronization (sample resolution) on hardware lacking this feature, the :ref:`snd_pcm_info_get_sync() <doxid-group___p_c_m___info_1ga4a46693c8a81912de84f814c3eecd06e>` function returns synchronization ID - :ref:`snd_pcm_sync_id_t <doxid-unionsnd__pcm__sync__id__t>`, which is equal for hardware synchronized streams. When the :ref:`snd_pcm_link() <doxid-group___p_c_m_1gac6c33091b049985baa6466e8fe93917e>` function is called, all operations managing the stream state for these two streams are joined. The opposite function is :ref:`snd_pcm_unlink() <doxid-group___p_c_m_1ga0d3af5e30593dae857b4308aab5035cd>`.
+
+
+
+
+
+.. _doxid-pcm_1pcm_thread_safety:
+
+Thread-safety
+~~~~~~~~~~~~~
+
+When the library is configured with the proper option, some PCM functions (e.g. :ref:`snd_pcm_avail_update() <doxid-group___p_c_m_1ga8bb836bd0c414b59789d51a5f5379c08>`) are thread-safe and can be called concurrently from multiple threads. Meanwhile, some functions (e.g. :ref:`snd_pcm_hw_params() <doxid-group___p_c_m_1ga1ca0dc120a484965e26cabf966502330>`) aren't thread-safe, and application needs to call them carefully when they are called from multiple threads. In general, all the functions that are often called during streaming are covered as thread-safe.
+
+This thread-safe behavior can be disabled also by passing 0 to the environment variable LIBASOUND_THREAD_SAFE, e.g.
+
+.. ref-code-block:: cpp
+
+	LIBASOUND_THREAD_SAFE=0 aplay foo.wav
+
+for making the debugging easier.
+
+
+
+
+
+.. _doxid-pcm_1pcm_dev_names:
+
+PCM naming conventions
+~~~~~~~~~~~~~~~~~~~~~~
+
+The ALSA library uses a generic string representation for names of devices. The devices might be virtual, physical or a mix of both. The generic string is passed to :ref:`snd_pcm_open() <doxid-group___p_c_m_1ga8340c7dc0ac37f37afe5e7c21d6c528b>` or :ref:`snd_pcm_open_lconf() <doxid-group___p_c_m_1ga88164d313d8ff9dc33c94815869cb677>`. It contains two parts: device name and arguments. Devices and arguments are described in configuration files. The usual place for default definitions is at /usr/share/alsa/alsa.conf. For detailed descriptions about integrated PCM plugins look to :ref:`PCM (digital audio) plugins <doxid-pcm_plugins>`.
+
+
+
+.. _doxid-pcm_1pcm_dev_names_default:
+
+Default device
+--------------
+
+The default device is equal to plug plugin with hw plugin as slave. The defaults are used:
+
+.. ref-code-block:: cpp
+
+	defaults.pcm.card 0
+	defaults.pcm.device 0
+	defaults.pcm.subdevice -1
+
+These defaults can be freely overwritten in local configuration files.
+
+Example:
+
+.. ref-code-block:: cpp
+
+	default
+
+
+
+
+
+.. _doxid-pcm_1pcm_dev_names_hw:
+
+HW device
+---------
+
+The hw device description uses the hw plugin. The three arguments (in order: CARD,DEV,SUBDEV) specify card number or identifier, device number and subdevice number (-1 means any).
+
+Example:
+
+.. ref-code-block:: cpp
+
+	hw
+	hw:0
+	hw:0,0
+	hw:supersonic,1
+	hw:soundwave,1,2
+	hw:DEV=1,CARD=soundwave,SUBDEV=2
+
+
+
+
+
+.. _doxid-pcm_1pcm_dev_names_plughw:
+
+Plug->HW device
+---------------
+
+The plughw device description uses the plug plugin and hw plugin as slave. The arguments are same as for hw device.
+
+Example:
+
+.. ref-code-block:: cpp
+
+	plughw
+	plughw:0
+	plughw:0,0
+	plughw:supersonic,1
+	plughw:soundwave,1,2
+	plughw:DEV=1,CARD=soundwave,SUBDEV=2
+
+
+
+
+
+.. _doxid-pcm_1pcm_dev_names_plug:
+
+Plug device
+-----------
+
+The plug device uses the plug plugin. The one SLAVE argument specifies the slave plugin.
+
+Example:
+
+.. ref-code-block:: cpp
+
+	plug:mypcmdef
+	plug:hw
+	plug:'hw:0,0'
+	plug:SLAVE=hw
+
+
+
+
+
+.. _doxid-pcm_1pcm_dev_names_shm:
+
+Shared memory device
+--------------------
+
+The shm device uses the shm plugin. The two arguments (in order: SOCKET,PCM) specify UNIX socket name (for example /tmp/alsa.socket) for server communication and server's PCM name.
+
+Example:
+
+.. ref-code-block:: cpp
+
+	shm:'/tmp/alsa.sock',default
+	shm:SOCKET='/tmp/alsa.sock',PCM=default
+
+
+
+
+
+.. _doxid-pcm_1pcm_dev_names_tee:
+
+Tee device
+----------
+
+The tee device stores contents of a stream to given file plus transfers it to given slave plugin. The three arguments (in order: SLAVE,FILE,FORMAT) specify slave plugin, filename and file format.
+
+Example:
+
+.. ref-code-block:: cpp
+
+	tee:hw,'/tmp/out.raw',raw
+
+
+
+
+
+.. _doxid-pcm_1pcm_dev_names_file:
+
+File device
+-----------
+
+The file device is file plugin with null plugin as slave. The arguments (in order: FILE,FORMAT) specify filename and file format.
+
+Example:
+
+.. ref-code-block:: cpp
+
+	file:'/tmp/out.raw',raw
+
+
+
+
+
+.. _doxid-pcm_1pcm_dev_names_null:
+
+Null device
+-----------
+
+The null device is null plugin. This device has not any arguments.
+
+
+
+
+
+
+
+.. _doxid-pcm_1pcm_examples:
+
+Examples
+~~~~~~~~
+
+The full featured examples with cross-links can be found in Examples section (see top of page):
+
+:target:`doxid-pcm_1example_test_pcm` alsa-lib/test/pcm.c example shows various transfer methods for the playback direction.
+
+alsa-lib/test/pcm_min.c example shows the minimal code to produce a sound.
+
+alsa-lib/test/latency.c example shows the measuring of minimal latency between capture and playback devices.
+

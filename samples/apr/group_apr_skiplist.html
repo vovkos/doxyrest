@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skip list implementation &mdash; Apache Portable Runtime Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinx_rtd_theme.css?v=b6ca47bd" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=515d8a7f"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="String routines" href="group_apr_strings.html" />
+    <link rel="prev" title="Signal Handling" href="group_apr_signal.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Apache Portable Runtime Documentation
+          </a>
+              <div class="version">
+                1.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="group_APR.html">Apache Portability Runtime library</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="group_apr_atomic.html">Atomic Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_getopt.html">Command Argument Parsing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_thread_cond.html">Condition Variable Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_dso.html">Dynamic Object Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_errno.html">Error Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_APR_Util_Escaping.html">Escape functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_file_io.html">File I/O Handling Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_file_info.html">File Information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_fnmatch.html">Filename Matching Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_env.html">Functions for manipulating the environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_lib.html">General Purpose Library Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_APR_GlobalMutex.html">Global Locking Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_hash.html">Hash Tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_support.html">Internal APR support functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_allocator.html">Internal Memory Allocation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_mmap.html">MMAP (Memory Map) Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_pools.html">Memory Pool Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_general.html">Miscellaneous library routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_network_io.html">Network Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_platform.html">Platform Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_poll.html">Poll Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_portabile.html">Portability Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_proc_mutex.html">Process Locking Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_random.html">Random Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_thread_rwlock.html">Reader/Writer Lock Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_ring.html">Ring Macro Implementations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_shm.html">Shared Memory Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_signal.html">Signal Handling</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Skip list implementation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#global-functions">Global Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_strings.html">String routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_tables.html">Table and Array Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_thread_mutex.html">Thread Mutex Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_thread_proc.html">Threads and Process Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_time.html">Time Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_user.html">User and Group ID Services</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="group_apr_library.html">Library initialization and termination</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_apr_ctype.html">ctype functions</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="page_bug.html">Bug List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_deprecated.html">Deprecated List</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Apache Portable Runtime Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="group_APR.html">Apache Portability Runtime library</a></li>
+      <li class="breadcrumb-item active">Skip list implementation</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="skip-list-implementation">
+<span id="doxid-group-apr-skiplist"></span><span id="index-0"></span><h1>Skip list implementation</h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="overview">
+<h2>Overview</h2>
+<p>Refer to <a class="reference external" href="http://en.wikipedia.org/wiki/Skip_list">http://en.wikipedia.org/wiki/Skip_list</a> for information about the purpose of and ideas behind skip lists. <a class="reference internal" href="#details-group-apr-skiplist"><span class="std std-ref">More…</span></a></p>
+<pre class="highlight doxyrest-overview-code-block literal-block"><span></span><span class="c1">// typedefs</span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-apr-skiplist-1ga873aa114e692e48c6587277680ceba87"><span class="std std-ref">apr_skiplist_compare</span></a><span></span><span class="p">)(</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span>
+    <span class="p">);</span>
+
+<span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-apr-skiplist-1ga326fdccaf516e5296969fa03bbda3fca"><span class="std std-ref">apr_skiplist_freefunc</span></a><span></span><span class="p">)(</span><span class="kt">void</span> <span class="o">*</span><span class="p">);</span>
+<span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span> <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-skiplist-1gafb934f577d03de823aa4d62b41399bc0"><span class="std std-ref">apr_skiplistnode</span></a><span></span> <a class="reference internal" href="#doxid-group-apr-skiplist-1gafb934f577d03de823aa4d62b41399bc0"><span class="std std-ref">apr_skiplistnode</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// global functions</span>
+
+<span class="kt">void</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-skiplist-1ga42fd4de5a4239c988c3d57f88bd685d6"><span class="std std-ref">apr_skiplist_alloc</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">size</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-apr-skiplist-1ga9e799684f45cc8a1b673cc99ca935f2b"><span class="std std-ref">apr_skiplist_free</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">mem</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-skiplist-1ga53f636612f9d82ef2886a85d33c704ed"><span class="std std-ref">apr_skiplist_init</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">**</span> <span class="n">sl</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-apr-skiplist-1ga61bebe90df16a4ea8a6ab6c6b6792e4a"><span class="std std-ref">apr_skiplist_set_compare</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1ga873aa114e692e48c6587277680ceba87"><span class="std std-ref">apr_skiplist_compare</span></a><span></span> <span class="n">XXX1</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1ga873aa114e692e48c6587277680ceba87"><span class="std std-ref">apr_skiplist_compare</span></a><span></span> <span class="n">XXX2</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-apr-skiplist-1ga7f9e8bd8d1900d64c82ca5c9113621a8"><span class="std std-ref">apr_skiplist_add_index</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1ga873aa114e692e48c6587277680ceba87"><span class="std std-ref">apr_skiplist_compare</span></a><span></span> <span class="n">XXX1</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1ga873aa114e692e48c6587277680ceba87"><span class="std std-ref">apr_skiplist_compare</span></a><span></span> <span class="n">XXX2</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="#doxid-group-apr-skiplist-1gafb934f577d03de823aa4d62b41399bc0"><span class="std std-ref">apr_skiplistnode</span></a><span></span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-skiplist-1ga2a4515bc1a4174fde279c2edc5dd2593"><span class="std std-ref">apr_skiplist_getlist</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">);</span>
+
+<span class="kt">void</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-skiplist-1gac1dc196aa51b1370cdc41e6258c36d7c"><span class="std std-ref">apr_skiplist_find_compare</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gafb934f577d03de823aa4d62b41399bc0"><span class="std std-ref">apr_skiplistnode</span></a><span></span><span class="o">**</span> <span class="n">iter</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1ga873aa114e692e48c6587277680ceba87"><span class="std std-ref">apr_skiplist_compare</span></a><span></span> <span class="n">func</span>
+<span class="p">);</span>
+
+<span class="kt">void</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-skiplist-1gab28a7376e3483ae1104f2665d9859b95"><span class="std std-ref">apr_skiplist_find</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gafb934f577d03de823aa4d62b41399bc0"><span class="std std-ref">apr_skiplistnode</span></a><span></span><span class="o">**</span> <span class="n">iter</span>
+<span class="p">);</span>
+
+<span class="kt">void</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-skiplist-1gaca0e377b36847ed03c3a135f0f3f353e"><span class="std std-ref">apr_skiplist_next</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gafb934f577d03de823aa4d62b41399bc0"><span class="std std-ref">apr_skiplistnode</span></a><span></span><span class="o">**</span> <span class="n">iter</span>
+<span class="p">);</span>
+
+<span class="kt">void</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-skiplist-1ga02ff03a8282b561edf01b3291c154af4"><span class="std std-ref">apr_skiplist_previous</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gafb934f577d03de823aa4d62b41399bc0"><span class="std std-ref">apr_skiplistnode</span></a><span></span><span class="o">**</span> <span class="n">iter</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="#doxid-group-apr-skiplist-1gafb934f577d03de823aa4d62b41399bc0"><span class="std std-ref">apr_skiplistnode</span></a><span></span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-skiplist-1ga01b128d5160bc905f4b60a120ca10b2e"><span class="std std-ref">apr_skiplist_insert_compare</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1ga873aa114e692e48c6587277680ceba87"><span class="std std-ref">apr_skiplist_compare</span></a><span></span> <span class="n">comp</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="#doxid-group-apr-skiplist-1gafb934f577d03de823aa4d62b41399bc0"><span class="std std-ref">apr_skiplistnode</span></a><span></span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-skiplist-1ga1aaaa029b9f166baf320bf43e6887b4d"><span class="std std-ref">apr_skiplist_insert</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">data</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-apr-skiplist-1ga9770c39604e7491da4c67282758690c2"><span class="std std-ref">apr_skiplist_remove_compare</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1ga326fdccaf516e5296969fa03bbda3fca"><span class="std std-ref">apr_skiplist_freefunc</span></a><span></span> <span class="n">myfree</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1ga873aa114e692e48c6587277680ceba87"><span class="std std-ref">apr_skiplist_compare</span></a><span></span> <span class="n">comp</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-apr-skiplist-1ga682f5e7dfcc4359097b9a4b96d053eff"><span class="std std-ref">apr_skiplist_remove</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1ga326fdccaf516e5296969fa03bbda3fca"><span class="std std-ref">apr_skiplist_freefunc</span></a><span></span> <span class="n">myfree</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-apr-skiplist-1ga67d3e8a4a817bf85f1999f41d9d4ec11"><span class="std std-ref">apr_skiplist_remove_all</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1ga326fdccaf516e5296969fa03bbda3fca"><span class="std std-ref">apr_skiplist_freefunc</span></a><span></span> <span class="n">myfree</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-apr-skiplist-1ga6d24c06537535773ad3b4d18c6efefc3"><span class="std std-ref">apr_skiplist_destroy</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1ga326fdccaf516e5296969fa03bbda3fca"><span class="std std-ref">apr_skiplist_freefunc</span></a><span></span> <span class="n">myfree</span>
+<span class="p">);</span>
+
+<span class="kt">void</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-skiplist-1ga237063a88253165f074c04ab9b0f17a3"><span class="std std-ref">apr_skiplist_pop</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1ga326fdccaf516e5296969fa03bbda3fca"><span class="std std-ref">apr_skiplist_freefunc</span></a><span></span> <span class="n">myfree</span>
+<span class="p">);</span>
+
+<span class="kt">void</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-skiplist-1ga96068b644647e86139bd6fdb0fcfebf3"><span class="std std-ref">apr_skiplist_peek</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">);</span>
+
+<a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-skiplist-1gab54881447708cf725758860c88ba52a6"><span class="std std-ref">apr_skiplist_merge</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl1</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl2</span>
+<span class="p">);</span></pre>
+</section>
+<section id="detailed-documentation">
+<span id="details-group-apr-skiplist"></span><h2>Detailed Documentation</h2>
+<p>Refer to <a class="reference external" href="http://en.wikipedia.org/wiki/Skip_list">http://en.wikipedia.org/wiki/Skip_list</a> for information about the purpose of and ideas behind skip lists.</p>
+<section id="typedefs">
+<h3>Typedefs</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-skiplist-1ga873aa114e692e48c6587277680ceba87"><span id="index-1"></span><span></span><span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">apr_skiplist_compare</span><span class="p">)(</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span>
+    <span class="p">)</span></pre>
+<p>apr_skiplist_compare is the function type that must be implemented per object type that is used in a skip list for comparisons to maintain order. A value &lt;0 indicates placement after this node; a value of 0 indicates collision with this exact node; a value &gt;0 indicates placement before this node.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-skiplist-1ga326fdccaf516e5296969fa03bbda3fca"><span id="index-2"></span><span></span><span class="k">typedef</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">apr_skiplist_freefunc</span><span class="p">)(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span></pre>
+<p>apr_skiplist_freefunc is the function type that must be implemented to handle elements as they are removed from a skip list.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span id="index-3"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span> <span class="n">apr_skiplist</span></pre>
+<p>Opaque structure used to represent the skip list</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-skiplist-1gafb934f577d03de823aa4d62b41399bc0"><span id="index-4"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-skiplist-1gafb934f577d03de823aa4d62b41399bc0"><span class="std std-ref">apr_skiplistnode</span></a><span></span> <span class="n">apr_skiplistnode</span></pre>
+<p>Opaque structure</p>
+</section>
+<section id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-skiplist-1ga42fd4de5a4239c988c3d57f88bd685d6"><span id="index-5"></span><span></span><span class="kt">void</span><span class="o">*</span>
+<span class="n">apr_skiplist_alloc</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">size</span>
+<span class="p">)</span></pre>
+<p>Allocate memory using the same mechanism as the skip list. If a pool was provided to <a class="reference internal" href="#doxid-group-apr-skiplist-1ga53f636612f9d82ef2886a85d33c704ed"><span class="std std-ref">apr_skiplist_init()</span></a>, memory will be allocated from the pool or from a free list maintained with the skip list. Otherwise, memory will be allocated using the C standard library heap functions.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sl</p></td>
+<td><p>The skip list</p></td>
+</tr>
+<tr class="row-even"><td><p>size</p></td>
+<td><p>The amount to allocate</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-skiplist-1ga9e799684f45cc8a1b673cc99ca935f2b"><span id="index-6"></span><span></span><span class="kt">void</span>
+<span class="n">apr_skiplist_free</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">mem</span>
+<span class="p">)</span></pre>
+<p>Free memory using the same mechanism as the skip list. If a pool was provided to <a class="reference internal" href="#doxid-group-apr-skiplist-1ga53f636612f9d82ef2886a85d33c704ed"><span class="std std-ref">apr_skiplist_init()</span></a>, memory will be added to a free list maintained with the skip list and be available to operations on the skip list or to other calls to <a class="reference internal" href="#doxid-group-apr-skiplist-1ga42fd4de5a4239c988c3d57f88bd685d6"><span class="std std-ref">apr_skiplist_alloc()</span></a>. Otherwise, memory will be freed using the C standard library heap functions.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sl</p></td>
+<td><p>The skip list</p></td>
+</tr>
+<tr class="row-even"><td><p>mem</p></td>
+<td><p>The object to free</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-skiplist-1ga53f636612f9d82ef2886a85d33c704ed"><span id="index-7"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_skiplist_init</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">**</span> <span class="n">sl</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">)</span></pre>
+<p>Allocate a new skip list Unlike most APR functions, a pool is optional. If no pool is provided, the C standard library heap functions will be used instead.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sl</p></td>
+<td><p>The pointer in which to return the newly created skip list</p></td>
+</tr>
+<tr class="row-even"><td><p>p</p></td>
+<td><p>The pool from which to allocate the skip list (optional).</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-skiplist-1ga61bebe90df16a4ea8a6ab6c6b6792e4a"><span id="index-8"></span><span></span><span class="kt">void</span>
+<span class="n">apr_skiplist_set_compare</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1ga873aa114e692e48c6587277680ceba87"><span class="std std-ref">apr_skiplist_compare</span></a><span></span> <span class="n">XXX1</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1ga873aa114e692e48c6587277680ceba87"><span class="std std-ref">apr_skiplist_compare</span></a><span></span> <span class="n">XXX2</span>
+<span class="p">)</span></pre>
+<p>Set the comparison functions to be used for searching the skip list. If existing comparison functions are being replaced, the index will be replaced during this call. That is a potentially expensive operation.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sl</p></td>
+<td><p>The skip list</p></td>
+</tr>
+<tr class="row-even"><td><p>XXX1</p></td>
+<td><p>FIXME</p></td>
+</tr>
+<tr class="row-odd"><td><p>XXX2</p></td>
+<td><p>FIXME</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-skiplist-1ga7f9e8bd8d1900d64c82ca5c9113621a8"><span id="index-9"></span><span></span><span class="kt">void</span>
+<span class="n">apr_skiplist_add_index</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1ga873aa114e692e48c6587277680ceba87"><span class="std std-ref">apr_skiplist_compare</span></a><span></span> <span class="n">XXX1</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1ga873aa114e692e48c6587277680ceba87"><span class="std std-ref">apr_skiplist_compare</span></a><span></span> <span class="n">XXX2</span>
+<span class="p">)</span></pre>
+<p>Set the indexing functions to the specified comparison functions and rebuild the index. If an index already exists, it will not be replaced and the comparison functions will not be changed.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sl</p></td>
+<td><p>The skip list</p></td>
+</tr>
+<tr class="row-even"><td><p>XXX1</p></td>
+<td><p>FIXME</p></td>
+</tr>
+<tr class="row-odd"><td><p>XXX2</p></td>
+<td><p>FIXME</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-skiplist-1ga2a4515bc1a4174fde279c2edc5dd2593"><span id="index-10"></span><a class="reference internal" href="#doxid-group-apr-skiplist-1gafb934f577d03de823aa4d62b41399bc0"><span class="std std-ref">apr_skiplistnode</span></a><span></span><span class="o">*</span>
+<span class="n">apr_skiplist_getlist</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">)</span></pre>
+<p>Return the list maintained by the skip list abstraction.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sl</p></td>
+<td><p>The skip list</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-skiplist-1gac1dc196aa51b1370cdc41e6258c36d7c"><span id="index-11"></span><span></span><span class="kt">void</span><span class="o">*</span>
+<span class="n">apr_skiplist_find_compare</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gafb934f577d03de823aa4d62b41399bc0"><span class="std std-ref">apr_skiplistnode</span></a><span></span><span class="o">**</span> <span class="n">iter</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1ga873aa114e692e48c6587277680ceba87"><span class="std std-ref">apr_skiplist_compare</span></a><span></span> <span class="n">func</span>
+<span class="p">)</span></pre>
+<p>Return the next matching element in the skip list using the specified comparison function.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sl</p></td>
+<td><p>The skip list</p></td>
+</tr>
+<tr class="row-even"><td><p>data</p></td>
+<td><p>The value to search for</p></td>
+</tr>
+<tr class="row-odd"><td><p>iter</p></td>
+<td><p>A pointer to the returned skip list node representing the element found</p></td>
+</tr>
+<tr class="row-even"><td><p>func</p></td>
+<td><p>The comparison function to use</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-skiplist-1gab28a7376e3483ae1104f2665d9859b95"><span id="index-12"></span><span></span><span class="kt">void</span><span class="o">*</span>
+<span class="n">apr_skiplist_find</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gafb934f577d03de823aa4d62b41399bc0"><span class="std std-ref">apr_skiplistnode</span></a><span></span><span class="o">**</span> <span class="n">iter</span>
+<span class="p">)</span></pre>
+<p>Return the next matching element in the skip list using the current comparison function.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sl</p></td>
+<td><p>The skip list</p></td>
+</tr>
+<tr class="row-even"><td><p>data</p></td>
+<td><p>The value to search for</p></td>
+</tr>
+<tr class="row-odd"><td><p>iter</p></td>
+<td><p>A pointer to the returned skip list node representing the element found</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-skiplist-1gaca0e377b36847ed03c3a135f0f3f353e"><span id="index-13"></span><span></span><span class="kt">void</span><span class="o">*</span>
+<span class="n">apr_skiplist_next</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gafb934f577d03de823aa4d62b41399bc0"><span class="std std-ref">apr_skiplistnode</span></a><span></span><span class="o">**</span> <span class="n">iter</span>
+<span class="p">)</span></pre>
+<p>Return the next element in the skip list. If iter points to a NULL value on entry, NULL will be returned.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sl</p></td>
+<td><p>The skip list</p></td>
+</tr>
+<tr class="row-even"><td><p>iter</p></td>
+<td><p>On entry, a pointer to the skip list node to start with; on return, a pointer to the skip list node representing the element returned</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-skiplist-1ga02ff03a8282b561edf01b3291c154af4"><span id="index-14"></span><span></span><span class="kt">void</span><span class="o">*</span>
+<span class="n">apr_skiplist_previous</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gafb934f577d03de823aa4d62b41399bc0"><span class="std std-ref">apr_skiplistnode</span></a><span></span><span class="o">**</span> <span class="n">iter</span>
+<span class="p">)</span></pre>
+<p>Return the previous element in the skip list. If iter points to a NULL value on entry, NULL will be returned.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sl</p></td>
+<td><p>The skip list</p></td>
+</tr>
+<tr class="row-even"><td><p>iter</p></td>
+<td><p>On entry, a pointer to the skip list node to start with; on return, a pointer to the skip list node representing the element returned</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-skiplist-1ga01b128d5160bc905f4b60a120ca10b2e"><span id="index-15"></span><a class="reference internal" href="#doxid-group-apr-skiplist-1gafb934f577d03de823aa4d62b41399bc0"><span class="std std-ref">apr_skiplistnode</span></a><span></span><span class="o">*</span>
+<span class="n">apr_skiplist_insert_compare</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1ga873aa114e692e48c6587277680ceba87"><span class="std std-ref">apr_skiplist_compare</span></a><span></span> <span class="n">comp</span>
+<span class="p">)</span></pre>
+<p>Insert an element into the skip list using the specified comparison function if it does not already exist.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sl</p></td>
+<td><p>The skip list</p></td>
+</tr>
+<tr class="row-even"><td><p>data</p></td>
+<td><p>The element to insert</p></td>
+</tr>
+<tr class="row-odd"><td><p>comp</p></td>
+<td><p>The comparison function to use for placement into the skip list</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-skiplist-1ga1aaaa029b9f166baf320bf43e6887b4d"><span id="index-16"></span><a class="reference internal" href="#doxid-group-apr-skiplist-1gafb934f577d03de823aa4d62b41399bc0"><span class="std std-ref">apr_skiplistnode</span></a><span></span><span class="o">*</span>
+<span class="n">apr_skiplist_insert</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">data</span>
+<span class="p">)</span></pre>
+<p>Insert an element into the skip list using the existing comparison function if it does not already exist (as determined by the comparison function) If no comparison function has been set for the skip list, the element will not be inserted and NULL will be returned.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sl</p></td>
+<td><p>The skip list</p></td>
+</tr>
+<tr class="row-even"><td><p>data</p></td>
+<td><p>The element to insert</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-skiplist-1ga9770c39604e7491da4c67282758690c2"><span id="index-17"></span><span></span><span class="kt">int</span>
+<span class="n">apr_skiplist_remove_compare</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1ga326fdccaf516e5296969fa03bbda3fca"><span class="std std-ref">apr_skiplist_freefunc</span></a><span></span> <span class="n">myfree</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1ga873aa114e692e48c6587277680ceba87"><span class="std std-ref">apr_skiplist_compare</span></a><span></span> <span class="n">comp</span>
+<span class="p">)</span></pre>
+<p>Remove an element from the skip list using the specified comparison function for locating the element. In the case of duplicates, the 1st entry will be removed. If the element is not found, 0 will be returned. Otherwise, the heightXXX will be returned.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sl</p></td>
+<td><p>The skip list</p></td>
+</tr>
+<tr class="row-even"><td><p>data</p></td>
+<td><p>The element to remove</p></td>
+</tr>
+<tr class="row-odd"><td><p>myfree</p></td>
+<td><p>A function to be called for each removed element</p></td>
+</tr>
+<tr class="row-even"><td><p>comp</p></td>
+<td><p>The comparison function to use for placement into the skip list</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-skiplist-1ga682f5e7dfcc4359097b9a4b96d053eff"><span id="index-18"></span><span></span><span class="kt">int</span>
+<span class="n">apr_skiplist_remove</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1ga326fdccaf516e5296969fa03bbda3fca"><span class="std std-ref">apr_skiplist_freefunc</span></a><span></span> <span class="n">myfree</span>
+<span class="p">)</span></pre>
+<p>Remove an element from the skip list using the existing comparison function for locating the element. In the case of duplicates, the 1st entry will be removed. If the element is not found, 0 will be returned. Otherwise, the heightXXX will be returned.</p>
+<p>If no comparison function has been set for the skip list, the element will not be removed and 0 will be returned.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sl</p></td>
+<td><p>The skip list</p></td>
+</tr>
+<tr class="row-even"><td><p>data</p></td>
+<td><p>The element to remove</p></td>
+</tr>
+<tr class="row-odd"><td><p>myfree</p></td>
+<td><p>A function to be called for each removed element</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-skiplist-1ga67d3e8a4a817bf85f1999f41d9d4ec11"><span id="index-19"></span><span></span><span class="kt">void</span>
+<span class="n">apr_skiplist_remove_all</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1ga326fdccaf516e5296969fa03bbda3fca"><span class="std std-ref">apr_skiplist_freefunc</span></a><span></span> <span class="n">myfree</span>
+<span class="p">)</span></pre>
+<p>Remove all elements from the skip list.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sl</p></td>
+<td><p>The skip list</p></td>
+</tr>
+<tr class="row-even"><td><p>myfree</p></td>
+<td><p>A function to be called for each removed element</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-skiplist-1ga6d24c06537535773ad3b4d18c6efefc3"><span id="index-20"></span><span></span><span class="kt">void</span>
+<span class="n">apr_skiplist_destroy</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1ga326fdccaf516e5296969fa03bbda3fca"><span class="std std-ref">apr_skiplist_freefunc</span></a><span></span> <span class="n">myfree</span>
+<span class="p">)</span></pre>
+<p>Remove each element from the skip list.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sl</p></td>
+<td><p>The skip list</p></td>
+</tr>
+<tr class="row-even"><td><p>myfree</p></td>
+<td><p>A function to be called for each removed element</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-skiplist-1ga237063a88253165f074c04ab9b0f17a3"><span id="index-21"></span><span></span><span class="kt">void</span><span class="o">*</span>
+<span class="n">apr_skiplist_pop</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1ga326fdccaf516e5296969fa03bbda3fca"><span class="std std-ref">apr_skiplist_freefunc</span></a><span></span> <span class="n">myfree</span>
+<span class="p">)</span></pre>
+<p>Return the first element in the skip list, removing the element from the skip list. NULL will be returned if there are no elements</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sl</p></td>
+<td><p>The skip list</p></td>
+</tr>
+<tr class="row-even"><td><p>myfree</p></td>
+<td><p>A function to be called for the removed element</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-skiplist-1ga96068b644647e86139bd6fdb0fcfebf3"><span id="index-22"></span><span></span><span class="kt">void</span><span class="o">*</span>
+<span class="n">apr_skiplist_peek</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl</span><span class="p">)</span></pre>
+<p>Return the first element in the skip list, leaving the element in the skip list. NULL will be returned if there are no elements</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sl</p></td>
+<td><p>The skip list</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-skiplist-1gab54881447708cf725758860c88ba52a6"><span id="index-23"></span><a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span>
+<span class="n">apr_skiplist_merge</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl1</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-skiplist-1gac79ddf14bb5cb5b6d35961309eadec48"><span class="std std-ref">apr_skiplist</span></a><span></span><span class="o">*</span> <span class="n">sl2</span>
+<span class="p">)</span></pre>
+<p>Merge two skip lists. XXX SEMANTICS</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sl1</p></td>
+<td><p>One of two skip lists to be merged</p></td>
+</tr>
+<tr class="row-even"><td><p>sl2</p></td>
+<td><p>The other of two skip lists to be merged</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="group_apr_signal.html" class="btn btn-neutral float-left" title="Signal Handling" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="group_apr_strings.html" class="btn btn-neutral float-right" title="String routines" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2008-2017, Apache Portable Runtime Maintainers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The SSH poll functions. &mdash; LibSSH Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinx_rtd_theme.css?v=b6ca47bd" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=840eb146"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="struct ssh_event_fd_wrapper" href="struct_ssh_event_fd_wrapper.html" />
+    <link rel="prev" title="The SSH message functions" href="group_libssh_messages.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            LibSSH Documentation
+          </a>
+              <div class="version">
+                0.7
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="page_libssh_linking.html">The Linking HowTo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_libssh_tutorial.html">The Tutorial</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="group_libssh.html">The libssh API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_pki.html">The SSH Public Key Infrastructure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_auth.html">The SSH authentication functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_buffer.html">The SSH buffer functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_channel.html">The SSH channel functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_error.html">The SSH error functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_misc.html">The SSH helper functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_log.html">The SSH logging functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_messages.html">The SSH message functions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">The SSH poll functions.</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="struct_ssh_event_fd_wrapper.html">struct ssh_event_fd_wrapper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="struct_ssh_event_struct.html">struct ssh_event_struct</a></li>
+<li class="toctree-l3"><a class="reference internal" href="struct_ssh_poll_ctx_struct.html">struct ssh_poll_ctx_struct</a></li>
+<li class="toctree-l3"><a class="reference internal" href="struct_ssh_poll_handle_struct.html">struct ssh_poll_handle_struct</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#global-functions">Global Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_scp.html">The SSH scp functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_session.html">The SSH session functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_string.html">The SSH string functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_threads.html">The SSH threading functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_callbacks.html">The libssh callbacks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh.html#detailed-documentation">Detailed Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="group_ssh_cpp.html">The libssh C++ wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libssh_sftp.html">The libssh SFTP API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libssh_server.html">The libssh server API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="page_bug.html">Bug List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_deprecated.html">Deprecated List</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LibSSH Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="group_libssh.html">The libssh API</a></li>
+      <li class="breadcrumb-item active">The SSH poll functions.</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="the-ssh-poll-functions">
+<span id="doxid-group-libssh-poll"></span><span id="index-0"></span><h1>The SSH poll functions.</h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="overview">
+<h2>Overview</h2>
+<p>Add a generic way to handle sockets asynchronously. <a class="reference internal" href="#details-group-libssh-poll"><span class="std std-ref">More…</span></a></p>
+<pre class="highlight doxyrest-overview-code-block literal-block"><span></span><span class="c1">// typedefs</span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="doxyrest-code-target target" id="doxid-group-libssh-poll-1ga3cb7d4c185d70c6a2e2b9696ef125fd4"><span></span><span class="n">poll_fn</span></span><span></span><span class="p">)(</span>
+    <span class="n">ssh_pollfd_t</span> <span class="o">*</span><span class="p">,</span>
+    <span class="kt">nfds_t</span><span class="p">,</span>
+    <span class="kt">int</span>
+    <span class="p">);</span>
+
+<span class="c1">// structs</span>
+
+<span class="k">struct</span> <a class="reference internal" href="struct_ssh_event_fd_wrapper.html#doxid-structssh-event-fd-wrapper"><span class="std std-ref">ssh_event_fd_wrapper</span></a><span></span><span class="p">;</span>
+<span class="k">struct</span> <a class="reference internal" href="struct_ssh_event_struct.html#doxid-structssh-event-struct"><span class="std std-ref">ssh_event_struct</span></a><span></span><span class="p">;</span>
+<span class="k">struct</span> <a class="reference internal" href="struct_ssh_poll_ctx_struct.html#doxid-structssh-poll-ctx-struct"><span class="std std-ref">ssh_poll_ctx_struct</span></a><span></span><span class="p">;</span>
+<span class="k">struct</span> <a class="reference internal" href="struct_ssh_poll_handle_struct.html#doxid-structssh-poll-handle-struct"><span class="std std-ref">ssh_poll_handle_struct</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// global variables</span>
+
+<span class="k">static</span> <a class="reference internal" href="#doxid-group-libssh-poll-1ga3cb7d4c185d70c6a2e2b9696ef125fd4"><span class="std std-ref">poll_fn</span></a><span></span> <span class="doxyrest-code-target target" id="doxid-group-libssh-poll-1ga6abf974b607f70c29b4ea8065f69d333"><span></span><span class="n">ssh_poll_emu</span></span><span></span><span class="p">;</span>
+
+<span class="c1">// global functions</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-poll-1ga41d63ffe950a48e8b2c513877e0cd6b4"><span class="std std-ref">ssh_event_add_fd</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_event</span> <span class="n">event</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-libssh-8h-1a30353f381f5fccbb956eea1f3a110b6c"><span class="std std-ref">socket_t</span></a><span></span> <span class="n">fd</span><span class="p">,</span>
+    <span class="kt">short</span> <span class="n">events</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-libssh-8h-1ad86976ea739d21a91265820921ee123c"><span class="std std-ref">ssh_event_callback</span></a><span></span> <span class="n">cb</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">userdata</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-poll-1ga51af38de4cc3adbd5566ec1f1b91983d"><span class="std std-ref">ssh_event_add_session</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_event</span> <span class="n">event</span><span class="p">,</span>
+    <span class="n">ssh_session</span> <span class="n">session</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-poll-1gada90c0ca6919271708ba1ea0352632cb"><span class="std std-ref">ssh_event_dopoll</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_event</span> <span class="n">event</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">timeout</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libssh-poll-1ga101388903c74d53ed550574b587449cd"><span class="std std-ref">ssh_event_free</span></a><span></span><span class="p">(</span><span class="n">ssh_event</span> <span class="n">event</span><span class="p">);</span>
+
+<span class="n">ssh_event</span>
+<a class="reference internal" href="#doxid-group-libssh-poll-1ga406895f99b6b486c4b65536e5399ff96"><span class="std std-ref">ssh_event_new</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-poll-1gaf2cdca09a3a2024ed9bb4f134c8ae368"><span class="std std-ref">ssh_event_remove_fd</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_event</span> <span class="n">event</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-libssh-8h-1a30353f381f5fccbb956eea1f3a110b6c"><span class="std std-ref">socket_t</span></a><span></span> <span class="n">fd</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-poll-1gaab8dec05a0afb49392c63b2ec158ac3d"><span class="std std-ref">ssh_event_remove_session</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_event</span> <span class="n">event</span><span class="p">,</span>
+    <span class="n">ssh_session</span> <span class="n">session</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libssh-poll-1ga26ad689751420b91bf002f616e8bf4f7"><span class="std std-ref">ssh_poll_add_events</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_poll_handle</span> <span class="n">p</span><span class="p">,</span>
+    <span class="kt">short</span> <span class="n">events</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-poll-1ga2c9eca31ff21406f13c1b7472ae8c85b"><span class="std std-ref">ssh_poll_ctx_add</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_poll_ctx</span> <span class="n">ctx</span><span class="p">,</span>
+    <span class="n">ssh_poll_handle</span> <span class="n">p</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-poll-1ga6c0f6d3c677838181df5cd03a755fd7c"><span class="std std-ref">ssh_poll_ctx_dopoll</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_poll_ctx</span> <span class="n">ctx</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">timeout</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libssh-poll-1ga86bd0c5c2fa5614acef127e6689282ae"><span class="std std-ref">ssh_poll_ctx_free</span></a><span></span><span class="p">(</span><span class="n">ssh_poll_ctx</span> <span class="n">ctx</span><span class="p">);</span>
+
+<span class="n">ssh_poll_ctx</span>
+<a class="reference internal" href="#doxid-group-libssh-poll-1ga5364b3fb8ae1cb44e3ec09c8c10cb5fa"><span class="std std-ref">ssh_poll_ctx_new</span></a><span></span><span class="p">(</span><span class="kt">size_t</span> <span class="n">chunk_size</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libssh-poll-1gad4404e7da7c676b126b87d2de4d45d1d"><span class="std std-ref">ssh_poll_ctx_remove</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_poll_ctx</span> <span class="n">ctx</span><span class="p">,</span>
+    <span class="n">ssh_poll_handle</span> <span class="n">p</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libssh-poll-1ga873ecc6866c286f7777612d94de5c00d"><span class="std std-ref">ssh_poll_free</span></a><span></span><span class="p">(</span><span class="n">ssh_poll_handle</span> <span class="n">p</span><span class="p">);</span>
+
+<span class="n">ssh_poll_ctx</span>
+<a class="reference internal" href="#doxid-group-libssh-poll-1gaca05fcf77e6c4b5e55a9cfd2c9690ea5"><span class="std std-ref">ssh_poll_get_ctx</span></a><span></span><span class="p">(</span><span class="n">ssh_poll_handle</span> <span class="n">p</span><span class="p">);</span>
+
+<span class="kt">short</span>
+<a class="reference internal" href="#doxid-group-libssh-poll-1ga8e2e646ac338021e8e804992e8c13496"><span class="std std-ref">ssh_poll_get_events</span></a><span></span><span class="p">(</span><span class="n">ssh_poll_handle</span> <span class="n">p</span><span class="p">);</span>
+
+<a class="reference internal" href="global.html#doxid-libssh-8h-1a30353f381f5fccbb956eea1f3a110b6c"><span class="std std-ref">socket_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-libssh-poll-1ga26c19b17ac8d1e3d7fcbfb4367fb93ff"><span class="std std-ref">ssh_poll_get_fd</span></a><span></span><span class="p">(</span><span class="n">ssh_poll_handle</span> <span class="n">p</span><span class="p">);</span>
+
+<span class="n">ssh_poll_handle</span>
+<a class="reference internal" href="#doxid-group-libssh-poll-1gac657ed07db9e5851ffb0aba45e071e99"><span class="std std-ref">ssh_poll_new</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="global.html#doxid-libssh-8h-1a30353f381f5fccbb956eea1f3a110b6c"><span class="std std-ref">socket_t</span></a><span></span> <span class="n">fd</span><span class="p">,</span>
+    <span class="kt">short</span> <span class="n">events</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-poll-8h-1af2a7809ed930c3f7eb5ab1a086673053"><span class="std std-ref">ssh_poll_callback</span></a><span></span> <span class="n">cb</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">userdata</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libssh-poll-1ga012582349ce62cf788761e5f97548496"><span class="std std-ref">ssh_poll_remove_events</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_poll_handle</span> <span class="n">p</span><span class="p">,</span>
+    <span class="kt">short</span> <span class="n">events</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libssh-poll-1ga98ba36c2771b1e49d5c8e2f79be6d3ba"><span class="std std-ref">ssh_poll_set_callback</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_poll_handle</span> <span class="n">p</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-poll-8h-1af2a7809ed930c3f7eb5ab1a086673053"><span class="std std-ref">ssh_poll_callback</span></a><span></span> <span class="n">cb</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">userdata</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libssh-poll-1gac02bf6f4444d4cc442da5865009fa5f6"><span class="std std-ref">ssh_poll_set_events</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_poll_handle</span> <span class="n">p</span><span class="p">,</span>
+    <span class="kt">short</span> <span class="n">events</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libssh-poll-1ga2da5adcc03754a3b17e4fb0f23867ace"><span class="std std-ref">ssh_poll_set_fd</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_poll_handle</span> <span class="n">p</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-libssh-8h-1a30353f381f5fccbb956eea1f3a110b6c"><span class="std std-ref">socket_t</span></a><span></span> <span class="n">fd</span>
+<span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-poll-1ga2d4a5991605a0507ae9f8854fd1ebce7"><span></span><span class="n">bsd_poll</span></span><span></span><span class="p">(</span>
+    <a class="reference internal" href="struct_ssh_pollfd_t.html#doxid-structssh-pollfd-t"><span class="std std-ref">ssh_pollfd_t</span></a><span></span><span class="o">*</span> <span class="n">fds</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-poll-8h-1abf4939a673f2b874b24dc204cedab8f5"><span class="std std-ref">nfds_t</span></a><span></span> <span class="n">nfds</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">timeout</span>
+<span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-poll-1ga495b312ef6f56bdf6d7e47dc0f75ab2d"><span></span><span class="n">ssh_event_fd_wrapper_callback</span></span><span></span><span class="p">(</span>
+    <span class="n">ssh_poll_handle</span> <span class="n">p</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-libssh-8h-1a30353f381f5fccbb956eea1f3a110b6c"><span class="std std-ref">socket_t</span></a><span></span> <span class="n">fd</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">revents</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">userdata</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-poll-1gad71eb057dc675a9291b6fa78e99ebbc9"><span></span><span class="n">ssh_poll</span></span><span></span><span class="p">(</span>
+    <a class="reference internal" href="struct_ssh_pollfd_t.html#doxid-structssh-pollfd-t"><span class="std std-ref">ssh_pollfd_t</span></a><span></span><span class="o">*</span> <span class="n">fds</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-poll-8h-1abf4939a673f2b874b24dc204cedab8f5"><span class="std std-ref">nfds_t</span></a><span></span> <span class="n">nfds</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">timeout</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-poll-1ga7e60f5f498b15eab57d9b2de70ab1acb"><span></span><span class="n">ssh_poll_cleanup</span></span><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-poll-1ga4aa3ef276370adbb4afb284947dc8005"><span class="std std-ref">ssh_poll_ctx_add_socket</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_poll_ctx</span> <span class="n">ctx</span><span class="p">,</span>
+    <span class="n">ssh_socket</span> <span class="n">s</span>
+<span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-poll-1ga87079a58e0cc336ad94fbd041e97bb19"><span></span><span class="n">ssh_poll_ctx_resize</span></span><span></span><span class="p">(</span>
+    <span class="n">ssh_poll_ctx</span> <span class="n">ctx</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">new_size</span>
+<span class="p">);</span>
+
+<span class="n">ssh_poll_ctx</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-poll-1ga8ad007907f642d4aa2c25e5209bf337a"><span></span><span class="n">ssh_poll_get_default_ctx</span></span><span></span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-poll-1ga26aa5e00c0201c30dad6ec0e93d3871f"><span></span><span class="n">ssh_poll_init</span></span><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span></pre>
+</section>
+<section id="detailed-documentation">
+<span id="details-group-libssh-poll"></span><h2>Detailed Documentation</h2>
+<p>Add a generic way to handle sockets asynchronously.</p>
+<p>It’s based on poll objects, each of which store a socket, its events and a callback, which gets called whenever an event is set. The poll objects are attached to a poll context, which should be allocated on per thread basis.</p>
+<p>Polling the poll context will poll all the attached poll objects and call their callbacks (handlers) if any of the socket events are set. This should be done within the main loop of an application.</p>
+<section id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-poll-1ga41d63ffe950a48e8b2c513877e0cd6b4"><span id="index-1"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_event_add_fd</span><span class="p">(</span>
+    <span class="n">ssh_event</span> <span class="n">event</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-libssh-8h-1a30353f381f5fccbb956eea1f3a110b6c"><span class="std std-ref">socket_t</span></a><span></span> <span class="n">fd</span><span class="p">,</span>
+    <span class="kt">short</span> <span class="n">events</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-libssh-8h-1ad86976ea739d21a91265820921ee123c"><span class="std std-ref">ssh_event_callback</span></a><span></span> <span class="n">cb</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">userdata</span>
+<span class="p">)</span></pre>
+<p>Add a fd to the event and assign it a callback, when used in blocking mode.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>event</p></td>
+<td><p>The ssh_event</p></td>
+</tr>
+<tr class="row-even"><td><p>fd</p></td>
+<td><p>Socket that will be polled.</p></td>
+</tr>
+<tr class="row-odd"><td><p>events</p></td>
+<td><p>Poll events that will be monitored for the socket. i.e. POLLIN, POLLPRI, POLLOUT</p></td>
+</tr>
+<tr class="row-even"><td><p>cb</p></td>
+<td><p>Function to be called if any of the events are set. The prototype of cb is: int (*ssh_event_callback)(socket_t fd, int revents, void *userdata);</p></td>
+</tr>
+<tr class="row-odd"><td><p>userdata</p></td>
+<td><p>Userdata to be passed to the callback function. NULL if not needed.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK on success SSH_ERROR on failure</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-poll-1ga51af38de4cc3adbd5566ec1f1b91983d"><span id="index-2"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_event_add_session</span><span class="p">(</span>
+    <span class="n">ssh_event</span> <span class="n">event</span><span class="p">,</span>
+    <span class="n">ssh_session</span> <span class="n">session</span>
+<span class="p">)</span></pre>
+<p>remove the poll handle from session and assign them to a event, when used in blocking mode.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>event</p></td>
+<td><p>The ssh_event object</p></td>
+</tr>
+<tr class="row-even"><td><p>session</p></td>
+<td><p>The session to add to the event.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK on success SSH_ERROR on failure</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-poll-1gada90c0ca6919271708ba1ea0352632cb"><span id="index-3"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_event_dopoll</span><span class="p">(</span>
+    <span class="n">ssh_event</span> <span class="n">event</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">timeout</span>
+<span class="p">)</span></pre>
+<p>Poll all the sockets and sessions associated through an event object.</p>
+<p>If any of the events are set after the poll, the call back functions of the sessions or sockets will be called. This function should be called once within the programs main loop.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>event</p></td>
+<td><p>The ssh_event object to poll.</p></td>
+</tr>
+<tr class="row-even"><td><p>timeout</p></td>
+<td><p>An upper limit on the time for which the poll will block, in milliseconds. Specifying a negative value means an infinite timeout. This parameter is passed to the poll() function.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK No error. SSH_ERROR Error happened during the poll.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-poll-1ga101388903c74d53ed550574b587449cd"><span id="index-4"></span><span></span><span class="kt">void</span>
+<span class="n">ssh_event_free</span><span class="p">(</span><span class="n">ssh_event</span> <span class="n">event</span><span class="p">)</span></pre>
+<p>Free an event context.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>event</p></td>
+<td><p>The ssh_event object to free. Note: you have to manually remove sessions and socket fds before freeing the event object.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-poll-1ga406895f99b6b486c4b65536e5399ff96"><span id="index-5"></span><span></span><span class="n">ssh_event</span>
+<span class="n">ssh_event_new</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></pre>
+<p>Create a new event context.</p>
+<p>It could be associated with many ssh_session objects and socket fd which are going to be polled at the same time as the event context. You would need a single event context per thread.</p>
+<p class="rubric">Returns:</p>
+<p>The ssh_event object on success, NULL on failure.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-poll-1gaf2cdca09a3a2024ed9bb4f134c8ae368"><span id="index-6"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_event_remove_fd</span><span class="p">(</span>
+    <span class="n">ssh_event</span> <span class="n">event</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-libssh-8h-1a30353f381f5fccbb956eea1f3a110b6c"><span class="std std-ref">socket_t</span></a><span></span> <span class="n">fd</span>
+<span class="p">)</span></pre>
+<p>Remove a socket fd from an event context.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>event</p></td>
+<td><p>The ssh_event object.</p></td>
+</tr>
+<tr class="row-even"><td><p>fd</p></td>
+<td><p>The fd to remove.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK on success SSH_ERROR on failure</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-poll-1gaab8dec05a0afb49392c63b2ec158ac3d"><span id="index-7"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_event_remove_session</span><span class="p">(</span>
+    <span class="n">ssh_event</span> <span class="n">event</span><span class="p">,</span>
+    <span class="n">ssh_session</span> <span class="n">session</span>
+<span class="p">)</span></pre>
+<p>Remove a session object from an event context.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>event</p></td>
+<td><p>The ssh_event object.</p></td>
+</tr>
+<tr class="row-even"><td><p>session</p></td>
+<td><p>The session to remove.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK on success SSH_ERROR on failure</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-poll-1ga26ad689751420b91bf002f616e8bf4f7"><span id="index-8"></span><span></span><span class="kt">void</span>
+<span class="n">ssh_poll_add_events</span><span class="p">(</span>
+    <span class="n">ssh_poll_handle</span> <span class="n">p</span><span class="p">,</span>
+    <span class="kt">short</span> <span class="n">events</span>
+<span class="p">)</span></pre>
+<p>Add extra events to a poll object.</p>
+<p>Duplicates are ignored. The events will also be propagated to an associated poll context.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>Pointer to an already allocated poll object.</p></td>
+</tr>
+<tr class="row-even"><td><p>events</p></td>
+<td><p>Poll events.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-poll-1ga2c9eca31ff21406f13c1b7472ae8c85b"><span id="index-9"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_poll_ctx_add</span><span class="p">(</span>
+    <span class="n">ssh_poll_ctx</span> <span class="n">ctx</span><span class="p">,</span>
+    <span class="n">ssh_poll_handle</span> <span class="n">p</span>
+<span class="p">)</span></pre>
+<p>Add a poll object to a poll context.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ctx</p></td>
+<td><p>Pointer to an already allocated poll context.</p></td>
+</tr>
+<tr class="row-even"><td><p>p</p></td>
+<td><p>Pointer to an already allocated poll object.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success, &lt; 0 on error</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-poll-1ga6c0f6d3c677838181df5cd03a755fd7c"><span id="index-10"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_poll_ctx_dopoll</span><span class="p">(</span>
+    <span class="n">ssh_poll_ctx</span> <span class="n">ctx</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">timeout</span>
+<span class="p">)</span></pre>
+<p>Poll all the sockets associated through a poll object with a poll context.</p>
+<p>If any of the events are set after the poll, the call back function of the socket will be called. This function should be called once within the programs main loop.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ctx</p></td>
+<td><p>Pointer to an already allocated poll context.</p></td>
+</tr>
+<tr class="row-even"><td><p>timeout</p></td>
+<td><p>An upper limit on the time for which ssh_poll_ctx() will block, in milliseconds. Specifying a negative value means an infinite timeout. This parameter is passed to the poll() function.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK No error. SSH_ERROR Error happened during the poll. SSH_AGAIN Timeout occured</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-poll-1ga86bd0c5c2fa5614acef127e6689282ae"><span id="index-11"></span><span></span><span class="kt">void</span>
+<span class="n">ssh_poll_ctx_free</span><span class="p">(</span><span class="n">ssh_poll_ctx</span> <span class="n">ctx</span><span class="p">)</span></pre>
+<p>Free a poll context.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ctx</p></td>
+<td><p>Pointer to an already allocated poll context.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-poll-1ga5364b3fb8ae1cb44e3ec09c8c10cb5fa"><span id="index-12"></span><span></span><span class="n">ssh_poll_ctx</span>
+<span class="n">ssh_poll_ctx_new</span><span class="p">(</span><span class="kt">size_t</span> <span class="n">chunk_size</span><span class="p">)</span></pre>
+<p>Create a new poll context.</p>
+<p>It could be associated with many poll object which are going to be polled at the same time as the poll context. You would need a single poll context per thread.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>chunk_size</p></td>
+<td><p>The size of the memory chunk that will be allocated, when more memory is needed. This is for efficiency reasons, i.e. don’t allocate memory for each new poll object, but for the next 5. Set it to 0 if you want to use the library’s default value.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-poll-1gad4404e7da7c676b126b87d2de4d45d1d"><span id="index-13"></span><span></span><span class="kt">void</span>
+<span class="n">ssh_poll_ctx_remove</span><span class="p">(</span>
+    <span class="n">ssh_poll_ctx</span> <span class="n">ctx</span><span class="p">,</span>
+    <span class="n">ssh_poll_handle</span> <span class="n">p</span>
+<span class="p">)</span></pre>
+<p>Remove a poll object from a poll context.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ctx</p></td>
+<td><p>Pointer to an already allocated poll context.</p></td>
+</tr>
+<tr class="row-even"><td><p>p</p></td>
+<td><p>Pointer to an already allocated poll object.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-poll-1ga873ecc6866c286f7777612d94de5c00d"><span id="index-14"></span><span></span><span class="kt">void</span>
+<span class="n">ssh_poll_free</span><span class="p">(</span><span class="n">ssh_poll_handle</span> <span class="n">p</span><span class="p">)</span></pre>
+<p>Free a poll object.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>Pointer to an already allocated poll object.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-poll-1gaca05fcf77e6c4b5e55a9cfd2c9690ea5"><span id="index-15"></span><span></span><span class="n">ssh_poll_ctx</span>
+<span class="n">ssh_poll_get_ctx</span><span class="p">(</span><span class="n">ssh_poll_handle</span> <span class="n">p</span><span class="p">)</span></pre>
+<p>Get the poll context of a poll object.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>Pointer to an already allocated poll object.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>Poll context or NULL if the poll object isn’t attached.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-poll-1ga8e2e646ac338021e8e804992e8c13496"><span id="index-16"></span><span></span><span class="kt">short</span>
+<span class="n">ssh_poll_get_events</span><span class="p">(</span><span class="n">ssh_poll_handle</span> <span class="n">p</span><span class="p">)</span></pre>
+<p>Get the events of a poll object.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>Pointer to an already allocated poll object.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>Poll events.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-poll-1ga26c19b17ac8d1e3d7fcbfb4367fb93ff"><span id="index-17"></span><a class="reference internal" href="global.html#doxid-libssh-8h-1a30353f381f5fccbb956eea1f3a110b6c"><span class="std std-ref">socket_t</span></a><span></span>
+<span class="n">ssh_poll_get_fd</span><span class="p">(</span><span class="n">ssh_poll_handle</span> <span class="n">p</span><span class="p">)</span></pre>
+<p>Get the raw socket of a poll object.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>Pointer to an already allocated poll object.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>Raw socket.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-poll-1gac657ed07db9e5851ffb0aba45e071e99"><span id="index-18"></span><span></span><span class="n">ssh_poll_handle</span>
+<span class="n">ssh_poll_new</span><span class="p">(</span>
+    <a class="reference internal" href="global.html#doxid-libssh-8h-1a30353f381f5fccbb956eea1f3a110b6c"><span class="std std-ref">socket_t</span></a><span></span> <span class="n">fd</span><span class="p">,</span>
+    <span class="kt">short</span> <span class="n">events</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-poll-8h-1af2a7809ed930c3f7eb5ab1a086673053"><span class="std std-ref">ssh_poll_callback</span></a><span></span> <span class="n">cb</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">userdata</span>
+<span class="p">)</span></pre>
+<p>Allocate a new poll object, which could be used within a poll context.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>fd</p></td>
+<td><p>Socket that will be polled.</p></td>
+</tr>
+<tr class="row-even"><td><p>events</p></td>
+<td><p>Poll events that will be monitored for the socket. i.e. POLLIN, POLLPRI, POLLOUT</p></td>
+</tr>
+<tr class="row-odd"><td><p>cb</p></td>
+<td><p>Function to be called if any of the events are set. The prototype of cb is: int (*ssh_poll_callback)(ssh_poll_handle p, socket_t fd, int revents, void *userdata);</p></td>
+</tr>
+<tr class="row-even"><td><p>userdata</p></td>
+<td><p>Userdata to be passed to the callback function. NULL if not needed.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>A new poll object, NULL on error</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-poll-1ga012582349ce62cf788761e5f97548496"><span id="index-19"></span><span></span><span class="kt">void</span>
+<span class="n">ssh_poll_remove_events</span><span class="p">(</span>
+    <span class="n">ssh_poll_handle</span> <span class="n">p</span><span class="p">,</span>
+    <span class="kt">short</span> <span class="n">events</span>
+<span class="p">)</span></pre>
+<p>Remove events from a poll object.</p>
+<p>Non-existent are ignored. The events will also be propagated to an associated poll context.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>Pointer to an already allocated poll object.</p></td>
+</tr>
+<tr class="row-even"><td><p>events</p></td>
+<td><p>Poll events.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-poll-1ga98ba36c2771b1e49d5c8e2f79be6d3ba"><span id="index-20"></span><span></span><span class="kt">void</span>
+<span class="n">ssh_poll_set_callback</span><span class="p">(</span>
+    <span class="n">ssh_poll_handle</span> <span class="n">p</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-poll-8h-1af2a7809ed930c3f7eb5ab1a086673053"><span class="std std-ref">ssh_poll_callback</span></a><span></span> <span class="n">cb</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">userdata</span>
+<span class="p">)</span></pre>
+<p>Set the callback of a poll object.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>Pointer to an already allocated poll object.</p></td>
+</tr>
+<tr class="row-even"><td><p>cb</p></td>
+<td><p>Function to be called if any of the events are set.</p></td>
+</tr>
+<tr class="row-odd"><td><p>userdata</p></td>
+<td><p>Userdata to be passed to the callback function. NULL if not needed.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-poll-1gac02bf6f4444d4cc442da5865009fa5f6"><span id="index-21"></span><span></span><span class="kt">void</span>
+<span class="n">ssh_poll_set_events</span><span class="p">(</span>
+    <span class="n">ssh_poll_handle</span> <span class="n">p</span><span class="p">,</span>
+    <span class="kt">short</span> <span class="n">events</span>
+<span class="p">)</span></pre>
+<p>Set the events of a poll object.</p>
+<p>The events will also be propagated to an associated poll context.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>Pointer to an already allocated poll object.</p></td>
+</tr>
+<tr class="row-even"><td><p>events</p></td>
+<td><p>Poll events.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-poll-1ga2da5adcc03754a3b17e4fb0f23867ace"><span id="index-22"></span><span></span><span class="kt">void</span>
+<span class="n">ssh_poll_set_fd</span><span class="p">(</span>
+    <span class="n">ssh_poll_handle</span> <span class="n">p</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-libssh-8h-1a30353f381f5fccbb956eea1f3a110b6c"><span class="std std-ref">socket_t</span></a><span></span> <span class="n">fd</span>
+<span class="p">)</span></pre>
+<p>Set the file descriptor of a poll object.</p>
+<p>The FD will also be propagated to an associated poll context.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>Pointer to an already allocated poll object.</p></td>
+</tr>
+<tr class="row-even"><td><p>fd</p></td>
+<td><p>New file descriptor.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-poll-1ga4aa3ef276370adbb4afb284947dc8005"><span id="index-23"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_poll_ctx_add_socket</span><span class="p">(</span>
+    <span class="n">ssh_poll_ctx</span> <span class="n">ctx</span><span class="p">,</span>
+    <span class="n">ssh_socket</span> <span class="n">s</span>
+<span class="p">)</span></pre>
+<p>Add a socket object to a poll context.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ctx</p></td>
+<td><p>Pointer to an already allocated poll context.</p></td>
+</tr>
+<tr class="row-even"><td><p>s</p></td>
+<td><p>A SSH socket handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success, &lt; 0 on error</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="group_libssh_messages.html" class="btn btn-neutral float-left" title="The SSH message functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="struct_ssh_event_fd_wrapper.html" class="btn btn-neutral float-right" title="struct ssh_event_fd_wrapper" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2003-2017, LibSSH Maintainers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

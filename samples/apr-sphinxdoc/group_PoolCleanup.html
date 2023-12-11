@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Pool Cleanup Functions &#8212; Apache Portable Runtime Documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=0a676766" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css?v=3785b6ce" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=515d8a7f"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Pool Debugging functions." href="group_PoolDebug.html" />
+    <link rel="prev" title="Memory Pool Functions" href="group_apr_pools.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="group_PoolDebug.html" title="Pool Debugging functions."
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="group_apr_pools.html" title="Memory Pool Functions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Apache Portable Runtime Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="group_APR.html" >Apache Portability Runtime library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="group_apr_pools.html" accesskey="U">Memory Pool Functions</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Pool Cleanup Functions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="pool-cleanup-functions">
+<span id="doxid-group-pool-cleanup"></span><span id="index-0"></span><h1>Pool Cleanup Functions</h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="overview">
+<h2>Overview</h2>
+<p>Cleanups are performed in the reverse order they were registered. <a class="reference internal" href="#details-group-pool-cleanup"><span class="std std-ref">More…</span></a></p>
+<pre class="highlight doxyrest-overview-code-block literal-block"><span></span><span class="c1">// global functions</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-pool-cleanup-1ga6bdb28224dfe08160cbe3ba6b22dcbd7"><span class="std std-ref">apr_pool_cleanup_register</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">plain_cleanup</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">child_cleanup</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-pool-cleanup-1ga64114542989d8872c7fd3c62f2a68678"><span class="std std-ref">apr_pool_pre_cleanup_register</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">plain_cleanup</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-pool-cleanup-1gadc59bf32a0302e34fa0a2663f6e48a44"><span class="std std-ref">apr_pool_cleanup_kill</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">cleanup</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-pool-cleanup-1ga7197fa6b43d9c5e99de17e0e900989ea"><span class="std std-ref">apr_pool_child_cleanup_set</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">plain_cleanup</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">child_cleanup</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-pool-cleanup-1gabf3913823af6015895a726ab738eaac5"><span class="std std-ref">apr_pool_cleanup_run</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">cleanup</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-pool-cleanup-1gaa211acee585df08f396a50b0ea489b02"><span class="std std-ref">apr_pool_cleanup_null</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-pool-cleanup-1ga1726cc585bda8997fcb0828f884be55b"><span class="std std-ref">apr_pool_cleanup_for_exec</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span></pre>
+</section>
+<section id="detailed-documentation">
+<span id="details-group-pool-cleanup"></span><h2>Detailed Documentation</h2>
+<p>Cleanups are performed in the reverse order they were registered. That is: Last In, First Out. A cleanup function can safely allocate memory from the pool that is being cleaned up. It can also safely register additional cleanups which will be run LIFO, directly after the current cleanup terminates. Cleanups have to take caution in calling functions that create subpools. Subpools, created during cleanup will NOT automatically be cleaned up. In other words, cleanups are to clean up after themselves.</p>
+<section id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-pool-cleanup-1ga6bdb28224dfe08160cbe3ba6b22dcbd7"><span id="index-1"></span><span></span><span class="kt">void</span>
+<span class="n">apr_pool_cleanup_register</span><span class="p">(</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">plain_cleanup</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">child_cleanup</span>
+<span class="p">)</span></pre>
+<p>Register a function to be called when a pool is cleared or destroyed</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>The pool to register the cleanup with</p></td>
+</tr>
+<tr class="row-even"><td><p>data</p></td>
+<td><p>The data to pass to the cleanup function.</p></td>
+</tr>
+<tr class="row-odd"><td><p>plain_cleanup</p></td>
+<td><p>The function to call when the pool is cleared or destroyed</p></td>
+</tr>
+<tr class="row-even"><td><p>child_cleanup</p></td>
+<td><p>The function to call when a child process is about to exec - this function is called in the child, obviously!</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-pool-cleanup-1ga64114542989d8872c7fd3c62f2a68678"><span id="index-2"></span><span></span><span class="kt">void</span>
+<span class="n">apr_pool_pre_cleanup_register</span><span class="p">(</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">plain_cleanup</span>
+<span class="p">)</span></pre>
+<p>Register a function to be called when a pool is cleared or destroyed.</p>
+<p>Unlike apr_pool_cleanup_register which registers a cleanup that is called AFTER all subpools are destroyed, this function registers a function that will be called before any of the subpools are destroyed.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>The pool to register the cleanup with</p></td>
+</tr>
+<tr class="row-even"><td><p>data</p></td>
+<td><p>The data to pass to the cleanup function.</p></td>
+</tr>
+<tr class="row-odd"><td><p>plain_cleanup</p></td>
+<td><p>The function to call when the pool is cleared or destroyed</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-pool-cleanup-1gadc59bf32a0302e34fa0a2663f6e48a44"><span id="index-3"></span><span></span><span class="kt">void</span>
+<span class="n">apr_pool_cleanup_kill</span><span class="p">(</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">cleanup</span>
+<span class="p">)</span></pre>
+<p>Remove a previously registered cleanup function.</p>
+<p>The cleanup most recently registered with <em>p</em> having the same values of <em>data</em> and <em>cleanup</em> will be removed.</p>
+<p>For some strange reason only the plain_cleanup is handled by this function</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>The pool to remove the cleanup from</p></td>
+</tr>
+<tr class="row-even"><td><p>data</p></td>
+<td><p>The data of the registered cleanup</p></td>
+</tr>
+<tr class="row-odd"><td><p>cleanup</p></td>
+<td><p>The function to remove from cleanup</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-pool-cleanup-1ga7197fa6b43d9c5e99de17e0e900989ea"><span id="index-4"></span><span></span><span class="kt">void</span>
+<span class="n">apr_pool_child_cleanup_set</span><span class="p">(</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">plain_cleanup</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">child_cleanup</span>
+<span class="p">)</span></pre>
+<p>Replace the child cleanup function of a previously registered cleanup.</p>
+<p>The cleanup most recently registered with <em>p</em> having the same values of <em>data</em> and <em>plain_cleanup</em> will have the registered child cleanup function replaced with <em>child_cleanup</em>.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>The pool of the registered cleanup</p></td>
+</tr>
+<tr class="row-even"><td><p>data</p></td>
+<td><p>The data of the registered cleanup</p></td>
+</tr>
+<tr class="row-odd"><td><p>plain_cleanup</p></td>
+<td><p>The plain cleanup function of the registered cleanup</p></td>
+</tr>
+<tr class="row-even"><td><p>child_cleanup</p></td>
+<td><p>The function to register as the child cleanup</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-pool-cleanup-1gabf3913823af6015895a726ab738eaac5"><span id="index-5"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_pool_cleanup_run</span><span class="p">(</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">cleanup</span>
+<span class="p">)</span></pre>
+<p>Run the specified cleanup function immediately and unregister it.</p>
+<p>The cleanup most recently registered with <em>p</em> having the same values of <em>data</em> and <em>cleanup</em> will be removed and <em>cleanup</em> will be called with <em>data</em> as the argument.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>The pool to remove the cleanup from</p></td>
+</tr>
+<tr class="row-even"><td><p>data</p></td>
+<td><p>The data to remove from cleanup</p></td>
+</tr>
+<tr class="row-odd"><td><p>cleanup</p></td>
+<td><p>The function to remove from cleanup</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-pool-cleanup-1gaa211acee585df08f396a50b0ea489b02"><span id="index-6"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_pool_cleanup_null</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">)</span></pre>
+<p>An empty cleanup function.</p>
+<p>Passed to <a class="reference internal" href="#doxid-group-pool-cleanup-1ga6bdb28224dfe08160cbe3ba6b22dcbd7"><span class="std std-ref">apr_pool_cleanup_register()</span></a> when no cleanup is required.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>data</p></td>
+<td><p>The data to cleanup, will not be used by this function.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-pool-cleanup-1ga1726cc585bda8997fcb0828f884be55b"><span id="index-7"></span><span></span><span class="kt">void</span>
+<span class="n">apr_pool_cleanup_for_exec</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></pre>
+<p>Run all registered child cleanups, in preparation for an exec() call in a forked child close files, etc., but <em>don’t</em> flush I/O buffers, <em>don’t</em> wait for subprocesses, and <em>don’t</em> free any memory.</p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Pool Cleanup Functions</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li><a class="reference internal" href="#global-functions">Global Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="group_apr_pools.html"
+                          title="previous chapter">Memory Pool Functions</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="group_PoolDebug.html"
+                          title="next chapter">Pool Debugging functions.</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="group_PoolDebug.html" title="Pool Debugging functions."
+             >next</a> |</li>
+        <li class="right" >
+          <a href="group_apr_pools.html" title="Memory Pool Functions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Apache Portable Runtime Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="group_APR.html" >Apache Portability Runtime library</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="group_apr_pools.html" >Memory Pool Functions</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Pool Cleanup Functions</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2008-2017, Apache Portable Runtime Maintainers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    </div>
+  </body>
+</html>

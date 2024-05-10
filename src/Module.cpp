@@ -63,7 +63,7 @@ removeDuplicates<EnumValue>(sl::List<EnumValue>* list) {
 
 void
 removeSubPages(sl::Array<Compound*>* pageArray) {
-	Compound** p = *pageArray;
+	Compound** p = pageArray->p();
 	size_t count = pageArray->getCount();
 
 	size_t i = 0;

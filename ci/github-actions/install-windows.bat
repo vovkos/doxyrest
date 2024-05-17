@@ -27,19 +27,14 @@ echo set (RAGEL_EXE %DOWNLOAD_DIR_CMAKE%/ragel.exe) >> paths.cmake
 
 :: . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-:: Lua (download from SourceForge, need PowerShell user agent to handle redirect)
+:: Lua (CMake-based)
 
 echo Downloading Lua...
 
 mkdir %DOWNLOAD_DIR%\lua
-powershell "Invoke-WebRequest -UserAgent [Microsoft.PowerShell.Commands.PSUserAgent]::FireFox -Uri %LUA_DOWNLOAD_URL% -OutFile %DOWNLOAD_DIR%\lua\lua.zip"
-7z x -y %DOWNLOAD_DIR%\lua\lua.zip -o%DOWNLOAD_DIR%\lua
-
-echo set (LUA_INC_DIR %DOWNLOAD_DIR_CMAKE%/lua/include) >> paths.cmake
-echo set (LUA_LIB_DIR %DOWNLOAD_DIR_CMAKE%/lua) >> paths.cmake
-echo set (LUA_DLL_DIR %DOWNLOAD_DIR_CMAKE%/lua) >> paths.cmake
-echo set (LUA_LIB_NAME %LUA_LIB_NAME%) >> paths.cmake
-echo set (OPENSSL_INC_DIR DISABLED) >> paths.cmake
+powershell "Invoke-WebRequest -Uri %LUA_DOWNLOAD_URL% -OutFile %DOWNLOAD_DIR%\lua\lua.zip"
+7z x -y %DOWNLOAD_DIR%\lua\lua.zip
+ren Lua-%LUA_VERSION% lua
 
 :: . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 

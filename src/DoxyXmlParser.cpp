@@ -36,7 +36,11 @@ DoxyXmlParser::parseFile(
 	m_filePath = io::getFullFilePath(fileName);
 	m_baseDir = io::getDir(m_filePath);
 
-	return xml::ExpatParser<DoxyXmlParser>::parseFile(fileName);
+	bool result = xml::ExpatParser<DoxyXmlParser>::parseFile(fileName);
+	if (!result)
+		err::pushFormatStringError("%s(%d)", m_filePath.sz(), getLineNumber());
+
+	return result;
 }
 
 void

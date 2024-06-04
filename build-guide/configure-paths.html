@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>paths.cmake &mdash; Doxyrest Build Guide</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/axl-pygments.css?v=e88e5af2" />
+      <link rel="stylesheet" type="text/css" href="_static/axl-sphinx_rtd_theme.css?v=2cffecd5" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=35e066c8"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="CMake Configuration Step" href="configure-cmake.html" />
+    <link rel="prev" title="Configuring" href="configure.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Doxyrest Build Guide
+          </a>
+              <div class="version">
+                2.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="configure.html">Configuring</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">paths.cmake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configure-cmake.html">CMake Configuration Step</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="build.html">Building</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Doxyrest Build Guide</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="configure.html">Configuring</a></li>
+      <li class="breadcrumb-item active">paths.cmake</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="paths-cmake">
+<h1>paths.cmake</h1>
+<p><p>Doxyrest build system uses <code class="docutils literal notranslate"><span class="pre">paths.cmake</span></code> file as the main reference when it needs to find a certain tool or library. When a path is not specified, a fallback attempt to find it using <code class="docutils literal notranslate"><span class="pre">find_package</span></code> will be made.</p>
+<p>This allows for out-of-the-box <em>default</em> build and at the same time provides a <em>fine-grained</em> control over locations of dependencies. Here in Tibbo, we have multiple versions of tools and libraries installed on the single build machine and at the same time, we are always in full control over which tool or library is going to be used when building a particular project.</p>
+<p><code class="docutils literal notranslate"><span class="pre">paths.cmake</span></code> files are <strong>cascading</strong>. It means, you can place one <em>anywhere</em> above the current directory and it will be found and used. From there you can chain-include the next <code class="docutils literal notranslate"><span class="pre">paths.cmake</span></code> and so on. This way you can specify some default locations for <em>all</em> your projects but still be able to override the paths for sub-projects.</p>
+<p>Being machine-specific <code class="docutils literal notranslate"><span class="pre">paths.cmake</span></code> files are added to <code class="docutils literal notranslate"><span class="pre">.gitignore</span></code> and are never tracked in Git. Therefore, you need to write <code class="docutils literal notranslate"><span class="pre">paths.cmake</span></code> file as the very first step of the configuration process. So, what should be inside?</p>
+<p>To answer this question, you need to check <code class="docutils literal notranslate"><span class="pre">dependencies.cmake</span></code> file. Inside this file, a variable called <code class="docutils literal notranslate"><span class="pre">AXL_PATH_LIST</span></code> contains all the paths that will be used during the build:</p>
+</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>LUA_INC_DIR<span class="w">       </span><span class="c1"># path to Lua C include directory</span>
+LUA_LIB_DIR<span class="w">       </span><span class="c1"># path to Lua library directory</span>
+LUA_LIB_NAME<span class="w">      </span><span class="c1"># (optional) name of Lua library (lua/lua51/lua52/lua53)</span>
+EXPAT_INC_DIR<span class="w">     </span><span class="c1"># path to Expat include directory</span>
+EXPAT_LIB_DIR<span class="w">     </span><span class="c1"># path to Expat library directory</span>
+SPHINX_BUILD_EXE<span class="w">  </span><span class="c1"># (optional) path to Sphinx compiler executable sphinx-build</span>
+PDFLATEX_EXE<span class="w">      </span><span class="c1"># (optional) path to Latex-to-PDF compiler</span>
+</pre></div>
+</div>
+<p><p>Some dependencies may be auto-detected – on Unix systems installed libraries and tools will likely be found automatically. On Windows Doxyrest build system will automatically find <em>tool executables</em> if they are added to <code class="docutils literal notranslate"><span class="pre">PATH</span></code> (via <code class="docutils literal notranslate"><span class="pre">where</span></code> command).</p>
+<p>But even when auto-detection works out-of-the-box, you can always use <code class="docutils literal notranslate"><span class="pre">paths.cmake</span></code> to <em>fine-tune</em> the location of a specific tool/library. I personally prefer to always specify all the paths explicitly.</p>
+</p>
+<p>On Windows you will have to specify paths to the required Lua and Expat libraries – they are unlikely to be found automatically.</p>
+<p class="rubric">Sample paths.cmake on Linux:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="w"> </span><span class="p">(</span><span class="s">LUA_VERSION</span><span class="w">   </span><span class="s">5.2.1</span><span class="p">)</span>
+<span class="nb">set</span><span class="w"> </span><span class="p">(</span><span class="s">EXPAT_VERSION</span><span class="w"> </span><span class="s">2.2.0</span><span class="p">)</span>
+
+<span class="nb">set</span><span class="w"> </span><span class="p">(</span><span class="s">LUA_INC_DIR</span><span class="w">   </span><span class="s">/home/vladimir/Develop/lua/lua-</span><span class="o">${</span><span class="nv">LUA_VERSION</span><span class="o">}</span><span class="s">/include</span><span class="p">)</span>
+<span class="nb">set</span><span class="w"> </span><span class="p">(</span><span class="s">EXPAT_INC_DIR</span><span class="w"> </span><span class="s">/home/vladimir/Develop/expat/expat-</span><span class="o">${</span><span class="nv">EXPAT_VERSION</span><span class="o">}</span><span class="s">/lib</span><span class="p">)</span>
+
+<span class="nb">if</span><span class="w"> </span><span class="p">(</span><span class="s2">&quot;${TARGET_CPU}&quot;</span><span class="w"> </span><span class="s">STREQUAL</span><span class="w"> </span><span class="s2">&quot;amd64&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">set</span><span class="w"> </span><span class="p">(</span><span class="s">LUA_LIB_DIR</span><span class="w">   </span><span class="s">/home/vladimir/Develop/lua/lua-</span><span class="o">${</span><span class="nv">LUA_VERSION</span><span class="o">}</span><span class="s">/lib-amd64</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">set</span><span class="w"> </span><span class="p">(</span><span class="s">EXPAT_LIB_DIR</span><span class="w"> </span><span class="s">/home/vladimir/Develop/expat/expat-</span><span class="o">${</span><span class="nv">EXPAT_VERSION</span><span class="o">}</span><span class="s">/build/make-amd64</span><span class="p">)</span>
+<span class="nb">else</span><span class="w"> </span><span class="p">()</span>
+<span class="w">        </span><span class="nb">set</span><span class="w"> </span><span class="p">(</span><span class="s">LUA_LIB_DIR</span><span class="w">   </span><span class="s">/home/vladimir/Develop/lua/lua-</span><span class="o">${</span><span class="nv">LUA_VERSION</span><span class="o">}</span><span class="s">/lib-x86</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">set</span><span class="w"> </span><span class="p">(</span><span class="s">EXPAT_LIB_DIR</span><span class="w"> </span><span class="s">/home/vladimir/Develop/expat/expat-</span><span class="o">${</span><span class="nv">EXPAT_VERSION</span><span class="o">}</span><span class="s">/build/make-x86</span><span class="p">)</span>
+<span class="nb">endif</span><span class="w"> </span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Sample paths.cmake on Windows:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="w"> </span><span class="p">(</span><span class="s">LUA_VERSION</span><span class="w">   </span><span class="s">5.2.1</span><span class="p">)</span>
+<span class="nb">set</span><span class="w"> </span><span class="p">(</span><span class="s">EXPAT_VERSION</span><span class="w"> </span><span class="s">2.1.0</span><span class="p">)</span>
+
+<span class="nb">set</span><span class="w"> </span><span class="p">(</span><span class="s">LUA_INC_DIR</span><span class="w">   </span><span class="s">c:/Develop/lua/lua-</span><span class="o">${</span><span class="nv">LUA_VERSION</span><span class="o">}</span><span class="s">/include</span><span class="p">)</span>
+<span class="nb">set</span><span class="w"> </span><span class="p">(</span><span class="s">EXPAT_INC_DIR</span><span class="w"> </span><span class="s">c:/Develop/expat/expat-</span><span class="o">${</span><span class="nv">EXPAT_VERSION</span><span class="o">}</span><span class="s">/lib</span><span class="p">)</span>
+
+<span class="nb">if</span><span class="w"> </span><span class="p">(</span><span class="s2">&quot;${TARGET_CPU}&quot;</span><span class="w"> </span><span class="s">STREQUAL</span><span class="w"> </span><span class="s2">&quot;amd64&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">set</span><span class="w"> </span><span class="p">(</span><span class="s">LUA_LIB_DIR</span><span class="w">   </span><span class="s">c:/Develop/lua/lua-</span><span class="o">${</span><span class="nv">LUA_VERSION</span><span class="o">}</span><span class="s">/lib/amd64/</span><span class="o">${</span><span class="nv">CONFIGURATION</span><span class="o">}</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">set</span><span class="w"> </span><span class="p">(</span><span class="s">EXPAT_LIB_DIR</span><span class="w"> </span><span class="s">c:/Develop/expat/expat-</span><span class="o">${</span><span class="nv">EXPAT_VERSION</span><span class="o">}</span><span class="s">/build/msvc10-amd64/</span><span class="o">${</span><span class="nv">CONFIGURATION</span><span class="o">}</span><span class="p">)</span>
+<span class="nb">else</span><span class="w"> </span><span class="p">()</span>
+<span class="w">        </span><span class="nb">set</span><span class="w"> </span><span class="p">(</span><span class="s">LUA_LIB_DIR</span><span class="w">   </span><span class="s">c:/Develop/lua/lua-</span><span class="o">${</span><span class="nv">LUA_VERSION</span><span class="o">}</span><span class="s">/lib/x86/</span><span class="o">${</span><span class="nv">CONFIGURATION</span><span class="o">}</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">set</span><span class="w"> </span><span class="p">(</span><span class="s">EXPAT_LIB_DIR</span><span class="w"> </span><span class="s">c:/Develop/expat/expat-</span><span class="o">${</span><span class="nv">EXPAT_VERSION</span><span class="o">}</span><span class="s">/build/msvc10/</span><span class="o">${</span><span class="nv">CONFIGURATION</span><span class="o">}</span><span class="p">)</span>
+<span class="nb">endif</span><span class="p">()</span>
+
+<span class="nb">set</span><span class="w"> </span><span class="p">(</span><span class="s">SPHINX_BUILD_EXE</span><span class="w"> </span><span class="s">c:/Develop/ActivePython/Scripts/sphinx-build.exe</span><span class="p">)</span>
+<span class="nb">set</span><span class="w"> </span><span class="p">(</span><span class="s">PDFLATEX_EXE</span><span class="w">     </span><span class="s2">&quot;c:/Program Files (x86)/MiKTeX 2.9/miktex/bin/pdflatex.exe&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="configure.html" class="btn btn-neutral float-left" title="Configuring" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="configure-cmake.html" class="btn btn-neutral float-right" title="CMake Configuration Step" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2016-2024, Tibbo Technology Inc.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

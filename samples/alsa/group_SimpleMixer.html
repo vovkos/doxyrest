@@ -1,0 +1,2036 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simple Mixer Interface &mdash; ALSA Library Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinx_rtd_theme.css?v=b6ca47bd" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=e9012143"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="enum snd_mixer_selem_channel_id_t" href="enum_snd_mixer_selem_channel_id_t.html" />
+    <link rel="prev" title="Mixer Interface" href="group_Mixer.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            ALSA Library Documentation
+          </a>
+              <div class="version">
+                1.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="group_Config.html">Configuration Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Digital_Audio_Interface.html">Constants for Digital Audio Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_MIDI_Interface.html">Constants for MIDI v1.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Control.html">Control Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Error.html">Error handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_CtlPlugin_SDK.html">External Control Plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Plugin_SDK.html">External PCM plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Global.html">Global defines and functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_HwDep.html">Hardware Dependant Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Input.html">Input Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Sequencer.html">MIDI Sequencer</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="group_Mixer.html">Mixer Interface</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Simple Mixer Interface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html">enum snd_mixer_selem_channel_id_t</a></li>
+<li class="toctree-l3"><a class="reference internal" href="enum_snd_mixer_selem_regopt_abstract.html">enum snd_mixer_selem_regopt_abstract</a></li>
+<li class="toctree-l3"><a class="reference internal" href="struct_snd_mixer_selem_regopt.html">struct snd_mixer_selem_regopt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#global-functions">Global Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#macros">Macros</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="enum_snd_mixer_elem_type_t.html">enum snd_mixer_elem_type_t</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_Mixer.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_Mixer.html#detailed-documentation">Detailed Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="group_Output.html">Output Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_PCM.html">PCM Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_RawMidi.html">RawMidi Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Timer.html">Timer Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_topology.html">Topology Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_ucm.html">Use Case Interface</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="page_topology.html">ALSA Topology Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_Usecase.html">ALSA Use Case Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_bug.html">Bug List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_conf.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_control.html">Control interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_deprecated.html">Deprecated List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_ctl_external_plugins.html">External Control Plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_hcontrol.html">High level control interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_confhooks.html">Hooks in configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_mixer.html">Mixer interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_pcm.html">PCM (digital audio) interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_pcm_plugins.html">PCM (digital audio) plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_pcm_external_plugins.html">PCM External Plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_rawmidi.html">RawMidi interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_confarg.html">Runtime arguments in configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_conffunc.html">Runtime functions in configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_seq.html">Sequencer interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_timer.html">Timer interface</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="example__test_latency.c.html">/test/latency.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_pcm.c.html">/test/pcm.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_pcm_min.c.html">/test/pcm_min.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_rawmidi.c.html">/test/rawmidi.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_timer.c.html">/test/timer.c</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ALSA Library Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="group_Mixer.html">Mixer Interface</a></li>
+      <li class="breadcrumb-item active">Simple Mixer Interface</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="simple-mixer-interface">
+<span id="doxid-group-simple-mixer"></span><span id="index-0"></span><h1>Simple Mixer Interface</h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="overview">
+<h2>Overview</h2>
+<p>The simple mixer interface. <a class="reference internal" href="#details-group-simple-mixer"><span class="std std-ref">More…</span></a></p>
+<pre class="highlight doxyrest-overview-code-block literal-block"><span></span><span class="c1">// typedefs</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_mixer_selem_id</span> <a class="reference internal" href="#doxid-group-simple-mixer-1gac0bfc2b9efcbc308df2daad92983e2ee"><span class="std std-ref">snd_mixer_selem_id_t</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// enums</span>
+
+<span class="k">enum</span> <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span><span class="p">;</span>
+<span class="k">enum</span> <a class="reference internal" href="enum_snd_mixer_selem_regopt_abstract.html#doxid-group-simple-mixer-1gab7031d53c3876396c9880631813979c2"><span class="std std-ref">snd_mixer_selem_regopt_abstract</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// structs</span>
+
+<span class="k">struct</span> <a class="reference internal" href="struct_snd_mixer_selem_regopt.html#doxid-structsnd-mixer-selem-regopt"><span class="std std-ref">snd_mixer_selem_regopt</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// global functions</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga37ae8c6874d975efa83a9074a28113b9"><span class="std std-ref">snd_mixer_selem_channel_name</span></a><span></span><span class="p">(</span><a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1gadd686db0b7d2bba9a88112b732b147d0"><span class="std std-ref">snd_mixer_selem_register</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga34161447bc01a64f578456ed13d57e33"><span class="std std-ref">snd_mixer_t</span></a><span></span><span class="o">*</span> <span class="n">mixer</span><span class="p">,</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_snd_mixer_selem_regopt.html#doxid-structsnd-mixer-selem-regopt"><span class="std std-ref">snd_mixer_selem_regopt</span></a><span></span><span class="o">*</span> <span class="n">options</span><span class="p">,</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga51c7b205d5afc62342d9dec3ce54d11f"><span class="std std-ref">snd_mixer_class_t</span></a><span></span><span class="o">**</span> <span class="n">classp</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga02aba43d5ae75392b6344c7f8f92fe72"><span class="std std-ref">snd_mixer_selem_get_id</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">element</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-simple-mixer-1gac0bfc2b9efcbc308df2daad92983e2ee"><span class="std std-ref">snd_mixer_selem_id_t</span></a><span></span><span class="o">*</span> <span class="n">id</span>
+<span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga51329fb3fea12d50209fcf8ebf542492"><span class="std std-ref">snd_mixer_selem_get_name</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">);</span>
+
+<span class="kt">unsigned</span> <span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga11a14cd0d589033d49647d27e12b9cc1"><span class="std std-ref">snd_mixer_selem_get_index</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">);</span>
+
+<a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1gad9b0c9a6d7956f95132aa42857d962cb"><span class="std std-ref">snd_mixer_find_selem</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga34161447bc01a64f578456ed13d57e33"><span class="std std-ref">snd_mixer_t</span></a><span></span><span class="o">*</span> <span class="n">mixer</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="#doxid-group-simple-mixer-1gac0bfc2b9efcbc308df2daad92983e2ee"><span class="std std-ref">snd_mixer_selem_id_t</span></a><span></span><span class="o">*</span> <span class="n">id</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga41eb6c6d7a237dc617115ba4ba91ffbd"><span class="std std-ref">snd_mixer_selem_is_active</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1gacdc9e474bb45ca6759a2f9ea878bc1a4"><span class="std std-ref">snd_mixer_selem_is_playback_mono</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga621b34fc2c4f47a28fb9b34a3dd820e7"><span class="std std-ref">snd_mixer_selem_has_playback_channel</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1gadc4c2179abd18d7c587cc199bb8e9273"><span class="std std-ref">snd_mixer_selem_is_capture_mono</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1gac05de257374bae60c03ba033344f811e"><span class="std std-ref">snd_mixer_selem_has_capture_channel</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1gae75b0133e7beba016589259b30cf8e7b"><span class="std std-ref">snd_mixer_selem_get_capture_group</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga08c4099ef62508d5ae7f13bd6affd5a5"><span class="std std-ref">snd_mixer_selem_has_common_volume</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga17468934f36929ae2f7af4850f40f851"><span class="std std-ref">snd_mixer_selem_has_playback_volume</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1gaf39321d4b7bb2efac3a3af357e42c6eb"><span class="std std-ref">snd_mixer_selem_has_playback_volume_joined</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga095d73eab22ef19cabed8732ffc44a7b"><span class="std std-ref">snd_mixer_selem_has_capture_volume</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga1646edce83681e786da2f1a6befaf113"><span class="std std-ref">snd_mixer_selem_has_capture_volume_joined</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga468e0188282093c377776683bcea20d4"><span class="std std-ref">snd_mixer_selem_has_common_switch</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga4efd34d5ccb384e8db4291bd3aad0760"><span class="std std-ref">snd_mixer_selem_has_playback_switch</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga162fa35b3cc76e67c14482a2f6b734c1"><span class="std std-ref">snd_mixer_selem_has_playback_switch_joined</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga6761e23f215d3d048c729a22cfdd952a"><span class="std std-ref">snd_mixer_selem_has_capture_switch</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga14a6a278ef91593d3c6fc53007627d25"><span class="std std-ref">snd_mixer_selem_has_capture_switch_joined</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga1ad2e8afe6f5ad7857b0bdc70048d44d"><span class="std std-ref">snd_mixer_selem_has_capture_switch_exclusive</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1gac8e2c7d0555f58ec790443da87ecbae3"><span class="std std-ref">snd_mixer_selem_ask_playback_vol_dB</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">value</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">dBvalue</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga87dcbf4b28ba67c8a07cdd79231b9942"><span class="std std-ref">snd_mixer_selem_ask_capture_vol_dB</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">value</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">dBvalue</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga3bf17ce7cb933fa69973cb69ca079f13"><span class="std std-ref">snd_mixer_selem_ask_playback_dB_vol</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">dBvalue</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">dir</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">value</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga40141aa00e0839bdfa8398b5aac1a0a6"><span class="std std-ref">snd_mixer_selem_ask_capture_dB_vol</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">dBvalue</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">dir</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">value</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga12f6f4124bf45db95f965298c2f318bb"><span class="std std-ref">snd_mixer_selem_get_playback_volume</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">value</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga3b15557f590f136735a4abee96cf28fd"><span class="std std-ref">snd_mixer_selem_get_capture_volume</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">value</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga6b5799e7971688e1f2e9ccf977c8a887"><span class="std std-ref">snd_mixer_selem_get_playback_dB</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">value</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga27bf2c4bd591bcf61b3fe20353bac8da"><span class="std std-ref">snd_mixer_selem_get_capture_dB</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">value</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga55a4f32e711efe4ef09cf041d9fc27f0"><span class="std std-ref">snd_mixer_selem_get_playback_switch</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">value</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga49f4c3b98ef2353cdaa582e5bf3417a1"><span class="std std-ref">snd_mixer_selem_get_capture_switch</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">value</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga1e4556740beefc8bed40677a316e60ac"><span class="std std-ref">snd_mixer_selem_set_playback_volume</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">value</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga8aa6b212e1e092e5d67ff11070a433ad"><span class="std std-ref">snd_mixer_selem_set_capture_volume</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">value</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga8bfb52575e4bb06deb30799bc39c0768"><span class="std std-ref">snd_mixer_selem_set_playback_dB</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">value</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">dir</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1gac1af2ccb94c19e7f616338791707c2eb"><span class="std std-ref">snd_mixer_selem_set_capture_dB</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">value</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">dir</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga2567351a2a7a70e6dda81f5ccc38d04b"><span class="std std-ref">snd_mixer_selem_set_playback_volume_all</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">value</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga0e6e40f799c9a4042444a4e26194d451"><span class="std std-ref">snd_mixer_selem_set_capture_volume_all</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">value</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga555df8c54f170ebe7f389eb7a8d04cc9"><span class="std std-ref">snd_mixer_selem_set_playback_dB_all</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">value</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">dir</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga395321949ec6444ca4590f0ca3eac6b0"><span class="std std-ref">snd_mixer_selem_set_capture_dB_all</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">value</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">dir</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga1a9b7c48b94d8cbeffc6847f3b884dcc"><span class="std std-ref">snd_mixer_selem_set_playback_switch</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">value</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga3de8f16807b23cdf9399f86a5eb3a353"><span class="std std-ref">snd_mixer_selem_set_capture_switch</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">value</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1gaa3e28640247b4eef389269b92f5b4a9d"><span class="std std-ref">snd_mixer_selem_set_playback_switch_all</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">value</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1gad43024c7d21c38cde7b440cdc6a85c07"><span class="std std-ref">snd_mixer_selem_set_capture_switch_all</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">value</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga09557e90c11fbd37aeed30938338698b"><span class="std std-ref">snd_mixer_selem_get_playback_volume_range</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">min</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">max</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1gad874cffabe541956b610858bcb38ba59"><span class="std std-ref">snd_mixer_selem_get_playback_dB_range</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">min</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">max</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1gaf4b095372a07bcdf769d74fa73c803d5"><span class="std std-ref">snd_mixer_selem_set_playback_volume_range</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">min</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">max</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga95e2624e7aaa7624e89121ce3f63b9dd"><span class="std std-ref">snd_mixer_selem_get_capture_volume_range</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">min</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">max</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga332241fcda7a9364b4d7830b592ba6a5"><span class="std std-ref">snd_mixer_selem_get_capture_dB_range</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">min</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">max</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga608663233daecd6b373aba808f5fc427"><span class="std std-ref">snd_mixer_selem_set_capture_volume_range</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">min</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">max</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1gab367abc11dae3681978c2f831afd1e37"><span class="std std-ref">snd_mixer_selem_is_enumerated</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1gaed68ad405d2c2e9447e2fa1d4f5d1107"><span class="std std-ref">snd_mixer_selem_is_enum_playback</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga90c5c5c0428fd0d6722c5a84348a39b0"><span class="std std-ref">snd_mixer_selem_is_enum_capture</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1gab803bca4a9c322e1efe87950b62431b3"><span class="std std-ref">snd_mixer_selem_get_enum_items</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1gacbae7ca76dc02dd172c80f8f704dd8c9"><span class="std std-ref">snd_mixer_selem_get_enum_item_name</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">idx</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">maxlen</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">str</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga6679dc52033e29b88da32f5bbd45f205"><span class="std std-ref">snd_mixer_selem_get_enum_item</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span><span class="o">*</span> <span class="n">idxp</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1gadcba6291c0382676ee442311c0ff1a8f"><span class="std std-ref">snd_mixer_selem_set_enum_item</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">idx</span>
+<span class="p">);</span>
+
+<span class="kt">size_t</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga29705a6b18fe910d2b7aeb98531d5056"><span class="std std-ref">snd_mixer_selem_id_sizeof</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1gac48d80bc60d03959c43a3ec6caca8498"><span class="std std-ref">snd_mixer_selem_id_malloc</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-simple-mixer-1gac0bfc2b9efcbc308df2daad92983e2ee"><span class="std std-ref">snd_mixer_selem_id_t</span></a><span></span><span class="o">**</span> <span class="n">ptr</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga2a6f790706e3ed64e1fb0f61177d13c5"><span class="std std-ref">snd_mixer_selem_id_free</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-simple-mixer-1gac0bfc2b9efcbc308df2daad92983e2ee"><span class="std std-ref">snd_mixer_selem_id_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga089d6e51b1b92fb51ff2cb771071a169"><span class="std std-ref">snd_mixer_selem_id_copy</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-simple-mixer-1gac0bfc2b9efcbc308df2daad92983e2ee"><span class="std std-ref">snd_mixer_selem_id_t</span></a><span></span><span class="o">*</span> <span class="n">dst</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="#doxid-group-simple-mixer-1gac0bfc2b9efcbc308df2daad92983e2ee"><span class="std std-ref">snd_mixer_selem_id_t</span></a><span></span><span class="o">*</span> <span class="n">src</span>
+<span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1gae54797dd9e4382d67718899047fa1087"><span class="std std-ref">snd_mixer_selem_id_get_name</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-simple-mixer-1gac0bfc2b9efcbc308df2daad92983e2ee"><span class="std std-ref">snd_mixer_selem_id_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="kt">unsigned</span> <span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1gabe5105469fa31b85a52253e709733638"><span class="std std-ref">snd_mixer_selem_id_get_index</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-simple-mixer-1gac0bfc2b9efcbc308df2daad92983e2ee"><span class="std std-ref">snd_mixer_selem_id_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1gad127341c44087525e1c715044d7a3919"><span class="std std-ref">snd_mixer_selem_id_set_name</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-simple-mixer-1gac0bfc2b9efcbc308df2daad92983e2ee"><span class="std std-ref">snd_mixer_selem_id_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">val</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-simple-mixer-1ga02bf0b9758ed4146eec38cd964b7621d"><span class="std std-ref">snd_mixer_selem_id_set_index</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-simple-mixer-1gac0bfc2b9efcbc308df2daad92983e2ee"><span class="std std-ref">snd_mixer_selem_id_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">val</span>
+<span class="p">);</span>
+
+<span class="c1">// macros</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-simple-mixer-1gae97a5b8fbc068632409e1459a9476222"><span class="std std-ref">snd_mixer_selem_id_alloca</span></a><span></span><span class="p">(</span><span class="n">ptr</span><span class="p">)</span></pre>
+</section>
+<section id="detailed-documentation">
+<span id="details-group-simple-mixer"></span><h2>Detailed Documentation</h2>
+<p>The simple mixer interface.</p>
+<section id="typedefs">
+<h3>Typedefs</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1gac0bfc2b9efcbc308df2daad92983e2ee"><span id="index-1"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_mixer_selem_id</span> <span class="n">snd_mixer_selem_id_t</span></pre>
+<p>Mixer simple element identifier</p>
+</section>
+<section id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga37ae8c6874d975efa83a9074a28113b9"><span id="index-2"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">snd_mixer_selem_channel_name</span><span class="p">(</span><a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">)</span></pre>
+<p>Return name of mixer simple element channel.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>channel</p></td>
+<td><p>mixer simple element channel identifier</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>channel name</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1gadd686db0b7d2bba9a88112b732b147d0"><span id="index-3"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_register</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga34161447bc01a64f578456ed13d57e33"><span class="std std-ref">snd_mixer_t</span></a><span></span><span class="o">*</span> <span class="n">mixer</span><span class="p">,</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_snd_mixer_selem_regopt.html#doxid-structsnd-mixer-selem-regopt"><span class="std std-ref">snd_mixer_selem_regopt</span></a><span></span><span class="o">*</span> <span class="n">options</span><span class="p">,</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga51c7b205d5afc62342d9dec3ce54d11f"><span class="std std-ref">snd_mixer_class_t</span></a><span></span><span class="o">**</span> <span class="n">classp</span>
+<span class="p">)</span></pre>
+<p>Register mixer simple element class.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>mixer</p></td>
+<td><p>Mixer handle</p></td>
+</tr>
+<tr class="row-even"><td><p>options</p></td>
+<td><p>Options container</p></td>
+</tr>
+<tr class="row-odd"><td><p>classp</p></td>
+<td><p>Pointer to returned mixer simple element class handle (or NULL)</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga02aba43d5ae75392b6344c7f8f92fe72"><span id="index-4"></span><span></span><span class="kt">void</span>
+<span class="n">snd_mixer_selem_get_id</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">element</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-simple-mixer-1gac0bfc2b9efcbc308df2daad92983e2ee"><span class="std std-ref">snd_mixer_selem_id_t</span></a><span></span><span class="o">*</span> <span class="n">id</span>
+<span class="p">)</span></pre>
+<p>Get mixer simple element identifier.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>id</p></td>
+<td><p>returned mixer simple element identifier</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga51329fb3fea12d50209fcf8ebf542492"><span id="index-5"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">snd_mixer_selem_get_name</span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">)</span></pre>
+<p>Get name part of mixer simple element identifier.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>name part of simple element identifier</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga11a14cd0d589033d49647d27e12b9cc1"><span id="index-6"></span><span></span><span class="kt">unsigned</span> <span class="kt">int</span>
+<span class="n">snd_mixer_selem_get_index</span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">)</span></pre>
+<p>Get index part of mixer simple element identifier.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>index part of simple element identifier</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1gad9b0c9a6d7956f95132aa42857d962cb"><span id="index-7"></span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span>
+<span class="n">snd_mixer_find_selem</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga34161447bc01a64f578456ed13d57e33"><span class="std std-ref">snd_mixer_t</span></a><span></span><span class="o">*</span> <span class="n">mixer</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="#doxid-group-simple-mixer-1gac0bfc2b9efcbc308df2daad92983e2ee"><span class="std std-ref">snd_mixer_selem_id_t</span></a><span></span><span class="o">*</span> <span class="n">id</span>
+<span class="p">)</span></pre>
+<p>Find a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>mixer</p></td>
+<td><p>Mixer handle</p></td>
+</tr>
+<tr class="row-even"><td><p>id</p></td>
+<td><p>Mixer simple element identifier</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>mixer simple element handle or NULL if not found</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga41eb6c6d7a237dc617115ba4ba91ffbd"><span id="index-8"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_is_active</span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">)</span></pre>
+<p>Get info about the active state of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if not active, 1 if active</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1gacdc9e474bb45ca6759a2f9ea878bc1a4"><span id="index-9"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_is_playback_mono</span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">)</span></pre>
+<p>Get info about channels of playback stream of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if not mono, 1 if mono</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga621b34fc2c4f47a28fb9b34a3dd820e7"><span id="index-10"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_has_playback_channel</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span>
+<span class="p">)</span></pre>
+<p>Get info about channels of playback stream of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>channel</p></td>
+<td><p>Mixer simple element channel identifier</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if channel is not present, 1 if present</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1gadc4c2179abd18d7c587cc199bb8e9273"><span id="index-11"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_is_capture_mono</span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">)</span></pre>
+<p>Get info about channels of capture stream of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if not mono, 1 if mono</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1gac05de257374bae60c03ba033344f811e"><span id="index-12"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_has_capture_channel</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span>
+<span class="p">)</span></pre>
+<p>Get info about channels of capture stream of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>channel</p></td>
+<td><p>Mixer simple element channel identifier</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if channel is not present, 1 if present</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1gae75b0133e7beba016589259b30cf8e7b"><span id="index-13"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_get_capture_group</span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">)</span></pre>
+<p>Return info about capture switch control of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>group for switch exclusivity (see <a class="reference internal" href="#doxid-group-simple-mixer-1ga1ad2e8afe6f5ad7857b0bdc70048d44d"><span class="std std-ref">snd_mixer_selem_has_capture_switch_exclusive</span></a>)</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga08c4099ef62508d5ae7f13bd6affd5a5"><span id="index-14"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_has_common_volume</span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">)</span></pre>
+<p>Return true if mixer simple element has only one volume control for both playback and capture.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 separated control, 1 common control</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga17468934f36929ae2f7af4850f40f851"><span id="index-15"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_has_playback_volume</span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">)</span></pre>
+<p>Return info about playback volume control of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if no control is present, 1 if it’s present</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1gaf39321d4b7bb2efac3a3af357e42c6eb"><span id="index-16"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_has_playback_volume_joined</span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">)</span></pre>
+<p>Return info about playback volume control of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if control is separated per channel, 1 if control acts on all channels together</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga095d73eab22ef19cabed8732ffc44a7b"><span id="index-17"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_has_capture_volume</span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">)</span></pre>
+<p>Return info about capture volume control of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if no control is present, 1 if it’s present</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga1646edce83681e786da2f1a6befaf113"><span id="index-18"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_has_capture_volume_joined</span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">)</span></pre>
+<p>Return info about capture volume control of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if control is separated per channel, 1 if control acts on all channels together</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga468e0188282093c377776683bcea20d4"><span id="index-19"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_has_common_switch</span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">)</span></pre>
+<p>Return true if mixer simple element has only one switch control for both playback and capture.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 separated control, 1 common control</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga4efd34d5ccb384e8db4291bd3aad0760"><span id="index-20"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_has_playback_switch</span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">)</span></pre>
+<p>Return info about playback switch control existence of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if no control is present, 1 if it’s present</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga162fa35b3cc76e67c14482a2f6b734c1"><span id="index-21"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_has_playback_switch_joined</span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">)</span></pre>
+<p>Return info about playback switch control of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if control is separated per channel, 1 if control acts on all channels together</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga6761e23f215d3d048c729a22cfdd952a"><span id="index-22"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_has_capture_switch</span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">)</span></pre>
+<p>Return info about capture switch control existence of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if no control is present, 1 if it’s present</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga14a6a278ef91593d3c6fc53007627d25"><span id="index-23"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_has_capture_switch_joined</span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">)</span></pre>
+<p>Return info about capture switch control of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if control is separated per channel, 1 if control acts on all channels together</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga1ad2e8afe6f5ad7857b0bdc70048d44d"><span id="index-24"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_has_capture_switch_exclusive</span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">)</span></pre>
+<p>Return info about capture switch control of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if control is separated per element, 1 if control acts on other elements too (i.e. only one active at a time inside a group)</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1gac8e2c7d0555f58ec790443da87ecbae3"><span id="index-25"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_ask_playback_vol_dB</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">value</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">dBvalue</span>
+<span class="p">)</span></pre>
+<p>Return corresponding dB value to an integer playback volume for a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>value</p></td>
+<td><p>value to be converted to dB range</p></td>
+</tr>
+<tr class="row-odd"><td><p>dBvalue</p></td>
+<td><p>pointer to returned dB value</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga87dcbf4b28ba67c8a07cdd79231b9942"><span id="index-26"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_ask_capture_vol_dB</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">value</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">dBvalue</span>
+<span class="p">)</span></pre>
+<p>Return corresponding dB value to an integer capture volume for a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>value</p></td>
+<td><p>value to be converted to dB range</p></td>
+</tr>
+<tr class="row-odd"><td><p>dBvalue</p></td>
+<td><p>pointer to returned dB value</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga3bf17ce7cb933fa69973cb69ca079f13"><span id="index-27"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_ask_playback_dB_vol</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">dBvalue</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">dir</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">value</span>
+<span class="p">)</span></pre>
+<p>Return corresponding integer playback volume for given dB value for a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>value</p></td>
+<td><p>value to be converted to dB range</p></td>
+</tr>
+<tr class="row-odd"><td><p>dir</p></td>
+<td><p>rounding mode - rounds up if dir &gt; 0, otherwise rounds down</p></td>
+</tr>
+<tr class="row-even"><td><p>dBvalue</p></td>
+<td><p>pointer to returned dB value</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga40141aa00e0839bdfa8398b5aac1a0a6"><span id="index-28"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_ask_capture_dB_vol</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">dBvalue</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">dir</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">value</span>
+<span class="p">)</span></pre>
+<p>Return corresponding integer capture volume for given dB value for a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>dBvalue</p></td>
+<td><p>dB value to be converted to integer range</p></td>
+</tr>
+<tr class="row-odd"><td><p>value</p></td>
+<td><p>pointer to returned integer value</p></td>
+</tr>
+<tr class="row-even"><td><p>dir</p></td>
+<td><p>rounding mode - rounds up if dir &gt; 0, otherwise rounds down</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga12f6f4124bf45db95f965298c2f318bb"><span id="index-29"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_get_playback_volume</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">value</span>
+<span class="p">)</span></pre>
+<p>Return value of playback volume control of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>channel</p></td>
+<td><p>mixer simple element channel identifier</p></td>
+</tr>
+<tr class="row-odd"><td><p>value</p></td>
+<td><p>pointer to returned value</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga3b15557f590f136735a4abee96cf28fd"><span id="index-30"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_get_capture_volume</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">value</span>
+<span class="p">)</span></pre>
+<p>Return value of capture volume control of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>channel</p></td>
+<td><p>mixer simple element channel identifier</p></td>
+</tr>
+<tr class="row-odd"><td><p>value</p></td>
+<td><p>pointer to returned value</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga6b5799e7971688e1f2e9ccf977c8a887"><span id="index-31"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_get_playback_dB</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">value</span>
+<span class="p">)</span></pre>
+<p>Return value of playback volume in dB control of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>channel</p></td>
+<td><p>mixer simple element channel identifier</p></td>
+</tr>
+<tr class="row-odd"><td><p>value</p></td>
+<td><p>pointer to returned value (dB * 100)</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga27bf2c4bd591bcf61b3fe20353bac8da"><span id="index-32"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_get_capture_dB</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">value</span>
+<span class="p">)</span></pre>
+<p>Return value of capture volume in dB control of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>channel</p></td>
+<td><p>mixer simple element channel identifier</p></td>
+</tr>
+<tr class="row-odd"><td><p>value</p></td>
+<td><p>pointer to returned value (dB * 100)</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga55a4f32e711efe4ef09cf041d9fc27f0"><span id="index-33"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_get_playback_switch</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">value</span>
+<span class="p">)</span></pre>
+<p>Return value of playback switch control of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>channel</p></td>
+<td><p>mixer simple element channel identifier</p></td>
+</tr>
+<tr class="row-odd"><td><p>value</p></td>
+<td><p>pointer to returned value</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga49f4c3b98ef2353cdaa582e5bf3417a1"><span id="index-34"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_get_capture_switch</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">value</span>
+<span class="p">)</span></pre>
+<p>Return value of capture switch control of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>channel</p></td>
+<td><p>mixer simple element channel identifier</p></td>
+</tr>
+<tr class="row-odd"><td><p>value</p></td>
+<td><p>pointer to returned value</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga1e4556740beefc8bed40677a316e60ac"><span id="index-35"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_set_playback_volume</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">value</span>
+<span class="p">)</span></pre>
+<p>Set value of playback volume control of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>channel</p></td>
+<td><p>mixer simple element channel identifier</p></td>
+</tr>
+<tr class="row-odd"><td><p>value</p></td>
+<td><p>control value</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga8aa6b212e1e092e5d67ff11070a433ad"><span id="index-36"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_set_capture_volume</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">value</span>
+<span class="p">)</span></pre>
+<p>Set value of capture volume control of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>channel</p></td>
+<td><p>mixer simple element channel identifier</p></td>
+</tr>
+<tr class="row-odd"><td><p>value</p></td>
+<td><p>control value</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga8bfb52575e4bb06deb30799bc39c0768"><span id="index-37"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_set_playback_dB</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">value</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">dir</span>
+<span class="p">)</span></pre>
+<p>Set value in dB of playback volume control of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>channel</p></td>
+<td><p>mixer simple element channel identifier</p></td>
+</tr>
+<tr class="row-odd"><td><p>value</p></td>
+<td><p>control value in dB * 100</p></td>
+</tr>
+<tr class="row-even"><td><p>dir</p></td>
+<td><p>rounding mode - rounds up if dir &gt; 0, otherwise rounds down</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1gac1af2ccb94c19e7f616338791707c2eb"><span id="index-38"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_set_capture_dB</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">value</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">dir</span>
+<span class="p">)</span></pre>
+<p>Set value in dB of capture volume control of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>channel</p></td>
+<td><p>mixer simple element channel identifier</p></td>
+</tr>
+<tr class="row-odd"><td><p>value</p></td>
+<td><p>control value in dB * 100</p></td>
+</tr>
+<tr class="row-even"><td><p>dir</p></td>
+<td><p>rounding mode - rounds up if dir &gt; 0, otherwise rounds down</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga2567351a2a7a70e6dda81f5ccc38d04b"><span id="index-39"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_set_playback_volume_all</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">value</span>
+<span class="p">)</span></pre>
+<p>Set value of playback volume control for all channels of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>value</p></td>
+<td><p>control value</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga0e6e40f799c9a4042444a4e26194d451"><span id="index-40"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_set_capture_volume_all</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">value</span>
+<span class="p">)</span></pre>
+<p>Set value of capture volume control for all channels of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>value</p></td>
+<td><p>control value</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga555df8c54f170ebe7f389eb7a8d04cc9"><span id="index-41"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_set_playback_dB_all</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">value</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">dir</span>
+<span class="p">)</span></pre>
+<p>Set value in dB of playback volume control for all channels of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>value</p></td>
+<td><p>control value in dB * 100</p></td>
+</tr>
+<tr class="row-odd"><td><p>dir</p></td>
+<td><p>rounding mode - rounds up if dir &gt; 0, otherwise rounds down</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga395321949ec6444ca4590f0ca3eac6b0"><span id="index-42"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_set_capture_dB_all</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">value</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">dir</span>
+<span class="p">)</span></pre>
+<p>Set value in dB of capture volume control for all channels of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>value</p></td>
+<td><p>control value in dB * 100</p></td>
+</tr>
+<tr class="row-odd"><td><p>dir</p></td>
+<td><p>rounding mode - rounds up if dir &gt; 0, otherwise rounds down</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga1a9b7c48b94d8cbeffc6847f3b884dcc"><span id="index-43"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_set_playback_switch</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">value</span>
+<span class="p">)</span></pre>
+<p>Set value of playback switch control of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>channel</p></td>
+<td><p>mixer simple element channel identifier</p></td>
+</tr>
+<tr class="row-odd"><td><p>value</p></td>
+<td><p>control value</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga3de8f16807b23cdf9399f86a5eb3a353"><span id="index-44"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_set_capture_switch</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">value</span>
+<span class="p">)</span></pre>
+<p>Set value of capture switch control of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>channel</p></td>
+<td><p>mixer simple element channel identifier</p></td>
+</tr>
+<tr class="row-odd"><td><p>value</p></td>
+<td><p>control value</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1gaa3e28640247b4eef389269b92f5b4a9d"><span id="index-45"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_set_playback_switch_all</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">value</span>
+<span class="p">)</span></pre>
+<p>Set value of playback switch control for all channels of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>value</p></td>
+<td><p>control value</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1gad43024c7d21c38cde7b440cdc6a85c07"><span id="index-46"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_set_capture_switch_all</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">value</span>
+<span class="p">)</span></pre>
+<p>Set value of capture switch control for all channels of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>value</p></td>
+<td><p>control value</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga09557e90c11fbd37aeed30938338698b"><span id="index-47"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_get_playback_volume_range</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">min</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">max</span>
+<span class="p">)</span></pre>
+<p>Get range for playback volume of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>min</p></td>
+<td><p>Pointer to returned minimum</p></td>
+</tr>
+<tr class="row-odd"><td><p>max</p></td>
+<td><p>Pointer to returned maximum</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1gad874cffabe541956b610858bcb38ba59"><span id="index-48"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_get_playback_dB_range</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">min</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">max</span>
+<span class="p">)</span></pre>
+<p>Get range in dB for playback volume of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>min</p></td>
+<td><p>Pointer to returned minimum (dB * 100)</p></td>
+</tr>
+<tr class="row-odd"><td><p>max</p></td>
+<td><p>Pointer to returned maximum (dB * 100)</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1gaf4b095372a07bcdf769d74fa73c803d5"><span id="index-49"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_set_playback_volume_range</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">min</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">max</span>
+<span class="p">)</span></pre>
+<p>Set range for playback volume of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>min</p></td>
+<td><p>minimum volume value</p></td>
+</tr>
+<tr class="row-odd"><td><p>max</p></td>
+<td><p>maximum volume value</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga95e2624e7aaa7624e89121ce3f63b9dd"><span id="index-50"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_get_capture_volume_range</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">min</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">max</span>
+<span class="p">)</span></pre>
+<p>Get range for capture volume of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>min</p></td>
+<td><p>Pointer to returned minimum</p></td>
+</tr>
+<tr class="row-odd"><td><p>max</p></td>
+<td><p>Pointer to returned maximum</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga332241fcda7a9364b4d7830b592ba6a5"><span id="index-51"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_get_capture_dB_range</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">min</span><span class="p">,</span>
+    <span class="kt">long</span><span class="o">*</span> <span class="n">max</span>
+<span class="p">)</span></pre>
+<p>Get range in dB for capture volume of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>min</p></td>
+<td><p>Pointer to returned minimum (dB * 100)</p></td>
+</tr>
+<tr class="row-odd"><td><p>max</p></td>
+<td><p>Pointer to returned maximum (dB * 100)</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga608663233daecd6b373aba808f5fc427"><span id="index-52"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_set_capture_volume_range</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">min</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">max</span>
+<span class="p">)</span></pre>
+<p>Set range for capture volume of a mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>min</p></td>
+<td><p>minimum volume value</p></td>
+</tr>
+<tr class="row-odd"><td><p>max</p></td>
+<td><p>maximum volume value</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1gab367abc11dae3681978c2f831afd1e37"><span id="index-53"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_is_enumerated</span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">)</span></pre>
+<p>Return true if mixer simple element is an enumerated control.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 normal volume/switch control, 1 enumerated control</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1gaed68ad405d2c2e9447e2fa1d4f5d1107"><span id="index-54"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_is_enum_playback</span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">)</span></pre>
+<p>Return true if mixer simple enumerated element belongs to the playback direction.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 no playback direction, 1 playback direction</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga90c5c5c0428fd0d6722c5a84348a39b0"><span id="index-55"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_is_enum_capture</span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">)</span></pre>
+<p>Return true if mixer simple enumerated element belongs to the capture direction.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 no capture direction, 1 capture direction</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1gab803bca4a9c322e1efe87950b62431b3"><span id="index-56"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_get_enum_items</span><span class="p">(</span><a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">)</span></pre>
+<p>Return the number of enumerated items of the given mixer simple element.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>the number of enumerated items, otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1gacbae7ca76dc02dd172c80f8f704dd8c9"><span id="index-57"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_get_enum_item_name</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">idx</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">maxlen</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">str</span>
+<span class="p">)</span></pre>
+<p>get the enumerated item string for the given mixer simple element</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>item</p></td>
+<td><p>the index of the enumerated item to query</p></td>
+</tr>
+<tr class="row-odd"><td><p>maxlen</p></td>
+<td><p>the maximal length to be stored</p></td>
+</tr>
+<tr class="row-even"><td><p>buf</p></td>
+<td><p>the buffer to store the name string</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if successful, otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga6679dc52033e29b88da32f5bbd45f205"><span id="index-58"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_get_enum_item</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span><span class="o">*</span> <span class="n">idxp</span>
+<span class="p">)</span></pre>
+<p>get the current selected enumerated item for the given mixer simple element</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>channel</p></td>
+<td><p>mixer simple element channel identifier</p></td>
+</tr>
+<tr class="row-odd"><td><p>itemp</p></td>
+<td><p>the pointer to store the index of the enumerated item</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if successful, otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1gadcba6291c0382676ee442311c0ff1a8f"><span id="index-59"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_set_enum_item</span><span class="p">(</span>
+    <a class="reference internal" href="group_Mixer.html#doxid-group-mixer-1ga9bb5eb24e4feea6c1a04c79b77938ef9"><span class="std std-ref">snd_mixer_elem_t</span></a><span></span><span class="o">*</span> <span class="n">elem</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_mixer_selem_channel_id_t.html#doxid-group-simple-mixer-1gaf01a92f33cc46d0b3878d65afcc41b97"><span class="std std-ref">snd_mixer_selem_channel_id_t</span></a><span></span> <span class="n">channel</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">idx</span>
+<span class="p">)</span></pre>
+<p>set the current selected enumerated item for the given mixer simple element</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>Mixer simple element handle</p></td>
+</tr>
+<tr class="row-even"><td><p>channel</p></td>
+<td><p>mixer simple element channel identifier</p></td>
+</tr>
+<tr class="row-odd"><td><p>item</p></td>
+<td><p>the enumerated item index</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if successful, otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga29705a6b18fe910d2b7aeb98531d5056"><span id="index-60"></span><span></span><span class="kt">size_t</span>
+<span class="n">snd_mixer_selem_id_sizeof</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></pre>
+<p>get size of <a class="reference internal" href="#doxid-group-simple-mixer-1gac0bfc2b9efcbc308df2daad92983e2ee"><span class="std std-ref">snd_mixer_selem_id_t</span></a></p>
+<p class="rubric">Returns:</p>
+<p>size in bytes</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1gac48d80bc60d03959c43a3ec6caca8498"><span id="index-61"></span><span></span><span class="kt">int</span>
+<span class="n">snd_mixer_selem_id_malloc</span><span class="p">(</span><a class="reference internal" href="#doxid-group-simple-mixer-1gac0bfc2b9efcbc308df2daad92983e2ee"><span class="std std-ref">snd_mixer_selem_id_t</span></a><span></span><span class="o">**</span> <span class="n">ptr</span><span class="p">)</span></pre>
+<p>allocate an invalid <a class="reference internal" href="#doxid-group-simple-mixer-1gac0bfc2b9efcbc308df2daad92983e2ee"><span class="std std-ref">snd_mixer_selem_id_t</span></a> using standard malloc</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ptr</p></td>
+<td><p>returned pointer</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga2a6f790706e3ed64e1fb0f61177d13c5"><span id="index-62"></span><span></span><span class="kt">void</span>
+<span class="n">snd_mixer_selem_id_free</span><span class="p">(</span><a class="reference internal" href="#doxid-group-simple-mixer-1gac0bfc2b9efcbc308df2daad92983e2ee"><span class="std std-ref">snd_mixer_selem_id_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>frees a previously allocated <a class="reference internal" href="#doxid-group-simple-mixer-1gac0bfc2b9efcbc308df2daad92983e2ee"><span class="std std-ref">snd_mixer_selem_id_t</span></a></p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>obj</p></td>
+<td><p>pointer to object to free</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga089d6e51b1b92fb51ff2cb771071a169"><span id="index-63"></span><span></span><span class="kt">void</span>
+<span class="n">snd_mixer_selem_id_copy</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-simple-mixer-1gac0bfc2b9efcbc308df2daad92983e2ee"><span class="std std-ref">snd_mixer_selem_id_t</span></a><span></span><span class="o">*</span> <span class="n">dst</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="#doxid-group-simple-mixer-1gac0bfc2b9efcbc308df2daad92983e2ee"><span class="std std-ref">snd_mixer_selem_id_t</span></a><span></span><span class="o">*</span> <span class="n">src</span>
+<span class="p">)</span></pre>
+<p>copy one <a class="reference internal" href="#doxid-group-simple-mixer-1gac0bfc2b9efcbc308df2daad92983e2ee"><span class="std std-ref">snd_mixer_selem_id_t</span></a> to another</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>dst</p></td>
+<td><p>pointer to destination</p></td>
+</tr>
+<tr class="row-even"><td><p>src</p></td>
+<td><p>pointer to source</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1gae54797dd9e4382d67718899047fa1087"><span id="index-64"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">snd_mixer_selem_id_get_name</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-simple-mixer-1gac0bfc2b9efcbc308df2daad92983e2ee"><span class="std std-ref">snd_mixer_selem_id_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>Get name part of a mixer simple element identifier.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>obj</p></td>
+<td><p>Mixer simple element identifier</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>name part</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1gabe5105469fa31b85a52253e709733638"><span id="index-65"></span><span></span><span class="kt">unsigned</span> <span class="kt">int</span>
+<span class="n">snd_mixer_selem_id_get_index</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-simple-mixer-1gac0bfc2b9efcbc308df2daad92983e2ee"><span class="std std-ref">snd_mixer_selem_id_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>Get index part of a mixer simple element identifier.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>obj</p></td>
+<td><p>Mixer simple element identifier</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>index part</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1gad127341c44087525e1c715044d7a3919"><span id="index-66"></span><span></span><span class="kt">void</span>
+<span class="n">snd_mixer_selem_id_set_name</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-simple-mixer-1gac0bfc2b9efcbc308df2daad92983e2ee"><span class="std std-ref">snd_mixer_selem_id_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">val</span>
+<span class="p">)</span></pre>
+<p>Set name part of a mixer simple element identifier.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>obj</p></td>
+<td><p>Mixer simple element identifier</p></td>
+</tr>
+<tr class="row-even"><td><p>val</p></td>
+<td><p>name part</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1ga02bf0b9758ed4146eec38cd964b7621d"><span id="index-67"></span><span></span><span class="kt">void</span>
+<span class="n">snd_mixer_selem_id_set_index</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-simple-mixer-1gac0bfc2b9efcbc308df2daad92983e2ee"><span class="std std-ref">snd_mixer_selem_id_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">val</span>
+<span class="p">)</span></pre>
+<p>Set index part of a mixer simple element identifier.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>obj</p></td>
+<td><p>Mixer simple element identifier</p></td>
+</tr>
+<tr class="row-even"><td><p>val</p></td>
+<td><p>index part</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="macros">
+<h3>Macros</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-simple-mixer-1gae97a5b8fbc068632409e1459a9476222"><span id="index-68"></span><span></span><span class="cp">#define snd_mixer_selem_id_alloca(ptr)</span></pre>
+<p>allocate an invalid <a class="reference internal" href="#doxid-group-simple-mixer-1gac0bfc2b9efcbc308df2daad92983e2ee"><span class="std std-ref">snd_mixer_selem_id_t</span></a> using standard alloca</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ptr</p></td>
+<td><p>returned pointer</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="group_Mixer.html" class="btn btn-neutral float-left" title="Mixer Interface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="enum_snd_mixer_selem_channel_id_t.html" class="btn btn-neutral float-right" title="enum snd_mixer_selem_channel_id_t" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 1998-2017, ALSA Library Maintainers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

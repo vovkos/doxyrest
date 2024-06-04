@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Library initialization and termination &#8212; Apache Portable Runtime Documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=0a676766" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css?v=3785b6ce" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=515d8a7f"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ctype functions" href="group_apr_ctype.html" />
+    <link rel="prev" title="User and Group ID Services" href="group_apr_user.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="group_apr_ctype.html" title="ctype functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="group_apr_user.html" title="User and Group ID Services"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Apache Portable Runtime Documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Library initialization and termination</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="library-initialization-and-termination">
+<span id="doxid-group-apr-library"></span><span id="index-0"></span><h1>Library initialization and termination</h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="overview">
+<h2>Overview</h2>
+<p>String and memory functions <a class="reference internal" href="#details-group-apr-library"><span class="std std-ref">More…</span></a></p>
+<pre class="highlight doxyrest-overview-code-block literal-block"><span></span><span class="c1">// global functions</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-library-1ga4a91a6b9ff457ead13e670950127761a"><span class="std std-ref">apr_initialize</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-library-1gaa1c4fc2e1c814cc5d4cd3d8719288fc9"><span class="std std-ref">apr_app_initialize</span></a><span></span><span class="p">(</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">argc</span><span class="p">,</span>
+    <span class="kt">char</span> <span class="k">const</span><span class="o">*</span><span class="k">const</span><span class="o">**</span> <span class="n">argv</span><span class="p">,</span>
+    <span class="kt">char</span> <span class="k">const</span><span class="o">*</span><span class="k">const</span><span class="o">**</span> <span class="n">env</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-apr-library-1ga8e96d45ee09fc7e7eb3646efef1424a3"><span class="std std-ref">apr_terminate</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-apr-library-1ga18667a60ff34d6209e519b4a4ce8cad1"><span class="std std-ref">apr_terminate2</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span></pre>
+</section>
+<section id="detailed-documentation">
+<span id="details-group-apr-library"></span><h2>Detailed Documentation</h2>
+<p>String and memory functions</p>
+<section id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-library-1ga4a91a6b9ff457ead13e670950127761a"><span id="index-1"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_initialize</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></pre>
+<p>Setup any APR internal data structures. This MUST be the first function called for any APR library. It is safe to call apr_initialize several times as long as apr_terminate is called the same number of times. See apr_app_initialize if this is an application, rather than a library consumer of apr.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-library-1gaa1c4fc2e1c814cc5d4cd3d8719288fc9"><span id="index-2"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_app_initialize</span><span class="p">(</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">argc</span><span class="p">,</span>
+    <span class="kt">char</span> <span class="k">const</span><span class="o">*</span><span class="k">const</span><span class="o">**</span> <span class="n">argv</span><span class="p">,</span>
+    <span class="kt">char</span> <span class="k">const</span><span class="o">*</span><span class="k">const</span><span class="o">**</span> <span class="n">env</span>
+<span class="p">)</span></pre>
+<p>Set up an application with normalized argc, argv (and optionally env) in order to deal with platform-specific oddities, such as Win32 services, code pages and signals. This must be the first function called for any APR program. See apr_initialize if this is a library consumer of apr. Otherwise, this call is identical to apr_initialize, and must be closed with a call to apr_terminate at the end of program execution.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>argc</p></td>
+<td><p>Pointer to the argc that may be corrected</p></td>
+</tr>
+<tr class="row-even"><td><p>argv</p></td>
+<td><p>Pointer to the argv that may be corrected</p></td>
+</tr>
+<tr class="row-odd"><td><p>env</p></td>
+<td><p>Pointer to the env that may be corrected, may be NULL</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-library-1ga8e96d45ee09fc7e7eb3646efef1424a3"><span id="index-3"></span><span></span><span class="kt">void</span>
+<span class="n">apr_terminate</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></pre>
+<p>Tear down any APR internal data structures which aren’t torn down automatically. apr_terminate must be called once for every call to <a class="reference internal" href="#doxid-group-apr-library-1ga4a91a6b9ff457ead13e670950127761a"><span class="std std-ref">apr_initialize()</span></a> or <a class="reference internal" href="#doxid-group-apr-library-1gaa1c4fc2e1c814cc5d4cd3d8719288fc9"><span class="std std-ref">apr_app_initialize()</span></a>. An APR program must call this function at termination once it has stopped using APR services. The APR developers suggest using atexit to ensure this is called. When using APR from a language other than C that has problems with the calling convention, use <a class="reference internal" href="#doxid-group-apr-library-1ga18667a60ff34d6209e519b4a4ce8cad1"><span class="std std-ref">apr_terminate2()</span></a> instead.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-library-1ga18667a60ff34d6209e519b4a4ce8cad1"><span id="index-4"></span><span></span><span class="kt">void</span>
+<span class="n">apr_terminate2</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></pre>
+<p>Tear down any APR internal data structures which aren’t torn down automatically, same as apr_terminate An APR program must call either the apr_terminate or apr_terminate2 function once it it has finished using APR services. The APR developers suggest using atexit(apr_terminate) to ensure this is done. apr_terminate2 exists to allow non-c language apps to tear down apr, while apr_terminate is recommended from c language applications.</p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Library initialization and termination</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li><a class="reference internal" href="#global-functions">Global Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="group_apr_user.html"
+                          title="previous chapter">User and Group ID Services</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="group_apr_ctype.html"
+                          title="next chapter">ctype functions</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="group_apr_ctype.html" title="ctype functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="group_apr_user.html" title="User and Group ID Services"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Apache Portable Runtime Documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Library initialization and termination</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2008-2017, Apache Portable Runtime Maintainers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Basic Usage &mdash; Doxyrest Manual</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinx_rtd_theme.css?v=b6ca47bd" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=35e066c8"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Advanced Topics" href="advanced.html" />
+    <link rel="prev" title="Lua Frames" href="frames.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Doxyrest Manual
+          </a>
+              <div class="version">
+                2.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="motivation.html">Motivation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architectural Overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="samples.html">Samples</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Doxyrest Manual</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Basic Usage</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="basic-usage">
+<h1>Basic Usage</h1>
+<section id="prepare-configuration-files">
+<h2>1 Prepare Configuration Files</h2>
+<section id="preparing-doxyfile">
+<h3>1.1 Preparing <code class="docutils literal notranslate"><span class="pre">Doxyfile</span></code></h3>
+<p>When applying Doxyrest to legacy Doxygen-based projects, a few key adjustments must be applied to the Doxygen configuration file <code class="docutils literal notranslate"><span class="pre">Doxyfile</span></code>.</p>
+<p>First and foremost, we do need XML:</p>
+<pre class="highlight literal-block"><a class="reference external" href="http://www.doxygen.nl/manual/config.html#cfg_generate_xml">GENERATE_XML</a> = YES</pre>
+<p>You may also want to turn the generation of HTML off now that you will be using Sphinx to build the final HTML documentation.</p>
+<pre class="highlight literal-block"><a class="reference external" href="http://www.doxygen.nl/manual/config.html#cfg_generate_html">GENERATE_HTML</a> = NO</pre>
+<p>Next, choose the location of the resulting XML database:</p>
+<pre class="highlight literal-block"><a class="reference external" href="http://www.doxygen.nl/manual/config.html#cfg_xml_output">XML_OUTPUT</a> = xml-dir</pre>
+<p>Program listing vastly increases the size of XML so it’s recommended to turn it OFF:</p>
+<pre class="highlight literal-block"><a class="reference external" href="http://www.doxygen.nl/manual/config.html#cfg_xml_programlisting">XML_PROGRAMLISTING</a> = NO</pre>
+<p>The next one is not obvious, but it’s <em>essential</em>! Sphinx uses lowercase reference IDs, so Doxygen can’t use mixed-case IDs. This must be set even for case-sensitive languages such as C.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>No need to worry, Doxygen will produce unique IDs for all identifiers.</p>
+</div>
+<pre class="highlight literal-block"><a class="reference external" href="http://www.doxygen.nl/manual/config.html#cfg_case_sense_names">CASE_SENSE_NAMES</a> = NO</pre>
+<p>The next one is also not so obvious – and quite frankly, I don’t have a clear explanation for why it produces the desired effect. However, it’s highly recommended to set it for C++ projects – otherwise Doxygen generates lots of bogus links to template arguments:</p>
+<pre class="highlight literal-block"><a class="reference external" href="http://www.doxygen.nl/manual/config.html#cfg_hide_undoc_relations">HIDE_UNDOC_RELATIONS</a> = YES</pre>
+<p>The last one is not essential, but recommended if your project sets <a class="reference external" href="http://www.doxygen.nl/manual/config.html#cfg_autolink_support">AUTOLINK_SUPPORT</a> to <code class="docutils literal notranslate"><span class="pre">ON</span></code> (like most projects do). Otherwise, auto-generated links may point to discarded items:</p>
+<pre class="highlight literal-block"><a class="reference external" href="http://www.doxygen.nl/manual/config.html#cfg_extract_all">EXTRACT_ALL</a> = YES</pre>
+<p>Refer to <a class="reference external" href="http://www.doxygen.nl/manual/config.html">Doxygen Configuration</a> for more details.</p>
+</section>
+<section id="preparing-doxyrest-config-lua">
+<span id="doxyrest-config"></span><h3>1.2 Preparing <code class="docutils literal notranslate"><span class="pre">doxyrest-config.lua</span></code></h3>
+<p><code class="docutils literal notranslate"><span class="pre">doxyrest-config.lua</span></code> is a Lua file with settings for frames.</p>
+<p>A default <code class="docutils literal notranslate"><span class="pre">doxyrest-config.lua</span></code> file for standard frames can be found at
+<code class="docutils literal notranslate"><span class="pre">$DOXYREST_FRAME_DIR/doxyrest-config.lua</span></code>. Copy it to your project
+directory and then adjust all the necessary parameters.</p>
+<p>Refer to <a class="reference internal" href="group_frame-config.html#doxid-group-frame-config"><span class="std std-ref">Frame Settings</span></a> for more details.</p>
+</section>
+<section id="preparing-conf-py">
+<h3>1.3 Preparing <code class="docutils literal notranslate"><span class="pre">conf.py</span></code></h3>
+<p>While preparing a Sphinx configuration file <code class="docutils literal notranslate"><span class="pre">conf.py</span></code>, only a few adjustments have to be made:</p>
+<p>Most importantly, specify the path to Doxyrest extensions for Sphinx and add these extensions:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;doxyrest-sphinx-dir&#39;</span><span class="p">))</span>
+<span class="n">extensions</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;doxyrest&#39;</span><span class="p">,</span> <span class="s1">&#39;cpplexer&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Another one is closely related to the <code class="doxyrest-cref docutils literal notranslate"><a class="reference internal" href="group_frame-config.html#doxid-variable-intro-file"><span class="std std-ref"><span class="pre">INTRO_FILE</span></span></a></code> setting.</p>
+<p>If one of the Doxyen pages was serving as the main page for your manual (was declared using <code class="docutils literal notranslate"><span class="pre">\mainpage</span></code> directive) and it’s now force-included into <code class="docutils literal notranslate"><span class="pre">index.rst</span></code> (with <code class="docutils literal notranslate"><span class="pre">INTRO_FILE</span></code> inside <code class="docutils literal notranslate"><span class="pre">doxyrest-config.lua</span></code>), it’s better to exclude it from the Sphinx input:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">exclude_patterns</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;page_index.rst&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Otherwise, there will be build warnings such as:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>path-to-rst-dir/page_main.rst: WARNING: document isn&#39;t included in any toctree
+</pre></div>
+</div>
+<p>Other adjustments may be necessary for <a class="reference internal" href="styling.html#styling"><span class="std std-ref">Styling</span></a>. For more details on standard Sphinx settings, refer to <a class="reference external" href="https://www.sphinx-doc.org/en/master/usage/configuration.html">Sphinx Configuration</a>.</p>
+</section>
+</section>
+<section id="build">
+<h2>2. Build</h2>
+<p>After the configuration files are ready, it’s time to run all three stages of the Doxyrest pipeline:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>doxygen<span class="w"> </span>Doxyfile
+$<span class="w"> </span>doxyrest<span class="w"> </span>-c<span class="w"> </span>doxyrest-config.lua
+$<span class="w"> </span>sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>rst-dir<span class="w"> </span>html-dir
+</pre></div>
+</div>
+<p>The resulting files are now in <code class="docutils literal notranslate"><span class="pre">html-dir</span></code></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="frames.html" class="btn btn-neutral float-left" title="Lua Frames" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="advanced.html" class="btn btn-neutral float-right" title="Advanced Topics" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2016-2024, Tibbo Technology Inc.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

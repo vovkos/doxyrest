@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The SSH scp functions &mdash; LibSSH Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinx_rtd_theme.css?v=b6ca47bd" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=840eb146"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="The SSH session functions." href="group_libssh_session.html" />
+    <link rel="prev" title="struct ssh_poll_handle_struct" href="struct_ssh_poll_handle_struct.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            LibSSH Documentation
+          </a>
+              <div class="version">
+                0.7
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="page_libssh_linking.html">The Linking HowTo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_libssh_tutorial.html">The Tutorial</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="group_libssh.html">The libssh API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_pki.html">The SSH Public Key Infrastructure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_auth.html">The SSH authentication functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_buffer.html">The SSH buffer functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_channel.html">The SSH channel functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_error.html">The SSH error functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_misc.html">The SSH helper functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_log.html">The SSH logging functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_messages.html">The SSH message functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_poll.html">The SSH poll functions.</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">The SSH scp functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#global-functions">Global Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_session.html">The SSH session functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_string.html">The SSH string functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_threads.html">The SSH threading functions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh_callbacks.html">The libssh callbacks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_libssh.html#detailed-documentation">Detailed Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="group_ssh_cpp.html">The libssh C++ wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libssh_sftp.html">The libssh SFTP API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libssh_server.html">The libssh server API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="page_bug.html">Bug List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_deprecated.html">Deprecated List</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LibSSH Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="group_libssh.html">The libssh API</a></li>
+      <li class="breadcrumb-item active">The SSH scp functions</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="the-ssh-scp-functions">
+<span id="doxid-group-libssh-scp"></span><span id="index-0"></span><h1>The SSH scp functions</h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="overview">
+<h2>Overview</h2>
+<p>SCP protocol over SSH functions. <a class="reference internal" href="#details-group-libssh-scp"><span class="std std-ref">More…</span></a></p>
+<pre class="highlight doxyrest-overview-code-block literal-block"><span></span><span class="c1">// global functions</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-scp-1gad3bb38b15f02597cc1e155c526a51e51"><span class="std std-ref">ssh_scp_accept_request</span></a><span></span><span class="p">(</span><span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-scp-1ga14d31059dcf6fb2325fb960da8e4474e"><span class="std std-ref">ssh_scp_close</span></a><span></span><span class="p">(</span><span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-scp-1gad36438c6b1e235d96cec43ca350e9b4f"><span class="std std-ref">ssh_scp_deny_request</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">reason</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libssh-scp-1gac29000cdb07c74d54251fbd838c0c661"><span class="std std-ref">ssh_scp_free</span></a><span></span><span class="p">(</span><span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-scp-1ga1db56dcb9dee01dd0b679b3b11151110"><span class="std std-ref">ssh_scp_init</span></a><span></span><span class="p">(</span><span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-scp-1ga2ca698c1e49612c083d9f8a72df52188"><span class="std std-ref">ssh_scp_leave_directory</span></a><span></span><span class="p">(</span><span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">);</span>
+
+<span class="n">ssh_scp</span>
+<a class="reference internal" href="#doxid-group-libssh-scp-1ga9fcd39a2bb6438e39cf19ff859dc2f2e"><span class="std std-ref">ssh_scp_new</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">mode</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">location</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-scp-1gaba59cd8cc77d219cac93f865445c6e47"><span class="std std-ref">ssh_scp_pull_request</span></a><span></span><span class="p">(</span><span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-scp-1gaa584f03d4e3d582ac10a3a19818ec56d"><span class="std std-ref">ssh_scp_push_directory</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">dirname</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">mode</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-scp-1ga544f4b9c525071910110ada94148adc6"><span class="std std-ref">ssh_scp_push_file</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">filename</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">size</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">perms</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-scp-1ga50b701b9c8923011d4fc6489c9c7eaae"><span class="std std-ref">ssh_scp_push_file64</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">filename</span><span class="p">,</span>
+    <span class="kt">uint64_t</span> <span class="n">size</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">perms</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-scp-1ga10bf627407959b51a7c39b37e8d46460"><span class="std std-ref">ssh_scp_read</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">size</span>
+<span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libssh-scp-1gab41ede14208dea4bbd3600077008ccf3"><span class="std std-ref">ssh_scp_request_get_filename</span></a><span></span><span class="p">(</span><span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-scp-1ga3386eb6df0cc620e74a039974c6280d4"><span class="std std-ref">ssh_scp_request_get_permissions</span></a><span></span><span class="p">(</span><span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">);</span>
+
+<span class="kt">size_t</span>
+<a class="reference internal" href="#doxid-group-libssh-scp-1ga8b6f736a5b5af73cf59c7825d7e61966"><span class="std std-ref">ssh_scp_request_get_size</span></a><span></span><span class="p">(</span><span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">);</span>
+
+<span class="kt">uint64_t</span>
+<a class="reference internal" href="#doxid-group-libssh-scp-1gaefe7f44417e1dc0d857d634fe1117d6d"><span class="std std-ref">ssh_scp_request_get_size64</span></a><span></span><span class="p">(</span><span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libssh-scp-1gafa91c1569e4d22d58a928b232264bbcb"><span class="std std-ref">ssh_scp_request_get_warning</span></a><span></span><span class="p">(</span><span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-scp-1ga11f48e2cf62bcec20d9232ed3ca41752"><span class="std std-ref">ssh_scp_write</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">len</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-scp-1gab7d6e452c6963199477103394456d3ae"><span class="std std-ref">ssh_scp_integer_mode</span></a><span></span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">mode</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-scp-1ga0be44d8a450767d92668d36d1beb43b9"><span class="std std-ref">ssh_scp_read_string</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">len</span>
+<span class="p">);</span>
+
+<span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libssh-scp-1ga8772a6523a2a21a06e3986dbcc02118f"><span class="std std-ref">ssh_scp_string_mode</span></a><span></span><span class="p">(</span><span class="kt">int</span> <span class="n">mode</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-scp-1gab713864881af7ebda7e1e9c609fdf604"><span></span><span class="n">ssh_scp_response</span></span><span></span><span class="p">(</span>
+    <span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">**</span> <span class="n">response</span>
+<span class="p">);</span></pre>
+</section>
+<section id="detailed-documentation">
+<span id="details-group-libssh-scp"></span><h2>Detailed Documentation</h2>
+<p>SCP protocol over SSH functions.</p>
+<section id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-scp-1gad3bb38b15f02597cc1e155c526a51e51"><span id="index-1"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_scp_accept_request</span><span class="p">(</span><span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">)</span></pre>
+<p>Accepts transfer of a file or creation of a directory coming from the remote party.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>scp</p></td>
+<td><p>The scp handle.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK if the message was sent, SSH_ERROR if sending the message failed, or sending it in a bad state.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-scp-1ga14d31059dcf6fb2325fb960da8e4474e"><span id="index-2"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_scp_close</span><span class="p">(</span><span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">)</span></pre>
+<p>Close the scp channel.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>scp</p></td>
+<td><p>The scp context to close.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK on success or an SSH error code.</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-libssh-scp-1ga1db56dcb9dee01dd0b679b3b11151110"><span class="std std-ref">ssh_scp_init()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-scp-1gad36438c6b1e235d96cec43ca350e9b4f"><span id="index-3"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_scp_deny_request</span><span class="p">(</span>
+    <span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">reason</span>
+<span class="p">)</span></pre>
+<p>Deny the transfer of a file or creation of a directory coming from the remote party.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>scp</p></td>
+<td><p>The scp handle.</p></td>
+</tr>
+<tr class="row-even"><td><p>reason</p></td>
+<td><p>A nul-terminated string with a human-readable explanation of the deny.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK if the message was sent, SSH_ERROR if the sending the message failed, or sending it in a bad state.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-scp-1gac29000cdb07c74d54251fbd838c0c661"><span id="index-4"></span><span></span><span class="kt">void</span>
+<span class="n">ssh_scp_free</span><span class="p">(</span><span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">)</span></pre>
+<p>Free a scp context.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>scp</p></td>
+<td><p>The context to free.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-libssh-scp-1ga9fcd39a2bb6438e39cf19ff859dc2f2e"><span class="std std-ref">ssh_scp_new()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-scp-1ga1db56dcb9dee01dd0b679b3b11151110"><span id="index-5"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_scp_init</span><span class="p">(</span><span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">)</span></pre>
+<p>Initialize the scp channel.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>scp</p></td>
+<td><p>The scp context to initialize.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK on success or an SSH error code.</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-libssh-scp-1ga9fcd39a2bb6438e39cf19ff859dc2f2e"><span class="std std-ref">ssh_scp_new()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-scp-1ga2ca698c1e49612c083d9f8a72df52188"><span id="index-6"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_scp_leave_directory</span><span class="p">(</span><span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">)</span></pre>
+<p>Leave a directory.</p>
+<p class="rubric">Returns:</p>
+<p>SSH_OK if the directory has been left,SSH_ERROR if an error occured.</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-libssh-scp-1gaa584f03d4e3d582ac10a3a19818ec56d"><span class="std std-ref">ssh_scp_push_directory()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-scp-1ga9fcd39a2bb6438e39cf19ff859dc2f2e"><span id="index-7"></span><span></span><span class="n">ssh_scp</span>
+<span class="n">ssh_scp_new</span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">mode</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">location</span>
+<span class="p">)</span></pre>
+<p>Create a new scp session.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>session</p></td>
+<td><p>The SSH session to use.</p></td>
+</tr>
+<tr class="row-even"><td><p>mode</p></td>
+<td><p>One of SSH_SCP_WRITE or SSH_SCP_READ, depending if you need to drop files remotely or read them. It is not possible to combine read and write. SSH_SCP_RECURSIVE Flag can be or’ed to this to indicate that you’re going to use recursion. Browsing through directories is not possible without this.</p></td>
+</tr>
+<tr class="row-odd"><td><p>location</p></td>
+<td><p>The directory in which write or read will be done. Any push or pull will be relative to this place. This can also be a pattern of files to download (read).</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>A ssh_scp handle, NULL if the creation was impossible.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-scp-1gaba59cd8cc77d219cac93f865445c6e47"><span id="index-8"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_scp_pull_request</span><span class="p">(</span><span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">)</span></pre>
+<p>Wait for a scp request (file, directory).</p>
+<p class="rubric">Returns:</p>
+<p>SSH_SCP_REQUEST_NEWFILE: The other side is sending a file SSH_SCP_REQUEST_NEWDIR: The other side is sending a directory SSH_SCP_REQUEST_ENDDIR: The other side has finished with the current directory SSH_SCP_REQUEST_WARNING: The other side sent us a warning SSH_SCP_REQUEST_EOF: The other side finished sending us files and data. SSH_ERROR: Some error happened</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-libssh-scp-1ga10bf627407959b51a7c39b37e8d46460"><span class="std std-ref">ssh_scp_read()</span></a></p>
+<p><a class="reference internal" href="#doxid-group-libssh-scp-1gad36438c6b1e235d96cec43ca350e9b4f"><span class="std std-ref">ssh_scp_deny_request()</span></a></p>
+<p><a class="reference internal" href="#doxid-group-libssh-scp-1gad3bb38b15f02597cc1e155c526a51e51"><span class="std std-ref">ssh_scp_accept_request()</span></a></p>
+<p><a class="reference internal" href="#doxid-group-libssh-scp-1gafa91c1569e4d22d58a928b232264bbcb"><span class="std std-ref">ssh_scp_request_get_warning()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-scp-1gaa584f03d4e3d582ac10a3a19818ec56d"><span id="index-9"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_scp_push_directory</span><span class="p">(</span>
+    <span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">dirname</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">mode</span>
+<span class="p">)</span></pre>
+<p>Create a directory in a scp in sink mode.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>scp</p></td>
+<td><p>The scp handle.</p></td>
+</tr>
+<tr class="row-even"><td><p>dirname</p></td>
+<td><p>The name of the directory being created.</p></td>
+</tr>
+<tr class="row-odd"><td><p>mode</p></td>
+<td><p>The UNIX permissions for the new directory, e.g. 0755.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK if the directory has been created, SSH_ERROR if an error occured.</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-libssh-scp-1ga2ca698c1e49612c083d9f8a72df52188"><span class="std std-ref">ssh_scp_leave_directory()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-scp-1ga544f4b9c525071910110ada94148adc6"><span id="index-10"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_scp_push_file</span><span class="p">(</span>
+    <span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">filename</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">size</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">perms</span>
+<span class="p">)</span></pre>
+<p>Initialize the sending of a file to a scp in sink mode.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>scp</p></td>
+<td><p>The scp handle.</p></td>
+</tr>
+<tr class="row-even"><td><p>filename</p></td>
+<td><p>The name of the file being sent. It should not contain any path indicator</p></td>
+</tr>
+<tr class="row-odd"><td><p>size</p></td>
+<td><p>Exact size in bytes of the file being sent.</p></td>
+</tr>
+<tr class="row-even"><td><p>mode</p></td>
+<td><p>The UNIX permissions for the new file, e.g. 0644.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK if the file is ready to be sent, SSH_ERROR if an error occured.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-scp-1ga50b701b9c8923011d4fc6489c9c7eaae"><span id="index-11"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_scp_push_file64</span><span class="p">(</span>
+    <span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">filename</span><span class="p">,</span>
+    <span class="kt">uint64_t</span> <span class="n">size</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">perms</span>
+<span class="p">)</span></pre>
+<p>Initialize the sending of a file to a scp in sink mode, using a 64-bit size.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>scp</p></td>
+<td><p>The scp handle.</p></td>
+</tr>
+<tr class="row-even"><td><p>filename</p></td>
+<td><p>The name of the file being sent. It should not contain any path indicator</p></td>
+</tr>
+<tr class="row-odd"><td><p>size</p></td>
+<td><p>Exact size in bytes of the file being sent.</p></td>
+</tr>
+<tr class="row-even"><td><p>mode</p></td>
+<td><p>The UNIX permissions for the new file, e.g. 0644.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK if the file is ready to be sent, SSH_ERROR if an error occured.</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-libssh-scp-1ga544f4b9c525071910110ada94148adc6"><span class="std std-ref">ssh_scp_push_file()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-scp-1ga10bf627407959b51a7c39b37e8d46460"><span id="index-12"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_scp_read</span><span class="p">(</span>
+    <span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">size</span>
+<span class="p">)</span></pre>
+<p>Read from a remote scp file.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>scp</p></td>
+<td><p>The scp handle.</p></td>
+</tr>
+<tr class="row-even"><td><p>buffer</p></td>
+<td><p>The destination buffer.</p></td>
+</tr>
+<tr class="row-odd"><td><p>size</p></td>
+<td><p>The size of the buffer.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>The nNumber of bytes read, SSH_ERROR if an error occured while reading.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-scp-1gab41ede14208dea4bbd3600077008ccf3"><span id="index-13"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">ssh_scp_request_get_filename</span><span class="p">(</span><span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">)</span></pre>
+<p>Get the name of the directory or file being pushed from the other party.</p>
+<p class="rubric">Returns:</p>
+<p>The file name, NULL on error. The string should not be freed.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-scp-1ga3386eb6df0cc620e74a039974c6280d4"><span id="index-14"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_scp_request_get_permissions</span><span class="p">(</span><span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">)</span></pre>
+<p>Get the permissions of the directory or file being pushed from the other party.</p>
+<p class="rubric">Returns:</p>
+<p>The UNIX permission, e.g 0644, -1 on error.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-scp-1ga8b6f736a5b5af73cf59c7825d7e61966"><span id="index-15"></span><span></span><span class="kt">size_t</span>
+<span class="n">ssh_scp_request_get_size</span><span class="p">(</span><span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">)</span></pre>
+<p>Get the size of the file being pushed from the other party.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The real size may not fit in a 32 bits field and may be truncated.</p>
+</div>
+<p class="rubric">Returns:</p>
+<p>The numeric size of the file being read.</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-libssh-scp-1gaefe7f44417e1dc0d857d634fe1117d6d"><span class="std std-ref">ssh_scp_request_get_size64()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-scp-1gaefe7f44417e1dc0d857d634fe1117d6d"><span id="index-16"></span><span></span><span class="kt">uint64_t</span>
+<span class="n">ssh_scp_request_get_size64</span><span class="p">(</span><span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">)</span></pre>
+<p>Get the size of the file being pushed from the other party.</p>
+<p class="rubric">Returns:</p>
+<p>The numeric size of the file being read.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-scp-1gafa91c1569e4d22d58a928b232264bbcb"><span id="index-17"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">ssh_scp_request_get_warning</span><span class="p">(</span><span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">)</span></pre>
+<p>Get the warning string from a scp handle.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>scp</p></td>
+<td><p>The scp handle.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>A warning string, or NULL on error. The string should not be freed.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-scp-1ga11f48e2cf62bcec20d9232ed3ca41752"><span id="index-18"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_scp_write</span><span class="p">(</span>
+    <span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">len</span>
+<span class="p">)</span></pre>
+<p>Write into a remote scp file.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>scp</p></td>
+<td><p>The scp handle.</p></td>
+</tr>
+<tr class="row-even"><td><p>buffer</p></td>
+<td><p>The buffer to write.</p></td>
+</tr>
+<tr class="row-odd"><td><p>len</p></td>
+<td><p>The number of bytes to write.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK if the write was successful, SSH_ERROR an error occured while writing.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-scp-1gab7d6e452c6963199477103394456d3ae"><span id="index-19"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_scp_integer_mode</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">mode</span><span class="p">)</span></pre>
+<p>Convert a scp text mode to an integer.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>mode</p></td>
+<td><p>The mode to convert, e.g. “0644”.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>An integer value, e.g. 420 for “0644”.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-scp-1ga0be44d8a450767d92668d36d1beb43b9"><span id="index-20"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_scp_read_string</span><span class="p">(</span>
+    <span class="n">ssh_scp</span> <span class="n">scp</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">len</span>
+<span class="p">)</span></pre>
+<p>Read a string on a channel, terminated by ‘</p>
+<p>‘.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>scp</p></td>
+<td><p>The scp handle.</p></td>
+</tr>
+<tr class="row-even"><td><p>buffer</p></td>
+<td><p>A pointer to a buffer to place the string.</p></td>
+</tr>
+<tr class="row-odd"><td><p>len</p></td>
+<td><p>The size of the buffer in bytes. If the string is bigger than len-1, only len-1 bytes are read and the string is null-terminated.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK if the string was read, SSH_ERROR if an error occured while reading.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-scp-1ga8772a6523a2a21a06e3986dbcc02118f"><span id="index-21"></span><span></span><span class="kt">char</span><span class="o">*</span>
+<span class="n">ssh_scp_string_mode</span><span class="p">(</span><span class="kt">int</span> <span class="n">mode</span><span class="p">)</span></pre>
+<p>Convert a unix mode into a scp string.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>mode</p></td>
+<td><p>The mode to convert, e.g. 420 or 0644.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>A pointer to a malloc’ed string containing the scp mode, e.g. “0644”.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="struct_ssh_poll_handle_struct.html" class="btn btn-neutral float-left" title="struct ssh_poll_handle_struct" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="group_libssh_session.html" class="btn btn-neutral float-right" title="The SSH session functions." accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2003-2017, LibSSH Maintainers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Atomic Operations &#8212; Apache Portable Runtime Documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=0a676766" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css?v=3785b6ce" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=515d8a7f"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Command Argument Parsing" href="group_apr_getopt.html" />
+    <link rel="prev" title="Apache Portability Runtime library" href="group_APR.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="group_apr_getopt.html" title="Command Argument Parsing"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="group_APR.html" title="Apache Portability Runtime library"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Apache Portable Runtime Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="group_APR.html" accesskey="U">Apache Portability Runtime library</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Atomic Operations</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="atomic-operations">
+<span id="doxid-group-apr-atomic"></span><span id="index-0"></span><h1>Atomic Operations</h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="overview">
+<h2>Overview</h2>
+<pre class="highlight doxyrest-overview-code-block literal-block"><span></span><span class="c1">// global functions</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-atomic-1gaa89b4022de39ca4d1c2ae6715e888e97"><span class="std std-ref">apr_atomic_init</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">);</span>
+
+<span class="n">apr_uint32_t</span>
+<a class="reference internal" href="#doxid-group-apr-atomic-1gafba4de90e113d26536cff48418689771"><span class="std std-ref">apr_atomic_read32</span></a><span></span><span class="p">(</span><span class="k">volatile</span> <span class="n">apr_uint32_t</span><span class="o">*</span> <span class="n">mem</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-apr-atomic-1gac689de9df18c093f66959227359328bb"><span class="std std-ref">apr_atomic_set32</span></a><span></span><span class="p">(</span>
+    <span class="k">volatile</span> <span class="n">apr_uint32_t</span><span class="o">*</span> <span class="n">mem</span><span class="p">,</span>
+    <span class="n">apr_uint32_t</span> <span class="n">val</span>
+<span class="p">);</span>
+
+<span class="n">apr_uint32_t</span>
+<a class="reference internal" href="#doxid-group-apr-atomic-1ga3ef16e13b679710fafd5196713e17433"><span class="std std-ref">apr_atomic_add32</span></a><span></span><span class="p">(</span>
+    <span class="k">volatile</span> <span class="n">apr_uint32_t</span><span class="o">*</span> <span class="n">mem</span><span class="p">,</span>
+    <span class="n">apr_uint32_t</span> <span class="n">val</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-apr-atomic-1ga4603396650e844bd987f01358ccb4df1"><span class="std std-ref">apr_atomic_sub32</span></a><span></span><span class="p">(</span>
+    <span class="k">volatile</span> <span class="n">apr_uint32_t</span><span class="o">*</span> <span class="n">mem</span><span class="p">,</span>
+    <span class="n">apr_uint32_t</span> <span class="n">val</span>
+<span class="p">);</span>
+
+<span class="n">apr_uint32_t</span>
+<a class="reference internal" href="#doxid-group-apr-atomic-1ga4af33da5aa6493ec321af14bedfc47a9"><span class="std std-ref">apr_atomic_inc32</span></a><span></span><span class="p">(</span><span class="k">volatile</span> <span class="n">apr_uint32_t</span><span class="o">*</span> <span class="n">mem</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-apr-atomic-1ga7a8d16335fdcd27f2baca90df35ad300"><span class="std std-ref">apr_atomic_dec32</span></a><span></span><span class="p">(</span><span class="k">volatile</span> <span class="n">apr_uint32_t</span><span class="o">*</span> <span class="n">mem</span><span class="p">);</span>
+
+<span class="n">apr_uint32_t</span>
+<a class="reference internal" href="#doxid-group-apr-atomic-1gae45c529f14f8489102382bd3fd4cce22"><span class="std std-ref">apr_atomic_cas32</span></a><span></span><span class="p">(</span>
+    <span class="k">volatile</span> <span class="n">apr_uint32_t</span><span class="o">*</span> <span class="n">mem</span><span class="p">,</span>
+    <span class="n">apr_uint32_t</span> <span class="n">with</span><span class="p">,</span>
+    <span class="n">apr_uint32_t</span> <span class="n">cmp</span>
+<span class="p">);</span>
+
+<span class="n">apr_uint32_t</span>
+<a class="reference internal" href="#doxid-group-apr-atomic-1ga50850e462d65e0409d5a93a6b4ec26c6"><span class="std std-ref">apr_atomic_xchg32</span></a><span></span><span class="p">(</span>
+    <span class="k">volatile</span> <span class="n">apr_uint32_t</span><span class="o">*</span> <span class="n">mem</span><span class="p">,</span>
+    <span class="n">apr_uint32_t</span> <span class="n">val</span>
+<span class="p">);</span>
+
+<span class="kt">void</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-atomic-1gafdd02b41cc39ade873daa2734597b0fa"><span class="std std-ref">apr_atomic_casptr</span></a><span></span><span class="p">(</span>
+    <span class="k">volatile</span> <span class="kt">void</span><span class="o">**</span> <span class="n">mem</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">with</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">cmp</span>
+<span class="p">);</span>
+
+<span class="kt">void</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-atomic-1gaab4c1c5b8be70ded06dd31a1a4f65bf6"><span class="std std-ref">apr_atomic_xchgptr</span></a><span></span><span class="p">(</span>
+    <span class="k">volatile</span> <span class="kt">void</span><span class="o">**</span> <span class="n">mem</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">with</span>
+<span class="p">);</span></pre>
+</section>
+<section id="detailed-documentation">
+<span id="details-group-apr-atomic"></span><h2>Detailed Documentation</h2>
+<section id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-atomic-1gaa89b4022de39ca4d1c2ae6715e888e97"><span id="index-1"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_atomic_init</span><span class="p">(</span><a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">)</span></pre>
+<p>this function is required on some platforms to initialize the atomic operation’s internal structures Programs do NOT need to call this directly. APR will call this automatically from apr_initialize.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>pool</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>APR_SUCCESS on successful completion</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-atomic-1gafba4de90e113d26536cff48418689771"><span id="index-2"></span><span></span><span class="n">apr_uint32_t</span>
+<span class="n">apr_atomic_read32</span><span class="p">(</span><span class="k">volatile</span> <span class="n">apr_uint32_t</span><span class="o">*</span> <span class="n">mem</span><span class="p">)</span></pre>
+<p>atomically read an apr_uint32_t from memory</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>mem</p></td>
+<td><p>the pointer</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-atomic-1gac689de9df18c093f66959227359328bb"><span id="index-3"></span><span></span><span class="kt">void</span>
+<span class="n">apr_atomic_set32</span><span class="p">(</span>
+    <span class="k">volatile</span> <span class="n">apr_uint32_t</span><span class="o">*</span> <span class="n">mem</span><span class="p">,</span>
+    <span class="n">apr_uint32_t</span> <span class="n">val</span>
+<span class="p">)</span></pre>
+<p>atomically set an apr_uint32_t in memory</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>mem</p></td>
+<td><p>pointer to the object</p></td>
+</tr>
+<tr class="row-even"><td><p>val</p></td>
+<td><p>value that the object will assume</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-atomic-1ga3ef16e13b679710fafd5196713e17433"><span id="index-4"></span><span></span><span class="n">apr_uint32_t</span>
+<span class="n">apr_atomic_add32</span><span class="p">(</span>
+    <span class="k">volatile</span> <span class="n">apr_uint32_t</span><span class="o">*</span> <span class="n">mem</span><span class="p">,</span>
+    <span class="n">apr_uint32_t</span> <span class="n">val</span>
+<span class="p">)</span></pre>
+<p>atomically add ‘val’ to an apr_uint32_t</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>mem</p></td>
+<td><p>pointer to the object</p></td>
+</tr>
+<tr class="row-even"><td><p>val</p></td>
+<td><p>amount to add</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>old value pointed to by mem</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-atomic-1ga4603396650e844bd987f01358ccb4df1"><span id="index-5"></span><span></span><span class="kt">void</span>
+<span class="n">apr_atomic_sub32</span><span class="p">(</span>
+    <span class="k">volatile</span> <span class="n">apr_uint32_t</span><span class="o">*</span> <span class="n">mem</span><span class="p">,</span>
+    <span class="n">apr_uint32_t</span> <span class="n">val</span>
+<span class="p">)</span></pre>
+<p>atomically subtract ‘val’ from an apr_uint32_t</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>mem</p></td>
+<td><p>pointer to the object</p></td>
+</tr>
+<tr class="row-even"><td><p>val</p></td>
+<td><p>amount to subtract</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-atomic-1ga4af33da5aa6493ec321af14bedfc47a9"><span id="index-6"></span><span></span><span class="n">apr_uint32_t</span>
+<span class="n">apr_atomic_inc32</span><span class="p">(</span><span class="k">volatile</span> <span class="n">apr_uint32_t</span><span class="o">*</span> <span class="n">mem</span><span class="p">)</span></pre>
+<p>atomically increment an apr_uint32_t by 1</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>mem</p></td>
+<td><p>pointer to the object</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>old value pointed to by mem</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-atomic-1ga7a8d16335fdcd27f2baca90df35ad300"><span id="index-7"></span><span></span><span class="kt">int</span>
+<span class="n">apr_atomic_dec32</span><span class="p">(</span><span class="k">volatile</span> <span class="n">apr_uint32_t</span><span class="o">*</span> <span class="n">mem</span><span class="p">)</span></pre>
+<p>atomically decrement an apr_uint32_t by 1</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>mem</p></td>
+<td><p>pointer to the atomic value</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>zero if the value becomes zero on decrement, otherwise non-zero</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-atomic-1gae45c529f14f8489102382bd3fd4cce22"><span id="index-8"></span><span></span><span class="n">apr_uint32_t</span>
+<span class="n">apr_atomic_cas32</span><span class="p">(</span>
+    <span class="k">volatile</span> <span class="n">apr_uint32_t</span><span class="o">*</span> <span class="n">mem</span><span class="p">,</span>
+    <span class="n">apr_uint32_t</span> <span class="n">with</span><span class="p">,</span>
+    <span class="n">apr_uint32_t</span> <span class="n">cmp</span>
+<span class="p">)</span></pre>
+<p>compare an apr_uint32_t’s value with ‘cmp’. If they are the same swap the value with ‘with’</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>mem</p></td>
+<td><p>pointer to the value</p></td>
+</tr>
+<tr class="row-even"><td><p>with</p></td>
+<td><p>what to swap it with</p></td>
+</tr>
+<tr class="row-odd"><td><p>cmp</p></td>
+<td><p>the value to compare it to</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>the old value of *mem</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-atomic-1ga50850e462d65e0409d5a93a6b4ec26c6"><span id="index-9"></span><span></span><span class="n">apr_uint32_t</span>
+<span class="n">apr_atomic_xchg32</span><span class="p">(</span>
+    <span class="k">volatile</span> <span class="n">apr_uint32_t</span><span class="o">*</span> <span class="n">mem</span><span class="p">,</span>
+    <span class="n">apr_uint32_t</span> <span class="n">val</span>
+<span class="p">)</span></pre>
+<p>exchange an apr_uint32_t’s value with ‘val’.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>mem</p></td>
+<td><p>pointer to the value</p></td>
+</tr>
+<tr class="row-even"><td><p>val</p></td>
+<td><p>what to swap it with</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>the old value of *mem</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-atomic-1gafdd02b41cc39ade873daa2734597b0fa"><span id="index-10"></span><span></span><span class="kt">void</span><span class="o">*</span>
+<span class="n">apr_atomic_casptr</span><span class="p">(</span>
+    <span class="k">volatile</span> <span class="kt">void</span><span class="o">**</span> <span class="n">mem</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">with</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">cmp</span>
+<span class="p">)</span></pre>
+<p>compare the pointer’s value with cmp. If they are the same swap the value with ‘with’</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>mem</p></td>
+<td><p>pointer to the pointer</p></td>
+</tr>
+<tr class="row-even"><td><p>with</p></td>
+<td><p>what to swap it with</p></td>
+</tr>
+<tr class="row-odd"><td><p>cmp</p></td>
+<td><p>the value to compare it to</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>the old value of the pointer</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-atomic-1gaab4c1c5b8be70ded06dd31a1a4f65bf6"><span id="index-11"></span><span></span><span class="kt">void</span><span class="o">*</span>
+<span class="n">apr_atomic_xchgptr</span><span class="p">(</span>
+    <span class="k">volatile</span> <span class="kt">void</span><span class="o">**</span> <span class="n">mem</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">with</span>
+<span class="p">)</span></pre>
+<p>exchange a pair of pointer values</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>mem</p></td>
+<td><p>pointer to the pointer</p></td>
+</tr>
+<tr class="row-even"><td><p>with</p></td>
+<td><p>what to swap it with</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>the old value of the pointer</p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Atomic Operations</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li><a class="reference internal" href="#global-functions">Global Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="group_APR.html"
+                          title="previous chapter">Apache Portability Runtime library</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="group_apr_getopt.html"
+                          title="next chapter">Command Argument Parsing</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="group_apr_getopt.html" title="Command Argument Parsing"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="group_APR.html" title="Apache Portability Runtime library"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Apache Portable Runtime Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="group_APR.html" >Apache Portability Runtime library</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Atomic Operations</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2008-2017, Apache Portable Runtime Maintainers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    </div>
+  </body>
+</html>

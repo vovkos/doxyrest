@@ -1,0 +1,2243 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Timer Interface &mdash; ALSA Library Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinx_rtd_theme.css?v=b6ca47bd" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=e9012143"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="enum snd_timer_class_t" href="enum_snd_timer_class_t.html" />
+    <link rel="prev" title="enum snd_rawmidi_type_t" href="enum_snd_rawmidi_type_t.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            ALSA Library Documentation
+          </a>
+              <div class="version">
+                1.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="group_Config.html">Configuration Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Digital_Audio_Interface.html">Constants for Digital Audio Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_MIDI_Interface.html">Constants for MIDI v1.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Control.html">Control Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Error.html">Error handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_CtlPlugin_SDK.html">External Control Plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Plugin_SDK.html">External PCM plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Global.html">Global defines and functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_HwDep.html">Hardware Dependant Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Input.html">Input Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Sequencer.html">MIDI Sequencer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Mixer.html">Mixer Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Output.html">Output Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_PCM.html">PCM Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_RawMidi.html">RawMidi Interface</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Timer Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="enum_snd_timer_class_t.html">enum snd_timer_class_t</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_snd_timer_event_t.html">enum snd_timer_event_t</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_snd_timer_slave_class_t.html">enum snd_timer_slave_class_t</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_snd_timer_type_t.html">enum snd_timer_type_t</a></li>
+<li class="toctree-l2"><a class="reference internal" href="struct_snd_timer_read_t.html">struct snd_timer_read_t</a></li>
+<li class="toctree-l2"><a class="reference internal" href="struct_snd_timer_tread_t.html">struct snd_timer_tread_t</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#global-functions">Global Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#macros">Macros</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="group_topology.html">Topology Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_ucm.html">Use Case Interface</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="page_topology.html">ALSA Topology Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_Usecase.html">ALSA Use Case Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_bug.html">Bug List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_conf.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_control.html">Control interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_deprecated.html">Deprecated List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_ctl_external_plugins.html">External Control Plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_hcontrol.html">High level control interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_confhooks.html">Hooks in configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_mixer.html">Mixer interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_pcm.html">PCM (digital audio) interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_pcm_plugins.html">PCM (digital audio) plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_pcm_external_plugins.html">PCM External Plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_rawmidi.html">RawMidi interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_confarg.html">Runtime arguments in configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_conffunc.html">Runtime functions in configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_seq.html">Sequencer interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_timer.html">Timer interface</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="example__test_latency.c.html">/test/latency.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_pcm.c.html">/test/pcm.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_pcm_min.c.html">/test/pcm_min.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_rawmidi.c.html">/test/rawmidi.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_timer.c.html">/test/timer.c</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ALSA Library Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Timer Interface</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="timer-interface">
+<span id="doxid-group-timer"></span><span id="index-0"></span><h1>Timer Interface</h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="overview">
+<h2>Overview</h2>
+<p>Timer Interface. <a class="reference internal" href="#details-group-timer"><span class="std std-ref">More…</span></a></p>
+<pre class="highlight doxyrest-overview-code-block literal-block"><span></span><span class="c1">// typedefs</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_timer_id</span> <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_timer_ginfo</span> <a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_timer_gparams</span> <a class="reference internal" href="#doxid-group-timer-1ga891a982092ef97b93001ae2c096b8bf9"><span class="std std-ref">snd_timer_gparams_t</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_timer_gstatus</span> <a class="reference internal" href="#doxid-group-timer-1gac14592347542015d4540e5c91ba2f677"><span class="std std-ref">snd_timer_gstatus_t</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_timer_info</span> <a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_timer_params</span> <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_timer_status</span> <a class="reference internal" href="#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_timer_query</span> <a class="reference internal" href="#doxid-group-timer-1ga279f189051eba2c5e072c30198deb81a"><span class="std std-ref">snd_timer_query_t</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_timer</span> <a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// enums</span>
+
+<span class="k">enum</span> <a class="reference internal" href="enum_snd_timer_class_t.html#doxid-group-timer-1gafcf09894847cdee6925ab6e405c358d9"><span class="std std-ref">snd_timer_class_t</span></a><span></span><span class="p">;</span>
+<span class="k">enum</span> <a class="reference internal" href="enum_snd_timer_event_t.html#doxid-group-timer-1ga396a3bb020be40c36c9a6de0554145b4"><span class="std std-ref">snd_timer_event_t</span></a><span></span><span class="p">;</span>
+<span class="k">enum</span> <a class="reference internal" href="enum_snd_timer_slave_class_t.html#doxid-group-timer-1gad834b328331c3a4a4fb42041e2e61298"><span class="std std-ref">snd_timer_slave_class_t</span></a><span></span><span class="p">;</span>
+<span class="k">enum</span> <a class="reference internal" href="enum_snd_timer_type_t.html#doxid-group-timer-1ga07cba0cdbcdc514edb078bcc0740a7cf"><span class="std std-ref">snd_timer_type_t</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// structs</span>
+
+<span class="k">struct</span> <a class="reference internal" href="struct_snd_timer_read_t.html#doxid-structsnd-timer-read-t"><span class="std std-ref">snd_timer_read_t</span></a><span></span><span class="p">;</span>
+<span class="k">struct</span> <a class="reference internal" href="struct_snd_timer_tread_t.html#doxid-structsnd-timer-tread-t"><span class="std std-ref">snd_timer_tread_t</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// global functions</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga54f6d3838ff4680fcda97952a60376ff"><span class="std std-ref">snd_timer_query_open</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga279f189051eba2c5e072c30198deb81a"><span class="std std-ref">snd_timer_query_t</span></a><span></span><span class="o">**</span> <span class="n">handle</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">mode</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga5d11f58dc15f5d12465f4e6aacae43cf"><span class="std std-ref">snd_timer_query_open_lconf</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga279f189051eba2c5e072c30198deb81a"><span class="std std-ref">snd_timer_query_t</span></a><span></span><span class="o">**</span> <span class="n">handle</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">mode</span><span class="p">,</span>
+    <a class="reference internal" href="group_Config.html#doxid-group-config-1ga1c20905af775ae77d04d1a5696f67985"><span class="std std-ref">snd_config_t</span></a><span></span><span class="o">*</span> <span class="n">lconf</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga13063464032aae91ab4e72dfdb57cb10"><span class="std std-ref">snd_timer_query_close</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga279f189051eba2c5e072c30198deb81a"><span class="std std-ref">snd_timer_query_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga5c10a9b8dc5f4442908fa3d15ab79169"><span class="std std-ref">snd_timer_query_next_device</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga279f189051eba2c5e072c30198deb81a"><span class="std std-ref">snd_timer_query_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">tid</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1gafcab2e2ce9b0ab69641ca10ba6a5bc17"><span class="std std-ref">snd_timer_query_info</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga279f189051eba2c5e072c30198deb81a"><span class="std std-ref">snd_timer_query_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">*</span> <span class="n">info</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga03945b4d2bd9512de9a3fd923b71551d"><span class="std std-ref">snd_timer_query_params</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga279f189051eba2c5e072c30198deb81a"><span class="std std-ref">snd_timer_query_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga891a982092ef97b93001ae2c096b8bf9"><span class="std std-ref">snd_timer_gparams_t</span></a><span></span><span class="o">*</span> <span class="n">params</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga4faf0668a3808f0b0f78f260af193645"><span class="std std-ref">snd_timer_query_status</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga279f189051eba2c5e072c30198deb81a"><span class="std std-ref">snd_timer_query_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-timer-1gac14592347542015d4540e5c91ba2f677"><span class="std std-ref">snd_timer_gstatus_t</span></a><span></span><span class="o">*</span> <span class="n">status</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga9fa22f49745d1e383f0d6e5d9e795e2e"><span class="std std-ref">snd_timer_open</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">**</span> <span class="n">handle</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">mode</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1gadd7dd0538f800b67fea5f096a73c2fee"><span class="std std-ref">snd_timer_open_lconf</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">**</span> <span class="n">handle</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">mode</span><span class="p">,</span>
+    <a class="reference internal" href="group_Config.html#doxid-group-config-1ga1c20905af775ae77d04d1a5696f67985"><span class="std std-ref">snd_config_t</span></a><span></span><span class="o">*</span> <span class="n">lconf</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga155e0b5c831a3140f49c04932da9404f"><span class="std std-ref">snd_timer_close</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga076a6bbae3bfdb956b0a1a6ea9daa0a2"><span class="std std-ref">snd_async_add_timer_handler</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Global.html#doxid-group-global-1ga8cd9a1d441e9219ca5f2ff04094c7c6d"><span class="std std-ref">snd_async_handler_t</span></a><span></span><span class="o">**</span> <span class="n">handler</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">*</span> <span class="n">timer</span><span class="p">,</span>
+    <a class="reference internal" href="group_Global.html#doxid-group-global-1gaf8937eadd968df14b64e54f49c29821c"><span class="std std-ref">snd_async_callback_t</span></a><span></span> <span class="n">callback</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">private_data</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-timer-1gaa497b2873abd234df7e932ecdefad5e0"><span class="std std-ref">snd_async_handler_get_timer</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_Global.html#doxid-group-global-1ga8cd9a1d441e9219ca5f2ff04094c7c6d"><span class="std std-ref">snd_async_handler_t</span></a><span></span><span class="o">*</span> <span class="n">handler</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1gaf035c37343afed7f13c60e950e461cdf"><span class="std std-ref">snd_timer_poll_descriptors_count</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga89ec000a41fa7dd1269e332324663f61"><span class="std std-ref">snd_timer_poll_descriptors</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <span class="k">struct</span> <span class="n">pollfd</span><span class="o">*</span> <span class="n">pfds</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">space</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga395e14d49bbb41794fb1bb6114fdf93f"><span class="std std-ref">snd_timer_poll_descriptors_revents</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">*</span> <span class="n">timer</span><span class="p">,</span>
+    <span class="k">struct</span> <span class="n">pollfd</span><span class="o">*</span> <span class="n">pfds</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">nfds</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">short</span><span class="o">*</span> <span class="n">revents</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga608cb266bf1cfd8f3796e6e55a2d5fe8"><span class="std std-ref">snd_timer_info</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a><span></span><span class="o">*</span> <span class="n">timer</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga3fd358a410688c3aba3e2d69acf027a8"><span class="std std-ref">snd_timer_params</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1gaa78c7089909252ee0ca69f7552fa2804"><span class="std std-ref">snd_timer_status</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a><span></span><span class="o">*</span> <span class="n">status</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1gafc990117a12e19a729ff10ef217fe2f9"><span class="std std-ref">snd_timer_start</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga6f8147c0679c820a77f98b1dd5b664a5"><span class="std std-ref">snd_timer_stop</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1gaefeb6d7a87d49666470a62cea1440ed3"><span class="std std-ref">snd_timer_continue</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">);</span>
+
+<span class="kt">ssize_t</span>
+<a class="reference internal" href="#doxid-group-timer-1ga724ada94d0bc3564ad77973c0a084682"><span class="std std-ref">snd_timer_read</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">size</span>
+<span class="p">);</span>
+
+<span class="kt">size_t</span>
+<a class="reference internal" href="#doxid-group-timer-1gacc0a4c452e6dc6a9401da8b0f22cd14f"><span class="std std-ref">snd_timer_id_sizeof</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1gab60829b0a47dfc5ef88ce74e586ebe23"><span class="std std-ref">snd_timer_id_malloc</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">**</span> <span class="n">ptr</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-timer-1ga4c938bd81f93c364aff08de5e96a3cf6"><span class="std std-ref">snd_timer_id_free</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-timer-1gac6d57323807a3ea3f3f9fe1870cd4755"><span class="std std-ref">snd_timer_id_copy</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">dst</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">src</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-timer-1ga93bce2afe5e3f40f9f7adc17339273c4"><span class="std std-ref">snd_timer_id_set_class</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">id</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">dev_class</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga42ea98dbaf720519453c0110bd06fb8b"><span class="std std-ref">snd_timer_id_get_class</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">id</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-timer-1ga2cafa2722ebd48051328c8684c9c544c"><span class="std std-ref">snd_timer_id_set_sclass</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">id</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">dev_sclass</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga82e2754532fa2b5b28733820eab4d600"><span class="std std-ref">snd_timer_id_get_sclass</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">id</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-timer-1ga18406bd50ccd2818c7aa6fde6274a303"><span class="std std-ref">snd_timer_id_set_card</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">id</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">card</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga305324f73fc12e7e42891598613a2d29"><span class="std std-ref">snd_timer_id_get_card</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">id</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-timer-1ga3c296e2bf5e2b0e1a71fe6612993e68e"><span class="std std-ref">snd_timer_id_set_device</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">id</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">device</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1gaa864bb9270989329f8acc86c5aec2093"><span class="std std-ref">snd_timer_id_get_device</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">id</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-timer-1ga28a3d45e09fc45f97fd37d7338138544"><span class="std std-ref">snd_timer_id_set_subdevice</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">id</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">subdevice</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga7f52f12140cd97f267143cbcd0832d02"><span class="std std-ref">snd_timer_id_get_subdevice</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">id</span><span class="p">);</span>
+
+<span class="kt">size_t</span>
+<a class="reference internal" href="#doxid-group-timer-1ga5433f9a5020b9db09939b51bfdecd449"><span class="std std-ref">snd_timer_ginfo_sizeof</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga7c0c9386149431c24b8260678afe57ea"><span class="std std-ref">snd_timer_ginfo_malloc</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">**</span> <span class="n">ptr</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-timer-1gaf223a09c3d076947ed3c09cb4d6fec79"><span class="std std-ref">snd_timer_ginfo_free</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-timer-1gacfde902fd8078764afa3c7cadfc5f53d"><span class="std std-ref">snd_timer_ginfo_copy</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">*</span> <span class="n">dst</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">*</span> <span class="n">src</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1gaebdec979e0c5a70100620cb7bf1c22d8"><span class="std std-ref">snd_timer_ginfo_set_tid</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">tid</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-timer-1ga66c1351ff92884298849d650f98b0a94"><span class="std std-ref">snd_timer_ginfo_get_tid</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="kt">unsigned</span> <span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga3f4cf1a7e485c18aa16c9de159490f36"><span class="std std-ref">snd_timer_ginfo_get_flags</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga086c81db497d7818afabbaadb888731b"><span class="std std-ref">snd_timer_ginfo_get_card</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-timer-1ga7c95448884b61a0f8a04c2cd134d5a41"><span class="std std-ref">snd_timer_ginfo_get_id</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-timer-1gadcd41537e9db1c08d816a9f2fe1bea52"><span class="std std-ref">snd_timer_ginfo_get_name</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="kt">unsigned</span> <span class="kt">long</span>
+<a class="reference internal" href="#doxid-group-timer-1ga452c539c7c8c949bb446879e4d9151c2"><span class="std std-ref">snd_timer_ginfo_get_resolution</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="kt">unsigned</span> <span class="kt">long</span>
+<a class="reference internal" href="#doxid-group-timer-1ga33c9458b0a47e6448af0acc97d8860f7"><span class="std std-ref">snd_timer_ginfo_get_resolution_min</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="kt">unsigned</span> <span class="kt">long</span>
+<a class="reference internal" href="#doxid-group-timer-1ga6fbb78b3361209c15a0ece5bc2b939c0"><span class="std std-ref">snd_timer_ginfo_get_resolution_max</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="kt">unsigned</span> <span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga497147a128b64374829408beb773316d"><span class="std std-ref">snd_timer_ginfo_get_clients</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="kt">size_t</span>
+<a class="reference internal" href="#doxid-group-timer-1ga3845cca41afd0f5ee40132d5b10c1e38"><span class="std std-ref">snd_timer_info_sizeof</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga51e754aec623f96bcfeda9511f51b5b7"><span class="std std-ref">snd_timer_info_malloc</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a><span></span><span class="o">**</span> <span class="n">ptr</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-timer-1ga10da72bb7ae7a6ed91e7857b61add016"><span class="std std-ref">snd_timer_info_free</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-timer-1ga92e91d9222794a1c5e82b7672faa214b"><span class="std std-ref">snd_timer_info_copy</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a><span></span><span class="o">*</span> <span class="n">dst</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a><span></span><span class="o">*</span> <span class="n">src</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1gaccf0a207b91965e7200355a0daaac6ce"><span class="std std-ref">snd_timer_info_is_slave</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1gaddb757aa65e9532ced42ff7e9146ff34"><span class="std std-ref">snd_timer_info_get_card</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-timer-1gaf46477b4ca62a7c2bd87926a45ecbd50"><span class="std std-ref">snd_timer_info_get_id</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-timer-1ga9360acea37a3351ab9d2c17b7a264395"><span class="std std-ref">snd_timer_info_get_name</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">);</span>
+
+<span class="kt">long</span>
+<a class="reference internal" href="#doxid-group-timer-1ga3b33c3f0af5c93461e9493b0d4a3b81c"><span class="std std-ref">snd_timer_info_get_resolution</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">);</span>
+
+<span class="kt">size_t</span>
+<a class="reference internal" href="#doxid-group-timer-1ga8a76df112a4046b72bdd4903215eca09"><span class="std std-ref">snd_timer_params_sizeof</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga6bdf00a7a9a2bcd46848c3862e31d7e7"><span class="std std-ref">snd_timer_params_malloc</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">**</span> <span class="n">ptr</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-timer-1ga3cba3ec4b6146cc7855d937b7aaf7953"><span class="std std-ref">snd_timer_params_free</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-timer-1ga6beaa69176cf2bb404983da4d133fda5"><span class="std std-ref">snd_timer_params_copy</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">dst</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">src</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1gac39b36fdcc72cbb05adb909673df04f0"><span class="std std-ref">snd_timer_params_set_auto_start</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">auto_start</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga0c7537d0729793d242b9263185f24e06"><span class="std std-ref">snd_timer_params_get_auto_start</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga497d23da21ec46d58ef3d6c01942d7c1"><span class="std std-ref">snd_timer_params_set_exclusive</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">exclusive</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga66fffdd5b538259b54ebe9570581d52a"><span class="std std-ref">snd_timer_params_get_exclusive</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1gaede871d499497de1199bdf1e8f9c9872"><span class="std std-ref">snd_timer_params_set_early_event</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">early_event</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga6e45bbcef976cfac74336f337a0460cd"><span class="std std-ref">snd_timer_params_get_early_event</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-timer-1gaa7101edb9ec33fdbbb94e04256388caa"><span class="std std-ref">snd_timer_params_set_ticks</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">ticks</span>
+<span class="p">);</span>
+
+<span class="kt">long</span>
+<a class="reference internal" href="#doxid-group-timer-1ga298418a42230f305c3c4efdf14da3403"><span class="std std-ref">snd_timer_params_get_ticks</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-timer-1ga3c55b27f682897a1b421b1be46a36289"><span class="std std-ref">snd_timer_params_set_queue_size</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">queue_size</span>
+<span class="p">);</span>
+
+<span class="kt">long</span>
+<a class="reference internal" href="#doxid-group-timer-1gaa4462f1d878e5f1f10c40549692effcb"><span class="std std-ref">snd_timer_params_get_queue_size</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-timer-1gab6820b66547c333402ea8e66fd600af2"><span class="std std-ref">snd_timer_params_set_filter</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">filter</span>
+<span class="p">);</span>
+
+<span class="kt">unsigned</span> <span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga94c66976bd4b993c766e81d2452597f1"><span class="std std-ref">snd_timer_params_get_filter</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">);</span>
+
+<span class="kt">size_t</span>
+<a class="reference internal" href="#doxid-group-timer-1gaf0ceabb82125265a8bfe6ea85b889063"><span class="std std-ref">snd_timer_status_sizeof</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-timer-1ga6fa0de36e4494bd5ece4965ffe832db1"><span class="std std-ref">snd_timer_status_malloc</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a><span></span><span class="o">**</span> <span class="n">ptr</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-timer-1ga60f6cf340f3f4881e1bff8ed11f1e634"><span class="std std-ref">snd_timer_status_free</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-timer-1gac14cf4718333897ecb2b823b738aaff4"><span class="std std-ref">snd_timer_status_copy</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a><span></span><span class="o">*</span> <span class="n">dst</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a><span></span><span class="o">*</span> <span class="n">src</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_Global.html#doxid-group-global-1ga3a3f5b65c40f498cdbc26944bd9855cf"><span class="std std-ref">snd_htimestamp_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-timer-1ga0c303da4c37285d423f428710409ee08"><span class="std std-ref">snd_timer_status_get_timestamp</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a><span></span><span class="o">*</span> <span class="n">status</span><span class="p">);</span>
+
+<span class="kt">long</span>
+<a class="reference internal" href="#doxid-group-timer-1gaaab668cc548b6c4a24236504d63da0a0"><span class="std std-ref">snd_timer_status_get_resolution</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a><span></span><span class="o">*</span> <span class="n">status</span><span class="p">);</span>
+
+<span class="kt">long</span>
+<a class="reference internal" href="#doxid-group-timer-1gaa7ad78e8af9855e71d4951147869693b"><span class="std std-ref">snd_timer_status_get_lost</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a><span></span><span class="o">*</span> <span class="n">status</span><span class="p">);</span>
+
+<span class="kt">long</span>
+<a class="reference internal" href="#doxid-group-timer-1gaf3a83c122c2e19059297599d3486c04d"><span class="std std-ref">snd_timer_status_get_overrun</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a><span></span><span class="o">*</span> <span class="n">status</span><span class="p">);</span>
+
+<span class="kt">long</span>
+<a class="reference internal" href="#doxid-group-timer-1ga6edb10e32b6b485ecccef73d862ca648"><span class="std std-ref">snd_timer_status_get_queue</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a><span></span><span class="o">*</span> <span class="n">status</span><span class="p">);</span>
+
+<span class="kt">long</span>
+<a class="reference internal" href="#doxid-group-timer-1gad0cf85bf970338f0924e0f642057c9a6"><span class="std std-ref">snd_timer_info_get_ticks</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">);</span>
+
+<span class="c1">// macros</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-timer-1gae123de10661be511c00d2d7b6a428745"><span class="std std-ref">SND_TIMER_DLSYM_VERSION</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-timer-1ga15f5febc65924c9d3b12c7440c13bdd3"><span class="std std-ref">SND_TIMER_GLOBAL_HPET</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-timer-1gacf694819483359539a0017b09e9de9ab"><span class="std std-ref">SND_TIMER_GLOBAL_HRTIMER</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-timer-1ga77ddf4d042846b39fc4ed4966e04bee2"><span class="std std-ref">SND_TIMER_GLOBAL_RTC</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-timer-1ga1cda350fb4de9a2f7a137c5649e3793c"><span class="std std-ref">SND_TIMER_GLOBAL_SYSTEM</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-timer-1gac2c50bf6045560bc13aab81f25b2b740"><span class="std std-ref">SND_TIMER_OPEN_NONBLOCK</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-timer-1ga8d8b1f21a9c9db84a6ffc02e8f2c745b"><span class="std std-ref">SND_TIMER_OPEN_TREAD</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-timer-1ga7439ac1cc9e0958a21f313ca848af77c"><span class="std std-ref">SND_TIMER_QUERY_DLSYM_VERSION</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-timer-1ga2b8086e599bd8d1bec750df97f572fcf"><span class="std std-ref">snd_timer_ginfo_alloca</span></a><span></span><span class="p">(</span><span class="n">ptr</span><span class="p">)</span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-timer-1gaef1895685cb2f65d1a40cc46fa5a7eb2"><span class="std std-ref">snd_timer_id_alloca</span></a><span></span><span class="p">(</span><span class="n">ptr</span><span class="p">)</span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-timer-1gafad2100b7f0478b8c3c59f0f4aced23e"><span class="std std-ref">snd_timer_info_alloca</span></a><span></span><span class="p">(</span><span class="n">ptr</span><span class="p">)</span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-timer-1ga2e76b7b6f7fe340b4a06935f080fbbbd"><span class="std std-ref">snd_timer_params_alloca</span></a><span></span><span class="p">(</span><span class="n">ptr</span><span class="p">)</span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-timer-1ga6597b8f73b30a3f2bf2aa9f3590b92f2"><span class="std std-ref">snd_timer_status_alloca</span></a><span></span><span class="p">(</span><span class="n">ptr</span><span class="p">)</span></pre>
+</section>
+<section id="detailed-documentation">
+<span id="details-group-timer"></span><h2>Detailed Documentation</h2>
+<p>Timer Interface. See <a class="reference internal" href="page_timer.html#doxid-timer"><span class="std std-ref">Timer interface</span></a> page for more details.</p>
+<section id="typedefs">
+<h3>Typedefs</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span id="index-1"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_timer_id</span> <span class="n">snd_timer_id_t</span></pre>
+<p>timer identification structure</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span id="index-2"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_timer_ginfo</span> <span class="n">snd_timer_ginfo_t</span></pre>
+<p>timer global info structure</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga891a982092ef97b93001ae2c096b8bf9"><span id="index-3"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_timer_gparams</span> <span class="n">snd_timer_gparams_t</span></pre>
+<p>timer global params structure</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gac14592347542015d4540e5c91ba2f677"><span id="index-4"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_timer_gstatus</span> <span class="n">snd_timer_gstatus_t</span></pre>
+<p>timer global status structure</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span id="index-5"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_timer_info</span> <span class="n">snd_timer_info_t</span></pre>
+<p>timer info structure</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span id="index-6"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_timer_params</span> <span class="n">snd_timer_params_t</span></pre>
+<p>timer params structure</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span id="index-7"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_timer_status</span> <span class="n">snd_timer_status_t</span></pre>
+<p>timer status structure</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga279f189051eba2c5e072c30198deb81a"><span id="index-8"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_timer_query</span> <span class="n">snd_timer_query_t</span></pre>
+<p>timer query handle</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span id="index-9"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_timer</span> <span class="n">snd_timer_t</span></pre>
+<p>timer handle</p>
+</section>
+<section id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga54f6d3838ff4680fcda97952a60376ff"><span id="index-10"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_query_open</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga279f189051eba2c5e072c30198deb81a"><span class="std std-ref">snd_timer_query_t</span></a><span></span><span class="o">**</span> <span class="n">handle</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">mode</span>
+<span class="p">)</span></pre>
+<p>Opens a new connection to the timer query interface.</p>
+<p>Opens a new connection to the RawMidi interface specified with an ASCII identifier and mode.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>timer</p></td>
+<td><p>Returned handle (NULL if not wanted)</p></td>
+</tr>
+<tr class="row-even"><td><p>name</p></td>
+<td><p>ASCII identifier of the RawMidi handle</p></td>
+</tr>
+<tr class="row-odd"><td><p>mode</p></td>
+<td><p>Open mode</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga5d11f58dc15f5d12465f4e6aacae43cf"><span id="index-11"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_query_open_lconf</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga279f189051eba2c5e072c30198deb81a"><span class="std std-ref">snd_timer_query_t</span></a><span></span><span class="o">**</span> <span class="n">handle</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">mode</span><span class="p">,</span>
+    <a class="reference internal" href="group_Config.html#doxid-group-config-1ga1c20905af775ae77d04d1a5696f67985"><span class="std std-ref">snd_config_t</span></a><span></span><span class="o">*</span> <span class="n">lconf</span>
+<span class="p">)</span></pre>
+<p>Opens a new connection to the timer query interface using local configuration.</p>
+<p>Opens a new connection to the RawMidi interface specified with an ASCII identifier and mode.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>timer</p></td>
+<td><p>Returned handle (NULL if not wanted)</p></td>
+</tr>
+<tr class="row-even"><td><p>name</p></td>
+<td><p>ASCII identifier of the RawMidi handle</p></td>
+</tr>
+<tr class="row-odd"><td><p>mode</p></td>
+<td><p>Open mode</p></td>
+</tr>
+<tr class="row-even"><td><p>lconf</p></td>
+<td><p>Local configuration</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga13063464032aae91ab4e72dfdb57cb10"><span id="index-12"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_query_close</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga279f189051eba2c5e072c30198deb81a"><span class="std std-ref">snd_timer_query_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">)</span></pre>
+<p>close timer query handle</p>
+<p>Closes the specified timer handle and frees all associated resources.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>timer</p></td>
+<td><p>timer handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga5c10a9b8dc5f4442908fa3d15ab79169"><span id="index-13"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_query_next_device</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga279f189051eba2c5e072c30198deb81a"><span class="std std-ref">snd_timer_query_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">tid</span>
+<span class="p">)</span></pre>
+<p>obtain the next timer identification</p>
+<p>if tid-&gt;dev_class is -1, then the first device is returned if result tid-&gt;dev_class is -1, no more devices are left</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>timer</p></td>
+<td><p>timer handle</p></td>
+</tr>
+<tr class="row-even"><td><p>tid</p></td>
+<td><p>timer identification</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gafcab2e2ce9b0ab69641ca10ba6a5bc17"><span id="index-14"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_query_info</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga279f189051eba2c5e072c30198deb81a"><span class="std std-ref">snd_timer_query_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">*</span> <span class="n">info</span>
+<span class="p">)</span></pre>
+<p>obtain the timer global information</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>timer</p></td>
+<td><p>timer handle</p></td>
+</tr>
+<tr class="row-even"><td><p>info</p></td>
+<td><p>timer information</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga03945b4d2bd9512de9a3fd923b71551d"><span id="index-15"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_query_params</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga279f189051eba2c5e072c30198deb81a"><span class="std std-ref">snd_timer_query_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga891a982092ef97b93001ae2c096b8bf9"><span class="std std-ref">snd_timer_gparams_t</span></a><span></span><span class="o">*</span> <span class="n">params</span>
+<span class="p">)</span></pre>
+<p>set the timer global parameters</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>timer</p></td>
+<td><p>timer handle</p></td>
+</tr>
+<tr class="row-even"><td><p>params</p></td>
+<td><p>timer parameters</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga4faf0668a3808f0b0f78f260af193645"><span id="index-16"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_query_status</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga279f189051eba2c5e072c30198deb81a"><span class="std std-ref">snd_timer_query_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-timer-1gac14592347542015d4540e5c91ba2f677"><span class="std std-ref">snd_timer_gstatus_t</span></a><span></span><span class="o">*</span> <span class="n">status</span>
+<span class="p">)</span></pre>
+<p>get the timer global status</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>timer</p></td>
+<td><p>timer handle</p></td>
+</tr>
+<tr class="row-even"><td><p>status</p></td>
+<td><p>timer status</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga9fa22f49745d1e383f0d6e5d9e795e2e"><span id="index-17"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_open</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">**</span> <span class="n">handle</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">mode</span>
+<span class="p">)</span></pre>
+<p>Opens a new connection to the timer interface.</p>
+<p>Opens a new connection to the timer interface specified with an ASCII identifier and mode.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>timer</p></td>
+<td><p>Returned handle (NULL if not wanted)</p></td>
+</tr>
+<tr class="row-even"><td><p>name</p></td>
+<td><p>ASCII identifier of the timer handle</p></td>
+</tr>
+<tr class="row-odd"><td><p>mode</p></td>
+<td><p>Open mode</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gadd7dd0538f800b67fea5f096a73c2fee"><span id="index-18"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_open_lconf</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">**</span> <span class="n">handle</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">mode</span><span class="p">,</span>
+    <a class="reference internal" href="group_Config.html#doxid-group-config-1ga1c20905af775ae77d04d1a5696f67985"><span class="std std-ref">snd_config_t</span></a><span></span><span class="o">*</span> <span class="n">lconf</span>
+<span class="p">)</span></pre>
+<p>Opens a new connection to the timer interface using local configuration.</p>
+<p>Opens a new connection to the timer interface specified with an ASCII identifier and mode.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>timer</p></td>
+<td><p>Returned handle (NULL if not wanted)</p></td>
+</tr>
+<tr class="row-even"><td><p>name</p></td>
+<td><p>ASCII identifier of the timer handle</p></td>
+</tr>
+<tr class="row-odd"><td><p>mode</p></td>
+<td><p>Open mode</p></td>
+</tr>
+<tr class="row-even"><td><p>lconf</p></td>
+<td><p>Local configuration</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga155e0b5c831a3140f49c04932da9404f"><span id="index-19"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_close</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">)</span></pre>
+<p>close timer handle</p>
+<p>Closes the specified timer handle and frees all associated resources.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>timer</p></td>
+<td><p>timer handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga076a6bbae3bfdb956b0a1a6ea9daa0a2"><span id="index-20"></span><span></span><span class="kt">int</span>
+<span class="n">snd_async_add_timer_handler</span><span class="p">(</span>
+    <a class="reference internal" href="group_Global.html#doxid-group-global-1ga8cd9a1d441e9219ca5f2ff04094c7c6d"><span class="std std-ref">snd_async_handler_t</span></a><span></span><span class="o">**</span> <span class="n">handler</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">*</span> <span class="n">timer</span><span class="p">,</span>
+    <a class="reference internal" href="group_Global.html#doxid-group-global-1gaf8937eadd968df14b64e54f49c29821c"><span class="std std-ref">snd_async_callback_t</span></a><span></span> <span class="n">callback</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">private_data</span>
+<span class="p">)</span></pre>
+<p>Add an async handler for a timer.</p>
+<p>The asynchronous callback is called when new timer event occurs.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>handler</p></td>
+<td><p>Returned handler handle</p></td>
+</tr>
+<tr class="row-even"><td><p>timer</p></td>
+<td><p>timer handle</p></td>
+</tr>
+<tr class="row-odd"><td><p>callback</p></td>
+<td><p>Callback function</p></td>
+</tr>
+<tr class="row-even"><td><p>private_data</p></td>
+<td><p>Callback private data</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 otherwise a negative error code on failure</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gaa497b2873abd234df7e932ecdefad5e0"><span id="index-21"></span><a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">*</span>
+<span class="n">snd_async_handler_get_timer</span><span class="p">(</span><a class="reference internal" href="group_Global.html#doxid-group-global-1ga8cd9a1d441e9219ca5f2ff04094c7c6d"><span class="std std-ref">snd_async_handler_t</span></a><span></span><span class="o">*</span> <span class="n">handler</span><span class="p">)</span></pre>
+<p>Return timer handle related to an async handler.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>handler</p></td>
+<td><p>Async handler handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>timer handle</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gaf035c37343afed7f13c60e950e461cdf"><span id="index-22"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_poll_descriptors_count</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">)</span></pre>
+<p>get count of poll descriptors for timer handle</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>timer</p></td>
+<td><p>timer handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>count of poll descriptors</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga89ec000a41fa7dd1269e332324663f61"><span id="index-23"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_poll_descriptors</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <span class="k">struct</span> <span class="n">pollfd</span><span class="o">*</span> <span class="n">pfds</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">space</span>
+<span class="p">)</span></pre>
+<p>get poll descriptors</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>timer</p></td>
+<td><p>timer handle</p></td>
+</tr>
+<tr class="row-even"><td><p>pfds</p></td>
+<td><p>array of poll descriptors</p></td>
+</tr>
+<tr class="row-odd"><td><p>space</p></td>
+<td><p>space in the poll descriptor array</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>count of filled descriptors</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga395e14d49bbb41794fb1bb6114fdf93f"><span id="index-24"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_poll_descriptors_revents</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">*</span> <span class="n">timer</span><span class="p">,</span>
+    <span class="k">struct</span> <span class="n">pollfd</span><span class="o">*</span> <span class="n">pfds</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">nfds</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">short</span><span class="o">*</span> <span class="n">revents</span>
+<span class="p">)</span></pre>
+<p>get returned events from poll descriptors</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>timer</p></td>
+<td><p>timer handle</p></td>
+</tr>
+<tr class="row-even"><td><p>pfds</p></td>
+<td><p>array of poll descriptors</p></td>
+</tr>
+<tr class="row-odd"><td><p>nfds</p></td>
+<td><p>count of poll descriptors</p></td>
+</tr>
+<tr class="row-even"><td><p>revents</p></td>
+<td><p>returned events</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>zero if success, otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga608cb266bf1cfd8f3796e6e55a2d5fe8"><span id="index-25"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_info</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a><span></span><span class="o">*</span> <span class="n">timer</span>
+<span class="p">)</span></pre>
+<p>get information about timer handle</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>timer</p></td>
+<td><p>timer handle</p></td>
+</tr>
+<tr class="row-even"><td><p>info</p></td>
+<td><p>pointer to a snd_timer_info_t structure to be filled</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga3fd358a410688c3aba3e2d69acf027a8"><span id="index-26"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_params</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span>
+<span class="p">)</span></pre>
+<p>set parameters for timer handle</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>timer</p></td>
+<td><p>timer handle</p></td>
+</tr>
+<tr class="row-even"><td><p>params</p></td>
+<td><p>pointer to a <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gaa78c7089909252ee0ca69f7552fa2804"><span id="index-27"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_status</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a><span></span><span class="o">*</span> <span class="n">status</span>
+<span class="p">)</span></pre>
+<p>get status from timer handle</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>timer</p></td>
+<td><p>timer handle</p></td>
+</tr>
+<tr class="row-even"><td><p>status</p></td>
+<td><p>pointer to a <a class="reference internal" href="#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a> structure to be filled</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gafc990117a12e19a729ff10ef217fe2f9"><span id="index-28"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_start</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">)</span></pre>
+<p>start the timer</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>timer</p></td>
+<td><p>timer handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga6f8147c0679c820a77f98b1dd5b664a5"><span id="index-29"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_stop</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">)</span></pre>
+<p>stop the timer</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>timer</p></td>
+<td><p>timer handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gaefeb6d7a87d49666470a62cea1440ed3"><span id="index-30"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_continue</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">)</span></pre>
+<p>continue the timer</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>timer</p></td>
+<td><p>timer handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga724ada94d0bc3564ad77973c0a084682"><span id="index-31"></span><span></span><span class="kt">ssize_t</span>
+<span class="n">snd_timer_read</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">size</span>
+<span class="p">)</span></pre>
+<p>read bytes using timer handle</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>timer</p></td>
+<td><p>timer handle</p></td>
+</tr>
+<tr class="row-even"><td><p>buffer</p></td>
+<td><p>buffer to store the input bytes</p></td>
+</tr>
+<tr class="row-odd"><td><p>size</p></td>
+<td><p>input buffer size in bytes</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gacc0a4c452e6dc6a9401da8b0f22cd14f"><span id="index-32"></span><span></span><span class="kt">size_t</span>
+<span class="n">snd_timer_id_sizeof</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></pre>
+<p>get size of the snd_timer_id_t structure in bytes</p>
+<p class="rubric">Returns:</p>
+<p>size of the snd_timer_id_t structure in bytes</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gab60829b0a47dfc5ef88ce74e586ebe23"><span id="index-33"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_id_malloc</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">**</span> <span class="n">ptr</span><span class="p">)</span></pre>
+<p>allocate a new snd_timer_id_t structure</p>
+<p>Allocates a new snd_timer_id_t structure using the standard malloc C library function.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>returned pointer</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code if fails</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga4c938bd81f93c364aff08de5e96a3cf6"><span id="index-34"></span><span></span><span class="kt">void</span>
+<span class="n">snd_timer_id_free</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>frees the snd_timer_id_t structure</p>
+<p>Frees the given snd_timer_id_t structure using the standard free C library function.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>pointer to the snd_timer_id_t structure to free</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gac6d57323807a3ea3f3f9fe1870cd4755"><span id="index-35"></span><span></span><span class="kt">void</span>
+<span class="n">snd_timer_id_copy</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">dst</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">src</span>
+<span class="p">)</span></pre>
+<p>copy one snd_timer_id_t structure to another</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>dst</p></td>
+<td><p>destination snd_timer_id_t structure</p></td>
+</tr>
+<tr class="row-even"><td><p>src</p></td>
+<td><p>source snd_timer_id_t structure</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga93bce2afe5e3f40f9f7adc17339273c4"><span id="index-36"></span><span></span><span class="kt">void</span>
+<span class="n">snd_timer_id_set_class</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">id</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">dev_class</span>
+<span class="p">)</span></pre>
+<p>set timer class</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>tid</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a> structure</p></td>
+</tr>
+<tr class="row-even"><td><p>dev_class</p></td>
+<td><p>class of timer device</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga42ea98dbaf720519453c0110bd06fb8b"><span id="index-37"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_id_get_class</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">id</span><span class="p">)</span></pre>
+<p>get timer class</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>tid</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>timer class</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga2cafa2722ebd48051328c8684c9c544c"><span id="index-38"></span><span></span><span class="kt">void</span>
+<span class="n">snd_timer_id_set_sclass</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">id</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">dev_sclass</span>
+<span class="p">)</span></pre>
+<p>set timer sub-class</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>tid</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a> structure</p></td>
+</tr>
+<tr class="row-even"><td><p>dev_sclass</p></td>
+<td><p>sub-class of timer device</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga82e2754532fa2b5b28733820eab4d600"><span id="index-39"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_id_get_sclass</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">id</span><span class="p">)</span></pre>
+<p>get timer sub-class</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>tid</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>timer sub-class</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga18406bd50ccd2818c7aa6fde6274a303"><span id="index-40"></span><span></span><span class="kt">void</span>
+<span class="n">snd_timer_id_set_card</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">id</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">card</span>
+<span class="p">)</span></pre>
+<p>set timer card</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>tid</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a> structure</p></td>
+</tr>
+<tr class="row-even"><td><p>card</p></td>
+<td><p>card number</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga305324f73fc12e7e42891598613a2d29"><span id="index-41"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_id_get_card</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">id</span><span class="p">)</span></pre>
+<p>get timer card</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>tid</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>timer card number</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga3c296e2bf5e2b0e1a71fe6612993e68e"><span id="index-42"></span><span></span><span class="kt">void</span>
+<span class="n">snd_timer_id_set_device</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">id</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">device</span>
+<span class="p">)</span></pre>
+<p>set timer device</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>tid</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a> structure</p></td>
+</tr>
+<tr class="row-even"><td><p>device</p></td>
+<td><p>device number</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gaa864bb9270989329f8acc86c5aec2093"><span id="index-43"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_id_get_device</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">id</span><span class="p">)</span></pre>
+<p>get timer device</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>tid</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>timer device number</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga28a3d45e09fc45f97fd37d7338138544"><span id="index-44"></span><span></span><span class="kt">void</span>
+<span class="n">snd_timer_id_set_subdevice</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">id</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">subdevice</span>
+<span class="p">)</span></pre>
+<p>set timer subdevice</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>tid</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a> structure</p></td>
+</tr>
+<tr class="row-even"><td><p>subdevice</p></td>
+<td><p>subdevice number</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga7f52f12140cd97f267143cbcd0832d02"><span id="index-45"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_id_get_subdevice</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">id</span><span class="p">)</span></pre>
+<p>get timer subdevice</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>tid</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>timer subdevice number</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga5433f9a5020b9db09939b51bfdecd449"><span id="index-46"></span><span></span><span class="kt">size_t</span>
+<span class="n">snd_timer_ginfo_sizeof</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></pre>
+<p>get size of the snd_timer_ginfo_t structure in bytes</p>
+<p class="rubric">Returns:</p>
+<p>size of the snd_timer_ginfo_t structure in bytes</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga7c0c9386149431c24b8260678afe57ea"><span id="index-47"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_ginfo_malloc</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">**</span> <span class="n">ptr</span><span class="p">)</span></pre>
+<p>allocate a new snd_timer_ginfo_t structure</p>
+<p>Allocates a new snd_timer_info_t structure using the standard malloc C library function.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>returned pointer</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code if fails</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gaf223a09c3d076947ed3c09cb4d6fec79"><span id="index-48"></span><span></span><span class="kt">void</span>
+<span class="n">snd_timer_ginfo_free</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>frees the snd_timer_ginfo_t structure</p>
+<p>Frees the given snd_timer_info_t structure using the standard free C library function.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>pointer to the snd_timer_ginfo_t structure to free</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gacfde902fd8078764afa3c7cadfc5f53d"><span id="index-49"></span><span></span><span class="kt">void</span>
+<span class="n">snd_timer_ginfo_copy</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">*</span> <span class="n">dst</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">*</span> <span class="n">src</span>
+<span class="p">)</span></pre>
+<p>copy one snd_timer_info_t structure to another</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>dst</p></td>
+<td><p>destination snd_timer_info_t structure</p></td>
+</tr>
+<tr class="row-even"><td><p>src</p></td>
+<td><p>source snd_timer_info_t structure</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gaebdec979e0c5a70100620cb7bf1c22d8"><span id="index-50"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_ginfo_set_tid</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span> <span class="n">tid</span>
+<span class="p">)</span></pre>
+<p>set timer identification</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>obj</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a> structure</p></td>
+</tr>
+<tr class="row-even"><td><p>tid</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>zero on success otherwise a negative error number</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga66c1351ff92884298849d650f98b0a94"><span id="index-51"></span><a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span><span class="o">*</span>
+<span class="n">snd_timer_ginfo_get_tid</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>get timer identification</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>obj</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>pointer to snd_timer_id_t</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga3f4cf1a7e485c18aa16c9de159490f36"><span id="index-52"></span><span></span><span class="kt">unsigned</span> <span class="kt">int</span>
+<span class="n">snd_timer_ginfo_get_flags</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>get timer flags</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>obj</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>timer flags</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga086c81db497d7818afabbaadb888731b"><span id="index-53"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_ginfo_get_card</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>get associated card with timer</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>obj</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>associated card</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga7c95448884b61a0f8a04c2cd134d5a41"><span id="index-54"></span><span></span><span class="kt">char</span><span class="o">*</span>
+<span class="n">snd_timer_ginfo_get_id</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>get timer identification</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>obj</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>timer identification</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gadcd41537e9db1c08d816a9f2fe1bea52"><span id="index-55"></span><span></span><span class="kt">char</span><span class="o">*</span>
+<span class="n">snd_timer_ginfo_get_name</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>get timer name</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>obj</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>timer name</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga452c539c7c8c949bb446879e4d9151c2"><span id="index-56"></span><span></span><span class="kt">unsigned</span> <span class="kt">long</span>
+<span class="n">snd_timer_ginfo_get_resolution</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>get timer resolution in ns</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>obj</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>timer resolution in ns</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga33c9458b0a47e6448af0acc97d8860f7"><span id="index-57"></span><span></span><span class="kt">unsigned</span> <span class="kt">long</span>
+<span class="n">snd_timer_ginfo_get_resolution_min</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>get timer minimal resolution in ns</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>obj</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>timer minimal resolution in ns</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga6fbb78b3361209c15a0ece5bc2b939c0"><span id="index-58"></span><span></span><span class="kt">unsigned</span> <span class="kt">long</span>
+<span class="n">snd_timer_ginfo_get_resolution_max</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>get timer maximal resolution in ns</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>obj</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>timer maximal resolution in ns</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga497147a128b64374829408beb773316d"><span id="index-59"></span><span></span><span class="kt">unsigned</span> <span class="kt">int</span>
+<span class="n">snd_timer_ginfo_get_clients</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>get current timer clients</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>obj</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>current timer clients</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga3845cca41afd0f5ee40132d5b10c1e38"><span id="index-60"></span><span></span><span class="kt">size_t</span>
+<span class="n">snd_timer_info_sizeof</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></pre>
+<p>get size of the snd_timer_info_t structure in bytes</p>
+<p class="rubric">Returns:</p>
+<p>size of the snd_timer_info_t structure in bytes</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga51e754aec623f96bcfeda9511f51b5b7"><span id="index-61"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_info_malloc</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a><span></span><span class="o">**</span> <span class="n">ptr</span><span class="p">)</span></pre>
+<p>allocate a new snd_timer_info_t structure</p>
+<p>Allocates a new snd_timer_info_t structure using the standard malloc C library function.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>returned pointer</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code if fails</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga10da72bb7ae7a6ed91e7857b61add016"><span id="index-62"></span><span></span><span class="kt">void</span>
+<span class="n">snd_timer_info_free</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>frees the snd_timer_info_t structure</p>
+<p>Frees the given snd_timer_info_t structure using the standard free C library function.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>pointer to the snd_timer_info_t structure to free</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga92e91d9222794a1c5e82b7672faa214b"><span id="index-63"></span><span></span><span class="kt">void</span>
+<span class="n">snd_timer_info_copy</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a><span></span><span class="o">*</span> <span class="n">dst</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a><span></span><span class="o">*</span> <span class="n">src</span>
+<span class="p">)</span></pre>
+<p>copy one snd_timer_info_t structure to another</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>dst</p></td>
+<td><p>destination snd_timer_info_t structure</p></td>
+</tr>
+<tr class="row-even"><td><p>src</p></td>
+<td><p>source snd_timer_info_t structure</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gaccf0a207b91965e7200355a0daaac6ce"><span id="index-64"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_info_is_slave</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">)</span></pre>
+<p>determine, if timer is slave</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>nonzero if timer is slave</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gaddb757aa65e9532ced42ff7e9146ff34"><span id="index-65"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_info_get_card</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">)</span></pre>
+<p>get timer card</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>timer card number</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gaf46477b4ca62a7c2bd87926a45ecbd50"><span id="index-66"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">snd_timer_info_get_id</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">)</span></pre>
+<p>get timer id</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>timer id</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga9360acea37a3351ab9d2c17b7a264395"><span id="index-67"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">snd_timer_info_get_name</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">)</span></pre>
+<p>get timer name</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>timer name</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga3b33c3f0af5c93461e9493b0d4a3b81c"><span id="index-68"></span><span></span><span class="kt">long</span>
+<span class="n">snd_timer_info_get_resolution</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">)</span></pre>
+<p>get timer resolution in us</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>timer resolution</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga8a76df112a4046b72bdd4903215eca09"><span id="index-69"></span><span></span><span class="kt">size_t</span>
+<span class="n">snd_timer_params_sizeof</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></pre>
+<p>get size of the snd_timer_params_t structure in bytes</p>
+<p class="rubric">Returns:</p>
+<p>size of the snd_timer_params_t structure in bytes</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga6bdf00a7a9a2bcd46848c3862e31d7e7"><span id="index-70"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_params_malloc</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">**</span> <span class="n">ptr</span><span class="p">)</span></pre>
+<p>allocate a new snd_timer_params_t structure</p>
+<p>Allocates a new snd_timer_params_t structure using the standard malloc C library function.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>params</p></td>
+<td><p>returned pointer</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code if fails</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga3cba3ec4b6146cc7855d937b7aaf7953"><span id="index-71"></span><span></span><span class="kt">void</span>
+<span class="n">snd_timer_params_free</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>frees the snd_timer_params_t structure</p>
+<p>Frees the given snd_timer_params_t structure using the standard free C library function.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>params</p></td>
+<td><p>pointer to the snd_timer_params_t structure to free</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga6beaa69176cf2bb404983da4d133fda5"><span id="index-72"></span><span></span><span class="kt">void</span>
+<span class="n">snd_timer_params_copy</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">dst</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">src</span>
+<span class="p">)</span></pre>
+<p>copy one snd_timer_params_t structure to another</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>dst</p></td>
+<td><p>destination snd_timer_params_t structure</p></td>
+</tr>
+<tr class="row-even"><td><p>src</p></td>
+<td><p>source snd_timer_params_t structure</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gac39b36fdcc72cbb05adb909673df04f0"><span id="index-73"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_params_set_auto_start</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">auto_start</span>
+<span class="p">)</span></pre>
+<p>set timer auto start</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>params</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a> structure</p></td>
+</tr>
+<tr class="row-even"><td><p>auto_start</p></td>
+<td><p>The boolean value to set</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga0c7537d0729793d242b9263185f24e06"><span id="index-74"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_params_get_auto_start</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">)</span></pre>
+<p>determine if timer has auto start flag</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>params</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>nonzero if timer has auto start flag</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga497d23da21ec46d58ef3d6c01942d7c1"><span id="index-75"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_params_set_exclusive</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">exclusive</span>
+<span class="p">)</span></pre>
+<p>set timer exclusive use</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>params</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a> structure</p></td>
+</tr>
+<tr class="row-even"><td><p>exclusive</p></td>
+<td><p>The boolean value to set</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga66fffdd5b538259b54ebe9570581d52a"><span id="index-76"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_params_get_exclusive</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">)</span></pre>
+<p>determine if timer has exclusive flag</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>params</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>nonzero if timer has exclusive flag</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gaede871d499497de1199bdf1e8f9c9872"><span id="index-77"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_params_set_early_event</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">early_event</span>
+<span class="p">)</span></pre>
+<p>set timer early event</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>params</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a> structure</p></td>
+</tr>
+<tr class="row-even"><td><p>early_event</p></td>
+<td><p>The boolean value to set</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga6e45bbcef976cfac74336f337a0460cd"><span id="index-78"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_params_get_early_event</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">)</span></pre>
+<p>determine if timer has early event flag</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>params</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>nonzero if timer has early event flag set</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gaa7101edb9ec33fdbbb94e04256388caa"><span id="index-79"></span><span></span><span class="kt">void</span>
+<span class="n">snd_timer_params_set_ticks</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">ticks</span>
+<span class="p">)</span></pre>
+<p>set timer ticks</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>params</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a> structure</p></td>
+</tr>
+<tr class="row-even"><td><p>ticks</p></td>
+<td><p>Ticks to set</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga298418a42230f305c3c4efdf14da3403"><span id="index-80"></span><span></span><span class="kt">long</span>
+<span class="n">snd_timer_params_get_ticks</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">)</span></pre>
+<p>get timer ticks</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>params</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>timer ticks</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga3c55b27f682897a1b421b1be46a36289"><span id="index-81"></span><span></span><span class="kt">void</span>
+<span class="n">snd_timer_params_set_queue_size</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">queue_size</span>
+<span class="p">)</span></pre>
+<p>set timer queue size (32-1024)</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>params</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a> structure</p></td>
+</tr>
+<tr class="row-even"><td><p>queue_size</p></td>
+<td><p>The queue size to set</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gaa4462f1d878e5f1f10c40549692effcb"><span id="index-82"></span><span></span><span class="kt">long</span>
+<span class="n">snd_timer_params_get_queue_size</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">)</span></pre>
+<p>get queue size</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>params</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>queue size</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gab6820b66547c333402ea8e66fd600af2"><span id="index-83"></span><span></span><span class="kt">void</span>
+<span class="n">snd_timer_params_set_filter</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">filter</span>
+<span class="p">)</span></pre>
+<p>set timer event filter</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>params</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a> structure</p></td>
+</tr>
+<tr class="row-even"><td><p>filter</p></td>
+<td><p>The event filter bits to set</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga94c66976bd4b993c766e81d2452597f1"><span id="index-84"></span><span></span><span class="kt">unsigned</span> <span class="kt">int</span>
+<span class="n">snd_timer_params_get_filter</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">)</span></pre>
+<p>get timer event filter</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>params</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>timer event filter</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gaf0ceabb82125265a8bfe6ea85b889063"><span id="index-85"></span><span></span><span class="kt">size_t</span>
+<span class="n">snd_timer_status_sizeof</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></pre>
+<p>get size of the snd_timer_status_t structure in bytes</p>
+<p class="rubric">Returns:</p>
+<p>size of the snd_timer_status_t structure in bytes</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga6fa0de36e4494bd5ece4965ffe832db1"><span id="index-86"></span><span></span><span class="kt">int</span>
+<span class="n">snd_timer_status_malloc</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a><span></span><span class="o">**</span> <span class="n">ptr</span><span class="p">)</span></pre>
+<p>allocate a new snd_timer_status_t structure</p>
+<p>Allocates a new snd_timer_status_t structure using the standard malloc C library function.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>status</p></td>
+<td><p>returned pointer</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code if fails</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga60f6cf340f3f4881e1bff8ed11f1e634"><span id="index-87"></span><span></span><span class="kt">void</span>
+<span class="n">snd_timer_status_free</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>frees the snd_timer_status_t structure</p>
+<p>Frees the given snd_timer_status_t structure using the standard free C library function.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>status</p></td>
+<td><p>pointer to the snd_timer_status_t structure to free</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gac14cf4718333897ecb2b823b738aaff4"><span id="index-88"></span><span></span><span class="kt">void</span>
+<span class="n">snd_timer_status_copy</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a><span></span><span class="o">*</span> <span class="n">dst</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a><span></span><span class="o">*</span> <span class="n">src</span>
+<span class="p">)</span></pre>
+<p>copy one snd_timer_status_t structure to another</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>dst</p></td>
+<td><p>destination snd_timer_status_t structure</p></td>
+</tr>
+<tr class="row-even"><td><p>src</p></td>
+<td><p>source snd_timer_status_t structure</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga0c303da4c37285d423f428710409ee08"><span id="index-89"></span><a class="reference internal" href="group_Global.html#doxid-group-global-1ga3a3f5b65c40f498cdbc26944bd9855cf"><span class="std std-ref">snd_htimestamp_t</span></a><span></span>
+<span class="n">snd_timer_status_get_timestamp</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a><span></span><span class="o">*</span> <span class="n">status</span><span class="p">)</span></pre>
+<p>get timestamp</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>status</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>timestamp</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gaaab668cc548b6c4a24236504d63da0a0"><span id="index-90"></span><span></span><span class="kt">long</span>
+<span class="n">snd_timer_status_get_resolution</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a><span></span><span class="o">*</span> <span class="n">status</span><span class="p">)</span></pre>
+<p>get resolution in us</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>status</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>resolution</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gaa7ad78e8af9855e71d4951147869693b"><span id="index-91"></span><span></span><span class="kt">long</span>
+<span class="n">snd_timer_status_get_lost</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a><span></span><span class="o">*</span> <span class="n">status</span><span class="p">)</span></pre>
+<p>get master tick lost count</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>status</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>master tick lost count</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gaf3a83c122c2e19059297599d3486c04d"><span id="index-92"></span><span></span><span class="kt">long</span>
+<span class="n">snd_timer_status_get_overrun</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a><span></span><span class="o">*</span> <span class="n">status</span><span class="p">)</span></pre>
+<p>get overrun count</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>status</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>overrun count</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga6edb10e32b6b485ecccef73d862ca648"><span id="index-93"></span><span></span><span class="kt">long</span>
+<span class="n">snd_timer_status_get_queue</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a><span></span><span class="o">*</span> <span class="n">status</span><span class="p">)</span></pre>
+<p>get count of used queue elements</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>status</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>count of used queue elements</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gad0cf85bf970338f0924e0f642057c9a6"><span id="index-94"></span><span></span><span class="kt">long</span>
+<span class="n">snd_timer_info_get_ticks</span><span class="p">(</span><a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">)</span></pre>
+<p>(DEPRECATED) get maximum timer ticks</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>pointer to <a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a> structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>maximum timer ticks</p>
+</section>
+<section id="macros">
+<h3>Macros</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gae123de10661be511c00d2d7b6a428745"><span id="index-95"></span><span></span><span class="cp">#define SND_TIMER_DLSYM_VERSION</span></pre>
+<p>dlsym version for interface entry callback</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga15f5febc65924c9d3b12c7440c13bdd3"><span id="index-96"></span><span></span><span class="cp">#define SND_TIMER_GLOBAL_HPET</span></pre>
+<p>global timer - HPET</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gacf694819483359539a0017b09e9de9ab"><span id="index-97"></span><span></span><span class="cp">#define SND_TIMER_GLOBAL_HRTIMER</span></pre>
+<p>global timer - HRTIMER</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga77ddf4d042846b39fc4ed4966e04bee2"><span id="index-98"></span><span></span><span class="cp">#define SND_TIMER_GLOBAL_RTC</span></pre>
+<p>global timer - RTC</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga1cda350fb4de9a2f7a137c5649e3793c"><span id="index-99"></span><span></span><span class="cp">#define SND_TIMER_GLOBAL_SYSTEM</span></pre>
+<p>global timer - system</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gac2c50bf6045560bc13aab81f25b2b740"><span id="index-100"></span><span></span><span class="cp">#define SND_TIMER_OPEN_NONBLOCK</span></pre>
+<p>timer open mode flag - non-blocking behaviour</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga8d8b1f21a9c9db84a6ffc02e8f2c745b"><span id="index-101"></span><span></span><span class="cp">#define SND_TIMER_OPEN_TREAD</span></pre>
+<p>use timestamps and event notification - enhanced read</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga7439ac1cc9e0958a21f313ca848af77c"><span id="index-102"></span><span></span><span class="cp">#define SND_TIMER_QUERY_DLSYM_VERSION</span></pre>
+<p>dlsym version for interface entry callback</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga2b8086e599bd8d1bec750df97f572fcf"><span id="index-103"></span><span></span><span class="cp">#define snd_timer_ginfo_alloca(ptr)</span></pre>
+<p>allocate <a class="reference internal" href="#doxid-group-timer-1ga794ba3ef840cdb926d415ebb75d2c968"><span class="std std-ref">snd_timer_ginfo_t</span></a> container on stack</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gaef1895685cb2f65d1a40cc46fa5a7eb2"><span id="index-104"></span><span></span><span class="cp">#define snd_timer_id_alloca(ptr)</span></pre>
+<p>allocate <a class="reference internal" href="#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a> container on stack</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1gafad2100b7f0478b8c3c59f0f4aced23e"><span id="index-105"></span><span></span><span class="cp">#define snd_timer_info_alloca(ptr)</span></pre>
+<p>allocate <a class="reference internal" href="#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a> container on stack</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga2e76b7b6f7fe340b4a06935f080fbbbd"><span id="index-106"></span><span></span><span class="cp">#define snd_timer_params_alloca(ptr)</span></pre>
+<p>allocate <a class="reference internal" href="#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a> container on stack</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-timer-1ga6597b8f73b30a3f2bf2aa9f3590b92f2"><span id="index-107"></span><span></span><span class="cp">#define snd_timer_status_alloca(ptr)</span></pre>
+<p>allocate <a class="reference internal" href="#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a> container on stack</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="enum_snd_rawmidi_type_t.html" class="btn btn-neutral float-left" title="enum snd_rawmidi_type_t" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="enum_snd_timer_class_t.html" class="btn btn-neutral float-right" title="enum snd_timer_class_t" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 1998-2017, ALSA Library Maintainers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+.. index:: pair: page; Contexts
+.. _doxid-libusb_contexts:
+
+Contexts
+========
+
+It is possible that libusb may be used simultaneously from two independent libraries linked into the same executable.
+
+For example, if your application has a plugin-like system which allows the user to dynamically load a range of modules into your program, it is feasible that two independently developed modules may both use libusb.
+
+libusb is written to allow for these multiple user scenarios. The two "instances" of libusb will not interfere: :ref:`libusb_set_debug() <doxid-group__libusb__lib_1ga5f8376b7a863a5a8d5b8824feb8a427a>` calls from one user will not affect the same settings for other users, other users can continue using libusb after one of them calls :ref:`libusb_exit() <doxid-group__libusb__lib_1ga86532f222d4f1332a5f8f5eef9a92da9>`, etc.
+
+This is made possible through libusb's *context* concept. When you call :ref:`libusb_init() <doxid-group__libusb__lib_1ga9517c37281bba0b51cc62eba728be48b>`, you are (optionally) given a context. You can then pass this context pointer back into future libusb functions.
+
+In order to keep things simple for more simplistic applications, it is legal to pass NULL to all functions requiring a context pointer (as long as you're sure no other code will attempt to use libusb from the same process). When you pass NULL, the default context will be used. The default context is created the first time a process calls :ref:`libusb_init() <doxid-group__libusb__lib_1ga9517c37281bba0b51cc62eba728be48b>` when no other context is alive. Contexts are destroyed during :ref:`libusb_exit() <doxid-group__libusb__lib_1ga86532f222d4f1332a5f8f5eef9a92da9>`.
+
+The default context is reference-counted and can be shared. That means that if libusb_init(NULL) is called twice within the same process, the two users end up sharing the same context. The deinitialization and freeing of the default context will only happen when the last user calls :ref:`libusb_exit() <doxid-group__libusb__lib_1ga86532f222d4f1332a5f8f5eef9a92da9>`. In other words, the default context is created and initialized when its reference count goes from 0 to 1, and is deinitialized and destroyed when its reference count goes from 1 to 0.
+
+You may be wondering why only a subset of libusb functions require a context pointer in their function definition. Internally, libusb stores context pointers in other objects (e.g. libusb_device instances) and hence can infer the context from those objects.
+

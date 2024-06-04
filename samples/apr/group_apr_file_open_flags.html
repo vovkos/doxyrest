@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>File Open Flags/Routines &mdash; Apache Portable Runtime Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinx_rtd_theme.css?v=b6ca47bd" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=515d8a7f"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="File Seek Flags" href="group_apr_file_seek_flags.html" />
+    <link rel="prev" title="File Lock Types" href="group_apr_file_lock_types.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Apache Portable Runtime Documentation
+          </a>
+              <div class="version">
+                1.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="group_APR.html">Apache Portability Runtime library</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="group_apr_atomic.html">Atomic Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_getopt.html">Command Argument Parsing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_thread_cond.html">Condition Variable Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_dso.html">Dynamic Object Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_errno.html">Error Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_APR_Util_Escaping.html">Escape functions</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="group_apr_file_io.html">File I/O Handling Functions</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="group_apr_file_attrs_set_flags.html">File Attribute Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="group_apr_file_lock_types.html">File Lock Types</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">File Open Flags/Routines</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="group_apr_file_seek_flags.html">File Seek Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="group_apr_file_writev.html">{_full} max iovec size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="group_apr_file_io.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="group_apr_file_io.html#detailed-documentation">Detailed Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_file_info.html">File Information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_fnmatch.html">Filename Matching Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_env.html">Functions for manipulating the environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_lib.html">General Purpose Library Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_APR_GlobalMutex.html">Global Locking Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_hash.html">Hash Tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_support.html">Internal APR support functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_allocator.html">Internal Memory Allocation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_mmap.html">MMAP (Memory Map) Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_pools.html">Memory Pool Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_general.html">Miscellaneous library routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_network_io.html">Network Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_platform.html">Platform Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_poll.html">Poll Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_portabile.html">Portability Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_proc_mutex.html">Process Locking Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_random.html">Random Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_thread_rwlock.html">Reader/Writer Lock Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_ring.html">Ring Macro Implementations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_shm.html">Shared Memory Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_signal.html">Signal Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_skiplist.html">Skip list implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_strings.html">String routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_tables.html">Table and Array Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_thread_mutex.html">Thread Mutex Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_thread_proc.html">Threads and Process Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_time.html">Time Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_user.html">User and Group ID Services</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="group_apr_library.html">Library initialization and termination</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_apr_ctype.html">ctype functions</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="page_bug.html">Bug List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_deprecated.html">Deprecated List</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Apache Portable Runtime Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="group_APR.html">Apache Portability Runtime library</a></li>
+          <li class="breadcrumb-item"><a href="group_apr_file_io.html">File I/O Handling Functions</a></li>
+      <li class="breadcrumb-item active">File Open Flags/Routines</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="file-open-flags-routines">
+<span id="doxid-group-apr-file-open-flags"></span><span id="index-0"></span><h1>File Open Flags/Routines</h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="overview">
+<h2>Overview</h2>
+<pre class="highlight doxyrest-overview-code-block literal-block"><span></span><span class="c1">// macros</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1ga26d3de2bae5c90e5124869f56c141c2e"><span class="std std-ref">APR_APPEND</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1ga0e7556bac0cc0d1dafdf38952a4e4015"><span class="std std-ref">APR_BINARY</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1ga6edc818199e8b90e3dabf97c42a27158"><span class="std std-ref">APR_BUFFERED</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1gac210e96bc821dbaa83c326e775dad028"><span class="std std-ref">APR_CREATE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1gaebc7f034a72dffe64858b1b9451994ff"><span class="std std-ref">APR_DELONCLOSE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1ga209c26b2b903cc23417f6781d4edf891"><span class="std std-ref">APR_EXCL</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1ga3ef1061dbb3adf595701bd12edb062f9"><span class="std std-ref">APR_FILE_NOCLEANUP</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1ga45f353db9b71d4760a3f35cf3781cfc8"><span class="std std-ref">APR_FOPEN_APPEND</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1gacb20b3028864f34cb26314fe2cacc3fa"><span class="std std-ref">APR_FOPEN_BINARY</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1gac48fd4c853c9f561632a2e8aaf5d8d97"><span class="std std-ref">APR_FOPEN_BUFFERED</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1gafe94f21ccbf411172e70e7f473af251a"><span class="std std-ref">APR_FOPEN_CREATE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1ga5d3756f6d242c667ed1d3f54af4916eb"><span class="std std-ref">APR_FOPEN_DELONCLOSE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1gabb7fb062cdf1d58faee8c7ea518496f1"><span class="std std-ref">APR_FOPEN_EXCL</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1gaf6cfaa4789e6264afd186235f0adbc22"><span class="std std-ref">APR_FOPEN_LARGEFILE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1ga3fc9b5a7791d9f462997cd29de67eb80"><span class="std std-ref">APR_FOPEN_NOCLEANUP</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1ga31e4d14068147e43e1778bcf975dda62"><span class="std std-ref">APR_FOPEN_NONBLOCK</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1gaf9e7303f028b130ff7d4b209d6662d7d"><span class="std std-ref">APR_FOPEN_READ</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1ga60c21e28e4a612d58a874fe2cc71a6e4"><span class="std std-ref">APR_FOPEN_SENDFILE_ENABLED</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1ga426f6e2a8457ab410d99248269059a18"><span class="std std-ref">APR_FOPEN_SHARELOCK</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1ga0d155e9bb7fbf1a5cd4e84b5ede059f4"><span class="std std-ref">APR_FOPEN_SPARSE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1ga09b05a5bd5db534b93794f7657bcb146"><span class="std std-ref">APR_FOPEN_TRUNCATE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1gac598bb95fc9476b0bf2ed0b1c308842c"><span class="std std-ref">APR_FOPEN_WRITE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1ga435cd9b2604b11796779c23ffa00a3dd"><span class="std std-ref">APR_FOPEN_XTHREAD</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1gaafa04fd4ec71910a5d7af1c7f5596bad"><span class="std std-ref">APR_LARGEFILE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1ga0021db78d799d1c8825b701c7efee483"><span class="std std-ref">APR_READ</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1ga17e216aadb23254580258889e10c53f3"><span class="std std-ref">APR_SENDFILE_ENABLED</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1ga41277154f4f754a22287ed90e9466811"><span class="std std-ref">APR_SHARELOCK</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1gaa8898fdebd69d3a64286731b713a6dc9"><span class="std std-ref">APR_TRUNCATE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1ga3e427e53aceb1ccdb078d9a03cd63d01"><span class="std std-ref">APR_WRITE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-file-open-flags-1gaa9120c0e395d8a0e640b5eafa8f11cce"><span class="std std-ref">APR_XTHREAD</span></a></pre>
+</section>
+<section id="detailed-documentation">
+<span id="details-group-apr-file-open-flags"></span><h2>Detailed Documentation</h2>
+<section id="macros">
+<h3>Macros</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1ga26d3de2bae5c90e5124869f56c141c2e"><span id="index-1"></span><span></span><span class="cp">#define APR_APPEND</span></pre>
+<p>Deprecated</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-file-open-flags-1ga45f353db9b71d4760a3f35cf3781cfc8"><span class="std std-ref">APR_FOPEN_APPEND</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1ga0e7556bac0cc0d1dafdf38952a4e4015"><span id="index-2"></span><span></span><span class="cp">#define APR_BINARY</span></pre>
+<p>Deprecated</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-file-open-flags-1gacb20b3028864f34cb26314fe2cacc3fa"><span class="std std-ref">APR_FOPEN_BINARY</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1ga6edc818199e8b90e3dabf97c42a27158"><span id="index-3"></span><span></span><span class="cp">#define APR_BUFFERED</span></pre>
+<p>Deprecated</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-file-open-flags-1gac48fd4c853c9f561632a2e8aaf5d8d97"><span class="std std-ref">APR_FOPEN_BUFFERED</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1gac210e96bc821dbaa83c326e775dad028"><span id="index-4"></span><span></span><span class="cp">#define APR_CREATE</span></pre>
+<p>Deprecated</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-file-open-flags-1gafe94f21ccbf411172e70e7f473af251a"><span class="std std-ref">APR_FOPEN_CREATE</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1gaebc7f034a72dffe64858b1b9451994ff"><span id="index-5"></span><span></span><span class="cp">#define APR_DELONCLOSE</span></pre>
+<p>Deprecated</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-file-open-flags-1ga5d3756f6d242c667ed1d3f54af4916eb"><span class="std std-ref">APR_FOPEN_DELONCLOSE</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1ga209c26b2b903cc23417f6781d4edf891"><span id="index-6"></span><span></span><span class="cp">#define APR_EXCL</span></pre>
+<p>Deprecated</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-file-open-flags-1gabb7fb062cdf1d58faee8c7ea518496f1"><span class="std std-ref">APR_FOPEN_EXCL</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1ga3ef1061dbb3adf595701bd12edb062f9"><span id="index-7"></span><span></span><span class="cp">#define APR_FILE_NOCLEANUP</span></pre>
+<p>Deprecated</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-file-open-flags-1ga3fc9b5a7791d9f462997cd29de67eb80"><span class="std std-ref">APR_FOPEN_NOCLEANUP</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1ga45f353db9b71d4760a3f35cf3781cfc8"><span id="index-8"></span><span></span><span class="cp">#define APR_FOPEN_APPEND</span></pre>
+<p>Append to the end of the file</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1gacb20b3028864f34cb26314fe2cacc3fa"><span id="index-9"></span><span></span><span class="cp">#define APR_FOPEN_BINARY</span></pre>
+<p>Open the file in binary mode (This flag is ignored on UNIX because it has no meaning)</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1gac48fd4c853c9f561632a2e8aaf5d8d97"><span id="index-10"></span><span></span><span class="cp">#define APR_FOPEN_BUFFERED</span></pre>
+<p>Open the file for buffered I/O</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1gafe94f21ccbf411172e70e7f473af251a"><span id="index-11"></span><span></span><span class="cp">#define APR_FOPEN_CREATE</span></pre>
+<p>Create the file if not there</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1ga5d3756f6d242c667ed1d3f54af4916eb"><span id="index-12"></span><span></span><span class="cp">#define APR_FOPEN_DELONCLOSE</span></pre>
+<p>Delete the file after close</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1gabb7fb062cdf1d58faee8c7ea518496f1"><span id="index-13"></span><span></span><span class="cp">#define APR_FOPEN_EXCL</span></pre>
+<p>Open should fail if <a class="reference internal" href="#doxid-group-apr-file-open-flags-1gafe94f21ccbf411172e70e7f473af251a"><span class="std std-ref">APR_FOPEN_CREATE</span></a> and file exists.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1gaf6cfaa4789e6264afd186235f0adbc22"><span id="index-14"></span><span></span><span class="cp">#define APR_FOPEN_LARGEFILE</span></pre>
+<p>Platform dependent flag to enable large file support, see WARNING below</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>APR_FOPEN_LARGEFILE flag only has effect on some platforms where sizeof(apr_off_t) == 4. Where implemented, it allows opening and writing to a file which exceeds the size which can be represented by apr_off_t (2 gigabytes). When a file’s size does exceed 2Gb, <a class="reference internal" href="group_apr_file_io.html#doxid-group-apr-file-io-1ga39be7fe05d0dda4a28f4358b61a44ac8"><span class="std std-ref">apr_file_info_get()</span></a> will fail with an error on the descriptor, likewise <a class="reference internal" href="group_apr_file_stat.html#doxid-group-apr-file-stat-1gafb0f4a4fa4545c155e20ddd8f2001c1a"><span class="std std-ref">apr_stat()</span></a> /apr_lstat() will fail on the filename. <a class="reference internal" href="group_apr_dir.html#doxid-group-apr-dir-1ga3e4ee253e0c712160bee10bfb9c8e4a8"><span class="std std-ref">apr_dir_read()</span></a> will fail with <a class="reference internal" href="group_APR_Error.html#doxid-group-a-p-r-error-1ga64dff43b83bcefd3f3c751be6b864ca1"><span class="std std-ref">APR_INCOMPLETE</span></a> on a directory entry for a large file depending on the particular APR_FINFO_* flags. Generally, it is not recommended to use this flag.</p>
+</div>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1ga3fc9b5a7791d9f462997cd29de67eb80"><span id="index-15"></span><span></span><span class="cp">#define APR_FOPEN_NOCLEANUP</span></pre>
+<p>Do not register a cleanup when the file is opened. The apr_os_file_t handle in apr_file_t will not be closed when the pool is destroyed.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1ga31e4d14068147e43e1778bcf975dda62"><span id="index-16"></span><span></span><span class="cp">#define APR_FOPEN_NONBLOCK</span></pre>
+<p>Platform dependent flag to enable non blocking file io</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>APR_FOPEN_NONBLOCK is not implemented on all platforms. Callers should be prepared for it to fail with <a class="reference internal" href="group_APR_Error.html#doxid-group-a-p-r-error-1ga939ddb834a30bc9a5a0a329b13000161"><span class="std std-ref">APR_ENOTIMPL</span></a>.</p>
+</div>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1gaf9e7303f028b130ff7d4b209d6662d7d"><span id="index-17"></span><span></span><span class="cp">#define APR_FOPEN_READ</span></pre>
+<p>Open the file for reading</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1ga60c21e28e4a612d58a874fe2cc71a6e4"><span id="index-18"></span><span></span><span class="cp">#define APR_FOPEN_SENDFILE_ENABLED</span></pre>
+<p>Advisory flag that this file should support apr_socket_sendfile operation</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1ga426f6e2a8457ab410d99248269059a18"><span id="index-19"></span><span></span><span class="cp">#define APR_FOPEN_SHARELOCK</span></pre>
+<p>Platform dependent support for higher level locked read/write access to support writes across process/machines</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1ga0d155e9bb7fbf1a5cd4e84b5ede059f4"><span id="index-20"></span><span></span><span class="cp">#define APR_FOPEN_SPARSE</span></pre>
+<p>Platform dependent flag to enable sparse file support, see WARNING below</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>APR_FOPEN_SPARSE may, depending on platform, convert a normal file to a sparse file. Some applications may be unable to decipher a sparse file, so it’s critical that the sparse file flag should only be used for files accessed only by APR or other applications known to be able to decipher them. APR does not guarantee that it will compress the file into sparse segments if it was previously created and written without the sparse flag. On platforms which do not understand, or on file systems which cannot handle sparse files, the flag is ignored by <a class="reference internal" href="group_apr_file_io.html#doxid-group-apr-file-io-1gabda14cbf242fb4fe99055434213e5446"><span class="std std-ref">apr_file_open()</span></a>.</p>
+</div>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1ga09b05a5bd5db534b93794f7657bcb146"><span id="index-21"></span><span></span><span class="cp">#define APR_FOPEN_TRUNCATE</span></pre>
+<p>Open the file and truncate to 0 length</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1gac598bb95fc9476b0bf2ed0b1c308842c"><span id="index-22"></span><span></span><span class="cp">#define APR_FOPEN_WRITE</span></pre>
+<p>Open the file for writing</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1ga435cd9b2604b11796779c23ffa00a3dd"><span id="index-23"></span><span></span><span class="cp">#define APR_FOPEN_XTHREAD</span></pre>
+<p>Platform dependent tag to open the file for use across multiple threads</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1gaafa04fd4ec71910a5d7af1c7f5596bad"><span id="index-24"></span><span></span><span class="cp">#define APR_LARGEFILE</span></pre>
+<p>Deprecated</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-file-open-flags-1gaf6cfaa4789e6264afd186235f0adbc22"><span class="std std-ref">APR_FOPEN_LARGEFILE</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1ga0021db78d799d1c8825b701c7efee483"><span id="index-25"></span><span></span><span class="cp">#define APR_READ</span></pre>
+<p>Deprecated</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-file-open-flags-1gaf9e7303f028b130ff7d4b209d6662d7d"><span class="std std-ref">APR_FOPEN_READ</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1ga17e216aadb23254580258889e10c53f3"><span id="index-26"></span><span></span><span class="cp">#define APR_SENDFILE_ENABLED</span></pre>
+<p>Deprecated</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-file-open-flags-1ga60c21e28e4a612d58a874fe2cc71a6e4"><span class="std std-ref">APR_FOPEN_SENDFILE_ENABLED</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1ga41277154f4f754a22287ed90e9466811"><span id="index-27"></span><span></span><span class="cp">#define APR_SHARELOCK</span></pre>
+<p>Deprecated</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-file-open-flags-1ga426f6e2a8457ab410d99248269059a18"><span class="std std-ref">APR_FOPEN_SHARELOCK</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1gaa8898fdebd69d3a64286731b713a6dc9"><span id="index-28"></span><span></span><span class="cp">#define APR_TRUNCATE</span></pre>
+<p>Deprecated</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-file-open-flags-1ga09b05a5bd5db534b93794f7657bcb146"><span class="std std-ref">APR_FOPEN_TRUNCATE</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1ga3e427e53aceb1ccdb078d9a03cd63d01"><span id="index-29"></span><span></span><span class="cp">#define APR_WRITE</span></pre>
+<p>Deprecated</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-file-open-flags-1gac598bb95fc9476b0bf2ed0b1c308842c"><span class="std std-ref">APR_FOPEN_WRITE</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-open-flags-1gaa9120c0e395d8a0e640b5eafa8f11cce"><span id="index-30"></span><span></span><span class="cp">#define APR_XTHREAD</span></pre>
+<p>Deprecated</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-file-open-flags-1ga435cd9b2604b11796779c23ffa00a3dd"><span class="std std-ref">APR_FOPEN_XTHREAD</span></a></p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="group_apr_file_lock_types.html" class="btn btn-neutral float-left" title="File Lock Types" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="group_apr_file_seek_flags.html" class="btn btn-neutral float-right" title="File Seek Flags" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2008-2017, Apache Portable Runtime Maintainers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

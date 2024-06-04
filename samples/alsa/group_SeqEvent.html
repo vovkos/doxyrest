@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sequencer Event API &mdash; ALSA Library Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinx_rtd_theme.css?v=b6ca47bd" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=e9012143"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Sequencer Event Definitions" href="group_SeqEvents.html" />
+    <link rel="prev" title="enum snd_seq_client_type_t" href="enum_snd_seq_client_type_t.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            ALSA Library Documentation
+          </a>
+              <div class="version">
+                1.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="group_Config.html">Configuration Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Digital_Audio_Interface.html">Constants for Digital Audio Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_MIDI_Interface.html">Constants for MIDI v1.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Control.html">Control Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Error.html">Error handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_CtlPlugin_SDK.html">External Control Plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Plugin_SDK.html">External PCM plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Global.html">Global defines and functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_HwDep.html">Hardware Dependant Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Input.html">Input Interface</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="group_Sequencer.html">MIDI Sequencer</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="group_SeqClient.html">Sequencer Client Interface</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Sequencer Event API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#global-functions">Global Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#macros">Macros</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="group_SeqEvents.html">Sequencer Event Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_SeqEvType.html">Sequencer Event Type Checks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_SeqMiddle.html">Sequencer Middle Level Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_SeqMisc.html">Sequencer Miscellaneous</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_SeqPort.html">Sequencer Port Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_SeqSubscribe.html">Sequencer Port Subscription</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_SeqQueue.html">Sequencer Queue Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_MIDI_Event.html">Sequencer event &lt;-&gt; MIDI byte stream coder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_snd_seq_type_t.html">enum snd_seq_type_t</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_Sequencer.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_Sequencer.html#detailed-documentation">Detailed Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="group_Mixer.html">Mixer Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Output.html">Output Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_PCM.html">PCM Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_RawMidi.html">RawMidi Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Timer.html">Timer Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_topology.html">Topology Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_ucm.html">Use Case Interface</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="page_topology.html">ALSA Topology Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_Usecase.html">ALSA Use Case Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_bug.html">Bug List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_conf.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_control.html">Control interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_deprecated.html">Deprecated List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_ctl_external_plugins.html">External Control Plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_hcontrol.html">High level control interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_confhooks.html">Hooks in configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_mixer.html">Mixer interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_pcm.html">PCM (digital audio) interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_pcm_plugins.html">PCM (digital audio) plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_pcm_external_plugins.html">PCM External Plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_rawmidi.html">RawMidi interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_confarg.html">Runtime arguments in configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_conffunc.html">Runtime functions in configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_seq.html">Sequencer interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_timer.html">Timer interface</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="example__test_latency.c.html">/test/latency.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_pcm.c.html">/test/pcm.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_pcm_min.c.html">/test/pcm_min.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_rawmidi.c.html">/test/rawmidi.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_timer.c.html">/test/timer.c</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ALSA Library Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="group_Sequencer.html">MIDI Sequencer</a></li>
+      <li class="breadcrumb-item active">Sequencer Event API</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="sequencer-event-api">
+<span id="doxid-group-seq-event"></span><span id="index-0"></span><h1>Sequencer Event API</h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="overview">
+<h2>Overview</h2>
+<p>Sequencer Event API <a class="reference internal" href="#details-group-seq-event"><span class="std std-ref">More…</span></a></p>
+<pre class="highlight doxyrest-overview-code-block literal-block"><span></span><span class="c1">// typedefs</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_seq_remove_events</span> <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// global functions</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-event-1ga6a4edcdaec5d55e61c8db1a0fbb2daa9"><span class="std std-ref">snd_seq_free_event</span></a><span></span><span class="p">(</span><a class="reference internal" href="struct_snd_seq_event_t.html#doxid-structsnd-seq-event-t"><span class="std std-ref">snd_seq_event_t</span></a><span></span><span class="o">*</span> <span class="n">ev</span><span class="p">);</span>
+
+<span class="kt">ssize_t</span>
+<a class="reference internal" href="#doxid-group-seq-event-1gae807a81acfbb8e7147a186a02274b34b"><span class="std std-ref">snd_seq_event_length</span></a><span></span><span class="p">(</span><a class="reference internal" href="struct_snd_seq_event_t.html#doxid-structsnd-seq-event-t"><span class="std std-ref">snd_seq_event_t</span></a><span></span><span class="o">*</span> <span class="n">ev</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-event-1ga0360e41b946c9948ad717beef7c5ab61"><span class="std std-ref">snd_seq_event_output</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="struct_snd_seq_event_t.html#doxid-structsnd-seq-event-t"><span class="std std-ref">snd_seq_event_t</span></a><span></span><span class="o">*</span> <span class="n">ev</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-event-1ga41be1e09173957944352c50067a686ea"><span class="std std-ref">snd_seq_event_output_buffer</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="struct_snd_seq_event_t.html#doxid-structsnd-seq-event-t"><span class="std std-ref">snd_seq_event_t</span></a><span></span><span class="o">*</span> <span class="n">ev</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-event-1ga63986686b918abeff9902108638c5b2f"><span class="std std-ref">snd_seq_event_output_direct</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="struct_snd_seq_event_t.html#doxid-structsnd-seq-event-t"><span class="std std-ref">snd_seq_event_t</span></a><span></span><span class="o">*</span> <span class="n">ev</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-event-1ga6421feafcd6f116d34531d6b54177c17"><span class="std std-ref">snd_seq_event_input</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="struct_snd_seq_event_t.html#doxid-structsnd-seq-event-t"><span class="std std-ref">snd_seq_event_t</span></a><span></span><span class="o">**</span> <span class="n">ev</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-event-1ga08d1c09716d6c04f8164539429a8659c"><span class="std std-ref">snd_seq_event_input_pending</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">seq</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">fetch_sequencer</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-event-1ga64a0ed5488504ef91b5b6b92172bc0aa"><span class="std std-ref">snd_seq_drain_output</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-event-1ga9ac143d4f0f826c9715424a8ec47339a"><span class="std std-ref">snd_seq_event_output_pending</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">seq</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-event-1ga8a75dbcc2b51d0ea81d2538c0ae131f0"><span class="std std-ref">snd_seq_extract_output</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="struct_snd_seq_event_t.html#doxid-structsnd-seq-event-t"><span class="std std-ref">snd_seq_event_t</span></a><span></span><span class="o">**</span> <span class="n">ev</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-event-1gae42e855dcb4745bdc78efe313d49a0ef"><span class="std std-ref">snd_seq_drop_output</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-event-1ga12bcd6b29f0d5f13b00f2c55a2ca4556"><span class="std std-ref">snd_seq_drop_output_buffer</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-event-1ga6f8a93aaa55cdbff67e264fd5357de0e"><span class="std std-ref">snd_seq_drop_input</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-event-1ga7b1182e2df033f7813a28bded948cd5e"><span class="std std-ref">snd_seq_drop_input_buffer</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">);</span>
+
+<span class="kt">size_t</span>
+<a class="reference internal" href="#doxid-group-seq-event-1gaa5a0541a3f5e9b0536c8bc022c64dc04"><span class="std std-ref">snd_seq_remove_events_sizeof</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-event-1ga280e1b40b1cb608176d9f561038afb74"><span class="std std-ref">snd_seq_remove_events_malloc</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">**</span> <span class="n">ptr</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-seq-event-1ga14849dfc4b6f46c58aa8567a7ee5860e"><span class="std std-ref">snd_seq_remove_events_free</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">ptr</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-seq-event-1ga03bce50b05a4a7ae7236875a3e9d2949"><span class="std std-ref">snd_seq_remove_events_copy</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">dst</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">src</span>
+<span class="p">);</span>
+
+<span class="kt">unsigned</span> <span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-event-1ga448bdde3612be594f3651d591678770e"><span class="std std-ref">snd_seq_remove_events_get_condition</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-event-1gaf1c86405bfc4ad14bfa7d6234545e4ae"><span class="std std-ref">snd_seq_remove_events_get_queue</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">);</span>
+
+<span class="k">const</span> <a class="reference internal" href="union_snd_seq_timestamp_t.html#doxid-unionsnd-seq-timestamp-t"><span class="std std-ref">snd_seq_timestamp_t</span></a><span></span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-seq-event-1ga781d9bfba05346779a4d89b8720111f5"><span class="std std-ref">snd_seq_remove_events_get_time</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">);</span>
+
+<span class="k">const</span> <a class="reference internal" href="struct_snd_seq_addr_t.html#doxid-structsnd-seq-addr-t"><span class="std std-ref">snd_seq_addr_t</span></a><span></span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-seq-event-1ga2b26aa9977be1f96e42cc71a9075909a"><span class="std std-ref">snd_seq_remove_events_get_dest</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-event-1ga474f7d65b54164c7b4066b2341680b69"><span class="std std-ref">snd_seq_remove_events_get_channel</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-event-1ga2bac6d50ae68c432441b6f86f8e51ec5"><span class="std std-ref">snd_seq_remove_events_get_event_type</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-event-1gaefe8772759971b008123512b5294fecb"><span class="std std-ref">snd_seq_remove_events_get_tag</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-seq-event-1ga4efc426e73bd8ed2398ee8911c1a1fea"><span class="std std-ref">snd_seq_remove_events_set_condition</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">flags</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-seq-event-1ga79e4eea77bf7639b314d0c6a2b858897"><span class="std std-ref">snd_seq_remove_events_set_queue</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">queue</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-seq-event-1ga34502d7f197063e7e404039c06cd49f6"><span class="std std-ref">snd_seq_remove_events_set_time</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="union_snd_seq_timestamp_t.html#doxid-unionsnd-seq-timestamp-t"><span class="std std-ref">snd_seq_timestamp_t</span></a><span></span><span class="o">*</span> <span class="n">time</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-seq-event-1gaaae3ddaad59def2395a9c3391ad3ea3c"><span class="std std-ref">snd_seq_remove_events_set_dest</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="struct_snd_seq_addr_t.html#doxid-structsnd-seq-addr-t"><span class="std std-ref">snd_seq_addr_t</span></a><span></span><span class="o">*</span> <span class="n">addr</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-seq-event-1ga0611da2732cef4d8943489736e838cb5"><span class="std std-ref">snd_seq_remove_events_set_channel</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">channel</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-seq-event-1ga4b3ac3780f5368118422b08a08ed8d43"><span class="std std-ref">snd_seq_remove_events_set_event_type</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">type</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-seq-event-1ga4847f69287addc86dddf61a2ffca5089"><span class="std std-ref">snd_seq_remove_events_set_tag</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">tag</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-event-1ga7ed1109642fdb8dbd9f8a20564e40362"><span class="std std-ref">snd_seq_remove_events</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span>
+<span class="p">);</span>
+
+<span class="c1">// macros</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-event-1ga2662f8f42259f5d61be4bfb66fc6f248"><span class="std std-ref">SND_SEQ_REMOVE_DEST</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-event-1ga639b7c33bf27b65ca14857bf5f1cee4a"><span class="std std-ref">SND_SEQ_REMOVE_DEST_CHANNEL</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-event-1gada13f98960143c3d24e6965c954d0fc4"><span class="std std-ref">SND_SEQ_REMOVE_EVENT_TYPE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-event-1ga43008e518e356084dbcea01b3e7d1909"><span class="std std-ref">SND_SEQ_REMOVE_IGNORE_OFF</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-event-1gac6a1b26c4551664f1647bc71001b5f88"><span class="std std-ref">SND_SEQ_REMOVE_INPUT</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-event-1ga21236ad0af7c1f3d549c1b3e008b0c73"><span class="std std-ref">SND_SEQ_REMOVE_OUTPUT</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-event-1ga19bc5ec1e09ad34af5cf5ae3b28ee434"><span class="std std-ref">SND_SEQ_REMOVE_TAG_MATCH</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-event-1ga8213dbaeb33df14ec7a1e7fd501f8c5e"><span class="std std-ref">SND_SEQ_REMOVE_TIME_AFTER</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-event-1ga69279405cabd0127222b936dd6e45e49"><span class="std std-ref">SND_SEQ_REMOVE_TIME_BEFORE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-event-1gac4169f30c9c8c5dc462245f3a2dc5d76"><span class="std std-ref">SND_SEQ_REMOVE_TIME_TICK</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-event-1gaa961c5d6e931bb50c75d828c8470ab02"><span class="std std-ref">snd_seq_remove_events_alloca</span></a><span></span><span class="p">(</span><span class="n">ptr</span><span class="p">)</span></pre>
+</section>
+<section id="detailed-documentation">
+<span id="details-group-seq-event"></span><h2>Detailed Documentation</h2>
+<p>Sequencer Event API</p>
+<section id="typedefs">
+<h3>Typedefs</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span id="index-1"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_seq_remove_events</span> <span class="n">snd_seq_remove_events_t</span></pre>
+<p>event removal conditionals</p>
+</section>
+<section id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga6a4edcdaec5d55e61c8db1a0fbb2daa9"><span id="index-2"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_free_event</span><span class="p">(</span><a class="reference internal" href="struct_snd_seq_event_t.html#doxid-structsnd-seq-event-t"><span class="std std-ref">snd_seq_event_t</span></a><span></span><span class="o">*</span> <span class="n">ev</span><span class="p">)</span></pre>
+<p>(DEPRECATED) free an event</p>
+<p>In the former version, this function was used to release the event pointer which was allocated by <a class="reference internal" href="#doxid-group-seq-event-1ga6421feafcd6f116d34531d6b54177c17"><span class="std std-ref">snd_seq_event_input()</span></a>. In the current version, the event record is not allocated, so you don’t have to call this function any more.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1gae807a81acfbb8e7147a186a02274b34b"><span id="index-3"></span><span></span><span class="kt">ssize_t</span>
+<span class="n">snd_seq_event_length</span><span class="p">(</span><a class="reference internal" href="struct_snd_seq_event_t.html#doxid-structsnd-seq-event-t"><span class="std std-ref">snd_seq_event_t</span></a><span></span><span class="o">*</span> <span class="n">ev</span><span class="p">)</span></pre>
+<p>calculates the (encoded) byte-stream size of the event</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ev</p></td>
+<td><p>the event</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>the size of decoded bytes</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga0360e41b946c9948ad717beef7c5ab61"><span id="index-4"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_event_output</span><span class="p">(</span>
+    <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="struct_snd_seq_event_t.html#doxid-structsnd-seq-event-t"><span class="std std-ref">snd_seq_event_t</span></a><span></span><span class="o">*</span> <span class="n">ev</span>
+<span class="p">)</span></pre>
+<p>output an event</p>
+<p>An event is once expanded on the output buffer. The output buffer will be drained automatically if it becomes full.</p>
+<p>If events remain unprocessed on output buffer before drained, the size of total byte data on output buffer is returned. If the output buffer is empty, this returns zero.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>seq</p></td>
+<td><p>sequencer handle</p></td>
+</tr>
+<tr class="row-even"><td><p>ev</p></td>
+<td><p>event to be output</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>the number of remaining events or a negative error code</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-event-1ga63986686b918abeff9902108638c5b2f"><span class="std std-ref">snd_seq_event_output_direct()</span></a>, <a class="reference internal" href="#doxid-group-seq-event-1ga41be1e09173957944352c50067a686ea"><span class="std std-ref">snd_seq_event_output_buffer()</span></a>, <a class="reference internal" href="#doxid-group-seq-event-1ga9ac143d4f0f826c9715424a8ec47339a"><span class="std std-ref">snd_seq_event_output_pending()</span></a>, <a class="reference internal" href="#doxid-group-seq-event-1ga64a0ed5488504ef91b5b6b92172bc0aa"><span class="std std-ref">snd_seq_drain_output()</span></a>, <a class="reference internal" href="#doxid-group-seq-event-1gae42e855dcb4745bdc78efe313d49a0ef"><span class="std std-ref">snd_seq_drop_output()</span></a>, <a class="reference internal" href="#doxid-group-seq-event-1ga8a75dbcc2b51d0ea81d2538c0ae131f0"><span class="std std-ref">snd_seq_extract_output()</span></a>, <a class="reference internal" href="#doxid-group-seq-event-1ga7ed1109642fdb8dbd9f8a20564e40362"><span class="std std-ref">snd_seq_remove_events()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga41be1e09173957944352c50067a686ea"><span id="index-5"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_event_output_buffer</span><span class="p">(</span>
+    <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="struct_snd_seq_event_t.html#doxid-structsnd-seq-event-t"><span class="std std-ref">snd_seq_event_t</span></a><span></span><span class="o">*</span> <span class="n">ev</span>
+<span class="p">)</span></pre>
+<p>output an event onto the lib buffer without draining buffer</p>
+<p>This function doesn’t drain buffer unlike <a class="reference internal" href="#doxid-group-seq-event-1ga0360e41b946c9948ad717beef7c5ab61"><span class="std std-ref">snd_seq_event_output()</span></a>.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>seq</p></td>
+<td><p>sequencer handle</p></td>
+</tr>
+<tr class="row-even"><td><p>ev</p></td>
+<td><p>event to be output</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>the byte size of remaining events. <code class="docutils literal notranslate"><span class="pre">-EAGAIN</span></code> if the buffer becomes full.</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-event-1ga0360e41b946c9948ad717beef7c5ab61"><span class="std std-ref">snd_seq_event_output()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga63986686b918abeff9902108638c5b2f"><span id="index-6"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_event_output_direct</span><span class="p">(</span>
+    <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="struct_snd_seq_event_t.html#doxid-structsnd-seq-event-t"><span class="std std-ref">snd_seq_event_t</span></a><span></span><span class="o">*</span> <span class="n">ev</span>
+<span class="p">)</span></pre>
+<p>output an event directly to the sequencer NOT through output buffer</p>
+<p>This function sends an event to the sequencer directly not through the output buffer. When the event is a variable length event, a temporary buffer is allocated inside alsa-lib and the data is copied there before actually sent.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>seq</p></td>
+<td><p>sequencer handle</p></td>
+</tr>
+<tr class="row-even"><td><p>ev</p></td>
+<td><p>event to be output</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>the byte size sent to sequencer or a negative error code</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-event-1ga0360e41b946c9948ad717beef7c5ab61"><span class="std std-ref">snd_seq_event_output()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga6421feafcd6f116d34531d6b54177c17"><span id="index-7"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_event_input</span><span class="p">(</span>
+    <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="struct_snd_seq_event_t.html#doxid-structsnd-seq-event-t"><span class="std std-ref">snd_seq_event_t</span></a><span></span><span class="o">**</span> <span class="n">ev</span>
+<span class="p">)</span></pre>
+<p>retrieve an event from sequencer</p>
+<p>Obtains an input event from sequencer. The event is created via snd_seq_create_event(), and its pointer is stored on ev argument.</p>
+<p>This function firstly receives the event byte-stream data from sequencer as much as possible at once. Then it retrieves the first event record and store the pointer on ev. By calling this function sequentially, events are extracted from the input buffer.</p>
+<p>If there is no input from sequencer, function falls into sleep in blocking mode until an event is received, or returns <code class="docutils literal notranslate"><span class="pre">-EAGAIN</span></code> error in non-blocking mode. Occasionally, this function may return <code class="docutils literal notranslate"><span class="pre">-ENOSPC</span></code> error. This means that the input FIFO of sequencer overran, and some events are lost. Once this error is returned, the input FIFO is cleared automatically.</p>
+<p>Function returns the byte size of remaining events on the input buffer if an event is successfully received. Application can determine from the returned value whether to call input once more or not.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>seq</p></td>
+<td><p>sequencer handle</p></td>
+</tr>
+<tr class="row-even"><td><p>ev</p></td>
+<td><p>event pointer to be stored</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-event-1ga08d1c09716d6c04f8164539429a8659c"><span class="std std-ref">snd_seq_event_input_pending()</span></a>, <a class="reference internal" href="#doxid-group-seq-event-1ga6f8a93aaa55cdbff67e264fd5357de0e"><span class="std std-ref">snd_seq_drop_input()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga08d1c09716d6c04f8164539429a8659c"><span id="index-8"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_event_input_pending</span><span class="p">(</span>
+    <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">seq</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">fetch_sequencer</span>
+<span class="p">)</span></pre>
+<p>check events in input buffer</p>
+<p>If events remain on the input buffer of user-space, function returns the total byte size of events on it. If fetch_sequencer argument is non-zero, this function checks the presence of events on sequencer FIFO When events exist, they are transferred to the input buffer, and the number of received events are returned. If fetch_sequencer argument is zero and no events remain on the input buffer, function simply returns zero.</p>
+<p class="rubric">Returns:</p>
+<p>the byte size of remaining input events on input buffer.</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-event-1ga6421feafcd6f116d34531d6b54177c17"><span class="std std-ref">snd_seq_event_input()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga64a0ed5488504ef91b5b6b92172bc0aa"><span id="index-9"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_drain_output</span><span class="p">(</span><a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">)</span></pre>
+<p>drain output buffer to sequencer</p>
+<p>This function drains all pending events on the output buffer. The function returns immediately after the events are sent to the queues regardless whether the events are processed or not. To get synchronization with the all event processes, use <a class="reference internal" href="group_SeqMiddle.html#doxid-group-seq-middle-1ga732ad887b457771b7db47908186e8cce"><span class="std std-ref">snd_seq_sync_output_queue()</span></a> after calling this function.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>seq</p></td>
+<td><p>sequencer handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 when all events are drained and sent to sequencer. When events still remain on the buffer, the byte size of remaining events are returned. On error a negative error code is returned.</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-event-1ga0360e41b946c9948ad717beef7c5ab61"><span class="std std-ref">snd_seq_event_output()</span></a>, <a class="reference internal" href="group_SeqMiddle.html#doxid-group-seq-middle-1ga732ad887b457771b7db47908186e8cce"><span class="std std-ref">snd_seq_sync_output_queue()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga9ac143d4f0f826c9715424a8ec47339a"><span id="index-10"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_event_output_pending</span><span class="p">(</span><a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">seq</span><span class="p">)</span></pre>
+<p>return the size of pending events on output buffer</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>seq</p></td>
+<td><p>sequencer handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>the byte size of total of pending events</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-event-1ga0360e41b946c9948ad717beef7c5ab61"><span class="std std-ref">snd_seq_event_output()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga8a75dbcc2b51d0ea81d2538c0ae131f0"><span id="index-11"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_extract_output</span><span class="p">(</span>
+    <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="struct_snd_seq_event_t.html#doxid-structsnd-seq-event-t"><span class="std std-ref">snd_seq_event_t</span></a><span></span><span class="o">**</span> <span class="n">ev</span>
+<span class="p">)</span></pre>
+<p>extract the first event in output buffer</p>
+<p>Extracts the first event in output buffer. If ev_res is NULL, just remove the event.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>seq</p></td>
+<td><p>sequencer handle</p></td>
+</tr>
+<tr class="row-even"><td><p>ev_res</p></td>
+<td><p>event pointer to be extracted</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-event-1ga0360e41b946c9948ad717beef7c5ab61"><span class="std std-ref">snd_seq_event_output()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1gae42e855dcb4745bdc78efe313d49a0ef"><span id="index-12"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_drop_output</span><span class="p">(</span><a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">)</span></pre>
+<p>remove all events on output buffer</p>
+<p>Removes all events on both user-space output buffer and output memory pool on kernel.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>seq</p></td>
+<td><p>sequencer handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-event-1ga64a0ed5488504ef91b5b6b92172bc0aa"><span class="std std-ref">snd_seq_drain_output()</span></a>, <a class="reference internal" href="#doxid-group-seq-event-1ga12bcd6b29f0d5f13b00f2c55a2ca4556"><span class="std std-ref">snd_seq_drop_output_buffer()</span></a>, <a class="reference internal" href="#doxid-group-seq-event-1ga7ed1109642fdb8dbd9f8a20564e40362"><span class="std std-ref">snd_seq_remove_events()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga12bcd6b29f0d5f13b00f2c55a2ca4556"><span id="index-13"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_drop_output_buffer</span><span class="p">(</span><a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">)</span></pre>
+<p>remove all events on user-space output buffer</p>
+<p>Removes all events on user-space output buffer. Unlike <a class="reference internal" href="#doxid-group-seq-event-1ga64a0ed5488504ef91b5b6b92172bc0aa"><span class="std std-ref">snd_seq_drain_output()</span></a>, this function doesn’t remove events on output memory pool of sequencer.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>seq</p></td>
+<td><p>sequencer handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-event-1gae42e855dcb4745bdc78efe313d49a0ef"><span class="std std-ref">snd_seq_drop_output()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga6f8a93aaa55cdbff67e264fd5357de0e"><span id="index-14"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_drop_input</span><span class="p">(</span><a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">)</span></pre>
+<p>clear input buffer and and remove events in sequencer queue</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>seq</p></td>
+<td><p>sequencer handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-event-1ga7b1182e2df033f7813a28bded948cd5e"><span class="std std-ref">snd_seq_drop_input_buffer()</span></a>, <a class="reference internal" href="#doxid-group-seq-event-1ga7ed1109642fdb8dbd9f8a20564e40362"><span class="std std-ref">snd_seq_remove_events()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga7b1182e2df033f7813a28bded948cd5e"><span id="index-15"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_drop_input_buffer</span><span class="p">(</span><a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">)</span></pre>
+<p>remove all events on user-space input FIFO</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>seq</p></td>
+<td><p>sequencer handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-event-1ga6f8a93aaa55cdbff67e264fd5357de0e"><span class="std std-ref">snd_seq_drop_input()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1gaa5a0541a3f5e9b0536c8bc022c64dc04"><span id="index-16"></span><span></span><span class="kt">size_t</span>
+<span class="n">snd_seq_remove_events_sizeof</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></pre>
+<p>get size of <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a></p>
+<p class="rubric">Returns:</p>
+<p>size in bytes</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga280e1b40b1cb608176d9f561038afb74"><span id="index-17"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_remove_events_malloc</span><span class="p">(</span><a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">**</span> <span class="n">ptr</span><span class="p">)</span></pre>
+<p>allocate an empty <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a> using standard malloc</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ptr</p></td>
+<td><p>returned pointer</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga14849dfc4b6f46c58aa8567a7ee5860e"><span id="index-18"></span><span></span><span class="kt">void</span>
+<span class="n">snd_seq_remove_events_free</span><span class="p">(</span><a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">ptr</span><span class="p">)</span></pre>
+<p>frees a previously allocated <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a></p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>obj</p></td>
+<td><p>pointer to object to free</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga03bce50b05a4a7ae7236875a3e9d2949"><span id="index-19"></span><span></span><span class="kt">void</span>
+<span class="n">snd_seq_remove_events_copy</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">dst</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">src</span>
+<span class="p">)</span></pre>
+<p>copy one <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a> to another</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>dst</p></td>
+<td><p>pointer to destination</p></td>
+</tr>
+<tr class="row-even"><td><p>src</p></td>
+<td><p>pointer to source</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga448bdde3612be594f3651d591678770e"><span id="index-20"></span><span></span><span class="kt">unsigned</span> <span class="kt">int</span>
+<span class="n">snd_seq_remove_events_get_condition</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">)</span></pre>
+<p>Get the removal condition bits.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>remove_events container</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>removal condition bits</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-event-1ga7ed1109642fdb8dbd9f8a20564e40362"><span class="std std-ref">snd_seq_remove_events()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1gaf1c86405bfc4ad14bfa7d6234545e4ae"><span id="index-21"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_remove_events_get_queue</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">)</span></pre>
+<p>Get the queue as removal condition.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>remove_events container</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>queue id</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-event-1ga7ed1109642fdb8dbd9f8a20564e40362"><span class="std std-ref">snd_seq_remove_events()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga781d9bfba05346779a4d89b8720111f5"><span id="index-22"></span><span></span><span class="k">const</span> <a class="reference internal" href="union_snd_seq_timestamp_t.html#doxid-unionsnd-seq-timestamp-t"><span class="std std-ref">snd_seq_timestamp_t</span></a><span></span><span class="o">*</span>
+<span class="n">snd_seq_remove_events_get_time</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">)</span></pre>
+<p>Get the event timestamp as removal condition.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>remove_events container</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>time stamp</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-event-1ga7ed1109642fdb8dbd9f8a20564e40362"><span class="std std-ref">snd_seq_remove_events()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga2b26aa9977be1f96e42cc71a9075909a"><span id="index-23"></span><span></span><span class="k">const</span> <a class="reference internal" href="struct_snd_seq_addr_t.html#doxid-structsnd-seq-addr-t"><span class="std std-ref">snd_seq_addr_t</span></a><span></span><span class="o">*</span>
+<span class="n">snd_seq_remove_events_get_dest</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">)</span></pre>
+<p>Get the event destination address as removal condition.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>remove_events container</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>destination address</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-event-1ga7ed1109642fdb8dbd9f8a20564e40362"><span class="std std-ref">snd_seq_remove_events()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga474f7d65b54164c7b4066b2341680b69"><span id="index-24"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_remove_events_get_channel</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">)</span></pre>
+<p>Get the event channel as removal condition.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>remove_events container</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>channel number</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-event-1ga7ed1109642fdb8dbd9f8a20564e40362"><span class="std std-ref">snd_seq_remove_events()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga2bac6d50ae68c432441b6f86f8e51ec5"><span id="index-25"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_remove_events_get_event_type</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">)</span></pre>
+<p>Get the event type as removal condition.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>remove_events container</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>event type</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-event-1ga7ed1109642fdb8dbd9f8a20564e40362"><span class="std std-ref">snd_seq_remove_events()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1gaefe8772759971b008123512b5294fecb"><span id="index-26"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_remove_events_get_tag</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">)</span></pre>
+<p>Get the event tag id as removal condition.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>remove_events container</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>tag id</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-event-1ga7ed1109642fdb8dbd9f8a20564e40362"><span class="std std-ref">snd_seq_remove_events()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga4efc426e73bd8ed2398ee8911c1a1fea"><span id="index-27"></span><span></span><span class="kt">void</span>
+<span class="n">snd_seq_remove_events_set_condition</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">flags</span>
+<span class="p">)</span></pre>
+<p>Set the removal condition bits.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>remove_events container</p></td>
+</tr>
+<tr class="row-even"><td><p>flags</p></td>
+<td><p>removal condition bits</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-event-1ga7ed1109642fdb8dbd9f8a20564e40362"><span class="std std-ref">snd_seq_remove_events()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga79e4eea77bf7639b314d0c6a2b858897"><span id="index-28"></span><span></span><span class="kt">void</span>
+<span class="n">snd_seq_remove_events_set_queue</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">queue</span>
+<span class="p">)</span></pre>
+<p>Set the queue as removal condition.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>remove_events container</p></td>
+</tr>
+<tr class="row-even"><td><p>queue</p></td>
+<td><p>queue id</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-event-1ga7ed1109642fdb8dbd9f8a20564e40362"><span class="std std-ref">snd_seq_remove_events()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga34502d7f197063e7e404039c06cd49f6"><span id="index-29"></span><span></span><span class="kt">void</span>
+<span class="n">snd_seq_remove_events_set_time</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="union_snd_seq_timestamp_t.html#doxid-unionsnd-seq-timestamp-t"><span class="std std-ref">snd_seq_timestamp_t</span></a><span></span><span class="o">*</span> <span class="n">time</span>
+<span class="p">)</span></pre>
+<p>Set the timestamp as removal condition.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>remove_events container</p></td>
+</tr>
+<tr class="row-even"><td><p>time</p></td>
+<td><p>timestamp pointer</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-event-1ga7ed1109642fdb8dbd9f8a20564e40362"><span class="std std-ref">snd_seq_remove_events()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1gaaae3ddaad59def2395a9c3391ad3ea3c"><span id="index-30"></span><span></span><span class="kt">void</span>
+<span class="n">snd_seq_remove_events_set_dest</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="struct_snd_seq_addr_t.html#doxid-structsnd-seq-addr-t"><span class="std std-ref">snd_seq_addr_t</span></a><span></span><span class="o">*</span> <span class="n">addr</span>
+<span class="p">)</span></pre>
+<p>Set the destination address as removal condition.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>remove_events container</p></td>
+</tr>
+<tr class="row-even"><td><p>addr</p></td>
+<td><p>destination address</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-event-1ga7ed1109642fdb8dbd9f8a20564e40362"><span class="std std-ref">snd_seq_remove_events()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga0611da2732cef4d8943489736e838cb5"><span id="index-31"></span><span></span><span class="kt">void</span>
+<span class="n">snd_seq_remove_events_set_channel</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">channel</span>
+<span class="p">)</span></pre>
+<p>Set the channel as removal condition.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>remove_events container</p></td>
+</tr>
+<tr class="row-even"><td><p>channel</p></td>
+<td><p>channel number</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-event-1ga7ed1109642fdb8dbd9f8a20564e40362"><span class="std std-ref">snd_seq_remove_events()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga4b3ac3780f5368118422b08a08ed8d43"><span id="index-32"></span><span></span><span class="kt">void</span>
+<span class="n">snd_seq_remove_events_set_event_type</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">type</span>
+<span class="p">)</span></pre>
+<p>Set the event type as removal condition.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>remove_events container</p></td>
+</tr>
+<tr class="row-even"><td><p>type</p></td>
+<td><p>event type</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-event-1ga7ed1109642fdb8dbd9f8a20564e40362"><span class="std std-ref">snd_seq_remove_events()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga4847f69287addc86dddf61a2ffca5089"><span id="index-33"></span><span></span><span class="kt">void</span>
+<span class="n">snd_seq_remove_events_set_tag</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">tag</span>
+<span class="p">)</span></pre>
+<p>Set the event tag as removal condition.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>remove_events container</p></td>
+</tr>
+<tr class="row-even"><td><p>tag</p></td>
+<td><p>tag id</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-event-1ga7ed1109642fdb8dbd9f8a20564e40362"><span class="std std-ref">snd_seq_remove_events()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga7ed1109642fdb8dbd9f8a20564e40362"><span id="index-34"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_remove_events</span><span class="p">(</span>
+    <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a><span></span><span class="o">*</span> <span class="n">info</span>
+<span class="p">)</span></pre>
+<p>remove events on input/output buffers and pools</p>
+<p>Removes matching events with the given condition from input/output buffers and pools. The removal condition is specified in <em>rmp</em> argument.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>seq</p></td>
+<td><p>sequencer handle</p></td>
+</tr>
+<tr class="row-even"><td><p>rmp</p></td>
+<td><p>remove event container</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-event-1ga0360e41b946c9948ad717beef7c5ab61"><span class="std std-ref">snd_seq_event_output()</span></a>, <a class="reference internal" href="#doxid-group-seq-event-1gae42e855dcb4745bdc78efe313d49a0ef"><span class="std std-ref">snd_seq_drop_output()</span></a>, <a class="reference internal" href="group_SeqMiddle.html#doxid-group-seq-middle-1ga49d2acf57c4493a95eaaa19d8199f6f2"><span class="std std-ref">snd_seq_reset_pool_output()</span></a></p>
+</section>
+<section id="macros">
+<h3>Macros</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga2662f8f42259f5d61be4bfb66fc6f248"><span id="index-35"></span><span></span><span class="cp">#define SND_SEQ_REMOVE_DEST</span></pre>
+<p>Restrict by destination q:client:port</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga639b7c33bf27b65ca14857bf5f1cee4a"><span id="index-36"></span><span></span><span class="cp">#define SND_SEQ_REMOVE_DEST_CHANNEL</span></pre>
+<p>Restrict by channel</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1gada13f98960143c3d24e6965c954d0fc4"><span id="index-37"></span><span></span><span class="cp">#define SND_SEQ_REMOVE_EVENT_TYPE</span></pre>
+<p>Restrict to event type</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga43008e518e356084dbcea01b3e7d1909"><span id="index-38"></span><span></span><span class="cp">#define SND_SEQ_REMOVE_IGNORE_OFF</span></pre>
+<p>Do not flush off events</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1gac6a1b26c4551664f1647bc71001b5f88"><span id="index-39"></span><span></span><span class="cp">#define SND_SEQ_REMOVE_INPUT</span></pre>
+<p>Remove conditional flags Flush input queues</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga21236ad0af7c1f3d549c1b3e008b0c73"><span id="index-40"></span><span></span><span class="cp">#define SND_SEQ_REMOVE_OUTPUT</span></pre>
+<p>Flush output queues</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga19bc5ec1e09ad34af5cf5ae3b28ee434"><span id="index-41"></span><span></span><span class="cp">#define SND_SEQ_REMOVE_TAG_MATCH</span></pre>
+<p>Restrict to events with given tag</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga8213dbaeb33df14ec7a1e7fd501f8c5e"><span id="index-42"></span><span></span><span class="cp">#define SND_SEQ_REMOVE_TIME_AFTER</span></pre>
+<p>Restrict to time or after</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1ga69279405cabd0127222b936dd6e45e49"><span id="index-43"></span><span></span><span class="cp">#define SND_SEQ_REMOVE_TIME_BEFORE</span></pre>
+<p>Restrict to before time</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1gac4169f30c9c8c5dc462245f3a2dc5d76"><span id="index-44"></span><span></span><span class="cp">#define SND_SEQ_REMOVE_TIME_TICK</span></pre>
+<p>Time is in ticks</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-event-1gaa961c5d6e931bb50c75d828c8470ab02"><span id="index-45"></span><span></span><span class="cp">#define snd_seq_remove_events_alloca(ptr)</span></pre>
+<p>allocate a <a class="reference internal" href="#doxid-group-seq-event-1gaff65b0e9c173d96af7f21bfceeca249c"><span class="std std-ref">snd_seq_remove_events_t</span></a> container on stack</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="enum_snd_seq_client_type_t.html" class="btn btn-neutral float-left" title="enum snd_seq_client_type_t" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="group_SeqEvents.html" class="btn btn-neutral float-right" title="Sequencer Event Definitions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 1998-2017, ALSA Library Maintainers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

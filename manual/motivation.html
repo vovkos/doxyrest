@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Motivation &mdash; Doxyrest Manual</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinx_rtd_theme.css?v=b6ca47bd" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=35e066c8"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Architectural Overview" href="architecture.html" />
+    <link rel="prev" title="Doxyrest Manual" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Doxyrest Manual
+          </a>
+              <div class="version">
+                2.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Motivation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architectural Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="samples.html">Samples</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Doxyrest Manual</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Motivation</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="motivation">
+<h1>Motivation</h1>
+<p>Sadly enough, up until now fellow C/C++ programmers don’t have much choice when it comes to documenting their C/C++ APIs. It basically boils down to these three options:</p>
+<ol class="arabic simple">
+<li><p><strong>Doxygen</strong>;</p></li>
+<li><p><strong>QDoc</strong>;</p></li>
+<li><p>Writing everything <em>manually</em>.</p></li>
+</ol>
+<p>I will dismiss the option #3 right away. If the API is evolving – which is almost always the case as long as the product is alive – it is simply <em>impossible to keep coherence</em> between the documentation and the C/C++ sources. To rephrase, a manually written API documentation is <em>always out-of-sync</em>.</p>
+<p>Next, Doxygen. Don’t get me wrong. Doxygen was revolutional when if first emerged, and it quickly became a de-facto standard of documenting C/C++ code. But unfortunately, it has two major problems:</p>
+<p>1.1. The default Doxygen output is… not exactly good-looking.</p>
+<blockquote>
+<div><p>Some people may not be as picky as I am, but I believe no professional web designer would ever approve the HTML output of Doxygen. However, it would be alright – should Doxygen provide a way to tweak its output. Which leads us to a larger problem…</p>
+</div></blockquote>
+<p>1.2. Doxygen never really developed <em>sufficient customizability</em>.</p>
+<blockquote>
+<div><p>Yeah, you can change CSS and replace headers and footers, but that’s about it. The thing is, too much is <em>hardcoded into the monolithic C++</em> core of Doxygen. That applies to both the back-end (generation of HTML and PDF) and to the front end (source code parser).</p>
+</div></blockquote>
+<p>QDoc generates much, much nicer default HTML output. But it shares the biggest problem of Doxygen:</p>
+<p>2.1. Both the parser and the HTML emitter are hardcoded into the monolithic C++ core!</p>
+<blockquote>
+<div><p>You can’t customize much in the output other than changing a few QDoc configuration variables in <code class="docutils literal notranslate"><span class="pre">.qdocconf</span></code> files and then twiddling CSS. Moreover, unlike Doxygen (which is a multi-language documentation generator) QDoc is strictly <em>C++ only</em> <a class="footnote-reference superscript" href="#f1" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>!</p>
+</div></blockquote>
+<p>Besides, and this was also crucial for us at Tibbo,</p>
+<p>2.2. There is no PDF output!</p>
+<p>I was contemplating the idea of creating a better alternative for documenting C/C++ for many years already. But the actual decision to finally get down to it came with the need to document <a class="reference external" href="https://github.com/vovkos/jancy">Jancy</a> API for <a class="reference external" href="https://ioninja.com">IO Ninja</a> (a universal all-in-one low-level IO debugger).</p>
+<p>Jancy is a C-family scripting language, but its keyword set and new syntax constructs make it impossible to be passed to the out-of-the-box Doxygen (and obviously, not to QDoc). And neither provide front-end modularity – to add a new parser you need to merge it into the monolithic С++ core and re-compile everything.</p>
+<p>So, I finally decided to fix the problem once and for all – and <strong>Doxyrest</strong> was born!</p>
+<hr class="docutils" />
+<p class="rubric">Footnotes:</p>
+<aside class="footnote-list superscript">
+<aside class="footnote superscript" id="f1" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>And not even just C++, but a dialect of C++ – with all the <code class="docutils literal notranslate"><span class="pre">Q_OBJECT</span></code>, <code class="docutils literal notranslate"><span class="pre">Q_PROPERTY</span></code>, <code class="docutils literal notranslate"><span class="pre">foreach</span></code> etc macro language extensions.</p>
+</aside>
+</aside>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Doxyrest Manual" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="architecture.html" class="btn btn-neutral float-right" title="Architectural Overview" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2016-2024, Tibbo Technology Inc.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

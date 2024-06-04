@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Synchronous device I/O &mdash; LibUSB Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinx_rtd_theme.css?v=b6ca47bd" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=46733111"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="USB descriptors" href="group_libusb_desc.html" />
+    <link rel="prev" title="struct libusb_pollfd" href="struct_libusb_pollfd.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            LibUSB Documentation
+          </a>
+              <div class="version">
+                1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_asyncio.html">Asynchronous device I/O</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_dev.html">Device handling and enumeration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_hotplug.html">Device hotplug event notification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_lib.html">Library initialization/deinitialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_misc.html">Miscellaneous</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_poll.html">Polling and timing</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Synchronous device I/O</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#global-functions">Global Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_desc.html">USB descriptors</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="page_libusb_api.html">Application Programming Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_libusb_caveats.html">Caveats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_libusb_contexts.html">Contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_libusb_hotplug.html">Device hotplug event notification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_libusb_mtasync.html">Multi-threaded applications and asynchronous I/O</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_libusb_packetoverflow.html">Packets and overflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_libusb_io.html">Synchronous and asynchronous device I/O</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LibUSB Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Synchronous device I/O</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="synchronous-device-i-o">
+<span id="doxid-group-libusb-syncio"></span><span id="index-0"></span><h1>Synchronous device I/O</h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="overview">
+<h2>Overview</h2>
+<p>This page documents libusb’s synchronous (blocking) API for USB device I/O. <a class="reference internal" href="#details-group-libusb-syncio"><span class="std std-ref">More…</span></a></p>
+<pre class="highlight doxyrest-overview-code-block literal-block"><span></span><span class="c1">// global functions</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libusb-syncio-1gadb11f7a761bd12fc77a07f4568d56f38"><span class="std std-ref">libusb_control_transfer</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga7df95821d20d27b5597f1d783749d6a4"><span class="std std-ref">libusb_device_handle</span></a><span></span><span class="o">*</span> <span class="n">dev_handle</span><span class="p">,</span>
+    <span class="kt">uint8_t</span> <span class="n">request_type</span><span class="p">,</span>
+    <span class="kt">uint8_t</span> <span class="n">bRequest</span><span class="p">,</span>
+    <span class="kt">uint16_t</span> <span class="n">wValue</span><span class="p">,</span>
+    <span class="kt">uint16_t</span> <span class="n">wIndex</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <span class="kt">uint16_t</span> <span class="n">wLength</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">timeout</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libusb-syncio-1gab8ae853ab492c22d707241dc26c8a805"><span class="std std-ref">libusb_bulk_transfer</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga7df95821d20d27b5597f1d783749d6a4"><span class="std std-ref">libusb_device_handle</span></a><span></span><span class="o">*</span> <span class="n">dev_handle</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">endpoint</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">length</span><span class="p">,</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">actual_length</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">timeout</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libusb-syncio-1gac412bda21b7ecf57e4c76877d78e6486"><span class="std std-ref">libusb_interrupt_transfer</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga7df95821d20d27b5597f1d783749d6a4"><span class="std std-ref">libusb_device_handle</span></a><span></span><span class="o">*</span> <span class="n">dev_handle</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">endpoint</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">length</span><span class="p">,</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">actual_length</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">timeout</span>
+<span class="p">);</span></pre>
+</section>
+<section id="detailed-documentation">
+<span id="details-group-libusb-syncio"></span><h2>Detailed Documentation</h2>
+<p>This page documents libusb’s synchronous (blocking) API for USB device I/O.</p>
+<p>This interface is easy to use but has some limitations. More advanced users may wish to consider using the <a class="reference internal" href="group_libusb_asyncio.html#doxid-group-libusb-asyncio"><span class="std std-ref">asynchronous I/O API</span></a> instead.</p>
+<section id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libusb-syncio-1gadb11f7a761bd12fc77a07f4568d56f38"><span id="index-1"></span><span></span><span class="kt">int</span>
+<span class="n">libusb_control_transfer</span><span class="p">(</span>
+    <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga7df95821d20d27b5597f1d783749d6a4"><span class="std std-ref">libusb_device_handle</span></a><span></span><span class="o">*</span> <span class="n">dev_handle</span><span class="p">,</span>
+    <span class="kt">uint8_t</span> <span class="n">request_type</span><span class="p">,</span>
+    <span class="kt">uint8_t</span> <span class="n">bRequest</span><span class="p">,</span>
+    <span class="kt">uint16_t</span> <span class="n">wValue</span><span class="p">,</span>
+    <span class="kt">uint16_t</span> <span class="n">wIndex</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <span class="kt">uint16_t</span> <span class="n">wLength</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">timeout</span>
+<span class="p">)</span></pre>
+<p>Perform a USB control transfer.</p>
+<p>The direction of the transfer is inferred from the bmRequestType field of the setup packet.</p>
+<p>The wValue, wIndex and wLength fields values should be given in host-endian byte order.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>dev_handle</p></td>
+<td><p>a handle for the device to communicate with</p></td>
+</tr>
+<tr class="row-even"><td><p>bmRequestType</p></td>
+<td><p>the request type field for the setup packet</p></td>
+</tr>
+<tr class="row-odd"><td><p>bRequest</p></td>
+<td><p>the request field for the setup packet</p></td>
+</tr>
+<tr class="row-even"><td><p>wValue</p></td>
+<td><p>the value field for the setup packet</p></td>
+</tr>
+<tr class="row-odd"><td><p>wIndex</p></td>
+<td><p>the index field for the setup packet</p></td>
+</tr>
+<tr class="row-even"><td><p>data</p></td>
+<td><p>a suitably-sized data buffer for either input or output (depending on direction bits within bmRequestType)</p></td>
+</tr>
+<tr class="row-odd"><td><p>wLength</p></td>
+<td><p>the length field for the setup packet. The data buffer should be at least this size.</p></td>
+</tr>
+<tr class="row-even"><td><p>timeout</p></td>
+<td><p>timeout (in millseconds) that this function should wait before giving up due to no response being received. For an unlimited timeout, use value 0.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>on success, the number of bytes actually transferred</p>
+<p>LIBUSB_ERROR_TIMEOUT if the transfer timed out</p>
+<p>LIBUSB_ERROR_PIPE if the control request was not supported by the device</p>
+<p>LIBUSB_ERROR_NO_DEVICE if the device has been disconnected</p>
+<p>LIBUSB_ERROR_BUSY if called from event handling context</p>
+<p>LIBUSB_ERROR_INVALID_PARAM if the transfer size is larger than the operating system and/or hardware can support</p>
+<p>another LIBUSB_ERROR code on other failures</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libusb-syncio-1gab8ae853ab492c22d707241dc26c8a805"><span id="index-2"></span><span></span><span class="kt">int</span>
+<span class="n">libusb_bulk_transfer</span><span class="p">(</span>
+    <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga7df95821d20d27b5597f1d783749d6a4"><span class="std std-ref">libusb_device_handle</span></a><span></span><span class="o">*</span> <span class="n">dev_handle</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">endpoint</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">length</span><span class="p">,</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">actual_length</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">timeout</span>
+<span class="p">)</span></pre>
+<p>Perform a USB bulk transfer.</p>
+<p>The direction of the transfer is inferred from the direction bits of the endpoint address.</p>
+<p>For bulk reads, the <code class="docutils literal notranslate"><span class="pre">length</span></code> field indicates the maximum length of data you are expecting to receive. If less data arrives than expected, this function will return that data, so be sure to check the <code class="docutils literal notranslate"><span class="pre">transferred</span></code> output parameter.</p>
+<p>You should also check the <code class="docutils literal notranslate"><span class="pre">transferred</span></code> parameter for bulk writes. Not all of the data may have been written.</p>
+<p>Also check <code class="docutils literal notranslate"><span class="pre">transferred</span></code> when dealing with a timeout error code. libusb may have to split your transfer into a number of chunks to satisfy underlying O/S requirements, meaning that the timeout may expire after the first few chunks have completed. libusb is careful not to lose any data that may have been transferred; do not assume that timeout conditions indicate a complete lack of I/O.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>dev_handle</p></td>
+<td><p>a handle for the device to communicate with</p></td>
+</tr>
+<tr class="row-even"><td><p>endpoint</p></td>
+<td><p>the address of a valid endpoint to communicate with</p></td>
+</tr>
+<tr class="row-odd"><td><p>data</p></td>
+<td><p>a suitably-sized data buffer for either input or output (depending on endpoint)</p></td>
+</tr>
+<tr class="row-even"><td><p>length</p></td>
+<td><p>for bulk writes, the number of bytes from data to be sent. for bulk reads, the maximum number of bytes to receive into the data buffer.</p></td>
+</tr>
+<tr class="row-odd"><td><p>transferred</p></td>
+<td><p>output location for the number of bytes actually transferred. Since version 1.0.21 (<a class="reference internal" href="group_libusb_misc.html#doxid-group-libusb-misc-1gaabe4bc36a83358685d36a6c853cbb4de"><span class="std std-ref">LIBUSB_API_VERSION</span></a>&gt;= 0x01000105), it is legal to pass a NULL pointer if you do not wish to receive this information.</p></td>
+</tr>
+<tr class="row-even"><td><p>timeout</p></td>
+<td><p>timeout (in millseconds) that this function should wait before giving up due to no response being received. For an unlimited timeout, use value 0.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success (and populates <code class="docutils literal notranslate"><span class="pre">transferred</span></code>)</p>
+<p>LIBUSB_ERROR_TIMEOUT if the transfer timed out (and populates <code class="docutils literal notranslate"><span class="pre">transferred</span></code>)</p>
+<p>LIBUSB_ERROR_PIPE if the endpoint halted</p>
+<p>LIBUSB_ERROR_OVERFLOW if the device offered more data, see <a class="reference internal" href="page_libusb_packetoverflow.html#doxid-libusb-packetoverflow"><span class="std std-ref">Packets and overflows</span></a></p>
+<p>LIBUSB_ERROR_NO_DEVICE if the device has been disconnected</p>
+<p>LIBUSB_ERROR_BUSY if called from event handling context</p>
+<p>another LIBUSB_ERROR code on other failures</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libusb-syncio-1gac412bda21b7ecf57e4c76877d78e6486"><span id="index-3"></span><span></span><span class="kt">int</span>
+<span class="n">libusb_interrupt_transfer</span><span class="p">(</span>
+    <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga7df95821d20d27b5597f1d783749d6a4"><span class="std std-ref">libusb_device_handle</span></a><span></span><span class="o">*</span> <span class="n">dev_handle</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">endpoint</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">length</span><span class="p">,</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">actual_length</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">timeout</span>
+<span class="p">)</span></pre>
+<p>Perform a USB interrupt transfer.</p>
+<p>The direction of the transfer is inferred from the direction bits of the endpoint address.</p>
+<p>For interrupt reads, the <code class="docutils literal notranslate"><span class="pre">length</span></code> field indicates the maximum length of data you are expecting to receive. If less data arrives than expected, this function will return that data, so be sure to check the <code class="docutils literal notranslate"><span class="pre">transferred</span></code> output parameter.</p>
+<p>You should also check the <code class="docutils literal notranslate"><span class="pre">transferred</span></code> parameter for interrupt writes. Not all of the data may have been written.</p>
+<p>Also check <code class="docutils literal notranslate"><span class="pre">transferred</span></code> when dealing with a timeout error code. libusb may have to split your transfer into a number of chunks to satisfy underlying O/S requirements, meaning that the timeout may expire after the first few chunks have completed. libusb is careful not to lose any data that may have been transferred; do not assume that timeout conditions indicate a complete lack of I/O.</p>
+<p>The default endpoint bInterval value is used as the polling interval.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>dev_handle</p></td>
+<td><p>a handle for the device to communicate with</p></td>
+</tr>
+<tr class="row-even"><td><p>endpoint</p></td>
+<td><p>the address of a valid endpoint to communicate with</p></td>
+</tr>
+<tr class="row-odd"><td><p>data</p></td>
+<td><p>a suitably-sized data buffer for either input or output (depending on endpoint)</p></td>
+</tr>
+<tr class="row-even"><td><p>length</p></td>
+<td><p>for bulk writes, the number of bytes from data to be sent. for bulk reads, the maximum number of bytes to receive into the data buffer.</p></td>
+</tr>
+<tr class="row-odd"><td><p>transferred</p></td>
+<td><p>output location for the number of bytes actually transferred. Since version 1.0.21 (<a class="reference internal" href="group_libusb_misc.html#doxid-group-libusb-misc-1gaabe4bc36a83358685d36a6c853cbb4de"><span class="std std-ref">LIBUSB_API_VERSION</span></a>&gt;= 0x01000105), it is legal to pass a NULL pointer if you do not wish to receive this information.</p></td>
+</tr>
+<tr class="row-even"><td><p>timeout</p></td>
+<td><p>timeout (in millseconds) that this function should wait before giving up due to no response being received. For an unlimited timeout, use value 0.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success (and populates <code class="docutils literal notranslate"><span class="pre">transferred</span></code>)</p>
+<p>LIBUSB_ERROR_TIMEOUT if the transfer timed out</p>
+<p>LIBUSB_ERROR_PIPE if the endpoint halted</p>
+<p>LIBUSB_ERROR_OVERFLOW if the device offered more data, see <a class="reference internal" href="page_libusb_packetoverflow.html#doxid-libusb-packetoverflow"><span class="std std-ref">Packets and overflows</span></a></p>
+<p>LIBUSB_ERROR_NO_DEVICE if the device has been disconnected</p>
+<p>LIBUSB_ERROR_BUSY if called from event handling context</p>
+<p>another LIBUSB_ERROR code on other error</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="struct_libusb_pollfd.html" class="btn btn-neutral float-left" title="struct libusb_pollfd" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="group_libusb_desc.html" class="btn btn-neutral float-right" title="USB descriptors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2007-2017, LibUSB Maintainers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

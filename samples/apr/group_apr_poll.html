@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Poll Routines &mdash; Apache Portable Runtime Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinx_rtd_theme.css?v=b6ca47bd" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=515d8a7f"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Poll options" href="group_pollopts.html" />
+    <link rel="prev" title="Platform Definitions" href="group_apr_platform.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Apache Portable Runtime Documentation
+          </a>
+              <div class="version">
+                1.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="group_APR.html">Apache Portability Runtime library</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="group_apr_atomic.html">Atomic Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_getopt.html">Command Argument Parsing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_thread_cond.html">Condition Variable Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_dso.html">Dynamic Object Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_errno.html">Error Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_APR_Util_Escaping.html">Escape functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_file_io.html">File I/O Handling Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_file_info.html">File Information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_fnmatch.html">Filename Matching Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_env.html">Functions for manipulating the environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_lib.html">General Purpose Library Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_APR_GlobalMutex.html">Global Locking Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_hash.html">Hash Tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_support.html">Internal APR support functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_allocator.html">Internal Memory Allocation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_mmap.html">MMAP (Memory Map) Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_pools.html">Memory Pool Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_general.html">Miscellaneous library routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_network_io.html">Network Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_platform.html">Platform Definitions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Poll Routines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="group_pollopts.html">Poll options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="group_pollflags.html">Pollset Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="enum_apr_datatype_e.html">enum apr_datatype_e</a></li>
+<li class="toctree-l3"><a class="reference internal" href="enum_apr_pollset_method_e.html">enum apr_pollset_method_e</a></li>
+<li class="toctree-l3"><a class="reference internal" href="struct_apr_pollfd_t.html">struct apr_pollfd_t</a></li>
+<li class="toctree-l3"><a class="reference internal" href="union_apr_descriptor.html">union apr_descriptor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#global-functions">Global Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_portabile.html">Portability Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_proc_mutex.html">Process Locking Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_random.html">Random Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_thread_rwlock.html">Reader/Writer Lock Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_ring.html">Ring Macro Implementations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_shm.html">Shared Memory Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_signal.html">Signal Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_skiplist.html">Skip list implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_strings.html">String routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_tables.html">Table and Array Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_thread_mutex.html">Thread Mutex Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_thread_proc.html">Threads and Process Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_time.html">Time Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_user.html">User and Group ID Services</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="group_apr_library.html">Library initialization and termination</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_apr_ctype.html">ctype functions</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="page_bug.html">Bug List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_deprecated.html">Deprecated List</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Apache Portable Runtime Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="group_APR.html">Apache Portability Runtime library</a></li>
+      <li class="breadcrumb-item active">Poll Routines</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="poll-routines">
+<span id="doxid-group-apr-poll"></span><span id="index-0"></span><h1>Poll Routines</h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="overview">
+<h2>Overview</h2>
+<div class="line-block">
+<div class="line"><a class="reference internal" href="group_pollopts.html#doxid-group-pollopts"><span class="std std-ref">Poll options</span></a></div>
+<div class="line"><a class="reference internal" href="group_pollflags.html#doxid-group-pollflags"><span class="std std-ref">Pollset Flags</span></a></div>
+</div>
+<pre class="highlight doxyrest-overview-code-block literal-block"><span></span><span class="c1">// typedefs</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="struct_apr_pollfd_t.html#doxid-structapr-pollfd-t"><span class="std std-ref">apr_pollfd_t</span></a><span></span> <a class="reference internal" href="#doxid-group-apr-poll-1ga0c89b184cbe2337e44207f1ad245129b"><span class="std std-ref">apr_pollfd_t</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-poll-1ga680da1f10ac5ef75efc503a9d15b8906"><span class="std std-ref">apr_pollset_t</span></a><span></span> <a class="reference internal" href="#doxid-group-apr-poll-1ga680da1f10ac5ef75efc503a9d15b8906"><span class="std std-ref">apr_pollset_t</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-poll-1gae382e39bdf0c5a02fca7da3944bece08"><span class="std std-ref">apr_pollcb_t</span></a><span></span> <a class="reference internal" href="#doxid-group-apr-poll-1gae382e39bdf0c5a02fca7da3944bece08"><span class="std std-ref">apr_pollcb_t</span></a><span></span><span class="p">;</span>
+
+<span class="k">typedef</span> <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-apr-poll-1ga1dcd8c87e233dbf105e83d50ef601f55"><span class="std std-ref">apr_pollcb_cb_t</span></a><span></span><span class="p">)(</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">baton</span><span class="p">,</span>
+    <span class="n">apr_pollfd_t</span> <span class="o">*</span><span class="n">descriptor</span>
+    <span class="p">);</span>
+
+<span class="c1">// enums</span>
+
+<span class="k">enum</span> <a class="reference internal" href="enum_apr_datatype_e.html#doxid-group-apr-poll-1ga0a8549d84c1721788b102a4cc8b4b0f0"><span class="std std-ref">apr_datatype_e</span></a><span></span><span class="p">;</span>
+<span class="k">enum</span> <a class="reference internal" href="enum_apr_pollset_method_e.html#doxid-group-apr-poll-1gabe6f1238ea45e9425fa052e2788e4a29"><span class="std std-ref">apr_pollset_method_e</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// structs</span>
+
+<span class="k">struct</span> <a class="reference internal" href="struct_apr_pollfd_t.html#doxid-structapr-pollfd-t"><span class="std std-ref">apr_pollfd_t</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// unions</span>
+
+<span class="k">union</span> <a class="reference internal" href="union_apr_descriptor.html#doxid-unionapr-descriptor"><span class="std std-ref">apr_descriptor</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// global functions</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-poll-1ga4ca4056a19daee8fe94ddba100fe2326"><span class="std std-ref">apr_pollset_create</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-poll-1ga680da1f10ac5ef75efc503a9d15b8906"><span class="std std-ref">apr_pollset_t</span></a><span></span><span class="o">**</span> <span class="n">pollset</span><span class="p">,</span>
+    <span class="n">apr_uint32_t</span> <span class="n">size</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="n">apr_uint32_t</span> <span class="n">flags</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-poll-1ga9448a2d756868aa1c6dbc9726a2e32b5"><span class="std std-ref">apr_pollset_create_ex</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-poll-1ga680da1f10ac5ef75efc503a9d15b8906"><span class="std std-ref">apr_pollset_t</span></a><span></span><span class="o">**</span> <span class="n">pollset</span><span class="p">,</span>
+    <span class="n">apr_uint32_t</span> <span class="n">size</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="n">apr_uint32_t</span> <span class="n">flags</span><span class="p">,</span>
+    <a class="reference internal" href="enum_apr_pollset_method_e.html#doxid-group-apr-poll-1gabe6f1238ea45e9425fa052e2788e4a29"><span class="std std-ref">apr_pollset_method_e</span></a><span></span> <span class="n">method</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-poll-1gaa06c538d3fea9d860374043aff9450b2"><span class="std std-ref">apr_pollset_destroy</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-poll-1ga680da1f10ac5ef75efc503a9d15b8906"><span class="std std-ref">apr_pollset_t</span></a><span></span><span class="o">*</span> <span class="n">pollset</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-poll-1ga4ec50bf9a11c6b60927c51b81412f5b9"><span class="std std-ref">apr_pollset_add</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-poll-1ga680da1f10ac5ef75efc503a9d15b8906"><span class="std std-ref">apr_pollset_t</span></a><span></span><span class="o">*</span> <span class="n">pollset</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="struct_apr_pollfd_t.html#doxid-structapr-pollfd-t"><span class="std std-ref">apr_pollfd_t</span></a><span></span><span class="o">*</span> <span class="n">descriptor</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-poll-1ga3c99c06e142d6b6b789eeb6086122e3a"><span class="std std-ref">apr_pollset_remove</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-poll-1ga680da1f10ac5ef75efc503a9d15b8906"><span class="std std-ref">apr_pollset_t</span></a><span></span><span class="o">*</span> <span class="n">pollset</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="struct_apr_pollfd_t.html#doxid-structapr-pollfd-t"><span class="std std-ref">apr_pollfd_t</span></a><span></span><span class="o">*</span> <span class="n">descriptor</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-poll-1ga6b31d7b3a7b2d356370403dd2b79ecf3"><span class="std std-ref">apr_pollset_poll</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-poll-1ga680da1f10ac5ef75efc503a9d15b8906"><span class="std std-ref">apr_pollset_t</span></a><span></span><span class="o">*</span> <span class="n">pollset</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_time.html#doxid-group-apr-time-1gaae2129185a395cc393f76fabf4f43e47"><span class="std std-ref">apr_interval_time_t</span></a><span></span> <span class="n">timeout</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span><span class="o">*</span> <span class="n">num</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="struct_apr_pollfd_t.html#doxid-structapr-pollfd-t"><span class="std std-ref">apr_pollfd_t</span></a><span></span><span class="o">**</span> <span class="n">descriptors</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-poll-1gac5e86828143e169e18b2a6eab94be531"><span class="std std-ref">apr_pollset_wakeup</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-poll-1ga680da1f10ac5ef75efc503a9d15b8906"><span class="std std-ref">apr_pollset_t</span></a><span></span><span class="o">*</span> <span class="n">pollset</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-poll-1gad1d8a1ccd14952be6da5f272ca8dda76"><span class="std std-ref">apr_poll</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="struct_apr_pollfd_t.html#doxid-structapr-pollfd-t"><span class="std std-ref">apr_pollfd_t</span></a><span></span><span class="o">*</span> <span class="n">aprset</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">numsock</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span><span class="o">*</span> <span class="n">nsds</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_time.html#doxid-group-apr-time-1gaae2129185a395cc393f76fabf4f43e47"><span class="std std-ref">apr_interval_time_t</span></a><span></span> <span class="n">timeout</span>
+<span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-poll-1ga942ebbcc17d27911da86e1bd5c7a592e"><span class="std std-ref">apr_pollset_method_name</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-poll-1ga680da1f10ac5ef75efc503a9d15b8906"><span class="std std-ref">apr_pollset_t</span></a><span></span><span class="o">*</span> <span class="n">pollset</span><span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-poll-1ga5d64867d7a3abd53d3765b4b47cf774f"><span class="std std-ref">apr_poll_method_defname</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-poll-1ga76c33736268d57fca503790711d6d04e"><span class="std std-ref">apr_pollcb_create</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-poll-1gae382e39bdf0c5a02fca7da3944bece08"><span class="std std-ref">apr_pollcb_t</span></a><span></span><span class="o">**</span> <span class="n">pollcb</span><span class="p">,</span>
+    <span class="n">apr_uint32_t</span> <span class="n">size</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="n">apr_uint32_t</span> <span class="n">flags</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-poll-1ga2ebdd0cba2d3b8333c46ee48170f8e90"><span class="std std-ref">apr_pollcb_create_ex</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-poll-1gae382e39bdf0c5a02fca7da3944bece08"><span class="std std-ref">apr_pollcb_t</span></a><span></span><span class="o">**</span> <span class="n">pollcb</span><span class="p">,</span>
+    <span class="n">apr_uint32_t</span> <span class="n">size</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="n">apr_uint32_t</span> <span class="n">flags</span><span class="p">,</span>
+    <a class="reference internal" href="enum_apr_pollset_method_e.html#doxid-group-apr-poll-1gabe6f1238ea45e9425fa052e2788e4a29"><span class="std std-ref">apr_pollset_method_e</span></a><span></span> <span class="n">method</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-poll-1ga8fab02dfa803d911dae98656fac7a2c8"><span class="std std-ref">apr_pollcb_add</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-poll-1gae382e39bdf0c5a02fca7da3944bece08"><span class="std std-ref">apr_pollcb_t</span></a><span></span><span class="o">*</span> <span class="n">pollcb</span><span class="p">,</span>
+    <a class="reference internal" href="struct_apr_pollfd_t.html#doxid-structapr-pollfd-t"><span class="std std-ref">apr_pollfd_t</span></a><span></span><span class="o">*</span> <span class="n">descriptor</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-poll-1gad004b778a14d6bcc4e48a10e5af729d8"><span class="std std-ref">apr_pollcb_remove</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-poll-1gae382e39bdf0c5a02fca7da3944bece08"><span class="std std-ref">apr_pollcb_t</span></a><span></span><span class="o">*</span> <span class="n">pollcb</span><span class="p">,</span>
+    <a class="reference internal" href="struct_apr_pollfd_t.html#doxid-structapr-pollfd-t"><span class="std std-ref">apr_pollfd_t</span></a><span></span><span class="o">*</span> <span class="n">descriptor</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-poll-1ga11765d1b27e2f621a8dcd2c40f0e259c"><span class="std std-ref">apr_pollcb_poll</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-poll-1gae382e39bdf0c5a02fca7da3944bece08"><span class="std std-ref">apr_pollcb_t</span></a><span></span><span class="o">*</span> <span class="n">pollcb</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_time.html#doxid-group-apr-time-1gaae2129185a395cc393f76fabf4f43e47"><span class="std std-ref">apr_interval_time_t</span></a><span></span> <span class="n">timeout</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-poll-1ga1dcd8c87e233dbf105e83d50ef601f55"><span class="std std-ref">apr_pollcb_cb_t</span></a><span></span> <span class="n">func</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">baton</span>
+<span class="p">);</span></pre>
+</section>
+<section id="detailed-documentation">
+<span id="details-group-apr-poll"></span><h2>Detailed Documentation</h2>
+<section id="typedefs">
+<h3>Typedefs</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-poll-1ga0c89b184cbe2337e44207f1ad245129b"><span id="index-1"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="struct_apr_pollfd_t.html#doxid-structapr-pollfd-t"><span class="std std-ref">apr_pollfd_t</span></a><span></span> <span class="n">apr_pollfd_t</span></pre>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="struct_apr_pollfd_t.html#doxid-structapr-pollfd-t"><span class="std std-ref">apr_pollfd_t</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-poll-1ga680da1f10ac5ef75efc503a9d15b8906"><span id="index-2"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-poll-1ga680da1f10ac5ef75efc503a9d15b8906"><span class="std std-ref">apr_pollset_t</span></a><span></span> <span class="n">apr_pollset_t</span></pre>
+<p>Opaque structure used for pollset API</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-poll-1gae382e39bdf0c5a02fca7da3944bece08"><span id="index-3"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-poll-1gae382e39bdf0c5a02fca7da3944bece08"><span class="std std-ref">apr_pollcb_t</span></a><span></span> <span class="n">apr_pollcb_t</span></pre>
+<p>Opaque structure used for pollcb API</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-poll-1ga1dcd8c87e233dbf105e83d50ef601f55"><span id="index-4"></span><span></span><span class="k">typedef</span> <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span> <span class="p">(</span><span class="o">*</span><span class="n">apr_pollcb_cb_t</span><span class="p">)(</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">baton</span><span class="p">,</span>
+    <span class="n">apr_pollfd_t</span> <span class="o">*</span><span class="n">descriptor</span>
+    <span class="p">)</span></pre>
+<p>Function prototype for pollcb handlers</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>baton</p></td>
+<td><p>Opaque baton passed into <a class="reference internal" href="#doxid-group-apr-poll-1ga11765d1b27e2f621a8dcd2c40f0e259c"><span class="std std-ref">apr_pollcb_poll()</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>descriptor</p></td>
+<td><p>Contains the notification for an active descriptor, the rtnevents member contains what events were triggered for this descriptor.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-poll-1ga4ca4056a19daee8fe94ddba100fe2326"><span id="index-5"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_pollset_create</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-poll-1ga680da1f10ac5ef75efc503a9d15b8906"><span class="std std-ref">apr_pollset_t</span></a><span></span><span class="o">**</span> <span class="n">pollset</span><span class="p">,</span>
+    <span class="n">apr_uint32_t</span> <span class="n">size</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="n">apr_uint32_t</span> <span class="n">flags</span>
+<span class="p">)</span></pre>
+<p>Set up a pollset object If flags contains APR_POLLSET_THREADSAFE, then a pollset is created on which it is safe to make concurrent calls to <a class="reference internal" href="#doxid-group-apr-poll-1ga4ec50bf9a11c6b60927c51b81412f5b9"><span class="std std-ref">apr_pollset_add()</span></a>, <a class="reference internal" href="#doxid-group-apr-poll-1ga3c99c06e142d6b6b789eeb6086122e3a"><span class="std std-ref">apr_pollset_remove()</span></a> and <a class="reference internal" href="#doxid-group-apr-poll-1ga6b31d7b3a7b2d356370403dd2b79ecf3"><span class="std std-ref">apr_pollset_poll()</span></a> from separate threads. This feature is only supported on some platforms; the <a class="reference internal" href="#doxid-group-apr-poll-1ga4ca4056a19daee8fe94ddba100fe2326"><span class="std std-ref">apr_pollset_create()</span></a> call will fail with APR_ENOTIMPL on platforms where it is not supported.</p>
+<p>If flags contains APR_POLLSET_WAKEABLE, then a pollset is created with an additional internal pipe object used for the <a class="reference internal" href="#doxid-group-apr-poll-1gac5e86828143e169e18b2a6eab94be531"><span class="std std-ref">apr_pollset_wakeup()</span></a> call. The actual size of pollset is in that case <em>size</em> + 1. This feature is only supported on some platforms; the <a class="reference internal" href="#doxid-group-apr-poll-1ga4ca4056a19daee8fe94ddba100fe2326"><span class="std std-ref">apr_pollset_create()</span></a> call will fail with APR_ENOTIMPL on platforms where it is not supported.</p>
+<p>If flags contains APR_POLLSET_NOCOPY, then the <a class="reference internal" href="struct_apr_pollfd_t.html#doxid-structapr-pollfd-t"><span class="std std-ref">apr_pollfd_t</span></a> structures passed to <a class="reference internal" href="#doxid-group-apr-poll-1ga4ec50bf9a11c6b60927c51b81412f5b9"><span class="std std-ref">apr_pollset_add()</span></a> are not copied and must have a lifetime at least as long as the pollset.</p>
+<p>Some poll methods (including APR_POLLSET_KQUEUE, APR_POLLSET_PORT, and APR_POLLSET_EPOLL) do not have a fixed limit on the size of the pollset. For these methods, the size parameter controls the maximum number of descriptors that will be returned by a single call to <a class="reference internal" href="#doxid-group-apr-poll-1ga6b31d7b3a7b2d356370403dd2b79ecf3"><span class="std std-ref">apr_pollset_poll()</span></a>.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>pollset</p></td>
+<td><p>The pointer in which to return the newly created object</p></td>
+</tr>
+<tr class="row-even"><td><p>size</p></td>
+<td><p>The maximum number of descriptors that this pollset can hold</p></td>
+</tr>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>The pool from which to allocate the pollset</p></td>
+</tr>
+<tr class="row-even"><td><p>flags</p></td>
+<td><p>Optional flags to modify the operation of the pollset.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-poll-1ga9448a2d756868aa1c6dbc9726a2e32b5"><span id="index-6"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_pollset_create_ex</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-poll-1ga680da1f10ac5ef75efc503a9d15b8906"><span class="std std-ref">apr_pollset_t</span></a><span></span><span class="o">**</span> <span class="n">pollset</span><span class="p">,</span>
+    <span class="n">apr_uint32_t</span> <span class="n">size</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="n">apr_uint32_t</span> <span class="n">flags</span><span class="p">,</span>
+    <a class="reference internal" href="enum_apr_pollset_method_e.html#doxid-group-apr-poll-1gabe6f1238ea45e9425fa052e2788e4a29"><span class="std std-ref">apr_pollset_method_e</span></a><span></span> <span class="n">method</span>
+<span class="p">)</span></pre>
+<p>Set up a pollset object If flags contains APR_POLLSET_THREADSAFE, then a pollset is created on which it is safe to make concurrent calls to <a class="reference internal" href="#doxid-group-apr-poll-1ga4ec50bf9a11c6b60927c51b81412f5b9"><span class="std std-ref">apr_pollset_add()</span></a>, <a class="reference internal" href="#doxid-group-apr-poll-1ga3c99c06e142d6b6b789eeb6086122e3a"><span class="std std-ref">apr_pollset_remove()</span></a> and <a class="reference internal" href="#doxid-group-apr-poll-1ga6b31d7b3a7b2d356370403dd2b79ecf3"><span class="std std-ref">apr_pollset_poll()</span></a> from separate threads. This feature is only supported on some platforms; the <a class="reference internal" href="#doxid-group-apr-poll-1ga9448a2d756868aa1c6dbc9726a2e32b5"><span class="std std-ref">apr_pollset_create_ex()</span></a> call will fail with APR_ENOTIMPL on platforms where it is not supported.</p>
+<p>If flags contains APR_POLLSET_WAKEABLE, then a pollset is created with additional internal pipe object used for the <a class="reference internal" href="#doxid-group-apr-poll-1gac5e86828143e169e18b2a6eab94be531"><span class="std std-ref">apr_pollset_wakeup()</span></a> call. The actual size of pollset is in that case size + 1. This feature is only supported on some platforms; the <a class="reference internal" href="#doxid-group-apr-poll-1ga9448a2d756868aa1c6dbc9726a2e32b5"><span class="std std-ref">apr_pollset_create_ex()</span></a> call will fail with APR_ENOTIMPL on platforms where it is not supported.</p>
+<p>If flags contains APR_POLLSET_NOCOPY, then the <a class="reference internal" href="struct_apr_pollfd_t.html#doxid-structapr-pollfd-t"><span class="std std-ref">apr_pollfd_t</span></a> structures passed to <a class="reference internal" href="#doxid-group-apr-poll-1ga4ec50bf9a11c6b60927c51b81412f5b9"><span class="std std-ref">apr_pollset_add()</span></a> are not copied and must have a lifetime at least as long as the pollset.</p>
+<p>Some poll methods (including APR_POLLSET_KQUEUE, APR_POLLSET_PORT, and APR_POLLSET_EPOLL) do not have a fixed limit on the size of the pollset. For these methods, the size parameter controls the maximum number of descriptors that will be returned by a single call to <a class="reference internal" href="#doxid-group-apr-poll-1ga6b31d7b3a7b2d356370403dd2b79ecf3"><span class="std std-ref">apr_pollset_poll()</span></a>.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>pollset</p></td>
+<td><p>The pointer in which to return the newly created object</p></td>
+</tr>
+<tr class="row-even"><td><p>size</p></td>
+<td><p>The maximum number of descriptors that this pollset can hold</p></td>
+</tr>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>The pool from which to allocate the pollset</p></td>
+</tr>
+<tr class="row-even"><td><p>flags</p></td>
+<td><p>Optional flags to modify the operation of the pollset.</p></td>
+</tr>
+<tr class="row-odd"><td><p>method</p></td>
+<td><p>Poll method to use. See <a class="reference internal" href="enum_apr_pollset_method_e.html#doxid-group-apr-poll-1gabe6f1238ea45e9425fa052e2788e4a29"><span class="std std-ref">apr_pollset_method_e</span></a>. If this method cannot be used, the default method will be used unless the APR_POLLSET_NODEFAULT flag has been specified.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-poll-1gaa06c538d3fea9d860374043aff9450b2"><span id="index-7"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_pollset_destroy</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-poll-1ga680da1f10ac5ef75efc503a9d15b8906"><span class="std std-ref">apr_pollset_t</span></a><span></span><span class="o">*</span> <span class="n">pollset</span><span class="p">)</span></pre>
+<p>Destroy a pollset object</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>pollset</p></td>
+<td><p>The pollset to destroy</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-poll-1ga4ec50bf9a11c6b60927c51b81412f5b9"><span id="index-8"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_pollset_add</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-poll-1ga680da1f10ac5ef75efc503a9d15b8906"><span class="std std-ref">apr_pollset_t</span></a><span></span><span class="o">*</span> <span class="n">pollset</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="struct_apr_pollfd_t.html#doxid-structapr-pollfd-t"><span class="std std-ref">apr_pollfd_t</span></a><span></span><span class="o">*</span> <span class="n">descriptor</span>
+<span class="p">)</span></pre>
+<p>Add a socket or file descriptor to a pollset If you set client_data in the descriptor, that value will be returned in the client_data field whenever this descriptor is signalled in <a class="reference internal" href="#doxid-group-apr-poll-1ga6b31d7b3a7b2d356370403dd2b79ecf3"><span class="std std-ref">apr_pollset_poll()</span></a>.</p>
+<p>If the pollset has been created with APR_POLLSET_THREADSAFE and thread T1 is blocked in a call to <a class="reference internal" href="#doxid-group-apr-poll-1ga6b31d7b3a7b2d356370403dd2b79ecf3"><span class="std std-ref">apr_pollset_poll()</span></a> for this same pollset that is being modified via <a class="reference internal" href="#doxid-group-apr-poll-1ga4ec50bf9a11c6b60927c51b81412f5b9"><span class="std std-ref">apr_pollset_add()</span></a> in thread T2, the currently executing <a class="reference internal" href="#doxid-group-apr-poll-1ga6b31d7b3a7b2d356370403dd2b79ecf3"><span class="std std-ref">apr_pollset_poll()</span></a> call in T1 will either: (1) automatically include the newly added descriptor in the set of descriptors it is watching or (2) return immediately with APR_EINTR. Option (1) is recommended, but option (2) is allowed for implementations where option (1) is impossible or impractical.</p>
+<p>If the pollset has been created with APR_POLLSET_NOCOPY, the <a class="reference internal" href="struct_apr_pollfd_t.html#doxid-structapr-pollfd-t"><span class="std std-ref">apr_pollfd_t</span></a> structure referenced by descriptor will not be copied and must have a lifetime at least as long as the pollset.</p>
+<p>Do not add the same socket or file descriptor to the same pollset multiple times, even if the requested events differ for the different calls to <a class="reference internal" href="#doxid-group-apr-poll-1ga4ec50bf9a11c6b60927c51b81412f5b9"><span class="std std-ref">apr_pollset_add()</span></a>. If the events of interest for a descriptor change, you must first remove the descriptor from the pollset with <a class="reference internal" href="#doxid-group-apr-poll-1ga3c99c06e142d6b6b789eeb6086122e3a"><span class="std std-ref">apr_pollset_remove()</span></a>, then add it again specifying all requested events.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>pollset</p></td>
+<td><p>The pollset to which to add the descriptor</p></td>
+</tr>
+<tr class="row-even"><td><p>descriptor</p></td>
+<td><p>The descriptor to add</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-poll-1ga3c99c06e142d6b6b789eeb6086122e3a"><span id="index-9"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_pollset_remove</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-poll-1ga680da1f10ac5ef75efc503a9d15b8906"><span class="std std-ref">apr_pollset_t</span></a><span></span><span class="o">*</span> <span class="n">pollset</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="struct_apr_pollfd_t.html#doxid-structapr-pollfd-t"><span class="std std-ref">apr_pollfd_t</span></a><span></span><span class="o">*</span> <span class="n">descriptor</span>
+<span class="p">)</span></pre>
+<p>Remove a descriptor from a pollset If the descriptor is not found, APR_NOTFOUND is returned.</p>
+<p>If the pollset has been created with APR_POLLSET_THREADSAFE and thread T1 is blocked in a call to <a class="reference internal" href="#doxid-group-apr-poll-1ga6b31d7b3a7b2d356370403dd2b79ecf3"><span class="std std-ref">apr_pollset_poll()</span></a> for this same pollset that is being modified via <a class="reference internal" href="#doxid-group-apr-poll-1ga3c99c06e142d6b6b789eeb6086122e3a"><span class="std std-ref">apr_pollset_remove()</span></a> in thread T2, the currently executing <a class="reference internal" href="#doxid-group-apr-poll-1ga6b31d7b3a7b2d356370403dd2b79ecf3"><span class="std std-ref">apr_pollset_poll()</span></a> call in T1 will either: (1) automatically exclude the newly added descriptor in the set of descriptors it is watching or (2) return immediately with APR_EINTR. Option (1) is recommended, but option (2) is allowed for implementations where option (1) is impossible or impractical.</p>
+<p><a class="reference internal" href="#doxid-group-apr-poll-1ga3c99c06e142d6b6b789eeb6086122e3a"><span class="std std-ref">apr_pollset_remove()</span></a> cannot be used to remove a subset of requested events for a descriptor. The reqevents field in the <a class="reference internal" href="struct_apr_pollfd_t.html#doxid-structapr-pollfd-t"><span class="std std-ref">apr_pollfd_t</span></a> parameter must contain the same value when removing as when adding.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>pollset</p></td>
+<td><p>The pollset from which to remove the descriptor</p></td>
+</tr>
+<tr class="row-even"><td><p>descriptor</p></td>
+<td><p>The descriptor to remove</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-poll-1ga6b31d7b3a7b2d356370403dd2b79ecf3"><span id="index-10"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_pollset_poll</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-poll-1ga680da1f10ac5ef75efc503a9d15b8906"><span class="std std-ref">apr_pollset_t</span></a><span></span><span class="o">*</span> <span class="n">pollset</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_time.html#doxid-group-apr-time-1gaae2129185a395cc393f76fabf4f43e47"><span class="std std-ref">apr_interval_time_t</span></a><span></span> <span class="n">timeout</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span><span class="o">*</span> <span class="n">num</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="struct_apr_pollfd_t.html#doxid-structapr-pollfd-t"><span class="std std-ref">apr_pollfd_t</span></a><span></span><span class="o">**</span> <span class="n">descriptors</span>
+<span class="p">)</span></pre>
+<p>Block for activity on the descriptor(s) in a pollset APR_EINTR will be returned if the pollset has been created with APR_POLLSET_WAKEABLE, <a class="reference internal" href="#doxid-group-apr-poll-1gac5e86828143e169e18b2a6eab94be531"><span class="std std-ref">apr_pollset_wakeup()</span></a> has been called while waiting for activity, and there were no signalled descriptors at the time of the wakeup call.</p>
+<p>Multiple signalled conditions for the same descriptor may be reported in one or more returned <a class="reference internal" href="struct_apr_pollfd_t.html#doxid-structapr-pollfd-t"><span class="std std-ref">apr_pollfd_t</span></a> structures, depending on the implementation.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>pollset</p></td>
+<td><p>The pollset to use</p></td>
+</tr>
+<tr class="row-even"><td><p>timeout</p></td>
+<td><p>The amount of time in microseconds to wait. This is a maximum, not a minimum. If a descriptor is signalled, the function will return before this time. If timeout is negative, the function will block until a descriptor is signalled or until <a class="reference internal" href="#doxid-group-apr-poll-1gac5e86828143e169e18b2a6eab94be531"><span class="std std-ref">apr_pollset_wakeup()</span></a> has been called.</p></td>
+</tr>
+<tr class="row-odd"><td><p>num</p></td>
+<td><p>Number of signalled descriptors (output parameter)</p></td>
+</tr>
+<tr class="row-even"><td><p>descriptors</p></td>
+<td><p>Array of signalled descriptors (output parameter)</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-poll-1gac5e86828143e169e18b2a6eab94be531"><span id="index-11"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_pollset_wakeup</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-poll-1ga680da1f10ac5ef75efc503a9d15b8906"><span class="std std-ref">apr_pollset_t</span></a><span></span><span class="o">*</span> <span class="n">pollset</span><span class="p">)</span></pre>
+<p>Interrupt the blocked <a class="reference internal" href="#doxid-group-apr-poll-1ga6b31d7b3a7b2d356370403dd2b79ecf3"><span class="std std-ref">apr_pollset_poll()</span></a> call. If the pollset was not created with APR_POLLSET_WAKEABLE the return value is APR_EINIT.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>pollset</p></td>
+<td><p>The pollset to use</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-poll-1gad1d8a1ccd14952be6da5f272ca8dda76"><span id="index-12"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_poll</span><span class="p">(</span>
+    <a class="reference internal" href="struct_apr_pollfd_t.html#doxid-structapr-pollfd-t"><span class="std std-ref">apr_pollfd_t</span></a><span></span><span class="o">*</span> <span class="n">aprset</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">numsock</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span><span class="o">*</span> <span class="n">nsds</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_time.html#doxid-group-apr-time-1gaae2129185a395cc393f76fabf4f43e47"><span class="std std-ref">apr_interval_time_t</span></a><span></span> <span class="n">timeout</span>
+<span class="p">)</span></pre>
+<p>Poll the descriptors in the poll structure The number of descriptors signalled is returned in the third argument. This is a blocking call, and it will not return until either a descriptor has been signalled or the timeout has expired.</p>
+<p>The rtnevents field in the <a class="reference internal" href="struct_apr_pollfd_t.html#doxid-structapr-pollfd-t"><span class="std std-ref">apr_pollfd_t</span></a> array will only be filled- in if the return value is APR_SUCCESS.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>aprset</p></td>
+<td><p>The poll structure we will be using.</p></td>
+</tr>
+<tr class="row-even"><td><p>numsock</p></td>
+<td><p>The number of descriptors we are polling</p></td>
+</tr>
+<tr class="row-odd"><td><p>nsds</p></td>
+<td><p>The number of descriptors signalled (output parameter)</p></td>
+</tr>
+<tr class="row-even"><td><p>timeout</p></td>
+<td><p>The amount of time in microseconds to wait. This is a maximum, not a minimum. If a descriptor is signalled, the function will return before this time. If timeout is negative, the function will block until a descriptor is signalled or until <a class="reference internal" href="#doxid-group-apr-poll-1gac5e86828143e169e18b2a6eab94be531"><span class="std std-ref">apr_pollset_wakeup()</span></a> has been called.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-poll-1ga942ebbcc17d27911da86e1bd5c7a592e"><span id="index-13"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">apr_pollset_method_name</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-poll-1ga680da1f10ac5ef75efc503a9d15b8906"><span class="std std-ref">apr_pollset_t</span></a><span></span><span class="o">*</span> <span class="n">pollset</span><span class="p">)</span></pre>
+<p>Return a printable representation of the pollset method.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>pollset</p></td>
+<td><p>The pollset to use</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-poll-1ga5d64867d7a3abd53d3765b4b47cf774f"><span id="index-14"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">apr_poll_method_defname</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></pre>
+<p>Return a printable representation of the default pollset method (APR_POLLSET_DEFAULT).</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-poll-1ga76c33736268d57fca503790711d6d04e"><span id="index-15"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_pollcb_create</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-poll-1gae382e39bdf0c5a02fca7da3944bece08"><span class="std std-ref">apr_pollcb_t</span></a><span></span><span class="o">**</span> <span class="n">pollcb</span><span class="p">,</span>
+    <span class="n">apr_uint32_t</span> <span class="n">size</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="n">apr_uint32_t</span> <span class="n">flags</span>
+<span class="p">)</span></pre>
+<p>Set up a pollcb object Pollcb is only supported on some platforms; the <a class="reference internal" href="#doxid-group-apr-poll-1ga76c33736268d57fca503790711d6d04e"><span class="std std-ref">apr_pollcb_create()</span></a> call will fail with APR_ENOTIMPL on platforms where it is not supported.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>pollcb</p></td>
+<td><p>The pointer in which to return the newly created object</p></td>
+</tr>
+<tr class="row-even"><td><p>size</p></td>
+<td><p>The maximum number of descriptors that a single _poll can return.</p></td>
+</tr>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>The pool from which to allocate the pollcb</p></td>
+</tr>
+<tr class="row-even"><td><p>flags</p></td>
+<td><p>Optional flags to modify the operation of the pollcb.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-poll-1ga2ebdd0cba2d3b8333c46ee48170f8e90"><span id="index-16"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_pollcb_create_ex</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-poll-1gae382e39bdf0c5a02fca7da3944bece08"><span class="std std-ref">apr_pollcb_t</span></a><span></span><span class="o">**</span> <span class="n">pollcb</span><span class="p">,</span>
+    <span class="n">apr_uint32_t</span> <span class="n">size</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="n">apr_uint32_t</span> <span class="n">flags</span><span class="p">,</span>
+    <a class="reference internal" href="enum_apr_pollset_method_e.html#doxid-group-apr-poll-1gabe6f1238ea45e9425fa052e2788e4a29"><span class="std std-ref">apr_pollset_method_e</span></a><span></span> <span class="n">method</span>
+<span class="p">)</span></pre>
+<p>Set up a pollcb object Pollcb is only supported on some platforms; the <a class="reference internal" href="#doxid-group-apr-poll-1ga2ebdd0cba2d3b8333c46ee48170f8e90"><span class="std std-ref">apr_pollcb_create_ex()</span></a> call will fail with APR_ENOTIMPL on platforms where it is not supported.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>pollcb</p></td>
+<td><p>The pointer in which to return the newly created object</p></td>
+</tr>
+<tr class="row-even"><td><p>size</p></td>
+<td><p>The maximum number of descriptors that a single _poll can return.</p></td>
+</tr>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>The pool from which to allocate the pollcb</p></td>
+</tr>
+<tr class="row-even"><td><p>flags</p></td>
+<td><p>Optional flags to modify the operation of the pollcb.</p></td>
+</tr>
+<tr class="row-odd"><td><p>method</p></td>
+<td><p>Poll method to use. See <a class="reference internal" href="enum_apr_pollset_method_e.html#doxid-group-apr-poll-1gabe6f1238ea45e9425fa052e2788e4a29"><span class="std std-ref">apr_pollset_method_e</span></a>. If this method cannot be used, the default method will be used unless the APR_POLLSET_NODEFAULT flag has been specified.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-poll-1ga8fab02dfa803d911dae98656fac7a2c8"><span id="index-17"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_pollcb_add</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-poll-1gae382e39bdf0c5a02fca7da3944bece08"><span class="std std-ref">apr_pollcb_t</span></a><span></span><span class="o">*</span> <span class="n">pollcb</span><span class="p">,</span>
+    <a class="reference internal" href="struct_apr_pollfd_t.html#doxid-structapr-pollfd-t"><span class="std std-ref">apr_pollfd_t</span></a><span></span><span class="o">*</span> <span class="n">descriptor</span>
+<span class="p">)</span></pre>
+<p>Add a socket or file descriptor to a pollcb If you set client_data in the descriptor, that value will be returned in the client_data field whenever this descriptor is signalled in <a class="reference internal" href="#doxid-group-apr-poll-1ga11765d1b27e2f621a8dcd2c40f0e259c"><span class="std std-ref">apr_pollcb_poll()</span></a>.</p>
+<p>Unlike the apr_pollset API, the descriptor is not copied, and users must retain the memory used by descriptor, as the same pointer will be returned to them from apr_pollcb_poll.</p>
+<p>Do not add the same socket or file descriptor to the same pollcb multiple times, even if the requested events differ for the different calls to <a class="reference internal" href="#doxid-group-apr-poll-1ga8fab02dfa803d911dae98656fac7a2c8"><span class="std std-ref">apr_pollcb_add()</span></a>. If the events of interest for a descriptor change, you must first remove the descriptor from the pollcb with <a class="reference internal" href="#doxid-group-apr-poll-1gad004b778a14d6bcc4e48a10e5af729d8"><span class="std std-ref">apr_pollcb_remove()</span></a>, then add it again specifying all requested events.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>pollcb</p></td>
+<td><p>The pollcb to which to add the descriptor</p></td>
+</tr>
+<tr class="row-even"><td><p>descriptor</p></td>
+<td><p>The descriptor to add</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-poll-1gad004b778a14d6bcc4e48a10e5af729d8"><span id="index-18"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_pollcb_remove</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-poll-1gae382e39bdf0c5a02fca7da3944bece08"><span class="std std-ref">apr_pollcb_t</span></a><span></span><span class="o">*</span> <span class="n">pollcb</span><span class="p">,</span>
+    <a class="reference internal" href="struct_apr_pollfd_t.html#doxid-structapr-pollfd-t"><span class="std std-ref">apr_pollfd_t</span></a><span></span><span class="o">*</span> <span class="n">descriptor</span>
+<span class="p">)</span></pre>
+<p>Remove a descriptor from a pollcb <a class="reference internal" href="#doxid-group-apr-poll-1gad004b778a14d6bcc4e48a10e5af729d8"><span class="std std-ref">apr_pollcb_remove()</span></a> cannot be used to remove a subset of requested events for a descriptor. The reqevents field in the <a class="reference internal" href="struct_apr_pollfd_t.html#doxid-structapr-pollfd-t"><span class="std std-ref">apr_pollfd_t</span></a> parameter must contain the same value when removing as when adding.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>pollcb</p></td>
+<td><p>The pollcb from which to remove the descriptor</p></td>
+</tr>
+<tr class="row-even"><td><p>descriptor</p></td>
+<td><p>The descriptor to remove</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-poll-1ga11765d1b27e2f621a8dcd2c40f0e259c"><span id="index-19"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_pollcb_poll</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-poll-1gae382e39bdf0c5a02fca7da3944bece08"><span class="std std-ref">apr_pollcb_t</span></a><span></span><span class="o">*</span> <span class="n">pollcb</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_time.html#doxid-group-apr-time-1gaae2129185a395cc393f76fabf4f43e47"><span class="std std-ref">apr_interval_time_t</span></a><span></span> <span class="n">timeout</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-poll-1ga1dcd8c87e233dbf105e83d50ef601f55"><span class="std std-ref">apr_pollcb_cb_t</span></a><span></span> <span class="n">func</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">baton</span>
+<span class="p">)</span></pre>
+<p>Block for activity on the descriptor(s) in a pollcb Multiple signalled conditions for the same descriptor may be reported in one or more calls to the callback function, depending on the implementation.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>pollcb</p></td>
+<td><p>The pollcb to use</p></td>
+</tr>
+<tr class="row-even"><td><p>timeout</p></td>
+<td><p>The amount of time in microseconds to wait. This is a maximum, not a minimum. If a descriptor is signalled, the function will return before this time. If timeout is negative, the function will block until a descriptor is signalled.</p></td>
+</tr>
+<tr class="row-odd"><td><p>func</p></td>
+<td><p>Callback function to call for each active descriptor.</p></td>
+</tr>
+<tr class="row-even"><td><p>baton</p></td>
+<td><p>Opaque baton passed to the callback function.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="group_apr_platform.html" class="btn btn-neutral float-left" title="Platform Definitions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="group_pollopts.html" class="btn btn-neutral float-right" title="Poll options" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2008-2017, Apache Portable Runtime Maintainers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

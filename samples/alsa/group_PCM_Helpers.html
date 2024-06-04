@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Helper Functions &mdash; ALSA Library Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinx_rtd_theme.css?v=b6ca47bd" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=e9012143"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Hook Extension" href="group_PCM_Hook.html" />
+    <link rel="prev" title="Hardware Parameters" href="group_PCM_HW_Params.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            ALSA Library Documentation
+          </a>
+              <div class="version">
+                1.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="group_Config.html">Configuration Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Digital_Audio_Interface.html">Constants for Digital Audio Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_MIDI_Interface.html">Constants for MIDI v1.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Control.html">Control Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Error.html">Error handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_CtlPlugin_SDK.html">External Control Plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Plugin_SDK.html">External PCM plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Global.html">Global defines and functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_HwDep.html">Hardware Dependant Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Input.html">Input Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Sequencer.html">MIDI Sequencer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Mixer.html">Mixer Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Output.html">Output Interface</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="group_PCM.html">PCM Interface</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="group_PCM_Access.html">Access Mask Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_PCM_Dump.html">Debug Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_PCM_Deprecated.html">Deprecated Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_PCM_Description.html">Description Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_PCM_Direct.html">Direct Access (MMAP) Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_PCM_Format.html">Format Mask Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_PCM_HW_Params.html">Hardware Parameters</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Helper Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#global-functions">Global Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="group_PCM_Hook.html">Hook Extension</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_PCM_Scope.html">Scope Plugin Extension</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_PCM_Simple.html">Simple setup functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_PCM_SW_Params.html">Software Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_PCM_Status.html">Status Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_PCM_Info.html">Stream Information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_PCM_SubFormat.html">Subformat Mask Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum__snd_pcm_type.html">enum _snd_pcm_type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_snd_pcm_access_t.html">enum snd_pcm_access_t</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_snd_pcm_chmap_position.html">enum snd_pcm_chmap_position</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_snd_pcm_chmap_type.html">enum snd_pcm_chmap_type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_snd_pcm_class_t.html">enum snd_pcm_class_t</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_snd_pcm_format_t.html">enum snd_pcm_format_t</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_snd_pcm_start_t.html">enum snd_pcm_start_t</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_snd_pcm_state_t.html">enum snd_pcm_state_t</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_snd_pcm_stream_t.html">enum snd_pcm_stream_t</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_snd_pcm_subclass_t.html">enum snd_pcm_subclass_t</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_snd_pcm_subformat_t.html">enum snd_pcm_subformat_t</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_snd_pcm_tstamp_t.html">enum snd_pcm_tstamp_t</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_snd_pcm_tstamp_type_t.html">enum snd_pcm_tstamp_type_t</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_snd_pcm_xrun_t.html">enum snd_pcm_xrun_t</a></li>
+<li class="toctree-l2"><a class="reference internal" href="struct_snd_pcm_audio_tstamp_config_t.html">struct snd_pcm_audio_tstamp_config_t</a></li>
+<li class="toctree-l2"><a class="reference internal" href="struct_snd_pcm_audio_tstamp_report_t.html">struct snd_pcm_audio_tstamp_report_t</a></li>
+<li class="toctree-l2"><a class="reference internal" href="struct_snd_pcm_channel_area_t.html">struct snd_pcm_channel_area_t</a></li>
+<li class="toctree-l2"><a class="reference internal" href="struct_snd_pcm_chmap_query_t.html">struct snd_pcm_chmap_query_t</a></li>
+<li class="toctree-l2"><a class="reference internal" href="struct_snd_pcm_chmap_t.html">struct snd_pcm_chmap_t</a></li>
+<li class="toctree-l2"><a class="reference internal" href="union_snd_pcm_sync_id_t.html">union snd_pcm_sync_id_t</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_PCM.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_PCM.html#detailed-documentation">Detailed Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="group_RawMidi.html">RawMidi Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Timer.html">Timer Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_topology.html">Topology Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_ucm.html">Use Case Interface</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="page_topology.html">ALSA Topology Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_Usecase.html">ALSA Use Case Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_bug.html">Bug List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_conf.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_control.html">Control interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_deprecated.html">Deprecated List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_ctl_external_plugins.html">External Control Plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_hcontrol.html">High level control interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_confhooks.html">Hooks in configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_mixer.html">Mixer interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_pcm.html">PCM (digital audio) interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_pcm_plugins.html">PCM (digital audio) plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_pcm_external_plugins.html">PCM External Plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_rawmidi.html">RawMidi interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_confarg.html">Runtime arguments in configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_conffunc.html">Runtime functions in configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_seq.html">Sequencer interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_timer.html">Timer interface</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="example__test_latency.c.html">/test/latency.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_pcm.c.html">/test/pcm.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_pcm_min.c.html">/test/pcm_min.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_rawmidi.c.html">/test/rawmidi.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_timer.c.html">/test/timer.c</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ALSA Library Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="group_PCM.html">PCM Interface</a></li>
+      <li class="breadcrumb-item active">Helper Functions</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="helper-functions">
+<span id="doxid-group-p-c-m-helpers"></span><span id="index-0"></span><h1>Helper Functions</h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="overview">
+<h2>Overview</h2>
+<p>See the <a class="reference internal" href="page_pcm.html#doxid-pcm"><span class="std std-ref">PCM (digital audio) interface</span></a> page for more details. <a class="reference internal" href="#details-group-p-c-m-helpers"><span class="std std-ref">More…</span></a></p>
+<pre class="highlight doxyrest-overview-code-block literal-block"><span></span><span class="c1">// global functions</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-p-c-m-helpers-1ga8b88181b11a026da55897a926d56034a"><span class="std std-ref">snd_pcm_format_signed</span></a><span></span><span class="p">(</span><a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-p-c-m-helpers-1ga8cd4e3ecc963942457e3b1b6f7661a90"><span class="std std-ref">snd_pcm_format_unsigned</span></a><span></span><span class="p">(</span><a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-p-c-m-helpers-1ga5a52bb63323f463198dea3f3c6aca571"><span class="std std-ref">snd_pcm_format_linear</span></a><span></span><span class="p">(</span><a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-p-c-m-helpers-1ga36ae70bef5bfd5e7ecc743f6a4d46cb5"><span class="std std-ref">snd_pcm_format_float</span></a><span></span><span class="p">(</span><a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-p-c-m-helpers-1ga89537d0a972fa124051f6ba1a78c4bfa"><span class="std std-ref">snd_pcm_format_little_endian</span></a><span></span><span class="p">(</span><a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-p-c-m-helpers-1ga3c0c224b8f67e73cf2447bee0110f760"><span class="std std-ref">snd_pcm_format_big_endian</span></a><span></span><span class="p">(</span><a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-p-c-m-helpers-1gaf950358cdbb26bab53f63f28443bd2ef"><span class="std std-ref">snd_pcm_format_cpu_endian</span></a><span></span><span class="p">(</span><a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-p-c-m-helpers-1ga8d4e07f2d68cc16f607857ed8a222a29"><span class="std std-ref">snd_pcm_format_width</span></a><span></span><span class="p">(</span><a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-p-c-m-helpers-1gaa3e0ff7560342e5af2b5c7bd2d63a307"><span class="std std-ref">snd_pcm_format_physical_width</span></a><span></span><span class="p">(</span><a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">);</span>
+
+<a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-p-c-m-helpers-1ga5f5ab1ac13de9598cf05877e4894e0d8"><span class="std std-ref">snd_pcm_build_linear_format</span></a><span></span><span class="p">(</span>
+    <span class="kt">int</span> <span class="n">width</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">pwidth</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">unsignd</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">big_endian</span>
+<span class="p">);</span>
+
+<span class="kt">ssize_t</span>
+<a class="reference internal" href="#doxid-group-p-c-m-helpers-1ga5953a58f024f8cf762a9e4dae6b09502"><span class="std std-ref">snd_pcm_format_size</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">samples</span>
+<span class="p">);</span>
+
+<span class="n">u_int8_t</span>
+<a class="reference internal" href="#doxid-group-p-c-m-helpers-1ga812a6458ab7759b750d6954050c75bb2"><span class="std std-ref">snd_pcm_format_silence</span></a><span></span><span class="p">(</span><a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">);</span>
+
+<span class="n">u_int16_t</span>
+<a class="reference internal" href="#doxid-group-p-c-m-helpers-1ga6602d717534a0b6857f461fef1d8b37c"><span class="std std-ref">snd_pcm_format_silence_16</span></a><span></span><span class="p">(</span><a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">);</span>
+
+<span class="n">u_int32_t</span>
+<a class="reference internal" href="#doxid-group-p-c-m-helpers-1gafbf8a883e8b7c38b94df561e0169aef4"><span class="std std-ref">snd_pcm_format_silence_32</span></a><span></span><span class="p">(</span><a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">);</span>
+
+<span class="n">u_int64_t</span>
+<a class="reference internal" href="#doxid-group-p-c-m-helpers-1ga79524557a85d7bbee12d315925e702b3"><span class="std std-ref">snd_pcm_format_silence_64</span></a><span></span><span class="p">(</span><a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-p-c-m-helpers-1ga82631361cf1c1d13af207beb59cf97ac"><span class="std std-ref">snd_pcm_format_set_silence</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">samples</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga71cdfa37e258d2210b8bd0216bf0c36c"><span class="std std-ref">snd_pcm_sframes_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-p-c-m-helpers-1gaf42fb6af35d3d85006c1dea2e11b3e54"><span class="std std-ref">snd_pcm_bytes_to_frames</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga919e634deecd855b6e2e15174e70d3ea"><span class="std std-ref">snd_pcm_t</span></a><span></span><span class="o">*</span> <span class="n">pcm</span><span class="p">,</span>
+    <span class="kt">ssize_t</span> <span class="n">bytes</span>
+<span class="p">);</span>
+
+<span class="kt">ssize_t</span>
+<a class="reference internal" href="#doxid-group-p-c-m-helpers-1gac05ac2b7c6e25986a71792392ff90b83"><span class="std std-ref">snd_pcm_frames_to_bytes</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga919e634deecd855b6e2e15174e70d3ea"><span class="std std-ref">snd_pcm_t</span></a><span></span><span class="o">*</span> <span class="n">pcm</span><span class="p">,</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga71cdfa37e258d2210b8bd0216bf0c36c"><span class="std std-ref">snd_pcm_sframes_t</span></a><span></span> <span class="n">frames</span>
+<span class="p">);</span>
+
+<span class="kt">long</span>
+<a class="reference internal" href="#doxid-group-p-c-m-helpers-1gaeed610ddb01120b01b5a2e5cc59aa35b"><span class="std std-ref">snd_pcm_bytes_to_samples</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga919e634deecd855b6e2e15174e70d3ea"><span class="std std-ref">snd_pcm_t</span></a><span></span><span class="o">*</span> <span class="n">pcm</span><span class="p">,</span>
+    <span class="kt">ssize_t</span> <span class="n">bytes</span>
+<span class="p">);</span>
+
+<span class="kt">ssize_t</span>
+<a class="reference internal" href="#doxid-group-p-c-m-helpers-1gae3669a4326ce185f4261d7bf96900f3f"><span class="std std-ref">snd_pcm_samples_to_bytes</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga919e634deecd855b6e2e15174e70d3ea"><span class="std std-ref">snd_pcm_t</span></a><span></span><span class="o">*</span> <span class="n">pcm</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">samples</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-p-c-m-helpers-1ga23e03a8b127764fff669240986b96b39"><span class="std std-ref">snd_pcm_area_silence</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <a class="reference internal" href="struct_snd_pcm_channel_area_t.html#doxid-structsnd-pcm-channel-area-t"><span class="std std-ref">snd_pcm_channel_area_t</span></a><span></span><span class="o">*</span> <span class="n">dst_channel</span><span class="p">,</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gab01fcfe9b97382a8d3f2027c664b8b8a"><span class="std std-ref">snd_pcm_uframes_t</span></a><span></span> <span class="n">dst_offset</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">samples</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-p-c-m-helpers-1ga1c0aab2a2bb341f1b1d154dae2b7e482"><span class="std std-ref">snd_pcm_areas_silence</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <a class="reference internal" href="struct_snd_pcm_channel_area_t.html#doxid-structsnd-pcm-channel-area-t"><span class="std std-ref">snd_pcm_channel_area_t</span></a><span></span><span class="o">*</span> <span class="n">dst_channels</span><span class="p">,</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gab01fcfe9b97382a8d3f2027c664b8b8a"><span class="std std-ref">snd_pcm_uframes_t</span></a><span></span> <span class="n">dst_offset</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">channels</span><span class="p">,</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gab01fcfe9b97382a8d3f2027c664b8b8a"><span class="std std-ref">snd_pcm_uframes_t</span></a><span></span> <span class="n">frames</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-p-c-m-helpers-1ga93d2f045575afb161abff126c3750049"><span class="std std-ref">snd_pcm_area_copy</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <a class="reference internal" href="struct_snd_pcm_channel_area_t.html#doxid-structsnd-pcm-channel-area-t"><span class="std std-ref">snd_pcm_channel_area_t</span></a><span></span><span class="o">*</span> <span class="n">dst_channel</span><span class="p">,</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gab01fcfe9b97382a8d3f2027c664b8b8a"><span class="std std-ref">snd_pcm_uframes_t</span></a><span></span> <span class="n">dst_offset</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="struct_snd_pcm_channel_area_t.html#doxid-structsnd-pcm-channel-area-t"><span class="std std-ref">snd_pcm_channel_area_t</span></a><span></span><span class="o">*</span> <span class="n">src_channel</span><span class="p">,</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gab01fcfe9b97382a8d3f2027c664b8b8a"><span class="std std-ref">snd_pcm_uframes_t</span></a><span></span> <span class="n">src_offset</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">samples</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-p-c-m-helpers-1gad57f8921f52ea2ffd870cafb2d076f2c"><span class="std std-ref">snd_pcm_areas_copy</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <a class="reference internal" href="struct_snd_pcm_channel_area_t.html#doxid-structsnd-pcm-channel-area-t"><span class="std std-ref">snd_pcm_channel_area_t</span></a><span></span><span class="o">*</span> <span class="n">dst_channels</span><span class="p">,</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gab01fcfe9b97382a8d3f2027c664b8b8a"><span class="std std-ref">snd_pcm_uframes_t</span></a><span></span> <span class="n">dst_offset</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="struct_snd_pcm_channel_area_t.html#doxid-structsnd-pcm-channel-area-t"><span class="std std-ref">snd_pcm_channel_area_t</span></a><span></span><span class="o">*</span> <span class="n">src_channels</span><span class="p">,</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gab01fcfe9b97382a8d3f2027c664b8b8a"><span class="std std-ref">snd_pcm_uframes_t</span></a><span></span> <span class="n">src_offset</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">channels</span><span class="p">,</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gab01fcfe9b97382a8d3f2027c664b8b8a"><span class="std std-ref">snd_pcm_uframes_t</span></a><span></span> <span class="n">frames</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span>
+<span class="p">);</span></pre>
+</section>
+<section id="detailed-documentation">
+<span id="details-group-p-c-m-helpers"></span><h2>Detailed Documentation</h2>
+<p>See the <a class="reference internal" href="page_pcm.html#doxid-pcm"><span class="std std-ref">PCM (digital audio) interface</span></a> page for more details.</p>
+<section id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-helpers-1ga8b88181b11a026da55897a926d56034a"><span id="index-1"></span><span></span><span class="kt">int</span>
+<span class="n">snd_pcm_format_signed</span><span class="p">(</span><a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">)</span></pre>
+<p>Return sign info for a PCM sample linear format.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>format</p></td>
+<td><p>Format</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 unsigned, 1 signed, a negative error code if format is not linear</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-helpers-1ga8cd4e3ecc963942457e3b1b6f7661a90"><span id="index-2"></span><span></span><span class="kt">int</span>
+<span class="n">snd_pcm_format_unsigned</span><span class="p">(</span><a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">)</span></pre>
+<p>Return sign info for a PCM sample linear format.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>format</p></td>
+<td><p>Format</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 signed, 1 unsigned, a negative error code if format is not linear</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-helpers-1ga5a52bb63323f463198dea3f3c6aca571"><span id="index-3"></span><span></span><span class="kt">int</span>
+<span class="n">snd_pcm_format_linear</span><span class="p">(</span><a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">)</span></pre>
+<p>Return linear info for a PCM sample format.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>format</p></td>
+<td><p>Format</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 non linear, 1 linear</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-helpers-1ga36ae70bef5bfd5e7ecc743f6a4d46cb5"><span id="index-4"></span><span></span><span class="kt">int</span>
+<span class="n">snd_pcm_format_float</span><span class="p">(</span><a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">)</span></pre>
+<p>Return float info for a PCM sample format.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>format</p></td>
+<td><p>Format</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 non float, 1 float</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-helpers-1ga89537d0a972fa124051f6ba1a78c4bfa"><span id="index-5"></span><span></span><span class="kt">int</span>
+<span class="n">snd_pcm_format_little_endian</span><span class="p">(</span><a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">)</span></pre>
+<p>Return endian info for a PCM sample format.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>format</p></td>
+<td><p>Format</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 big endian, 1 little endian, a negative error code if endian independent</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-helpers-1ga3c0c224b8f67e73cf2447bee0110f760"><span id="index-6"></span><span></span><span class="kt">int</span>
+<span class="n">snd_pcm_format_big_endian</span><span class="p">(</span><a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">)</span></pre>
+<p>Return endian info for a PCM sample format.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>format</p></td>
+<td><p>Format</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 little endian, 1 big endian, a negative error code if endian independent</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-helpers-1gaf950358cdbb26bab53f63f28443bd2ef"><span id="index-7"></span><span></span><span class="kt">int</span>
+<span class="n">snd_pcm_format_cpu_endian</span><span class="p">(</span><a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">)</span></pre>
+<p>Return endian info for a PCM sample format.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>format</p></td>
+<td><p>Format</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 swapped, 1 CPU endian, a negative error code if endian independent</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-helpers-1ga8d4e07f2d68cc16f607857ed8a222a29"><span id="index-8"></span><span></span><span class="kt">int</span>
+<span class="n">snd_pcm_format_width</span><span class="p">(</span><a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">)</span></pre>
+<p>Return nominal bits per a PCM sample.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>format</p></td>
+<td><p>Sample format</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>bits per sample, a negative error code if not applicable</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-helpers-1gaa3e0ff7560342e5af2b5c7bd2d63a307"><span id="index-9"></span><span></span><span class="kt">int</span>
+<span class="n">snd_pcm_format_physical_width</span><span class="p">(</span><a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">)</span></pre>
+<p>Return bits needed to store a PCM sample.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>format</p></td>
+<td><p>Sample format</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>bits per sample, a negative error code if not applicable</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-helpers-1ga5f5ab1ac13de9598cf05877e4894e0d8"><span id="index-10"></span><a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span>
+<span class="n">snd_pcm_build_linear_format</span><span class="p">(</span>
+    <span class="kt">int</span> <span class="n">width</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">pwidth</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">unsignd</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">big_endian</span>
+<span class="p">)</span></pre>
+<p>Compose a PCM sample linear format.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>width</p></td>
+<td><p>Nominal bits per sample</p></td>
+</tr>
+<tr class="row-even"><td><p>pwidth</p></td>
+<td><p>Physical bit width of the format</p></td>
+</tr>
+<tr class="row-odd"><td><p>unsignd</p></td>
+<td><p>Sign: 0 signed, 1 unsigned</p></td>
+</tr>
+<tr class="row-even"><td><p>big_endian</p></td>
+<td><p>Endian: 0 little endian, 1 big endian</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>The matching format type, or <a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1ggaa14b7f26877a812acbb39811364177f8ab1e118ecdccf628639b5c85bc3a48999"><span class="std std-ref">SND_PCM_FORMAT_UNKNOWN</span></a> if no match</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-helpers-1ga5953a58f024f8cf762a9e4dae6b09502"><span id="index-11"></span><span></span><span class="kt">ssize_t</span>
+<span class="n">snd_pcm_format_size</span><span class="p">(</span>
+    <a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">samples</span>
+<span class="p">)</span></pre>
+<p>Return bytes needed to store a quantity of PCM sample.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>format</p></td>
+<td><p>Sample format</p></td>
+</tr>
+<tr class="row-even"><td><p>samples</p></td>
+<td><p>Samples count</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>bytes needed, a negative error code if not integer or unknown</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-helpers-1ga812a6458ab7759b750d6954050c75bb2"><span id="index-12"></span><span></span><span class="n">u_int8_t</span>
+<span class="n">snd_pcm_format_silence</span><span class="p">(</span><a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">)</span></pre>
+<p>Return 8 bit expressing silence for a PCM sample format.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>format</p></td>
+<td><p>Sample format</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>silence 8 bit word</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-helpers-1ga6602d717534a0b6857f461fef1d8b37c"><span id="index-13"></span><span></span><span class="n">u_int16_t</span>
+<span class="n">snd_pcm_format_silence_16</span><span class="p">(</span><a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">)</span></pre>
+<p>Return 16 bit expressing silence for a PCM sample format.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>format</p></td>
+<td><p>Sample format</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>silence 16 bit word</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-helpers-1gafbf8a883e8b7c38b94df561e0169aef4"><span id="index-14"></span><span></span><span class="n">u_int32_t</span>
+<span class="n">snd_pcm_format_silence_32</span><span class="p">(</span><a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">)</span></pre>
+<p>Return 32 bit expressing silence for a PCM sample format.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>format</p></td>
+<td><p>Sample format</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>silence 32 bit word</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-helpers-1ga79524557a85d7bbee12d315925e702b3"><span id="index-15"></span><span></span><span class="n">u_int64_t</span>
+<span class="n">snd_pcm_format_silence_64</span><span class="p">(</span><a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">)</span></pre>
+<p>Return 64 bit expressing silence for a PCM sample format.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>format</p></td>
+<td><p>Sample format</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>silence 64 bit word</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-helpers-1ga82631361cf1c1d13af207beb59cf97ac"><span id="index-16"></span><span></span><span class="kt">int</span>
+<span class="n">snd_pcm_format_set_silence</span><span class="p">(</span>
+    <a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">samples</span>
+<span class="p">)</span></pre>
+<p>Silence a PCM samples buffer.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>format</p></td>
+<td><p>Sample format</p></td>
+</tr>
+<tr class="row-even"><td><p>data</p></td>
+<td><p>Buffer</p></td>
+</tr>
+<tr class="row-odd"><td><p>samples</p></td>
+<td><p>Samples count</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if successful or a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-helpers-1gaf42fb6af35d3d85006c1dea2e11b3e54"><span id="index-17"></span><a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga71cdfa37e258d2210b8bd0216bf0c36c"><span class="std std-ref">snd_pcm_sframes_t</span></a><span></span>
+<span class="n">snd_pcm_bytes_to_frames</span><span class="p">(</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga919e634deecd855b6e2e15174e70d3ea"><span class="std std-ref">snd_pcm_t</span></a><span></span><span class="o">*</span> <span class="n">pcm</span><span class="p">,</span>
+    <span class="kt">ssize_t</span> <span class="n">bytes</span>
+<span class="p">)</span></pre>
+<p>Convert bytes in frames for a PCM.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>pcm</p></td>
+<td><p>PCM handle</p></td>
+</tr>
+<tr class="row-even"><td><p>bytes</p></td>
+<td><p>quantity in bytes</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>quantity expressed in frames</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-helpers-1gac05ac2b7c6e25986a71792392ff90b83"><span id="index-18"></span><span></span><span class="kt">ssize_t</span>
+<span class="n">snd_pcm_frames_to_bytes</span><span class="p">(</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga919e634deecd855b6e2e15174e70d3ea"><span class="std std-ref">snd_pcm_t</span></a><span></span><span class="o">*</span> <span class="n">pcm</span><span class="p">,</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga71cdfa37e258d2210b8bd0216bf0c36c"><span class="std std-ref">snd_pcm_sframes_t</span></a><span></span> <span class="n">frames</span>
+<span class="p">)</span></pre>
+<p>Convert frames in bytes for a PCM.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>pcm</p></td>
+<td><p>PCM handle</p></td>
+</tr>
+<tr class="row-even"><td><p>frames</p></td>
+<td><p>quantity in frames</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>quantity expressed in bytes</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-helpers-1gaeed610ddb01120b01b5a2e5cc59aa35b"><span id="index-19"></span><span></span><span class="kt">long</span>
+<span class="n">snd_pcm_bytes_to_samples</span><span class="p">(</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga919e634deecd855b6e2e15174e70d3ea"><span class="std std-ref">snd_pcm_t</span></a><span></span><span class="o">*</span> <span class="n">pcm</span><span class="p">,</span>
+    <span class="kt">ssize_t</span> <span class="n">bytes</span>
+<span class="p">)</span></pre>
+<p>Convert bytes in samples for a PCM.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>pcm</p></td>
+<td><p>PCM handle</p></td>
+</tr>
+<tr class="row-even"><td><p>bytes</p></td>
+<td><p>quantity in bytes</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>quantity expressed in samples</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-helpers-1gae3669a4326ce185f4261d7bf96900f3f"><span id="index-20"></span><span></span><span class="kt">ssize_t</span>
+<span class="n">snd_pcm_samples_to_bytes</span><span class="p">(</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga919e634deecd855b6e2e15174e70d3ea"><span class="std std-ref">snd_pcm_t</span></a><span></span><span class="o">*</span> <span class="n">pcm</span><span class="p">,</span>
+    <span class="kt">long</span> <span class="n">samples</span>
+<span class="p">)</span></pre>
+<p>Convert samples in bytes for a PCM.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>pcm</p></td>
+<td><p>PCM handle</p></td>
+</tr>
+<tr class="row-even"><td><p>samples</p></td>
+<td><p>quantity in samples</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>quantity expressed in bytes</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-helpers-1ga23e03a8b127764fff669240986b96b39"><span id="index-21"></span><span></span><span class="kt">int</span>
+<span class="n">snd_pcm_area_silence</span><span class="p">(</span>
+    <span class="k">const</span> <a class="reference internal" href="struct_snd_pcm_channel_area_t.html#doxid-structsnd-pcm-channel-area-t"><span class="std std-ref">snd_pcm_channel_area_t</span></a><span></span><span class="o">*</span> <span class="n">dst_channel</span><span class="p">,</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gab01fcfe9b97382a8d3f2027c664b8b8a"><span class="std std-ref">snd_pcm_uframes_t</span></a><span></span> <span class="n">dst_offset</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">samples</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span>
+<span class="p">)</span></pre>
+<p>Silence an area.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>dst_area</p></td>
+<td><p>area specification</p></td>
+</tr>
+<tr class="row-even"><td><p>dst_offset</p></td>
+<td><p>offset in frames inside area</p></td>
+</tr>
+<tr class="row-odd"><td><p>samples</p></td>
+<td><p>samples to silence</p></td>
+</tr>
+<tr class="row-even"><td><p>format</p></td>
+<td><p>PCM sample format</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-helpers-1ga1c0aab2a2bb341f1b1d154dae2b7e482"><span id="index-22"></span><span></span><span class="kt">int</span>
+<span class="n">snd_pcm_areas_silence</span><span class="p">(</span>
+    <span class="k">const</span> <a class="reference internal" href="struct_snd_pcm_channel_area_t.html#doxid-structsnd-pcm-channel-area-t"><span class="std std-ref">snd_pcm_channel_area_t</span></a><span></span><span class="o">*</span> <span class="n">dst_channels</span><span class="p">,</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gab01fcfe9b97382a8d3f2027c664b8b8a"><span class="std std-ref">snd_pcm_uframes_t</span></a><span></span> <span class="n">dst_offset</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">channels</span><span class="p">,</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gab01fcfe9b97382a8d3f2027c664b8b8a"><span class="std std-ref">snd_pcm_uframes_t</span></a><span></span> <span class="n">frames</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span>
+<span class="p">)</span></pre>
+<p>Silence one or more areas.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>dst_areas</p></td>
+<td><p>areas specification (one for each channel)</p></td>
+</tr>
+<tr class="row-even"><td><p>dst_offset</p></td>
+<td><p>offset in frames inside area</p></td>
+</tr>
+<tr class="row-odd"><td><p>channels</p></td>
+<td><p>channels count</p></td>
+</tr>
+<tr class="row-even"><td><p>frames</p></td>
+<td><p>frames to silence</p></td>
+</tr>
+<tr class="row-odd"><td><p>format</p></td>
+<td><p>PCM sample format</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-helpers-1ga93d2f045575afb161abff126c3750049"><span id="index-23"></span><span></span><span class="kt">int</span>
+<span class="n">snd_pcm_area_copy</span><span class="p">(</span>
+    <span class="k">const</span> <a class="reference internal" href="struct_snd_pcm_channel_area_t.html#doxid-structsnd-pcm-channel-area-t"><span class="std std-ref">snd_pcm_channel_area_t</span></a><span></span><span class="o">*</span> <span class="n">dst_channel</span><span class="p">,</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gab01fcfe9b97382a8d3f2027c664b8b8a"><span class="std std-ref">snd_pcm_uframes_t</span></a><span></span> <span class="n">dst_offset</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="struct_snd_pcm_channel_area_t.html#doxid-structsnd-pcm-channel-area-t"><span class="std std-ref">snd_pcm_channel_area_t</span></a><span></span><span class="o">*</span> <span class="n">src_channel</span><span class="p">,</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gab01fcfe9b97382a8d3f2027c664b8b8a"><span class="std std-ref">snd_pcm_uframes_t</span></a><span></span> <span class="n">src_offset</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">samples</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span>
+<span class="p">)</span></pre>
+<p>Copy an area.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>dst_area</p></td>
+<td><p>destination area specification</p></td>
+</tr>
+<tr class="row-even"><td><p>dst_offset</p></td>
+<td><p>offset in frames inside destination area</p></td>
+</tr>
+<tr class="row-odd"><td><p>src_area</p></td>
+<td><p>source area specification</p></td>
+</tr>
+<tr class="row-even"><td><p>src_offset</p></td>
+<td><p>offset in frames inside source area</p></td>
+</tr>
+<tr class="row-odd"><td><p>samples</p></td>
+<td><p>samples to copy</p></td>
+</tr>
+<tr class="row-even"><td><p>format</p></td>
+<td><p>PCM sample format</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-p-c-m-helpers-1gad57f8921f52ea2ffd870cafb2d076f2c"><span id="index-24"></span><span></span><span class="kt">int</span>
+<span class="n">snd_pcm_areas_copy</span><span class="p">(</span>
+    <span class="k">const</span> <a class="reference internal" href="struct_snd_pcm_channel_area_t.html#doxid-structsnd-pcm-channel-area-t"><span class="std std-ref">snd_pcm_channel_area_t</span></a><span></span><span class="o">*</span> <span class="n">dst_channels</span><span class="p">,</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gab01fcfe9b97382a8d3f2027c664b8b8a"><span class="std std-ref">snd_pcm_uframes_t</span></a><span></span> <span class="n">dst_offset</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="struct_snd_pcm_channel_area_t.html#doxid-structsnd-pcm-channel-area-t"><span class="std std-ref">snd_pcm_channel_area_t</span></a><span></span><span class="o">*</span> <span class="n">src_channels</span><span class="p">,</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gab01fcfe9b97382a8d3f2027c664b8b8a"><span class="std std-ref">snd_pcm_uframes_t</span></a><span></span> <span class="n">src_offset</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">channels</span><span class="p">,</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gab01fcfe9b97382a8d3f2027c664b8b8a"><span class="std std-ref">snd_pcm_uframes_t</span></a><span></span> <span class="n">frames</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span>
+<span class="p">)</span></pre>
+<p>Copy one or more areas.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>dst_areas</p></td>
+<td><p>destination areas specification (one for each channel)</p></td>
+</tr>
+<tr class="row-even"><td><p>dst_offset</p></td>
+<td><p>offset in frames inside destination area</p></td>
+</tr>
+<tr class="row-odd"><td><p>src_areas</p></td>
+<td><p>source areas specification (one for each channel)</p></td>
+</tr>
+<tr class="row-even"><td><p>src_offset</p></td>
+<td><p>offset in frames inside source area</p></td>
+</tr>
+<tr class="row-odd"><td><p>channels</p></td>
+<td><p>channels count</p></td>
+</tr>
+<tr class="row-even"><td><p>frames</p></td>
+<td><p>frames to copy</p></td>
+</tr>
+<tr class="row-odd"><td><p>format</p></td>
+<td><p>PCM sample format</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="group_PCM_HW_Params.html" class="btn btn-neutral float-left" title="Hardware Parameters" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="group_PCM_Hook.html" class="btn btn-neutral float-right" title="Hook Extension" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 1998-2017, ALSA Library Maintainers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

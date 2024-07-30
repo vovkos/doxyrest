@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Internal Memory Allocation &#8212; Apache Portable Runtime Documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=0a676766" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css?v=3785b6ce" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=515d8a7f"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="struct apr_memnode_t" href="struct_apr_memnode_t.html" />
+    <link rel="prev" title="Internal APR support functions" href="group_apr_support.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="struct_apr_memnode_t.html" title="struct apr_memnode_t"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="group_apr_support.html" title="Internal APR support functions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Apache Portable Runtime Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="group_APR.html" accesskey="U">Apache Portability Runtime library</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Internal Memory Allocation</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="internal-memory-allocation">
+<span id="doxid-group-apr-allocator"></span><span id="index-0"></span><h1>Internal Memory Allocation</h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="overview">
+<h2>Overview</h2>
+<pre class="highlight doxyrest-overview-code-block literal-block"><span></span><span class="c1">// typedefs</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span> <a class="reference internal" href="#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="struct_apr_memnode_t.html#doxid-structapr-memnode-t"><span class="std std-ref">apr_memnode_t</span></a><span></span> <a class="reference internal" href="#doxid-group-apr-allocator-1ga3b6437036dfcdffbf87ad4677c818211"><span class="std std-ref">apr_memnode_t</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// structs</span>
+
+<span class="k">struct</span> <a class="reference internal" href="struct_apr_memnode_t.html#doxid-structapr-memnode-t"><span class="std std-ref">apr_memnode_t</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// global functions</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-allocator-1gaf834f409a34b7f8656c045cff02fd953"><span class="std std-ref">apr_allocator_create</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">**</span> <span class="n">allocator</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-apr-allocator-1ga704529f6b26279ad1c48d5e8372d859c"><span class="std std-ref">apr_allocator_destroy</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span> <span class="n">allocator</span><span class="p">);</span>
+
+<a class="reference internal" href="struct_apr_memnode_t.html#doxid-structapr-memnode-t"><span class="std std-ref">apr_memnode_t</span></a><span></span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-allocator-1ga7452b0837c2148bd63109f89bbc0c3db"><span class="std std-ref">apr_allocator_alloc</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span> <span class="n">allocator</span><span class="p">,</span>
+    <span class="n">apr_size_t</span> <span class="n">size</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-apr-allocator-1ga124e48339838213fd5e160a4125cb7e8"><span class="std std-ref">apr_allocator_free</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span> <span class="n">allocator</span><span class="p">,</span>
+    <a class="reference internal" href="struct_apr_memnode_t.html#doxid-structapr-memnode-t"><span class="std std-ref">apr_memnode_t</span></a><span></span><span class="o">*</span> <span class="n">memnode</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-apr-allocator-1gadf38bbec37c29c24388e95b1c9acad28"><span class="std std-ref">apr_allocator_owner_set</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span> <span class="n">allocator</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-allocator-1ga3cfe48c8717de6495480ce1479d262f1"><span class="std std-ref">apr_allocator_owner_get</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span> <span class="n">allocator</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-apr-allocator-1ga1d45cb6dbe69ba25dee0ec5f4e031d60"><span class="std std-ref">apr_allocator_max_free_set</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span> <span class="n">allocator</span><span class="p">,</span>
+    <span class="n">apr_size_t</span> <span class="n">size</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-apr-allocator-1gab803d74f56683004f7ec384ced210dd5"><span class="std std-ref">apr_allocator_mutex_set</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span> <span class="n">allocator</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_thread_mutex.html#doxid-group-apr-thread-mutex-1ga95712060ba3a192036416e1ccef1db75"><span class="std std-ref">apr_thread_mutex_t</span></a><span></span><span class="o">*</span> <span class="n">mutex</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_thread_mutex.html#doxid-group-apr-thread-mutex-1ga95712060ba3a192036416e1ccef1db75"><span class="std std-ref">apr_thread_mutex_t</span></a><span></span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-allocator-1ga38599aa9f1330846a2d2b25ec5c8d9c9"><span class="std std-ref">apr_allocator_mutex_get</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span> <span class="n">allocator</span><span class="p">);</span>
+
+<span class="c1">// macros</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-allocator-1ga54f32b19d8dad59bc6364a7a6b8ebec9"><span class="std std-ref">APR_ALLOCATOR_MAX_FREE_UNLIMITED</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-allocator-1gaf382851817012929f4e2458b43f4482c"><span class="std std-ref">APR_MEMNODE_T_SIZE</span></a></pre>
+</section>
+<section id="detailed-documentation">
+<span id="details-group-apr-allocator"></span><h2>Detailed Documentation</h2>
+<section id="typedefs">
+<h3>Typedefs</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span id="index-1"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span> <span class="n">apr_allocator_t</span></pre>
+<p>the allocator structure</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-allocator-1ga3b6437036dfcdffbf87ad4677c818211"><span id="index-2"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="struct_apr_memnode_t.html#doxid-structapr-memnode-t"><span class="std std-ref">apr_memnode_t</span></a><span></span> <span class="n">apr_memnode_t</span></pre>
+<p>the structure which holds information about the allocation</p>
+</section>
+<section id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-allocator-1gaf834f409a34b7f8656c045cff02fd953"><span id="index-3"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_allocator_create</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">**</span> <span class="n">allocator</span><span class="p">)</span></pre>
+<p>Create a new allocator</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>allocator</p></td>
+<td><p>The allocator we have just created.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-allocator-1ga704529f6b26279ad1c48d5e8372d859c"><span id="index-4"></span><span></span><span class="kt">void</span>
+<span class="n">apr_allocator_destroy</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span> <span class="n">allocator</span><span class="p">)</span></pre>
+<p>Destroy an allocator Any memnodes not given back to the allocator prior to destroying will <em>not</em> be free()d.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>allocator</p></td>
+<td><p>The allocator to be destroyed</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-allocator-1ga7452b0837c2148bd63109f89bbc0c3db"><span id="index-5"></span><a class="reference internal" href="struct_apr_memnode_t.html#doxid-structapr-memnode-t"><span class="std std-ref">apr_memnode_t</span></a><span></span><span class="o">*</span>
+<span class="n">apr_allocator_alloc</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span> <span class="n">allocator</span><span class="p">,</span>
+    <span class="n">apr_size_t</span> <span class="n">size</span>
+<span class="p">)</span></pre>
+<p>Allocate a block of mem from the allocator</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>allocator</p></td>
+<td><p>The allocator to allocate from</p></td>
+</tr>
+<tr class="row-even"><td><p>size</p></td>
+<td><p>The size of the mem to allocate (excluding the memnode structure)</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-allocator-1ga124e48339838213fd5e160a4125cb7e8"><span id="index-6"></span><span></span><span class="kt">void</span>
+<span class="n">apr_allocator_free</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span> <span class="n">allocator</span><span class="p">,</span>
+    <a class="reference internal" href="struct_apr_memnode_t.html#doxid-structapr-memnode-t"><span class="std std-ref">apr_memnode_t</span></a><span></span><span class="o">*</span> <span class="n">memnode</span>
+<span class="p">)</span></pre>
+<p>Free a list of blocks of mem, giving them back to the allocator. The list is typically terminated by a memnode with its next field set to NULL.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>allocator</p></td>
+<td><p>The allocator to give the mem back to</p></td>
+</tr>
+<tr class="row-even"><td><p>memnode</p></td>
+<td><p>The memory node to return</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-allocator-1gadf38bbec37c29c24388e95b1c9acad28"><span id="index-7"></span><span></span><span class="kt">void</span>
+<span class="n">apr_allocator_owner_set</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span> <span class="n">allocator</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">)</span></pre>
+<p>Set the owner of the allocator Typically pool is the highest level pool using the allocator</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>allocator</p></td>
+<td><p>The allocator to set the owner for</p></td>
+</tr>
+<tr class="row-even"><td><p>pool</p></td>
+<td><p>The pool that is to own the allocator</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-allocator-1ga3cfe48c8717de6495480ce1479d262f1"><span id="index-8"></span><a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span>
+<span class="n">apr_allocator_owner_get</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span> <span class="n">allocator</span><span class="p">)</span></pre>
+<p>Get the current owner of the allocator</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>allocator</p></td>
+<td><p>The allocator to get the owner from</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-allocator-1ga1d45cb6dbe69ba25dee0ec5f4e031d60"><span id="index-9"></span><span></span><span class="kt">void</span>
+<span class="n">apr_allocator_max_free_set</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span> <span class="n">allocator</span><span class="p">,</span>
+    <span class="n">apr_size_t</span> <span class="n">size</span>
+<span class="p">)</span></pre>
+<p>Set the current threshold at which the allocator should start giving blocks back to the system.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>allocator</p></td>
+<td><p>The allocator to set the threshold on</p></td>
+</tr>
+<tr class="row-even"><td><p>size</p></td>
+<td><p>The threshold. 0 == unlimited.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-allocator-1gab803d74f56683004f7ec384ced210dd5"><span id="index-10"></span><span></span><span class="kt">void</span>
+<span class="n">apr_allocator_mutex_set</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span> <span class="n">allocator</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_thread_mutex.html#doxid-group-apr-thread-mutex-1ga95712060ba3a192036416e1ccef1db75"><span class="std std-ref">apr_thread_mutex_t</span></a><span></span><span class="o">*</span> <span class="n">mutex</span>
+<span class="p">)</span></pre>
+<p>Set a mutex for the allocator to use</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>allocator</p></td>
+<td><p>The allocator to set the mutex for</p></td>
+</tr>
+<tr class="row-even"><td><p>mutex</p></td>
+<td><p>The mutex</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-allocator-1ga38599aa9f1330846a2d2b25ec5c8d9c9"><span id="index-11"></span><a class="reference internal" href="group_apr_thread_mutex.html#doxid-group-apr-thread-mutex-1ga95712060ba3a192036416e1ccef1db75"><span class="std std-ref">apr_thread_mutex_t</span></a><span></span><span class="o">*</span>
+<span class="n">apr_allocator_mutex_get</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span> <span class="n">allocator</span><span class="p">)</span></pre>
+<p>Get the mutex currently set for the allocator</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>allocator</p></td>
+<td><p>The allocator</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="macros">
+<h3>Macros</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-allocator-1ga54f32b19d8dad59bc6364a7a6b8ebec9"><span id="index-12"></span><span></span><span class="cp">#define APR_ALLOCATOR_MAX_FREE_UNLIMITED</span></pre>
+<p>Symbolic constants</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-allocator-1gaf382851817012929f4e2458b43f4482c"><span id="index-13"></span><span></span><span class="cp">#define APR_MEMNODE_T_SIZE</span></pre>
+<p>The base size of a memory node - aligned.</p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Internal Memory Allocation</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li><a class="reference internal" href="#global-functions">Global Functions</a></li>
+<li><a class="reference internal" href="#macros">Macros</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="group_apr_support.html"
+                          title="previous chapter">Internal APR support functions</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="struct_apr_memnode_t.html"
+                          title="next chapter">struct apr_memnode_t</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="struct_apr_memnode_t.html" title="struct apr_memnode_t"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="group_apr_support.html" title="Internal APR support functions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Apache Portable Runtime Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="group_APR.html" >Apache Portability Runtime library</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Internal Memory Allocation</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2008-2017, Apache Portable Runtime Maintainers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    </div>
+  </body>
+</html>

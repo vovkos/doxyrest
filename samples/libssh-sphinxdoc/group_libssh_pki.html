@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>The SSH Public Key Infrastructure &#8212; LibSSH Documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=0a676766" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css?v=3785b6ce" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=840eb146"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="The SSH authentication functions." href="group_libssh_auth.html" />
+    <link rel="prev" title="The libssh API" href="group_libssh.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="group_libssh_auth.html" title="The SSH authentication functions."
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="group_libssh.html" title="The libssh API"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LibSSH Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="group_libssh.html" accesskey="U">The libssh API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">The SSH Public Key Infrastructure</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="the-ssh-public-key-infrastructure">
+<span id="doxid-group-libssh-pki"></span><span id="index-0"></span><h1>The SSH Public Key Infrastructure</h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="overview">
+<h2>Overview</h2>
+<p>Functions for the creation, importation and manipulation of public and private keys in the context of the SSH protocol. <a class="reference internal" href="#details-group-libssh-pki"><span class="std std-ref">More…</span></a></p>
+<pre class="highlight doxyrest-overview-code-block literal-block"><span></span><span class="c1">// global functions</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-pki-1ga4dc33945294c2bbd671365a9d3db8e2f"><span class="std std-ref">ssh_key_cmp</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">ssh_key</span> <span class="n">k1</span><span class="p">,</span>
+    <span class="k">const</span> <span class="n">ssh_key</span> <span class="n">k2</span><span class="p">,</span>
+    <span class="k">enum</span> <a class="reference internal" href="enum_ssh_keycmp_e.html#doxid-libssh-8h-1ad6ae03e8cb7f93c664a1af5d5a899f62"><span class="std std-ref">ssh_keycmp_e</span></a><span></span> <span class="n">what</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libssh-pki-1ga08808beb83a42ccd6f1c710ddeb1b4c2"><span class="std std-ref">ssh_key_free</span></a><span></span><span class="p">(</span><span class="n">ssh_key</span> <span class="n">key</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-pki-1ga09de68aba0a7c4e31d8ba7df43b637c5"><span class="std std-ref">ssh_key_is_private</span></a><span></span><span class="p">(</span><span class="k">const</span> <span class="n">ssh_key</span> <span class="n">k</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-pki-1ga9bc688b5cbc400320ac44896eba21924"><span class="std std-ref">ssh_key_is_public</span></a><span></span><span class="p">(</span><span class="k">const</span> <span class="n">ssh_key</span> <span class="n">k</span><span class="p">);</span>
+
+<span class="n">ssh_key</span>
+<a class="reference internal" href="#doxid-group-libssh-pki-1gabfebce03474a4d014aa779d5dbf057b0"><span class="std std-ref">ssh_key_new</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="k">enum</span> <a class="reference internal" href="enum_ssh_keytypes_e.html#doxid-libssh-8h-1a244b017e5993fde29fe9e9b1f04a7bce"><span class="std std-ref">ssh_keytypes_e</span></a><span></span>
+<a class="reference internal" href="#doxid-group-libssh-pki-1ga9cb4a857f8e510f80cfc38e46c476490"><span class="std std-ref">ssh_key_type</span></a><span></span><span class="p">(</span><span class="k">const</span> <span class="n">ssh_key</span> <span class="n">key</span><span class="p">);</span>
+
+<span class="k">enum</span> <a class="reference internal" href="enum_ssh_keytypes_e.html#doxid-libssh-8h-1a244b017e5993fde29fe9e9b1f04a7bce"><span class="std std-ref">ssh_keytypes_e</span></a><span></span>
+<a class="reference internal" href="#doxid-group-libssh-pki-1ga44584f2316c6ccd40e9939454335d8bc"><span class="std std-ref">ssh_key_type_from_name</span></a><span></span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libssh-pki-1ga302919f046a4af504e5a2a9924b031c1"><span class="std std-ref">ssh_key_type_to_char</span></a><span></span><span class="p">(</span><span class="k">enum</span> <a class="reference internal" href="enum_ssh_keytypes_e.html#doxid-libssh-8h-1a244b017e5993fde29fe9e9b1f04a7bce"><span class="std std-ref">ssh_keytypes_e</span></a><span></span> <span class="n">type</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-pki-1ga3b294c44e2280c935cb0b82ede5c42ee"><span class="std std-ref">ssh_pki_export_privkey_file</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">ssh_key</span> <span class="n">privkey</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">passphrase</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-libssh-8h-1a3b54d7be70dcc98a107e41e11000a3e1"><span class="std std-ref">ssh_auth_callback</span></a><span></span> <span class="n">auth_fn</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">auth_data</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">filename</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-pki-1ga5777bc537da6a447b2a9aa9eceff9877"><span class="std std-ref">ssh_pki_export_privkey_to_pubkey</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">ssh_key</span> <span class="n">privkey</span><span class="p">,</span>
+    <span class="n">ssh_key</span><span class="o">*</span> <span class="n">pkey</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-pki-1ga2caa40cbd9620e9f7e3e7ab654b256c5"><span class="std std-ref">ssh_pki_export_pubkey_base64</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">ssh_key</span> <span class="n">key</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">**</span> <span class="n">b64_key</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-pki-1gae038fa1b34f9427c7ba84082a1a20bad"><span class="std std-ref">ssh_pki_generate</span></a><span></span><span class="p">(</span>
+    <span class="k">enum</span> <a class="reference internal" href="enum_ssh_keytypes_e.html#doxid-libssh-8h-1a244b017e5993fde29fe9e9b1f04a7bce"><span class="std std-ref">ssh_keytypes_e</span></a><span></span> <span class="n">type</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">parameter</span><span class="p">,</span>
+    <span class="n">ssh_key</span><span class="o">*</span> <span class="n">pkey</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-pki-1ga5f2a2ca4b9b711d1c1af8020dfbd4a53"><span class="std std-ref">ssh_pki_import_privkey_base64</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">b64_key</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">passphrase</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-libssh-8h-1a3b54d7be70dcc98a107e41e11000a3e1"><span class="std std-ref">ssh_auth_callback</span></a><span></span> <span class="n">auth_fn</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">auth_data</span><span class="p">,</span>
+    <span class="n">ssh_key</span><span class="o">*</span> <span class="n">pkey</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-pki-1ga1c8f84137606b1585006302499100ee0"><span class="std std-ref">ssh_pki_import_privkey_file</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">filename</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">passphrase</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-libssh-8h-1a3b54d7be70dcc98a107e41e11000a3e1"><span class="std std-ref">ssh_auth_callback</span></a><span></span> <span class="n">auth_fn</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">auth_data</span><span class="p">,</span>
+    <span class="n">ssh_key</span><span class="o">*</span> <span class="n">pkey</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-pki-1gac8d7d3fa88b93d8b059b6b5b2f457913"><span class="std std-ref">ssh_pki_import_pubkey_base64</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">b64_key</span><span class="p">,</span>
+    <span class="k">enum</span> <a class="reference internal" href="enum_ssh_keytypes_e.html#doxid-libssh-8h-1a244b017e5993fde29fe9e9b1f04a7bce"><span class="std std-ref">ssh_keytypes_e</span></a><span></span> <span class="n">type</span><span class="p">,</span>
+    <span class="n">ssh_key</span><span class="o">*</span> <span class="n">pkey</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-pki-1gaffb08168b870fb9e86cc7649c8987eb0"><span class="std std-ref">ssh_pki_import_pubkey_file</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">filename</span><span class="p">,</span>
+    <span class="n">ssh_key</span><span class="o">*</span> <span class="n">pkey</span>
+<span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libssh-pki-1gaf9ba4d3e3cd2a8b61fabe33b5b7e59c2"><span class="std std-ref">ssh_pki_key_ecdsa_name</span></a><span></span><span class="p">(</span><span class="k">const</span> <span class="n">ssh_key</span> <span class="n">key</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-libssh-pki-1ga9ee6aacb86cb7f4e8f3b5ec582040d3a"><span class="std std-ref">ssh_key_clean</span></a><span></span><span class="p">(</span><span class="n">ssh_key</span> <span class="n">key</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-pki-1ga44009d2912430773ef2d4fc8a27eec3a"><span></span><span class="n">_ssh_pki_log</span></span><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">function</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">format</span><span class="p">,</span>
+    <span class="p">...</span>
+<span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-pki-1ga47e989e47acf6d577c805910e688a21f"><span></span><span class="n">pki_import_pubkey_buffer</span></span><span></span><span class="p">(</span>
+    <span class="n">ssh_buffer</span> <span class="n">buffer</span><span class="p">,</span>
+    <span class="k">enum</span> <a class="reference internal" href="enum_ssh_keytypes_e.html#doxid-libssh-8h-1a244b017e5993fde29fe9e9b1f04a7bce"><span class="std std-ref">ssh_keytypes_e</span></a><span></span> <span class="n">type</span><span class="p">,</span>
+    <span class="n">ssh_key</span><span class="o">*</span> <span class="n">pkey</span>
+<span class="p">);</span>
+
+<span class="k">enum</span> <a class="reference internal" href="enum_ssh_keytypes_e.html#doxid-libssh-8h-1a244b017e5993fde29fe9e9b1f04a7bce"><span class="std std-ref">ssh_keytypes_e</span></a><span></span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-pki-1ga7e7a133a35452b9ffe494848aa347cd1"><span></span><span class="n">pki_privatekey_type_from_string</span></span><span></span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">privkey</span><span class="p">);</span>
+
+<span class="n">ssh_key</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-pki-1gae0944d085d1a63c73b7eaf78924ddca8"><span></span><span class="n">ssh_key_dup</span></span><span></span><span class="p">(</span><span class="k">const</span> <span class="n">ssh_key</span> <span class="n">key</span><span class="p">);</span>
+
+<span class="n">ssh_private_key</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-pki-1gacf3c14fbfaa1e0b1aa3d4129bad07fb8"><span></span><span class="n">ssh_pki_convert_key_to_privatekey</span></span><span></span><span class="p">(</span><span class="k">const</span> <span class="n">ssh_key</span> <span class="n">key</span><span class="p">);</span>
+
+<span class="n">ssh_public_key</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-pki-1ga2fb166991a033adb5540b66f407e2db4"><span></span><span class="n">ssh_pki_convert_key_to_publickey</span></span><span></span><span class="p">(</span><span class="k">const</span> <span class="n">ssh_key</span> <span class="n">key</span><span class="p">);</span>
+
+<span class="n">ssh_string</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-pki-1ga7e1830d2e6eaf10d4fdfb5954bf718eb"><span></span><span class="n">ssh_pki_do_sign</span></span><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_buffer</span> <span class="n">sigbuf</span><span class="p">,</span>
+    <span class="k">const</span> <span class="n">ssh_key</span> <span class="n">privkey</span>
+<span class="p">);</span>
+
+<span class="n">ssh_string</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-pki-1ga030b5e767d97bd26053a5644b083c133"><span></span><span class="n">ssh_pki_do_sign_agent</span></span><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_ssh_buffer_struct.html#doxid-structssh-buffer-struct"><span class="std std-ref">ssh_buffer_struct</span></a><span></span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span>
+    <span class="k">const</span> <span class="n">ssh_key</span> <span class="n">pubkey</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-pki-1gaadeaf6dc35e99214de0af82c3c431649"><span></span><span class="n">ssh_pki_export_pubkey_blob</span></span><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">ssh_key</span> <span class="n">key</span><span class="p">,</span>
+    <span class="n">ssh_string</span><span class="o">*</span> <span class="n">pblob</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-pki-1ga576cb3a5c7f40a0e20a88b14a023613d"><span></span><span class="n">ssh_pki_export_pubkey_file</span></span><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">ssh_key</span> <span class="n">key</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">filename</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-pki-1ga9fe9fefc705e7ea8acc8dc809cea1076"><span></span><span class="n">ssh_pki_export_pubkey_rsa1</span></span><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">ssh_key</span> <span class="n">key</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">host</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">rsa1</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">rsa1_len</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-pki-1ga302c3e762e3268e3971df86784688013"><span></span><span class="n">ssh_pki_export_signature_blob</span></span><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">ssh_signature</span> <span class="n">sig</span><span class="p">,</span>
+    <span class="n">ssh_string</span><span class="o">*</span> <span class="n">sig_blob</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-pki-1ga942b96ee72b13655952c87efe938e6ee"><span></span><span class="n">ssh_pki_import_pubkey_blob</span></span><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">ssh_string</span> <span class="n">key_blob</span><span class="p">,</span>
+    <span class="n">ssh_key</span><span class="o">*</span> <span class="n">pkey</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-pki-1ga02ef62122b1d2c3065e86413cc673704"><span></span><span class="n">ssh_pki_import_signature_blob</span></span><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">ssh_string</span> <span class="n">sig_blob</span><span class="p">,</span>
+    <span class="k">const</span> <span class="n">ssh_key</span> <span class="n">pubkey</span><span class="p">,</span>
+    <span class="n">ssh_signature</span><span class="o">*</span> <span class="n">psig</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-pki-1ga03fdd0bce9e259365736555abb0ed571"><span></span><span class="n">ssh_pki_signature_verify_blob</span></span><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="n">ssh_string</span> <span class="n">sig_blob</span><span class="p">,</span>
+    <span class="k">const</span> <span class="n">ssh_key</span> <span class="n">key</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">digest</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">dlen</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-pki-1ga428f0c9a085999e3e28e672d23a5bc55"><span></span><span class="n">ssh_signature_free</span></span><span></span><span class="p">(</span><span class="n">ssh_signature</span> <span class="n">sig</span><span class="p">);</span>
+
+<span class="n">ssh_signature</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-pki-1gae69bb1e43ad83f808cc0ce4b89727bad"><span></span><span class="n">ssh_signature_new</span></span><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="n">ssh_string</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-pki-1ga7f7b8ba203dc93fd0ffdfb4bacb0f0e4"><span></span><span class="n">ssh_srv_pki_do_sign_sessionid</span></span><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="k">const</span> <span class="n">ssh_key</span> <span class="n">privkey</span>
+<span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-pki-1ga5a513e1a553cbfc5301138f52bcd5881"><span class="std std-ref">pki_openssh_import_privkey_blob</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_buffer</span> <span class="n">key_blob_buffer</span><span class="p">,</span>
+    <span class="n">ssh_key</span><span class="o">*</span> <span class="n">pkey</span>
+<span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-pki-1gae8b8a710eea5b5c36c9e2416cc0734d7"><span class="std std-ref">pki_private_key_decrypt</span></a><span></span><span class="p">(</span>
+    <span class="n">ssh_string</span> <span class="n">blob</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">passphrase</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">ciphername</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">kdfname</span><span class="p">,</span>
+    <span class="n">ssh_string</span> <span class="n">kdfoptions</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-libssh-8h-1a3b54d7be70dcc98a107e41e11000a3e1"><span class="std std-ref">ssh_auth_callback</span></a><span></span> <span class="n">auth_fn</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">auth_data</span>
+<span class="p">);</span>
+
+<span class="n">ssh_key</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-pki-1gaf157c1df451c718d42a3db69443acf12"><span></span><span class="n">ssh_pki_openssh_privkey_import</span></span><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">text_key</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">passphrase</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-libssh-8h-1a3b54d7be70dcc98a107e41e11000a3e1"><span class="std std-ref">ssh_auth_callback</span></a><span></span> <span class="n">auth_fn</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">auth_data</span>
+<span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-pki-1gae31fc9d1d7202ca99b444d6b8159cabb"><span></span><span class="n">pki_openssh_export_privkey_blob</span></span><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">ssh_key</span> <span class="n">privkey</span><span class="p">,</span>
+    <span class="n">ssh_buffer</span> <span class="n">buffer</span>
+<span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-pki-1gad2addfee75214413f07493a89638350f"><span></span><span class="n">pki_private_key_encrypt</span></span><span></span><span class="p">(</span>
+    <span class="n">ssh_buffer</span> <span class="n">privkey_buffer</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">passphrase</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">ciphername</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">kdfname</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-libssh-8h-1a3b54d7be70dcc98a107e41e11000a3e1"><span class="std std-ref">ssh_auth_callback</span></a><span></span> <span class="n">auth_fn</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">auth_data</span><span class="p">,</span>
+    <span class="kt">uint32_t</span> <span class="n">rounds</span><span class="p">,</span>
+    <span class="n">ssh_string</span> <span class="n">salt</span>
+<span class="p">);</span>
+
+<span class="n">ssh_string</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-pki-1ga0a1b01b666de3e4f433660761c7658ad"><span></span><span class="n">ssh_pki_openssh_privkey_export</span></span><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">ssh_key</span> <span class="n">privkey</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">passphrase</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-libssh-8h-1a3b54d7be70dcc98a107e41e11000a3e1"><span class="std std-ref">ssh_auth_callback</span></a><span></span> <span class="n">auth_fn</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">auth_data</span>
+<span class="p">);</span></pre>
+</section>
+<section id="detailed-documentation">
+<span id="details-group-libssh-pki"></span><h2>Detailed Documentation</h2>
+<p>Functions for the creation, importation and manipulation of public and private keys in the context of the SSH protocol.</p>
+<section id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-pki-1ga4dc33945294c2bbd671365a9d3db8e2f"><span id="index-1"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_key_cmp</span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">ssh_key</span> <span class="n">k1</span><span class="p">,</span>
+    <span class="k">const</span> <span class="n">ssh_key</span> <span class="n">k2</span><span class="p">,</span>
+    <span class="k">enum</span> <a class="reference internal" href="enum_ssh_keycmp_e.html#doxid-libssh-8h-1ad6ae03e8cb7f93c664a1af5d5a899f62"><span class="std std-ref">ssh_keycmp_e</span></a><span></span> <span class="n">what</span>
+<span class="p">)</span></pre>
+<p>Compare keys if they are equal.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>k1</p></td>
+<td><p>The first key to compare.</p></td>
+</tr>
+<tr class="row-even"><td><p>k2</p></td>
+<td><p>The second key to compare.</p></td>
+</tr>
+<tr class="row-odd"><td><p>what</p></td>
+<td><p>What part or type of the key do you want to compare.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 if equal, 1 if not.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-pki-1ga08808beb83a42ccd6f1c710ddeb1b4c2"><span id="index-2"></span><span></span><span class="kt">void</span>
+<span class="n">ssh_key_free</span><span class="p">(</span><span class="n">ssh_key</span> <span class="n">key</span><span class="p">)</span></pre>
+<p>deallocate a SSH key</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>key</p></td>
+<td><p>ssh_key handle to free</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-pki-1ga09de68aba0a7c4e31d8ba7df43b637c5"><span id="index-3"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_key_is_private</span><span class="p">(</span><span class="k">const</span> <span class="n">ssh_key</span> <span class="n">k</span><span class="p">)</span></pre>
+<p>Check if the key is a private key.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>k</p></td>
+<td><p>The key to check.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>1 if it is a private key, 0 if not.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-pki-1ga9bc688b5cbc400320ac44896eba21924"><span id="index-4"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_key_is_public</span><span class="p">(</span><span class="k">const</span> <span class="n">ssh_key</span> <span class="n">k</span><span class="p">)</span></pre>
+<p>Check if the key has/is a public key.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>k</p></td>
+<td><p>The key to check.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>1 if it is a public key, 0 if not.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-pki-1gabfebce03474a4d014aa779d5dbf057b0"><span id="index-5"></span><span></span><span class="n">ssh_key</span>
+<span class="n">ssh_key_new</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></pre>
+<p>creates a new empty SSH key</p>
+<p class="rubric">Returns:</p>
+<p>an empty ssh_key handle, or NULL on error.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-pki-1ga9cb4a857f8e510f80cfc38e46c476490"><span id="index-6"></span><span></span><span class="k">enum</span> <a class="reference internal" href="enum_ssh_keytypes_e.html#doxid-libssh-8h-1a244b017e5993fde29fe9e9b1f04a7bce"><span class="std std-ref">ssh_keytypes_e</span></a><span></span>
+<span class="n">ssh_key_type</span><span class="p">(</span><span class="k">const</span> <span class="n">ssh_key</span> <span class="n">key</span><span class="p">)</span></pre>
+<p>returns the type of a ssh key</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>key</p></td>
+<td><p>the ssh_key handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>one of SSH_KEYTYPE_RSA,SSH_KEYTYPE_DSS,SSH_KEYTYPE_RSA1</p>
+<p>SSH_KEYTYPE_UNKNOWN if the type is unknown</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-pki-1ga44584f2316c6ccd40e9939454335d8bc"><span id="index-7"></span><span></span><span class="k">enum</span> <a class="reference internal" href="enum_ssh_keytypes_e.html#doxid-libssh-8h-1a244b017e5993fde29fe9e9b1f04a7bce"><span class="std std-ref">ssh_keytypes_e</span></a><span></span>
+<span class="n">ssh_key_type_from_name</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">)</span></pre>
+<p>Convert a ssh key name to a ssh key type.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>name</p></td>
+<td><p>The name to convert.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>The enum ssh key type.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-pki-1ga302919f046a4af504e5a2a9924b031c1"><span id="index-8"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">ssh_key_type_to_char</span><span class="p">(</span><span class="k">enum</span> <a class="reference internal" href="enum_ssh_keytypes_e.html#doxid-libssh-8h-1a244b017e5993fde29fe9e9b1f04a7bce"><span class="std std-ref">ssh_keytypes_e</span></a><span></span> <span class="n">type</span><span class="p">)</span></pre>
+<p>Convert a key type to a string.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>type</p></td>
+<td><p>The type to convert.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>A string for the keytype or NULL if unknown.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-pki-1ga3b294c44e2280c935cb0b82ede5c42ee"><span id="index-9"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_pki_export_privkey_file</span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">ssh_key</span> <span class="n">privkey</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">passphrase</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-libssh-8h-1a3b54d7be70dcc98a107e41e11000a3e1"><span class="std std-ref">ssh_auth_callback</span></a><span></span> <span class="n">auth_fn</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">auth_data</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">filename</span>
+<span class="p">)</span></pre>
+<p>Export a private key to a pem file on disk, or OpenSSH format for keytype ssh-ed25519.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>privkey</p></td>
+<td><p>The private key to export.</p></td>
+</tr>
+<tr class="row-even"><td><p>passphrase</p></td>
+<td><p>The passphrase to use to encrypt the key with or NULL. An empty string means no passphrase.</p></td>
+</tr>
+<tr class="row-odd"><td><p>auth_fn</p></td>
+<td><p>An auth function you may want to use or NULL.</p></td>
+</tr>
+<tr class="row-even"><td><p>auth_data</p></td>
+<td><p>Private data passed to the auth function.</p></td>
+</tr>
+<tr class="row-odd"><td><p>filename</p></td>
+<td><p>The path where to store the pem file.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK on success, SSH_ERROR on error.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-pki-1ga5777bc537da6a447b2a9aa9eceff9877"><span id="index-10"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_pki_export_privkey_to_pubkey</span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">ssh_key</span> <span class="n">privkey</span><span class="p">,</span>
+    <span class="n">ssh_key</span><span class="o">*</span> <span class="n">pkey</span>
+<span class="p">)</span></pre>
+<p>Create a public key from a private key.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>privkey</p></td>
+<td><p>The private key to get the public key from.</p></td>
+</tr>
+<tr class="row-even"><td><p>pkey</p></td>
+<td><p>A pointer to store the newly allocated public key. You NEED to free the key.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK on success, SSH_ERROR on error.</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-libssh-pki-1ga08808beb83a42ccd6f1c710ddeb1b4c2"><span class="std std-ref">ssh_key_free()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-pki-1ga2caa40cbd9620e9f7e3e7ab654b256c5"><span id="index-11"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_pki_export_pubkey_base64</span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">ssh_key</span> <span class="n">key</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">**</span> <span class="n">b64_key</span>
+<span class="p">)</span></pre>
+<p>Convert a public key to a base64 encoded key.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>key</p></td>
+<td><p>The key to hash</p></td>
+</tr>
+<tr class="row-even"><td><p>b64_key</p></td>
+<td><p>A pointer to store the allocated base64 encoded key. You need to free the buffer.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK on success, SSH_ERROR on error.</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="group_libssh_string.html#doxid-group-libssh-string-1gafc10700722d6cafc468c2ee97585449a"><span class="std std-ref">ssh_string_free_char()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-pki-1gae038fa1b34f9427c7ba84082a1a20bad"><span id="index-12"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_pki_generate</span><span class="p">(</span>
+    <span class="k">enum</span> <a class="reference internal" href="enum_ssh_keytypes_e.html#doxid-libssh-8h-1a244b017e5993fde29fe9e9b1f04a7bce"><span class="std std-ref">ssh_keytypes_e</span></a><span></span> <span class="n">type</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">parameter</span><span class="p">,</span>
+    <span class="n">ssh_key</span><span class="o">*</span> <span class="n">pkey</span>
+<span class="p">)</span></pre>
+<p>Generates a keypair.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Generating a key pair may take some time.</p>
+</div>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>type</p></td>
+<td><p>Type of key to create</p></td>
+</tr>
+<tr class="row-even"><td><p>parameter</p></td>
+<td><p>Parameter to the creation of key: rsa : length of the key in bits (e.g. 1024, 2048, 4096) dsa : length of the key in bits (e.g. 1024, 2048, 3072) ecdsa : bits of the key (e.g. 256, 384, 512)</p></td>
+</tr>
+<tr class="row-odd"><td><p>pkey</p></td>
+<td><p>A pointer to store the allocated private key. You need to free the memory.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK on success, SSH_ERROR on error.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-pki-1ga5f2a2ca4b9b711d1c1af8020dfbd4a53"><span id="index-13"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_pki_import_privkey_base64</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">b64_key</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">passphrase</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-libssh-8h-1a3b54d7be70dcc98a107e41e11000a3e1"><span class="std std-ref">ssh_auth_callback</span></a><span></span> <span class="n">auth_fn</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">auth_data</span><span class="p">,</span>
+    <span class="n">ssh_key</span><span class="o">*</span> <span class="n">pkey</span>
+<span class="p">)</span></pre>
+<p>import a base64 formated key from a memory c-string</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>b64_key</p></td>
+<td><p>The c-string holding the base64 encoded key</p></td>
+</tr>
+<tr class="row-even"><td><p>passphrase</p></td>
+<td><p>The passphrase to decrypt the key, or NULL</p></td>
+</tr>
+<tr class="row-odd"><td><p>auth_fn</p></td>
+<td><p>An auth function you may want to use or NULL.</p></td>
+</tr>
+<tr class="row-even"><td><p>auth_data</p></td>
+<td><p>Private data passed to the auth function.</p></td>
+</tr>
+<tr class="row-odd"><td><p>pkey</p></td>
+<td><p>A pointer where the allocated key can be stored. You need to free the memory.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_ERROR in case of error, SSH_OK otherwise.</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-libssh-pki-1ga08808beb83a42ccd6f1c710ddeb1b4c2"><span class="std std-ref">ssh_key_free()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-pki-1ga1c8f84137606b1585006302499100ee0"><span id="index-14"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_pki_import_privkey_file</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">filename</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">passphrase</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-libssh-8h-1a3b54d7be70dcc98a107e41e11000a3e1"><span class="std std-ref">ssh_auth_callback</span></a><span></span> <span class="n">auth_fn</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">auth_data</span><span class="p">,</span>
+    <span class="n">ssh_key</span><span class="o">*</span> <span class="n">pkey</span>
+<span class="p">)</span></pre>
+<p>Import a key from a file.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>filename</p></td>
+<td><p>The filename of the the private key.</p></td>
+</tr>
+<tr class="row-even"><td><p>passphrase</p></td>
+<td><p>The passphrase to decrypt the private key. Set to NULL if none is needed or it is unknown.</p></td>
+</tr>
+<tr class="row-odd"><td><p>auth_fn</p></td>
+<td><p>An auth function you may want to use or NULL.</p></td>
+</tr>
+<tr class="row-even"><td><p>auth_data</p></td>
+<td><p>Private data passed to the auth function.</p></td>
+</tr>
+<tr class="row-odd"><td><p>pkey</p></td>
+<td><p>A pointer to store the allocated ssh_key. You need to free the key.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK on success, SSH_EOF if the file doesn’t exist or permission denied, SSH_ERROR otherwise.</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-libssh-pki-1ga08808beb83a42ccd6f1c710ddeb1b4c2"><span class="std std-ref">ssh_key_free()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-pki-1gac8d7d3fa88b93d8b059b6b5b2f457913"><span id="index-15"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_pki_import_pubkey_base64</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">b64_key</span><span class="p">,</span>
+    <span class="k">enum</span> <a class="reference internal" href="enum_ssh_keytypes_e.html#doxid-libssh-8h-1a244b017e5993fde29fe9e9b1f04a7bce"><span class="std std-ref">ssh_keytypes_e</span></a><span></span> <span class="n">type</span><span class="p">,</span>
+    <span class="n">ssh_key</span><span class="o">*</span> <span class="n">pkey</span>
+<span class="p">)</span></pre>
+<p>Import a base64 formated public key from a memory c-string.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>b64_key</p></td>
+<td><p>The base64 key to format.</p></td>
+</tr>
+<tr class="row-even"><td><p>type</p></td>
+<td><p>The type of the key to format.</p></td>
+</tr>
+<tr class="row-odd"><td><p>pkey</p></td>
+<td><p>A pointer where the allocated key can be stored. You need to free the memory.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK on success, SSH_ERROR on error.</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-libssh-pki-1ga08808beb83a42ccd6f1c710ddeb1b4c2"><span class="std std-ref">ssh_key_free()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-pki-1gaffb08168b870fb9e86cc7649c8987eb0"><span id="index-16"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_pki_import_pubkey_file</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">filename</span><span class="p">,</span>
+    <span class="n">ssh_key</span><span class="o">*</span> <span class="n">pkey</span>
+<span class="p">)</span></pre>
+<p>Import a public key from the given filename.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>filename</p></td>
+<td><p>The path to the public key.</p></td>
+</tr>
+<tr class="row-even"><td><p>pkey</p></td>
+<td><p>A pointer to store the allocated public key. You need to free the memory.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK on success, SSH_EOF if the file doesn’t exist or permission denied, SSH_ERROR otherwise.</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-libssh-pki-1ga08808beb83a42ccd6f1c710ddeb1b4c2"><span class="std std-ref">ssh_key_free()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-pki-1gaf9ba4d3e3cd2a8b61fabe33b5b7e59c2"><span id="index-17"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">ssh_pki_key_ecdsa_name</span><span class="p">(</span><span class="k">const</span> <span class="n">ssh_key</span> <span class="n">key</span><span class="p">)</span></pre>
+<p>returns the ECDSA key name (“ecdsa-sha2-nistp256” for example)</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>key</p></td>
+<td><p>the ssh_key whose ECDSA name to get</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>the ECDSA key name (“ecdsa-sha2-nistp256” for example)</p>
+<p>“unknown” if the ECDSA key name is not known</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-pki-1ga9ee6aacb86cb7f4e8f3b5ec582040d3a"><span id="index-18"></span><span></span><span class="kt">void</span>
+<span class="n">ssh_key_clean</span><span class="p">(</span><span class="n">ssh_key</span> <span class="n">key</span><span class="p">)</span></pre>
+<p>clean up the key and deallocate all existing keys</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>key</p></td>
+<td><p>ssh_key to clean</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-pki-1ga5a513e1a553cbfc5301138f52bcd5881"><span id="index-19"></span><span></span><span class="k">static</span>
+<span class="kt">int</span>
+<span class="n">pki_openssh_import_privkey_blob</span><span class="p">(</span>
+    <span class="n">ssh_buffer</span> <span class="n">key_blob_buffer</span><span class="p">,</span>
+    <span class="n">ssh_key</span><span class="o">*</span> <span class="n">pkey</span>
+<span class="p">)</span></pre>
+<ul class="simple">
+<li></li>
+</ul>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-pki-1gae8b8a710eea5b5c36c9e2416cc0734d7"><span id="index-20"></span><span></span><span class="k">static</span>
+<span class="kt">int</span>
+<span class="n">pki_private_key_decrypt</span><span class="p">(</span>
+    <span class="n">ssh_string</span> <span class="n">blob</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">passphrase</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">ciphername</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">kdfname</span><span class="p">,</span>
+    <span class="n">ssh_string</span> <span class="n">kdfoptions</span><span class="p">,</span>
+    <a class="reference internal" href="global.html#doxid-libssh-8h-1a3b54d7be70dcc98a107e41e11000a3e1"><span class="std std-ref">ssh_auth_callback</span></a><span></span> <span class="n">auth_fn</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">auth_data</span>
+<span class="p">)</span></pre>
+<p>decrypts an encrypted ed25519 private key blob</p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">The SSH Public Key Infrastructure</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li><a class="reference internal" href="#global-functions">Global Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="group_libssh.html"
+                          title="previous chapter">The libssh API</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="group_libssh_auth.html"
+                          title="next chapter">The SSH authentication functions.</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="group_libssh_auth.html" title="The SSH authentication functions."
+             >next</a> |</li>
+        <li class="right" >
+          <a href="group_libssh.html" title="The libssh API"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LibSSH Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="group_libssh.html" >The libssh API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">The SSH Public Key Infrastructure</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2003-2017, LibSSH Maintainers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    </div>
+  </body>
+</html>

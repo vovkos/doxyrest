@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ring Macro Implementations &mdash; Apache Portable Runtime Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinx_rtd_theme.css?v=b6ca47bd" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=515d8a7f"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Shared Memory Routines" href="group_apr_shm.html" />
+    <link rel="prev" title="Reader/Writer Lock Routines" href="group_apr_thread_rwlock.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Apache Portable Runtime Documentation
+          </a>
+              <div class="version">
+                1.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="group_APR.html">Apache Portability Runtime library</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="group_apr_atomic.html">Atomic Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_getopt.html">Command Argument Parsing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_thread_cond.html">Condition Variable Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_dso.html">Dynamic Object Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_errno.html">Error Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_APR_Util_Escaping.html">Escape functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_file_io.html">File I/O Handling Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_file_info.html">File Information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_fnmatch.html">Filename Matching Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_env.html">Functions for manipulating the environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_lib.html">General Purpose Library Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_APR_GlobalMutex.html">Global Locking Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_hash.html">Hash Tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_support.html">Internal APR support functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_allocator.html">Internal Memory Allocation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_mmap.html">MMAP (Memory Map) Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_pools.html">Memory Pool Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_general.html">Miscellaneous library routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_network_io.html">Network Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_platform.html">Platform Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_poll.html">Poll Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_portabile.html">Portability Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_proc_mutex.html">Process Locking Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_random.html">Random Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_thread_rwlock.html">Reader/Writer Lock Routines</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Ring Macro Implementations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#macros">Macros</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_shm.html">Shared Memory Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_signal.html">Signal Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_skiplist.html">Skip list implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_strings.html">String routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_tables.html">Table and Array Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_thread_mutex.html">Thread Mutex Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_thread_proc.html">Threads and Process Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_time.html">Time Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_user.html">User and Group ID Services</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="group_apr_library.html">Library initialization and termination</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_apr_ctype.html">ctype functions</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="page_bug.html">Bug List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_deprecated.html">Deprecated List</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Apache Portable Runtime Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="group_APR.html">Apache Portability Runtime library</a></li>
+      <li class="breadcrumb-item active">Ring Macro Implementations</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ring-macro-implementations">
+<span id="doxid-group-apr-ring"></span><span id="index-0"></span><h1>Ring Macro Implementations</h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="overview">
+<h2>Overview</h2>
+<p>A ring is a kind of doubly-linked list that can be manipulated without knowing where its head is. <a class="reference internal" href="#details-group-apr-ring"><span class="std std-ref">More…</span></a></p>
+<pre class="highlight doxyrest-overview-code-block literal-block"><span></span><span class="c1">// macros</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1ga97bb4dcc313145496e6b05855f9c6e2b"><span class="std std-ref">APR_RING_CHECK</span></a><span></span><span class="p">(</span> \
+    <span class="n">hp</span><span class="p">,</span> \
+    <span class="n">elem</span><span class="p">,</span> \
+    <span class="n">link</span><span class="p">,</span> \
+    <span class="n">msg</span> \
+<span class="p">)</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1ga6b0f2091527ee9c7a1511cb6f172a0a7"><span class="std std-ref">APR_RING_CHECK_CONSISTENCY</span></a><span></span><span class="p">(</span> \
+    <span class="n">hp</span><span class="p">,</span> \
+    <span class="n">elem</span><span class="p">,</span> \
+    <span class="n">link</span> \
+<span class="p">)</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1ga5500df0e96dea1a3258f1e92b28fea0a"><span class="std std-ref">APR_RING_CHECK_ELEM</span></a><span></span><span class="p">(</span> \
+    <span class="n">ep</span><span class="p">,</span> \
+    <span class="n">elem</span><span class="p">,</span> \
+    <span class="n">link</span><span class="p">,</span> \
+    <span class="n">msg</span> \
+<span class="p">)</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1gab7070ae5cf69bf16178a0e0e397c5b38"><span class="std std-ref">APR_RING_CHECK_ELEM_CONSISTENCY</span></a><span></span><span class="p">(</span> \
+    <span class="n">ep</span><span class="p">,</span> \
+    <span class="n">elem</span><span class="p">,</span> \
+    <span class="n">link</span> \
+<span class="p">)</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1ga33c7cfbea7c688c7bd0a3d36609f318b"><span class="std std-ref">APR_RING_CHECK_ONE</span></a><span></span><span class="p">(</span> \
+    <span class="n">msg</span><span class="p">,</span> \
+    <span class="n">ptr</span> \
+<span class="p">)</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1ga34ee7a0d6daa61117006bb74498ff5aa"><span class="std std-ref">APR_RING_CONCAT</span></a><span></span><span class="p">(</span> \
+    <span class="n">h1</span><span class="p">,</span> \
+    <span class="n">h2</span><span class="p">,</span> \
+    <span class="n">elem</span><span class="p">,</span> \
+    <span class="n">link</span> \
+<span class="p">)</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1gae5048ecda4b26b012ee93c2c830058cb"><span class="std std-ref">APR_RING_ELEM_INIT</span></a><span></span><span class="p">(</span> \
+    <span class="n">ep</span><span class="p">,</span> \
+    <span class="n">link</span> \
+<span class="p">)</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1ga9b64ad6eebea19f896d2aa90172b6b9a"><span class="std std-ref">APR_RING_EMPTY</span></a><span></span><span class="p">(</span> \
+    <span class="n">hp</span><span class="p">,</span> \
+    <span class="n">elem</span><span class="p">,</span> \
+    <span class="n">link</span> \
+<span class="p">)</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1ga095edad4bcb6975014ed9584930f7819"><span class="std std-ref">APR_RING_ENTRY</span></a><span></span><span class="p">(</span><span class="n">elem</span><span class="p">)</span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1gacacd9cfca24feb7ff754d4008422efcb"><span class="std std-ref">APR_RING_FIRST</span></a><span></span><span class="p">(</span><span class="n">hp</span><span class="p">)</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1ga7dc7b26e72f836d27e8e0c87da14fb4a"><span class="std std-ref">APR_RING_FOREACH</span></a><span></span><span class="p">(</span> \
+    <span class="n">ep</span><span class="p">,</span> \
+    <span class="n">head</span><span class="p">,</span> \
+    <span class="n">elem</span><span class="p">,</span> \
+    <span class="n">link</span> \
+<span class="p">)</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1ga9a1e91eef86d676d1622dc5b9ddd6f89"><span class="std std-ref">APR_RING_FOREACH_SAFE</span></a><span></span><span class="p">(</span> \
+    <span class="n">ep1</span><span class="p">,</span> \
+    <span class="n">ep2</span><span class="p">,</span> \
+    <span class="n">head</span><span class="p">,</span> \
+    <span class="n">elem</span><span class="p">,</span> \
+    <span class="n">link</span> \
+<span class="p">)</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1ga2953b8d4034077c4020616282e6c0b67"><span class="std std-ref">APR_RING_HEAD</span></a><span></span><span class="p">(</span> \
+    <span class="n">head</span><span class="p">,</span> \
+    <span class="n">elem</span> \
+<span class="p">)</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1ga245e1a73b162a4a68ebd54c84683729d"><span class="std std-ref">APR_RING_INIT</span></a><span></span><span class="p">(</span> \
+    <span class="n">hp</span><span class="p">,</span> \
+    <span class="n">elem</span><span class="p">,</span> \
+    <span class="n">link</span> \
+<span class="p">)</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1ga40453637d00c853f3a212a30c1f2cb41"><span class="std std-ref">APR_RING_INSERT_AFTER</span></a><span></span><span class="p">(</span> \
+    <span class="n">lep</span><span class="p">,</span> \
+    <span class="n">nep</span><span class="p">,</span> \
+    <span class="n">link</span> \
+<span class="p">)</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1ga76f9a04f932b3377073fa4e30d745564"><span class="std std-ref">APR_RING_INSERT_BEFORE</span></a><span></span><span class="p">(</span> \
+    <span class="n">lep</span><span class="p">,</span> \
+    <span class="n">nep</span><span class="p">,</span> \
+    <span class="n">link</span> \
+<span class="p">)</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1gad59352546dc9253c0057ad43cf728a63"><span class="std std-ref">APR_RING_INSERT_HEAD</span></a><span></span><span class="p">(</span> \
+    <span class="n">hp</span><span class="p">,</span> \
+    <span class="n">nep</span><span class="p">,</span> \
+    <span class="n">elem</span><span class="p">,</span> \
+    <span class="n">link</span> \
+<span class="p">)</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1ga235311035184125d72ce0689c9949a3e"><span class="std std-ref">APR_RING_INSERT_TAIL</span></a><span></span><span class="p">(</span> \
+    <span class="n">hp</span><span class="p">,</span> \
+    <span class="n">nep</span><span class="p">,</span> \
+    <span class="n">elem</span><span class="p">,</span> \
+    <span class="n">link</span> \
+<span class="p">)</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1ga8b927069ba9dc13defaf45a87267b5d3"><span class="std std-ref">APR_RING_LAST</span></a><span></span><span class="p">(</span><span class="n">hp</span><span class="p">)</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1gae42e4f7148719aa534bdbbc82be26a06"><span class="std std-ref">APR_RING_NEXT</span></a><span></span><span class="p">(</span> \
+    <span class="n">ep</span><span class="p">,</span> \
+    <span class="n">link</span> \
+<span class="p">)</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1ga4d5aaa9b6f02f96f98f234a0a428474d"><span class="std std-ref">APR_RING_PREPEND</span></a><span></span><span class="p">(</span> \
+    <span class="n">h1</span><span class="p">,</span> \
+    <span class="n">h2</span><span class="p">,</span> \
+    <span class="n">elem</span><span class="p">,</span> \
+    <span class="n">link</span> \
+<span class="p">)</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1ga82d45623d505d59ea5619cf8f63d0ebb"><span class="std std-ref">APR_RING_PREV</span></a><span></span><span class="p">(</span> \
+    <span class="n">ep</span><span class="p">,</span> \
+    <span class="n">link</span> \
+<span class="p">)</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1gaab4a57544bdb660ec1e306137387d9d7"><span class="std std-ref">APR_RING_REMOVE</span></a><span></span><span class="p">(</span> \
+    <span class="n">ep</span><span class="p">,</span> \
+    <span class="n">link</span> \
+<span class="p">)</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1ga54210090292ebafcd0a0d75d9ff1563d"><span class="std std-ref">APR_RING_SENTINEL</span></a><span></span><span class="p">(</span> \
+    <span class="n">hp</span><span class="p">,</span> \
+    <span class="n">elem</span><span class="p">,</span> \
+    <span class="n">link</span> \
+<span class="p">)</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1ga53e6564eba59d7e734a0ce03cb418a42"><span class="std std-ref">APR_RING_SPLICE_AFTER</span></a><span></span><span class="p">(</span> \
+    <span class="n">lep</span><span class="p">,</span> \
+    <span class="n">ep1</span><span class="p">,</span> \
+    <span class="n">epN</span><span class="p">,</span> \
+    <span class="n">link</span> \
+<span class="p">)</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1ga438e7369e650ee07ac98ed0731589750"><span class="std std-ref">APR_RING_SPLICE_BEFORE</span></a><span></span><span class="p">(</span> \
+    <span class="n">lep</span><span class="p">,</span> \
+    <span class="n">ep1</span><span class="p">,</span> \
+    <span class="n">epN</span><span class="p">,</span> \
+    <span class="n">link</span> \
+<span class="p">)</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1ga592e71a7cf219fc70f4fc47c60ef4c64"><span class="std std-ref">APR_RING_SPLICE_HEAD</span></a><span></span><span class="p">(</span> \
+    <span class="n">hp</span><span class="p">,</span> \
+    <span class="n">ep1</span><span class="p">,</span> \
+    <span class="n">epN</span><span class="p">,</span> \
+    <span class="n">elem</span><span class="p">,</span> \
+    <span class="n">link</span> \
+<span class="p">)</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1ga51e02e214fb6e218f45ff23cbd1f7abc"><span class="std std-ref">APR_RING_SPLICE_TAIL</span></a><span></span><span class="p">(</span> \
+    <span class="n">hp</span><span class="p">,</span> \
+    <span class="n">ep1</span><span class="p">,</span> \
+    <span class="n">epN</span><span class="p">,</span> \
+    <span class="n">elem</span><span class="p">,</span> \
+    <span class="n">link</span> \
+<span class="p">)</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-ring-1ga1d725b0a9ea7ff88f771e37ec130c13b"><span class="std std-ref">APR_RING_UNSPLICE</span></a><span></span><span class="p">(</span> \
+    <span class="n">ep1</span><span class="p">,</span> \
+    <span class="n">epN</span><span class="p">,</span> \
+    <span class="n">link</span> \
+<span class="p">)</span></pre>
+</section>
+<section id="detailed-documentation">
+<span id="details-group-apr-ring"></span><h2>Detailed Documentation</h2>
+<p>A ring is a kind of doubly-linked list that can be manipulated without knowing where its head is.</p>
+<section id="macros">
+<h3>Macros</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1ga97bb4dcc313145496e6b05855f9c6e2b"><span id="index-1"></span><span></span><span class="cp">#define APR_RING_CHECK( \</span>
+<span class="cp">    hp, \</span>
+<span class="cp">    elem, \</span>
+<span class="cp">    link, \</span>
+<span class="cp">    msg \</span>
+<span class="cp">)</span></pre>
+<p>Dump all ring pointers to STDERR, starting with the head and looping all the way around the ring back to the head. Aborts if an inconsistency is found. (This is a no-op unless APR_RING_DEBUG is defined.)</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>hp</p></td>
+<td><p>Head of the ring</p></td>
+</tr>
+<tr class="row-even"><td><p>elem</p></td>
+<td><p>The name of the element struct</p></td>
+</tr>
+<tr class="row-odd"><td><p>link</p></td>
+<td><p>The name of the APR_RING_ENTRY in the element struct</p></td>
+</tr>
+<tr class="row-even"><td><p>msg</p></td>
+<td><p>Descriptive message</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1ga6b0f2091527ee9c7a1511cb6f172a0a7"><span id="index-2"></span><span></span><span class="cp">#define APR_RING_CHECK_CONSISTENCY( \</span>
+<span class="cp">    hp, \</span>
+<span class="cp">    elem, \</span>
+<span class="cp">    link \</span>
+<span class="cp">)</span></pre>
+<p>Loops around a ring and checks all the pointers for consistency. Pops an assertion if any inconsistency is found. Same idea as <a class="reference internal" href="#doxid-group-apr-ring-1ga97bb4dcc313145496e6b05855f9c6e2b"><span class="std std-ref">APR_RING_CHECK()</span></a> except that it’s silent if all is well. (This is a no-op unless APR_RING_DEBUG is defined.)</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>hp</p></td>
+<td><p>Head of the ring</p></td>
+</tr>
+<tr class="row-even"><td><p>elem</p></td>
+<td><p>The name of the element struct</p></td>
+</tr>
+<tr class="row-odd"><td><p>link</p></td>
+<td><p>The name of the APR_RING_ENTRY in the element struct</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1ga5500df0e96dea1a3258f1e92b28fea0a"><span id="index-3"></span><span></span><span class="cp">#define APR_RING_CHECK_ELEM( \</span>
+<span class="cp">    ep, \</span>
+<span class="cp">    elem, \</span>
+<span class="cp">    link, \</span>
+<span class="cp">    msg \</span>
+<span class="cp">)</span></pre>
+<p>Dump all ring pointers to STDERR, starting with the given element and looping all the way around the ring back to that element. Aborts if an inconsistency is found. (This is a no-op unless APR_RING_DEBUG is defined.)</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ep</p></td>
+<td><p>The element</p></td>
+</tr>
+<tr class="row-even"><td><p>elem</p></td>
+<td><p>The name of the element struct</p></td>
+</tr>
+<tr class="row-odd"><td><p>link</p></td>
+<td><p>The name of the APR_RING_ENTRY in the element struct</p></td>
+</tr>
+<tr class="row-even"><td><p>msg</p></td>
+<td><p>Descriptive message</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1gab7070ae5cf69bf16178a0e0e397c5b38"><span id="index-4"></span><span></span><span class="cp">#define APR_RING_CHECK_ELEM_CONSISTENCY( \</span>
+<span class="cp">    ep, \</span>
+<span class="cp">    elem, \</span>
+<span class="cp">    link \</span>
+<span class="cp">)</span></pre>
+<p>Loops around a ring, starting with the given element, and checks all the pointers for consistency. Pops an assertion if any inconsistency is found. Same idea as <a class="reference internal" href="#doxid-group-apr-ring-1ga5500df0e96dea1a3258f1e92b28fea0a"><span class="std std-ref">APR_RING_CHECK_ELEM()</span></a> except that it’s silent if all is well. (This is a no-op unless APR_RING_DEBUG is defined.)</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ep</p></td>
+<td><p>The element</p></td>
+</tr>
+<tr class="row-even"><td><p>elem</p></td>
+<td><p>The name of the element struct</p></td>
+</tr>
+<tr class="row-odd"><td><p>link</p></td>
+<td><p>The name of the APR_RING_ENTRY in the element struct</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1ga33c7cfbea7c688c7bd0a3d36609f318b"><span id="index-5"></span><span></span><span class="cp">#define APR_RING_CHECK_ONE( \</span>
+<span class="cp">    msg, \</span>
+<span class="cp">    ptr \</span>
+<span class="cp">)</span></pre>
+<p>Print a single pointer value to STDERR (This is a no-op unless APR_RING_DEBUG is defined.)</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>msg</p></td>
+<td><p>Descriptive message</p></td>
+</tr>
+<tr class="row-even"><td><p>ptr</p></td>
+<td><p>Pointer value to print</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1ga34ee7a0d6daa61117006bb74498ff5aa"><span id="index-6"></span><span></span><span class="cp">#define APR_RING_CONCAT( \</span>
+<span class="cp">    h1, \</span>
+<span class="cp">    h2, \</span>
+<span class="cp">    elem, \</span>
+<span class="cp">    link \</span>
+<span class="cp">)</span></pre>
+<p>Concatenate ring h2 onto the end of ring h1, leaving h2 empty.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>h1</p></td>
+<td><p>Head of the ring to concatenate onto</p></td>
+</tr>
+<tr class="row-even"><td><p>h2</p></td>
+<td><p>Head of the ring to concatenate</p></td>
+</tr>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>The name of the element struct</p></td>
+</tr>
+<tr class="row-even"><td><p>link</p></td>
+<td><p>The name of the APR_RING_ENTRY in the element struct</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1gae5048ecda4b26b012ee93c2c830058cb"><span id="index-7"></span><span></span><span class="cp">#define APR_RING_ELEM_INIT( \</span>
+<span class="cp">    ep, \</span>
+<span class="cp">    link \</span>
+<span class="cp">)</span></pre>
+<p>Initialize a singleton element</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ep</p></td>
+<td><p>The element</p></td>
+</tr>
+<tr class="row-even"><td><p>link</p></td>
+<td><p>The name of the APR_RING_ENTRY in the element struct</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1ga9b64ad6eebea19f896d2aa90172b6b9a"><span id="index-8"></span><span></span><span class="cp">#define APR_RING_EMPTY( \</span>
+<span class="cp">    hp, \</span>
+<span class="cp">    elem, \</span>
+<span class="cp">    link \</span>
+<span class="cp">)</span></pre>
+<p>Determine if a ring is empty</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>hp</p></td>
+<td><p>The head of the ring</p></td>
+</tr>
+<tr class="row-even"><td><p>elem</p></td>
+<td><p>The name of the element struct</p></td>
+</tr>
+<tr class="row-odd"><td><p>link</p></td>
+<td><p>The name of the APR_RING_ENTRY in the element struct</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>true or false</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1ga095edad4bcb6975014ed9584930f7819"><span id="index-9"></span><span></span><span class="cp">#define APR_RING_ENTRY(elem)</span></pre>
+<p>The Ring Element</p>
+<p>A ring element struct is linked to the other elements in the ring through its ring entry field, e.g.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>struct my_element_t {
+    :ref:`APR_RING_ENTRY(my_element_t) &lt;doxid-group__apr__ring_1ga095edad4bcb6975014ed9584930f7819&gt;` link;
+    int foo;
+    char *bar;
+};
+</pre></div>
+</div>
+<p>An element struct may be put on more than one ring if it has more than one APR_RING_ENTRY field. Each APR_RING_ENTRY has a corresponding APR_RING_HEAD declaration.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>For strict C standards compliance you should put the APR_RING_ENTRY first in the element struct unless the head is always part of a larger object with enough earlier fields to accommodate the offsetof() used to compute the ring sentinel below. You can usually ignore this caveat.</p>
+</div>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1gacacd9cfca24feb7ff754d4008422efcb"><span id="index-10"></span><span></span><span class="cp">#define APR_RING_FIRST(hp)</span></pre>
+<p>The first element of the ring</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>hp</p></td>
+<td><p>The head of the ring</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1ga7dc7b26e72f836d27e8e0c87da14fb4a"><span id="index-11"></span><span></span><span class="cp">#define APR_RING_FOREACH( \</span>
+<span class="cp">    ep, \</span>
+<span class="cp">    head, \</span>
+<span class="cp">    elem, \</span>
+<span class="cp">    link \</span>
+<span class="cp">)</span></pre>
+<p>Iterate over a ring</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ep</p></td>
+<td><p>The current element</p></td>
+</tr>
+<tr class="row-even"><td><p>head</p></td>
+<td><p>The head of the ring</p></td>
+</tr>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>The name of the element struct</p></td>
+</tr>
+<tr class="row-even"><td><p>link</p></td>
+<td><p>The name of the APR_RING_ENTRY in the element struct</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1ga9a1e91eef86d676d1622dc5b9ddd6f89"><span id="index-12"></span><span></span><span class="cp">#define APR_RING_FOREACH_SAFE( \</span>
+<span class="cp">    ep1, \</span>
+<span class="cp">    ep2, \</span>
+<span class="cp">    head, \</span>
+<span class="cp">    elem, \</span>
+<span class="cp">    link \</span>
+<span class="cp">)</span></pre>
+<p>Iterate over a ring safe against removal of the current element</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ep1</p></td>
+<td><p>The current element</p></td>
+</tr>
+<tr class="row-even"><td><p>ep2</p></td>
+<td><p>Iteration cursor</p></td>
+</tr>
+<tr class="row-odd"><td><p>head</p></td>
+<td><p>The head of the ring</p></td>
+</tr>
+<tr class="row-even"><td><p>elem</p></td>
+<td><p>The name of the element struct</p></td>
+</tr>
+<tr class="row-odd"><td><p>link</p></td>
+<td><p>The name of the APR_RING_ENTRY in the element struct</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1ga2953b8d4034077c4020616282e6c0b67"><span id="index-13"></span><span></span><span class="cp">#define APR_RING_HEAD( \</span>
+<span class="cp">    head, \</span>
+<span class="cp">    elem \</span>
+<span class="cp">)</span></pre>
+<p>The Ring Head</p>
+<p>Each ring is managed via its head, which is a struct declared like this:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>:ref:`APR_RING_HEAD(my_ring_t, my_element_t) &lt;doxid-group__apr__ring_1ga2953b8d4034077c4020616282e6c0b67&gt;`;
+struct my_ring_t ring, *ringp;
+</pre></div>
+</div>
+<p>This struct looks just like the element link struct so that we can be sure that the typecasting games will work as expected.</p>
+<p>The first element in the ring is next after the head, and the last element is just before the head.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1ga245e1a73b162a4a68ebd54c84683729d"><span id="index-14"></span><span></span><span class="cp">#define APR_RING_INIT( \</span>
+<span class="cp">    hp, \</span>
+<span class="cp">    elem, \</span>
+<span class="cp">    link \</span>
+<span class="cp">)</span></pre>
+<p>Initialize a ring</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>hp</p></td>
+<td><p>The head of the ring</p></td>
+</tr>
+<tr class="row-even"><td><p>elem</p></td>
+<td><p>The name of the element struct</p></td>
+</tr>
+<tr class="row-odd"><td><p>link</p></td>
+<td><p>The name of the APR_RING_ENTRY in the element struct</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1ga40453637d00c853f3a212a30c1f2cb41"><span id="index-15"></span><span></span><span class="cp">#define APR_RING_INSERT_AFTER( \</span>
+<span class="cp">    lep, \</span>
+<span class="cp">    nep, \</span>
+<span class="cp">    link \</span>
+<span class="cp">)</span></pre>
+<p>Insert the element nep into the ring after element lep (..lep.. becomes ..lep..nep..)</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This doesn’t work for inserting after the last element or on empty rings… see APR_RING_INSERT_TAIL for one that does</p>
+</div>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>lep</p></td>
+<td><p>Element in the ring to insert after</p></td>
+</tr>
+<tr class="row-even"><td><p>nep</p></td>
+<td><p>Element to insert</p></td>
+</tr>
+<tr class="row-odd"><td><p>link</p></td>
+<td><p>The name of the APR_RING_ENTRY in the element struct</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1ga76f9a04f932b3377073fa4e30d745564"><span id="index-16"></span><span></span><span class="cp">#define APR_RING_INSERT_BEFORE( \</span>
+<span class="cp">    lep, \</span>
+<span class="cp">    nep, \</span>
+<span class="cp">    link \</span>
+<span class="cp">)</span></pre>
+<p>Insert the element nep into the ring before element lep (..lep.. becomes ..nep..lep..)</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This doesn’t work for inserting before the first element or on empty rings… see APR_RING_INSERT_HEAD for one that does</p>
+</div>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>lep</p></td>
+<td><p>Element in the ring to insert before</p></td>
+</tr>
+<tr class="row-even"><td><p>nep</p></td>
+<td><p>Element to insert</p></td>
+</tr>
+<tr class="row-odd"><td><p>link</p></td>
+<td><p>The name of the APR_RING_ENTRY in the element struct</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1gad59352546dc9253c0057ad43cf728a63"><span id="index-17"></span><span></span><span class="cp">#define APR_RING_INSERT_HEAD( \</span>
+<span class="cp">    hp, \</span>
+<span class="cp">    nep, \</span>
+<span class="cp">    elem, \</span>
+<span class="cp">    link \</span>
+<span class="cp">)</span></pre>
+<p>Insert the element nep into the ring before the first element (..hp.. becomes ..hp..nep..)</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>hp</p></td>
+<td><p>Head of the ring</p></td>
+</tr>
+<tr class="row-even"><td><p>nep</p></td>
+<td><p>Element to insert</p></td>
+</tr>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>The name of the element struct</p></td>
+</tr>
+<tr class="row-even"><td><p>link</p></td>
+<td><p>The name of the APR_RING_ENTRY in the element struct</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1ga235311035184125d72ce0689c9949a3e"><span id="index-18"></span><span></span><span class="cp">#define APR_RING_INSERT_TAIL( \</span>
+<span class="cp">    hp, \</span>
+<span class="cp">    nep, \</span>
+<span class="cp">    elem, \</span>
+<span class="cp">    link \</span>
+<span class="cp">)</span></pre>
+<p>Insert the element nep into the ring after the last element (..hp.. becomes ..nep..hp..)</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>hp</p></td>
+<td><p>Head of the ring</p></td>
+</tr>
+<tr class="row-even"><td><p>nep</p></td>
+<td><p>Element to insert</p></td>
+</tr>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>The name of the element struct</p></td>
+</tr>
+<tr class="row-even"><td><p>link</p></td>
+<td><p>The name of the APR_RING_ENTRY in the element struct</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1ga8b927069ba9dc13defaf45a87267b5d3"><span id="index-19"></span><span></span><span class="cp">#define APR_RING_LAST(hp)</span></pre>
+<p>The last element of the ring</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>hp</p></td>
+<td><p>The head of the ring</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1gae42e4f7148719aa534bdbbc82be26a06"><span id="index-20"></span><span></span><span class="cp">#define APR_RING_NEXT( \</span>
+<span class="cp">    ep, \</span>
+<span class="cp">    link \</span>
+<span class="cp">)</span></pre>
+<p>The next element in the ring</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ep</p></td>
+<td><p>The current element</p></td>
+</tr>
+<tr class="row-even"><td><p>link</p></td>
+<td><p>The name of the APR_RING_ENTRY in the element struct</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1ga4d5aaa9b6f02f96f98f234a0a428474d"><span id="index-21"></span><span></span><span class="cp">#define APR_RING_PREPEND( \</span>
+<span class="cp">    h1, \</span>
+<span class="cp">    h2, \</span>
+<span class="cp">    elem, \</span>
+<span class="cp">    link \</span>
+<span class="cp">)</span></pre>
+<p>Prepend ring h2 onto the beginning of ring h1, leaving h2 empty.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>h1</p></td>
+<td><p>Head of the ring to prepend onto</p></td>
+</tr>
+<tr class="row-even"><td><p>h2</p></td>
+<td><p>Head of the ring to prepend</p></td>
+</tr>
+<tr class="row-odd"><td><p>elem</p></td>
+<td><p>The name of the element struct</p></td>
+</tr>
+<tr class="row-even"><td><p>link</p></td>
+<td><p>The name of the APR_RING_ENTRY in the element struct</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1ga82d45623d505d59ea5619cf8f63d0ebb"><span id="index-22"></span><span></span><span class="cp">#define APR_RING_PREV( \</span>
+<span class="cp">    ep, \</span>
+<span class="cp">    link \</span>
+<span class="cp">)</span></pre>
+<p>The previous element in the ring</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ep</p></td>
+<td><p>The current element</p></td>
+</tr>
+<tr class="row-even"><td><p>link</p></td>
+<td><p>The name of the APR_RING_ENTRY in the element struct</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1gaab4a57544bdb660ec1e306137387d9d7"><span id="index-23"></span><span></span><span class="cp">#define APR_RING_REMOVE( \</span>
+<span class="cp">    ep, \</span>
+<span class="cp">    link \</span>
+<span class="cp">)</span></pre>
+<p>Remove a single element from a ring</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The unspliced element is left with dangling pointers at either end</p>
+</div>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ep</p></td>
+<td><p>Element to remove</p></td>
+</tr>
+<tr class="row-even"><td><p>link</p></td>
+<td><p>The name of the APR_RING_ENTRY in the element struct</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1ga54210090292ebafcd0a0d75d9ff1563d"><span id="index-24"></span><span></span><span class="cp">#define APR_RING_SENTINEL( \</span>
+<span class="cp">    hp, \</span>
+<span class="cp">    elem, \</span>
+<span class="cp">    link \</span>
+<span class="cp">)</span></pre>
+<p>The Ring Sentinel</p>
+<p>This is the magic pointer value that occurs before the first and after the last elements in the ring, computed from the address of the ring’s head. The head itself isn’t an element, but in order to get rid of all the special cases when dealing with the ends of the ring, we play typecasting games to make it look like one.</p>
+<p>Here is a diagram to illustrate the arrangements of the next and prev pointers of each element in a single ring. Note that they point to the start of each element, not to the APR_RING_ENTRY structure.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    +-&gt;+------+&lt;-+  +-&gt;+------+&lt;-+  +-&gt;+------+&lt;-+
+    |  |struct|  |  |  |struct|  |  |  |struct|  |
+   /   | elem |   \/   | elem |   \/   | elem |  \
+...    |      |   /\   |      |   /\   |      |   ...
+       +------+  |  |  +------+  |  |  +------+
+  ...--|prev  |  |  +--|ring  |  |  +--|prev  |
+       |  next|--+     | entry|--+     |  next|--...
+       +------+        +------+        +------+
+       | etc. |        | etc. |        | etc. |
+       :      :        :      :        :      :
+</pre></div>
+</div>
+<p>The APR_RING_HEAD is nothing but a bare APR_RING_ENTRY. The prev and next pointers in the first and last elements don’t actually point to the head, they point to a phantom place called the sentinel. Its value is such that last-&gt;next-&gt;next == first because the offset from the sentinel to the head’s next pointer is the same as the offset from the start of an element to its next pointer. This also works in the opposite direction.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>       last                            first
+    +-&gt;+------+&lt;-+  +-&gt;sentinel&lt;-+  +-&gt;+------+&lt;-+
+    |  |struct|  |  |            |  |  |struct|  |
+   /   | elem |   \/              \/   | elem |  \
+...    |      |   /\              /\   |      |   ...
+       +------+  |  |  +------+  |  |  +------+
+  ...--|prev  |  |  +--|ring  |  |  +--|prev  |
+       |  next|--+     |  head|--+     |  next|--...
+       +------+        +------+        +------+
+       | etc. |                        | etc. |
+       :      :                        :      :
+</pre></div>
+</div>
+<p>Note that the offset mentioned above is different for each kind of ring that the element may be on, and each kind of ring has a unique name for its APR_RING_ENTRY in each element, and has its own type for its APR_RING_HEAD.</p>
+<p>Note also that if the offset is non-zero (which is required if an element has more than one APR_RING_ENTRY), the unreality of the sentinel may have bad implications on very perverse implementations of C see the warning in APR_RING_ENTRY.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>hp</p></td>
+<td><p>The head of the ring</p></td>
+</tr>
+<tr class="row-even"><td><p>elem</p></td>
+<td><p>The name of the element struct</p></td>
+</tr>
+<tr class="row-odd"><td><p>link</p></td>
+<td><p>The name of the APR_RING_ENTRY in the element struct</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1ga53e6564eba59d7e734a0ce03cb418a42"><span id="index-25"></span><span></span><span class="cp">#define APR_RING_SPLICE_AFTER( \</span>
+<span class="cp">    lep, \</span>
+<span class="cp">    ep1, \</span>
+<span class="cp">    epN, \</span>
+<span class="cp">    link \</span>
+<span class="cp">)</span></pre>
+<p>Splice the sequence ep1..epN into the ring after element lep (..lep.. becomes ..lep..ep1..epN..)</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This doesn’t work for splicing after the last element or on empty rings… see APR_RING_SPLICE_TAIL for one that does</p>
+</div>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>lep</p></td>
+<td><p>Element in the ring to splice after</p></td>
+</tr>
+<tr class="row-even"><td><p>ep1</p></td>
+<td><p>First element in the sequence to splice in</p></td>
+</tr>
+<tr class="row-odd"><td><p>epN</p></td>
+<td><p>Last element in the sequence to splice in</p></td>
+</tr>
+<tr class="row-even"><td><p>link</p></td>
+<td><p>The name of the APR_RING_ENTRY in the element struct</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1ga438e7369e650ee07ac98ed0731589750"><span id="index-26"></span><span></span><span class="cp">#define APR_RING_SPLICE_BEFORE( \</span>
+<span class="cp">    lep, \</span>
+<span class="cp">    ep1, \</span>
+<span class="cp">    epN, \</span>
+<span class="cp">    link \</span>
+<span class="cp">)</span></pre>
+<p>Splice the sequence ep1..epN into the ring before element lep (..lep.. becomes ..ep1..epN..lep..)</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This doesn’t work for splicing before the first element or on empty rings… see APR_RING_SPLICE_HEAD for one that does</p>
+</div>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>lep</p></td>
+<td><p>Element in the ring to splice before</p></td>
+</tr>
+<tr class="row-even"><td><p>ep1</p></td>
+<td><p>First element in the sequence to splice in</p></td>
+</tr>
+<tr class="row-odd"><td><p>epN</p></td>
+<td><p>Last element in the sequence to splice in</p></td>
+</tr>
+<tr class="row-even"><td><p>link</p></td>
+<td><p>The name of the APR_RING_ENTRY in the element struct</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1ga592e71a7cf219fc70f4fc47c60ef4c64"><span id="index-27"></span><span></span><span class="cp">#define APR_RING_SPLICE_HEAD( \</span>
+<span class="cp">    hp, \</span>
+<span class="cp">    ep1, \</span>
+<span class="cp">    epN, \</span>
+<span class="cp">    elem, \</span>
+<span class="cp">    link \</span>
+<span class="cp">)</span></pre>
+<p>Splice the sequence ep1..epN into the ring before the first element (..hp.. becomes ..hp..ep1..epN..)</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>hp</p></td>
+<td><p>Head of the ring</p></td>
+</tr>
+<tr class="row-even"><td><p>ep1</p></td>
+<td><p>First element in the sequence to splice in</p></td>
+</tr>
+<tr class="row-odd"><td><p>epN</p></td>
+<td><p>Last element in the sequence to splice in</p></td>
+</tr>
+<tr class="row-even"><td><p>elem</p></td>
+<td><p>The name of the element struct</p></td>
+</tr>
+<tr class="row-odd"><td><p>link</p></td>
+<td><p>The name of the APR_RING_ENTRY in the element struct</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1ga51e02e214fb6e218f45ff23cbd1f7abc"><span id="index-28"></span><span></span><span class="cp">#define APR_RING_SPLICE_TAIL( \</span>
+<span class="cp">    hp, \</span>
+<span class="cp">    ep1, \</span>
+<span class="cp">    epN, \</span>
+<span class="cp">    elem, \</span>
+<span class="cp">    link \</span>
+<span class="cp">)</span></pre>
+<p>Splice the sequence ep1..epN into the ring after the last element (..hp.. becomes ..ep1..epN..hp..)</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>hp</p></td>
+<td><p>Head of the ring</p></td>
+</tr>
+<tr class="row-even"><td><p>ep1</p></td>
+<td><p>First element in the sequence to splice in</p></td>
+</tr>
+<tr class="row-odd"><td><p>epN</p></td>
+<td><p>Last element in the sequence to splice in</p></td>
+</tr>
+<tr class="row-even"><td><p>elem</p></td>
+<td><p>The name of the element struct</p></td>
+</tr>
+<tr class="row-odd"><td><p>link</p></td>
+<td><p>The name of the APR_RING_ENTRY in the element struct</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-ring-1ga1d725b0a9ea7ff88f771e37ec130c13b"><span id="index-29"></span><span></span><span class="cp">#define APR_RING_UNSPLICE( \</span>
+<span class="cp">    ep1, \</span>
+<span class="cp">    epN, \</span>
+<span class="cp">    link \</span>
+<span class="cp">)</span></pre>
+<p>Unsplice a sequence of elements from a ring</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The unspliced sequence is left with dangling pointers at either end</p>
+</div>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ep1</p></td>
+<td><p>First element in the sequence to unsplice</p></td>
+</tr>
+<tr class="row-even"><td><p>epN</p></td>
+<td><p>Last element in the sequence to unsplice</p></td>
+</tr>
+<tr class="row-odd"><td><p>link</p></td>
+<td><p>The name of the APR_RING_ENTRY in the element struct</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="group_apr_thread_rwlock.html" class="btn btn-neutral float-left" title="Reader/Writer Lock Routines" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="group_apr_shm.html" class="btn btn-neutral float-right" title="Shared Memory Routines" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2008-2017, Apache Portable Runtime Maintainers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

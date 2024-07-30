@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Network Routines &#8212; Apache Portable Runtime Documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=0a676766" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css?v=3785b6ce" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=515d8a7f"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="IP Multicast" href="group_apr_mcast.html" />
+    <link rel="prev" title="Miscellaneous library routines" href="group_apr_general.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="group_apr_mcast.html" title="IP Multicast"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="group_apr_general.html" title="Miscellaneous library routines"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Apache Portable Runtime Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="group_APR.html" accesskey="U">Apache Portability Runtime library</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Network Routines</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="network-routines">
+<span id="doxid-group-apr-network-io"></span><span id="index-0"></span><h1>Network Routines</h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="overview">
+<h2>Overview</h2>
+<div class="line-block">
+<div class="line"><a class="reference internal" href="group_apr_mcast.html#doxid-group-apr-mcast"><span class="std std-ref">IP Multicast</span></a></div>
+<div class="line"><a class="reference internal" href="group_IP_Proto.html#doxid-group-i-p-proto"><span class="std std-ref">IP Protocol Definitions for use when creating sockets</span></a></div>
+<div class="line"><a class="reference internal" href="group_apr_sockopt.html#doxid-group-apr-sockopt"><span class="std std-ref">Socket option definitions</span></a></div>
+</div>
+<pre class="highlight doxyrest-overview-code-block literal-block"><span></span><span class="c1">// typedefs</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span> <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="struct_apr_hdtr_t.html#doxid-structapr-hdtr-t"><span class="std std-ref">apr_hdtr_t</span></a><span></span> <a class="reference internal" href="#doxid-group-apr-network-io-1ga97887d5358a9c79c241ccafab61d8ff5"><span class="std std-ref">apr_hdtr_t</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">in_addr</span> <a class="reference internal" href="#doxid-group-apr-network-io-1gad30d6c55a354a9a2e0a8747abb0c8176"><span class="std std-ref">apr_in_addr_t</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-network-io-1gac86ee04eb80f938902095d1d0a67c324"><span class="std std-ref">apr_ipsubnet_t</span></a><span></span> <a class="reference internal" href="#doxid-group-apr-network-io-1gac86ee04eb80f938902095d1d0a67c324"><span class="std std-ref">apr_ipsubnet_t</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <span class="n">apr_uint16_t</span> <a class="reference internal" href="#doxid-group-apr-network-io-1gaa670a71960f6eb4fe0d0de2a1e7aba03"><span class="std std-ref">apr_port_t</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span> <a class="reference internal" href="#doxid-group-apr-network-io-1ga373fb6f32d0875c5deb648b779c8a709"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// enums</span>
+
+<span class="k">enum</span> <a class="reference internal" href="enum_apr_interface_e.html#doxid-group-apr-network-io-1ga1982f44f48fdf00a8bd754bc7b773edc"><span class="std std-ref">apr_interface_e</span></a><span></span><span class="p">;</span>
+<span class="k">enum</span> <a class="reference internal" href="enum_apr_shutdown_how_e.html#doxid-group-apr-network-io-1gae2130f1fa2d0db58c5c3c9c73d9b4009"><span class="std std-ref">apr_shutdown_how_e</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// structs</span>
+
+<span class="k">struct</span> <a class="reference internal" href="struct_apr_hdtr_t.html#doxid-structapr-hdtr-t"><span class="std std-ref">apr_hdtr_t</span></a><span></span><span class="p">;</span>
+<span class="k">struct</span> <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// global functions</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1ga46b81e267ef80e64510d4e83880a91bd"><span class="std std-ref">apr_socket_create</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">**</span> <span class="n">new_sock</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">family</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">type</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">protocol</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">cont</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1gac5aea857a50c493f840c48b930abc48e"><span class="std std-ref">apr_socket_shutdown</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">thesocket</span><span class="p">,</span>
+    <a class="reference internal" href="enum_apr_shutdown_how_e.html#doxid-group-apr-network-io-1gae2130f1fa2d0db58c5c3c9c73d9b4009"><span class="std std-ref">apr_shutdown_how_e</span></a><span></span> <span class="n">how</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1ga88779f243ce19a2563544aee81894e6d"><span class="std std-ref">apr_socket_close</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">thesocket</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1ga512882c9979c2b9cad7cbc2508516d65"><span class="std std-ref">apr_socket_bind</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="o">*</span> <span class="n">sa</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1ga154bcee918f6f01fe0373359dd74b0c4"><span class="std std-ref">apr_socket_listen</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">backlog</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1ga1d62711ca77ccc0f6413a298a47876da"><span class="std std-ref">apr_socket_accept</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">**</span> <span class="n">new_sock</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">connection_pool</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1ga8e58bd8112ed2ce5004487918cd9275e"><span class="std std-ref">apr_socket_connect</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="o">*</span> <span class="n">sa</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1gabfcb1fe4447921e5b86d395126b5d6f0"><span class="std std-ref">apr_socket_atreadeof</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">atreadeof</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1gaa2f399ca2b60b35c0abf7630298c6c9f"><span class="std std-ref">apr_sockaddr_info_get</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="o">**</span> <span class="n">sa</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">hostname</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">family</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1gaa670a71960f6eb4fe0d0de2a1e7aba03"><span class="std std-ref">apr_port_t</span></a><span></span> <span class="n">port</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">flags</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1ga7a56fd9573b942753738ec30b887c9de"><span class="std std-ref">apr_getnameinfo</span></a><span></span><span class="p">(</span>
+    <span class="kt">char</span><span class="o">**</span> <span class="n">hostname</span><span class="p">,</span>
+    <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="o">*</span> <span class="n">sa</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">flags</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1ga90c31b2f012c6b1e2d842a96c4431de3"><span class="std std-ref">apr_parse_addr_port</span></a><span></span><span class="p">(</span>
+    <span class="kt">char</span><span class="o">**</span> <span class="n">addr</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">**</span> <span class="n">scope_id</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1gaa670a71960f6eb4fe0d0de2a1e7aba03"><span class="std std-ref">apr_port_t</span></a><span></span><span class="o">*</span> <span class="n">port</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">str</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1ga6bd3d656ba935ca428075f477b8a6f8b"><span class="std std-ref">apr_gethostname</span></a><span></span><span class="p">(</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">len</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">cont</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1gae76b48d0224a608b4ddb8bd00582eaa7"><span class="std std-ref">apr_socket_data_get</span></a><span></span><span class="p">(</span>
+    <span class="kt">void</span><span class="o">**</span> <span class="n">data</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">key</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1gafec197f3aa9a495801cdf7892ff8dcb5"><span class="std std-ref">apr_socket_data_set</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">key</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">cleanup</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1ga943268245cf59f6ff8cf1458c9a9ba8d"><span class="std std-ref">apr_socket_send</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span>
+    <span class="n">apr_size_t</span><span class="o">*</span> <span class="n">len</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1ga99ece70c34a7a332daa3941de3950c64"><span class="std std-ref">apr_socket_sendv</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <span class="k">const</span> <span class="k">struct</span> <span class="n">iovec</span><span class="o">*</span> <span class="n">vec</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">nvec</span><span class="p">,</span>
+    <span class="n">apr_size_t</span><span class="o">*</span> <span class="n">len</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1ga03ae34bc5712dac2b3fdee39e5f87be3"><span class="std std-ref">apr_socket_sendto</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="o">*</span> <span class="n">where</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">flags</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span>
+    <span class="n">apr_size_t</span><span class="o">*</span> <span class="n">len</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1ga80880312b41e86c9c266ede1a504e2ca"><span class="std std-ref">apr_socket_recvfrom</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="o">*</span> <span class="n">from</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">flags</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span>
+    <span class="n">apr_size_t</span><span class="o">*</span> <span class="n">len</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1ga3d93e6212c4c27f2390b0057f8f4a8be"><span class="std std-ref">apr_socket_sendfile</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_io.html#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">file</span><span class="p">,</span>
+    <a class="reference internal" href="struct_apr_hdtr_t.html#doxid-structapr-hdtr-t"><span class="std std-ref">apr_hdtr_t</span></a><span></span><span class="o">*</span> <span class="n">hdtr</span><span class="p">,</span>
+    <span class="n">apr_off_t</span><span class="o">*</span> <span class="n">offset</span><span class="p">,</span>
+    <span class="n">apr_size_t</span><span class="o">*</span> <span class="n">len</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">flags</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1gaa6ee00191f197f64b5a5409f4aff53d1"><span class="std std-ref">apr_socket_recv</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span>
+    <span class="n">apr_size_t</span><span class="o">*</span> <span class="n">len</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1ga08f5e505fa611005f56c12783269ffa9"><span class="std std-ref">apr_socket_opt_set</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">opt</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">on</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1ga945bdbe807ec5635d65a6fd9ddb78c29"><span class="std std-ref">apr_socket_timeout_set</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_time.html#doxid-group-apr-time-1gaae2129185a395cc393f76fabf4f43e47"><span class="std std-ref">apr_interval_time_t</span></a><span></span> <span class="n">t</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1ga1934c2d5943efc8ce925f376f3c2e17e"><span class="std std-ref">apr_socket_opt_get</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">opt</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span><span class="o">*</span> <span class="n">on</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1gaa32313b54afed590367c8571075d2bc1"><span class="std std-ref">apr_socket_timeout_get</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_time.html#doxid-group-apr-time-1gaae2129185a395cc393f76fabf4f43e47"><span class="std std-ref">apr_interval_time_t</span></a><span></span><span class="o">*</span> <span class="n">t</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1ga2389de257444870974b5ded91cf7a10c"><span class="std std-ref">apr_socket_atmark</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">atmark</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1gacad56b59eafc6ad2459bf6493c992515"><span class="std std-ref">apr_socket_addr_get</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="o">**</span> <span class="n">sa</span><span class="p">,</span>
+    <a class="reference internal" href="enum_apr_interface_e.html#doxid-group-apr-network-io-1ga1982f44f48fdf00a8bd754bc7b773edc"><span class="std std-ref">apr_interface_e</span></a><span></span> <span class="n">which</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1gab78fc9b9799c119f4a5517411458a660"><span class="std std-ref">apr_sockaddr_ip_get</span></a><span></span><span class="p">(</span>
+    <span class="kt">char</span><span class="o">**</span> <span class="n">addr</span><span class="p">,</span>
+    <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="o">*</span> <span class="n">sockaddr</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1ga8c88ae154304e30d47c2696f4370dc6d"><span class="std std-ref">apr_sockaddr_ip_getbuf</span></a><span></span><span class="p">(</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span>
+    <span class="n">apr_size_t</span> <span class="n">buflen</span><span class="p">,</span>
+    <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="o">*</span> <span class="n">sockaddr</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1ga1bf65369305ae352f3280af2acc684f5"><span class="std std-ref">apr_sockaddr_equal</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="o">*</span> <span class="n">addr1</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="o">*</span> <span class="n">addr2</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1gab9e53832f95e39cb780345c2b7783830"><span class="std std-ref">apr_sockaddr_is_wildcard</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="o">*</span> <span class="n">addr</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1ga8d23ee2db9a84af2e6408ef460613514"><span class="std std-ref">apr_socket_type_get</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">type</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1gad5b504c0fe4d578e72531e3ca0263654"><span class="std std-ref">apr_getservbyname</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="o">*</span> <span class="n">sockaddr</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">servname</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1ga34a3c7f1666427f4e381e857b9e9c298"><span class="std std-ref">apr_ipsubnet_create</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1gac86ee04eb80f938902095d1d0a67c324"><span class="std std-ref">apr_ipsubnet_t</span></a><span></span><span class="o">**</span> <span class="n">ipsub</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">ipstr</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">mask_or_numbits</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1gab74d21b8898b7c40bf7fd07ad3eb993d"><span class="std std-ref">apr_ipsubnet_test</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1gac86ee04eb80f938902095d1d0a67c324"><span class="std std-ref">apr_ipsubnet_t</span></a><span></span><span class="o">*</span> <span class="n">ipsub</span><span class="p">,</span>
+    <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="o">*</span> <span class="n">sa</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1ga270b7c0835283fa2b85a05d295dd7ee5"><span class="std std-ref">apr_socket_accept_filter</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">args</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1gac402d9426de37b6cede18fa157020bd9"><span class="std std-ref">apr_socket_protocol_get</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">protocol</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1ga4f109ecf176aee8fca8ecfa7f8b07d93"><span class="std std-ref">apr_socket_pool_get</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">thesocket</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1ga8ae81c6a7acf90112ebcfb9221ccc649"><span class="std std-ref">apr_socket_inherit_set</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">thesocket</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-network-io-1ga5afabb2cee38c141d076b9c52a3f2ce1"><span class="std std-ref">apr_socket_inherit_unset</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">thesocket</span><span class="p">);</span>
+
+<span class="c1">// macros</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-network-io-1ga7f5b3882209106bb407b1d518d6ad59d"><span class="std std-ref">APRMAXHOSTLEN</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-network-io-1gadce1131c46b897ec63e9e4316a4631dd"><span class="std std-ref">APR_ANYADDR</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-network-io-1ga16eb7ee55ff87a5093f2114ea5351217"><span class="std std-ref">APR_INADDR_NONE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-network-io-1gaa96e8e8dbf92bc77643a4032017b3d67"><span class="std std-ref">APR_INET</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-network-io-1gad09d9ea8995f50f35073ae0c77efb44f"><span class="std std-ref">APR_INET6</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-network-io-1ga58aa30a94127b4a80f27fbf2e03fdfd8"><span class="std std-ref">APR_IPV4_ADDR_OK</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-network-io-1gaef1f70f9b969d25832a230f429837207"><span class="std std-ref">APR_IPV6_ADDR_OK</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-network-io-1ga8311c84f6946742188a6b9a45e92ea8e"><span class="std std-ref">APR_MAX_SECS_TO_LINGER</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-network-io-1gaca378d0e24b1588e3fdb143e4ea9090d"><span class="std std-ref">APR_SENDFILE_DISCONNECT_SOCKET</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-network-io-1gaa7a33b17a7d0820b09ef489bd3328f85"><span class="std std-ref">APR_UNSPEC</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-network-io-1ga46a8b06887871cfd60a3e37385775e22"><span class="std std-ref">apr_inet_addr</span></a></pre>
+</section>
+<section id="detailed-documentation">
+<span id="details-group-apr-network-io"></span><h2>Detailed Documentation</h2>
+<section id="typedefs">
+<h3>Typedefs</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span id="index-1"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span> <span class="n">apr_socket_t</span></pre>
+<p>A structure to represent sockets</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga97887d5358a9c79c241ccafab61d8ff5"><span id="index-2"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="struct_apr_hdtr_t.html#doxid-structapr-hdtr-t"><span class="std std-ref">apr_hdtr_t</span></a><span></span> <span class="n">apr_hdtr_t</span></pre>
+<p>A structure to encapsulate headers and trailers for apr_socket_sendfile</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1gad30d6c55a354a9a2e0a8747abb0c8176"><span id="index-3"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">in_addr</span> <span class="n">apr_in_addr_t</span></pre>
+<p>A structure to represent in_addr</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1gac86ee04eb80f938902095d1d0a67c324"><span id="index-4"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-network-io-1gac86ee04eb80f938902095d1d0a67c324"><span class="std std-ref">apr_ipsubnet_t</span></a><span></span> <span class="n">apr_ipsubnet_t</span></pre>
+<p>A structure to represent an IP subnet</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1gaa670a71960f6eb4fe0d0de2a1e7aba03"><span id="index-5"></span><span></span><span class="k">typedef</span> <span class="n">apr_uint16_t</span> <span class="n">apr_port_t</span></pre>
+<p>use apr_uint16_t just in case some system has a short that isn’t 16 bits…</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga373fb6f32d0875c5deb648b779c8a709"><span id="index-6"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span> <span class="n">apr_sockaddr_t</span></pre>
+<p>It’s defined here as I think it should all be platform safe…</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a></p>
+</section>
+<section id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga46b81e267ef80e64510d4e83880a91bd"><span id="index-7"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_socket_create</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">**</span> <span class="n">new_sock</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">family</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">type</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">protocol</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">cont</span>
+<span class="p">)</span></pre>
+<p>Create a socket.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The pool will be used by various functions that operate on the socket. The caller must ensure that it is not used by other threads at the same time.</p>
+</div>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>new_sock</p></td>
+<td><p>The new socket that has been set up.</p></td>
+</tr>
+<tr class="row-even"><td><p>family</p></td>
+<td><p>The address family of the socket (e.g., APR_INET).</p></td>
+</tr>
+<tr class="row-odd"><td><p>type</p></td>
+<td><p>The type of the socket (e.g., SOCK_STREAM).</p></td>
+</tr>
+<tr class="row-even"><td><p>protocol</p></td>
+<td><p>The protocol of the socket (e.g., APR_PROTO_TCP).</p></td>
+</tr>
+<tr class="row-odd"><td><p>cont</p></td>
+<td><p>The pool for the apr_socket_t and associated storage.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1gac5aea857a50c493f840c48b930abc48e"><span id="index-8"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_socket_shutdown</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">thesocket</span><span class="p">,</span>
+    <a class="reference internal" href="enum_apr_shutdown_how_e.html#doxid-group-apr-network-io-1gae2130f1fa2d0db58c5c3c9c73d9b4009"><span class="std std-ref">apr_shutdown_how_e</span></a><span></span> <span class="n">how</span>
+<span class="p">)</span></pre>
+<p>Shutdown either reading, writing, or both sides of a socket. This does not actually close the socket descriptor, it just controls which calls are still valid on the socket.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>thesocket</p></td>
+<td><p>The socket to close</p></td>
+</tr>
+<tr class="row-even"><td><p>how</p></td>
+<td><p>How to shutdown the socket. One of:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>APR_SHUTDOWN_READ         no longer allow read requests
+APR_SHUTDOWN_WRITE        no longer allow write requests
+APR_SHUTDOWN_READWRITE    no longer allow read or write requests
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="enum_apr_shutdown_how_e.html#doxid-group-apr-network-io-1gae2130f1fa2d0db58c5c3c9c73d9b4009"><span class="std std-ref">apr_shutdown_how_e</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga88779f243ce19a2563544aee81894e6d"><span id="index-9"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_socket_close</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">thesocket</span><span class="p">)</span></pre>
+<p>Close a socket.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>thesocket</p></td>
+<td><p>The socket to close</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga512882c9979c2b9cad7cbc2508516d65"><span id="index-10"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_socket_bind</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="o">*</span> <span class="n">sa</span>
+<span class="p">)</span></pre>
+<p>Bind the socket to its associated port This may be where we will find out if there is any other process using the selected port.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sock</p></td>
+<td><p>The socket to bind</p></td>
+</tr>
+<tr class="row-even"><td><p>sa</p></td>
+<td><p>The socket address to bind to</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga154bcee918f6f01fe0373359dd74b0c4"><span id="index-11"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_socket_listen</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">backlog</span>
+<span class="p">)</span></pre>
+<p>Listen to a bound socket for connections.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sock</p></td>
+<td><p>The socket to listen on</p></td>
+</tr>
+<tr class="row-even"><td><p>backlog</p></td>
+<td><p>The number of outstanding connections allowed in the sockets listen queue. If this value is less than zero, the listen queue size is set to zero.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga1d62711ca77ccc0f6413a298a47876da"><span id="index-12"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_socket_accept</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">**</span> <span class="n">new_sock</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">connection_pool</span>
+<span class="p">)</span></pre>
+<p>Accept a new connection request</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The pool will be used by various functions that operate on the socket. The caller must ensure that it is not used by other threads at the same time.</p>
+</div>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>new_sock</p></td>
+<td><p>A copy of the socket that is connected to the socket that made the connection request. This is the socket which should be used for all future communication.</p></td>
+</tr>
+<tr class="row-even"><td><p>sock</p></td>
+<td><p>The socket we are listening on.</p></td>
+</tr>
+<tr class="row-odd"><td><p>connection_pool</p></td>
+<td><p>The pool for the new socket.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga8e58bd8112ed2ce5004487918cd9275e"><span id="index-13"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_socket_connect</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="o">*</span> <span class="n">sa</span>
+<span class="p">)</span></pre>
+<p>Issue a connection request to a socket either on the same machine or a different one.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sock</p></td>
+<td><p>The socket we wish to use for our side of the connection</p></td>
+</tr>
+<tr class="row-even"><td><p>sa</p></td>
+<td><p>The address of the machine we wish to connect to.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1gabfcb1fe4447921e5b86d395126b5d6f0"><span id="index-14"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_socket_atreadeof</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">atreadeof</span>
+<span class="p">)</span></pre>
+<p>Determine whether the receive part of the socket has been closed by the peer (such that a subsequent call to apr_socket_read would return APR_EOF), if the socket’s receive buffer is empty. This function does not block waiting for I/O.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sock</p></td>
+<td><p>The socket to check</p></td>
+</tr>
+<tr class="row-even"><td><p>atreadeof</p></td>
+<td><p>If APR_SUCCESS is returned, *atreadeof is set to non-zero if a subsequent read would return APR_EOF</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>an error is returned if it was not possible to determine the status, in which case *atreadeof is not changed.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1gaa2f399ca2b60b35c0abf7630298c6c9f"><span id="index-15"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_sockaddr_info_get</span><span class="p">(</span>
+    <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="o">**</span> <span class="n">sa</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">hostname</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">family</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1gaa670a71960f6eb4fe0d0de2a1e7aba03"><span class="std std-ref">apr_port_t</span></a><span></span> <span class="n">port</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">flags</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">)</span></pre>
+<p>Create <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a> from hostname, address family, and port.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sa</p></td>
+<td><p>The new <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p>hostname</p></td>
+<td><p>The hostname or numeric address string to resolve/parse, or NULL to build an address that corresponds to <code class="docutils literal notranslate"><span class="pre">0.0.0.0</span></code> or <code class="docutils literal notranslate"><span class="pre">::</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>family</p></td>
+<td><p>The address family to use, or APR_UNSPEC if the system should decide.</p></td>
+</tr>
+<tr class="row-even"><td><p>port</p></td>
+<td><p>The port number.</p></td>
+</tr>
+<tr class="row-odd"><td><p>flags</p></td>
+<td><p>Special processing flags:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>APR_IPV4_ADDR_OK          first query for IPv4 addresses; only look
+                          for IPv6 addresses if the first query failed;
+                          only valid if family is APR_UNSPEC and hostname
+                          isn&#39;t NULL; mutually exclusive with
+                          APR_IPV6_ADDR_OK
+APR_IPV6_ADDR_OK          first query for IPv6 addresses; only look
+                          for IPv4 addresses if the first query failed;
+                          only valid if family is APR_UNSPEC and hostname
+                          isn&#39;t NULL and APR_HAVE_IPV6; mutually exclusive
+                          with APR_IPV4_ADDR_OK
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>p</p></td>
+<td><p>The pool for the <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a> and associated storage.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga7a56fd9573b942753738ec30b887c9de"><span id="index-16"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_getnameinfo</span><span class="p">(</span>
+    <span class="kt">char</span><span class="o">**</span> <span class="n">hostname</span><span class="p">,</span>
+    <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="o">*</span> <span class="n">sa</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">flags</span>
+<span class="p">)</span></pre>
+<p>Look up the host name from an <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a>. Results can vary significantly between platforms when processing wildcard socket addresses.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>hostname</p></td>
+<td><p>The hostname.</p></td>
+</tr>
+<tr class="row-even"><td><p>sa</p></td>
+<td><p>The <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>flags</p></td>
+<td><p>Special processing flags.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga90c31b2f012c6b1e2d842a96c4431de3"><span id="index-17"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_parse_addr_port</span><span class="p">(</span>
+    <span class="kt">char</span><span class="o">**</span> <span class="n">addr</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">**</span> <span class="n">scope_id</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1gaa670a71960f6eb4fe0d0de2a1e7aba03"><span class="std std-ref">apr_port_t</span></a><span></span><span class="o">*</span> <span class="n">port</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">str</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">)</span></pre>
+<p>Parse hostname/IP address with scope id and port.</p>
+<p>Any of the following strings are accepted: 8080 (just the port number) www.apache.org (just the hostname) www.apache.org:8080 (hostname and port number)</p>
+<p>[fe80::1eth0] (IPv6 numeric address string and scope id)</p>
+<p>Invalid strings: (empty string) [abc] (not valid IPv6 numeric address string) abc:65536 (invalid port number)</p>
+<p class="rubric">return something besides zero if the port is missing.</p>
+<p>If scope id shouldn’t be allowed, check for scope_id != NULL in addition to checking the return code. If addr/hostname should be required, check for addr == NULL in addition to checking the return code.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>addr</p></td>
+<td><p>The new buffer containing just the hostname. On output, *addr will be NULL if no hostname/IP address was specfied.</p></td>
+</tr>
+<tr class="row-even"><td><p>scope_id</p></td>
+<td><p>The new buffer containing just the scope id. On output, *scope_id will be NULL if no scope id was specified.</p></td>
+</tr>
+<tr class="row-odd"><td><p>port</p></td>
+<td><p>The port number. On output, *port will be 0 if no port was specified.</p>
+<p class="rubric">FIXME: 0 is a legal port (per RFC 1700). this should</p>
+</td>
+</tr>
+<tr class="row-even"><td><p>str</p></td>
+<td><p>The input string to be parsed.</p></td>
+</tr>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>The pool from which *addr and *scope_id are allocated.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga6bd3d656ba935ca428075f477b8a6f8b"><span id="index-18"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_gethostname</span><span class="p">(</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">len</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">cont</span>
+<span class="p">)</span></pre>
+<p>Get name of the current machine If the buffer was not large enough, an error will be returned.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>buf</p></td>
+<td><p>A buffer to store the hostname in.</p></td>
+</tr>
+<tr class="row-even"><td><p>len</p></td>
+<td><p>The maximum length of the hostname that can be stored in the buffer provided. The suggested length is APRMAXHOSTLEN + 1.</p></td>
+</tr>
+<tr class="row-odd"><td><p>cont</p></td>
+<td><p>The pool to use.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1gae76b48d0224a608b4ddb8bd00582eaa7"><span id="index-19"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_socket_data_get</span><span class="p">(</span>
+    <span class="kt">void</span><span class="o">**</span> <span class="n">data</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">key</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span>
+<span class="p">)</span></pre>
+<p>Return the data associated with the current socket</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>data</p></td>
+<td><p>The user data associated with the socket.</p></td>
+</tr>
+<tr class="row-even"><td><p>key</p></td>
+<td><p>The key to associate with the user data.</p></td>
+</tr>
+<tr class="row-odd"><td><p>sock</p></td>
+<td><p>The currently open socket.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1gafec197f3aa9a495801cdf7892ff8dcb5"><span id="index-20"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_socket_data_set</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">key</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">cleanup</span>
+<span class="p">)</span></pre>
+<p>Set the data associated with the current socket.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sock</p></td>
+<td><p>The currently open socket.</p></td>
+</tr>
+<tr class="row-even"><td><p>data</p></td>
+<td><p>The user data to associate with the socket.</p></td>
+</tr>
+<tr class="row-odd"><td><p>key</p></td>
+<td><p>The key to associate with the data.</p></td>
+</tr>
+<tr class="row-even"><td><p>cleanup</p></td>
+<td><p>The cleanup to call when the socket is destroyed.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga943268245cf59f6ff8cf1458c9a9ba8d"><span id="index-21"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_socket_send</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span>
+    <span class="n">apr_size_t</span><span class="o">*</span> <span class="n">len</span>
+<span class="p">)</span></pre>
+<p>Send data over a network… code-block:: none</p>
+<blockquote>
+<div><p>This functions acts like a blocking write by default.  To change
+this behavior, use <a class="reference internal" href="#doxid-group-apr-network-io-1ga945bdbe807ec5635d65a6fd9ddb78c29"><span class="std std-ref">apr_socket_timeout_set()</span></a> or the APR_SO_NONBLOCK
+socket option.</p>
+</div></blockquote>
+<p>It is possible for both bytes to be sent and an error to be returned.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>APR_EINTR is never returned.
+</pre></div>
+</div>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sock</p></td>
+<td><p>The socket to send the data over.</p></td>
+</tr>
+<tr class="row-even"><td><p>buf</p></td>
+<td><p>The buffer which contains the data to be sent.</p></td>
+</tr>
+<tr class="row-odd"><td><p>len</p></td>
+<td><p>On entry, the number of bytes to send; on exit, the number of bytes sent.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga99ece70c34a7a332daa3941de3950c64"><span id="index-22"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_socket_sendv</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <span class="k">const</span> <span class="k">struct</span> <span class="n">iovec</span><span class="o">*</span> <span class="n">vec</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">nvec</span><span class="p">,</span>
+    <span class="n">apr_size_t</span><span class="o">*</span> <span class="n">len</span>
+<span class="p">)</span></pre>
+<p>Send multiple buffers over a network… code-block:: none</p>
+<blockquote>
+<div><p>This functions acts like a blocking write by default.  To change
+this behavior, use <a class="reference internal" href="#doxid-group-apr-network-io-1ga945bdbe807ec5635d65a6fd9ddb78c29"><span class="std std-ref">apr_socket_timeout_set()</span></a> or the APR_SO_NONBLOCK
+socket option.
+The number of bytes actually sent is stored in argument 4.</p>
+</div></blockquote>
+<p>It is possible for both bytes to be sent and an error to be returned.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>APR_EINTR is never returned.
+</pre></div>
+</div>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sock</p></td>
+<td><p>The socket to send the data over.</p></td>
+</tr>
+<tr class="row-even"><td><p>vec</p></td>
+<td><p>The array of iovec structs containing the data to send</p></td>
+</tr>
+<tr class="row-odd"><td><p>nvec</p></td>
+<td><p>The number of iovec structs in the array</p></td>
+</tr>
+<tr class="row-even"><td><p>len</p></td>
+<td><p>Receives the number of bytes actually written</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga03ae34bc5712dac2b3fdee39e5f87be3"><span id="index-23"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_socket_sendto</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="o">*</span> <span class="n">where</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">flags</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span>
+    <span class="n">apr_size_t</span><span class="o">*</span> <span class="n">len</span>
+<span class="p">)</span></pre>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sock</p></td>
+<td><p>The socket to send from</p></td>
+</tr>
+<tr class="row-even"><td><p>where</p></td>
+<td><p>The <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a> describing where to send the data</p></td>
+</tr>
+<tr class="row-odd"><td><p>flags</p></td>
+<td><p>The flags to use</p></td>
+</tr>
+<tr class="row-even"><td><p>buf</p></td>
+<td><p>The data to send</p></td>
+</tr>
+<tr class="row-odd"><td><p>len</p></td>
+<td><p>The length of the data to send</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga80880312b41e86c9c266ede1a504e2ca"><span id="index-24"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_socket_recvfrom</span><span class="p">(</span>
+    <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="o">*</span> <span class="n">from</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">flags</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span>
+    <span class="n">apr_size_t</span><span class="o">*</span> <span class="n">len</span>
+<span class="p">)</span></pre>
+<p>Read data from a socket. On success, the address of the peer from which the data was sent is copied into the <em>from</em> parameter, and the <em>len</em> parameter is updated to give the number of bytes written to <em>buf</em>.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>from</p></td>
+<td><p>Updated with the address from which the data was received</p></td>
+</tr>
+<tr class="row-even"><td><p>sock</p></td>
+<td><p>The socket to use</p></td>
+</tr>
+<tr class="row-odd"><td><p>flags</p></td>
+<td><p>The flags to use</p></td>
+</tr>
+<tr class="row-even"><td><p>buf</p></td>
+<td><p>The buffer to use</p></td>
+</tr>
+<tr class="row-odd"><td><p>len</p></td>
+<td><p>The length of the available buffer</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga3d93e6212c4c27f2390b0057f8f4a8be"><span id="index-25"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_socket_sendfile</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_io.html#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">file</span><span class="p">,</span>
+    <a class="reference internal" href="struct_apr_hdtr_t.html#doxid-structapr-hdtr-t"><span class="std std-ref">apr_hdtr_t</span></a><span></span><span class="o">*</span> <span class="n">hdtr</span><span class="p">,</span>
+    <span class="n">apr_off_t</span><span class="o">*</span> <span class="n">offset</span><span class="p">,</span>
+    <span class="n">apr_size_t</span><span class="o">*</span> <span class="n">len</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">flags</span>
+<span class="p">)</span></pre>
+<p>Send a file from an open file descriptor to a socket, along with optional headers and trailers This functions acts like a blocking write by default. To change this behavior, use <a class="reference internal" href="#doxid-group-apr-network-io-1ga945bdbe807ec5635d65a6fd9ddb78c29"><span class="std std-ref">apr_socket_timeout_set()</span></a> or the APR_SO_NONBLOCK socket option. The number of bytes actually sent is stored in the len parameter. The offset parameter is passed by reference for no reason; its value will never be modified by the <a class="reference internal" href="#doxid-group-apr-network-io-1ga3d93e6212c4c27f2390b0057f8f4a8be"><span class="std std-ref">apr_socket_sendfile()</span></a> function.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sock</p></td>
+<td><p>The socket to which we’re writing</p></td>
+</tr>
+<tr class="row-even"><td><p>file</p></td>
+<td><p>The open file from which to read</p></td>
+</tr>
+<tr class="row-odd"><td><p>hdtr</p></td>
+<td><p>A structure containing the headers and trailers to send</p></td>
+</tr>
+<tr class="row-even"><td><p>offset</p></td>
+<td><p>Offset into the file where we should begin writing</p></td>
+</tr>
+<tr class="row-odd"><td><p>len</p></td>
+<td><p>(input) - Number of bytes to send from the file (output) - Number of bytes actually sent, including headers, file, and trailers</p></td>
+</tr>
+<tr class="row-even"><td><p>flags</p></td>
+<td><p>APR flags that are mapped to OS specific flags</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1gaa6ee00191f197f64b5a5409f4aff53d1"><span id="index-26"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_socket_recv</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span>
+    <span class="n">apr_size_t</span><span class="o">*</span> <span class="n">len</span>
+<span class="p">)</span></pre>
+<p>Read data from a network… code-block:: none</p>
+<blockquote>
+<div><p>This functions acts like a blocking read by default.  To change
+this behavior, use <a class="reference internal" href="#doxid-group-apr-network-io-1ga945bdbe807ec5635d65a6fd9ddb78c29"><span class="std std-ref">apr_socket_timeout_set()</span></a> or the APR_SO_NONBLOCK
+socket option.
+The number of bytes actually received is stored in argument 3.</p>
+</div></blockquote>
+<p>It is possible for both bytes to be received and an APR_EOF or other error to be returned.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>APR_EINTR is never returned.
+</pre></div>
+</div>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sock</p></td>
+<td><p>The socket to read the data from.</p></td>
+</tr>
+<tr class="row-even"><td><p>buf</p></td>
+<td><p>The buffer to store the data in.</p></td>
+</tr>
+<tr class="row-odd"><td><p>len</p></td>
+<td><p>On entry, the number of bytes to receive; on exit, the number of bytes received.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga08f5e505fa611005f56c12783269ffa9"><span id="index-27"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_socket_opt_set</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">opt</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">on</span>
+<span class="p">)</span></pre>
+<p>Setup socket options for the specified socket</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sock</p></td>
+<td><p>The socket to set up.</p></td>
+</tr>
+<tr class="row-even"><td><p>opt</p></td>
+<td><p>The option we would like to configure. One of:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>APR_SO_DEBUG      --  turn on debugging information
+APR_SO_KEEPALIVE  --  keep connections active
+APR_SO_LINGER     --  lingers on close if data is present
+APR_SO_NONBLOCK   --  Turns blocking on/off for socket
+                      When this option is enabled, use
+                      the :ref:`APR_STATUS_IS_EAGAIN() &lt;doxid-group___a_p_r___s_t_a_t_u_s___i_s_1ga9dd578bfcd76a2d997395608ae5b3a4e&gt;` macro to
+                      see if a send or receive function
+                      could not transfer data without
+                      blocking.
+APR_SO_REUSEADDR  --  The rules used in validating addresses
+                      supplied to bind should allow reuse
+                      of local addresses.
+APR_SO_SNDBUF     --  Set the SendBufferSize
+APR_SO_RCVBUF     --  Set the ReceiveBufferSize
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>on</p></td>
+<td><p>Value for the option.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga945bdbe807ec5635d65a6fd9ddb78c29"><span id="index-28"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_socket_timeout_set</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_time.html#doxid-group-apr-time-1gaae2129185a395cc393f76fabf4f43e47"><span class="std std-ref">apr_interval_time_t</span></a><span></span> <span class="n">t</span>
+<span class="p">)</span></pre>
+<p>Setup socket timeout for the specified socket</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sock</p></td>
+<td><p>The socket to set up.</p></td>
+</tr>
+<tr class="row-even"><td><p>t</p></td>
+<td><p>Value for the timeout.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>t &gt; 0   read and write calls return APR_TIMEUP if specified time
+          elapsess with no data read or written
+t == 0  read and write calls never block
+t &lt; 0   read and write calls block
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga1934c2d5943efc8ce925f376f3c2e17e"><span id="index-29"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_socket_opt_get</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">opt</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span><span class="o">*</span> <span class="n">on</span>
+<span class="p">)</span></pre>
+<p>Query socket options for the specified socket</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sock</p></td>
+<td><p>The socket to query</p></td>
+</tr>
+<tr class="row-even"><td><p>opt</p></td>
+<td><p>The option we would like to query. One of:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>APR_SO_DEBUG      --  turn on debugging information
+APR_SO_KEEPALIVE  --  keep connections active
+APR_SO_LINGER     --  lingers on close if data is present
+APR_SO_NONBLOCK   --  Turns blocking on/off for socket
+APR_SO_REUSEADDR  --  The rules used in validating addresses
+                      supplied to bind should allow reuse
+                      of local addresses.
+APR_SO_SNDBUF     --  Set the SendBufferSize
+APR_SO_RCVBUF     --  Set the ReceiveBufferSize
+APR_SO_DISCONNECTED -- Query the disconnected state of the socket.
+                      (Currently only used on Windows)
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>on</p></td>
+<td><p>Socket option returned on the call.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1gaa32313b54afed590367c8571075d2bc1"><span id="index-30"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_socket_timeout_get</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_time.html#doxid-group-apr-time-1gaae2129185a395cc393f76fabf4f43e47"><span class="std std-ref">apr_interval_time_t</span></a><span></span><span class="o">*</span> <span class="n">t</span>
+<span class="p">)</span></pre>
+<p>Query socket timeout for the specified socket</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sock</p></td>
+<td><p>The socket to query</p></td>
+</tr>
+<tr class="row-even"><td><p>t</p></td>
+<td><p>Socket timeout returned from the query.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga2389de257444870974b5ded91cf7a10c"><span id="index-31"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_socket_atmark</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">atmark</span>
+<span class="p">)</span></pre>
+<p>Query the specified socket if at the OOB/Urgent data mark</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sock</p></td>
+<td><p>The socket to query</p></td>
+</tr>
+<tr class="row-even"><td><p>atmark</p></td>
+<td><p>Is set to true if socket is at the OOB/urgent mark, otherwise is set to false.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1gacad56b59eafc6ad2459bf6493c992515"><span id="index-32"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_socket_addr_get</span><span class="p">(</span>
+    <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="o">**</span> <span class="n">sa</span><span class="p">,</span>
+    <a class="reference internal" href="enum_apr_interface_e.html#doxid-group-apr-network-io-1ga1982f44f48fdf00a8bd754bc7b773edc"><span class="std std-ref">apr_interface_e</span></a><span></span> <span class="n">which</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span>
+<span class="p">)</span></pre>
+<p>Return an address associated with a socket; either the address to which the socket is bound locally or the address of the peer to which the socket is connected.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sa</p></td>
+<td><p>The returned <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p>which</p></td>
+<td><p>Whether to retrieve the local or remote address</p></td>
+</tr>
+<tr class="row-odd"><td><p>sock</p></td>
+<td><p>The socket to use</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1gab78fc9b9799c119f4a5517411458a660"><span id="index-33"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_sockaddr_ip_get</span><span class="p">(</span>
+    <span class="kt">char</span><span class="o">**</span> <span class="n">addr</span><span class="p">,</span>
+    <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="o">*</span> <span class="n">sockaddr</span>
+<span class="p">)</span></pre>
+<p>Return the IP address (in numeric address string format) in an APR socket address. APR will allocate storage for the IP address string from the pool of the <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a>.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>addr</p></td>
+<td><p>The IP address.</p></td>
+</tr>
+<tr class="row-even"><td><p>sockaddr</p></td>
+<td><p>The socket address to reference.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga8c88ae154304e30d47c2696f4370dc6d"><span id="index-34"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_sockaddr_ip_getbuf</span><span class="p">(</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span>
+    <span class="n">apr_size_t</span> <span class="n">buflen</span><span class="p">,</span>
+    <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="o">*</span> <span class="n">sockaddr</span>
+<span class="p">)</span></pre>
+<p>Write the IP address (in numeric address string format) of the APR socket address <em>sockaddr</em> into the buffer <em>buf</em> (of size <em>buflen</em>).</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sockaddr</p></td>
+<td><p>The socket address to reference.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga1bf65369305ae352f3280af2acc684f5"><span id="index-35"></span><span></span><span class="kt">int</span>
+<span class="n">apr_sockaddr_equal</span><span class="p">(</span>
+    <span class="k">const</span> <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="o">*</span> <span class="n">addr1</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="o">*</span> <span class="n">addr2</span>
+<span class="p">)</span></pre>
+<p>See if the IP addresses in two APR socket addresses are equivalent. Appropriate logic is present for comparing IPv4-mapped IPv6 addresses with IPv4 addresses.</p>
+<p>The return value will be non-zero if the addresses are equivalent.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>addr1</p></td>
+<td><p>One of the APR socket addresses.</p></td>
+</tr>
+<tr class="row-even"><td><p>addr2</p></td>
+<td><p>The other APR socket address.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1gab9e53832f95e39cb780345c2b7783830"><span id="index-36"></span><span></span><span class="kt">int</span>
+<span class="n">apr_sockaddr_is_wildcard</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="o">*</span> <span class="n">addr</span><span class="p">)</span></pre>
+<p>See if the IP address in an APR socket address refers to the wildcard address for the protocol family (e.g., INADDR_ANY for IPv4).</p>
+<p>The return value will be non-zero if the address is initialized and is the wildcard address.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>addr</p></td>
+<td><p>The APR socket address to examine.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga8d23ee2db9a84af2e6408ef460613514"><span id="index-37"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_socket_type_get</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">type</span>
+<span class="p">)</span></pre>
+<p>Return the type of the socket.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sock</p></td>
+<td><p>The socket to query.</p></td>
+</tr>
+<tr class="row-even"><td><p>type</p></td>
+<td><p>The returned type (e.g., SOCK_STREAM).</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1gad5b504c0fe4d578e72531e3ca0263654"><span id="index-38"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_getservbyname</span><span class="p">(</span>
+    <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="o">*</span> <span class="n">sockaddr</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">servname</span>
+<span class="p">)</span></pre>
+<p>Given an <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a> and a service name, set the port for the service</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sockaddr</p></td>
+<td><p>The <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a> that will have its port set</p></td>
+</tr>
+<tr class="row-even"><td><p>servname</p></td>
+<td><p>The name of the service you wish to use</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga34a3c7f1666427f4e381e857b9e9c298"><span id="index-39"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_ipsubnet_create</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1gac86ee04eb80f938902095d1d0a67c324"><span class="std std-ref">apr_ipsubnet_t</span></a><span></span><span class="o">**</span> <span class="n">ipsub</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">ipstr</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">mask_or_numbits</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">)</span></pre>
+<p>Build an ip-subnet representation from an IP address and optional netmask or number-of-bits.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ipsub</p></td>
+<td><p>The new ip-subnet representation</p></td>
+</tr>
+<tr class="row-even"><td><p>ipstr</p></td>
+<td><p>The input IP address string</p></td>
+</tr>
+<tr class="row-odd"><td><p>mask_or_numbits</p></td>
+<td><p>The input netmask or number-of-bits string, or NULL</p></td>
+</tr>
+<tr class="row-even"><td><p>p</p></td>
+<td><p>The pool to allocate from</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1gab74d21b8898b7c40bf7fd07ad3eb993d"><span id="index-40"></span><span></span><span class="kt">int</span>
+<span class="n">apr_ipsubnet_test</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1gac86ee04eb80f938902095d1d0a67c324"><span class="std std-ref">apr_ipsubnet_t</span></a><span></span><span class="o">*</span> <span class="n">ipsub</span><span class="p">,</span>
+    <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a><span></span><span class="o">*</span> <span class="n">sa</span>
+<span class="p">)</span></pre>
+<p>Test the IP address in an <a class="reference internal" href="struct_apr_sockaddr_t.html#doxid-structapr-sockaddr-t"><span class="std std-ref">apr_sockaddr_t</span></a> against a pre-built ip-subnet representation.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ipsub</p></td>
+<td><p>The ip-subnet representation</p></td>
+</tr>
+<tr class="row-even"><td><p>sa</p></td>
+<td><p>The socket address to test</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>non-zero if the socket address is within the subnet, 0 otherwise</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga270b7c0835283fa2b85a05d295dd7ee5"><span id="index-41"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_socket_accept_filter</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">args</span>
+<span class="p">)</span></pre>
+<p>Set an OS level accept filter. Bug name and args should have been declared as const char *, as they are in APR 2.0</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sock</p></td>
+<td><p>The socket to put the accept filter on.</p></td>
+</tr>
+<tr class="row-even"><td><p>name</p></td>
+<td><p>The accept filter</p></td>
+</tr>
+<tr class="row-odd"><td><p>args</p></td>
+<td><p>Any extra args to the accept filter. Passing NULL here removes the accept filter.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1gac402d9426de37b6cede18fa157020bd9"><span id="index-42"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_socket_protocol_get</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">sock</span><span class="p">,</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">protocol</span>
+<span class="p">)</span></pre>
+<p>Return the protocol of the socket.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>sock</p></td>
+<td><p>The socket to query.</p></td>
+</tr>
+<tr class="row-even"><td><p>protocol</p></td>
+<td><p>The returned protocol (e.g., APR_PROTO_TCP).</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga4f109ecf176aee8fca8ecfa7f8b07d93"><span id="index-43"></span><a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span>
+<span class="n">apr_socket_pool_get</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">thesocket</span><span class="p">)</span></pre>
+<p>Get the pool used by the socket.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga8ae81c6a7acf90112ebcfb9221ccc649"><span id="index-44"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_socket_inherit_set</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">thesocket</span><span class="p">)</span></pre>
+<p>Set a socket to be inherited by child processes.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga5afabb2cee38c141d076b9c52a3f2ce1"><span id="index-45"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_socket_inherit_unset</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-network-io-1ga49262b223e7434746e1f1737659aa2c3"><span class="std std-ref">apr_socket_t</span></a><span></span><span class="o">*</span> <span class="n">thesocket</span><span class="p">)</span></pre>
+<p>Unset a socket from being inherited by child processes.</p>
+</section>
+<section id="macros">
+<h3>Macros</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga7f5b3882209106bb407b1d518d6ad59d"><span id="index-46"></span><span></span><span class="cp">#define APRMAXHOSTLEN</span></pre>
+<p>Maximum hostname length</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1gadce1131c46b897ec63e9e4316a4631dd"><span id="index-47"></span><span></span><span class="cp">#define APR_ANYADDR</span></pre>
+<p>Default ‘any’ address</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga16eb7ee55ff87a5093f2114ea5351217"><span id="index-48"></span><span></span><span class="cp">#define APR_INADDR_NONE</span></pre>
+<p>Not all platforms have a real INADDR_NONE. This macro replaces INADDR_NONE on all platforms.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1gaa96e8e8dbf92bc77643a4032017b3d67"><span id="index-49"></span><span></span><span class="cp">#define APR_INET</span></pre>
+<p>Not all platforms have these defined, so we’ll define them here The default values come from FreeBSD 4.1.1</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1gad09d9ea8995f50f35073ae0c77efb44f"><span id="index-50"></span><span></span><span class="cp">#define APR_INET6</span></pre>
+<p>IPv6 Address Family. Not all platforms may have this defined.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga58aa30a94127b4a80f27fbf2e03fdfd8"><span id="index-51"></span><span></span><span class="cp">#define APR_IPV4_ADDR_OK</span></pre>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-network-io-1gaa2f399ca2b60b35c0abf7630298c6c9f"><span class="std std-ref">apr_sockaddr_info_get()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1gaef1f70f9b969d25832a230f429837207"><span id="index-52"></span><span></span><span class="cp">#define APR_IPV6_ADDR_OK</span></pre>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-network-io-1gaa2f399ca2b60b35c0abf7630298c6c9f"><span class="std std-ref">apr_sockaddr_info_get()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga8311c84f6946742188a6b9a45e92ea8e"><span id="index-53"></span><span></span><span class="cp">#define APR_MAX_SECS_TO_LINGER</span></pre>
+<p>Maximum seconds to linger</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1gaca378d0e24b1588e3fdb143e4ea9090d"><span id="index-54"></span><span></span><span class="cp">#define APR_SENDFILE_DISCONNECT_SOCKET</span></pre>
+<p>Support reusing the socket on platforms which support it (from disconnect, specifically Win32. Optional flag passed into <a class="reference internal" href="#doxid-group-apr-network-io-1ga3d93e6212c4c27f2390b0057f8f4a8be"><span class="std std-ref">apr_socket_sendfile()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1gaa7a33b17a7d0820b09ef489bd3328f85"><span id="index-55"></span><span></span><span class="cp">#define APR_UNSPEC</span></pre>
+<p>Let the system decide which address family to use</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-network-io-1ga46a8b06887871cfd60a3e37385775e22"><span id="index-56"></span><span></span><span class="cp">#define apr_inet_addr</span></pre>
+<p>The specific declaration of inet_addr’s … some platforms fall back inet_network (this is not good, but necessary)</p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Network Routines</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li><a class="reference internal" href="#global-functions">Global Functions</a></li>
+<li><a class="reference internal" href="#macros">Macros</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="group_apr_general.html"
+                          title="previous chapter">Miscellaneous library routines</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="group_apr_mcast.html"
+                          title="next chapter">IP Multicast</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="group_apr_mcast.html" title="IP Multicast"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="group_apr_general.html" title="Miscellaneous library routines"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Apache Portable Runtime Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="group_APR.html" >Apache Portability Runtime library</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Network Routines</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2008-2017, Apache Portable Runtime Maintainers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    </div>
+  </body>
+</html>

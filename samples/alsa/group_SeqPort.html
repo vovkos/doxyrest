@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sequencer Port Interface &mdash; ALSA Library Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinx_rtd_theme.css?v=b6ca47bd" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=e9012143"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Sequencer Port Subscription" href="group_SeqSubscribe.html" />
+    <link rel="prev" title="Sequencer Miscellaneous" href="group_SeqMisc.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            ALSA Library Documentation
+          </a>
+              <div class="version">
+                1.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="group_Config.html">Configuration Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Digital_Audio_Interface.html">Constants for Digital Audio Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_MIDI_Interface.html">Constants for MIDI v1.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Control.html">Control Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Error.html">Error handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_CtlPlugin_SDK.html">External Control Plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Plugin_SDK.html">External PCM plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Global.html">Global defines and functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_HwDep.html">Hardware Dependant Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Input.html">Input Interface</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="group_Sequencer.html">MIDI Sequencer</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="group_SeqClient.html">Sequencer Client Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_SeqEvent.html">Sequencer Event API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_SeqEvents.html">Sequencer Event Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_SeqEvType.html">Sequencer Event Type Checks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_SeqMiddle.html">Sequencer Middle Level Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_SeqMisc.html">Sequencer Miscellaneous</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Sequencer Port Interface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#global-functions">Global Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#macros">Macros</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="group_SeqSubscribe.html">Sequencer Port Subscription</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_SeqQueue.html">Sequencer Queue Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_MIDI_Event.html">Sequencer event &lt;-&gt; MIDI byte stream coder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_snd_seq_type_t.html">enum snd_seq_type_t</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_Sequencer.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_Sequencer.html#detailed-documentation">Detailed Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="group_Mixer.html">Mixer Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Output.html">Output Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_PCM.html">PCM Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_RawMidi.html">RawMidi Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Timer.html">Timer Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_topology.html">Topology Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_ucm.html">Use Case Interface</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="page_topology.html">ALSA Topology Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_Usecase.html">ALSA Use Case Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_bug.html">Bug List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_conf.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_control.html">Control interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_deprecated.html">Deprecated List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_ctl_external_plugins.html">External Control Plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_hcontrol.html">High level control interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_confhooks.html">Hooks in configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_mixer.html">Mixer interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_pcm.html">PCM (digital audio) interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_pcm_plugins.html">PCM (digital audio) plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_pcm_external_plugins.html">PCM External Plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_rawmidi.html">RawMidi interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_confarg.html">Runtime arguments in configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_conffunc.html">Runtime functions in configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_seq.html">Sequencer interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_timer.html">Timer interface</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="example__test_latency.c.html">/test/latency.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_pcm.c.html">/test/pcm.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_pcm_min.c.html">/test/pcm_min.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_rawmidi.c.html">/test/rawmidi.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_timer.c.html">/test/timer.c</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ALSA Library Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="group_Sequencer.html">MIDI Sequencer</a></li>
+      <li class="breadcrumb-item active">Sequencer Port Interface</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="sequencer-port-interface">
+<span id="doxid-group-seq-port"></span><span id="index-0"></span><h1>Sequencer Port Interface</h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="overview">
+<h2>Overview</h2>
+<p>Sequencer Port Interface <a class="reference internal" href="#details-group-seq-port"><span class="std std-ref">More…</span></a></p>
+<pre class="highlight doxyrest-overview-code-block literal-block"><span></span><span class="c1">// typedefs</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_seq_port_info</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// global functions</span>
+
+<span class="kt">size_t</span>
+<a class="reference internal" href="#doxid-group-seq-port-1gaaf7342df4e6dcdd4b40bffab2d9383bf"><span class="std std-ref">snd_seq_port_info_sizeof</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-port-1ga86ff334491c0d8c5b007e5b78d457334"><span class="std std-ref">snd_seq_port_info_malloc</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">**</span> <span class="n">ptr</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-seq-port-1gac6254a78c36c8244782e18225647a06a"><span class="std std-ref">snd_seq_port_info_free</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">ptr</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-seq-port-1gac1a2571b37277ca7845a078fbbd07e30"><span class="std std-ref">snd_seq_port_info_copy</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">dst</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">src</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-port-1ga5a9f99c028e47a549836581b3cc01705"><span class="std std-ref">snd_seq_port_info_get_client</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-port-1ga90475c2db0acf804d8959058782493ed"><span class="std std-ref">snd_seq_port_info_get_port</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">);</span>
+
+<span class="k">const</span> <a class="reference internal" href="struct_snd_seq_addr_t.html#doxid-structsnd-seq-addr-t"><span class="std std-ref">snd_seq_addr_t</span></a><span></span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-seq-port-1ga58c1e63db50536dbe517c4eb56884a99"><span class="std std-ref">snd_seq_port_info_get_addr</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-seq-port-1ga2ce813765619784f7b6f773730bb00a3"><span class="std std-ref">snd_seq_port_info_get_name</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">);</span>
+
+<span class="kt">unsigned</span> <span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-port-1ga52d3744aa8a9ef122b350247c206ca1f"><span class="std std-ref">snd_seq_port_info_get_capability</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">);</span>
+
+<span class="kt">unsigned</span> <span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-port-1ga67089430166da86830b2e8d24ffcb82e"><span class="std std-ref">snd_seq_port_info_get_type</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-port-1ga98f449484e99680ec24dd8a635e5c46e"><span class="std std-ref">snd_seq_port_info_get_midi_channels</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-port-1gace0fa9154b4c7f48e582d2c6fca4d343"><span class="std std-ref">snd_seq_port_info_get_midi_voices</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-port-1ga3a7cc5d4eecf7fff98f6f8118176b352"><span class="std std-ref">snd_seq_port_info_get_synth_voices</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-port-1ga67ae52056047784f451f46dc0e81ca67"><span class="std std-ref">snd_seq_port_info_get_read_use</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-port-1ga8278d1e6aa256e8f26191ae16202c114"><span class="std std-ref">snd_seq_port_info_get_write_use</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-port-1gaf4a8c5c64c489321994ace0247921a87"><span class="std std-ref">snd_seq_port_info_get_port_specified</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-port-1ga2b452e4c849fc860db7879f82d4b3323"><span class="std std-ref">snd_seq_port_info_get_timestamping</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-port-1ga56146d9a0b992ed1fddabd787ecdd755"><span class="std std-ref">snd_seq_port_info_get_timestamp_real</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-port-1ga25bed7f48ec3e75764c3c49b510b23b3"><span class="std std-ref">snd_seq_port_info_get_timestamp_queue</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-seq-port-1ga7ea54e7b23774e0670174cc8698cb375"><span class="std std-ref">snd_seq_port_info_set_client</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">client</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-seq-port-1gae3d9b091002c86bc31644da0a9b48bb7"><span class="std std-ref">snd_seq_port_info_set_port</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">port</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-seq-port-1ga2cb8af4a438139a3733212ef8d9fda81"><span class="std std-ref">snd_seq_port_info_set_addr</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="struct_snd_seq_addr_t.html#doxid-structsnd-seq-addr-t"><span class="std std-ref">snd_seq_addr_t</span></a><span></span><span class="o">*</span> <span class="n">addr</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-seq-port-1gae36f8b99f4e5a374dd69760a2d23b1a5"><span class="std std-ref">snd_seq_port_info_set_name</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-seq-port-1ga5e66f8964ac8686437936958c50d2e08"><span class="std std-ref">snd_seq_port_info_set_capability</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">capability</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-seq-port-1gae67a71150ca0bf04f265f6df14120c8a"><span class="std std-ref">snd_seq_port_info_set_type</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">type</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-seq-port-1ga95fd5b48eae29be7186013a3aded24c4"><span class="std std-ref">snd_seq_port_info_set_midi_channels</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">channels</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-seq-port-1ga9efdb4781a133315240b4da0a336935f"><span class="std std-ref">snd_seq_port_info_set_midi_voices</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">voices</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-seq-port-1gad52fdf46df934c1c3ab369ee4bcb7a66"><span class="std std-ref">snd_seq_port_info_set_synth_voices</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">voices</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-seq-port-1gafd4325db9167baf3e994a942577c2d5c"><span class="std std-ref">snd_seq_port_info_set_port_specified</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">val</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-seq-port-1gacf6441ee4622b87b450381e1cea7d7d1"><span class="std std-ref">snd_seq_port_info_set_timestamping</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">enable</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-seq-port-1ga2faba31e8c97874e4be7ca95e76bdbd1"><span class="std std-ref">snd_seq_port_info_set_timestamp_real</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">realtime</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-seq-port-1ga5c4463ccb1c7f599a1b34bcac2c01ff5"><span class="std std-ref">snd_seq_port_info_set_timestamp_queue</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">queue</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-port-1gab40867ed02d9d6e40a75f929b5adf24d"><span class="std std-ref">snd_seq_create_port</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-port-1gaa79a02d8fc3d6668b0a68d5d8b172603"><span class="std std-ref">snd_seq_delete_port</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">port</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">port</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-port-1gaca72792a7a96c18809768a905cefbfa4"><span class="std std-ref">snd_seq_get_any_port_info</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">client</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">port</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-port-1gab979b7ece475bba1d75e9d7279b912b1"><span class="std std-ref">snd_seq_set_port_info</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">port</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-seq-port-1ga9f3ba4f4a959798bd0b25b417b9ca4cd"><span class="std std-ref">snd_seq_query_next_port</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span>
+<span class="p">);</span>
+
+<span class="c1">// macros</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-port-1ga97da74dc7f0f295f000fadd1c50c1130"><span class="std std-ref">SND_SEQ_PORT_CAP_DUPLEX</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-port-1gaa0a63e34744ed9faedf64fe0b364bfd4"><span class="std std-ref">SND_SEQ_PORT_CAP_NO_EXPORT</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-port-1ga81a7a5385af746364b757eb7911ec2f0"><span class="std std-ref">SND_SEQ_PORT_CAP_READ</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-port-1ga4b8aa6cbeb3c99c3ad033f4ce69c06e2"><span class="std std-ref">SND_SEQ_PORT_CAP_SUBS_READ</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-port-1ga52ff1c51578166e67936cfb826c966c0"><span class="std std-ref">SND_SEQ_PORT_CAP_SUBS_WRITE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-port-1gaebcc3dd1ad3b42d2305290feab04005a"><span class="std std-ref">SND_SEQ_PORT_CAP_SYNC_READ</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-port-1gabd27d66e2de0ff9556cc81cbec9ba7de"><span class="std std-ref">SND_SEQ_PORT_CAP_SYNC_WRITE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-port-1gae8afb5ac8f546461b4bab25454972aeb"><span class="std std-ref">SND_SEQ_PORT_CAP_WRITE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-port-1gaf12ff6ca6077edc7c6027a3fb1d0664b"><span class="std std-ref">SND_SEQ_PORT_SYSTEM_ANNOUNCE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-port-1ga02870ceddec24d3cc5609ec728b0cb92"><span class="std std-ref">SND_SEQ_PORT_SYSTEM_TIMER</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-port-1ga703a0651b941c583d5f8928f8f3b1b67"><span class="std std-ref">SND_SEQ_PORT_TYPE_APPLICATION</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-port-1ga745828e8de9962c7c8c42ad5039e595d"><span class="std std-ref">SND_SEQ_PORT_TYPE_DIRECT_SAMPLE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-port-1ga7c7c4e97a41a4056c759f5398643a37f"><span class="std std-ref">SND_SEQ_PORT_TYPE_HARDWARE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-port-1ga0f89faac8be715b9e2d9d885c7f644a0"><span class="std std-ref">SND_SEQ_PORT_TYPE_MIDI_GENERIC</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-port-1ga7202cc7b9acc0d78f59c502d7be4d2d7"><span class="std std-ref">SND_SEQ_PORT_TYPE_MIDI_GM</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-port-1gabba1c9b09748d446bb6b20b0ae717984"><span class="std std-ref">SND_SEQ_PORT_TYPE_MIDI_GM2</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-port-1gadf72cb865e33a0ce1462f68303165537"><span class="std std-ref">SND_SEQ_PORT_TYPE_MIDI_GS</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-port-1ga12743fc5f31ab3718d5f86d88eef05fe"><span class="std std-ref">SND_SEQ_PORT_TYPE_MIDI_MT32</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-port-1ga8b51348b38a543151dda96c73fbfb5d4"><span class="std std-ref">SND_SEQ_PORT_TYPE_MIDI_XG</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-port-1ga3c9413dbab5e6c6a18235e8b05c8fb3c"><span class="std std-ref">SND_SEQ_PORT_TYPE_PORT</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-port-1gae4096b5c650fc3db614d8dead99ef404"><span class="std std-ref">SND_SEQ_PORT_TYPE_SAMPLE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-port-1ga6b1a73e34cedbf61f039db614a50b27c"><span class="std std-ref">SND_SEQ_PORT_TYPE_SOFTWARE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-port-1gaeb05a94bbdf256b857fcad28aeb2bb57"><span class="std std-ref">SND_SEQ_PORT_TYPE_SPECIFIC</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-port-1ga25b090c0416b501001ae05350480acfd"><span class="std std-ref">SND_SEQ_PORT_TYPE_SYNTH</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-port-1gab873e7e613eee3af725f4a286c9c1cdf"><span class="std std-ref">SND_SEQ_PORT_TYPE_SYNTHESIZER</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-seq-port-1gac39e99230c62a36daa985273faac0de7"><span class="std std-ref">snd_seq_port_info_alloca</span></a><span></span><span class="p">(</span><span class="n">ptr</span><span class="p">)</span></pre>
+</section>
+<section id="detailed-documentation">
+<span id="details-group-seq-port"></span><h2>Detailed Documentation</h2>
+<p>Sequencer Port Interface</p>
+<section id="typedefs">
+<h3>Typedefs</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span id="index-1"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_seq_port_info</span> <span class="n">snd_seq_port_info_t</span></pre>
+<p>port information container</p>
+</section>
+<section id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1gaaf7342df4e6dcdd4b40bffab2d9383bf"><span id="index-2"></span><span></span><span class="kt">size_t</span>
+<span class="n">snd_seq_port_info_sizeof</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></pre>
+<p>get size of <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a></p>
+<p class="rubric">Returns:</p>
+<p>size in bytes</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga86ff334491c0d8c5b007e5b78d457334"><span id="index-3"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_port_info_malloc</span><span class="p">(</span><a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">**</span> <span class="n">ptr</span><span class="p">)</span></pre>
+<p>allocate an empty <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a> using standard malloc</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ptr</p></td>
+<td><p>returned pointer</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1gac6254a78c36c8244782e18225647a06a"><span id="index-4"></span><span></span><span class="kt">void</span>
+<span class="n">snd_seq_port_info_free</span><span class="p">(</span><a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">ptr</span><span class="p">)</span></pre>
+<p>frees a previously allocated <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a></p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>obj</p></td>
+<td><p>pointer to object to free</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1gac1a2571b37277ca7845a078fbbd07e30"><span id="index-5"></span><span></span><span class="kt">void</span>
+<span class="n">snd_seq_port_info_copy</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">dst</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">src</span>
+<span class="p">)</span></pre>
+<p>copy one <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a> to another</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>dst</p></td>
+<td><p>pointer to destination</p></td>
+</tr>
+<tr class="row-even"><td><p>src</p></td>
+<td><p>pointer to source</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga5a9f99c028e47a549836581b3cc01705"><span id="index-6"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_port_info_get_client</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">)</span></pre>
+<p>Get client id of a port_info container.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port_info container</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>client id</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1ga7ea54e7b23774e0670174cc8698cb375"><span class="std std-ref">snd_seq_port_info_set_client()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga90475c2db0acf804d8959058782493ed"><span id="index-7"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_port_info_get_port</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">)</span></pre>
+<p>Get port id of a port_info container.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port_info container</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>port id</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1gae3d9b091002c86bc31644da0a9b48bb7"><span class="std std-ref">snd_seq_port_info_set_port()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga58c1e63db50536dbe517c4eb56884a99"><span id="index-8"></span><span></span><span class="k">const</span> <a class="reference internal" href="struct_snd_seq_addr_t.html#doxid-structsnd-seq-addr-t"><span class="std std-ref">snd_seq_addr_t</span></a><span></span><span class="o">*</span>
+<span class="n">snd_seq_port_info_get_addr</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">)</span></pre>
+<p>Get client/port address of a port_info container.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port_info container</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>client/port address pointer</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1ga2cb8af4a438139a3733212ef8d9fda81"><span class="std std-ref">snd_seq_port_info_set_addr()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga2ce813765619784f7b6f773730bb00a3"><span id="index-9"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">snd_seq_port_info_get_name</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">)</span></pre>
+<p>Get the name of a port_info container.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port_info container</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>name string</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1gae36f8b99f4e5a374dd69760a2d23b1a5"><span class="std std-ref">snd_seq_port_info_set_name()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga52d3744aa8a9ef122b350247c206ca1f"><span id="index-10"></span><span></span><span class="kt">unsigned</span> <span class="kt">int</span>
+<span class="n">snd_seq_port_info_get_capability</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">)</span></pre>
+<p>Get the capability bits of a port_info container.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port_info container</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>capability bits</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1ga5e66f8964ac8686437936958c50d2e08"><span class="std std-ref">snd_seq_port_info_set_capability()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga67089430166da86830b2e8d24ffcb82e"><span id="index-11"></span><span></span><span class="kt">unsigned</span> <span class="kt">int</span>
+<span class="n">snd_seq_port_info_get_type</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">)</span></pre>
+<p>Get the type bits of a port_info container.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port_info container</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>port type bits</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1gae67a71150ca0bf04f265f6df14120c8a"><span class="std std-ref">snd_seq_port_info_set_type()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga98f449484e99680ec24dd8a635e5c46e"><span id="index-12"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_port_info_get_midi_channels</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">)</span></pre>
+<p>Get the midi channels of a port_info container.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port_info container</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>number of midi channels (default 0)</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1ga95fd5b48eae29be7186013a3aded24c4"><span class="std std-ref">snd_seq_port_info_set_midi_channels()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1gace0fa9154b4c7f48e582d2c6fca4d343"><span id="index-13"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_port_info_get_midi_voices</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">)</span></pre>
+<p>Get the midi voices of a port_info container.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port_info container</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>number of midi voices (default 0)</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1ga9efdb4781a133315240b4da0a336935f"><span class="std std-ref">snd_seq_port_info_set_midi_voices()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga3a7cc5d4eecf7fff98f6f8118176b352"><span id="index-14"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_port_info_get_synth_voices</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">)</span></pre>
+<p>Get the synth voices of a port_info container.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port_info container</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>number of synth voices (default 0)</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1gad52fdf46df934c1c3ab369ee4bcb7a66"><span class="std std-ref">snd_seq_port_info_set_synth_voices()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga67ae52056047784f451f46dc0e81ca67"><span id="index-15"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_port_info_get_read_use</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">)</span></pre>
+<p>Get the number of read subscriptions of a port_info container.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port_info container</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>number of read subscriptions</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga8278d1e6aa256e8f26191ae16202c114"><span id="index-16"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_port_info_get_write_use</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">)</span></pre>
+<p>Get the number of write subscriptions of a port_info container.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port_info container</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>number of write subscriptions</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1gaf4a8c5c64c489321994ace0247921a87"><span id="index-17"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_port_info_get_port_specified</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">)</span></pre>
+<p>Get the port-specified mode of a port_info container.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port_info container</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>1 if port id is specified at creation</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1gafd4325db9167baf3e994a942577c2d5c"><span class="std std-ref">snd_seq_port_info_set_port_specified()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga2b452e4c849fc860db7879f82d4b3323"><span id="index-18"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_port_info_get_timestamping</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">)</span></pre>
+<p>Get the time-stamping mode of the given port in a port_info container.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port_info container</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>1 if the port updates timestamps of incoming events</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1gacf6441ee4622b87b450381e1cea7d7d1"><span class="std std-ref">snd_seq_port_info_set_timestamping()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga56146d9a0b992ed1fddabd787ecdd755"><span id="index-19"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_port_info_get_timestamp_real</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">)</span></pre>
+<p>Get whether the time-stamping of the given port is real-time mode.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port_info container</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>1 if the time-stamping is in the real-time mode</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1ga2faba31e8c97874e4be7ca95e76bdbd1"><span class="std std-ref">snd_seq_port_info_set_timestamp_real()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga25bed7f48ec3e75764c3c49b510b23b3"><span id="index-20"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_port_info_get_timestamp_queue</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">)</span></pre>
+<p>Get the queue id to update timestamps.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port_info container</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>the queue id to get the timestamps</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1ga5c4463ccb1c7f599a1b34bcac2c01ff5"><span class="std std-ref">snd_seq_port_info_set_timestamp_queue()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga7ea54e7b23774e0670174cc8698cb375"><span id="index-21"></span><span></span><span class="kt">void</span>
+<span class="n">snd_seq_port_info_set_client</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">client</span>
+<span class="p">)</span></pre>
+<p>Set the client id of a port_info container.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port_info container</p></td>
+</tr>
+<tr class="row-even"><td><p>client</p></td>
+<td><p>client id</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1ga5a9f99c028e47a549836581b3cc01705"><span class="std std-ref">snd_seq_port_info_get_client()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1gae3d9b091002c86bc31644da0a9b48bb7"><span id="index-22"></span><span></span><span class="kt">void</span>
+<span class="n">snd_seq_port_info_set_port</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">port</span>
+<span class="p">)</span></pre>
+<p>Set the port id of a port_info container.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port_info container</p></td>
+</tr>
+<tr class="row-even"><td><p>port</p></td>
+<td><p>port id</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1ga90475c2db0acf804d8959058782493ed"><span class="std std-ref">snd_seq_port_info_get_port()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga2cb8af4a438139a3733212ef8d9fda81"><span id="index-23"></span><span></span><span class="kt">void</span>
+<span class="n">snd_seq_port_info_set_addr</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="struct_snd_seq_addr_t.html#doxid-structsnd-seq-addr-t"><span class="std std-ref">snd_seq_addr_t</span></a><span></span><span class="o">*</span> <span class="n">addr</span>
+<span class="p">)</span></pre>
+<p>Set the client/port address of a port_info container.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port_info container</p></td>
+</tr>
+<tr class="row-even"><td><p>addr</p></td>
+<td><p>client/port address</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1ga58c1e63db50536dbe517c4eb56884a99"><span class="std std-ref">snd_seq_port_info_get_addr()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1gae36f8b99f4e5a374dd69760a2d23b1a5"><span id="index-24"></span><span></span><span class="kt">void</span>
+<span class="n">snd_seq_port_info_set_name</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span>
+<span class="p">)</span></pre>
+<p>Set the name of a port_info container.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port_info container</p></td>
+</tr>
+<tr class="row-even"><td><p>name</p></td>
+<td><p>name string</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1ga2ce813765619784f7b6f773730bb00a3"><span class="std std-ref">snd_seq_port_info_get_name()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga5e66f8964ac8686437936958c50d2e08"><span id="index-25"></span><span></span><span class="kt">void</span>
+<span class="n">snd_seq_port_info_set_capability</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">capability</span>
+<span class="p">)</span></pre>
+<p>set the capability bits of a port_info container</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port_info container</p></td>
+</tr>
+<tr class="row-even"><td><p>capability</p></td>
+<td><p>capability bits</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1ga52d3744aa8a9ef122b350247c206ca1f"><span class="std std-ref">snd_seq_port_info_get_capability()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1gae67a71150ca0bf04f265f6df14120c8a"><span id="index-26"></span><span></span><span class="kt">void</span>
+<span class="n">snd_seq_port_info_set_type</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">type</span>
+<span class="p">)</span></pre>
+<p>Get the type bits of a port_info container.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port_info container</p></td>
+</tr>
+<tr class="row-even"><td><p>type</p></td>
+<td><p>port type bits</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1ga67089430166da86830b2e8d24ffcb82e"><span class="std std-ref">snd_seq_port_info_get_type()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga95fd5b48eae29be7186013a3aded24c4"><span id="index-27"></span><span></span><span class="kt">void</span>
+<span class="n">snd_seq_port_info_set_midi_channels</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">channels</span>
+<span class="p">)</span></pre>
+<p>set the midi channels of a port_info container</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port_info container</p></td>
+</tr>
+<tr class="row-even"><td><p>channels</p></td>
+<td><p>midi channels (default 0)</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1ga98f449484e99680ec24dd8a635e5c46e"><span class="std std-ref">snd_seq_port_info_get_midi_channels()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga9efdb4781a133315240b4da0a336935f"><span id="index-28"></span><span></span><span class="kt">void</span>
+<span class="n">snd_seq_port_info_set_midi_voices</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">voices</span>
+<span class="p">)</span></pre>
+<p>set the midi voices of a port_info container</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port_info container</p></td>
+</tr>
+<tr class="row-even"><td><p>voices</p></td>
+<td><p>midi voices (default 0)</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1gace0fa9154b4c7f48e582d2c6fca4d343"><span class="std std-ref">snd_seq_port_info_get_midi_voices()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1gad52fdf46df934c1c3ab369ee4bcb7a66"><span id="index-29"></span><span></span><span class="kt">void</span>
+<span class="n">snd_seq_port_info_set_synth_voices</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">voices</span>
+<span class="p">)</span></pre>
+<p>set the synth voices of a port_info container</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port_info container</p></td>
+</tr>
+<tr class="row-even"><td><p>voices</p></td>
+<td><p>synth voices (default 0)</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a>, snd_seq_port_info_get_synth_voice()</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1gafd4325db9167baf3e994a942577c2d5c"><span id="index-30"></span><span></span><span class="kt">void</span>
+<span class="n">snd_seq_port_info_set_port_specified</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">val</span>
+<span class="p">)</span></pre>
+<p>Set the port-specified mode of a port_info container.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port_info container</p></td>
+</tr>
+<tr class="row-even"><td><p>val</p></td>
+<td><p>non-zero if specifying the port id at creation</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1gaf4a8c5c64c489321994ace0247921a87"><span class="std std-ref">snd_seq_port_info_get_port_specified()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1gacf6441ee4622b87b450381e1cea7d7d1"><span id="index-31"></span><span></span><span class="kt">void</span>
+<span class="n">snd_seq_port_info_set_timestamping</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">enable</span>
+<span class="p">)</span></pre>
+<p>Set the time-stamping mode of the given port.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port_info container</p></td>
+</tr>
+<tr class="row-even"><td><p>enable</p></td>
+<td><p>non-zero if updating the timestamps of incoming events</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1ga2b452e4c849fc860db7879f82d4b3323"><span class="std std-ref">snd_seq_port_info_get_timestamping()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga2faba31e8c97874e4be7ca95e76bdbd1"><span id="index-32"></span><span></span><span class="kt">void</span>
+<span class="n">snd_seq_port_info_set_timestamp_real</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">realtime</span>
+<span class="p">)</span></pre>
+<p>Set whether the timestime is updated in the real-time mode.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port_info container</p></td>
+</tr>
+<tr class="row-even"><td><p>enable</p></td>
+<td><p>non-zero if updating the timestamps in real-time mode</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1ga56146d9a0b992ed1fddabd787ecdd755"><span class="std std-ref">snd_seq_port_info_get_timestamp_real()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga5c4463ccb1c7f599a1b34bcac2c01ff5"><span id="index-33"></span><span></span><span class="kt">void</span>
+<span class="n">snd_seq_port_info_set_timestamp_queue</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">queue</span>
+<span class="p">)</span></pre>
+<p>Set the queue id for timestamping.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port_info container</p></td>
+</tr>
+<tr class="row-even"><td><p>queue</p></td>
+<td><p>the queue id to get timestamps</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1ga25bed7f48ec3e75764c3c49b510b23b3"><span class="std std-ref">snd_seq_port_info_get_timestamp_queue()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1gab40867ed02d9d6e40a75f929b5adf24d"><span id="index-34"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_create_port</span><span class="p">(</span>
+    <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span>
+<span class="p">)</span></pre>
+<p>create a sequencer port on the current client</p>
+<p>Creates a sequencer port on the current client. The attributes of created port is specified in <em>info</em> argument.</p>
+<p>The client field in <em>info</em> argument is overwritten with the current client id. The port id to be created can be specified via <a class="reference internal" href="#doxid-group-seq-port-1gafd4325db9167baf3e994a942577c2d5c"><span class="std std-ref">snd_seq_port_info_set_port_specified</span></a>. You can get the created port id by reading the port pointer via <a class="reference internal" href="#doxid-group-seq-port-1ga90475c2db0acf804d8959058782493ed"><span class="std std-ref">snd_seq_port_info_get_port</span></a>.</p>
+<p>Each port has the capability bit-masks to specify the access capability of the port from other clients. The capability bit flags are defined as follows:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#doxid-group-seq-port-1ga81a7a5385af746364b757eb7911ec2f0"><span class="std std-ref">SND_SEQ_PORT_CAP_READ</span></a> Readable from this port</p></li>
+<li><p><a class="reference internal" href="#doxid-group-seq-port-1gae8afb5ac8f546461b4bab25454972aeb"><span class="std std-ref">SND_SEQ_PORT_CAP_WRITE</span></a> Writable to this port.</p></li>
+<li><p><a class="reference internal" href="#doxid-group-seq-port-1gaebcc3dd1ad3b42d2305290feab04005a"><span class="std std-ref">SND_SEQ_PORT_CAP_SYNC_READ</span></a> For synchronization (not implemented)</p></li>
+<li><p><a class="reference internal" href="#doxid-group-seq-port-1gabd27d66e2de0ff9556cc81cbec9ba7de"><span class="std std-ref">SND_SEQ_PORT_CAP_SYNC_WRITE</span></a> For synchronization (not implemented)</p></li>
+<li><p><a class="reference internal" href="#doxid-group-seq-port-1ga97da74dc7f0f295f000fadd1c50c1130"><span class="std std-ref">SND_SEQ_PORT_CAP_DUPLEX</span></a> Read/write duplex access is supported</p></li>
+<li><p><a class="reference internal" href="#doxid-group-seq-port-1ga4b8aa6cbeb3c99c3ad033f4ce69c06e2"><span class="std std-ref">SND_SEQ_PORT_CAP_SUBS_READ</span></a> Read subscription is allowed</p></li>
+<li><p><a class="reference internal" href="#doxid-group-seq-port-1ga52ff1c51578166e67936cfb826c966c0"><span class="std std-ref">SND_SEQ_PORT_CAP_SUBS_WRITE</span></a> Write subscription is allowed</p></li>
+<li><p><a class="reference internal" href="#doxid-group-seq-port-1gaa0a63e34744ed9faedf64fe0b364bfd4"><span class="std std-ref">SND_SEQ_PORT_CAP_NO_EXPORT</span></a> Subscription management from 3rd client is disallowed</p></li>
+</ul>
+<p>Each port has also the type bitmasks defined as follows:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#doxid-group-seq-port-1gaeb05a94bbdf256b857fcad28aeb2bb57"><span class="std std-ref">SND_SEQ_PORT_TYPE_SPECIFIC</span></a> Hardware specific port</p></li>
+<li><p><a class="reference internal" href="#doxid-group-seq-port-1ga0f89faac8be715b9e2d9d885c7f644a0"><span class="std std-ref">SND_SEQ_PORT_TYPE_MIDI_GENERIC</span></a> Generic MIDI device</p></li>
+<li><p><a class="reference internal" href="#doxid-group-seq-port-1ga7202cc7b9acc0d78f59c502d7be4d2d7"><span class="std std-ref">SND_SEQ_PORT_TYPE_MIDI_GM</span></a> General MIDI compatible device</p></li>
+<li><p><a class="reference internal" href="#doxid-group-seq-port-1gabba1c9b09748d446bb6b20b0ae717984"><span class="std std-ref">SND_SEQ_PORT_TYPE_MIDI_GM2</span></a> General MIDI 2 compatible device</p></li>
+<li><p><a class="reference internal" href="#doxid-group-seq-port-1gadf72cb865e33a0ce1462f68303165537"><span class="std std-ref">SND_SEQ_PORT_TYPE_MIDI_GS</span></a> GS compatible device</p></li>
+<li><p><a class="reference internal" href="#doxid-group-seq-port-1ga8b51348b38a543151dda96c73fbfb5d4"><span class="std std-ref">SND_SEQ_PORT_TYPE_MIDI_XG</span></a> XG compatible device</p></li>
+<li><p><a class="reference internal" href="#doxid-group-seq-port-1ga12743fc5f31ab3718d5f86d88eef05fe"><span class="std std-ref">SND_SEQ_PORT_TYPE_MIDI_MT32</span></a> MT-32 compatible device</p></li>
+<li><p><a class="reference internal" href="#doxid-group-seq-port-1ga7c7c4e97a41a4056c759f5398643a37f"><span class="std std-ref">SND_SEQ_PORT_TYPE_HARDWARE</span></a> Implemented in hardware</p></li>
+<li><p><a class="reference internal" href="#doxid-group-seq-port-1ga6b1a73e34cedbf61f039db614a50b27c"><span class="std std-ref">SND_SEQ_PORT_TYPE_SOFTWARE</span></a> Implemented in software</p></li>
+<li><p><a class="reference internal" href="#doxid-group-seq-port-1gab873e7e613eee3af725f4a286c9c1cdf"><span class="std std-ref">SND_SEQ_PORT_TYPE_SYNTHESIZER</span></a> Generates sound</p></li>
+<li><p><a class="reference internal" href="#doxid-group-seq-port-1ga3c9413dbab5e6c6a18235e8b05c8fb3c"><span class="std std-ref">SND_SEQ_PORT_TYPE_PORT</span></a> Connects to other device(s)</p></li>
+<li><p><a class="reference internal" href="#doxid-group-seq-port-1ga703a0651b941c583d5f8928f8f3b1b67"><span class="std std-ref">SND_SEQ_PORT_TYPE_APPLICATION</span></a> Application (sequencer/editor)</p></li>
+</ul>
+<p>A port may contain specific midi channels, midi voices and synth voices. These values could be zero as default.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>seq</p></td>
+<td><p>sequencer handle</p></td>
+</tr>
+<tr class="row-even"><td><p>port</p></td>
+<td><p>port information for the new port</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1gaa79a02d8fc3d6668b0a68d5d8b172603"><span class="std std-ref">snd_seq_delete_port()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a>, <a class="reference internal" href="group_SeqMiddle.html#doxid-group-seq-middle-1ga9368266bde7b5c0f8d5ddeaf64914719"><span class="std std-ref">snd_seq_create_simple_port()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1gaa79a02d8fc3d6668b0a68d5d8b172603"><span id="index-35"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_delete_port</span><span class="p">(</span>
+    <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">port</span>
+<span class="p">)</span></pre>
+<p>delete a sequencer port on the current client</p>
+<p>Deletes the existing sequencer port on the current client.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>seq</p></td>
+<td><p>sequencer handle</p></td>
+</tr>
+<tr class="row-even"><td><p>port</p></td>
+<td><p>port to be deleted</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1gab40867ed02d9d6e40a75f929b5adf24d"><span class="std std-ref">snd_seq_create_port()</span></a>, <a class="reference internal" href="group_SeqMiddle.html#doxid-group-seq-middle-1ga8ac4c3a85750550f2978ca720a6329ca"><span class="std std-ref">snd_seq_delete_simple_port()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span id="index-36"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_get_port_info</span><span class="p">(</span>
+    <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">port</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span>
+<span class="p">)</span></pre>
+<p>obtain the information of a port on the current client</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>seq</p></td>
+<td><p>sequencer handle</p></td>
+</tr>
+<tr class="row-even"><td><p>port</p></td>
+<td><p>port id to get</p></td>
+</tr>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>pointer information returns</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1gab40867ed02d9d6e40a75f929b5adf24d"><span class="std std-ref">snd_seq_create_port()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1gaca72792a7a96c18809768a905cefbfa4"><span class="std std-ref">snd_seq_get_any_port_info()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1gab979b7ece475bba1d75e9d7279b912b1"><span class="std std-ref">snd_seq_set_port_info()</span></a>, <a class="reference internal" href="#doxid-group-seq-port-1ga9f3ba4f4a959798bd0b25b417b9ca4cd"><span class="std std-ref">snd_seq_query_next_port()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1gaca72792a7a96c18809768a905cefbfa4"><span id="index-37"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_get_any_port_info</span><span class="p">(</span>
+    <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">client</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">port</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span>
+<span class="p">)</span></pre>
+<p>obtain the information of a port on an arbitrary client</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>seq</p></td>
+<td><p>sequencer handle</p></td>
+</tr>
+<tr class="row-even"><td><p>client</p></td>
+<td><p>client id to get</p></td>
+</tr>
+<tr class="row-odd"><td><p>port</p></td>
+<td><p>port id to get</p></td>
+</tr>
+<tr class="row-even"><td><p>info</p></td>
+<td><p>pointer information returns</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1gab979b7ece475bba1d75e9d7279b912b1"><span id="index-38"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_set_port_info</span><span class="p">(</span>
+    <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">port</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span>
+<span class="p">)</span></pre>
+<p>set the information of a port on the current client</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>seq</p></td>
+<td><p>sequencer handle</p></td>
+</tr>
+<tr class="row-even"><td><p>port</p></td>
+<td><p>port to be set</p></td>
+</tr>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>port information to be set</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1gab979b7ece475bba1d75e9d7279b912b1"><span class="std std-ref">snd_seq_set_port_info()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga9f3ba4f4a959798bd0b25b417b9ca4cd"><span id="index-39"></span><span></span><span class="kt">int</span>
+<span class="n">snd_seq_query_next_port</span><span class="p">(</span>
+    <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1gae141149958a7458806152ed5942a1acd"><span class="std std-ref">snd_seq_t</span></a><span></span><span class="o">*</span> <span class="n">handle</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span>
+<span class="p">)</span></pre>
+<p>query the next matching port</p>
+<p>Queries the next matching port on the client specified in <em>info</em> argument. The search begins at the next port specified in port field of <em>info</em> argument. For finding the first port at a certain client, give -1.</p>
+<p>If a matching port is found, its attributes are stored on <em>info</em> and function returns zero. Otherwise, a negative error code is returned.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>seq</p></td>
+<td><p>sequencer handle</p></td>
+</tr>
+<tr class="row-even"><td><p>info</p></td>
+<td><p>query pattern and result</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-seq-port-1ga9de3dbd9960f6108257f38e7945ae327"><span class="std std-ref">snd_seq_get_port_info()</span></a></p>
+</section>
+<section id="macros">
+<h3>Macros</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga97da74dc7f0f295f000fadd1c50c1130"><span id="index-40"></span><span></span><span class="cp">#define SND_SEQ_PORT_CAP_DUPLEX</span></pre>
+<p>allow read/write duplex</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1gaa0a63e34744ed9faedf64fe0b364bfd4"><span id="index-41"></span><span></span><span class="cp">#define SND_SEQ_PORT_CAP_NO_EXPORT</span></pre>
+<p>routing not allowed</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga81a7a5385af746364b757eb7911ec2f0"><span id="index-42"></span><span></span><span class="cp">#define SND_SEQ_PORT_CAP_READ</span></pre>
+<p>port capabilities (32 bits) readable from this port</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga4b8aa6cbeb3c99c3ad033f4ce69c06e2"><span id="index-43"></span><span></span><span class="cp">#define SND_SEQ_PORT_CAP_SUBS_READ</span></pre>
+<p>allow read subscription</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga52ff1c51578166e67936cfb826c966c0"><span id="index-44"></span><span></span><span class="cp">#define SND_SEQ_PORT_CAP_SUBS_WRITE</span></pre>
+<p>allow write subscription</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1gaebcc3dd1ad3b42d2305290feab04005a"><span id="index-45"></span><span></span><span class="cp">#define SND_SEQ_PORT_CAP_SYNC_READ</span></pre>
+<p>allow read subscriptions</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1gabd27d66e2de0ff9556cc81cbec9ba7de"><span id="index-46"></span><span></span><span class="cp">#define SND_SEQ_PORT_CAP_SYNC_WRITE</span></pre>
+<p>allow write subscriptions</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1gae8afb5ac8f546461b4bab25454972aeb"><span id="index-47"></span><span></span><span class="cp">#define SND_SEQ_PORT_CAP_WRITE</span></pre>
+<p>writable to this port</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1gaf12ff6ca6077edc7c6027a3fb1d0664b"><span id="index-48"></span><span></span><span class="cp">#define SND_SEQ_PORT_SYSTEM_ANNOUNCE</span></pre>
+<p>system announce port</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga02870ceddec24d3cc5609ec728b0cb92"><span id="index-49"></span><span></span><span class="cp">#define SND_SEQ_PORT_SYSTEM_TIMER</span></pre>
+<p>known port numbers system timer port</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga703a0651b941c583d5f8928f8f3b1b67"><span id="index-50"></span><span></span><span class="cp">#define SND_SEQ_PORT_TYPE_APPLICATION</span></pre>
+<p>This port belongs to an application, such as a sequencer or editor.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga745828e8de9962c7c8c42ad5039e595d"><span id="index-51"></span><span></span><span class="cp">#define SND_SEQ_PORT_TYPE_DIRECT_SAMPLE</span></pre>
+<p>Instruments can be downloaded to this port (with SND_SEQ_EVENT_INSTR_xxx messages sent directly).</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga7c7c4e97a41a4056c759f5398643a37f"><span id="index-52"></span><span></span><span class="cp">#define SND_SEQ_PORT_TYPE_HARDWARE</span></pre>
+<p>This port is implemented in hardware.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga0f89faac8be715b9e2d9d885c7f644a0"><span id="index-53"></span><span></span><span class="cp">#define SND_SEQ_PORT_TYPE_MIDI_GENERIC</span></pre>
+<p>This port understands MIDI messages.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga7202cc7b9acc0d78f59c502d7be4d2d7"><span id="index-54"></span><span></span><span class="cp">#define SND_SEQ_PORT_TYPE_MIDI_GM</span></pre>
+<p>This port is compatible with the General MIDI specification.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1gabba1c9b09748d446bb6b20b0ae717984"><span id="index-55"></span><span></span><span class="cp">#define SND_SEQ_PORT_TYPE_MIDI_GM2</span></pre>
+<p>This port is compatible with the General MIDI 2 specification.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1gadf72cb865e33a0ce1462f68303165537"><span id="index-56"></span><span></span><span class="cp">#define SND_SEQ_PORT_TYPE_MIDI_GS</span></pre>
+<p>This port is compatible with the Roland GS standard.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga12743fc5f31ab3718d5f86d88eef05fe"><span id="index-57"></span><span></span><span class="cp">#define SND_SEQ_PORT_TYPE_MIDI_MT32</span></pre>
+<p>This port is compatible with the Roland MT-32.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga8b51348b38a543151dda96c73fbfb5d4"><span id="index-58"></span><span></span><span class="cp">#define SND_SEQ_PORT_TYPE_MIDI_XG</span></pre>
+<p>This port is compatible with the Yamaha XG specification.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga3c9413dbab5e6c6a18235e8b05c8fb3c"><span id="index-59"></span><span></span><span class="cp">#define SND_SEQ_PORT_TYPE_PORT</span></pre>
+<p>This port may connect to other devices (whose characteristics are not known).</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1gae4096b5c650fc3db614d8dead99ef404"><span id="index-60"></span><span></span><span class="cp">#define SND_SEQ_PORT_TYPE_SAMPLE</span></pre>
+<p>Instruments can be downloaded to this port (with SND_SEQ_EVENT_INSTR_xxx messages sent directly or through a queue).</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga6b1a73e34cedbf61f039db614a50b27c"><span id="index-61"></span><span></span><span class="cp">#define SND_SEQ_PORT_TYPE_SOFTWARE</span></pre>
+<p>This port is implemented in software.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1gaeb05a94bbdf256b857fcad28aeb2bb57"><span id="index-62"></span><span></span><span class="cp">#define SND_SEQ_PORT_TYPE_SPECIFIC</span></pre>
+<p>Messages sent from/to this port have device-specific semantics.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1ga25b090c0416b501001ae05350480acfd"><span id="index-63"></span><span></span><span class="cp">#define SND_SEQ_PORT_TYPE_SYNTH</span></pre>
+<p>This port understands SND_SEQ_EVENT_SAMPLE_xxx messages (these are not MIDI messages).</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1gab873e7e613eee3af725f4a286c9c1cdf"><span id="index-64"></span><span></span><span class="cp">#define SND_SEQ_PORT_TYPE_SYNTHESIZER</span></pre>
+<p>Messages sent to this port will generate sounds.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-seq-port-1gac39e99230c62a36daa985273faac0de7"><span id="index-65"></span><span></span><span class="cp">#define snd_seq_port_info_alloca(ptr)</span></pre>
+<p>allocate a <a class="reference internal" href="#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a> container on stack</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="group_SeqMisc.html" class="btn btn-neutral float-left" title="Sequencer Miscellaneous" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="group_SeqSubscribe.html" class="btn btn-neutral float-right" title="Sequencer Port Subscription" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 1998-2017, ALSA Library Maintainers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

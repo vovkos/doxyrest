@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lua Frames &mdash; Doxyrest Manual</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinx_rtd_theme.css?v=b6ca47bd" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=35e066c8"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Basic Usage" href="basic.html" />
+    <link rel="prev" title="Architectural Overview" href="architecture.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Doxyrest Manual
+          </a>
+              <div class="version">
+                2.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="motivation.html">Motivation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="architecture.html">Architectural Overview</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Lua Frames</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="basic.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="samples.html">Samples</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Doxyrest Manual</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="architecture.html">Architectural Overview</a></li>
+      <li class="breadcrumb-item active">Lua Frames</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="lua-frames">
+<h1>Lua Frames</h1>
+<p>Lua frames are used as templates for reStructuredText generation. The default set of frames is located at: <code class="docutils literal notranslate"><span class="pre">$DOXYREST_DIR/frame</span></code>.</p>
+<section id="frame-structure">
+<h2>Frame Structure</h2>
+<p>Each frame consists of <strong>reStructuredText</strong> with injections of <strong>Lua</strong> code. Lua code should be placed inside braces: <code class="docutils literal notranslate"><span class="pre">%{</span></code> and <code class="docutils literal notranslate"><span class="pre">}</span></code>. Control flow graph of the injected code can be used to <em>include</em>, <em>exclude</em> or <em>loop</em> pieces of template reStructuredText.</p>
+<p class="rubric">Example:</p>
+<p>Frame:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Header
+======
+
+%{
+if false then
+}
+This text will be excluded.
+%{
+end -- if
+
+for i = 1, 3 do
+}
+* List item
+%{
+end -- for
+}
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Header
+======
+
+* List item
+* List item
+* List item
+</pre></div>
+</div>
+<p>Variables or expressions may be injected directly into the template reStructuredText using <code class="docutils literal notranslate"><span class="pre">$variable</span></code> or <code class="docutils literal notranslate"><span class="pre">$(expression)</span></code> operators.</p>
+<p class="rubric">Example:</p>
+<p>Frame:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>%{
+a = 10
+b = 20
+}
+$a + $b = $(a + b)
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>10 + 20 = 30
+</pre></div>
+</div>
+<p>Frames may include other frames using <code class="doxyrest-cref docutils literal notranslate"><a class="reference internal" href="group_api-stapi.html#doxid-function-includefile"><span class="std std-ref"><span class="pre">includeFile</span></span></a></code> or generate extra files from other frames using <code class="doxyrest-cref docutils literal notranslate"><a class="reference internal" href="group_api-stapi.html#doxid-function-generatefile"><span class="std std-ref"><span class="pre">generateFile</span></span></a></code>.</p>
+</section>
+<section id="standard-frames">
+<h2>Standard Frames</h2>
+<p>Doxyrest provides ready-to-use frames for the following langhuages:</p>
+<ul>
+<li><p>C-family</p>
+<blockquote>
+<div><p>These frames reside in the <code class="docutils literal notranslate"><span class="pre">$DOXYREST_FRAME_DIR/cfamily</span></code> directory; they also reference common frames in <code class="docutils literal notranslate"><span class="pre">$DOXYREST_FRAME_DIR/common</span></code> directory.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Here in Tibbo, C-family frames are used to produce documentation for <strong>C</strong>, <strong>C++</strong> and <strong>Jancy</strong>. Other C-family languages, while likely to work <em>somewhat alright</em> out-of-the-box, will probably require some adjustments in the frames (mostly, regarding the declaration syntax).</p>
+</div>
+</div></blockquote>
+</li>
+<li><p>Lua</p>
+<blockquote>
+<div><p>These frames reside in the <code class="docutils literal notranslate"><span class="pre">$DOXYREST_FRAME_DIR/lua</span></code> directory; they also reference common frames in <code class="docutils literal notranslate"><span class="pre">$DOXYREST_FRAME_DIR/common</span></code> directory.</p>
+</div></blockquote>
+</li>
+<li><p>CMake</p>
+<blockquote>
+<div><p>These frames reside in the <code class="docutils literal notranslate"><span class="pre">$DOXYREST_FRAME_DIR/cmake</span></code> directory; they also reference common frames in <code class="docutils literal notranslate"><span class="pre">$DOXYREST_FRAME_DIR/common</span></code> directory.</p>
+</div></blockquote>
+</li>
+</ul>
+<p>There are many configuration parameters for tweaking the output of the frames. All the parameters which require non-default values, may be either passed via the command-line <code class="docutils literal notranslate"><span class="pre">-D</span></code> switch (e.g. <code class="docutils literal notranslate"><span class="pre">-D</span> <span class="pre">EXCLUDE_UNDOCUMENTED_ITEMS</span></code>) or placed in the <code class="docutils literal notranslate"><span class="pre">doxyrest-config.lua</span></code> file and then referenced via the command-line <code class="docutils literal notranslate"><span class="pre">-c</span></code> switch (e.g. <code class="docutils literal notranslate"><span class="pre">-c</span> <span class="pre">doxyrest-config.lua</span></code>). If <code class="docutils literal notranslate"><span class="pre">-c</span></code> switch is omitted, <code class="docutils literal notranslate"><span class="pre">doxyrest-config.lua</span></code> will be searched in the <em>current directory</em>.</p>
+<p>For your reference, a default <code class="docutils literal notranslate"><span class="pre">doxyrest-config.lua</span></code> file for standard frames can be found at <code class="docutils literal notranslate"><span class="pre">$DOXYREST_FRAME_DIR/doxyrest-config.lua</span></code>. Copy it to your project directory and then adjust all the necessary parameters.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="architecture.html" class="btn btn-neutral float-left" title="Architectural Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="basic.html" class="btn btn-neutral float-right" title="Basic Usage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2016-2024, Tibbo Technology Inc.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

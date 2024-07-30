@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RawMidi Interface &mdash; ALSA Library Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinx_rtd_theme.css?v=b6ca47bd" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=e9012143"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="enum snd_rawmidi_stream_t" href="enum_snd_rawmidi_stream_t.html" />
+    <link rel="prev" title="union snd_pcm_sync_id_t" href="union_snd_pcm_sync_id_t.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            ALSA Library Documentation
+          </a>
+              <div class="version">
+                1.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="group_Config.html">Configuration Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Digital_Audio_Interface.html">Constants for Digital Audio Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_MIDI_Interface.html">Constants for MIDI v1.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Control.html">Control Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Error.html">Error handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_CtlPlugin_SDK.html">External Control Plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Plugin_SDK.html">External PCM plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Global.html">Global defines and functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_HwDep.html">Hardware Dependant Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Input.html">Input Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Sequencer.html">MIDI Sequencer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Mixer.html">Mixer Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Output.html">Output Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_PCM.html">PCM Interface</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">RawMidi Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="enum_snd_rawmidi_stream_t.html">enum snd_rawmidi_stream_t</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum_snd_rawmidi_type_t.html">enum snd_rawmidi_type_t</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#global-functions">Global Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#macros">Macros</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="group_Timer.html">Timer Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_topology.html">Topology Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_ucm.html">Use Case Interface</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="page_topology.html">ALSA Topology Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_Usecase.html">ALSA Use Case Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_bug.html">Bug List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_conf.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_control.html">Control interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_deprecated.html">Deprecated List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_ctl_external_plugins.html">External Control Plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_hcontrol.html">High level control interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_confhooks.html">Hooks in configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_mixer.html">Mixer interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_pcm.html">PCM (digital audio) interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_pcm_plugins.html">PCM (digital audio) plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_pcm_external_plugins.html">PCM External Plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_rawmidi.html">RawMidi interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_confarg.html">Runtime arguments in configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_conffunc.html">Runtime functions in configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_seq.html">Sequencer interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_timer.html">Timer interface</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="example__test_latency.c.html">/test/latency.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_pcm.c.html">/test/pcm.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_pcm_min.c.html">/test/pcm_min.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_rawmidi.c.html">/test/rawmidi.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_timer.c.html">/test/timer.c</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ALSA Library Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">RawMidi Interface</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="rawmidi-interface">
+<span id="doxid-group-raw-midi"></span><span id="index-0"></span><h1>RawMidi Interface</h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="overview">
+<h2>Overview</h2>
+<p>The RawMidi Interface. <a class="reference internal" href="#details-group-raw-midi"><span class="std std-ref">More…</span></a></p>
+<pre class="highlight doxyrest-overview-code-block literal-block"><span></span><span class="c1">// typedefs</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_rawmidi_info</span> <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_rawmidi_params</span> <a class="reference internal" href="#doxid-group-raw-midi-1ga98ad06bccfabc646530241d3a0eef5a1"><span class="std std-ref">snd_rawmidi_params_t</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_rawmidi_status</span> <a class="reference internal" href="#doxid-group-raw-midi-1ga10a44a41000ef7dfe61f712466237aff"><span class="std std-ref">snd_rawmidi_status_t</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_rawmidi</span> <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// enums</span>
+
+<span class="k">enum</span> <a class="reference internal" href="enum_snd_rawmidi_stream_t.html#doxid-group-raw-midi-1gac3d11365c928cdfd3176ffede3e6f8c5"><span class="std std-ref">snd_rawmidi_stream_t</span></a><span></span><span class="p">;</span>
+<span class="k">enum</span> <a class="reference internal" href="enum_snd_rawmidi_type_t.html#doxid-group-raw-midi-1ga271ccd508f221ec7c99a27b150c657ba"><span class="std std-ref">snd_rawmidi_type_t</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// global functions</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1ga2ab783051deeb7eb37eb568b76448889"><span class="std std-ref">snd_rawmidi_open</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">**</span> <span class="n">in_rmidi</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">**</span> <span class="n">out_rmidi</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">mode</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1gaa7e3daf5cf4dd36b2534d2f1d6309477"><span class="std std-ref">snd_rawmidi_open_lconf</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">**</span> <span class="n">in_rmidi</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">**</span> <span class="n">out_rmidi</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">mode</span><span class="p">,</span>
+    <a class="reference internal" href="group_Config.html#doxid-group-config-1ga1c20905af775ae77d04d1a5696f67985"><span class="std std-ref">snd_config_t</span></a><span></span><span class="o">*</span> <span class="n">lconf</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1gabc6bd5922151fb50196f62b9a4ab9f56"><span class="std std-ref">snd_rawmidi_close</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1ga39ac11df7e520e753b26ab4eceabe6de"><span class="std std-ref">snd_rawmidi_poll_descriptors_count</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1ga22fcc3fc5c62c9db88d79a0b91e3a75f"><span class="std std-ref">snd_rawmidi_poll_descriptors</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">,</span>
+    <span class="k">struct</span> <span class="n">pollfd</span><span class="o">*</span> <span class="n">pfds</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">space</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1ga38f15766f77c0bb50fec6cdcd87254b0"><span class="std std-ref">snd_rawmidi_poll_descriptors_revents</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rawmidi</span><span class="p">,</span>
+    <span class="k">struct</span> <span class="n">pollfd</span><span class="o">*</span> <span class="n">pfds</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">nfds</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">short</span><span class="o">*</span> <span class="n">revent</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1gafe714a54fdb6083eb003bcc21da89553"><span class="std std-ref">snd_rawmidi_nonblock</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">nonblock</span>
+<span class="p">);</span>
+
+<span class="kt">size_t</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1ga383592eddf099559822357678fbe7d8c"><span class="std std-ref">snd_rawmidi_info_sizeof</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1ga11f8d3832ec7ea7fd6e8445338704528"><span class="std std-ref">snd_rawmidi_info_malloc</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">**</span> <span class="n">ptr</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1gaa84495bee993f34fb9bac33b5a9cf65f"><span class="std std-ref">snd_rawmidi_info_free</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1gabfb769e2aaf0a6b8274b5e0c3e9141d8"><span class="std std-ref">snd_rawmidi_info_copy</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">dst</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">src</span>
+<span class="p">);</span>
+
+<span class="kt">unsigned</span> <span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1gacfb2e65475c314f5f1dde0c5d7a05a7b"><span class="std std-ref">snd_rawmidi_info_get_device</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="kt">unsigned</span> <span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1ga3fea97d5bff26c54831e95b2200f857c"><span class="std std-ref">snd_rawmidi_info_get_subdevice</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<a class="reference internal" href="enum_snd_rawmidi_stream_t.html#doxid-group-raw-midi-1gac3d11365c928cdfd3176ffede3e6f8c5"><span class="std std-ref">snd_rawmidi_stream_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-raw-midi-1ga760552af30a089ddacc3af79985e24f6"><span class="std std-ref">snd_rawmidi_info_get_stream</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1ga463916bd78a0ab5a96a053edca05a8d3"><span class="std std-ref">snd_rawmidi_info_get_card</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="kt">unsigned</span> <span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1gaf9ede5bbc9abc9124910c2612363de30"><span class="std std-ref">snd_rawmidi_info_get_flags</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1gac7ac90e99759ee7b2dddd3613219c798"><span class="std std-ref">snd_rawmidi_info_get_id</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1gafd809c976c1dab23957e338b5af2a353"><span class="std std-ref">snd_rawmidi_info_get_name</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1ga428398f23118575aa4f62eed860132cf"><span class="std std-ref">snd_rawmidi_info_get_subdevice_name</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="kt">unsigned</span> <span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1gac0b33eb2f54cd6fc9b34002fe28ca9fe"><span class="std std-ref">snd_rawmidi_info_get_subdevices_count</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="kt">unsigned</span> <span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1ga71717ea1f35bf2a59548d3d106278336"><span class="std std-ref">snd_rawmidi_info_get_subdevices_avail</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1ga98fcdcb94c12baf65dd0ec8f9d52ef59"><span class="std std-ref">snd_rawmidi_info_set_device</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">val</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1ga49eff1cd1b62e0399826740863cdcce3"><span class="std std-ref">snd_rawmidi_info_set_subdevice</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">val</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1gad704ac98c8313235c73c23d374bf6831"><span class="std std-ref">snd_rawmidi_info_set_stream</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_rawmidi_stream_t.html#doxid-group-raw-midi-1gac3d11365c928cdfd3176ffede3e6f8c5"><span class="std std-ref">snd_rawmidi_stream_t</span></a><span></span> <span class="n">val</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1ga3c3595d2907ee30754f6a1d5ceb2d97f"><span class="std std-ref">snd_rawmidi_info</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span>
+<span class="p">);</span>
+
+<span class="kt">size_t</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1gaeb5767a318d349a4d2a100191c3cf8d8"><span class="std std-ref">snd_rawmidi_params_sizeof</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1gaedc01312384764d02b6bc946cb1e79a9"><span class="std std-ref">snd_rawmidi_params_malloc</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-raw-midi-1ga98ad06bccfabc646530241d3a0eef5a1"><span class="std std-ref">snd_rawmidi_params_t</span></a><span></span><span class="o">**</span> <span class="n">ptr</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1gad8c735ed6a8533655dabd7318f25a6fc"><span class="std std-ref">snd_rawmidi_params_free</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-raw-midi-1ga98ad06bccfabc646530241d3a0eef5a1"><span class="std std-ref">snd_rawmidi_params_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1ga533710a31f6b6b4f6791baa27e69089f"><span class="std std-ref">snd_rawmidi_params_copy</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1ga98ad06bccfabc646530241d3a0eef5a1"><span class="std std-ref">snd_rawmidi_params_t</span></a><span></span><span class="o">*</span> <span class="n">dst</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1ga98ad06bccfabc646530241d3a0eef5a1"><span class="std std-ref">snd_rawmidi_params_t</span></a><span></span><span class="o">*</span> <span class="n">src</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1ga612c96757e2f81fda5b6cd6dec826de1"><span class="std std-ref">snd_rawmidi_params_set_buffer_size</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1ga98ad06bccfabc646530241d3a0eef5a1"><span class="std std-ref">snd_rawmidi_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">val</span>
+<span class="p">);</span>
+
+<span class="kt">size_t</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1ga0bd9629686062562b88bfd2a3eadc1bd"><span class="std std-ref">snd_rawmidi_params_get_buffer_size</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1ga98ad06bccfabc646530241d3a0eef5a1"><span class="std std-ref">snd_rawmidi_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1ga89782681ce86b3d5cbebb5136d25439f"><span class="std std-ref">snd_rawmidi_params_set_avail_min</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1ga98ad06bccfabc646530241d3a0eef5a1"><span class="std std-ref">snd_rawmidi_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">val</span>
+<span class="p">);</span>
+
+<span class="kt">size_t</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1gae629f2ef814eda39dc081dff65bf7d20"><span class="std std-ref">snd_rawmidi_params_get_avail_min</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1ga98ad06bccfabc646530241d3a0eef5a1"><span class="std std-ref">snd_rawmidi_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1gab717719be70fe4396dc84f3f895d6e12"><span class="std std-ref">snd_rawmidi_params_set_no_active_sensing</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1ga98ad06bccfabc646530241d3a0eef5a1"><span class="std std-ref">snd_rawmidi_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">val</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1ga6a057d467faa2b65ddace364fde985fd"><span class="std std-ref">snd_rawmidi_params_get_no_active_sensing</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1ga98ad06bccfabc646530241d3a0eef5a1"><span class="std std-ref">snd_rawmidi_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1ga458d8ad22277645d9b65fa47c011465c"><span class="std std-ref">snd_rawmidi_params</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1ga98ad06bccfabc646530241d3a0eef5a1"><span class="std std-ref">snd_rawmidi_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1ga86eabf81acd7c43fc100c67fbda5085d"><span class="std std-ref">snd_rawmidi_params_current</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1ga98ad06bccfabc646530241d3a0eef5a1"><span class="std std-ref">snd_rawmidi_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span>
+<span class="p">);</span>
+
+<span class="kt">size_t</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1ga7933bdb7eea04815be0bba98261865e4"><span class="std std-ref">snd_rawmidi_status_sizeof</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1gac1035208bbdf81852dbcf2e14ce4a8dc"><span class="std std-ref">snd_rawmidi_status_malloc</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-raw-midi-1ga10a44a41000ef7dfe61f712466237aff"><span class="std std-ref">snd_rawmidi_status_t</span></a><span></span><span class="o">**</span> <span class="n">ptr</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1gac9852f68911bbb8aef21d2e20c3ff2c0"><span class="std std-ref">snd_rawmidi_status_free</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-raw-midi-1ga10a44a41000ef7dfe61f712466237aff"><span class="std std-ref">snd_rawmidi_status_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1gab62e8a4ca0033166f906a969048d935c"><span class="std std-ref">snd_rawmidi_status_copy</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1ga10a44a41000ef7dfe61f712466237aff"><span class="std std-ref">snd_rawmidi_status_t</span></a><span></span><span class="o">*</span> <span class="n">dst</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1ga10a44a41000ef7dfe61f712466237aff"><span class="std std-ref">snd_rawmidi_status_t</span></a><span></span><span class="o">*</span> <span class="n">src</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1gaeb867dbf1d4d5fb3bdcad36a86565837"><span class="std std-ref">snd_rawmidi_status_get_tstamp</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1ga10a44a41000ef7dfe61f712466237aff"><span class="std std-ref">snd_rawmidi_status_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">,</span>
+    <a class="reference internal" href="group_Global.html#doxid-group-global-1ga3a3f5b65c40f498cdbc26944bd9855cf"><span class="std std-ref">snd_htimestamp_t</span></a><span></span><span class="o">*</span> <span class="n">ptr</span>
+<span class="p">);</span>
+
+<span class="kt">size_t</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1ga7ff63a2376b2df549698296d37b532ed"><span class="std std-ref">snd_rawmidi_status_get_avail</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1ga10a44a41000ef7dfe61f712466237aff"><span class="std std-ref">snd_rawmidi_status_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="kt">size_t</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1gae4f69ac10574cfc2cd5c848628e75f9b"><span class="std std-ref">snd_rawmidi_status_get_xruns</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1ga10a44a41000ef7dfe61f712466237aff"><span class="std std-ref">snd_rawmidi_status_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1gab888bce923769882931f77603327231d"><span class="std std-ref">snd_rawmidi_status</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1ga10a44a41000ef7dfe61f712466237aff"><span class="std std-ref">snd_rawmidi_status_t</span></a><span></span><span class="o">*</span> <span class="n">status</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1gabfff7417ec957b7ee07882f91d73d7be"><span class="std std-ref">snd_rawmidi_drain</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1ga01076c87d169cf77334d35bd094abd0a"><span class="std std-ref">snd_rawmidi_drop</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">);</span>
+
+<span class="kt">ssize_t</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1ga0a30e482efec57f4ea74c533a0f9b134"><span class="std std-ref">snd_rawmidi_write</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">size</span>
+<span class="p">);</span>
+
+<span class="kt">ssize_t</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1ga9b0952fc04facda83cdf1521325ca475"><span class="std std-ref">snd_rawmidi_read</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">size</span>
+<span class="p">);</span>
+
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-raw-midi-1gaa4bf6540f3f36c5878d31abd34a341d3"><span class="std std-ref">snd_rawmidi_name</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">);</span>
+
+<a class="reference internal" href="enum_snd_rawmidi_type_t.html#doxid-group-raw-midi-1ga271ccd508f221ec7c99a27b150c657ba"><span class="std std-ref">snd_rawmidi_type_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-raw-midi-1ga5984e0c61995c8184a0e6e0a68a6faaf"><span class="std std-ref">snd_rawmidi_type</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">);</span>
+
+<a class="reference internal" href="enum_snd_rawmidi_stream_t.html#doxid-group-raw-midi-1gac3d11365c928cdfd3176ffede3e6f8c5"><span class="std std-ref">snd_rawmidi_stream_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-raw-midi-1ga295d2f3ce9e992919f205b929fcb83ee"><span class="std std-ref">snd_rawmidi_stream</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rawmidi</span><span class="p">);</span>
+
+<span class="c1">// macros</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-raw-midi-1ga7060640f32abcd337239bde2c8749d23"><span class="std std-ref">SND_RAWMIDI_APPEND</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-raw-midi-1ga2b1694b5b3e98514d6b2bc5b824e9adc"><span class="std std-ref">SND_RAWMIDI_DLSYM_VERSION</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-raw-midi-1ga31ee35659c82272382ccc3014c8a73f8"><span class="std std-ref">SND_RAWMIDI_NONBLOCK</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-raw-midi-1gab1a659b38e5174d790d5671739995894"><span class="std std-ref">SND_RAWMIDI_SYNC</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-raw-midi-1gaaa4c7257d03c396293cffaef02818c35"><span class="std std-ref">snd_rawmidi_info_alloca</span></a><span></span><span class="p">(</span><span class="n">ptr</span><span class="p">)</span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-raw-midi-1ga0a7ab61af3880409ccd9adee0e756210"><span class="std std-ref">snd_rawmidi_params_alloca</span></a><span></span><span class="p">(</span><span class="n">ptr</span><span class="p">)</span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-raw-midi-1gaa83c6963d341b0c067764dd1ba2c3d76"><span class="std std-ref">snd_rawmidi_status_alloca</span></a><span></span><span class="p">(</span><span class="n">ptr</span><span class="p">)</span></pre>
+</section>
+<section id="detailed-documentation">
+<span id="details-group-raw-midi"></span><h2>Detailed Documentation</h2>
+<p>The RawMidi Interface. See <a class="reference internal" href="page_rawmidi.html#doxid-rawmidi"><span class="std std-ref">RawMidi interface</span></a> page for more details.</p>
+<section id="typedefs">
+<h3>Typedefs</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span id="index-1"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_rawmidi_info</span> <span class="n">snd_rawmidi_info_t</span></pre>
+<p>RawMidi information container</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga98ad06bccfabc646530241d3a0eef5a1"><span id="index-2"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_rawmidi_params</span> <span class="n">snd_rawmidi_params_t</span></pre>
+<p>RawMidi settings container</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga10a44a41000ef7dfe61f712466237aff"><span id="index-3"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_rawmidi_status</span> <span class="n">snd_rawmidi_status_t</span></pre>
+<p>RawMidi status container</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span id="index-4"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">_snd_rawmidi</span> <span class="n">snd_rawmidi_t</span></pre>
+<p>RawMidi handle</p>
+</section>
+<section id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga2ab783051deeb7eb37eb568b76448889"><span id="index-5"></span><span></span><span class="kt">int</span>
+<span class="n">snd_rawmidi_open</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">**</span> <span class="n">in_rmidi</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">**</span> <span class="n">out_rmidi</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">mode</span>
+<span class="p">)</span></pre>
+<p>Opens a new connection to the RawMidi interface.</p>
+<p>Opens a new connection to the RawMidi interface specified with an ASCII identifier and mode.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>inputp</p></td>
+<td><p>Returned input handle (NULL if not wanted)</p></td>
+</tr>
+<tr class="row-even"><td><p>outputp</p></td>
+<td><p>Returned output handle (NULL if not wanted)</p></td>
+</tr>
+<tr class="row-odd"><td><p>name</p></td>
+<td><p>ASCII identifier of the RawMidi handle</p></td>
+</tr>
+<tr class="row-even"><td><p>mode</p></td>
+<td><p>Open mode</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gaa7e3daf5cf4dd36b2534d2f1d6309477"><span id="index-6"></span><span></span><span class="kt">int</span>
+<span class="n">snd_rawmidi_open_lconf</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">**</span> <span class="n">in_rmidi</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">**</span> <span class="n">out_rmidi</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">mode</span><span class="p">,</span>
+    <a class="reference internal" href="group_Config.html#doxid-group-config-1ga1c20905af775ae77d04d1a5696f67985"><span class="std std-ref">snd_config_t</span></a><span></span><span class="o">*</span> <span class="n">lconf</span>
+<span class="p">)</span></pre>
+<p>Opens a new connection to the RawMidi interface using local configuration.</p>
+<p>Opens a new connection to the RawMidi interface specified with an ASCII identifier and mode.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>inputp</p></td>
+<td><p>Returned input handle (NULL if not wanted)</p></td>
+</tr>
+<tr class="row-even"><td><p>outputp</p></td>
+<td><p>Returned output handle (NULL if not wanted)</p></td>
+</tr>
+<tr class="row-odd"><td><p>name</p></td>
+<td><p>ASCII identifier of the RawMidi handle</p></td>
+</tr>
+<tr class="row-even"><td><p>mode</p></td>
+<td><p>Open mode</p></td>
+</tr>
+<tr class="row-odd"><td><p>lconf</p></td>
+<td><p>Local configuration</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gabc6bd5922151fb50196f62b9a4ab9f56"><span id="index-7"></span><span></span><span class="kt">int</span>
+<span class="n">snd_rawmidi_close</span><span class="p">(</span><a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">)</span></pre>
+<p>close RawMidi handle</p>
+<p>Closes the specified RawMidi handle and frees all associated resources.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>rawmidi</p></td>
+<td><p>RawMidi handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga39ac11df7e520e753b26ab4eceabe6de"><span id="index-8"></span><span></span><span class="kt">int</span>
+<span class="n">snd_rawmidi_poll_descriptors_count</span><span class="p">(</span><a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">)</span></pre>
+<p>get count of poll descriptors for RawMidi handle</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>rawmidi</p></td>
+<td><p>RawMidi handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>count of poll descriptors</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga22fcc3fc5c62c9db88d79a0b91e3a75f"><span id="index-9"></span><span></span><span class="kt">int</span>
+<span class="n">snd_rawmidi_poll_descriptors</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">,</span>
+    <span class="k">struct</span> <span class="n">pollfd</span><span class="o">*</span> <span class="n">pfds</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">space</span>
+<span class="p">)</span></pre>
+<p>get poll descriptors</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>rawmidi</p></td>
+<td><p>RawMidi handle</p></td>
+</tr>
+<tr class="row-even"><td><p>pfds</p></td>
+<td><p>array of poll descriptors</p></td>
+</tr>
+<tr class="row-odd"><td><p>space</p></td>
+<td><p>space in the poll descriptor array</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>count of filled descriptors</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga38f15766f77c0bb50fec6cdcd87254b0"><span id="index-10"></span><span></span><span class="kt">int</span>
+<span class="n">snd_rawmidi_poll_descriptors_revents</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rawmidi</span><span class="p">,</span>
+    <span class="k">struct</span> <span class="n">pollfd</span><span class="o">*</span> <span class="n">pfds</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">nfds</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">short</span><span class="o">*</span> <span class="n">revent</span>
+<span class="p">)</span></pre>
+<p>get returned events from poll descriptors</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>rawmidi</p></td>
+<td><p>rawmidi RawMidi handle</p></td>
+</tr>
+<tr class="row-even"><td><p>pfds</p></td>
+<td><p>array of poll descriptors</p></td>
+</tr>
+<tr class="row-odd"><td><p>nfds</p></td>
+<td><p>count of poll descriptors</p></td>
+</tr>
+<tr class="row-even"><td><p>revents</p></td>
+<td><p>returned events</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>zero if success, otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gafe714a54fdb6083eb003bcc21da89553"><span id="index-11"></span><span></span><span class="kt">int</span>
+<span class="n">snd_rawmidi_nonblock</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">nonblock</span>
+<span class="p">)</span></pre>
+<p>set nonblock mode</p>
+<p>The nonblock mode cannot be used when the stream is in <a class="reference internal" href="#doxid-group-raw-midi-1ga7060640f32abcd337239bde2c8749d23"><span class="std std-ref">SND_RAWMIDI_APPEND</span></a> state.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>rawmidi</p></td>
+<td><p>RawMidi handle</p></td>
+</tr>
+<tr class="row-even"><td><p>nonblock</p></td>
+<td><p>0 = block, 1 = nonblock mode</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga383592eddf099559822357678fbe7d8c"><span id="index-12"></span><span></span><span class="kt">size_t</span>
+<span class="n">snd_rawmidi_info_sizeof</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></pre>
+<p>get size of the snd_rawmidi_info_t structure in bytes</p>
+<p class="rubric">Returns:</p>
+<p>size of the snd_rawmidi_info_t structure in bytes</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga11f8d3832ec7ea7fd6e8445338704528"><span id="index-13"></span><span></span><span class="kt">int</span>
+<span class="n">snd_rawmidi_info_malloc</span><span class="p">(</span><a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">**</span> <span class="n">ptr</span><span class="p">)</span></pre>
+<p>allocate a new snd_rawmidi_info_t structure</p>
+<p>Allocates a new snd_rawmidi_params_t structure using the standard malloc C library function.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>returned pointer</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code if fails</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gaa84495bee993f34fb9bac33b5a9cf65f"><span id="index-14"></span><span></span><span class="kt">void</span>
+<span class="n">snd_rawmidi_info_free</span><span class="p">(</span><a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>frees the snd_rawmidi_info_t structure</p>
+<p>Frees the given snd_rawmidi_params_t structure using the standard free C library function.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>pointer to the snd_rawmidi_info_t structure to free</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gabfb769e2aaf0a6b8274b5e0c3e9141d8"><span id="index-15"></span><span></span><span class="kt">void</span>
+<span class="n">snd_rawmidi_info_copy</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">dst</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">src</span>
+<span class="p">)</span></pre>
+<p>copy one snd_rawmidi_info_t structure to another</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>dst</p></td>
+<td><p>destination snd_rawmidi_info_t structure</p></td>
+</tr>
+<tr class="row-even"><td><p>src</p></td>
+<td><p>source snd_rawmidi_info_t structure</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gacfb2e65475c314f5f1dde0c5d7a05a7b"><span id="index-16"></span><span></span><span class="kt">unsigned</span> <span class="kt">int</span>
+<span class="n">snd_rawmidi_info_get_device</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>get rawmidi device number</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>pointer to a snd_rawmidi_info_t structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>rawmidi device number</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga3fea97d5bff26c54831e95b2200f857c"><span id="index-17"></span><span></span><span class="kt">unsigned</span> <span class="kt">int</span>
+<span class="n">snd_rawmidi_info_get_subdevice</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>get rawmidi subdevice number</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>pointer to a snd_rawmidi_info_t structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>rawmidi subdevice number</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga760552af30a089ddacc3af79985e24f6"><span id="index-18"></span><a class="reference internal" href="enum_snd_rawmidi_stream_t.html#doxid-group-raw-midi-1gac3d11365c928cdfd3176ffede3e6f8c5"><span class="std std-ref">snd_rawmidi_stream_t</span></a><span></span>
+<span class="n">snd_rawmidi_info_get_stream</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>get rawmidi stream identification</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>pointer to a snd_rawmidi_info_t structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>rawmidi stream identification</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga463916bd78a0ab5a96a053edca05a8d3"><span id="index-19"></span><span></span><span class="kt">int</span>
+<span class="n">snd_rawmidi_info_get_card</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>get rawmidi card number</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>pointer to a snd_rawmidi_info_t structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>rawmidi card number</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gaf9ede5bbc9abc9124910c2612363de30"><span id="index-20"></span><span></span><span class="kt">unsigned</span> <span class="kt">int</span>
+<span class="n">snd_rawmidi_info_get_flags</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>get rawmidi flags</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>pointer to a snd_rawmidi_info_t structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>rawmidi flags</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gac7ac90e99759ee7b2dddd3613219c798"><span id="index-21"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">snd_rawmidi_info_get_id</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>get rawmidi hardware driver identifier</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>pointer to a snd_rawmidi_info_t structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>rawmidi hardware driver identifier</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gafd809c976c1dab23957e338b5af2a353"><span id="index-22"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">snd_rawmidi_info_get_name</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>get rawmidi hardware driver name</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>pointer to a snd_rawmidi_info_t structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>rawmidi hardware driver name</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga428398f23118575aa4f62eed860132cf"><span id="index-23"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">snd_rawmidi_info_get_subdevice_name</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>get rawmidi subdevice name</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>pointer to a snd_rawmidi_info_t structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>rawmidi subdevice name</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gac0b33eb2f54cd6fc9b34002fe28ca9fe"><span id="index-24"></span><span></span><span class="kt">unsigned</span> <span class="kt">int</span>
+<span class="n">snd_rawmidi_info_get_subdevices_count</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>get rawmidi count of subdevices</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>pointer to a snd_rawmidi_info_t structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>rawmidi count of subdevices</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga71717ea1f35bf2a59548d3d106278336"><span id="index-25"></span><span></span><span class="kt">unsigned</span> <span class="kt">int</span>
+<span class="n">snd_rawmidi_info_get_subdevices_avail</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>get rawmidi available count of subdevices</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>pointer to a snd_rawmidi_info_t structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>rawmidi available count of subdevices</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga98fcdcb94c12baf65dd0ec8f9d52ef59"><span id="index-26"></span><span></span><span class="kt">void</span>
+<span class="n">snd_rawmidi_info_set_device</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">val</span>
+<span class="p">)</span></pre>
+<p>set rawmidi device number</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>pointer to a snd_rawmidi_info_t structure</p></td>
+</tr>
+<tr class="row-even"><td><p>val</p></td>
+<td><p>device number</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga49eff1cd1b62e0399826740863cdcce3"><span id="index-27"></span><span></span><span class="kt">void</span>
+<span class="n">snd_rawmidi_info_set_subdevice</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">val</span>
+<span class="p">)</span></pre>
+<p>set rawmidi subdevice number</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>pointer to a snd_rawmidi_info_t structure</p></td>
+</tr>
+<tr class="row-even"><td><p>val</p></td>
+<td><p>subdevice number</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gad704ac98c8313235c73c23d374bf6831"><span id="index-28"></span><span></span><span class="kt">void</span>
+<span class="n">snd_rawmidi_info_set_stream</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">,</span>
+    <a class="reference internal" href="enum_snd_rawmidi_stream_t.html#doxid-group-raw-midi-1gac3d11365c928cdfd3176ffede3e6f8c5"><span class="std std-ref">snd_rawmidi_stream_t</span></a><span></span> <span class="n">val</span>
+<span class="p">)</span></pre>
+<p>set rawmidi stream identifier</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>info</p></td>
+<td><p>pointer to a snd_rawmidi_info_t structure</p></td>
+</tr>
+<tr class="row-even"><td><p>val</p></td>
+<td><p>rawmidi stream identifier</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga3c3595d2907ee30754f6a1d5ceb2d97f"><span id="index-29"></span><span></span><span class="kt">int</span>
+<span class="n">snd_rawmidi_info</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a><span></span><span class="o">*</span> <span class="n">info</span>
+<span class="p">)</span></pre>
+<p>get information about RawMidi handle</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>rawmidi</p></td>
+<td><p>RawMidi handle</p></td>
+</tr>
+<tr class="row-even"><td><p>info</p></td>
+<td><p>pointer to a snd_rawmidi_info_t structure to be filled</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gaeb5767a318d349a4d2a100191c3cf8d8"><span id="index-30"></span><span></span><span class="kt">size_t</span>
+<span class="n">snd_rawmidi_params_sizeof</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></pre>
+<p>get size of the snd_rawmidi_params_t structure in bytes</p>
+<p class="rubric">Returns:</p>
+<p>size of the snd_rawmidi_params_t structure in bytes</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gaedc01312384764d02b6bc946cb1e79a9"><span id="index-31"></span><span></span><span class="kt">int</span>
+<span class="n">snd_rawmidi_params_malloc</span><span class="p">(</span><a class="reference internal" href="#doxid-group-raw-midi-1ga98ad06bccfabc646530241d3a0eef5a1"><span class="std std-ref">snd_rawmidi_params_t</span></a><span></span><span class="o">**</span> <span class="n">ptr</span><span class="p">)</span></pre>
+<p>allocate the snd_rawmidi_params_t structure</p>
+<p>Allocates a new snd_rawmidi_params_t structure using the standard malloc C library function.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>params</p></td>
+<td><p>returned pointer</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code if fails</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gad8c735ed6a8533655dabd7318f25a6fc"><span id="index-32"></span><span></span><span class="kt">void</span>
+<span class="n">snd_rawmidi_params_free</span><span class="p">(</span><a class="reference internal" href="#doxid-group-raw-midi-1ga98ad06bccfabc646530241d3a0eef5a1"><span class="std std-ref">snd_rawmidi_params_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>frees the snd_rawmidi_params_t structure</p>
+<p>Frees the given snd_rawmidi_params_t structure using the standard free C library function.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>params</p></td>
+<td><p>pointer to the <a class="reference internal" href="#doxid-group-raw-midi-1ga98ad06bccfabc646530241d3a0eef5a1"><span class="std std-ref">snd_rawmidi_params_t</span></a> structure to free</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga533710a31f6b6b4f6791baa27e69089f"><span id="index-33"></span><span></span><span class="kt">void</span>
+<span class="n">snd_rawmidi_params_copy</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1ga98ad06bccfabc646530241d3a0eef5a1"><span class="std std-ref">snd_rawmidi_params_t</span></a><span></span><span class="o">*</span> <span class="n">dst</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1ga98ad06bccfabc646530241d3a0eef5a1"><span class="std std-ref">snd_rawmidi_params_t</span></a><span></span><span class="o">*</span> <span class="n">src</span>
+<span class="p">)</span></pre>
+<p>copy one snd_rawmidi_params_t structure to another</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>dst</p></td>
+<td><p>destination snd_rawmidi_params_t structure</p></td>
+</tr>
+<tr class="row-even"><td><p>src</p></td>
+<td><p>source snd_rawmidi_params_t structure</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga612c96757e2f81fda5b6cd6dec826de1"><span id="index-34"></span><span></span><span class="kt">int</span>
+<span class="n">snd_rawmidi_params_set_buffer_size</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1ga98ad06bccfabc646530241d3a0eef5a1"><span class="std std-ref">snd_rawmidi_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">val</span>
+<span class="p">)</span></pre>
+<p>set rawmidi I/O ring buffer size</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>rawmidi</p></td>
+<td><p>RawMidi handle</p></td>
+</tr>
+<tr class="row-even"><td><p>params</p></td>
+<td><p>pointer to a snd_rawmidi_params_t structure</p></td>
+</tr>
+<tr class="row-odd"><td><p>val</p></td>
+<td><p>size in bytes</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga0bd9629686062562b88bfd2a3eadc1bd"><span id="index-35"></span><span></span><span class="kt">size_t</span>
+<span class="n">snd_rawmidi_params_get_buffer_size</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1ga98ad06bccfabc646530241d3a0eef5a1"><span class="std std-ref">snd_rawmidi_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">)</span></pre>
+<p>get rawmidi I/O ring buffer size</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>params</p></td>
+<td><p>pointer to a snd_rawmidi_params_t structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>size of rawmidi I/O ring buffer in bytes</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga89782681ce86b3d5cbebb5136d25439f"><span id="index-36"></span><span></span><span class="kt">int</span>
+<span class="n">snd_rawmidi_params_set_avail_min</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1ga98ad06bccfabc646530241d3a0eef5a1"><span class="std std-ref">snd_rawmidi_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">val</span>
+<span class="p">)</span></pre>
+<p>set minimum available bytes in rawmidi I/O ring buffer for wakeup</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>rawmidi</p></td>
+<td><p>RawMidi handle</p></td>
+</tr>
+<tr class="row-even"><td><p>params</p></td>
+<td><p>pointer to a snd_rawmidi_params_t structure</p></td>
+</tr>
+<tr class="row-odd"><td><p>val</p></td>
+<td><p>desired value</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gae629f2ef814eda39dc081dff65bf7d20"><span id="index-37"></span><span></span><span class="kt">size_t</span>
+<span class="n">snd_rawmidi_params_get_avail_min</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1ga98ad06bccfabc646530241d3a0eef5a1"><span class="std std-ref">snd_rawmidi_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">)</span></pre>
+<p>get minimum available bytes in rawmidi I/O ring buffer for wakeup</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>params</p></td>
+<td><p>pointer to snd_rawmidi_params_t structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>minimum available bytes</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gab717719be70fe4396dc84f3f895d6e12"><span id="index-38"></span><span></span><span class="kt">int</span>
+<span class="n">snd_rawmidi_params_set_no_active_sensing</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1ga98ad06bccfabc646530241d3a0eef5a1"><span class="std std-ref">snd_rawmidi_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">val</span>
+<span class="p">)</span></pre>
+<p>set no-active-sensing action on <a class="reference internal" href="#doxid-group-raw-midi-1gabc6bd5922151fb50196f62b9a4ab9f56"><span class="std std-ref">snd_rawmidi_close()</span></a></p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>rawmidi</p></td>
+<td><p>RawMidi handle</p></td>
+</tr>
+<tr class="row-even"><td><p>params</p></td>
+<td><p>pointer to snd_rawmidi_params_t structure</p></td>
+</tr>
+<tr class="row-odd"><td><p>val</p></td>
+<td><p>value: 0 = enable to send the active sensing message, 1 = disable</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga6a057d467faa2b65ddace364fde985fd"><span id="index-39"></span><span></span><span class="kt">int</span>
+<span class="n">snd_rawmidi_params_get_no_active_sensing</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1ga98ad06bccfabc646530241d3a0eef5a1"><span class="std std-ref">snd_rawmidi_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span><span class="p">)</span></pre>
+<p>get no-active-sensing action status</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>params</p></td>
+<td><p>pointer to snd_rawmidi_params_t structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>the current status (0 = enable, 1 = disable the active sensing message)</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga458d8ad22277645d9b65fa47c011465c"><span id="index-40"></span><span></span><span class="kt">int</span>
+<span class="n">snd_rawmidi_params</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1ga98ad06bccfabc646530241d3a0eef5a1"><span class="std std-ref">snd_rawmidi_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span>
+<span class="p">)</span></pre>
+<p>set parameters about rawmidi stream</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>rawmidi</p></td>
+<td><p>RawMidi handle</p></td>
+</tr>
+<tr class="row-even"><td><p>params</p></td>
+<td><p>pointer to a snd_rawmidi_params_t structure to be filled</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga86eabf81acd7c43fc100c67fbda5085d"><span id="index-41"></span><span></span><span class="kt">int</span>
+<span class="n">snd_rawmidi_params_current</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1ga98ad06bccfabc646530241d3a0eef5a1"><span class="std std-ref">snd_rawmidi_params_t</span></a><span></span><span class="o">*</span> <span class="n">params</span>
+<span class="p">)</span></pre>
+<p>get current parameters about rawmidi stream</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>rawmidi</p></td>
+<td><p>RawMidi handle</p></td>
+</tr>
+<tr class="row-even"><td><p>params</p></td>
+<td><p>pointer to a snd_rawmidi_params_t structure to be filled</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga7933bdb7eea04815be0bba98261865e4"><span id="index-42"></span><span></span><span class="kt">size_t</span>
+<span class="n">snd_rawmidi_status_sizeof</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></pre>
+<p>get size of the snd_rawmidi_status_t structure in bytes</p>
+<p class="rubric">Returns:</p>
+<p>size of the snd_rawmidi_status_t structure in bytes</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gac1035208bbdf81852dbcf2e14ce4a8dc"><span id="index-43"></span><span></span><span class="kt">int</span>
+<span class="n">snd_rawmidi_status_malloc</span><span class="p">(</span><a class="reference internal" href="#doxid-group-raw-midi-1ga10a44a41000ef7dfe61f712466237aff"><span class="std std-ref">snd_rawmidi_status_t</span></a><span></span><span class="o">**</span> <span class="n">ptr</span><span class="p">)</span></pre>
+<p>allocate the snd_rawmidi_status_t structure</p>
+<p>Allocates a new snd_rawmidi_status_t structure using the standard malloc C library function.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ptr</p></td>
+<td><p>returned pointer</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code if fails</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gac9852f68911bbb8aef21d2e20c3ff2c0"><span id="index-44"></span><span></span><span class="kt">void</span>
+<span class="n">snd_rawmidi_status_free</span><span class="p">(</span><a class="reference internal" href="#doxid-group-raw-midi-1ga10a44a41000ef7dfe61f712466237aff"><span class="std std-ref">snd_rawmidi_status_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>frees the snd_rawmidi_status_t structure</p>
+<p>Frees the given snd_rawmidi_status_t structure using the standard free C library function.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>status</p></td>
+<td><p>pointer to the snd_rawmidi_status_t structure to free</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gab62e8a4ca0033166f906a969048d935c"><span id="index-45"></span><span></span><span class="kt">void</span>
+<span class="n">snd_rawmidi_status_copy</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1ga10a44a41000ef7dfe61f712466237aff"><span class="std std-ref">snd_rawmidi_status_t</span></a><span></span><span class="o">*</span> <span class="n">dst</span><span class="p">,</span>
+    <span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1ga10a44a41000ef7dfe61f712466237aff"><span class="std std-ref">snd_rawmidi_status_t</span></a><span></span><span class="o">*</span> <span class="n">src</span>
+<span class="p">)</span></pre>
+<p>copy one snd_rawmidi_status_t structure to another</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>dst</p></td>
+<td><p>destination snd_rawmidi_status_t structure</p></td>
+</tr>
+<tr class="row-even"><td><p>src</p></td>
+<td><p>source snd_rawmidi_status_t structure</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gaeb867dbf1d4d5fb3bdcad36a86565837"><span id="index-46"></span><span></span><span class="kt">void</span>
+<span class="n">snd_rawmidi_status_get_tstamp</span><span class="p">(</span>
+    <span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1ga10a44a41000ef7dfe61f712466237aff"><span class="std std-ref">snd_rawmidi_status_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">,</span>
+    <a class="reference internal" href="group_Global.html#doxid-group-global-1ga3a3f5b65c40f498cdbc26944bd9855cf"><span class="std std-ref">snd_htimestamp_t</span></a><span></span><span class="o">*</span> <span class="n">ptr</span>
+<span class="p">)</span></pre>
+<p>get the start timestamp</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>status</p></td>
+<td><p>pointer to a snd_rawmidi_status_t structure</p></td>
+</tr>
+<tr class="row-even"><td><p>tstamp</p></td>
+<td><p>returned timestamp value</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga7ff63a2376b2df549698296d37b532ed"><span id="index-47"></span><span></span><span class="kt">size_t</span>
+<span class="n">snd_rawmidi_status_get_avail</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1ga10a44a41000ef7dfe61f712466237aff"><span class="std std-ref">snd_rawmidi_status_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>get current available bytes in the rawmidi I/O ring buffer</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>status</p></td>
+<td><p>pointer to a snd_rawmidi_status_t structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>current available bytes in the rawmidi I/O ring buffer</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gae4f69ac10574cfc2cd5c848628e75f9b"><span id="index-48"></span><span></span><span class="kt">size_t</span>
+<span class="n">snd_rawmidi_status_get_xruns</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-raw-midi-1ga10a44a41000ef7dfe61f712466237aff"><span class="std std-ref">snd_rawmidi_status_t</span></a><span></span><span class="o">*</span> <span class="n">obj</span><span class="p">)</span></pre>
+<p>get count of xruns</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>status</p></td>
+<td><p>pointer to a snd_rawmidi_status_t structure</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>count of xruns</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gab888bce923769882931f77603327231d"><span id="index-49"></span><span></span><span class="kt">int</span>
+<span class="n">snd_rawmidi_status</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1ga10a44a41000ef7dfe61f712466237aff"><span class="std std-ref">snd_rawmidi_status_t</span></a><span></span><span class="o">*</span> <span class="n">status</span>
+<span class="p">)</span></pre>
+<p>get status of rawmidi stream</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>rawmidi</p></td>
+<td><p>RawMidi handle</p></td>
+</tr>
+<tr class="row-even"><td><p>status</p></td>
+<td><p>pointer to a snd_rawmidi_status_t structure to be filled</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gabfff7417ec957b7ee07882f91d73d7be"><span id="index-50"></span><span></span><span class="kt">int</span>
+<span class="n">snd_rawmidi_drain</span><span class="p">(</span><a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">)</span></pre>
+<p>drain all bytes in the rawmidi I/O ring buffer</p>
+<p>Waits until all MIDI bytes are not drained (sent) to the hardware device.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>rawmidi</p></td>
+<td><p>RawMidi handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga01076c87d169cf77334d35bd094abd0a"><span id="index-51"></span><span></span><span class="kt">int</span>
+<span class="n">snd_rawmidi_drop</span><span class="p">(</span><a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">)</span></pre>
+<p>drop all bytes in the rawmidi I/O ring buffer immediately</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>rawmidi</p></td>
+<td><p>RawMidi handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success otherwise a negative error code</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga0a30e482efec57f4ea74c533a0f9b134"><span id="index-52"></span><span></span><span class="kt">ssize_t</span>
+<span class="n">snd_rawmidi_write</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">size</span>
+<span class="p">)</span></pre>
+<p>write MIDI bytes to MIDI stream</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>rawmidi</p></td>
+<td><p>RawMidi handle</p></td>
+</tr>
+<tr class="row-even"><td><p>buffer</p></td>
+<td><p>buffer containing MIDI bytes</p></td>
+</tr>
+<tr class="row-odd"><td><p>size</p></td>
+<td><p>output buffer size in bytes</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga9b0952fc04facda83cdf1521325ca475"><span id="index-53"></span><span></span><span class="kt">ssize_t</span>
+<span class="n">snd_rawmidi_read</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">size</span>
+<span class="p">)</span></pre>
+<p>read MIDI bytes from MIDI stream</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>rawmidi</p></td>
+<td><p>RawMidi handle</p></td>
+</tr>
+<tr class="row-even"><td><p>buffer</p></td>
+<td><p>buffer to store the input MIDI bytes</p></td>
+</tr>
+<tr class="row-odd"><td><p>size</p></td>
+<td><p>input buffer size in bytes</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gaa4bf6540f3f36c5878d31abd34a341d3"><span id="index-54"></span><span></span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span>
+<span class="n">snd_rawmidi_name</span><span class="p">(</span><a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">)</span></pre>
+<p>get identifier of RawMidi handle</p>
+<p>Returns the ASCII identifier of given RawMidi handle. It’s the same identifier specified in <a class="reference internal" href="#doxid-group-raw-midi-1ga2ab783051deeb7eb37eb568b76448889"><span class="std std-ref">snd_rawmidi_open()</span></a>.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>rawmidi</p></td>
+<td><p>a RawMidi handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>ascii identifier of RawMidi handle</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga5984e0c61995c8184a0e6e0a68a6faaf"><span id="index-55"></span><a class="reference internal" href="enum_snd_rawmidi_type_t.html#doxid-group-raw-midi-1ga271ccd508f221ec7c99a27b150c657ba"><span class="std std-ref">snd_rawmidi_type_t</span></a><span></span>
+<span class="n">snd_rawmidi_type</span><span class="p">(</span><a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rmidi</span><span class="p">)</span></pre>
+<p>get type of RawMidi handle</p>
+<p>Returns the type <a class="reference internal" href="enum_snd_rawmidi_type_t.html#doxid-group-raw-midi-1ga271ccd508f221ec7c99a27b150c657ba"><span class="std std-ref">snd_rawmidi_type_t</span></a> of given RawMidi handle.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>rawmidi</p></td>
+<td><p>a RawMidi handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>type of RawMidi handle</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga295d2f3ce9e992919f205b929fcb83ee"><span id="index-56"></span><a class="reference internal" href="enum_snd_rawmidi_stream_t.html#doxid-group-raw-midi-1gac3d11365c928cdfd3176ffede3e6f8c5"><span class="std std-ref">snd_rawmidi_stream_t</span></a><span></span>
+<span class="n">snd_rawmidi_stream</span><span class="p">(</span><a class="reference internal" href="#doxid-group-raw-midi-1gaa21972df6ca3ebde0f7225b2472d0095"><span class="std std-ref">snd_rawmidi_t</span></a><span></span><span class="o">*</span> <span class="n">rawmidi</span><span class="p">)</span></pre>
+<p>get stream (direction) of RawMidi handle</p>
+<p>Returns the stream <a class="reference internal" href="enum_snd_rawmidi_stream_t.html#doxid-group-raw-midi-1gac3d11365c928cdfd3176ffede3e6f8c5"><span class="std std-ref">snd_rawmidi_stream_t</span></a> of given RawMidi handle.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>rawmidi</p></td>
+<td><p>a RawMidi handle</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>stream of RawMidi handle</p>
+</section>
+<section id="macros">
+<h3>Macros</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga7060640f32abcd337239bde2c8749d23"><span id="index-57"></span><span></span><span class="cp">#define SND_RAWMIDI_APPEND</span></pre>
+<p>Append (flag to open mode)</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga2b1694b5b3e98514d6b2bc5b824e9adc"><span id="index-58"></span><span></span><span class="cp">#define SND_RAWMIDI_DLSYM_VERSION</span></pre>
+<p>dlsym version for interface entry callback</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga31ee35659c82272382ccc3014c8a73f8"><span id="index-59"></span><span></span><span class="cp">#define SND_RAWMIDI_NONBLOCK</span></pre>
+<p>Non blocking mode (flag to open mode)</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gab1a659b38e5174d790d5671739995894"><span id="index-60"></span><span></span><span class="cp">#define SND_RAWMIDI_SYNC</span></pre>
+<p>Write sync mode (Flag to open mode)</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gaaa4c7257d03c396293cffaef02818c35"><span id="index-61"></span><span></span><span class="cp">#define snd_rawmidi_info_alloca(ptr)</span></pre>
+<p>allocate an invalid <a class="reference internal" href="#doxid-group-raw-midi-1gab0f0f325ab812941e9b81addf0b941d3"><span class="std std-ref">snd_rawmidi_info_t</span></a> using standard alloca</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ptr</p></td>
+<td><p>returned pointer</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1ga0a7ab61af3880409ccd9adee0e756210"><span id="index-62"></span><span></span><span class="cp">#define snd_rawmidi_params_alloca(ptr)</span></pre>
+<p>allocate an invalid <a class="reference internal" href="#doxid-group-raw-midi-1ga98ad06bccfabc646530241d3a0eef5a1"><span class="std std-ref">snd_rawmidi_params_t</span></a> using standard alloca</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ptr</p></td>
+<td><p>returned pointer</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-raw-midi-1gaa83c6963d341b0c067764dd1ba2c3d76"><span id="index-63"></span><span></span><span class="cp">#define snd_rawmidi_status_alloca(ptr)</span></pre>
+<p>allocate an invalid <a class="reference internal" href="#doxid-group-raw-midi-1ga10a44a41000ef7dfe61f712466237aff"><span class="std std-ref">snd_rawmidi_status_t</span></a> using standard alloca</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ptr</p></td>
+<td><p>returned pointer</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="union_snd_pcm_sync_id_t.html" class="btn btn-neutral float-left" title="union snd_pcm_sync_id_t" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="enum_snd_rawmidi_stream_t.html" class="btn btn-neutral float-right" title="enum snd_rawmidi_stream_t" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 1998-2017, ALSA Library Maintainers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

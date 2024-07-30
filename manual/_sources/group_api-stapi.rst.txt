@@ -1,0 +1,142 @@
+.. index:: pair: group; String templating API functions
+.. _doxid-group_api_stapi:
+
+String templating API functions
+===============================
+
+
+.. toctree::
+	:hidden:
+
+Overview
+~~~~~~~~
+
+This section describes functions exported to the namespace of Lua frames by the main Doxyrest string templating engine. :ref:`More...<details-group_api_stapi>`
+
+.. ref-code-block:: lua
+	:class: doxyrest-overview-code-block
+
+	-- functions
+
+	function :ref:`emit<doxid-function_emit>`(s)
+	function :ref:`generateFile<doxid-function_generatefile>`(targetFileName, frameFileName, ...)
+	function :ref:`getCol<doxid-function_getcol>`()
+	function :ref:`getLine<doxid-function_getline>`()
+	function :ref:`getLineText<doxid-function_getlinetext>`()
+	function :ref:`includeFile<doxid-function_includefile>`(fileName, ...)
+	function :ref:`includeFileWithIndent<doxid-function_includefilewithindent>`(indent, fileName, ...)
+	function :ref:`passthrough<doxid-function_passthrough>`(offset, length)
+	function :ref:`trimOutput<doxid-function_trimoutput>`()
+
+.. _details-group_api_stapi:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+This section describes functions exported to the namespace of Lua frames by the main Doxyrest string templating engine.
+
+Functions
+---------
+
+.. index:: pair: function; emit
+.. _doxid-function_emit:
+
+.. ref-code-block:: lua
+	:class: doxyrest-title-code-block
+
+	function emit(s)
+
+Emits ``s``, i.e. appends string ``s`` to the output.
+
+.. index:: pair: function; generateFile
+.. _doxid-function_generatefile:
+
+.. ref-code-block:: lua
+	:class: doxyrest-title-code-block
+
+	function generateFile(targetFileName, frameFileName, ...)
+
+Processes a frame located in the file ``frameFileName`` and writes the output to the file ``targetFileName``. All the variables and functions declared up to this point remain accessible from Lua code in the frame. It's also possible to pass extra arguments to the frame by passing more values after the ``frameFileName`` argument [#f1]_.
+
+.. index:: pair: function; getCol
+.. _doxid-function_getcol:
+
+.. ref-code-block:: lua
+	:class: doxyrest-title-code-block
+
+	function getCol()
+
+Returns current column number in the emitted output.
+
+.. index:: pair: function; getLine
+.. _doxid-function_getline:
+
+.. ref-code-block:: lua
+	:class: doxyrest-title-code-block
+
+	function getLine()
+
+Returns current line number in the emitted output.
+
+.. index:: pair: function; getLineText
+.. _doxid-function_getlinetext:
+
+.. ref-code-block:: lua
+	:class: doxyrest-title-code-block
+
+	function getLineText()
+
+Returns text of the current line in the emitted output.
+
+.. index:: pair: function; includeFile
+.. _doxid-function_includefile:
+.. index:: pair: function; includeFileWithIndent
+.. _doxid-function_includefilewithindent:
+
+.. ref-code-block:: lua
+	:class: doxyrest-title-code-block
+
+	function includeFile(fileName, ...)
+	function includeFileWithIndent(indent, fileName, ...)
+
+Processes a frame located in the file ``fileName`` and appends the results is appended to the current output. All the variables and functions declared up to this point remain accessible from Lua code in the frame. It's also possible to pass extra arguments to the frame by passing more values after the ``fileName`` argument [#f1]_. ``includeFileWithIndent`` function also injects extra indent before each and every line generated as a result of processing the frame ``fileName``.
+
+.. index:: pair: function; passthrough
+.. _doxid-function_passthrough:
+
+.. ref-code-block:: lua
+	:class: doxyrest-title-code-block
+
+	function passthrough(offset, length)
+
+Emits the *original* text from the current string template frame. The arguments ``offset`` and ``length`` define the region of the frame to emit. Normally, you never have to manually call this function, as the string template engine inserts calls to ``passthrough(...)`` in necessary locations automatically.
+
+.. index:: pair: function; trimOutput
+.. _doxid-function_trimoutput:
+
+.. ref-code-block:: lua
+	:class: doxyrest-title-code-block
+
+	function trimOutput()
+
+Removes all trailing spaces from the current line in the emitted output.
+
+
+---------------------
+
+.. rubric:: Footnotes
+
+.. [#f1]
+
+	As always in Lua, you can pass extra arguments to frame processing
+	functions in addition to mandatory ones. This technique provides a
+	convenient way of passing certain **context** to the frame (and is
+	relied upon in standard ``*.rst.in`` files).
+	
+	Later you access these extra arguments from your frame like this:
+	
+	.. code-block:: lua
+	
+		local argArray = table.pack (...)
+		local extraArg = argArray [1]
+

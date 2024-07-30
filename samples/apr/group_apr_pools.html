@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Memory Pool Functions &mdash; Apache Portable Runtime Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinx_rtd_theme.css?v=b6ca47bd" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=515d8a7f"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Pool Cleanup Functions" href="group_PoolCleanup.html" />
+    <link rel="prev" title="struct apr_mmap_t" href="struct_apr_mmap_t.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Apache Portable Runtime Documentation
+          </a>
+              <div class="version">
+                1.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="group_APR.html">Apache Portability Runtime library</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="group_apr_atomic.html">Atomic Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_getopt.html">Command Argument Parsing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_thread_cond.html">Condition Variable Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_dso.html">Dynamic Object Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_errno.html">Error Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_APR_Util_Escaping.html">Escape functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_file_io.html">File I/O Handling Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_file_info.html">File Information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_fnmatch.html">Filename Matching Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_env.html">Functions for manipulating the environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_lib.html">General Purpose Library Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_APR_GlobalMutex.html">Global Locking Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_hash.html">Hash Tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_support.html">Internal APR support functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_allocator.html">Internal Memory Allocation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_mmap.html">MMAP (Memory Map) Routines</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Memory Pool Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="group_PoolCleanup.html">Pool Cleanup Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="group_PoolDebug.html">Pool Debugging functions.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#global-functions">Global Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#macros">Macros</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_general.html">Miscellaneous library routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_network_io.html">Network Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_platform.html">Platform Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_poll.html">Poll Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_portabile.html">Portability Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_proc_mutex.html">Process Locking Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_random.html">Random Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_thread_rwlock.html">Reader/Writer Lock Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_ring.html">Ring Macro Implementations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_shm.html">Shared Memory Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_signal.html">Signal Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_skiplist.html">Skip list implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_strings.html">String routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_tables.html">Table and Array Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_thread_mutex.html">Thread Mutex Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_thread_proc.html">Threads and Process Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_time.html">Time Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_user.html">User and Group ID Services</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="group_apr_library.html">Library initialization and termination</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_apr_ctype.html">ctype functions</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="page_bug.html">Bug List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_deprecated.html">Deprecated List</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Apache Portable Runtime Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="group_APR.html">Apache Portability Runtime library</a></li>
+      <li class="breadcrumb-item active">Memory Pool Functions</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="memory-pool-functions">
+<span id="doxid-group-apr-pools"></span><span id="index-0"></span><h1>Memory Pool Functions</h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="overview">
+<h2>Overview</h2>
+<div class="line-block">
+<div class="line"><a class="reference internal" href="group_PoolCleanup.html#doxid-group-pool-cleanup"><span class="std std-ref">Pool Cleanup Functions</span></a></div>
+<div class="line"><a class="reference internal" href="group_PoolDebug.html#doxid-group-pool-debug"><span class="std std-ref">Pool Debugging functions.</span></a></div>
+</div>
+<pre class="highlight doxyrest-overview-code-block literal-block"><span></span><span class="c1">// typedefs</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span> <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><a class="reference internal" href="#doxid-group-apr-pools-1ga370a939349adf6d1438068e2fc69a0dd"><span class="std std-ref">apr_abortfunc_t</span></a><span></span><span class="p">)(</span><span class="kt">int</span> <span class="n">retcode</span><span class="p">);</span>
+
+<span class="c1">// global functions</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-pools-1gad64a6a29515621bc13f8a8da50366d67"><span class="std std-ref">apr_pool_initialize</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-apr-pools-1ga3728aacec227318cef973b8a33f3b430"><span class="std std-ref">apr_pool_terminate</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-pools-1gab274bd29e4e4d4944b4618403148074f"><span class="std std-ref">apr_pool_create_ex</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">**</span> <span class="n">newpool</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">parent</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1ga370a939349adf6d1438068e2fc69a0dd"><span class="std std-ref">apr_abortfunc_t</span></a><span></span> <span class="n">abort_fn</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_allocator.html#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span> <span class="n">allocator</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-pools-1ga20e514c83555398acddc30c4dfa0c540"><span class="std std-ref">apr_pool_create_core_ex</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">**</span> <span class="n">newpool</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1ga370a939349adf6d1438068e2fc69a0dd"><span class="std std-ref">apr_abortfunc_t</span></a><span></span> <span class="n">abort_fn</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_allocator.html#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span> <span class="n">allocator</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-pools-1gaae7212db77bb57f86419cd594f73a92f"><span class="std std-ref">apr_pool_create_unmanaged_ex</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">**</span> <span class="n">newpool</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1ga370a939349adf6d1438068e2fc69a0dd"><span class="std std-ref">apr_abortfunc_t</span></a><span></span> <span class="n">abort_fn</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_allocator.html#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span> <span class="n">allocator</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-pools-1gacbea97ae5c0c861f6b7c147d46ac1d0c"><span class="std std-ref">apr_pool_create_ex_debug</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">**</span> <span class="n">newpool</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">parent</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1ga370a939349adf6d1438068e2fc69a0dd"><span class="std std-ref">apr_abortfunc_t</span></a><span></span> <span class="n">abort_fn</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_allocator.html#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span> <span class="n">allocator</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">file_line</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-pools-1gaa1c5bfc44188884bb439670f81448c20"><span class="std std-ref">apr_pool_create_core_ex_debug</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">**</span> <span class="n">newpool</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1ga370a939349adf6d1438068e2fc69a0dd"><span class="std std-ref">apr_abortfunc_t</span></a><span></span> <span class="n">abort_fn</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_allocator.html#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span> <span class="n">allocator</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">file_line</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-pools-1gae220e572b14355f1aa7b21c8fb022524"><span class="std std-ref">apr_pool_create_unmanaged_ex_debug</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">**</span> <span class="n">newpool</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1ga370a939349adf6d1438068e2fc69a0dd"><span class="std std-ref">apr_abortfunc_t</span></a><span></span> <span class="n">abort_fn</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_allocator.html#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span> <span class="n">allocator</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">file_line</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-pools-1ga918adf3026c894efeae254a0446aed3b"><span class="std std-ref">apr_pool_create</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">**</span> <span class="n">newpool</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">parent</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-pools-1gad3675378924bc9d98e46258c049f1761"><span class="std std-ref">apr_pool_create_core</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">**</span> <span class="n">newpool</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="doxyrest-code-target target" id="doxid-group-apr-pools-1ga72f86d699b4b2ec2aeb82c334ca3446b"><span></span><span class="n">apr_pool_create_unmanaged</span></span><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">**</span> <span class="n">newpool</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_allocator.html#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-pools-1gaf446fcf5da1fcd62d3f802a4c0c10f97"><span class="std std-ref">apr_pool_allocator_get</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-apr-pools-1gafa8a998cd660e82b62aecec09e239d0d"><span class="std std-ref">apr_pool_clear</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-apr-pools-1ga9521870e42ec4395a0bf8388706a57b9"><span class="std std-ref">apr_pool_clear_debug</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">file_line</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-apr-pools-1ga54759954d2cba7cb649ab5680a33f9e3"><span class="std std-ref">apr_pool_destroy</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-apr-pools-1ga7efe64dfcce883d7fad9df813d9259fc"><span class="std std-ref">apr_pool_destroy_debug</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">file_line</span>
+<span class="p">);</span>
+
+<span class="kt">void</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-pools-1ga85f1e193c31d109affda72f9a92c6915"><span class="std std-ref">apr_palloc</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="n">apr_size_t</span> <span class="n">size</span>
+<span class="p">);</span>
+
+<span class="kt">void</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-pools-1ga0ac211ac89be868b107776b4183a8174"><span class="std std-ref">apr_palloc_debug</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="n">apr_size_t</span> <span class="n">size</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">file_line</span>
+<span class="p">);</span>
+
+<span class="kt">void</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-pools-1gaf61c098ad258069d64cdf8c0a9369f9e"><span class="std std-ref">apr_pcalloc</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="n">apr_size_t</span> <span class="n">size</span>
+<span class="p">);</span>
+
+<span class="kt">void</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-pools-1ga7b43035318ffdc57a6eddab07dc57cb2"><span class="std std-ref">apr_pcalloc_debug</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="n">apr_size_t</span> <span class="n">size</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">file_line</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-apr-pools-1gaa658b1f10dd13967eaa7c4156d4c2174"><span class="std std-ref">apr_pool_abort_set</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1ga370a939349adf6d1438068e2fc69a0dd"><span class="std std-ref">apr_abortfunc_t</span></a><span></span> <span class="n">abortfunc</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="#doxid-group-apr-pools-1ga370a939349adf6d1438068e2fc69a0dd"><span class="std std-ref">apr_abortfunc_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-pools-1gaf7610c30ef5f84a8742c0b3e63fdd7b0"><span class="std std-ref">apr_pool_abort_get</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span><span class="p">);</span>
+
+<a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-pools-1ga94db31f40609b15b592ff47f989ca9ec"><span class="std std-ref">apr_pool_parent_get</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-apr-pools-1ga05d299f778659d1e0806140d8a7fea79"><span class="std std-ref">apr_pool_is_ancestor</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">a</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">b</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<a class="reference internal" href="#doxid-group-apr-pools-1gaeaa872f7999740a60803e95429890518"><span class="std std-ref">apr_pool_tag</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">tag</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-pools-1ga78d1aa2d9fa842d83eaffccb0f0c0c5c"><span class="std std-ref">apr_pool_userdata_set</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">key</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">cleanup</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-pools-1ga435644c493dc5b10d80c4b99b8cd4589"><span class="std std-ref">apr_pool_userdata_setn</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">key</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">cleanup</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-pools-1gaf930f1fad2cf92a2432c0814c8a0b86f"><span class="std std-ref">apr_pool_userdata_get</span></a><span></span><span class="p">(</span>
+    <span class="kt">void</span><span class="o">**</span> <span class="n">data</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">key</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">);</span>
+
+<span class="c1">// macros</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-pools-1ga89ce1d55c7f0c39ea87c88eabd655394"><span class="std std-ref">APR_POOL_DECLARE_ACCESSOR</span></a><span></span><span class="p">(</span><span class="n">type</span><span class="p">)</span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-pools-1ga43a8a52f68f8b7d3b7694c254da4a074"><span class="std std-ref">APR_POOL_IMPLEMENT_ACCESSOR</span></a><span></span><span class="p">(</span><span class="n">type</span><span class="p">)</span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-pools-1gac81cff34d0ff4be52fa924663478eade"><span class="std std-ref">APR_POOL__FILE_LINE__</span></a></pre>
+</section>
+<section id="detailed-documentation">
+<span id="details-group-apr-pools"></span><h2>Detailed Documentation</h2>
+<section id="typedefs">
+<h3>Typedefs</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span id="index-1"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span> <span class="n">apr_pool_t</span></pre>
+<p>The fundamental pool type</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1ga370a939349adf6d1438068e2fc69a0dd"><span id="index-2"></span><span></span><span class="k">typedef</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">apr_abortfunc_t</span><span class="p">)(</span><span class="kt">int</span> <span class="n">retcode</span><span class="p">)</span></pre>
+<p>A function that is called when allocation fails.</p>
+</section>
+<section id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1gad64a6a29515621bc13f8a8da50366d67"><span id="index-3"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_pool_initialize</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></pre>
+<p>Setup all of the internal structures required to use pools Programs do NOT need to call this directly. APR will call this automatically from apr_initialize.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1ga3728aacec227318cef973b8a33f3b430"><span id="index-4"></span><span></span><span class="kt">void</span>
+<span class="n">apr_pool_terminate</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></pre>
+<p>Tear down all of the internal structures required to use pools Programs do NOT need to call this directly. APR will call this automatically from apr_terminate.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1gab274bd29e4e4d4944b4618403148074f"><span id="index-5"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_pool_create_ex</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">**</span> <span class="n">newpool</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">parent</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1ga370a939349adf6d1438068e2fc69a0dd"><span class="std std-ref">apr_abortfunc_t</span></a><span></span> <span class="n">abort_fn</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_allocator.html#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span> <span class="n">allocator</span>
+<span class="p">)</span></pre>
+<p>Create a new pool. This function is thread-safe, in the sense that multiple threads can safely create subpools of the same parent pool concurrently. Similarly, a subpool can be created by one thread at the same time that another thread accesses the parent pool.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>newpool</p></td>
+<td><p>The pool we have just created.</p></td>
+</tr>
+<tr class="row-even"><td><p>parent</p></td>
+<td><p>The parent pool. If this is NULL, the new pool is a root pool. If it is non-NULL, the new pool will inherit all of its parent pool’s attributes, except the apr_pool_t will be a sub-pool.</p></td>
+</tr>
+<tr class="row-odd"><td><p>abort_fn</p></td>
+<td><p>A function to use if the pool cannot allocate more memory.</p></td>
+</tr>
+<tr class="row-even"><td><p>allocator</p></td>
+<td><p>The allocator to use with the new pool. If NULL the allocator of the parent pool will be used.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1ga20e514c83555398acddc30c4dfa0c540"><span id="index-6"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_pool_create_core_ex</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">**</span> <span class="n">newpool</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1ga370a939349adf6d1438068e2fc69a0dd"><span class="std std-ref">apr_abortfunc_t</span></a><span></span> <span class="n">abort_fn</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_allocator.html#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span> <span class="n">allocator</span>
+<span class="p">)</span></pre>
+<p>Create a new pool. Deprecated</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-pools-1gaae7212db77bb57f86419cd594f73a92f"><span class="std std-ref">apr_pool_create_unmanaged_ex</span></a>.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1gaae7212db77bb57f86419cd594f73a92f"><span id="index-7"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_pool_create_unmanaged_ex</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">**</span> <span class="n">newpool</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1ga370a939349adf6d1438068e2fc69a0dd"><span class="std std-ref">apr_abortfunc_t</span></a><span></span> <span class="n">abort_fn</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_allocator.html#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span> <span class="n">allocator</span>
+<span class="p">)</span></pre>
+<p>Create a new unmanaged pool. An unmanaged pool is a special pool without a parent; it will NOT be destroyed upon apr_terminate. It must be explicitly destroyed by calling apr_pool_destroy, to prevent memory leaks. Use of this function is discouraged, think twice about whether you really really need it.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Any child cleanups registered against the new pool, or against sub-pools thereof, will not be executed during an invocation of <a class="reference internal" href="group_apr_thread_proc.html#doxid-group-apr-thread-proc-1gab51dd90b98d365a969f0ec5c7bef4e14"><span class="std std-ref">apr_proc_create()</span></a>, so resources created in an “unmanaged” pool hierarchy will leak to child processes.</p>
+</div>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>newpool</p></td>
+<td><p>The pool we have just created.</p></td>
+</tr>
+<tr class="row-even"><td><p>abort_fn</p></td>
+<td><p>A function to use if the pool cannot allocate more memory.</p></td>
+</tr>
+<tr class="row-odd"><td><p>allocator</p></td>
+<td><p>The allocator to use with the new pool. If NULL a new allocator will be created with the new pool as owner.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1gacbea97ae5c0c861f6b7c147d46ac1d0c"><span id="index-8"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_pool_create_ex_debug</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">**</span> <span class="n">newpool</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">parent</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1ga370a939349adf6d1438068e2fc69a0dd"><span class="std std-ref">apr_abortfunc_t</span></a><span></span> <span class="n">abort_fn</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_allocator.html#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span> <span class="n">allocator</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">file_line</span>
+<span class="p">)</span></pre>
+<p>Debug version of apr_pool_create_ex. Only available when APR_POOL_DEBUG is defined. Call this directly if you have your apr_pool_create_ex calls in a wrapper function and wish to override the file_line argument to reflect the caller of your wrapper function. If you do not have apr_pool_create_ex in a wrapper, trust the macro and don’t call apr_pool_create_ex_debug directly.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>newpool</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>parent</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>abort_fn</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>allocator</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>file_line</p></td>
+<td><p>Where the function is called from. This is usually APR_POOL__FILE_LINE__.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-pools-1ga918adf3026c894efeae254a0446aed3b"><span class="std std-ref">apr_pool_create</span></a>.</p>
+<p><a class="reference internal" href="#doxid-group-apr-pools-1ga918adf3026c894efeae254a0446aed3b"><span class="std std-ref">apr_pool_create</span></a>.</p>
+<p><a class="reference internal" href="#doxid-group-apr-pools-1ga918adf3026c894efeae254a0446aed3b"><span class="std std-ref">apr_pool_create</span></a>.</p>
+<p><a class="reference internal" href="#doxid-group-apr-pools-1ga918adf3026c894efeae254a0446aed3b"><span class="std std-ref">apr_pool_create</span></a>.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1gaa1c5bfc44188884bb439670f81448c20"><span id="index-9"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_pool_create_core_ex_debug</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">**</span> <span class="n">newpool</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1ga370a939349adf6d1438068e2fc69a0dd"><span class="std std-ref">apr_abortfunc_t</span></a><span></span> <span class="n">abort_fn</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_allocator.html#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span> <span class="n">allocator</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">file_line</span>
+<span class="p">)</span></pre>
+<p>Debug version of apr_pool_create_core_ex. Deprecated</p>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-pools-1gae220e572b14355f1aa7b21c8fb022524"><span class="std std-ref">apr_pool_create_unmanaged_ex_debug</span></a>.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1gae220e572b14355f1aa7b21c8fb022524"><span id="index-10"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_pool_create_unmanaged_ex_debug</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">**</span> <span class="n">newpool</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1ga370a939349adf6d1438068e2fc69a0dd"><span class="std std-ref">apr_abortfunc_t</span></a><span></span> <span class="n">abort_fn</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_allocator.html#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span> <span class="n">allocator</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">file_line</span>
+<span class="p">)</span></pre>
+<p>Debug version of apr_pool_create_unmanaged_ex. Only available when APR_POOL_DEBUG is defined. Call this directly if you have your apr_pool_create_unmanaged_ex calls in a wrapper function and wish to override the file_line argument to reflect the caller of your wrapper function. If you do not have apr_pool_create_core_ex in a wrapper, trust the macro and don’t call apr_pool_create_core_ex_debug directly.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>newpool</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>abort_fn</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>allocator</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>file_line</p></td>
+<td><p>Where the function is called from. This is usually APR_POOL__FILE_LINE__.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p>apr_pool_create_unmanaged.</p>
+<p>apr_pool_create_unmanaged.</p>
+<p>apr_pool_create_unmanaged.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1ga918adf3026c894efeae254a0446aed3b"><span id="index-11"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_pool_create</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">**</span> <span class="n">newpool</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">parent</span>
+<span class="p">)</span></pre>
+<p>Create a new pool. This function is thread-safe, in the sense that multiple threads can safely create subpools of the same parent pool concurrently. Similarly, a subpool can be created by one thread at the same time that another thread accesses the parent pool.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>newpool</p></td>
+<td><p>The pool we have just created.</p></td>
+</tr>
+<tr class="row-even"><td><p>parent</p></td>
+<td><p>The parent pool. If this is NULL, the new pool is a root pool. If it is non-NULL, the new pool will inherit all of its parent pool’s attributes, except the apr_pool_t will be a sub-pool.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1gad3675378924bc9d98e46258c049f1761"><span id="index-12"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_pool_create_core</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">**</span> <span class="n">newpool</span><span class="p">)</span></pre>
+<p>Create a new unmanaged pool.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>newpool</p></td>
+<td><p>The pool we have just created.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1gaf446fcf5da1fcd62d3f802a4c0c10f97"><span id="index-13"></span><a class="reference internal" href="group_apr_allocator.html#doxid-group-apr-allocator-1ga1ceabfd30fcfc455e47d052d2a24244b"><span class="std std-ref">apr_allocator_t</span></a><span></span><span class="o">*</span>
+<span class="n">apr_pool_allocator_get</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span><span class="p">)</span></pre>
+<p>Find the pool’s allocator</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>pool</p></td>
+<td><p>The pool to get the allocator from.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1gafa8a998cd660e82b62aecec09e239d0d"><span id="index-14"></span><span></span><span class="kt">void</span>
+<span class="n">apr_pool_clear</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">)</span></pre>
+<p>Clear all memory in the pool and run all the cleanups. This also destroys all subpools. This does not actually free the memory, it just allows the pool to re-use this memory for the next allocation.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>The pool to clear</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-pools-1ga54759954d2cba7cb649ab5680a33f9e3"><span class="std std-ref">apr_pool_destroy()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1ga9521870e42ec4395a0bf8388706a57b9"><span id="index-15"></span><span></span><span class="kt">void</span>
+<span class="n">apr_pool_clear_debug</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">file_line</span>
+<span class="p">)</span></pre>
+<p>Debug version of apr_pool_clear. Only available when APR_POOL_DEBUG is defined. Call this directly if you have your apr_pool_clear calls in a wrapper function and wish to override the file_line argument to reflect the caller of your wrapper function. If you do not have apr_pool_clear in a wrapper, trust the macro and don’t call apr_pool_destroy_clear directly.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>See: apr_pool_clear.</p></td>
+</tr>
+<tr class="row-even"><td><p>file_line</p></td>
+<td><p>Where the function is called from. This is usually APR_POOL__FILE_LINE__.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1ga54759954d2cba7cb649ab5680a33f9e3"><span id="index-16"></span><span></span><span class="kt">void</span>
+<span class="n">apr_pool_destroy</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">)</span></pre>
+<p>Destroy the pool. This takes similar action as <a class="reference internal" href="#doxid-group-apr-pools-1gafa8a998cd660e82b62aecec09e239d0d"><span class="std std-ref">apr_pool_clear()</span></a> and then frees all the memory. This will actually free the memory</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>The pool to destroy</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1ga7efe64dfcce883d7fad9df813d9259fc"><span id="index-17"></span><span></span><span class="kt">void</span>
+<span class="n">apr_pool_destroy_debug</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">file_line</span>
+<span class="p">)</span></pre>
+<p>Debug version of apr_pool_destroy. Only available when APR_POOL_DEBUG is defined. Call this directly if you have your apr_pool_destroy calls in a wrapper function and wish to override the file_line argument to reflect the caller of your wrapper function. If you do not have apr_pool_destroy in a wrapper, trust the macro and don’t call apr_pool_destroy_debug directly.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>See: apr_pool_destroy.</p></td>
+</tr>
+<tr class="row-even"><td><p>file_line</p></td>
+<td><p>Where the function is called from. This is usually APR_POOL__FILE_LINE__.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1ga85f1e193c31d109affda72f9a92c6915"><span id="index-18"></span><span></span><span class="kt">void</span><span class="o">*</span>
+<span class="n">apr_palloc</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="n">apr_size_t</span> <span class="n">size</span>
+<span class="p">)</span></pre>
+<p>Allocate a block of memory from a pool</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>The pool to allocate from</p></td>
+</tr>
+<tr class="row-even"><td><p>size</p></td>
+<td><p>The amount of memory to allocate</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>The allocated memory</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1ga0ac211ac89be868b107776b4183a8174"><span id="index-19"></span><span></span><span class="kt">void</span><span class="o">*</span>
+<span class="n">apr_palloc_debug</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="n">apr_size_t</span> <span class="n">size</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">file_line</span>
+<span class="p">)</span></pre>
+<p>Debug version of apr_palloc</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>See: apr_palloc</p></td>
+</tr>
+<tr class="row-even"><td><p>size</p></td>
+<td><p>See: apr_palloc</p></td>
+</tr>
+<tr class="row-odd"><td><p>file_line</p></td>
+<td><p>Where the function is called from. This is usually APR_POOL__FILE_LINE__.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>See: apr_palloc</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1gaf61c098ad258069d64cdf8c0a9369f9e"><span id="index-20"></span><span></span><span class="kt">void</span><span class="o">*</span>
+<span class="n">apr_pcalloc</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="n">apr_size_t</span> <span class="n">size</span>
+<span class="p">)</span></pre>
+<p>Allocate a block of memory from a pool and set all of the memory to 0</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>The pool to allocate from</p></td>
+</tr>
+<tr class="row-even"><td><p>size</p></td>
+<td><p>The amount of memory to allocate</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>The allocated memory</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1ga7b43035318ffdc57a6eddab07dc57cb2"><span id="index-21"></span><span></span><span class="kt">void</span><span class="o">*</span>
+<span class="n">apr_pcalloc_debug</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span><span class="p">,</span>
+    <span class="n">apr_size_t</span> <span class="n">size</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">file_line</span>
+<span class="p">)</span></pre>
+<p>Debug version of apr_pcalloc</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>See: apr_pcalloc</p></td>
+</tr>
+<tr class="row-even"><td><p>size</p></td>
+<td><p>See: apr_pcalloc</p></td>
+</tr>
+<tr class="row-odd"><td><p>file_line</p></td>
+<td><p>Where the function is called from. This is usually APR_POOL__FILE_LINE__.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>See: apr_pcalloc</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1gaa658b1f10dd13967eaa7c4156d4c2174"><span id="index-22"></span><span></span><span class="kt">void</span>
+<span class="n">apr_pool_abort_set</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1ga370a939349adf6d1438068e2fc69a0dd"><span class="std std-ref">apr_abortfunc_t</span></a><span></span> <span class="n">abortfunc</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">)</span></pre>
+<p>Set the function to be called when an allocation failure occurs. If the program wants APR to exit on a memory allocation error, then this function can be called to set the callback to use (for performing cleanup and then exiting). If this function is not called, then APR will return an error and expect the calling program to deal with the error accordingly.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1gaf7610c30ef5f84a8742c0b3e63fdd7b0"><span id="index-23"></span><a class="reference internal" href="#doxid-group-apr-pools-1ga370a939349adf6d1438068e2fc69a0dd"><span class="std std-ref">apr_abortfunc_t</span></a><span></span>
+<span class="n">apr_pool_abort_get</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span><span class="p">)</span></pre>
+<p>Get the abort function associated with the specified pool.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>pool</p></td>
+<td><p>The pool for retrieving the abort function.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>The abort function for the given pool.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1ga94db31f40609b15b592ff47f989ca9ec"><span id="index-24"></span><a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span>
+<span class="n">apr_pool_parent_get</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span><span class="p">)</span></pre>
+<p>Get the parent pool of the specified pool.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>pool</p></td>
+<td><p>The pool for retrieving the parent pool.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>The parent of the given pool.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1ga05d299f778659d1e0806140d8a7fea79"><span id="index-25"></span><span></span><span class="kt">int</span>
+<span class="n">apr_pool_is_ancestor</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">a</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">b</span>
+<span class="p">)</span></pre>
+<p>Determine if pool a is an ancestor of pool b. if compiled with APR_POOL_DEBUG, this function will also return true if A is a pool which has been guaranteed by the caller (using apr_pool_join) to have a lifetime at least as long as some ancestor of pool B.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>a</p></td>
+<td><p>The pool to search</p></td>
+</tr>
+<tr class="row-even"><td><p>b</p></td>
+<td><p>The pool to search for</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>True if a is an ancestor of b, NULL is considered an ancestor of all pools.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1gaeaa872f7999740a60803e95429890518"><span id="index-26"></span><span></span><span class="kt">void</span>
+<span class="n">apr_pool_tag</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">tag</span>
+<span class="p">)</span></pre>
+<p>Tag a pool (give it a name)</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>pool</p></td>
+<td><p>The pool to tag</p></td>
+</tr>
+<tr class="row-even"><td><p>tag</p></td>
+<td><p>The tag</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1ga78d1aa2d9fa842d83eaffccb0f0c0c5c"><span id="index-27"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_pool_userdata_set</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">key</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">cleanup</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">)</span></pre>
+<p>Set the data associated with the current pool</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The data to be attached to the pool should have a life span at least as long as the pool it is being attached to.</p>
+</div>
+<p>Users of APR must take EXTREME care when choosing a key to use for their data. It is possible to accidentally overwrite data by choosing a key that another part of the program is using. Therefore it is advised that steps are taken to ensure that unique keys are used for all of the userdata objects in a particular pool (the same key in two different pools or a pool and one of its subpools is okay) at all times. Careful namespace prefixing of key names is a typical way to help ensure this uniqueness.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>data</p></td>
+<td><p>The user data associated with the pool.</p></td>
+</tr>
+<tr class="row-even"><td><p>key</p></td>
+<td><p>The key to use for association</p></td>
+</tr>
+<tr class="row-odd"><td><p>cleanup</p></td>
+<td><p>The cleanup program to use to cleanup the data (NULL if none)</p></td>
+</tr>
+<tr class="row-even"><td><p>pool</p></td>
+<td><p>The current pool</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1ga435644c493dc5b10d80c4b99b8cd4589"><span id="index-28"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_pool_userdata_setn</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">key</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">cleanup</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">)</span></pre>
+<p>Set the data associated with the current pool</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>same as <a class="reference internal" href="#doxid-group-apr-pools-1ga78d1aa2d9fa842d83eaffccb0f0c0c5c"><span class="std std-ref">apr_pool_userdata_set()</span></a>, except that this version doesn’t make a copy of the key (this function is useful, for example, when the key is a string literal)</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This should NOT be used if the key could change addresses by any means between the <a class="reference internal" href="#doxid-group-apr-pools-1ga435644c493dc5b10d80c4b99b8cd4589"><span class="std std-ref">apr_pool_userdata_setn()</span></a> call and a subsequent <a class="reference internal" href="#doxid-group-apr-pools-1gaf930f1fad2cf92a2432c0814c8a0b86f"><span class="std std-ref">apr_pool_userdata_get()</span></a> on that key, such as if a static string is used as a userdata key in a DSO and the DSO could be unloaded and reloaded between the _setn() and the _get(). You MUST use <a class="reference internal" href="#doxid-group-apr-pools-1ga78d1aa2d9fa842d83eaffccb0f0c0c5c"><span class="std std-ref">apr_pool_userdata_set()</span></a> in such cases.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>More generally, the key and the data to be attached to the pool should have a life span at least as long as the pool itself.</p>
+</div>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>data</p></td>
+<td><p>The user data associated with the pool.</p></td>
+</tr>
+<tr class="row-even"><td><p>key</p></td>
+<td><p>The key to use for association</p></td>
+</tr>
+<tr class="row-odd"><td><p>cleanup</p></td>
+<td><p>The cleanup program to use to cleanup the data (NULL if none)</p></td>
+</tr>
+<tr class="row-even"><td><p>pool</p></td>
+<td><p>The current pool</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1gaf930f1fad2cf92a2432c0814c8a0b86f"><span id="index-29"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_pool_userdata_get</span><span class="p">(</span>
+    <span class="kt">void</span><span class="o">**</span> <span class="n">data</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">key</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">)</span></pre>
+<p>Return the data associated with the current pool.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>data</p></td>
+<td><p>The user data associated with the pool.</p></td>
+</tr>
+<tr class="row-even"><td><p>key</p></td>
+<td><p>The key for the data to retrieve</p></td>
+</tr>
+<tr class="row-odd"><td><p>pool</p></td>
+<td><p>The current pool.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="macros">
+<h3>Macros</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1ga89ce1d55c7f0c39ea87c88eabd655394"><span id="index-30"></span><span></span><span class="cp">#define APR_POOL_DECLARE_ACCESSOR(type)</span></pre>
+<p>Declaration helper macro to construct apr_foo_pool_get()s.</p>
+<p>This standardized macro is used by opaque (APR) data types to return the apr_pool_t that is associated with the data type.</p>
+<p><a class="reference internal" href="#doxid-group-apr-pools-1ga89ce1d55c7f0c39ea87c88eabd655394"><span class="std std-ref">APR_POOL_DECLARE_ACCESSOR()</span></a> is used in a header file to declare the accessor function. A typical usage and result would be:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>   :ref:`APR_POOL_DECLARE_ACCESSOR(file) &lt;doxid-group__apr__pools_1ga89ce1d55c7f0c39ea87c88eabd655394&gt;`;
+becomes:
+   :ref:`APR_DECLARE(apr_pool_t *) &lt;doxid-group__apr__platform_1gad7b91b811a172bfa802603c2fb688f98&gt;` :ref:`apr_file_pool_get(const apr_file_t *thefile) &lt;doxid-group__apr__file__io_1gab5950b3b0156097b0181394a37e03ede&gt;`;
+</pre></div>
+</div>
+<p>Doxygen unwraps this macro (via doxygen.conf) to provide actual help for each specific occurrence of apr_foo_pool_get.</p>
+<p>the linkage is specified for APR. It would be possible to expand the macros to support other linkages.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1ga43a8a52f68f8b7d3b7694c254da4a074"><span id="index-31"></span><span></span><span class="cp">#define APR_POOL_IMPLEMENT_ACCESSOR(type)</span></pre>
+<p>Implementation helper macro to provide apr_foo_pool_get()s.</p>
+<p>In the implementation, the <a class="reference internal" href="#doxid-group-apr-pools-1ga43a8a52f68f8b7d3b7694c254da4a074"><span class="std std-ref">APR_POOL_IMPLEMENT_ACCESSOR()</span></a> is used to actually define the function. It assumes the field is named “pool”.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-pools-1gac81cff34d0ff4be52fa924663478eade"><span id="index-32"></span><span></span><span class="cp">#define APR_POOL__FILE_LINE__</span></pre>
+<p>Pool debug levels</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>.. rubric:: | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>|   |   |   |   |   |   |   | x |  General debug code enabled (useful in
+                                   combination with with-efence).
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>|   |   |   |   |   |   | x |   |  Verbose output on stderr (report
+                                   CREATE, CLEAR, DESTROY).
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>|   |   |   | x |   |   |   |   |  Verbose output on stderr (report
+                                   PALLOC, PCALLOC).
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>|   |   |   |   |   | x |   |   |  Lifetime checking. On each use of a
+                                   pool, check its lifetime.  If the pool
+                                   is out of scope, abort().
+                                   In combination with the verbose flag
+                                   above, it will output LIFE in such an
+                                   event prior to aborting.
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>|   |   |   |   | x |   |   |   |  Pool owner checking.  On each use of a
+                                   pool, check if the current thread is the
+                                   pool&#39;s owner.  If not, abort().  In
+                                   combination with the verbose flag above,
+                                   it will output OWNER in such an event
+                                   prior to aborting.  Use the debug
+                                   function apr_pool_owner_set() to switch
+                                   a pool&#39;s ownership.
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>When no debug level was specified, assume general debug mode.
+If level 0 was specified, debugging is switched off.
+</pre></div>
+</div>
+<p>the place in the code where the particular function was called</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="struct_apr_mmap_t.html" class="btn btn-neutral float-left" title="struct apr_mmap_t" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="group_PoolCleanup.html" class="btn btn-neutral float-right" title="Pool Cleanup Functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2008-2017, Apache Portable Runtime Maintainers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

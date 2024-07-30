@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>The SSH logging functions. &#8212; LibSSH Documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=0a676766" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css?v=3785b6ce" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=840eb146"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="The SSH message functions" href="group_libssh_messages.html" />
+    <link rel="prev" title="The SSH helper functions." href="group_libssh_misc.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="group_libssh_messages.html" title="The SSH message functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="group_libssh_misc.html" title="The SSH helper functions."
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LibSSH Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="group_libssh.html" accesskey="U">The libssh API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">The SSH logging functions.</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="the-ssh-logging-functions">
+<span id="doxid-group-libssh-log"></span><span id="index-0"></span><h1>The SSH logging functions.</h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="overview">
+<h2>Overview</h2>
+<p>Logging functions for debugging and problem resolving. <a class="reference internal" href="#details-group-libssh-log"><span class="std std-ref">More…</span></a></p>
+<pre class="highlight doxyrest-overview-code-block literal-block"><span></span><span class="c1">// enums</span>
+
+<span class="k">enum</span> <span class="p">{</span>
+    <a class="reference internal" href="#doxid-group-libssh-log-1gga06fc87d81c62e9abb8790b6e5713c55ba95c5ce872b66ec03f3336970c1e0a774"><span class="std std-ref">&#64;0::SSH_LOG_NOLOG</span></a><span></span>     <span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-libssh-log-1gga06fc87d81c62e9abb8790b6e5713c55ba12e6bbab0c5a667e259e2f9599a72550"><span class="std std-ref">&#64;0::SSH_LOG_WARNING</span></a><span></span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-libssh-log-1gga06fc87d81c62e9abb8790b6e5713c55ba75fa79e63947b66462db977d9b5ae27c"><span class="std std-ref">&#64;0::SSH_LOG_PROTOCOL</span></a><span></span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-libssh-log-1gga06fc87d81c62e9abb8790b6e5713c55ba6445dfe21592d69d9741d319538b6673"><span class="std std-ref">&#64;0::SSH_LOG_PACKET</span></a><span></span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-libssh-log-1gga06fc87d81c62e9abb8790b6e5713c55ba926c933f61d1afa64003c1cc66f6a01c"><span class="std std-ref">&#64;0::SSH_LOG_FUNCTIONS</span></a><span></span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="c1">// global functions</span>
+
+<a class="reference internal" href="global.html#doxid-libssh-8h-1a2ba7f29ac0f2b5ef7134243d24888ac5"><span class="std std-ref">LIBSSH_API</span></a><span></span> <span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-log-1ga6accdc08b7d8c4234750ef30c4854b9e"><span class="std std-ref">ssh_set_log_callback</span></a><span></span><span class="p">(</span><a class="reference internal" href="group_libssh_callbacks.html#doxid-group-libssh-callbacks-1gab6eedc77c07dde0c6baf9c29e7700a99"><span class="std std-ref">ssh_logging_callback</span></a><span></span> <span class="n">cb</span><span class="p">);</span>
+
+<a class="reference internal" href="global.html#doxid-libssh-8h-1a2ba7f29ac0f2b5ef7134243d24888ac5"><span class="std std-ref">LIBSSH_API</span></a><span></span> <a class="reference internal" href="group_libssh_callbacks.html#doxid-group-libssh-callbacks-1gab6eedc77c07dde0c6baf9c29e7700a99"><span class="std std-ref">ssh_logging_callback</span></a><span></span>
+<a class="reference internal" href="#doxid-group-libssh-log-1ga0f795c820547d058dbbfa80cd4fe9a4e"><span class="std std-ref">ssh_get_log_callback</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-log-1gad6a0b7b581b12be4e34a110b7312614b"><span class="std std-ref">ssh_get_log_level</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="kt">void</span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-libssh-log-1ga887a1e754cd935b55fea1afb1f718761"><span class="std std-ref">ssh_get_log_userdata</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-log-1ga9719dabb8fab8a3ebeb4dc2ebcd2dd45"><span class="std std-ref">ssh_set_log_level</span></a><span></span><span class="p">(</span><span class="kt">int</span> <span class="n">level</span><span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-libssh-log-1ga0addd5c29922f40e9f842a43e0cb0b27"><span class="std std-ref">ssh_set_log_userdata</span></a><span></span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">);</span>
+
+<span class="kt">void</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-log-1gac8bd5378e8af9c6af0ebc198ae6dd2ed"><span></span><span class="n">_ssh_log</span></span><span></span><span class="p">(</span>
+    <span class="kt">int</span> <span class="n">verbosity</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">function</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">format</span><span class="p">,</span>
+    <span class="p">...</span>
+<span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">int</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-log-1ga04e485696de6a4eb9ba303ef190f6a93"><span></span><span class="n">current_timestring</span></span><span></span><span class="p">(</span>
+    <span class="kt">int</span> <span class="n">hires</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span>
+    <span class="kt">size_t</span> <span class="n">len</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-log-1ga0bb252b81e0c497fc559c9e4007cf6c5"><span></span><span class="n">ssh_log</span></span><span></span><span class="p">(</span>
+    <span class="n">ssh_session</span> <span class="n">session</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">verbosity</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">format</span><span class="p">,</span>
+    <span class="p">...</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-log-1gacfb35fd4c7d3dafdbbfaa2c255022ddc"><span></span><span class="n">ssh_log_common</span></span><span></span><span class="p">(</span>
+    <span class="k">struct</span> <a class="reference internal" href="struct_ssh_common_struct.html#doxid-structssh-common-struct"><span class="std std-ref">ssh_common_struct</span></a><span></span><span class="o">*</span> <span class="n">common</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">verbosity</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">function</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">format</span><span class="p">,</span>
+    <span class="p">...</span>
+<span class="p">);</span>
+
+<span class="kt">void</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-log-1ga28de9ecb422e9b2ffcd5dcb5b7ec13e1"><span></span><span class="n">ssh_log_function</span></span><span></span><span class="p">(</span>
+    <span class="kt">int</span> <span class="n">verbosity</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">function</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">buffer</span>
+<span class="p">);</span>
+
+<span class="k">static</span>
+<span class="kt">void</span>
+<span class="doxyrest-code-target target" id="doxid-group-libssh-log-1ga04874b7c2777229ef8ec669886ee10bd"><span></span><span class="n">ssh_log_stderr</span></span><span></span><span class="p">(</span>
+    <span class="kt">int</span> <span class="n">verbosity</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">function</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">buffer</span>
+<span class="p">);</span></pre>
+</section>
+<section id="detailed-documentation">
+<span id="details-group-libssh-log"></span><h2>Detailed Documentation</h2>
+<p>Logging functions for debugging and problem resolving.</p>
+<section id="enum-values">
+<h3>Enum Values</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-log-1gga06fc87d81c62e9abb8790b6e5713c55ba95c5ce872b66ec03f3336970c1e0a774"><span id="index-1"></span><span></span><span class="n">SSH_LOG_NOLOG</span></pre>
+<p>No logging at all.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-log-1gga06fc87d81c62e9abb8790b6e5713c55ba12e6bbab0c5a667e259e2f9599a72550"><span id="index-2"></span><span></span><span class="n">SSH_LOG_WARNING</span></pre>
+<p>Only warnings.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-log-1gga06fc87d81c62e9abb8790b6e5713c55ba75fa79e63947b66462db977d9b5ae27c"><span id="index-3"></span><span></span><span class="n">SSH_LOG_PROTOCOL</span></pre>
+<p>High level protocol information.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-log-1gga06fc87d81c62e9abb8790b6e5713c55ba6445dfe21592d69d9741d319538b6673"><span id="index-4"></span><span></span><span class="n">SSH_LOG_PACKET</span></pre>
+<p>Lower level protocol infomations, packet level.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-log-1gga06fc87d81c62e9abb8790b6e5713c55ba926c933f61d1afa64003c1cc66f6a01c"><span id="index-5"></span><span></span><span class="n">SSH_LOG_FUNCTIONS</span></pre>
+<p>Every function path.</p>
+</section>
+<section id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-log-1ga6accdc08b7d8c4234750ef30c4854b9e"><span id="index-6"></span><a class="reference internal" href="global.html#doxid-libssh-8h-1a2ba7f29ac0f2b5ef7134243d24888ac5"><span class="std std-ref">LIBSSH_API</span></a><span></span> <span class="kt">int</span>
+<span class="n">ssh_set_log_callback</span><span class="p">(</span><a class="reference internal" href="group_libssh_callbacks.html#doxid-group-libssh-callbacks-1gab6eedc77c07dde0c6baf9c29e7700a99"><span class="std std-ref">ssh_logging_callback</span></a><span></span> <span class="n">cb</span><span class="p">)</span></pre>
+<p>Set the logging callback function.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>cb</p></td>
+<td><p>The callback to set.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>0 on success, &lt; 0 on errror.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-log-1ga0f795c820547d058dbbfa80cd4fe9a4e"><span id="index-7"></span><a class="reference internal" href="global.html#doxid-libssh-8h-1a2ba7f29ac0f2b5ef7134243d24888ac5"><span class="std std-ref">LIBSSH_API</span></a><span></span> <a class="reference internal" href="group_libssh_callbacks.html#doxid-group-libssh-callbacks-1gab6eedc77c07dde0c6baf9c29e7700a99"><span class="std std-ref">ssh_logging_callback</span></a><span></span>
+<span class="n">ssh_get_log_callback</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></pre>
+<p>Get the pointer to the logging callback function.</p>
+<p class="rubric">Returns:</p>
+<p>The pointer the the callback or NULL if none set.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-log-1gad6a0b7b581b12be4e34a110b7312614b"><span id="index-8"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_get_log_level</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></pre>
+<p>Get the log level of the library.</p>
+<p class="rubric">Returns:</p>
+<p>The value of the log level.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-log-1ga887a1e754cd935b55fea1afb1f718761"><span id="index-9"></span><span></span><span class="kt">void</span><span class="o">*</span>
+<span class="n">ssh_get_log_userdata</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span></pre>
+<p>Get the userdata of the logging function.</p>
+<p class="rubric">Returns:</p>
+<p>The userdata if set or NULL.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-log-1ga9719dabb8fab8a3ebeb4dc2ebcd2dd45"><span id="index-10"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_set_log_level</span><span class="p">(</span><span class="kt">int</span> <span class="n">level</span><span class="p">)</span></pre>
+<p>Set the log level of the library.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>level</p></td>
+<td><p>The level to set.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK on success, SSH_ERROR on error.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-libssh-log-1ga0addd5c29922f40e9f842a43e0cb0b27"><span id="index-11"></span><span></span><span class="kt">int</span>
+<span class="n">ssh_set_log_userdata</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">)</span></pre>
+<p>Set the userdata for the logging function.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>data</p></td>
+<td><p>The userdata to set.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>SSH_OK on success.</p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">The SSH logging functions.</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li><a class="reference internal" href="#enum-values">Enum Values</a></li>
+<li><a class="reference internal" href="#global-functions">Global Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="group_libssh_misc.html"
+                          title="previous chapter">The SSH helper functions.</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="group_libssh_messages.html"
+                          title="next chapter">The SSH message functions</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="group_libssh_messages.html" title="The SSH message functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="group_libssh_misc.html" title="The SSH helper functions."
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LibSSH Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="group_libssh.html" >The libssh API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">The SSH logging functions.</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2003-2017, LibSSH Maintainers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    </div>
+  </body>
+</html>

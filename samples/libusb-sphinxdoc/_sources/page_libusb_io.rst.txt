@@ -1,0 +1,116 @@
+.. index:: pair: page; Synchronous and asynchronous device I/O
+.. _doxid-libusb_io:
+
+Synchronous and asynchronous device I/O
+=======================================
+
+
+
+.. _doxid-libusb_io_1io_intro:
+
+Introduction
+~~~~~~~~~~~~
+
+If you're using libusb in your application, you're probably wanting to perform I/O with devices - you want to perform USB data transfers.
+
+libusb offers two separate interfaces for device I/O. This page aims to introduce the two in order to help you decide which one is more suitable for your application. You can also choose to use both interfaces in your application by considering each transfer on a case-by-case basis.
+
+Once you have read through the following discussion, you should consult the detailed API documentation pages for the details:
+
+* :ref:`Synchronous device I/O <doxid-group__libusb__syncio>`
+
+* :ref:`Asynchronous device I/O <doxid-group__libusb__asyncio>`
+
+
+
+
+
+.. _doxid-libusb_io_1theory:
+
+Transfers at a logical level
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+At a logical level, USB transfers typically happen in two parts. For example, when reading data from a endpoint:
+
+#. A request for data is sent to the device
+
+#. Some time later, the incoming data is received by the host
+
+or when writing data to an endpoint:
+
+#. The data is sent to the device
+
+#. Some time later, the host receives acknowledgement from the device that the data has been transferred.
+
+There may be an indefinite delay between the two steps. Consider a fictional USB input device with a button that the user can press. In order to determine when the button is pressed, you would likely submit a request to read data on a bulk or interrupt endpoint and wait for data to arrive. Data will arrive when the button is pressed by the user, which is potentially hours later.
+
+libusb offers both a synchronous and an asynchronous interface to performing USB transfers. The main difference is that the synchronous interface combines both steps indicated above into a single function call, whereas the asynchronous interface separates them.
+
+
+
+
+
+.. _doxid-libusb_io_1sync:
+
+The synchronous interface
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The synchronous I/O interface allows you to perform a USB transfer with a single function call. When the function call returns, the transfer has completed and you can parse the results.
+
+If you have used the libusb-0.1 before, this I/O style will seem familar to you. libusb-0.1 only offered a synchronous interface.
+
+In our input device example, to read button presses you might write code in the following style:
+
+.. ref-code-block:: c
+
+	unsigned char data[4];
+	int actual_length;
+	int r = libusb_bulk_transfer(dev_handle, LIBUSB_ENDPOINT_IN, data, sizeof(data), &actual_length, 0);
+	if (r == 0 && actual_length == sizeof(data)) {
+	    // results of the transaction can now be found in the data buffer
+	    // parse them here and report button press
+	} else {
+	    error();
+	}
+
+The main advantage of this model is simplicity: you did everything with a single simple function call.
+
+However, this interface has its limitations. Your application will sleep inside :ref:`libusb_bulk_transfer() <doxid-group__libusb__syncio_1gab8ae853ab492c22d707241dc26c8a805>` until the transaction has completed. If it takes the user 3 hours to press the button, your application will be sleeping for that long. Execution will be tied up inside the library - the entire thread will be useless for that duration.
+
+Another issue is that by tieing up the thread with that single transaction there is no possibility of performing I/O with multiple endpoints and/or multiple devices simultaneously, unless you resort to creating one thread per transaction.
+
+Additionally, there is no opportunity to cancel the transfer after the request has been submitted.
+
+For details on how to use the synchronous API, see the :ref:`synchronous I/O API documentation <doxid-group__libusb__syncio>` pages.
+
+
+
+
+
+.. _doxid-libusb_io_1async:
+
+The asynchronous interface
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Asynchronous I/O is the most significant new feature in libusb-1.0. Although it is a more complex interface, it solves all the issues detailed above.
+
+Instead of providing which functions that block until the I/O has complete, libusb's asynchronous interface presents non-blocking functions which begin a transfer and then return immediately. Your application passes a callback function pointer to this non-blocking function, which libusb will call with the results of the transaction when it has completed.
+
+Transfers which have been submitted through the non-blocking functions can be cancelled with a separate function call.
+
+The non-blocking nature of this interface allows you to be simultaneously performing I/O to multiple endpoints on multiple devices, without having to use threads.
+
+This added flexibility does come with some complications though:
+
+* In the interest of being a lightweight library, libusb does not create threads and can only operate when your application is calling into it. Your application must call into libusb from it's main loop when events are ready to be handled, or you must use some other scheme to allow libusb to undertake whatever work needs to be done.
+
+* libusb also needs to be called into at certain fixed points in time in order to accurately handle transfer timeouts.
+
+* Memory handling becomes more complex. You cannot use stack memory unless the function with that stack is guaranteed not to return until the transfer callback has finished executing.
+
+* You generally lose some linearity from your code flow because submitting the transfer request is done in a separate function from where the transfer results are handled. This becomes particularly obvious when you want to submit a second transfer based on the results of an earlier transfer.
+
+Internally, libusb's synchronous interface is expressed in terms of function calls to the asynchronous interface.
+
+For details on how to use the asynchronous API, see the :ref:`asynchronous I/O API <doxid-group__libusb__asyncio>` documentation pages.
+

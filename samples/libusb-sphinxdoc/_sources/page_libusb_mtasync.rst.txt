@@ -1,0 +1,253 @@
+.. index:: pair: page; Multi-threaded applications and asynchronous I/O
+.. _doxid-libusb_mtasync:
+
+Multi-threaded applications and asynchronous I/O
+================================================
+
+libusb is a thread-safe library, but extra considerations must be applied to applications which interact with libusb from multiple threads.
+
+The underlying issue that must be addressed is that all libusb I/O revolves around monitoring file descriptors through the poll()/select() system calls. This is directly exposed at the :ref:`asynchronous interface <doxid-group__libusb__asyncio>` but it is important to note that the :ref:`synchronous interface <doxid-group__libusb__syncio>` is implemented on top of the asynchonrous interface, therefore the same considerations apply.
+
+The issue is that if two or more threads are concurrently calling poll() or select() on libusb's file descriptors then only one of those threads will be woken up when an event arrives. The others will be completely oblivious that anything has happened.
+
+Consider the following pseudo-code, which submits an asynchronous transfer then waits for its completion. This style is one way you could implement a synchronous interface on top of the asynchronous interface (and libusb does something similar, albeit more advanced due to the complications explained on this page).
+
+.. ref-code-block:: c
+
+	void cb(struct libusb_transfer *transfer)
+	{
+	    int *completed = transfer->user_data;
+	     *completed = 1;
+	}
+	
+	void myfunc() {
+	    struct libusb_transfer *transfer;
+	    unsigned char buffer[LIBUSB_CONTROL_SETUP_SIZE] __attribute__ ((aligned (2)));
+	    int completed = 0;
+	
+	    transfer = libusb_alloc_transfer(0);
+	    libusb_fill_control_setup(buffer,
+	        LIBUSB_REQUEST_TYPE_VENDOR | LIBUSB_ENDPOINT_OUT, 0x04, 0x01, 0, 0);
+	    libusb_fill_control_transfer(transfer, dev, buffer, cb, &completed, 1000);
+	    libusb_submit_transfer(transfer);
+	
+	    while (!completed) {
+	        poll(libusb file descriptors, 120*1000);
+	        if (poll indicates activity)
+	            libusb_handle_events_timeout(ctx, &zero_tv);
+	    }
+	    printf("completed!");
+	    // other code here
+	}
+
+Here we are *serializing* completion of an asynchronous event against a condition - the condition being completion of a specific transfer. The poll() loop has a long timeout to minimize CPU usage during situations when nothing is happening (it could reasonably be unlimited).
+
+If this is the only thread that is polling libusb's file descriptors, there is no problem: there is no danger that another thread will swallow up the event that we are interested in. On the other hand, if there is another thread polling the same descriptors, there is a chance that it will receive the event that we were interested in. In this situation, ``myfunc()`` will only realise that the transfer has completed on the next iteration of the loop, *up to 120 seconds later.* Clearly a two-minute delay is undesirable, and don't even think about using short timeouts to circumvent this issue!
+
+The solution here is to ensure that no two threads are ever polling the file descriptors at the same time. A naive implementation of this would impact the capabilities of the library, so libusb offers the scheme documented below to ensure no loss of functionality.
+
+Before we go any further, it is worth mentioning that all libusb-wrapped event handling procedures fully adhere to the scheme documented below. This includes :ref:`libusb_handle_events() <doxid-group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327>` and its variants, and all the synchronous I/O functions - libusb hides this headache from you.
+
+
+
+.. _doxid-libusb_mtasync_1Using:
+
+libusb_handle_events() from multiple threads
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Even when only using :ref:`libusb_handle_events() <doxid-group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327>` and synchronous I/O functions, you can still have a race condition. You might be tempted to solve the above with :ref:`libusb_handle_events() <doxid-group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327>` like so:
+
+.. ref-code-block:: c
+
+	libusb_submit_transfer(transfer);
+	
+	while (!completed) {
+	    libusb_handle_events(ctx);
+	}
+	printf("completed!");
+
+This however has a race between the checking of completed and :ref:`libusb_handle_events() <doxid-group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327>` acquiring the events lock, so another thread could have completed the transfer, resulting in this thread hanging until either a timeout or another event occurs. See also commit 6696512aade99bb15d6792af90ae329af270eba6 which fixes this in the synchronous API implementation of libusb.
+
+Fixing this race requires checking the variable completed only after taking the event lock, which defeats the concept of just calling :ref:`libusb_handle_events() <doxid-group__libusb__poll_1ga4989086e3f0327f3886a4c474ec7c327>` without worrying about locking. This is why libusb-1.0.9 introduces the new :ref:`libusb_handle_events_timeout_completed() <doxid-group__libusb__poll_1ga43e52b912a760b41a0cf8a4a472fbd5b>` and :ref:`libusb_handle_events_completed() <doxid-group__libusb__poll_1ga0bc99f39e4cf5ad393cd5936c36037d1>` functions, which handles doing the completion check for you after they have acquired the lock:
+
+.. ref-code-block:: c
+
+	libusb_submit_transfer(transfer);
+	
+	while (!completed) {
+	    libusb_handle_events_completed(ctx, &completed);
+	}
+	printf("completed!");
+
+This nicely fixes the race in our example. Note that if all you want to do is submit a single transfer and wait for its completion, then using one of the synchronous I/O functions is much easier.
+
+
+
+
+
+.. _doxid-libusb_mtasync_1eventlock:
+
+The events lock
+~~~~~~~~~~~~~~~
+
+The problem is when we consider the fact that libusb exposes file descriptors to allow for you to integrate asynchronous USB I/O into existing main loops, effectively allowing you to do some work behind libusb's back. If you do take libusb's file descriptors and pass them to poll()/select() yourself, you need to be aware of the associated issues.
+
+The first concept to be introduced is the events lock. The events lock is used to serialize threads that want to handle events, such that only one thread is handling events at any one time.
+
+You must take the events lock before polling libusb file descriptors, using :ref:`libusb_lock_events() <doxid-group__libusb__poll_1gaa72153938dc4f34decfacbc6cc6237ef>`. You must release the lock as soon as you have aborted your poll()/select() loop, using :ref:`libusb_unlock_events() <doxid-group__libusb__poll_1gacefbeabdd3409490dc4678f00779c165>`.
+
+
+
+
+
+.. _doxid-libusb_mtasync_1threadwait:
+
+Letting other threads do the work for you
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Although the events lock is a critical part of the solution, it is not enough on it's own. You might wonder if the following is sufficient...
+
+.. ref-code-block:: c
+
+	libusb_lock_events(ctx);
+	while (!completed) {
+	    poll(libusb file descriptors, 120*1000);
+	    if (poll indicates activity)
+	        libusb_handle_events_timeout(ctx, &zero_tv);
+	}
+	libusb_unlock_events(ctx);
+
+...and the answer is that it is not. This is because the transfer in the code shown above may take a long time (say 30 seconds) to complete, and the lock is not released until the transfer is completed.
+
+Another thread with similar code that wants to do event handling may be working with a transfer that completes after a few milliseconds. Despite having such a quick completion time, the other thread cannot check that status of its transfer until the code above has finished (30 seconds later) due to contention on the lock.
+
+To solve this, libusb offers you a mechanism to determine when another thread is handling events. It also offers a mechanism to block your thread until the event handling thread has completed an event (and this mechanism does not involve polling of file descriptors).
+
+After determining that another thread is currently handling events, you obtain the *event waiters* lock using :ref:`libusb_lock_event_waiters() <doxid-group__libusb__poll_1ga150865a3f35c38173d688efa7ee52929>`. You then re-check that some other thread is still handling events, and if so, you call :ref:`libusb_wait_for_event() <doxid-group__libusb__poll_1gae22755d523560be2867be7d09034ca50>`.
+
+:ref:`libusb_wait_for_event() <doxid-group__libusb__poll_1gae22755d523560be2867be7d09034ca50>` puts your application to sleep until an event occurs, or until a thread releases the events lock. When either of these things happen, your thread is woken up, and should re-check the condition it was waiting on. It should also re-check that another thread is handling events, and if not, it should start handling events itself.
+
+This looks like the following, as pseudo-code:
+
+.. ref-code-block:: c
+
+	retry:
+	if (libusb_try_lock_events(ctx) == 0) {
+	    // we obtained the event lock: do our own event handling
+	    while (!completed) {
+	        if (!libusb_event_handling_ok(ctx)) {
+	            libusb_unlock_events(ctx);
+	            goto retry;
+	        }
+	        poll(libusb file descriptors, 120*1000);
+	        if (poll indicates activity)
+	            libusb_handle_events_locked(ctx, 0);
+	    }
+	    libusb_unlock_events(ctx);
+	} else {
+	    // another thread is doing event handling. wait for it to signal us that
+	    // an event has completed
+	    libusb_lock_event_waiters(ctx);
+	
+	    while (!completed) {
+	        // now that we have the event waiters lock, double check that another
+	        // thread is still handling events for us. (it may have ceased handling
+	        // events in the time it took us to reach this point)
+	        if (!libusb_event_handler_active(ctx)) {
+	            // whoever was handling events is no longer doing so, try again
+	            libusb_unlock_event_waiters(ctx);
+	            goto retry;
+	        }
+	
+	        libusb_wait_for_event(ctx, NULL);
+	    }
+	    libusb_unlock_event_waiters(ctx);
+	}
+	printf("completed!\n");
+
+A naive look at the above code may suggest that this can only support one event waiter (hence a total of 2 competing threads, the other doing event handling), because the event waiter seems to have taken the event waiters lock while waiting for an event. However, the system does support multiple event waiters, because :ref:`libusb_wait_for_event() <doxid-group__libusb__poll_1gae22755d523560be2867be7d09034ca50>` actually drops the lock while waiting, and reaquires it before continuing.
+
+We have now implemented code which can dynamically handle situations where nobody is handling events (so we should do it ourselves), and it can also handle situations where another thread is doing event handling (so we can piggyback onto them). It is also equipped to handle a combination of the two, for example, another thread is doing event handling, but for whatever reason it stops doing so before our condition is met, so we take over the event handling.
+
+Four functions were introduced in the above pseudo-code. Their importance should be apparent from the code shown above.
+
+#. :ref:`libusb_try_lock_events() <doxid-group__libusb__poll_1ga6e5a116d5c9498ca4a0e29587fec1a05>` is a non-blocking function which attempts to acquire the events lock but returns a failure code if it is contended.
+
+#. :ref:`libusb_event_handling_ok() <doxid-group__libusb__poll_1ga63592b28c265185d9469d1e6920d8373>` checks that libusb is still happy for your thread to be performing event handling. Sometimes, libusb needs to interrupt the event handler, and this is how you can check if you have been interrupted. If this function returns 0, the correct behaviour is for you to give up the event handling lock, and then to repeat the cycle. The following :ref:`libusb_try_lock_events() <doxid-group__libusb__poll_1ga6e5a116d5c9498ca4a0e29587fec1a05>` will fail, so you will become an events waiter. For more information on this, read :ref:`The full story <doxid-libusb_mtasync_1fullstory>` below.
+
+#. :ref:`libusb_handle_events_locked() <doxid-group__libusb__poll_1ga71da081f97afa3bf68aed8e372254e8f>` is a variant of :ref:`libusb_handle_events_timeout() <doxid-group__libusb__poll_1ga6deff4c7d3a6c04bb9ec9fd259b48933>` that you can call while holding the events lock. :ref:`libusb_handle_events_timeout() <doxid-group__libusb__poll_1ga6deff4c7d3a6c04bb9ec9fd259b48933>` itself implements similar logic to the above, so be sure not to call it when you are "working behind libusb's back", as is the case here.
+
+#. :ref:`libusb_event_handler_active() <doxid-group__libusb__poll_1ga3a0a6e8be310c20f1ca68722149f9dbf>` determines if someone is currently holding the events lock
+
+You might be wondering why there is no function to wake up all threads blocked on :ref:`libusb_wait_for_event() <doxid-group__libusb__poll_1gae22755d523560be2867be7d09034ca50>`. This is because libusb can do this internally: it will wake up all such threads when someone calls :ref:`libusb_unlock_events() <doxid-group__libusb__poll_1gacefbeabdd3409490dc4678f00779c165>` or when a transfer completes (at the point after its callback has returned).
+
+
+
+.. _doxid-libusb_mtasync_1fullstory:
+
+The full story
+--------------
+
+The above explanation should be enough to get you going, but if you're really thinking through the issues then you may be left with some more questions regarding libusb's internals. If you're curious, read on, and if not, skip to the next section to avoid confusing yourself!
+
+The immediate question that may spring to mind is: what if one thread modifies the set of file descriptors that need to be polled while another thread is doing event handling?
+
+There are 2 situations in which this may happen.
+
+#. :ref:`libusb_open() <doxid-group__libusb__dev_1ga3f184a8be4488a767b2e0ae07e76d1b0>` will add another file descriptor to the poll set, therefore it is desirable to interrupt the event handler so that it restarts, picking up the new descriptor.
+
+#. :ref:`libusb_close() <doxid-group__libusb__dev_1ga779bc4f1316bdb0ac383bddbd538620e>` will remove a file descriptor from the poll set. There are all kinds of race conditions that could arise here, so it is important that nobody is doing event handling at this time.
+
+libusb handles these issues internally, so application developers do not have to stop their event handlers while opening/closing devices. Here's how it works, focusing on the :ref:`libusb_close() <doxid-group__libusb__dev_1ga779bc4f1316bdb0ac383bddbd538620e>` situation first:
+
+#. During initialization, libusb opens an internal pipe, and it adds the read end of this pipe to the set of file descriptors to be polled.
+
+#. During :ref:`libusb_close() <doxid-group__libusb__dev_1ga779bc4f1316bdb0ac383bddbd538620e>`, libusb writes some dummy data on this event pipe. This immediately interrupts the event handler. libusb also records internally that it is trying to interrupt event handlers for this high-priority event.
+
+#. At this point, some of the functions described above start behaving differently:
+   
+   * :ref:`libusb_event_handling_ok() <doxid-group__libusb__poll_1ga63592b28c265185d9469d1e6920d8373>` starts returning 1, indicating that it is NOT OK for event handling to continue.
+   
+   * :ref:`libusb_try_lock_events() <doxid-group__libusb__poll_1ga6e5a116d5c9498ca4a0e29587fec1a05>` starts returning 1, indicating that another thread holds the event handling lock, even if the lock is uncontended.
+   
+   * :ref:`libusb_event_handler_active() <doxid-group__libusb__poll_1ga3a0a6e8be310c20f1ca68722149f9dbf>` starts returning 1, indicating that another thread is doing event handling, even if that is not true.
+
+#. The above changes in behaviour result in the event handler stopping and giving up the events lock very quickly, giving the high-priority :ref:`libusb_close() <doxid-group__libusb__dev_1ga779bc4f1316bdb0ac383bddbd538620e>` operation a "free ride" to acquire the events lock. All threads that are competing to do event handling become event waiters.
+
+#. With the events lock held inside :ref:`libusb_close() <doxid-group__libusb__dev_1ga779bc4f1316bdb0ac383bddbd538620e>`, libusb can safely remove a file descriptor from the poll set, in the safety of knowledge that nobody is polling those descriptors or trying to access the poll set.
+
+#. After obtaining the events lock, the close operation completes very quickly (usually a matter of milliseconds) and then immediately releases the events lock.
+
+#. At the same time, the behaviour of :ref:`libusb_event_handling_ok() <doxid-group__libusb__poll_1ga63592b28c265185d9469d1e6920d8373>` and friends reverts to the original, documented behaviour.
+
+#. The release of the events lock causes the threads that are waiting for events to be woken up and to start competing to become event handlers again. One of them will succeed; it will then re-obtain the list of poll descriptors, and USB I/O will then continue as normal.
+
+:ref:`libusb_open() <doxid-group__libusb__dev_1ga3f184a8be4488a767b2e0ae07e76d1b0>` is similar, and is actually a more simplistic case. Upon a call to :ref:`libusb_open() <doxid-group__libusb__dev_1ga3f184a8be4488a767b2e0ae07e76d1b0>` :
+
+#. The device is opened and a file descriptor is added to the poll set.
+
+#. libusb sends some dummy data on the event pipe, and records that it is trying to modify the poll descriptor set.
+
+#. The event handler is interrupted, and the same behaviour change as for :ref:`libusb_close() <doxid-group__libusb__dev_1ga779bc4f1316bdb0ac383bddbd538620e>` takes effect, causing all event handling threads to become event waiters.
+
+#. The :ref:`libusb_open() <doxid-group__libusb__dev_1ga3f184a8be4488a767b2e0ae07e76d1b0>` implementation takes its free ride to the events lock.
+
+#. Happy that it has successfully paused the events handler, :ref:`libusb_open() <doxid-group__libusb__dev_1ga3f184a8be4488a767b2e0ae07e76d1b0>` releases the events lock.
+
+#. The event waiter threads are all woken up and compete to become event handlers again. The one that succeeds will obtain the list of poll descriptors again, which will include the addition of the new device.
+
+
+
+
+
+.. _doxid-libusb_mtasync_1concl:
+
+Closing remarks
+---------------
+
+The above may seem a little complicated, but hopefully I have made it clear why such complications are necessary. Also, do not forget that this only applies to applications that take libusb's file descriptors and integrate them into their own polling loops.
+
+You may decide that it is OK for your multi-threaded application to ignore some of the rules and locks detailed above, because you don't think that two threads can ever be polling the descriptors at the same time. If that is the case, then that's good news for you because you don't have to worry. But be careful here; remember that the synchronous I/O functions do event handling internally. If you have one thread doing event handling in a loop (without implementing the rules and locking semantics documented above) and another trying to send a synchronous USB transfer, you will end up with two threads monitoring the same descriptors, and the above-described undesirable behaviour occurring. The solution is for your polling thread to play by the rules; the synchronous I/O functions do so, and this will result in them getting along in perfect harmony.
+
+If you do have a dedicated thread doing event handling, it is perfectly legal for it to take the event handling lock for long periods of time. Any synchronous I/O functions you call from other threads will transparently fall back to the "event waiters" mechanism detailed above. The only consideration that your event handling thread must apply is the one related to :ref:`libusb_event_handling_ok() <doxid-group__libusb__poll_1ga63592b28c265185d9469d1e6920d8373>` : you must call this before every poll(), and give up the events lock if instructed.
+

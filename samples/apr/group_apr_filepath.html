@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Filepath Manipulation Functions &mdash; Apache Portable Runtime Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinx_rtd_theme.css?v=b6ca47bd" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=515d8a7f"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Stat Functions" href="group_apr_file_stat.html" />
+    <link rel="prev" title="File Permissions flags" href="group_apr_file_permissions.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Apache Portable Runtime Documentation
+          </a>
+              <div class="version">
+                1.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="group_APR.html">Apache Portability Runtime library</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="group_apr_atomic.html">Atomic Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_getopt.html">Command Argument Parsing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_thread_cond.html">Condition Variable Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_dso.html">Dynamic Object Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_errno.html">Error Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_APR_Util_Escaping.html">Escape functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_file_io.html">File I/O Handling Functions</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="group_apr_file_info.html">File Information</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="group_apr_dir.html">Directory Manipulation Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="group_apr_file_permissions.html">File Permissions flags</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Filepath Manipulation Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="group_apr_file_stat.html">Stat Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="enum_apr_filetype_e.html">enum apr_filetype_e</a></li>
+<li class="toctree-l3"><a class="reference internal" href="group_apr_file_info.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="group_apr_file_info.html#detailed-documentation">Detailed Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_fnmatch.html">Filename Matching Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_env.html">Functions for manipulating the environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_lib.html">General Purpose Library Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_APR_GlobalMutex.html">Global Locking Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_hash.html">Hash Tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_support.html">Internal APR support functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_allocator.html">Internal Memory Allocation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_mmap.html">MMAP (Memory Map) Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_pools.html">Memory Pool Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_general.html">Miscellaneous library routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_network_io.html">Network Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_platform.html">Platform Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_poll.html">Poll Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_portabile.html">Portability Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_proc_mutex.html">Process Locking Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_random.html">Random Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_thread_rwlock.html">Reader/Writer Lock Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_ring.html">Ring Macro Implementations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_shm.html">Shared Memory Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_signal.html">Signal Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_skiplist.html">Skip list implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_strings.html">String routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_tables.html">Table and Array Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_thread_mutex.html">Thread Mutex Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_thread_proc.html">Threads and Process Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_time.html">Time Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_user.html">User and Group ID Services</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="group_apr_library.html">Library initialization and termination</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_apr_ctype.html">ctype functions</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="page_bug.html">Bug List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_deprecated.html">Deprecated List</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Apache Portable Runtime Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="group_APR.html">Apache Portability Runtime library</a></li>
+          <li class="breadcrumb-item"><a href="group_apr_file_info.html">File Information</a></li>
+      <li class="breadcrumb-item active">Filepath Manipulation Functions</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="filepath-manipulation-functions">
+<span id="doxid-group-apr-filepath"></span><span id="index-0"></span><h1>Filepath Manipulation Functions</h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="overview">
+<h2>Overview</h2>
+<pre class="highlight doxyrest-overview-code-block literal-block"><span></span><span class="c1">// global functions</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-filepath-1ga1eacdd5ed069faa137bde014fa50494d"><span class="std std-ref">apr_filepath_root</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">**</span> <span class="n">rootpath</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">**</span> <span class="n">filepath</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">flags</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-filepath-1gae89fd67108f10dc5044b6d062dde0138"><span class="std std-ref">apr_filepath_merge</span></a><span></span><span class="p">(</span>
+    <span class="kt">char</span><span class="o">**</span> <span class="n">newpath</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">rootpath</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">addpath</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">flags</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-filepath-1gaf259849de62ac172dde7dcbe73421500"><span class="std std-ref">apr_filepath_list_split</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="struct_apr_array_header_t.html#doxid-structapr-array-header-t"><span class="std std-ref">apr_array_header_t</span></a><span></span><span class="o">**</span> <span class="n">pathelts</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">liststr</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-filepath-1ga8316896ab8e3901f9711d9d4cc89b373"><span class="std std-ref">apr_filepath_list_merge</span></a><span></span><span class="p">(</span>
+    <span class="kt">char</span><span class="o">**</span> <span class="n">liststr</span><span class="p">,</span>
+    <a class="reference internal" href="struct_apr_array_header_t.html#doxid-structapr-array-header-t"><span class="std std-ref">apr_array_header_t</span></a><span></span><span class="o">*</span> <span class="n">pathelts</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-filepath-1gaac7c26321fd60d7304326fe531639507"><span class="std std-ref">apr_filepath_get</span></a><span></span><span class="p">(</span>
+    <span class="kt">char</span><span class="o">**</span> <span class="n">path</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">flags</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-filepath-1ga9773589b65b7f0b7d5b59d427fd0eb93"><span class="std std-ref">apr_filepath_set</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">path</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-filepath-1gad4d3a5888a54a52b3552911e448a3eb3"><span class="std std-ref">apr_filepath_encoding</span></a><span></span><span class="p">(</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">style</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">);</span>
+
+<span class="c1">// macros</span>
+
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-filepath-1gaecb3193c8e36fbf58564f94b8c38b6d9"><span class="std std-ref">APR_FILEPATH_ENCODING_LOCALE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-filepath-1ga26cd6345ccc38ae3ad001fd2fa885634"><span class="std std-ref">APR_FILEPATH_ENCODING_UNKNOWN</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-filepath-1ga1c99d1644a8b49dc0be166bdc352819a"><span class="std std-ref">APR_FILEPATH_ENCODING_UTF8</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-filepath-1ga2d72ade2cada76d2fa8af3fe4d8fb1de"><span class="std std-ref">APR_FILEPATH_NATIVE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-filepath-1gabb57ce7b23caf512d7f64b92a662ab3d"><span class="std std-ref">APR_FILEPATH_NOTABOVEROOT</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-filepath-1gaac75b8e9fd5c248b52ac36a1fd6b7f98"><span class="std std-ref">APR_FILEPATH_NOTABSOLUTE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-filepath-1ga487344eb474ea4033b19c386db9aa03a"><span class="std std-ref">APR_FILEPATH_NOTRELATIVE</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-filepath-1ga6a518889311b81e1d2fc434e7d3acecd"><span class="std std-ref">APR_FILEPATH_SECUREROOT</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-filepath-1ga48b6cabfa91e6070c45977ba7035f328"><span class="std std-ref">APR_FILEPATH_SECUREROOTTEST</span></a><span></span>
+<span class="cp">#define </span><a class="reference internal" href="#doxid-group-apr-filepath-1gafb7dd411e9ef212a03051806cb60c9d8"><span class="std std-ref">APR_FILEPATH_TRUENAME</span></a></pre>
+</section>
+<section id="detailed-documentation">
+<span id="details-group-apr-filepath"></span><h2>Detailed Documentation</h2>
+<section id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-filepath-1ga1eacdd5ed069faa137bde014fa50494d"><span id="index-1"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_filepath_root</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">**</span> <span class="n">rootpath</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">**</span> <span class="n">filepath</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">flags</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">)</span></pre>
+<p>Extract the rootpath from the given filepath on return, filepath points to the first non-root character in the given filepath. In the simplest example, given a filepath of “/foo”, returns the rootpath of “/” and filepath points at “foo”. This is far more complex on other platforms, which will canonicalize the root form to a consistant format, given the APR_FILEPATH_TRUENAME flag, and also test for the validity of that root (e.g., that a drive d:/ or network share //machine/foovol/). The function returns APR_ERELATIVE if filepath isn’t rooted (an error), APR_EINCOMPLETE if the root path is ambiguous (but potentially legitimate, e.g. “/” on Windows is incomplete because it doesn’t specify the drive letter), or APR_EBADPATH if the root is simply invalid. APR_SUCCESS is returned if filepath is an absolute path.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>rootpath</p></td>
+<td><p>the root file path returned with APR_SUCCESS or APR_EINCOMPLETE</p></td>
+</tr>
+<tr class="row-even"><td><p>filepath</p></td>
+<td><p>the pathname to parse for its root component</p></td>
+</tr>
+<tr class="row-odd"><td><p>flags</p></td>
+<td><p>the desired rules to apply, from</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>APR_FILEPATH_NATIVE    Use native path separators (e.g. &#39;\&#39; on Win32)
+APR_FILEPATH_TRUENAME  Tests that the root exists, and makes it proper
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>p</p></td>
+<td><p>the pool to allocate the new path string from</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-filepath-1gae89fd67108f10dc5044b6d062dde0138"><span id="index-2"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_filepath_merge</span><span class="p">(</span>
+    <span class="kt">char</span><span class="o">**</span> <span class="n">newpath</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">rootpath</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">addpath</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">flags</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">)</span></pre>
+<p>Merge additional file path onto the previously processed rootpath if the flag APR_FILEPATH_TRUENAME is given, and the addpath contains wildcard characters (’*’, ‘?’) on platforms that don’t support such characters within filenames, the paths will be merged, but the result code will be APR_EPATHWILD, and all further segments will not reflect the true filenames including the wildcard and following segments.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>newpath</p></td>
+<td><p>the merged paths returned</p></td>
+</tr>
+<tr class="row-even"><td><p>rootpath</p></td>
+<td><p>the root file path (NULL uses the current working path)</p></td>
+</tr>
+<tr class="row-odd"><td><p>addpath</p></td>
+<td><p>the path to add to the root path</p></td>
+</tr>
+<tr class="row-even"><td><p>flags</p></td>
+<td><p>the desired APR_FILEPATH_ rules to apply when merging</p></td>
+</tr>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>the pool to allocate the new path string from</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-filepath-1gaf259849de62ac172dde7dcbe73421500"><span id="index-3"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_filepath_list_split</span><span class="p">(</span>
+    <a class="reference internal" href="struct_apr_array_header_t.html#doxid-structapr-array-header-t"><span class="std std-ref">apr_array_header_t</span></a><span></span><span class="o">**</span> <span class="n">pathelts</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">liststr</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">)</span></pre>
+<p>Split a search path into separate components empty path components do not become part of <em>pathelts</em>.</p>
+<p>the path separator in <em>liststr</em> is system specific; e.g., ‘:’ on Unix, ‘;’ on Windows, etc.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>pathelts</p></td>
+<td><p>the returned components of the search path</p></td>
+</tr>
+<tr class="row-even"><td><p>liststr</p></td>
+<td><p>the search path (e.g., <code class="docutils literal notranslate"><span class="pre">getenv(&quot;PATH&quot;)</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>the pool to allocate the array and path components from</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-filepath-1ga8316896ab8e3901f9711d9d4cc89b373"><span id="index-4"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_filepath_list_merge</span><span class="p">(</span>
+    <span class="kt">char</span><span class="o">**</span> <span class="n">liststr</span><span class="p">,</span>
+    <a class="reference internal" href="struct_apr_array_header_t.html#doxid-structapr-array-header-t"><span class="std std-ref">apr_array_header_t</span></a><span></span><span class="o">*</span> <span class="n">pathelts</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">)</span></pre>
+<p>Merge a list of search path components into a single search path emtpy strings in the source array are ignored.</p>
+<p>the path separator in <em>liststr</em> is system specific; e.g., ‘:’ on Unix, ‘;’ on Windows, etc.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>liststr</p></td>
+<td><p>the returned search path; may be NULL if <em>pathelts</em> is empty</p></td>
+</tr>
+<tr class="row-even"><td><p>pathelts</p></td>
+<td><p>the components of the search path</p></td>
+</tr>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>the pool to allocate the search path from</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-filepath-1gaac7c26321fd60d7304326fe531639507"><span id="index-5"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_filepath_get</span><span class="p">(</span>
+    <span class="kt">char</span><span class="o">**</span> <span class="n">path</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">flags</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">)</span></pre>
+<p>Return the default file path (for relative file names)</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>path</p></td>
+<td><p>the default path string returned</p></td>
+</tr>
+<tr class="row-even"><td><p>flags</p></td>
+<td><p>optional flag APR_FILEPATH_NATIVE to retrieve the default file path in os-native format.</p></td>
+</tr>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>the pool to allocate the default path string from</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-filepath-1ga9773589b65b7f0b7d5b59d427fd0eb93"><span id="index-6"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_filepath_set</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">path</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">)</span></pre>
+<p>Set the default file path (for relative file names)</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>path</p></td>
+<td><p>the default path returned</p></td>
+</tr>
+<tr class="row-even"><td><p>p</p></td>
+<td><p>the pool to allocate any working storage</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-filepath-1gad4d3a5888a54a52b3552911e448a3eb3"><span id="index-7"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_filepath_encoding</span><span class="p">(</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">style</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">)</span></pre>
+<p>Determine the encoding used internally by the FilePath functions Use <code class="docutils literal notranslate"><span class="pre">apr_os_locale_encoding</span></code> and/or <code class="docutils literal notranslate"><span class="pre">apr_os_default_encoding</span></code> to get the name of the path encoding if it’s not UTF-8.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>style</p></td>
+<td><p>points to a variable which receives the encoding style flag</p></td>
+</tr>
+<tr class="row-even"><td><p>p</p></td>
+<td><p>the pool to allocate any working storage</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="macros">
+<h3>Macros</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-filepath-1gaecb3193c8e36fbf58564f94b8c38b6d9"><span id="index-8"></span><span></span><span class="cp">#define APR_FILEPATH_ENCODING_LOCALE</span></pre>
+<p>The FilePath character encoding is locale-dependent</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-filepath-1ga26cd6345ccc38ae3ad001fd2fa885634"><span id="index-9"></span><span></span><span class="cp">#define APR_FILEPATH_ENCODING_UNKNOWN</span></pre>
+<p>The FilePath character encoding is unknown</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-filepath-1ga1c99d1644a8b49dc0be166bdc352819a"><span id="index-10"></span><span></span><span class="cp">#define APR_FILEPATH_ENCODING_UTF8</span></pre>
+<p>The FilePath character encoding is UTF-8</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-filepath-1ga2d72ade2cada76d2fa8af3fe4d8fb1de"><span id="index-11"></span><span></span><span class="cp">#define APR_FILEPATH_NATIVE</span></pre>
+<p>Return the file system’s native path format (e.g. path delimiters of ‘:’ on MacOS9, ‘' on Win32, etc.)</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-filepath-1gabb57ce7b23caf512d7f64b92a662ab3d"><span id="index-12"></span><span></span><span class="cp">#define APR_FILEPATH_NOTABOVEROOT</span></pre>
+<p>Cause apr_filepath_merge to fail if addpath is above rootpath Bug in APR 0.9 and 1.x, this flag’s behavior is undefined if the rootpath is NULL or empty. In APR 2.0 this should be changed to imply NOTABSOLUTE if the rootpath is NULL or empty.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-filepath-1gaac75b8e9fd5c248b52ac36a1fd6b7f98"><span id="index-13"></span><span></span><span class="cp">#define APR_FILEPATH_NOTABSOLUTE</span></pre>
+<p>Fail apr_filepath_merge if the merged path is absolute</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-filepath-1ga487344eb474ea4033b19c386db9aa03a"><span id="index-14"></span><span></span><span class="cp">#define APR_FILEPATH_NOTRELATIVE</span></pre>
+<p>Fail apr_filepath_merge if the merged path is relative</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-filepath-1ga6a518889311b81e1d2fc434e7d3acecd"><span id="index-15"></span><span></span><span class="cp">#define APR_FILEPATH_SECUREROOT</span></pre>
+<p>Cause apr_filepath_merge to fail if addpath is above rootpath, even given a rootpath /foo/bar and an addpath ../bar/bash</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-filepath-1ga48b6cabfa91e6070c45977ba7035f328"><span id="index-16"></span><span></span><span class="cp">#define APR_FILEPATH_SECUREROOTTEST</span></pre>
+<p>internal: Only meaningful with APR_FILEPATH_NOTABOVEROOT</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-filepath-1gafb7dd411e9ef212a03051806cb60c9d8"><span id="index-17"></span><span></span><span class="cp">#define APR_FILEPATH_TRUENAME</span></pre>
+<p>Resolve the true case of existing directories and file elements of addpath, (resolving any aliases on Win32) and append a proper trailing slash if a directory</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="group_apr_file_permissions.html" class="btn btn-neutral float-left" title="File Permissions flags" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="group_apr_file_stat.html" class="btn btn-neutral float-right" title="Stat Functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2008-2017, Apache Portable Runtime Maintainers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

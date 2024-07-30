@@ -1,0 +1,1982 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>File I/O Handling Functions &mdash; Apache Portable Runtime Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinx_rtd_theme.css?v=b6ca47bd" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=515d8a7f"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="File Attribute Flags" href="group_apr_file_attrs_set_flags.html" />
+    <link rel="prev" title="Escape functions" href="group_APR_Util_Escaping.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Apache Portable Runtime Documentation
+          </a>
+              <div class="version">
+                1.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="group_APR.html">Apache Portability Runtime library</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="group_apr_atomic.html">Atomic Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_getopt.html">Command Argument Parsing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_thread_cond.html">Condition Variable Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_dso.html">Dynamic Object Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_errno.html">Error Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_APR_Util_Escaping.html">Escape functions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">File I/O Handling Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="group_apr_file_attrs_set_flags.html">File Attribute Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="group_apr_file_lock_types.html">File Lock Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="group_apr_file_open_flags.html">File Open Flags/Routines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="group_apr_file_seek_flags.html">File Seek Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="group_apr_file_writev.html">{_full} max iovec size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#global-functions">Global Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_file_info.html">File Information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_fnmatch.html">Filename Matching Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_env.html">Functions for manipulating the environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_lib.html">General Purpose Library Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_APR_GlobalMutex.html">Global Locking Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_hash.html">Hash Tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_support.html">Internal APR support functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_allocator.html">Internal Memory Allocation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_mmap.html">MMAP (Memory Map) Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_pools.html">Memory Pool Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_general.html">Miscellaneous library routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_network_io.html">Network Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_platform.html">Platform Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_poll.html">Poll Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_portabile.html">Portability Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_proc_mutex.html">Process Locking Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_random.html">Random Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_thread_rwlock.html">Reader/Writer Lock Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_ring.html">Ring Macro Implementations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_shm.html">Shared Memory Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_signal.html">Signal Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_skiplist.html">Skip list implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_strings.html">String routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_tables.html">Table and Array Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_thread_mutex.html">Thread Mutex Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_thread_proc.html">Threads and Process Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_time.html">Time Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="group_apr_user.html">User and Group ID Services</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="group_apr_library.html">Library initialization and termination</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_apr_ctype.html">ctype functions</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="page_bug.html">Bug List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_deprecated.html">Deprecated List</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Apache Portable Runtime Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="group_APR.html">Apache Portability Runtime library</a></li>
+      <li class="breadcrumb-item active">File I/O Handling Functions</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="file-i-o-handling-functions">
+<span id="doxid-group-apr-file-io"></span><span id="index-0"></span><h1>File I/O Handling Functions</h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="overview">
+<h2>Overview</h2>
+<div class="line-block">
+<div class="line"><a class="reference internal" href="group_apr_file_attrs_set_flags.html#doxid-group-apr-file-attrs-set-flags"><span class="std std-ref">File Attribute Flags</span></a></div>
+<div class="line"><a class="reference internal" href="group_apr_file_lock_types.html#doxid-group-apr-file-lock-types"><span class="std std-ref">File Lock Types</span></a></div>
+<div class="line"><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags"><span class="std std-ref">File Open Flags/Routines</span></a></div>
+<div class="line"><a class="reference internal" href="group_apr_file_seek_flags.html#doxid-group-apr-file-seek-flags"><span class="std std-ref">File Seek Flags</span></a></div>
+<div class="line"><a class="reference internal" href="group_apr_file_writev.html#doxid-group-apr-file-writev"><span class="std std-ref">{_full} max iovec size</span></a></div>
+</div>
+<pre class="highlight doxyrest-overview-code-block literal-block"><span></span><span class="c1">// typedefs</span>
+
+<span class="k">typedef</span> <span class="n">apr_uint32_t</span> <a class="reference internal" href="#doxid-group-apr-file-io-1ga11fbee5a7a3f3d45fff5c31df0db9737"><span class="std std-ref">apr_fileattrs_t</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">int</span> <a class="reference internal" href="#doxid-group-apr-file-io-1ga8eecd44975906042e0e369771802a145"><span class="std std-ref">apr_seek_where_t</span></a><span></span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span> <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="p">;</span>
+
+<span class="c1">// global functions</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1gabda14cbf242fb4fe99055434213e5446"><span class="std std-ref">apr_file_open</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">**</span> <span class="n">newf</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">fname</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">flag</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_info.html#doxid-group-apr-file-info-1ga3af19c4c47007169064a70f9351bc7d8"><span class="std std-ref">apr_fileperms_t</span></a><span></span> <span class="n">perm</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga5607bce1c4c798ceb6c8475a998a81a1"><span class="std std-ref">apr_file_close</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">file</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga211c40be82f8bf8b8d7dce5afca5500b"><span class="std std-ref">apr_file_remove</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">path</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga29b5633bb80226baa5de79a83c6999aa"><span class="std std-ref">apr_file_rename</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">from_path</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">to_path</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1gaa7911275c0e97edc064b8167be658f9e"><span class="std std-ref">apr_file_link</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">from_path</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">to_path</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga2b82c441246cc4596795420b0a94a9a2"><span class="std std-ref">apr_file_copy</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">from_path</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">to_path</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_info.html#doxid-group-apr-file-info-1ga3af19c4c47007169064a70f9351bc7d8"><span class="std std-ref">apr_fileperms_t</span></a><span></span> <span class="n">perms</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga0b9bc41ffa4ac43cbea46b44eace939e"><span class="std std-ref">apr_file_append</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">from_path</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">to_path</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_info.html#doxid-group-apr-file-info-1ga3af19c4c47007169064a70f9351bc7d8"><span class="std std-ref">apr_fileperms_t</span></a><span></span> <span class="n">perms</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga8efaff2f556b250fee1021541b782ea8"><span class="std std-ref">apr_file_eof</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">fptr</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1gaf426d98943319acced2c9b52757f377f"><span class="std std-ref">apr_file_open_stderr</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">**</span> <span class="n">thefile</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga0d36922c0944ff9675cc820e68d56199"><span class="std std-ref">apr_file_open_stdout</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">**</span> <span class="n">thefile</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga539454470148f9b22a31f85936a5f8b4"><span class="std std-ref">apr_file_open_stdin</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">**</span> <span class="n">thefile</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga6e87d695994e236dae3d428ed68886bf"><span class="std std-ref">apr_file_open_flags_stderr</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">**</span> <span class="n">thefile</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">flags</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1gaeda353505bc1dc46db93b0a80d0b1c4c"><span class="std std-ref">apr_file_open_flags_stdout</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">**</span> <span class="n">thefile</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">flags</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga3bde3e61454b5604077f297b1d1671c0"><span class="std std-ref">apr_file_open_flags_stdin</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">**</span> <span class="n">thefile</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">flags</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1gadd067ee0050dff0c03a9420c9d424466"><span class="std std-ref">apr_file_read</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span>
+    <span class="n">apr_size_t</span><span class="o">*</span> <span class="n">nbytes</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga2e4baa94102c363fdca3c850375d3584"><span class="std std-ref">apr_file_write</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span>
+    <span class="n">apr_size_t</span><span class="o">*</span> <span class="n">nbytes</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1gacc7924dd7af1c2948b5b2ea6e5f77984"><span class="std std-ref">apr_file_writev</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">,</span>
+    <span class="k">const</span> <span class="k">struct</span> <span class="n">iovec</span><span class="o">*</span> <span class="n">vec</span><span class="p">,</span>
+    <span class="n">apr_size_t</span> <span class="n">nvec</span><span class="p">,</span>
+    <span class="n">apr_size_t</span><span class="o">*</span> <span class="n">nbytes</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1gaf39a17404e868808aff8e2e7ecaa87e0"><span class="std std-ref">apr_file_read_full</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span>
+    <span class="n">apr_size_t</span> <span class="n">nbytes</span><span class="p">,</span>
+    <span class="n">apr_size_t</span><span class="o">*</span> <span class="n">bytes_read</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga560d5c062d65e64c07d906d1207337d4"><span class="std std-ref">apr_file_write_full</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span>
+    <span class="n">apr_size_t</span> <span class="n">nbytes</span><span class="p">,</span>
+    <span class="n">apr_size_t</span><span class="o">*</span> <span class="n">bytes_written</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga24457e11f0db908b21b7e1742db4ed7b"><span class="std std-ref">apr_file_writev_full</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">,</span>
+    <span class="k">const</span> <span class="k">struct</span> <span class="n">iovec</span><span class="o">*</span> <span class="n">vec</span><span class="p">,</span>
+    <span class="n">apr_size_t</span> <span class="n">nvec</span><span class="p">,</span>
+    <span class="n">apr_size_t</span><span class="o">*</span> <span class="n">nbytes</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga33e51b53194e7c0dac513ca27ca18e63"><span class="std std-ref">apr_file_putc</span></a><span></span><span class="p">(</span>
+    <span class="kt">char</span> <span class="n">ch</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga852b9c77d4223af15d8d3674a0e2714d"><span class="std std-ref">apr_file_getc</span></a><span></span><span class="p">(</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">ch</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga9d06778e719d596ab96bca812b01cb3a"><span class="std std-ref">apr_file_ungetc</span></a><span></span><span class="p">(</span>
+    <span class="kt">char</span> <span class="n">ch</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1gaf9513b769c10b09e5f37d6d0b86bdce9"><span class="std std-ref">apr_file_gets</span></a><span></span><span class="p">(</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">str</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">len</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1gacde81145cc38660a1512d469886ddb16"><span class="std std-ref">apr_file_puts</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">str</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga68aba780b7fc53e47404bfd8def949bc"><span class="std std-ref">apr_file_flush</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga4385e141c4bbb96294acd7d342f138da"><span class="std std-ref">apr_file_sync</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1gaa4b4e5027c1d8dbe4e5cb47b8eebc03b"><span class="std std-ref">apr_file_datasync</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga6e849af1b0fd31669c58a803fcb13837"><span class="std std-ref">apr_file_dup</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">**</span> <span class="n">new_file</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">old_file</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga602926aad867088297e8f59490ff939c"><span class="std std-ref">apr_file_dup2</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">new_file</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">old_file</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1gadaf046ce39aa118dab921a407446355b"><span class="std std-ref">apr_file_setaside</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">**</span> <span class="n">new_file</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">old_file</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1gafe4be8c3b62c42535b84d4237bf6e421"><span class="std std-ref">apr_file_buffer_set</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span>
+    <span class="n">apr_size_t</span> <span class="n">bufsize</span>
+<span class="p">);</span>
+
+<span class="n">apr_size_t</span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga42bbb9227095686ea15eb79f99d248a2"><span class="std std-ref">apr_file_buffer_size_get</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga9db84bec24db97a53890df1a6aff63a1"><span class="std std-ref">apr_file_seek</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1ga8eecd44975906042e0e369771802a145"><span class="std std-ref">apr_seek_where_t</span></a><span></span> <span class="n">where</span><span class="p">,</span>
+    <span class="n">apr_off_t</span><span class="o">*</span> <span class="n">offset</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1gaae3b81342d239c58c351cf11190740ed"><span class="std std-ref">apr_file_pipe_create</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">**</span> <span class="n">in</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">**</span> <span class="n">out</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga2fbbae715bee0e0ca9adadd66ac65e96"><span class="std std-ref">apr_file_pipe_create_ex</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">**</span> <span class="n">in</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">**</span> <span class="n">out</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">blocking</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga60cec3e6717bab0f11577bd7c38b4c59"><span class="std std-ref">apr_file_namedpipe_create</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">filename</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_info.html#doxid-group-apr-file-info-1ga3af19c4c47007169064a70f9351bc7d8"><span class="std std-ref">apr_fileperms_t</span></a><span></span> <span class="n">perm</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga90e481207a38df04818a0c55883ee953"><span class="std std-ref">apr_file_pipe_timeout_get</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thepipe</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_time.html#doxid-group-apr-time-1gaae2129185a395cc393f76fabf4f43e47"><span class="std std-ref">apr_interval_time_t</span></a><span></span><span class="o">*</span> <span class="n">timeout</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1gaf88d2fca768e3fa9f28ea010e1bf602a"><span class="std std-ref">apr_file_pipe_timeout_set</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thepipe</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_time.html#doxid-group-apr-time-1gaae2129185a395cc393f76fabf4f43e47"><span class="std std-ref">apr_interval_time_t</span></a><span></span> <span class="n">timeout</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga2d337e66c1fa0cd433164079bf542484"><span class="std std-ref">apr_file_lock</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">type</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga3a255996fb439b6d66ed7cd65319525b"><span class="std std-ref">apr_file_unlock</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga5c750a88fe1e032e1d85d3db40d9519f"><span class="std std-ref">apr_file_name_get</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">**</span> <span class="n">new_path</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1gafa13b7024748a7e45344d6998ddbd281"><span class="std std-ref">apr_file_data_get</span></a><span></span><span class="p">(</span>
+    <span class="kt">void</span><span class="o">**</span> <span class="n">data</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">key</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">file</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga58c857162593d8b3aa999df5b7af0805"><span class="std std-ref">apr_file_data_set</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">file</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">key</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">cleanup</span>
+<span class="p">);</span>
+
+<span class="kt">int</span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga29fca4b0201c236856fea5578f410c0e"><span class="std std-ref">apr_file_printf</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">fptr</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">format</span><span class="p">,</span>
+    <span class="p">...</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1gac5fed6d75597476718c40fc603823b1e"><span class="std std-ref">apr_file_perms_set</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">fname</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_info.html#doxid-group-apr-file-info-1ga3af19c4c47007169064a70f9351bc7d8"><span class="std std-ref">apr_fileperms_t</span></a><span></span> <span class="n">perms</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga96ceec3492ad0c75d2b58c167087ee6a"><span class="std std-ref">apr_file_attrs_set</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">fname</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1ga11fbee5a7a3f3d45fff5c31df0db9737"><span class="std std-ref">apr_fileattrs_t</span></a><span></span> <span class="n">attributes</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1ga11fbee5a7a3f3d45fff5c31df0db9737"><span class="std std-ref">apr_fileattrs_t</span></a><span></span> <span class="n">attr_mask</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga79f58458a00a4072622005c09ed8f96f"><span class="std std-ref">apr_file_mtime_set</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">fname</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_time.html#doxid-group-apr-time-1gadb4bde16055748190eae190c55aa02bb"><span class="std std-ref">apr_time_t</span></a><span></span> <span class="n">mtime</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga51e0b4703c7561f72587982808985d29"><span class="std std-ref">apr_dir_make</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">path</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_info.html#doxid-group-apr-file-info-1ga3af19c4c47007169064a70f9351bc7d8"><span class="std std-ref">apr_fileperms_t</span></a><span></span> <span class="n">perm</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga6a3b2602f57ff148cd64096da02adbd2"><span class="std std-ref">apr_dir_make_recursive</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">path</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_info.html#doxid-group-apr-file-info-1ga3af19c4c47007169064a70f9351bc7d8"><span class="std std-ref">apr_fileperms_t</span></a><span></span> <span class="n">perm</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga5487d02a62fba9444747ccb5838150ba"><span class="std std-ref">apr_dir_remove</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">path</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga39be7fe05d0dda4a28f4358b61a44ac8"><span class="std std-ref">apr_file_info_get</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="struct_apr_finfo_t.html#doxid-structapr-finfo-t"><span class="std std-ref">apr_finfo_t</span></a><span></span><span class="o">*</span> <span class="n">finfo</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">wanted</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1gac067fe5f208c927cf6d213197b9335a8"><span class="std std-ref">apr_file_trunc</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">fp</span><span class="p">,</span>
+    <span class="n">apr_off_t</span> <span class="n">offset</span>
+<span class="p">);</span>
+
+<span class="n">apr_int32_t</span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga023d6e4d2512382a9d4b1f881e105b8f"><span class="std std-ref">apr_file_flags_get</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">f</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1gab5950b3b0156097b0181394a37e03ede"><span class="std std-ref">apr_file_pool_get</span></a><span></span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga137bee13d2c65fb8afd4b34e400187c7"><span class="std std-ref">apr_file_inherit_set</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga69fa72a6f77b96572248c2a6a347c02a"><span class="std std-ref">apr_file_inherit_unset</span></a><span></span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1gac34981f9ff41f85e4377a6dde185fe52"><span class="std std-ref">apr_file_mktemp</span></a><span></span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">**</span> <span class="n">fp</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">templ</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">flags</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">);</span>
+
+<a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<a class="reference internal" href="#doxid-group-apr-file-io-1ga5cc19828a668c362be0ad7a12b805cc0"><span class="std std-ref">apr_temp_dir_get</span></a><span></span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">**</span> <span class="n">temp_dir</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">);</span></pre>
+</section>
+<section id="detailed-documentation">
+<span id="details-group-apr-file-io"></span><h2>Detailed Documentation</h2>
+<section id="typedefs">
+<h3>Typedefs</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga11fbee5a7a3f3d45fff5c31df0db9737"><span id="index-1"></span><span></span><span class="k">typedef</span> <span class="n">apr_uint32_t</span> <span class="n">apr_fileattrs_t</span></pre>
+<p>File attributes</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga8eecd44975906042e0e369771802a145"><span id="index-2"></span><span></span><span class="k">typedef</span> <span class="kt">int</span> <span class="n">apr_seek_where_t</span></pre>
+<p>Type to pass as whence argument to apr_file_seek.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span id="index-3"></span><span></span><span class="k">typedef</span> <span class="k">struct</span> <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span> <span class="n">apr_file_t</span></pre>
+<p>Structure for referencing files.</p>
+</section>
+<section id="global-functions">
+<h3>Global Functions</h3>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1gabda14cbf242fb4fe99055434213e5446"><span id="index-4"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_open</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">**</span> <span class="n">newf</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">fname</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">flag</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_info.html#doxid-group-apr-file-info-1ga3af19c4c47007169064a70f9351bc7d8"><span class="std std-ref">apr_fileperms_t</span></a><span></span> <span class="n">perm</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">)</span></pre>
+<p>Open the specified file. If perm is <a class="reference internal" href="group_apr_file_permissions.html#doxid-group-apr-file-permissions-1gad3c65a67ee6eb12ecc6a33857397900b"><span class="std std-ref">APR_FPROT_OS_DEFAULT</span></a> and the file is being created, appropriate default permissions will be used.</p>
+<p>By default, the returned file descriptor will not be inherited by child processes created by <a class="reference internal" href="group_apr_thread_proc.html#doxid-group-apr-thread-proc-1gab51dd90b98d365a969f0ec5c7bef4e14"><span class="std std-ref">apr_proc_create()</span></a>. This can be changed using <a class="reference internal" href="#doxid-group-apr-file-io-1ga137bee13d2c65fb8afd4b34e400187c7"><span class="std std-ref">apr_file_inherit_set()</span></a>.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>newf</p></td>
+<td><p>The opened file descriptor.</p></td>
+</tr>
+<tr class="row-even"><td><p>fname</p></td>
+<td><p>The full path to the file (using / on all systems)</p></td>
+</tr>
+<tr class="row-odd"><td><p>flag</p></td>
+<td><p>Or’ed value of:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1gaf9e7303f028b130ff7d4b209d6662d7d"><span class="std std-ref">APR_FOPEN_READ</span></a> open for reading</p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1gac598bb95fc9476b0bf2ed0b1c308842c"><span class="std std-ref">APR_FOPEN_WRITE</span></a> open for writing</p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1gafe94f21ccbf411172e70e7f473af251a"><span class="std std-ref">APR_FOPEN_CREATE</span></a> create the file if not there</p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1ga45f353db9b71d4760a3f35cf3781cfc8"><span class="std std-ref">APR_FOPEN_APPEND</span></a> file ptr is set to end prior to all writes</p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1ga09b05a5bd5db534b93794f7657bcb146"><span class="std std-ref">APR_FOPEN_TRUNCATE</span></a> set length to zero if file exists</p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1gacb20b3028864f34cb26314fe2cacc3fa"><span class="std std-ref">APR_FOPEN_BINARY</span></a> not a text file</p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1gac48fd4c853c9f561632a2e8aaf5d8d97"><span class="std std-ref">APR_FOPEN_BUFFERED</span></a> buffer the data. Default is non-buffered</p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1gabb7fb062cdf1d58faee8c7ea518496f1"><span class="std std-ref">APR_FOPEN_EXCL</span></a> return error if <a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1gafe94f21ccbf411172e70e7f473af251a"><span class="std std-ref">APR_FOPEN_CREATE</span></a> and file exists</p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1ga5d3756f6d242c667ed1d3f54af4916eb"><span class="std std-ref">APR_FOPEN_DELONCLOSE</span></a> delete the file after closing</p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1ga435cd9b2604b11796779c23ffa00a3dd"><span class="std std-ref">APR_FOPEN_XTHREAD</span></a> Platform dependent tag to open the file for use across multiple threads</p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1ga426f6e2a8457ab410d99248269059a18"><span class="std std-ref">APR_FOPEN_SHARELOCK</span></a> Platform dependent support for higher level locked read/write access to support writes across process/machines</p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1ga3fc9b5a7791d9f462997cd29de67eb80"><span class="std std-ref">APR_FOPEN_NOCLEANUP</span></a> Do not register a cleanup with the pool passed in on the <em>pool</em> argument (see below)</p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1ga60c21e28e4a612d58a874fe2cc71a6e4"><span class="std std-ref">APR_FOPEN_SENDFILE_ENABLED</span></a> Open with appropriate platform semantics for sendfile operations. Advisory only, apr_socket_sendfile does not check this flag</p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1gaf6cfaa4789e6264afd186235f0adbc22"><span class="std std-ref">APR_FOPEN_LARGEFILE</span></a> Platform dependent flag to enable large file support, see WARNING below</p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1ga0d155e9bb7fbf1a5cd4e84b5ede059f4"><span class="std std-ref">APR_FOPEN_SPARSE</span></a> Platform dependent flag to enable sparse file support, see WARNING below</p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1ga31e4d14068147e43e1778bcf975dda62"><span class="std std-ref">APR_FOPEN_NONBLOCK</span></a> Platform dependent flag to enable non blocking file io</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>perm</p></td>
+<td><p>Access permissions for file.</p></td>
+</tr>
+<tr class="row-odd"><td><p>pool</p></td>
+<td><p>The pool to use.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga5607bce1c4c798ceb6c8475a998a81a1"><span id="index-5"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_close</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">file</span><span class="p">)</span></pre>
+<p>Close the specified file.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>file</p></td>
+<td><p>The file descriptor to close.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga211c40be82f8bf8b8d7dce5afca5500b"><span id="index-6"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_remove</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">path</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">)</span></pre>
+<p>Delete the specified file. If the file is open, it won’t be removed until all instances are closed.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>path</p></td>
+<td><p>The full path to the file (using / on all systems)</p></td>
+</tr>
+<tr class="row-even"><td><p>pool</p></td>
+<td><p>The pool to use.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga29b5633bb80226baa5de79a83c6999aa"><span id="index-7"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_rename</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">from_path</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">to_path</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">)</span></pre>
+<p>Rename the specified file.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If a file exists at the new location, then it will be overwritten. Moving files or directories across devices may not be possible.</p>
+</div>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>from_path</p></td>
+<td><p>The full path to the original file (using / on all systems)</p></td>
+</tr>
+<tr class="row-even"><td><p>to_path</p></td>
+<td><p>The full path to the new file (using / on all systems)</p></td>
+</tr>
+<tr class="row-odd"><td><p>pool</p></td>
+<td><p>The pool to use.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1gaa7911275c0e97edc064b8167be658f9e"><span id="index-8"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_link</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">from_path</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">to_path</span>
+<span class="p">)</span></pre>
+<p>Create a hard link to the specified file. Both files must reside on the same device.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>from_path</p></td>
+<td><p>The full path to the original file (using / on all systems)</p></td>
+</tr>
+<tr class="row-even"><td><p>to_path</p></td>
+<td><p>The full path to the new file (using / on all systems)</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga2b82c441246cc4596795420b0a94a9a2"><span id="index-9"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_copy</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">from_path</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">to_path</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_info.html#doxid-group-apr-file-info-1ga3af19c4c47007169064a70f9351bc7d8"><span class="std std-ref">apr_fileperms_t</span></a><span></span> <span class="n">perms</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">)</span></pre>
+<p>Copy the specified file to another file. The new file does not need to exist, it will be created if required.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If the new file already exists, its contents will be overwritten.</p>
+</div>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>from_path</p></td>
+<td><p>The full path to the original file (using / on all systems)</p></td>
+</tr>
+<tr class="row-even"><td><p>to_path</p></td>
+<td><p>The full path to the new file (using / on all systems)</p></td>
+</tr>
+<tr class="row-odd"><td><p>perms</p></td>
+<td><p>Access permissions for the new file if it is created. In place of the usual or’d combination of file permissions, the value <a class="reference internal" href="group_apr_file_permissions.html#doxid-group-apr-file-permissions-1gac08d4e868c7c9532f7c97c70556663dc"><span class="std std-ref">APR_FPROT_FILE_SOURCE_PERMS</span></a> may be given, in which case the source file’s permissions are copied.</p></td>
+</tr>
+<tr class="row-even"><td><p>pool</p></td>
+<td><p>The pool to use.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga0b9bc41ffa4ac43cbea46b44eace939e"><span id="index-10"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_append</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">from_path</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">to_path</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_info.html#doxid-group-apr-file-info-1ga3af19c4c47007169064a70f9351bc7d8"><span class="std std-ref">apr_fileperms_t</span></a><span></span> <span class="n">perms</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">)</span></pre>
+<p>Append the specified file to another file. The new file does not need to exist, it will be created if required.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>from_path</p></td>
+<td><p>The full path to the source file (use / on all systems)</p></td>
+</tr>
+<tr class="row-even"><td><p>to_path</p></td>
+<td><p>The full path to the destination file (use / on all systems)</p></td>
+</tr>
+<tr class="row-odd"><td><p>perms</p></td>
+<td><p>Access permissions for the destination file if it is created. In place of the usual or’d combination of file permissions, the value <a class="reference internal" href="group_apr_file_permissions.html#doxid-group-apr-file-permissions-1gac08d4e868c7c9532f7c97c70556663dc"><span class="std std-ref">APR_FPROT_FILE_SOURCE_PERMS</span></a> may be given, in which case the source file’s permissions are copied.</p></td>
+</tr>
+<tr class="row-even"><td><p>pool</p></td>
+<td><p>The pool to use.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga8efaff2f556b250fee1021541b782ea8"><span id="index-11"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_eof</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">fptr</span><span class="p">)</span></pre>
+<p>Are we at the end of the file Returns <a class="reference internal" href="group_APR_Error.html#doxid-group-a-p-r-error-1ga35d9dca2514c522a2840aca0f3e2ebd3"><span class="std std-ref">APR_EOF</span></a> if we are at the end of file, <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1ga9ee311b7bf1c691dc521d721339ee2a6"><span class="std std-ref">APR_SUCCESS</span></a> otherwise.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>fptr</p></td>
+<td><p>The apr file we are testing.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1gaf426d98943319acced2c9b52757f377f"><span id="index-12"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_open_stderr</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">**</span> <span class="n">thefile</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">)</span></pre>
+<p>Open standard error as an apr file pointer. The only reason that the apr_file_open_std* functions exist is that you may not always have a stderr/out/in on Windows. This is generally a problem with newer versions of Windows and services.</p>
+<p>The other problem is that the C library functions generally work differently on Windows and Unix. So, by using apr_file_open_std* functions, you can get a handle to an APR struct that works with the APR functions which are supposed to work identically on all platforms.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>thefile</p></td>
+<td><p>The apr file to use as stderr.</p></td>
+</tr>
+<tr class="row-even"><td><p>pool</p></td>
+<td><p>The pool to allocate the file out of.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga0d36922c0944ff9675cc820e68d56199"><span id="index-13"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_open_stdout</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">**</span> <span class="n">thefile</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">)</span></pre>
+<p>open standard output as an apr file pointer. See remarks for <a class="reference internal" href="#doxid-group-apr-file-io-1gaf426d98943319acced2c9b52757f377f"><span class="std std-ref">apr_file_open_stderr()</span></a>.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>thefile</p></td>
+<td><p>The apr file to use as stdout.</p></td>
+</tr>
+<tr class="row-even"><td><p>pool</p></td>
+<td><p>The pool to allocate the file out of.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga539454470148f9b22a31f85936a5f8b4"><span id="index-14"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_open_stdin</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">**</span> <span class="n">thefile</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">)</span></pre>
+<p>open standard input as an apr file pointer. See remarks for <a class="reference internal" href="#doxid-group-apr-file-io-1gaf426d98943319acced2c9b52757f377f"><span class="std std-ref">apr_file_open_stderr()</span></a>.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>thefile</p></td>
+<td><p>The apr file to use as stdin.</p></td>
+</tr>
+<tr class="row-even"><td><p>pool</p></td>
+<td><p>The pool to allocate the file out of.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga6e87d695994e236dae3d428ed68886bf"><span id="index-15"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_open_flags_stderr</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">**</span> <span class="n">thefile</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">flags</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">)</span></pre>
+<p>open standard error as an apr file pointer, with flags. See remarks for <a class="reference internal" href="#doxid-group-apr-file-io-1gaf426d98943319acced2c9b52757f377f"><span class="std std-ref">apr_file_open_stderr()</span></a>.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>thefile</p></td>
+<td><p>The apr file to use as stderr.</p></td>
+</tr>
+<tr class="row-even"><td><p>flags</p></td>
+<td><p>The flags to open the file with. Only the</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1gabb7fb062cdf1d58faee8c7ea518496f1"><span class="std std-ref">APR_FOPEN_EXCL</span></a></p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1gac48fd4c853c9f561632a2e8aaf5d8d97"><span class="std std-ref">APR_FOPEN_BUFFERED</span></a></p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1ga435cd9b2604b11796779c23ffa00a3dd"><span class="std std-ref">APR_FOPEN_XTHREAD</span></a></p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1ga426f6e2a8457ab410d99248269059a18"><span class="std std-ref">APR_FOPEN_SHARELOCK</span></a></p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1ga60c21e28e4a612d58a874fe2cc71a6e4"><span class="std std-ref">APR_FOPEN_SENDFILE_ENABLED</span></a></p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1gaf6cfaa4789e6264afd186235f0adbc22"><span class="std std-ref">APR_FOPEN_LARGEFILE</span></a></p></li>
+</ul>
+<p>flags should be used. The <a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1gac598bb95fc9476b0bf2ed0b1c308842c"><span class="std std-ref">APR_FOPEN_WRITE</span></a> flag will be set unconditionally.</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p>pool</p></td>
+<td><p>The pool to allocate the file out of.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1gaeda353505bc1dc46db93b0a80d0b1c4c"><span id="index-16"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_open_flags_stdout</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">**</span> <span class="n">thefile</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">flags</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">)</span></pre>
+<p>open standard output as an apr file pointer, with flags. See remarks for <a class="reference internal" href="#doxid-group-apr-file-io-1gaf426d98943319acced2c9b52757f377f"><span class="std std-ref">apr_file_open_stderr()</span></a>.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>thefile</p></td>
+<td><p>The apr file to use as stdout.</p></td>
+</tr>
+<tr class="row-even"><td><p>flags</p></td>
+<td><p>The flags to open the file with. Only the</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1gabb7fb062cdf1d58faee8c7ea518496f1"><span class="std std-ref">APR_FOPEN_EXCL</span></a></p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1gac48fd4c853c9f561632a2e8aaf5d8d97"><span class="std std-ref">APR_FOPEN_BUFFERED</span></a></p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1ga435cd9b2604b11796779c23ffa00a3dd"><span class="std std-ref">APR_FOPEN_XTHREAD</span></a></p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1ga426f6e2a8457ab410d99248269059a18"><span class="std std-ref">APR_FOPEN_SHARELOCK</span></a></p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1ga60c21e28e4a612d58a874fe2cc71a6e4"><span class="std std-ref">APR_FOPEN_SENDFILE_ENABLED</span></a></p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1gaf6cfaa4789e6264afd186235f0adbc22"><span class="std std-ref">APR_FOPEN_LARGEFILE</span></a></p></li>
+</ul>
+<p>flags should be used. The <a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1gac598bb95fc9476b0bf2ed0b1c308842c"><span class="std std-ref">APR_FOPEN_WRITE</span></a> flag will be set unconditionally.</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p>pool</p></td>
+<td><p>The pool to allocate the file out of.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga3bde3e61454b5604077f297b1d1671c0"><span id="index-17"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_open_flags_stdin</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">**</span> <span class="n">thefile</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">flags</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">)</span></pre>
+<p>open standard input as an apr file pointer, with flags. See remarks for <a class="reference internal" href="#doxid-group-apr-file-io-1gaf426d98943319acced2c9b52757f377f"><span class="std std-ref">apr_file_open_stderr()</span></a>.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>thefile</p></td>
+<td><p>The apr file to use as stdin.</p></td>
+</tr>
+<tr class="row-even"><td><p>flags</p></td>
+<td><p>The flags to open the file with. Only the</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1gabb7fb062cdf1d58faee8c7ea518496f1"><span class="std std-ref">APR_FOPEN_EXCL</span></a></p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1gac48fd4c853c9f561632a2e8aaf5d8d97"><span class="std std-ref">APR_FOPEN_BUFFERED</span></a></p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1ga435cd9b2604b11796779c23ffa00a3dd"><span class="std std-ref">APR_FOPEN_XTHREAD</span></a></p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1ga426f6e2a8457ab410d99248269059a18"><span class="std std-ref">APR_FOPEN_SHARELOCK</span></a></p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1ga60c21e28e4a612d58a874fe2cc71a6e4"><span class="std std-ref">APR_FOPEN_SENDFILE_ENABLED</span></a></p></li>
+<li><p><a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1gaf6cfaa4789e6264afd186235f0adbc22"><span class="std std-ref">APR_FOPEN_LARGEFILE</span></a></p></li>
+</ul>
+<p>flags should be used. The <a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1gac598bb95fc9476b0bf2ed0b1c308842c"><span class="std std-ref">APR_FOPEN_WRITE</span></a> flag will be set unconditionally.</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p>pool</p></td>
+<td><p>The pool to allocate the file out of.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1gadd067ee0050dff0c03a9420c9d424466"><span id="index-18"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_read</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span>
+    <span class="n">apr_size_t</span><span class="o">*</span> <span class="n">nbytes</span>
+<span class="p">)</span></pre>
+<p>Read data from the specified file. <a class="reference internal" href="#doxid-group-apr-file-io-1gadd067ee0050dff0c03a9420c9d424466"><span class="std std-ref">apr_file_read()</span></a> will read up to the specified number of bytes, but never more. If there isn’t enough data to fill that number of bytes, all of the available data is read. The third argument is modified to reflect the number of bytes read. If a char was put back into the stream via ungetc, it will be the first character returned.</p>
+<p>It is not possible for both bytes to be read and an <a class="reference internal" href="group_APR_Error.html#doxid-group-a-p-r-error-1ga35d9dca2514c522a2840aca0f3e2ebd3"><span class="std std-ref">APR_EOF</span></a> or other error to be returned. <a class="reference internal" href="group_APR_Error.html#doxid-group-a-p-r-error-1gaee1ce306c0ebf1701b34172310aa1bd5"><span class="std std-ref">APR_EINTR</span></a> is never returned.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>thefile</p></td>
+<td><p>The file descriptor to read from.</p></td>
+</tr>
+<tr class="row-even"><td><p>buf</p></td>
+<td><p>The buffer to store the data to.</p></td>
+</tr>
+<tr class="row-odd"><td><p>nbytes</p></td>
+<td><p>On entry, the number of bytes to read; on exit, the number of bytes read.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga2e4baa94102c363fdca3c850375d3584"><span id="index-19"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_write</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span>
+    <span class="n">apr_size_t</span><span class="o">*</span> <span class="n">nbytes</span>
+<span class="p">)</span></pre>
+<p>Write data to the specified file. <a class="reference internal" href="#doxid-group-apr-file-io-1ga2e4baa94102c363fdca3c850375d3584"><span class="std std-ref">apr_file_write()</span></a> will write up to the specified number of bytes, but never more. If the OS cannot write that many bytes, it will write as many as it can. The third argument is modified to reflect the * number of bytes written.</p>
+<p>It is possible for both bytes to be written and an error to be returned. <a class="reference internal" href="group_APR_Error.html#doxid-group-a-p-r-error-1gaee1ce306c0ebf1701b34172310aa1bd5"><span class="std std-ref">APR_EINTR</span></a> is never returned.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>thefile</p></td>
+<td><p>The file descriptor to write to.</p></td>
+</tr>
+<tr class="row-even"><td><p>buf</p></td>
+<td><p>The buffer which contains the data.</p></td>
+</tr>
+<tr class="row-odd"><td><p>nbytes</p></td>
+<td><p>On entry, the number of bytes to write; on exit, the number of bytes written.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1gacc7924dd7af1c2948b5b2ea6e5f77984"><span id="index-20"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_writev</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">,</span>
+    <span class="k">const</span> <span class="k">struct</span> <span class="n">iovec</span><span class="o">*</span> <span class="n">vec</span><span class="p">,</span>
+    <span class="n">apr_size_t</span> <span class="n">nvec</span><span class="p">,</span>
+    <span class="n">apr_size_t</span><span class="o">*</span> <span class="n">nbytes</span>
+<span class="p">)</span></pre>
+<p>Write data from iovec array to the specified file. It is possible for both bytes to be written and an error to be returned. <a class="reference internal" href="group_APR_Error.html#doxid-group-a-p-r-error-1gaee1ce306c0ebf1701b34172310aa1bd5"><span class="std std-ref">APR_EINTR</span></a> is never returned.</p>
+<p><a class="reference internal" href="#doxid-group-apr-file-io-1gacc7924dd7af1c2948b5b2ea6e5f77984"><span class="std std-ref">apr_file_writev()</span></a> is available even if the underlying operating system doesn’t provide writev().</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>thefile</p></td>
+<td><p>The file descriptor to write to.</p></td>
+</tr>
+<tr class="row-even"><td><p>vec</p></td>
+<td><p>The array from which to get the data to write to the file.</p></td>
+</tr>
+<tr class="row-odd"><td><p>nvec</p></td>
+<td><p>The number of elements in the struct iovec array. This must be smaller than <a class="reference internal" href="group_apr_file_writev.html#doxid-group-apr-file-writev-1gae04a4721139b2b252ea20e68883da4b4"><span class="std std-ref">APR_MAX_IOVEC_SIZE</span></a>. If it isn’t, the function will fail with <a class="reference internal" href="group_APR_Error.html#doxid-group-a-p-r-error-1gae3ffc41994444e71ce522c036ca1d9a4"><span class="std std-ref">APR_EINVAL</span></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p>nbytes</p></td>
+<td><p>The number of bytes written.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1gaf39a17404e868808aff8e2e7ecaa87e0"><span id="index-21"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_read_full</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span>
+    <span class="n">apr_size_t</span> <span class="n">nbytes</span><span class="p">,</span>
+    <span class="n">apr_size_t</span><span class="o">*</span> <span class="n">bytes_read</span>
+<span class="p">)</span></pre>
+<p>Read data from the specified file, ensuring that the buffer is filled before returning. <a class="reference internal" href="#doxid-group-apr-file-io-1gaf39a17404e868808aff8e2e7ecaa87e0"><span class="std std-ref">apr_file_read_full()</span></a> will read up to the specified number of bytes, but never more. If there isn’t enough data to fill that number of bytes, then the process/thread will block until it is available or EOF is reached. If a char was put back into the stream via ungetc, it will be the first character returned.</p>
+<p>It is possible for both bytes to be read and an error to be returned. And if *bytes_read is less than nbytes, an accompanying error is <em>always</em> returned.</p>
+<p><a class="reference internal" href="group_APR_Error.html#doxid-group-a-p-r-error-1gaee1ce306c0ebf1701b34172310aa1bd5"><span class="std std-ref">APR_EINTR</span></a> is never returned.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>thefile</p></td>
+<td><p>The file descriptor to read from.</p></td>
+</tr>
+<tr class="row-even"><td><p>buf</p></td>
+<td><p>The buffer to store the data to.</p></td>
+</tr>
+<tr class="row-odd"><td><p>nbytes</p></td>
+<td><p>The number of bytes to read.</p></td>
+</tr>
+<tr class="row-even"><td><p>bytes_read</p></td>
+<td><p>If non-NULL, this will contain the number of bytes read.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga560d5c062d65e64c07d906d1207337d4"><span id="index-22"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_write_full</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span>
+    <span class="n">apr_size_t</span> <span class="n">nbytes</span><span class="p">,</span>
+    <span class="n">apr_size_t</span><span class="o">*</span> <span class="n">bytes_written</span>
+<span class="p">)</span></pre>
+<p>Write data to the specified file, ensuring that all of the data is written before returning. <a class="reference internal" href="#doxid-group-apr-file-io-1ga560d5c062d65e64c07d906d1207337d4"><span class="std std-ref">apr_file_write_full()</span></a> will write up to the specified number of bytes, but never more. If the OS cannot write that many bytes, the process/thread will block until they can be written. Exceptional error such as “out of space” or “pipe closed” will terminate with an error.</p>
+<p>It is possible for both bytes to be written and an error to be returned. And if *bytes_written is less than nbytes, an accompanying error is <em>always</em> returned.</p>
+<p><a class="reference internal" href="group_APR_Error.html#doxid-group-a-p-r-error-1gaee1ce306c0ebf1701b34172310aa1bd5"><span class="std std-ref">APR_EINTR</span></a> is never returned.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>thefile</p></td>
+<td><p>The file descriptor to write to.</p></td>
+</tr>
+<tr class="row-even"><td><p>buf</p></td>
+<td><p>The buffer which contains the data.</p></td>
+</tr>
+<tr class="row-odd"><td><p>nbytes</p></td>
+<td><p>The number of bytes to write.</p></td>
+</tr>
+<tr class="row-even"><td><p>bytes_written</p></td>
+<td><p>If non-NULL, set to the number of bytes written.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga24457e11f0db908b21b7e1742db4ed7b"><span id="index-23"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_writev_full</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">,</span>
+    <span class="k">const</span> <span class="k">struct</span> <span class="n">iovec</span><span class="o">*</span> <span class="n">vec</span><span class="p">,</span>
+    <span class="n">apr_size_t</span> <span class="n">nvec</span><span class="p">,</span>
+    <span class="n">apr_size_t</span><span class="o">*</span> <span class="n">nbytes</span>
+<span class="p">)</span></pre>
+<p>Write data from iovec array to the specified file, ensuring that all of the data is written before returning. <a class="reference internal" href="#doxid-group-apr-file-io-1ga24457e11f0db908b21b7e1742db4ed7b"><span class="std std-ref">apr_file_writev_full()</span></a> is available even if the underlying operating system doesn’t provide writev().</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>thefile</p></td>
+<td><p>The file descriptor to write to.</p></td>
+</tr>
+<tr class="row-even"><td><p>vec</p></td>
+<td><p>The array from which to get the data to write to the file.</p></td>
+</tr>
+<tr class="row-odd"><td><p>nvec</p></td>
+<td><p>The number of elements in the struct iovec array. This must be smaller than <a class="reference internal" href="group_apr_file_writev.html#doxid-group-apr-file-writev-1gae04a4721139b2b252ea20e68883da4b4"><span class="std std-ref">APR_MAX_IOVEC_SIZE</span></a>. If it isn’t, the function will fail with <a class="reference internal" href="group_APR_Error.html#doxid-group-a-p-r-error-1gae3ffc41994444e71ce522c036ca1d9a4"><span class="std std-ref">APR_EINVAL</span></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p>nbytes</p></td>
+<td><p>The number of bytes written.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga33e51b53194e7c0dac513ca27ca18e63"><span id="index-24"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_putc</span><span class="p">(</span>
+    <span class="kt">char</span> <span class="n">ch</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span>
+<span class="p">)</span></pre>
+<p>Write a character into the specified file.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ch</p></td>
+<td><p>The character to write.</p></td>
+</tr>
+<tr class="row-even"><td><p>thefile</p></td>
+<td><p>The file descriptor to write to</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga852b9c77d4223af15d8d3674a0e2714d"><span id="index-25"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_getc</span><span class="p">(</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">ch</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span>
+<span class="p">)</span></pre>
+<p>Read a character from the specified file.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ch</p></td>
+<td><p>The character to read into</p></td>
+</tr>
+<tr class="row-even"><td><p>thefile</p></td>
+<td><p>The file descriptor to read from</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga9d06778e719d596ab96bca812b01cb3a"><span id="index-26"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_ungetc</span><span class="p">(</span>
+    <span class="kt">char</span> <span class="n">ch</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span>
+<span class="p">)</span></pre>
+<p>Put a character back onto a specified stream.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>ch</p></td>
+<td><p>The character to write.</p></td>
+</tr>
+<tr class="row-even"><td><p>thefile</p></td>
+<td><p>The file descriptor to write to</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1gaf9513b769c10b09e5f37d6d0b86bdce9"><span id="index-27"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_gets</span><span class="p">(</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">str</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">len</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span>
+<span class="p">)</span></pre>
+<p>Read a line from the specified file The buffer will be NUL-terminated if any characters are stored. The newline at the end of the line will not be stripped.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>str</p></td>
+<td><p>The buffer to store the string in.</p></td>
+</tr>
+<tr class="row-even"><td><p>len</p></td>
+<td><p>The length of the string</p></td>
+</tr>
+<tr class="row-odd"><td><p>thefile</p></td>
+<td><p>The file descriptor to read from</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1gacde81145cc38660a1512d469886ddb16"><span id="index-28"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_puts</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">str</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span>
+<span class="p">)</span></pre>
+<p>Write the string into the specified file.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>str</p></td>
+<td><p>The string to write.</p></td>
+</tr>
+<tr class="row-even"><td><p>thefile</p></td>
+<td><p>The file descriptor to write to</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga68aba780b7fc53e47404bfd8def949bc"><span id="index-29"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_flush</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">)</span></pre>
+<p>Flush the file’s buffer.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>thefile</p></td>
+<td><p>The file descriptor to flush</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga4385e141c4bbb96294acd7d342f138da"><span id="index-30"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_sync</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">)</span></pre>
+<p>Transfer all file modified data and metadata to disk.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>thefile</p></td>
+<td><p>The file descriptor to sync</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1gaa4b4e5027c1d8dbe4e5cb47b8eebc03b"><span id="index-31"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_datasync</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">)</span></pre>
+<p>Transfer all file modified data to disk.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>thefile</p></td>
+<td><p>The file descriptor to sync</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga6e849af1b0fd31669c58a803fcb13837"><span id="index-32"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_dup</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">**</span> <span class="n">new_file</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">old_file</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">)</span></pre>
+<p>Duplicate the specified file descriptor. *new_file must point to a valid apr_file_t, or point to NULL.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>new_file</p></td>
+<td><p>The structure to duplicate into.</p></td>
+</tr>
+<tr class="row-even"><td><p>old_file</p></td>
+<td><p>The file to duplicate.</p></td>
+</tr>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>The pool to use for the new file.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga602926aad867088297e8f59490ff939c"><span id="index-33"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_dup2</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">new_file</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">old_file</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">)</span></pre>
+<p>Duplicate the specified file descriptor and close the original new_file MUST point at a valid apr_file_t. It cannot be NULL.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>new_file</p></td>
+<td><p>The old file that is to be closed and reused</p></td>
+</tr>
+<tr class="row-even"><td><p>old_file</p></td>
+<td><p>The file to duplicate</p></td>
+</tr>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>The pool to use for the new file</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1gadaf046ce39aa118dab921a407446355b"><span id="index-34"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_setaside</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">**</span> <span class="n">new_file</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">old_file</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">)</span></pre>
+<p>Move the specified file descriptor to a new pool Unlike <a class="reference internal" href="#doxid-group-apr-file-io-1ga602926aad867088297e8f59490ff939c"><span class="std std-ref">apr_file_dup2()</span></a>, this function doesn’t do an OS dup() operation on the underlying descriptor; it just moves the descriptor’s apr_file_t wrapper to a new pool.</p>
+<p>The new pool need not be an ancestor of old_file’s pool.</p>
+<p>After calling this function, old_file may not be used</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>new_file</p></td>
+<td><p>Pointer in which to return the new apr_file_t</p></td>
+</tr>
+<tr class="row-even"><td><p>old_file</p></td>
+<td><p>The file to move</p></td>
+</tr>
+<tr class="row-odd"><td><p>p</p></td>
+<td><p>The pool to which the descriptor is to be moved</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1gafe4be8c3b62c42535b84d4237bf6e421"><span id="index-35"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_buffer_set</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span>
+    <span class="n">apr_size_t</span> <span class="n">bufsize</span>
+<span class="p">)</span></pre>
+<p>Give the specified apr file handle a new buffer It is possible to add a buffer to previously unbuffered file handles, the <a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1gac48fd4c853c9f561632a2e8aaf5d8d97"><span class="std std-ref">APR_FOPEN_BUFFERED</span></a> flag will be added to the file handle’s flags. Likewise, with buffer=NULL and bufsize=0 arguments it is possible to make a previously buffered file handle unbuffered.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>thefile</p></td>
+<td><p>The file handle that is to be modified</p></td>
+</tr>
+<tr class="row-even"><td><p>buffer</p></td>
+<td><p>The buffer</p></td>
+</tr>
+<tr class="row-odd"><td><p>bufsize</p></td>
+<td><p>The size of the buffer</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga42bbb9227095686ea15eb79f99d248a2"><span id="index-36"></span><span></span><span class="n">apr_size_t</span>
+<span class="n">apr_file_buffer_size_get</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">)</span></pre>
+<p>Get the size of any buffer for the specified apr file handle</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>thefile</p></td>
+<td><p>The file handle</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga9db84bec24db97a53890df1a6aff63a1"><span id="index-37"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_seek</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1ga8eecd44975906042e0e369771802a145"><span class="std std-ref">apr_seek_where_t</span></a><span></span> <span class="n">where</span><span class="p">,</span>
+    <span class="n">apr_off_t</span><span class="o">*</span> <span class="n">offset</span>
+<span class="p">)</span></pre>
+<p>Move the read/write file offset to a specified byte within a file. The third argument is modified to be the offset the pointer was actually moved to.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>thefile</p></td>
+<td><p>The file descriptor</p></td>
+</tr>
+<tr class="row-even"><td><p>where</p></td>
+<td><p>How to move the pointer, one of:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="group_apr_file_seek_flags.html#doxid-group-apr-file-seek-flags-1ga2fdf78845c897f69451d49e1e2b90ac9"><span class="std std-ref">APR_SET</span></a> set the offset to offset</p></li>
+<li><p><a class="reference internal" href="group_apr_file_seek_flags.html#doxid-group-apr-file-seek-flags-1gae17abc53fea00bfd51e184017113e250"><span class="std std-ref">APR_CUR</span></a> add the offset to the current position</p></li>
+<li><p><a class="reference internal" href="group_apr_file_seek_flags.html#doxid-group-apr-file-seek-flags-1ga438f3568be799d1e4bbd19492ca47d22"><span class="std std-ref">APR_END</span></a> add the offset to the current file size</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>offset</p></td>
+<td><p>The offset to move the pointer to.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1gaae3b81342d239c58c351cf11190740ed"><span id="index-38"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_pipe_create</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">**</span> <span class="n">in</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">**</span> <span class="n">out</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">)</span></pre>
+<p>Create an anonymous pipe. By default, the returned file descriptors will be inherited by child processes created using <a class="reference internal" href="group_apr_thread_proc.html#doxid-group-apr-thread-proc-1gab51dd90b98d365a969f0ec5c7bef4e14"><span class="std std-ref">apr_proc_create()</span></a>. This can be changed using <a class="reference internal" href="#doxid-group-apr-file-io-1ga69fa72a6f77b96572248c2a6a347c02a"><span class="std std-ref">apr_file_inherit_unset()</span></a>.</p>
+<p>Bug Some platforms cannot toggle between blocking and nonblocking, and when passing a pipe as a standard handle to an application which does not expect it, a non-blocking stream will fluxor the client app.</p>
+<p>Deprecated</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>in</p></td>
+<td><p>The newly created pipe’s file for reading.</p></td>
+</tr>
+<tr class="row-even"><td><p>out</p></td>
+<td><p>The newly created pipe’s file for writing.</p></td>
+</tr>
+<tr class="row-odd"><td><p>pool</p></td>
+<td><p>The pool to operate on.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="#doxid-group-apr-file-io-1ga2fbbae715bee0e0ca9adadd66ac65e96"><span class="std std-ref">apr_file_pipe_create_ex()</span></a></p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga2fbbae715bee0e0ca9adadd66ac65e96"><span id="index-39"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_pipe_create_ex</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">**</span> <span class="n">in</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">**</span> <span class="n">out</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">blocking</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">)</span></pre>
+<p>Create an anonymous pipe which portably supports async timeout options. By default, the returned file descriptors will be inherited by child processes created using <a class="reference internal" href="group_apr_thread_proc.html#doxid-group-apr-thread-proc-1gab51dd90b98d365a969f0ec5c7bef4e14"><span class="std std-ref">apr_proc_create()</span></a>. This can be changed using <a class="reference internal" href="#doxid-group-apr-file-io-1ga69fa72a6f77b96572248c2a6a347c02a"><span class="std std-ref">apr_file_inherit_unset()</span></a>.</p>
+<p>Some platforms cannot toggle between blocking and nonblocking, and when passing a pipe as a standard handle to an application which does not expect it, a non-blocking stream will fluxor the client app. Use this function rather than <a class="reference internal" href="#doxid-group-apr-file-io-1gaae3b81342d239c58c351cf11190740ed"><span class="std std-ref">apr_file_pipe_create()</span></a> to create pipes where one or both ends require non-blocking semantics.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>in</p></td>
+<td><p>The newly created pipe’s file for reading.</p></td>
+</tr>
+<tr class="row-even"><td><p>out</p></td>
+<td><p>The newly created pipe’s file for writing.</p></td>
+</tr>
+<tr class="row-odd"><td><p>blocking</p></td>
+<td><p>one of these values defined in <code class="docutils literal notranslate"><span class="pre">apr_thread_proc.h</span></code>;</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="group_apr_thread_proc.html#doxid-group-apr-thread-proc-1ga646af57314e71f4647243f36dd03e5ea"><span class="std std-ref">APR_FULL_BLOCK</span></a></p></li>
+<li><p><a class="reference internal" href="group_apr_thread_proc.html#doxid-group-apr-thread-proc-1gaf8295548cb0821ee02249d6de8336bcb"><span class="std std-ref">APR_READ_BLOCK</span></a></p></li>
+<li><p><a class="reference internal" href="group_apr_thread_proc.html#doxid-group-apr-thread-proc-1ga36ff2de9664ad6995bd488b4ac715c9c"><span class="std std-ref">APR_WRITE_BLOCK</span></a></p></li>
+<li><p><a class="reference internal" href="group_apr_thread_proc.html#doxid-group-apr-thread-proc-1gae0707f76da785490830fc3491093767c"><span class="std std-ref">APR_FULL_NONBLOCK</span></a></p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>pool</p></td>
+<td><p>The pool to operate on.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga60cec3e6717bab0f11577bd7c38b4c59"><span id="index-40"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_namedpipe_create</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">filename</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_info.html#doxid-group-apr-file-info-1ga3af19c4c47007169064a70f9351bc7d8"><span class="std std-ref">apr_fileperms_t</span></a><span></span> <span class="n">perm</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">)</span></pre>
+<p>Create a named pipe.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>filename</p></td>
+<td><p>The filename of the named pipe</p></td>
+</tr>
+<tr class="row-even"><td><p>perm</p></td>
+<td><p>The permissions for the newly created pipe.</p></td>
+</tr>
+<tr class="row-odd"><td><p>pool</p></td>
+<td><p>The pool to operate on.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga90e481207a38df04818a0c55883ee953"><span id="index-41"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_pipe_timeout_get</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thepipe</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_time.html#doxid-group-apr-time-1gaae2129185a395cc393f76fabf4f43e47"><span class="std std-ref">apr_interval_time_t</span></a><span></span><span class="o">*</span> <span class="n">timeout</span>
+<span class="p">)</span></pre>
+<p>Get the timeout value for a pipe or manipulate the blocking state.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>thepipe</p></td>
+<td><p>The pipe we are getting a timeout for.</p></td>
+</tr>
+<tr class="row-even"><td><p>timeout</p></td>
+<td><p>The current timeout value in microseconds.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1gaf88d2fca768e3fa9f28ea010e1bf602a"><span id="index-42"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_pipe_timeout_set</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thepipe</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_time.html#doxid-group-apr-time-1gaae2129185a395cc393f76fabf4f43e47"><span class="std std-ref">apr_interval_time_t</span></a><span></span> <span class="n">timeout</span>
+<span class="p">)</span></pre>
+<p>Set the timeout value for a pipe or manipulate the blocking state.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>thepipe</p></td>
+<td><p>The pipe we are setting a timeout on.</p></td>
+</tr>
+<tr class="row-even"><td><p>timeout</p></td>
+<td><p>The timeout value in microseconds. Values &lt; 0 mean wait forever, 0 means do not wait at all.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga2d337e66c1fa0cd433164079bf542484"><span id="index-43"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_lock</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">type</span>
+<span class="p">)</span></pre>
+<p>file (un)locking functions. Establish a lock on the specified, open file. The lock may be advisory or mandatory, at the discretion of the platform. The lock applies to the file as a whole, rather than a specific range. Locks are established on a per-thread/process basis; a second lock by the same thread will not block.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>thefile</p></td>
+<td><p>The file to lock.</p></td>
+</tr>
+<tr class="row-even"><td><p>type</p></td>
+<td><p>The type of lock to establish on the file.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga3a255996fb439b6d66ed7cd65319525b"><span id="index-44"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_unlock</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">)</span></pre>
+<p>Remove any outstanding locks on the file.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>thefile</p></td>
+<td><p>The file to unlock.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga5c750a88fe1e032e1d85d3db40d9519f"><span id="index-45"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_name_get</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">**</span> <span class="n">new_path</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span>
+<span class="p">)</span></pre>
+<p>accessor and general file_io functions. return the file name of the current file.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>new_path</p></td>
+<td><p>The path of the file.</p></td>
+</tr>
+<tr class="row-even"><td><p>thefile</p></td>
+<td><p>The currently open file.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1gafa13b7024748a7e45344d6998ddbd281"><span id="index-46"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_data_get</span><span class="p">(</span>
+    <span class="kt">void</span><span class="o">**</span> <span class="n">data</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">key</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">file</span>
+<span class="p">)</span></pre>
+<p>Return the data associated with the current file.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>data</p></td>
+<td><p>The user data associated with the file.</p></td>
+</tr>
+<tr class="row-even"><td><p>key</p></td>
+<td><p>The key to use for retrieving data associated with this file.</p></td>
+</tr>
+<tr class="row-odd"><td><p>file</p></td>
+<td><p>The currently open file.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga58c857162593d8b3aa999df5b7af0805"><span id="index-47"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_data_set</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">file</span><span class="p">,</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">key</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="n">cleanup</span>
+<span class="p">)</span></pre>
+<p>Set the data associated with the current file.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>file</p></td>
+<td><p>The currently open file.</p></td>
+</tr>
+<tr class="row-even"><td><p>data</p></td>
+<td><p>The user data to associate with the file.</p></td>
+</tr>
+<tr class="row-odd"><td><p>key</p></td>
+<td><p>The key to use for associating data with the file.</p></td>
+</tr>
+<tr class="row-even"><td><p>cleanup</p></td>
+<td><p>The cleanup routine to use when the file is destroyed.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga29fca4b0201c236856fea5578f410c0e"><span id="index-48"></span><span></span><span class="kt">int</span>
+<span class="n">apr_file_printf</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">fptr</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">format</span><span class="p">,</span>
+    <span class="p">...</span>
+<span class="p">)</span></pre>
+<p>Write a string to a file using a printf format.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>fptr</p></td>
+<td><p>The file to write to.</p></td>
+</tr>
+<tr class="row-even"><td><p>format</p></td>
+<td><p>The format string</p></td>
+</tr>
+<tr class="row-odd"><td><p>…</p></td>
+<td><p>The values to substitute in the format string</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Returns:</p>
+<p>The number of bytes written</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1gac5fed6d75597476718c40fc603823b1e"><span id="index-49"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_perms_set</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">fname</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_info.html#doxid-group-apr-file-info-1ga3af19c4c47007169064a70f9351bc7d8"><span class="std std-ref">apr_fileperms_t</span></a><span></span> <span class="n">perms</span>
+<span class="p">)</span></pre>
+<p>set the specified file’s permission bits.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Some platforms may not be able to apply all of the available permission bits; <a class="reference internal" href="group_APR_Error.html#doxid-group-a-p-r-error-1ga64dff43b83bcefd3f3c751be6b864ca1"><span class="std std-ref">APR_INCOMPLETE</span></a> will be returned if some permissions are specified which could not be set.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Platforms which do not implement this feature will return <a class="reference internal" href="group_APR_Error.html#doxid-group-a-p-r-error-1ga939ddb834a30bc9a5a0a329b13000161"><span class="std std-ref">APR_ENOTIMPL</span></a>.</p>
+</div>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>fname</p></td>
+<td><p>The file (name) to apply the permissions to.</p></td>
+</tr>
+<tr class="row-even"><td><p>perms</p></td>
+<td><p>The permission bits to apply to the file.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga96ceec3492ad0c75d2b58c167087ee6a"><span id="index-50"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_attrs_set</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">fname</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1ga11fbee5a7a3f3d45fff5c31df0db9737"><span class="std std-ref">apr_fileattrs_t</span></a><span></span> <span class="n">attributes</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1ga11fbee5a7a3f3d45fff5c31df0db9737"><span class="std std-ref">apr_fileattrs_t</span></a><span></span> <span class="n">attr_mask</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">)</span></pre>
+<p>Set attributes of the specified file. This function should be used in preference to explicit manipulation of the file permissions, because the operations to provide these attributes are platform specific and may involve more than simply setting permission bits.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Platforms which do not implement this feature will return <a class="reference internal" href="group_APR_Error.html#doxid-group-a-p-r-error-1ga939ddb834a30bc9a5a0a329b13000161"><span class="std std-ref">APR_ENOTIMPL</span></a>.</p>
+</div>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>fname</p></td>
+<td><p>The full path to the file (using / on all systems)</p></td>
+</tr>
+<tr class="row-even"><td><p>attributes</p></td>
+<td><p>Or’d combination of</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="group_apr_file_attrs_set_flags.html#doxid-group-apr-file-attrs-set-flags-1ga333f2c798495cfb95ee624e11c862e38"><span class="std std-ref">APR_FILE_ATTR_READONLY</span></a> - make the file readonly</p></li>
+<li><p><a class="reference internal" href="group_apr_file_attrs_set_flags.html#doxid-group-apr-file-attrs-set-flags-1ga51346f433e354f0bc8722388b6b275fd"><span class="std std-ref">APR_FILE_ATTR_EXECUTABLE</span></a> - make the file executable</p></li>
+<li><p><a class="reference internal" href="group_apr_file_attrs_set_flags.html#doxid-group-apr-file-attrs-set-flags-1ga68c188c0e56b9abdef3c97ffd913c5aa"><span class="std std-ref">APR_FILE_ATTR_HIDDEN</span></a> - make the file hidden</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>attr_mask</p></td>
+<td><p>Mask of valid bits in attributes.</p></td>
+</tr>
+<tr class="row-even"><td><p>pool</p></td>
+<td><p>the pool to use.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga79f58458a00a4072622005c09ed8f96f"><span id="index-51"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_mtime_set</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">fname</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_time.html#doxid-group-apr-time-1gadb4bde16055748190eae190c55aa02bb"><span class="std std-ref">apr_time_t</span></a><span></span> <span class="n">mtime</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">)</span></pre>
+<p>Set the mtime of the specified file.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Platforms which do not implement this feature will return <a class="reference internal" href="group_APR_Error.html#doxid-group-a-p-r-error-1ga939ddb834a30bc9a5a0a329b13000161"><span class="std std-ref">APR_ENOTIMPL</span></a>.</p>
+</div>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>fname</p></td>
+<td><p>The full path to the file (using / on all systems)</p></td>
+</tr>
+<tr class="row-even"><td><p>mtime</p></td>
+<td><p>The mtime to apply to the file.</p></td>
+</tr>
+<tr class="row-odd"><td><p>pool</p></td>
+<td><p>The pool to use.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga51e0b4703c7561f72587982808985d29"><span id="index-52"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_dir_make</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">path</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_info.html#doxid-group-apr-file-info-1ga3af19c4c47007169064a70f9351bc7d8"><span class="std std-ref">apr_fileperms_t</span></a><span></span> <span class="n">perm</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">)</span></pre>
+<p>Create a new directory on the file system.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>path</p></td>
+<td><p>the path for the directory to be created. (use / on all systems)</p></td>
+</tr>
+<tr class="row-even"><td><p>perm</p></td>
+<td><p>Permissions for the new directory.</p></td>
+</tr>
+<tr class="row-odd"><td><p>pool</p></td>
+<td><p>the pool to use.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga6a3b2602f57ff148cd64096da02adbd2"><span id="index-53"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_dir_make_recursive</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">path</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_file_info.html#doxid-group-apr-file-info-1ga3af19c4c47007169064a70f9351bc7d8"><span class="std std-ref">apr_fileperms_t</span></a><span></span> <span class="n">perm</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">)</span></pre>
+<p>Creates a new directory on the file system, but behaves like ‘mkdir -p’. Creates intermediate directories as required. No error will be reported if PATH already exists.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>path</p></td>
+<td><p>the path for the directory to be created. (use / on all systems)</p></td>
+</tr>
+<tr class="row-even"><td><p>perm</p></td>
+<td><p>Permissions for the new directory.</p></td>
+</tr>
+<tr class="row-odd"><td><p>pool</p></td>
+<td><p>the pool to use.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga5487d02a62fba9444747ccb5838150ba"><span id="index-54"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_dir_remove</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">path</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">pool</span>
+<span class="p">)</span></pre>
+<p>Remove directory from the file system. Removing a directory which is in-use (e.g., the current working directory, or during apr_dir_read, or with an open file) is not portable.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>path</p></td>
+<td><p>the path for the directory to be removed. (use / on all systems)</p></td>
+</tr>
+<tr class="row-even"><td><p>pool</p></td>
+<td><p>the pool to use.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga39be7fe05d0dda4a28f4358b61a44ac8"><span id="index-55"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_info_get</span><span class="p">(</span>
+    <a class="reference internal" href="struct_apr_finfo_t.html#doxid-structapr-finfo-t"><span class="std std-ref">apr_finfo_t</span></a><span></span><span class="o">*</span> <span class="n">finfo</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">wanted</span><span class="p">,</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span>
+<span class="p">)</span></pre>
+<p>get the specified file’s stats.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>finfo</p></td>
+<td><p>Where to store the information about the file.</p></td>
+</tr>
+<tr class="row-even"><td><p>wanted</p></td>
+<td><p>The desired <a class="reference internal" href="struct_apr_finfo_t.html#doxid-structapr-finfo-t"><span class="std std-ref">apr_finfo_t</span></a> fields, as a bit flag of APR_FINFO_* values</p></td>
+</tr>
+<tr class="row-odd"><td><p>thefile</p></td>
+<td><p>The file to get information about.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1gac067fe5f208c927cf6d213197b9335a8"><span id="index-56"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_trunc</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">fp</span><span class="p">,</span>
+    <span class="n">apr_off_t</span> <span class="n">offset</span>
+<span class="p">)</span></pre>
+<p>Truncate the file’s length to the specified offset The read/write file offset is repositioned to offset.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>fp</p></td>
+<td><p>The file to truncate</p></td>
+</tr>
+<tr class="row-even"><td><p>offset</p></td>
+<td><p>The offset to truncate to.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga023d6e4d2512382a9d4b1f881e105b8f"><span id="index-57"></span><span></span><span class="n">apr_int32_t</span>
+<span class="n">apr_file_flags_get</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">f</span><span class="p">)</span></pre>
+<p>Retrieve the flags that were passed into <a class="reference internal" href="#doxid-group-apr-file-io-1gabda14cbf242fb4fe99055434213e5446"><span class="std std-ref">apr_file_open()</span></a> when the file was opened.</p>
+<p class="rubric">Returns:</p>
+<p>apr_int32_t the flags</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1gab5950b3b0156097b0181394a37e03ede"><span id="index-58"></span><a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span>
+<span class="n">apr_file_pool_get</span><span class="p">(</span><span class="k">const</span> <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">)</span></pre>
+<p>Get the pool used by the file.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga137bee13d2c65fb8afd4b34e400187c7"><span id="index-59"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_inherit_set</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">)</span></pre>
+<p>Set a file to be inherited by child processes.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga69fa72a6f77b96572248c2a6a347c02a"><span id="index-60"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_inherit_unset</span><span class="p">(</span><a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">*</span> <span class="n">thefile</span><span class="p">)</span></pre>
+<p>Unset a file from being inherited by child processes.</p>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1gac34981f9ff41f85e4377a6dde185fe52"><span id="index-61"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_file_mktemp</span><span class="p">(</span>
+    <a class="reference internal" href="#doxid-group-apr-file-io-1gaa46e4763ac375ea3c7a43ba6f6099e22"><span class="std std-ref">apr_file_t</span></a><span></span><span class="o">**</span> <span class="n">fp</span><span class="p">,</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">templ</span><span class="p">,</span>
+    <span class="n">apr_int32_t</span> <span class="n">flags</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">)</span></pre>
+<p>Open a temporary file This function generates a unique temporary file name from template. The last six characters of template must be XXXXXX and these are replaced with a string that makes the filename unique. Since it will be modified, template must not be a string constant, but should be declared as a character array.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>fp</p></td>
+<td><p>The apr file to use as a temporary file.</p></td>
+</tr>
+<tr class="row-even"><td><p>templ</p></td>
+<td><p>The template to use when creating a temp file.</p></td>
+</tr>
+<tr class="row-odd"><td><p>flags</p></td>
+<td><p>The flags to open the file with. If this is zero, the file is opened with <a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1gafe94f21ccbf411172e70e7f473af251a"><span class="std std-ref">APR_FOPEN_CREATE</span></a> | <a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1gaf9e7303f028b130ff7d4b209d6662d7d"><span class="std std-ref">APR_FOPEN_READ</span></a> | <a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1gac598bb95fc9476b0bf2ed0b1c308842c"><span class="std std-ref">APR_FOPEN_WRITE</span></a> | <a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1gabb7fb062cdf1d58faee8c7ea518496f1"><span class="std std-ref">APR_FOPEN_EXCL</span></a> | <a class="reference internal" href="group_apr_file_open_flags.html#doxid-group-apr-file-open-flags-1ga5d3756f6d242c667ed1d3f54af4916eb"><span class="std std-ref">APR_FOPEN_DELONCLOSE</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>p</p></td>
+<td><p>The pool to allocate the file out of.</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight doxyrest-title-code-block literal-block" id="doxid-group-apr-file-io-1ga5cc19828a668c362be0ad7a12b805cc0"><span id="index-62"></span><a class="reference internal" href="group_apr_errno.html#doxid-group-apr-errno-1gaf76ee4543247e9fb3f3546203e590a6c"><span class="std std-ref">apr_status_t</span></a><span></span>
+<span class="n">apr_temp_dir_get</span><span class="p">(</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">**</span> <span class="n">temp_dir</span><span class="p">,</span>
+    <a class="reference internal" href="group_apr_pools.html#doxid-group-apr-pools-1gaf137f28edcf9a086cd6bc36c20d7cdfb"><span class="std std-ref">apr_pool_t</span></a><span></span><span class="o">*</span> <span class="n">p</span>
+<span class="p">)</span></pre>
+<p>Find an existing directory suitable as a temporary storage location. This function uses an algorithm to search for a directory that an an application can use for temporary storage.</p>
+<p class="rubric">Parameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>temp_dir</p></td>
+<td><p>The temp directory.</p></td>
+</tr>
+<tr class="row-even"><td><p>p</p></td>
+<td><p>The pool to use for any necessary allocations.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="group_APR_Util_Escaping.html" class="btn btn-neutral float-left" title="Escape functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="group_apr_file_attrs_set_flags.html" class="btn btn-neutral float-right" title="File Attribute Flags" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2008-2017, Apache Portable Runtime Maintainers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

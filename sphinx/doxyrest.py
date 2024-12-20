@@ -34,6 +34,8 @@ cref_w_target_re_prog = re.compile('(.+?)\s*<([^<>]*)>$')
 def get_cref_target(text, target=None):
     if not target:
         target = text
+    elif url_re_prog.match(target):
+        return target
 
     if target in crefdb:
         return crefdb[target]

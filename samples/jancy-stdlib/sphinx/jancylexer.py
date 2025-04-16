@@ -168,7 +168,7 @@ class JancyLexer(RegexLexer):
                 'false',
                 'null'),
                 suffix=r'\b'), Keyword),
-            ('[a-zA-Z_]\w*', Name),
+            (r'[a-zA-Z_]\w*', Name),
         ],
         'root': [
             include('whitespace'),

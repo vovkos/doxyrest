@@ -162,19 +162,13 @@ target_link_libraries(
 	${LUA_LIB_NAME}
 )
 
-if(UNIX)
+if(UNIX AND NOT APPLE)
 	target_link_libraries(
 		doxyrest
 		pthread
 		dl
+		rt
 	)
-
-	if(NOT APPLE)
-		target_link_libraries(
-			doxyrest
-			rt
-		)
-	endif()
 endif()
 
 if(WIN32)

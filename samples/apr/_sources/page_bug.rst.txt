@@ -1,0 +1,66 @@
+.. index:: pair: page; Bug List
+.. _doxid-bug:
+
+Bug List
+========
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- :target:`doxid-bug_1_bug000001` Global :ref:`apr_dso_load <doxid-group__apr__dso_1gaedc8609c2bb76e5c43f2df2281a9d8b6>` (apr_dso_handle_t \*\*res_handle, const char \*path, apr_pool_t \*ctx)
+
+		- We aught to provide an alternative to RTLD_GLOBAL, which is the only supported method of loading DSOs today.
+
+	*
+		- :target:`doxid-bug_1_bug000003` Global :ref:`apr_file_pipe_create <doxid-group__apr__file__io_1gaae3b81342d239c58c351cf11190740ed>` (apr_file_t \*\*in, apr_file_t \*\*out, apr_pool_t \*pool)
+
+		- Some platforms cannot toggle between blocking and nonblocking, and when passing a pipe as a standard handle to an application which does not expect it, a non-blocking stream will fluxor the client app.
+
+	*
+		- :target:`doxid-bug_1_bug000002` Global :ref:`APR_FILEPATH_NOTABOVEROOT <doxid-group__apr__filepath_1gabb57ce7b23caf512d7f64b92a662ab3d>`
+
+		- in APR 0.9 and 1.x, this flag's behavior is undefined if the rootpath is NULL or empty. In APR 2.0 this should be changed to imply NOTABSOLUTE if the rootpath is NULL or empty.
+
+	*
+		- :target:`doxid-bug_1_bug000010` Global :ref:`apr_proc_other_child_register <doxid-group__apr__thread__proc_1gaf8d2be452a819161aa4cd6205a17761e>` (:ref:`apr_proc_t <doxid-structapr__proc__t>` \*proc, void(\*maintenance)(int reason, void \*, int status), void \*data, apr_file_t \*write_fd, apr_pool_t \*p)
+
+		- write_fd duplicates the proc->out stream, it's really redundant and should be replaced in the APR 1.0 API with a bitflag of which proc->in/out/err handles should be health checked.
+		  
+		  no platform currently tests the pipes health.
+
+	*
+		- :target:`doxid-bug_1_bug000011` Global :ref:`apr_proc_t::invoked <doxid-structapr__proc__t_1a72ed1c58c3f08ffa7202fa80e870cd54>`
+
+		- This should either always or never be present in release builds - since it breaks binary compatibility. We may enable it always in APR 1.0 yet leave it undefined in most cases.
+
+	*
+		- :target:`doxid-bug_1_bug000009` Global :ref:`apr_proc_wait_all_procs <doxid-group__apr__thread__proc_1ga506183074e8413c3ff597539e4768ea4>` (:ref:`apr_proc_t <doxid-structapr__proc__t>` \*proc, int \*exitcode, apr_exit_why_e \*exitwhy, apr_wait_how_e waithow, apr_pool_t \*p)
+
+		- Passing proc as a \*proc rather than \*\*proc was an odd choice for some platforms... this should be revisited in 1.0
+
+	*
+		- :target:`doxid-bug_1_bug000008` Global :ref:`apr_procattr_child_err_set <doxid-group__apr__thread__proc_1ga6fad364c6c820e37c0915435cfb3921f>` (struct apr_procattr_t \*attr, apr_file_t \*child_err, apr_file_t \*parent_err)
+
+		- Note that calling this function with two NULL files on some platforms creates an APR_FULL_BLOCK pipe, but this behavior is neither portable nor is it supported.
+
+	*
+		- :target:`doxid-bug_1_bug000006` Global :ref:`apr_procattr_child_in_set <doxid-group__apr__thread__proc_1ga24f40119b1aa07dd45a681a44915cb1b>` (struct apr_procattr_t \*attr, apr_file_t \*child_in, apr_file_t \*parent_in)
+
+		- Note that calling this function with two NULL files on some platforms creates an APR_FULL_BLOCK pipe, but this behavior is neither portable nor is it supported.
+
+	*
+		- :target:`doxid-bug_1_bug000007` Global :ref:`apr_procattr_child_out_set <doxid-group__apr__thread__proc_1gabb97e9a49021ab4452ae3f1a281c977f>` (struct apr_procattr_t \*attr, apr_file_t \*child_out, apr_file_t \*parent_out)
+
+		- Note that calling this function with two NULL files on some platforms creates an APR_FULL_BLOCK pipe, but this behavior is neither portable nor is it supported.
+
+	*
+		- :target:`doxid-bug_1_bug000004` Global :ref:`apr_socket_accept_filter <doxid-group__apr__network__io_1ga270b7c0835283fa2b85a05d295dd7ee5>` (apr_socket_t \*sock, char \*name, char \*args)
+
+		- name and args should have been declared as const char \*, as they are in APR 2.0
+
+	*
+		- :target:`doxid-bug_1_bug000005` Global :ref:`apr_strtoff <doxid-group__apr__strings_1ga1583688e0777398174f62e46a522ae8f>` (apr_off_t \*offset, const char \*buf, char \*\*end, int base)
+
+		- \*end breaks type safety; where \*buf is const, \*end needs to be declared as const in APR 2.0
+

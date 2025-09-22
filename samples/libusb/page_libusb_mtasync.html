@@ -1,0 +1,298 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multi-threaded applications and asynchronous I/O &mdash; LibUSB Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinx_rtd_theme.css?v=b6ca47bd" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=3e568265"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Packets and overflows" href="page_libusb_packetoverflow.html" />
+    <link rel="prev" title="Device hotplug event notification" href="page_libusb_hotplug.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            LibUSB Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_asyncio.html">Asynchronous device I/O</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_dev.html">Device handling and enumeration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_hotplug.html">Device hotplug event notification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_lib.html">Library initialization/deinitialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_misc.html">Miscellaneous</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_poll.html">Polling and timing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_syncio.html">Synchronous device I/O</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_desc.html">USB descriptors</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="page_libusb_api.html">Application Programming Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_libusb_caveats.html">Caveats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_libusb_contexts.html">Contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_libusb_hotplug.html">Device hotplug event notification</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Multi-threaded applications and asynchronous I/O</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#libusb-handle-events-from-multiple-threads">libusb_handle_events() from multiple threads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-events-lock">The events lock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#letting-other-threads-do-the-work-for-you">Letting other threads do the work for you</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-full-story">The full story</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#closing-remarks">Closing remarks</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="page_libusb_packetoverflow.html">Packets and overflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_libusb_io.html">Synchronous and asynchronous device I/O</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LibUSB Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Multi-threaded applications and asynchronous I/O</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="multi-threaded-applications-and-asynchronous-i-o">
+<span id="doxid-libusb-mtasync"></span><span id="index-0"></span><h1>Multi-threaded applications and asynchronous I/O</h1>
+<p>libusb is a thread-safe library, but extra considerations must be applied to applications which interact with libusb from multiple threads.</p>
+<p>The underlying issue that must be addressed is that all libusb I/O revolves around monitoring file descriptors through the poll()/select() system calls. This is directly exposed at the <a class="reference internal" href="group_libusb_asyncio.html#doxid-group-libusb-asyncio"><span class="std std-ref">asynchronous interface</span></a> but it is important to note that the <a class="reference internal" href="group_libusb_syncio.html#doxid-group-libusb-syncio"><span class="std std-ref">synchronous interface</span></a> is implemented on top of the asynchonrous interface, therefore the same considerations apply.</p>
+<p>The issue is that if two or more threads are concurrently calling poll() or select() on libusb’s file descriptors then only one of those threads will be woken up when an event arrives. The others will be completely oblivious that anything has happened.</p>
+<p>Consider the following pseudo-code, which submits an asynchronous transfer then waits for its completion. This style is one way you could implement a synchronous interface on top of the asynchronous interface (and libusb does something similar, albeit more advanced due to the complications explained on this page).</p>
+<pre class="highlight literal-block"><span></span><span class="kt">void</span> <span class="nf">cb</span><span class="p">(</span><span class="k">struct</span> <span class="n">libusb_transfer</span> <span class="o">*</span><span class="n">transfer</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">completed</span> <span class="o">=</span> <span class="n">transfer</span><span class="o">-&gt;</span><span class="n">user_data</span><span class="p">;</span>
+     <span class="o">*</span><span class="n">completed</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">myfunc</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">struct</span> <span class="n">libusb_transfer</span> <span class="o">*</span><span class="n">transfer</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span><span class="n">LIBUSB_CONTROL_SETUP_SIZE</span><span class="p">]</span> <span class="n">__attribute__</span> <span class="p">((</span><span class="n">aligned</span> <span class="p">(</span><span class="mi">2</span><span class="p">)));</span>
+    <span class="kt">int</span> <span class="n">completed</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="n">transfer</span> <span class="o">=</span> <span class="n">libusb_alloc_transfer</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">libusb_fill_control_setup</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span>
+        <span class="n">LIBUSB_REQUEST_TYPE_VENDOR</span> <span class="o">|</span> <span class="n">LIBUSB_ENDPOINT_OUT</span><span class="p">,</span> <span class="mh">0x04</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="n">libusb_fill_control_transfer</span><span class="p">(</span><span class="n">transfer</span><span class="p">,</span> <span class="n">dev</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">cb</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">completed</span><span class="p">,</span> <span class="mi">1000</span><span class="p">);</span>
+    <span class="n">libusb_submit_transfer</span><span class="p">(</span><span class="n">transfer</span><span class="p">);</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">completed</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">poll</span><span class="p">(</span><span class="n">libusb</span> <span class="n">file</span> <span class="n">descriptors</span><span class="p">,</span> <span class="mi">120</span><span class="o">*</span><span class="mi">1000</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">poll</span> <span class="n">indicates</span> <span class="n">activity</span><span class="p">)</span>
+            <span class="n">libusb_handle_events_timeout</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">zero_tv</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;completed!&quot;</span><span class="p">);</span>
+    <span class="c1">// other code here</span>
+<span class="p">}</span></pre>
+<p>Here we are <em>serializing</em> completion of an asynchronous event against a condition - the condition being completion of a specific transfer. The poll() loop has a long timeout to minimize CPU usage during situations when nothing is happening (it could reasonably be unlimited).</p>
+<p>If this is the only thread that is polling libusb’s file descriptors, there is no problem: there is no danger that another thread will swallow up the event that we are interested in. On the other hand, if there is another thread polling the same descriptors, there is a chance that it will receive the event that we were interested in. In this situation, <code class="docutils literal notranslate"><span class="pre">myfunc()</span></code> will only realise that the transfer has completed on the next iteration of the loop, <em>up to 120 seconds later.</em> Clearly a two-minute delay is undesirable, and don’t even think about using short timeouts to circumvent this issue!</p>
+<p>The solution here is to ensure that no two threads are ever polling the file descriptors at the same time. A naive implementation of this would impact the capabilities of the library, so libusb offers the scheme documented below to ensure no loss of functionality.</p>
+<p>Before we go any further, it is worth mentioning that all libusb-wrapped event handling procedures fully adhere to the scheme documented below. This includes <a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1ga4989086e3f0327f3886a4c474ec7c327"><span class="std std-ref">libusb_handle_events()</span></a> and its variants, and all the synchronous I/O functions - libusb hides this headache from you.</p>
+<section id="libusb-handle-events-from-multiple-threads">
+<span id="doxid-libusb-mtasync-1using"></span><h2>libusb_handle_events() from multiple threads</h2>
+<p>Even when only using <a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1ga4989086e3f0327f3886a4c474ec7c327"><span class="std std-ref">libusb_handle_events()</span></a> and synchronous I/O functions, you can still have a race condition. You might be tempted to solve the above with <a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1ga4989086e3f0327f3886a4c474ec7c327"><span class="std std-ref">libusb_handle_events()</span></a> like so:</p>
+<pre class="highlight literal-block"><span></span><span class="n">libusb_submit_transfer</span><span class="p">(</span><span class="n">transfer</span><span class="p">);</span>
+
+<span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">completed</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">libusb_handle_events</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;completed!&quot;</span><span class="p">);</span></pre>
+<p>This however has a race between the checking of completed and <a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1ga4989086e3f0327f3886a4c474ec7c327"><span class="std std-ref">libusb_handle_events()</span></a> acquiring the events lock, so another thread could have completed the transfer, resulting in this thread hanging until either a timeout or another event occurs. See also commit 6696512aade99bb15d6792af90ae329af270eba6 which fixes this in the synchronous API implementation of libusb.</p>
+<p>Fixing this race requires checking the variable completed only after taking the event lock, which defeats the concept of just calling <a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1ga4989086e3f0327f3886a4c474ec7c327"><span class="std std-ref">libusb_handle_events()</span></a> without worrying about locking. This is why libusb-1.0.9 introduces the new <a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1ga43e52b912a760b41a0cf8a4a472fbd5b"><span class="std std-ref">libusb_handle_events_timeout_completed()</span></a> and <a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1ga0bc99f39e4cf5ad393cd5936c36037d1"><span class="std std-ref">libusb_handle_events_completed()</span></a> functions, which handles doing the completion check for you after they have acquired the lock:</p>
+<pre class="highlight literal-block"><span></span><span class="n">libusb_submit_transfer</span><span class="p">(</span><span class="n">transfer</span><span class="p">);</span>
+
+<span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">completed</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">libusb_handle_events_completed</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">completed</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;completed!&quot;</span><span class="p">);</span></pre>
+<p>This nicely fixes the race in our example. Note that if all you want to do is submit a single transfer and wait for its completion, then using one of the synchronous I/O functions is much easier.</p>
+</section>
+<section id="the-events-lock">
+<span id="doxid-libusb-mtasync-1eventlock"></span><h2>The events lock</h2>
+<p>The problem is when we consider the fact that libusb exposes file descriptors to allow for you to integrate asynchronous USB I/O into existing main loops, effectively allowing you to do some work behind libusb’s back. If you do take libusb’s file descriptors and pass them to poll()/select() yourself, you need to be aware of the associated issues.</p>
+<p>The first concept to be introduced is the events lock. The events lock is used to serialize threads that want to handle events, such that only one thread is handling events at any one time.</p>
+<p>You must take the events lock before polling libusb file descriptors, using <a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1gaa72153938dc4f34decfacbc6cc6237ef"><span class="std std-ref">libusb_lock_events()</span></a>. You must release the lock as soon as you have aborted your poll()/select() loop, using <a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1gacefbeabdd3409490dc4678f00779c165"><span class="std std-ref">libusb_unlock_events()</span></a>.</p>
+</section>
+<section id="letting-other-threads-do-the-work-for-you">
+<span id="doxid-libusb-mtasync-1threadwait"></span><h2>Letting other threads do the work for you</h2>
+<p>Although the events lock is a critical part of the solution, it is not enough on it’s own. You might wonder if the following is sufficient…</p>
+<pre class="highlight literal-block"><span></span><span class="n">libusb_lock_events</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
+<span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">completed</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">poll</span><span class="p">(</span><span class="n">libusb</span> <span class="n">file</span> <span class="n">descriptors</span><span class="p">,</span> <span class="mi">120</span><span class="o">*</span><span class="mi">1000</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">poll</span> <span class="n">indicates</span> <span class="n">activity</span><span class="p">)</span>
+        <span class="n">libusb_handle_events_timeout</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">zero_tv</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="n">libusb_unlock_events</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span></pre>
+<p>…and the answer is that it is not. This is because the transfer in the code shown above may take a long time (say 30 seconds) to complete, and the lock is not released until the transfer is completed.</p>
+<p>Another thread with similar code that wants to do event handling may be working with a transfer that completes after a few milliseconds. Despite having such a quick completion time, the other thread cannot check that status of its transfer until the code above has finished (30 seconds later) due to contention on the lock.</p>
+<p>To solve this, libusb offers you a mechanism to determine when another thread is handling events. It also offers a mechanism to block your thread until the event handling thread has completed an event (and this mechanism does not involve polling of file descriptors).</p>
+<p>After determining that another thread is currently handling events, you obtain the <em>event waiters</em> lock using <a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1ga150865a3f35c38173d688efa7ee52929"><span class="std std-ref">libusb_lock_event_waiters()</span></a>. You then re-check that some other thread is still handling events, and if so, you call <a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1gae22755d523560be2867be7d09034ca50"><span class="std std-ref">libusb_wait_for_event()</span></a>.</p>
+<p><a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1gae22755d523560be2867be7d09034ca50"><span class="std std-ref">libusb_wait_for_event()</span></a> puts your application to sleep until an event occurs, or until a thread releases the events lock. When either of these things happen, your thread is woken up, and should re-check the condition it was waiting on. It should also re-check that another thread is handling events, and if not, it should start handling events itself.</p>
+<p>This looks like the following, as pseudo-code:</p>
+<pre class="highlight literal-block"><span></span><span class="nl">retry</span><span class="p">:</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">libusb_try_lock_events</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// we obtained the event lock: do our own event handling</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">completed</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">libusb_event_handling_ok</span><span class="p">(</span><span class="n">ctx</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">libusb_unlock_events</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
+            <span class="k">goto</span> <span class="n">retry</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">poll</span><span class="p">(</span><span class="n">libusb</span> <span class="n">file</span> <span class="n">descriptors</span><span class="p">,</span> <span class="mi">120</span><span class="o">*</span><span class="mi">1000</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">poll</span> <span class="n">indicates</span> <span class="n">activity</span><span class="p">)</span>
+            <span class="n">libusb_handle_events_locked</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">libusb_unlock_events</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="c1">// another thread is doing event handling. wait for it to signal us that</span>
+    <span class="c1">// an event has completed</span>
+    <span class="n">libusb_lock_event_waiters</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">completed</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// now that we have the event waiters lock, double check that another</span>
+        <span class="c1">// thread is still handling events for us. (it may have ceased handling</span>
+        <span class="c1">// events in the time it took us to reach this point)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">libusb_event_handler_active</span><span class="p">(</span><span class="n">ctx</span><span class="p">))</span> <span class="p">{</span>
+            <span class="c1">// whoever was handling events is no longer doing so, try again</span>
+            <span class="n">libusb_unlock_event_waiters</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
+            <span class="k">goto</span> <span class="n">retry</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">libusb_wait_for_event</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">libusb_unlock_event_waiters</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;completed!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span></pre>
+<p>A naive look at the above code may suggest that this can only support one event waiter (hence a total of 2 competing threads, the other doing event handling), because the event waiter seems to have taken the event waiters lock while waiting for an event. However, the system does support multiple event waiters, because <a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1gae22755d523560be2867be7d09034ca50"><span class="std std-ref">libusb_wait_for_event()</span></a> actually drops the lock while waiting, and reaquires it before continuing.</p>
+<p>We have now implemented code which can dynamically handle situations where nobody is handling events (so we should do it ourselves), and it can also handle situations where another thread is doing event handling (so we can piggyback onto them). It is also equipped to handle a combination of the two, for example, another thread is doing event handling, but for whatever reason it stops doing so before our condition is met, so we take over the event handling.</p>
+<p>Four functions were introduced in the above pseudo-code. Their importance should be apparent from the code shown above.</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1ga6e5a116d5c9498ca4a0e29587fec1a05"><span class="std std-ref">libusb_try_lock_events()</span></a> is a non-blocking function which attempts to acquire the events lock but returns a failure code if it is contended.</p></li>
+<li><p><a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1ga63592b28c265185d9469d1e6920d8373"><span class="std std-ref">libusb_event_handling_ok()</span></a> checks that libusb is still happy for your thread to be performing event handling. Sometimes, libusb needs to interrupt the event handler, and this is how you can check if you have been interrupted. If this function returns 0, the correct behaviour is for you to give up the event handling lock, and then to repeat the cycle. The following <a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1ga6e5a116d5c9498ca4a0e29587fec1a05"><span class="std std-ref">libusb_try_lock_events()</span></a> will fail, so you will become an events waiter. For more information on this, read <a class="reference internal" href="#doxid-libusb-mtasync-1fullstory"><span class="std std-ref">The full story</span></a> below.</p></li>
+<li><p><a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1ga71da081f97afa3bf68aed8e372254e8f"><span class="std std-ref">libusb_handle_events_locked()</span></a> is a variant of <a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1ga6deff4c7d3a6c04bb9ec9fd259b48933"><span class="std std-ref">libusb_handle_events_timeout()</span></a> that you can call while holding the events lock. <a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1ga6deff4c7d3a6c04bb9ec9fd259b48933"><span class="std std-ref">libusb_handle_events_timeout()</span></a> itself implements similar logic to the above, so be sure not to call it when you are “working behind libusb’s back”, as is the case here.</p></li>
+<li><p><a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1ga3a0a6e8be310c20f1ca68722149f9dbf"><span class="std std-ref">libusb_event_handler_active()</span></a> determines if someone is currently holding the events lock</p></li>
+</ol>
+<p>You might be wondering why there is no function to wake up all threads blocked on <a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1gae22755d523560be2867be7d09034ca50"><span class="std std-ref">libusb_wait_for_event()</span></a>. This is because libusb can do this internally: it will wake up all such threads when someone calls <a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1gacefbeabdd3409490dc4678f00779c165"><span class="std std-ref">libusb_unlock_events()</span></a> or when a transfer completes (at the point after its callback has returned).</p>
+<section id="the-full-story">
+<span id="doxid-libusb-mtasync-1fullstory"></span><h3>The full story</h3>
+<p>The above explanation should be enough to get you going, but if you’re really thinking through the issues then you may be left with some more questions regarding libusb’s internals. If you’re curious, read on, and if not, skip to the next section to avoid confusing yourself!</p>
+<p>The immediate question that may spring to mind is: what if one thread modifies the set of file descriptors that need to be polled while another thread is doing event handling?</p>
+<p>There are 2 situations in which this may happen.</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga3f184a8be4488a767b2e0ae07e76d1b0"><span class="std std-ref">libusb_open()</span></a> will add another file descriptor to the poll set, therefore it is desirable to interrupt the event handler so that it restarts, picking up the new descriptor.</p></li>
+<li><p><a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga779bc4f1316bdb0ac383bddbd538620e"><span class="std std-ref">libusb_close()</span></a> will remove a file descriptor from the poll set. There are all kinds of race conditions that could arise here, so it is important that nobody is doing event handling at this time.</p></li>
+</ol>
+<p>libusb handles these issues internally, so application developers do not have to stop their event handlers while opening/closing devices. Here’s how it works, focusing on the <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga779bc4f1316bdb0ac383bddbd538620e"><span class="std std-ref">libusb_close()</span></a> situation first:</p>
+<ol class="arabic simple">
+<li><p>During initialization, libusb opens an internal pipe, and it adds the read end of this pipe to the set of file descriptors to be polled.</p></li>
+<li><p>During <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga779bc4f1316bdb0ac383bddbd538620e"><span class="std std-ref">libusb_close()</span></a>, libusb writes some dummy data on this event pipe. This immediately interrupts the event handler. libusb also records internally that it is trying to interrupt event handlers for this high-priority event.</p></li>
+<li><p>At this point, some of the functions described above start behaving differently:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1ga63592b28c265185d9469d1e6920d8373"><span class="std std-ref">libusb_event_handling_ok()</span></a> starts returning 1, indicating that it is NOT OK for event handling to continue.</p></li>
+<li><p><a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1ga6e5a116d5c9498ca4a0e29587fec1a05"><span class="std std-ref">libusb_try_lock_events()</span></a> starts returning 1, indicating that another thread holds the event handling lock, even if the lock is uncontended.</p></li>
+<li><p><a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1ga3a0a6e8be310c20f1ca68722149f9dbf"><span class="std std-ref">libusb_event_handler_active()</span></a> starts returning 1, indicating that another thread is doing event handling, even if that is not true.</p></li>
+</ul>
+</li>
+<li><p>The above changes in behaviour result in the event handler stopping and giving up the events lock very quickly, giving the high-priority <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga779bc4f1316bdb0ac383bddbd538620e"><span class="std std-ref">libusb_close()</span></a> operation a “free ride” to acquire the events lock. All threads that are competing to do event handling become event waiters.</p></li>
+<li><p>With the events lock held inside <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga779bc4f1316bdb0ac383bddbd538620e"><span class="std std-ref">libusb_close()</span></a>, libusb can safely remove a file descriptor from the poll set, in the safety of knowledge that nobody is polling those descriptors or trying to access the poll set.</p></li>
+<li><p>After obtaining the events lock, the close operation completes very quickly (usually a matter of milliseconds) and then immediately releases the events lock.</p></li>
+<li><p>At the same time, the behaviour of <a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1ga63592b28c265185d9469d1e6920d8373"><span class="std std-ref">libusb_event_handling_ok()</span></a> and friends reverts to the original, documented behaviour.</p></li>
+<li><p>The release of the events lock causes the threads that are waiting for events to be woken up and to start competing to become event handlers again. One of them will succeed; it will then re-obtain the list of poll descriptors, and USB I/O will then continue as normal.</p></li>
+</ol>
+<p><a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga3f184a8be4488a767b2e0ae07e76d1b0"><span class="std std-ref">libusb_open()</span></a> is similar, and is actually a more simplistic case. Upon a call to <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga3f184a8be4488a767b2e0ae07e76d1b0"><span class="std std-ref">libusb_open()</span></a> :</p>
+<ol class="arabic simple">
+<li><p>The device is opened and a file descriptor is added to the poll set.</p></li>
+<li><p>libusb sends some dummy data on the event pipe, and records that it is trying to modify the poll descriptor set.</p></li>
+<li><p>The event handler is interrupted, and the same behaviour change as for <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga779bc4f1316bdb0ac383bddbd538620e"><span class="std std-ref">libusb_close()</span></a> takes effect, causing all event handling threads to become event waiters.</p></li>
+<li><p>The <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga3f184a8be4488a767b2e0ae07e76d1b0"><span class="std std-ref">libusb_open()</span></a> implementation takes its free ride to the events lock.</p></li>
+<li><p>Happy that it has successfully paused the events handler, <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga3f184a8be4488a767b2e0ae07e76d1b0"><span class="std std-ref">libusb_open()</span></a> releases the events lock.</p></li>
+<li><p>The event waiter threads are all woken up and compete to become event handlers again. The one that succeeds will obtain the list of poll descriptors again, which will include the addition of the new device.</p></li>
+</ol>
+</section>
+<section id="closing-remarks">
+<span id="doxid-libusb-mtasync-1concl"></span><h3>Closing remarks</h3>
+<p>The above may seem a little complicated, but hopefully I have made it clear why such complications are necessary. Also, do not forget that this only applies to applications that take libusb’s file descriptors and integrate them into their own polling loops.</p>
+<p>You may decide that it is OK for your multi-threaded application to ignore some of the rules and locks detailed above, because you don’t think that two threads can ever be polling the descriptors at the same time. If that is the case, then that’s good news for you because you don’t have to worry. But be careful here; remember that the synchronous I/O functions do event handling internally. If you have one thread doing event handling in a loop (without implementing the rules and locking semantics documented above) and another trying to send a synchronous USB transfer, you will end up with two threads monitoring the same descriptors, and the above-described undesirable behaviour occurring. The solution is for your polling thread to play by the rules; the synchronous I/O functions do so, and this will result in them getting along in perfect harmony.</p>
+<p>If you do have a dedicated thread doing event handling, it is perfectly legal for it to take the event handling lock for long periods of time. Any synchronous I/O functions you call from other threads will transparently fall back to the “event waiters” mechanism detailed above. The only consideration that your event handling thread must apply is the one related to <a class="reference internal" href="group_libusb_poll.html#doxid-group-libusb-poll-1ga63592b28c265185d9469d1e6920d8373"><span class="std std-ref">libusb_event_handling_ok()</span></a> : you must call this before every poll(), and give up the events lock if instructed.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="page_libusb_hotplug.html" class="btn btn-neutral float-left" title="Device hotplug event notification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="page_libusb_packetoverflow.html" class="btn btn-neutral float-right" title="Packets and overflows" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2007-2017, LibUSB Maintainers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

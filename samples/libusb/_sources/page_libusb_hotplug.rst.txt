@@ -1,0 +1,101 @@
+.. index:: pair: page; Device hotplug event notification
+.. _doxid-libusb_hotplug:
+
+Device hotplug event notification
+=================================
+
+
+
+.. _doxid-libusb_hotplug_1hotplug_intro:
+
+Introduction
+~~~~~~~~~~~~
+
+Version 1.0.16, :ref:`LIBUSB_API_VERSION <doxid-group__libusb__misc_1gaabe4bc36a83358685d36a6c853cbb4de>`>= 0x01000102, has added support for hotplug events on **some** platforms (you should test if your platform supports hotplug notification by calling :ref:`libusb_has_capability() <doxid-group__libusb__misc_1ga9b8e324d28c624cd0b8e7ba21607b8db>` with parameter :ref:`LIBUSB_CAP_HAS_HOTPLUG <doxid-group__libusb__misc_1ggaab1b3fa0728c06fafbee897795889bd5a8b1bbccc648a6677cb9030a6ba827438>`).
+
+This interface allows you to request notification for the arrival and departure of matching USB devices.
+
+To receive hotplug notification you register a callback by calling :ref:`libusb_hotplug_register_callback() <doxid-group__libusb__hotplug_1ga00e0c69ddf1fb1b6774dc918192e8dc7>`. This function will optionally return a callback handle that can be passed to :ref:`libusb_hotplug_deregister_callback() <doxid-group__libusb__hotplug_1ga8110f57eab2064375934f1449b2602bc>`.
+
+A callback function must return an int (0 or 1) indicating whether the callback is expecting additional events. Returning 0 will rearm the callback and 1 will cause the callback to be deregistered. Note that when callbacks are called from :ref:`libusb_hotplug_register_callback() <doxid-group__libusb__hotplug_1ga00e0c69ddf1fb1b6774dc918192e8dc7>` because of the :ref:`LIBUSB_HOTPLUG_ENUMERATE <doxid-group__libusb__hotplug_1gga95ce2ec85dec177854c423cea2853c52a01a1c0c9f4e6852cb6df713f2e8a7f6b>` flag, the callback return value is ignored, iow you cannot cause a callback to be deregistered by returning 1 when it is called from :ref:`libusb_hotplug_register_callback() <doxid-group__libusb__hotplug_1ga00e0c69ddf1fb1b6774dc918192e8dc7>`.
+
+Callbacks for a particular context are automatically deregistered by :ref:`libusb_exit() <doxid-group__libusb__lib_1ga86532f222d4f1332a5f8f5eef9a92da9>`.
+
+As of 1.0.16 there are two supported hotplug events:
+
+* LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED: A device has arrived and is ready to use
+
+* LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT: A device has left and is no longer available
+
+A hotplug event can listen for either or both of these events.
+
+Note: If you receive notification that a device has left and you have any a libusb_device_handles for the device it is up to you to call :ref:`libusb_close() <doxid-group__libusb__dev_1ga779bc4f1316bdb0ac383bddbd538620e>` on each device handle to free up any remaining resources associated with the device. Once a device has left any libusb_device_handle associated with the device are invalid and will remain so even if the device comes back.
+
+When handling a LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED event it is considered safe to call any libusb function that takes a libusb_device. It also safe to open a device and submit asynchronous transfers. However, most other functions that take a libusb_device_handle are **not** safe to call. Examples of such functions are any of the :ref:`synchronous API <doxid-group__libusb__syncio>` functions or the blocking functions that retrieve various :ref:`USB descriptors <doxid-group__libusb__desc>`. These functions must be used outside of the context of the hotplug callback.
+
+When handling a LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT event the only safe function is :ref:`libusb_get_device_descriptor() <doxid-group__libusb__desc_1ga5e9ab08d490a7704cf3a9b0439f16f00>`.
+
+The following code provides an example of the usage of the hotplug interface:
+
+.. ref-code-block:: c
+
+	#include <stdio.h>
+	#include <stdlib.h>
+	#include <time.h>
+	#include <libusb.h>
+	
+	static int count = 0;
+	
+	int hotplug_callback(struct libusb_context *ctx, struct libusb_device *dev,
+	                     libusb_hotplug_event event, void *user_data) {
+	  static libusb_device_handle *dev_handle = NULL;
+	  struct libusb_device_descriptor desc;
+	  int rc;
+	
+	  (void)libusb_get_device_descriptor(dev, &desc);
+	
+	  if (LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED == event) {
+	    rc = libusb_open(dev, &dev_handle);
+	    if (LIBUSB_SUCCESS != rc) {
+	      printf("Could not open USB device\n");
+	    }
+	  } else if (LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT == event) {
+	    if (dev_handle) {
+	      libusb_close(dev_handle);
+	      dev_handle = NULL;
+	    }
+	  } else {
+	    printf("Unhandled event %d\n", event);
+	  }
+	  count++;
+	
+	  return 0;
+	}
+	
+	int main (void) {
+	  libusb_hotplug_callback_handle callback_handle;
+	  int rc;
+	
+	  libusb_init(NULL);
+	
+	  rc = libusb_hotplug_register_callback(NULL, LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED |
+	                                        LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT, 0, 0x045a, 0x5005,
+	                                        LIBUSB_HOTPLUG_MATCH_ANY, hotplug_callback, NULL,
+	                                        &callback_handle);
+	  if (LIBUSB_SUCCESS != rc) {
+	    printf("Error creating a hotplug callback\n");
+	    libusb_exit(NULL);
+	    return EXIT_FAILURE;
+	  }
+	
+	  while (count < 2) {
+	    libusb_handle_events_completed(NULL, NULL);
+	    nanosleep(&(struct timespec){0, 10000000UL}, NULL);
+	  }
+	
+	  libusb_hotplug_deregister_callback(NULL, callback_handle);
+	  libusb_exit(NULL);
+	
+	  return 0;
+	}
+

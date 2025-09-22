@@ -1,0 +1,196 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Synchronous and asynchronous device I/O &mdash; LibUSB Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinx_rtd_theme.css?v=b6ca47bd" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=3e568265"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Global Namespace" href="global.html" />
+    <link rel="prev" title="Packets and overflows" href="page_libusb_packetoverflow.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            LibUSB Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_asyncio.html">Asynchronous device I/O</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_dev.html">Device handling and enumeration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_hotplug.html">Device hotplug event notification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_lib.html">Library initialization/deinitialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_misc.html">Miscellaneous</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_poll.html">Polling and timing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_syncio.html">Synchronous device I/O</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libusb_desc.html">USB descriptors</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="page_libusb_api.html">Application Programming Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_libusb_caveats.html">Caveats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_libusb_contexts.html">Contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_libusb_hotplug.html">Device hotplug event notification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_libusb_mtasync.html">Multi-threaded applications and asynchronous I/O</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_libusb_packetoverflow.html">Packets and overflows</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Synchronous and asynchronous device I/O</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#transfers-at-a-logical-level">Transfers at a logical level</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-synchronous-interface">The synchronous interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-asynchronous-interface">The asynchronous interface</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LibUSB Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Synchronous and asynchronous device I/O</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="synchronous-and-asynchronous-device-i-o">
+<span id="doxid-libusb-io"></span><span id="index-0"></span><h1>Synchronous and asynchronous device I/O</h1>
+<section id="introduction">
+<span id="doxid-libusb-io-1io-intro"></span><h2>Introduction</h2>
+<p>If you’re using libusb in your application, you’re probably wanting to perform I/O with devices - you want to perform USB data transfers.</p>
+<p>libusb offers two separate interfaces for device I/O. This page aims to introduce the two in order to help you decide which one is more suitable for your application. You can also choose to use both interfaces in your application by considering each transfer on a case-by-case basis.</p>
+<p>Once you have read through the following discussion, you should consult the detailed API documentation pages for the details:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="group_libusb_syncio.html#doxid-group-libusb-syncio"><span class="std std-ref">Synchronous device I/O</span></a></p></li>
+<li><p><a class="reference internal" href="group_libusb_asyncio.html#doxid-group-libusb-asyncio"><span class="std std-ref">Asynchronous device I/O</span></a></p></li>
+</ul>
+</section>
+<section id="transfers-at-a-logical-level">
+<span id="doxid-libusb-io-1theory"></span><h2>Transfers at a logical level</h2>
+<p>At a logical level, USB transfers typically happen in two parts. For example, when reading data from a endpoint:</p>
+<ol class="arabic simple">
+<li><p>A request for data is sent to the device</p></li>
+<li><p>Some time later, the incoming data is received by the host</p></li>
+</ol>
+<p>or when writing data to an endpoint:</p>
+<ol class="arabic simple">
+<li><p>The data is sent to the device</p></li>
+<li><p>Some time later, the host receives acknowledgement from the device that the data has been transferred.</p></li>
+</ol>
+<p>There may be an indefinite delay between the two steps. Consider a fictional USB input device with a button that the user can press. In order to determine when the button is pressed, you would likely submit a request to read data on a bulk or interrupt endpoint and wait for data to arrive. Data will arrive when the button is pressed by the user, which is potentially hours later.</p>
+<p>libusb offers both a synchronous and an asynchronous interface to performing USB transfers. The main difference is that the synchronous interface combines both steps indicated above into a single function call, whereas the asynchronous interface separates them.</p>
+</section>
+<section id="the-synchronous-interface">
+<span id="doxid-libusb-io-1sync"></span><h2>The synchronous interface</h2>
+<p>The synchronous I/O interface allows you to perform a USB transfer with a single function call. When the function call returns, the transfer has completed and you can parse the results.</p>
+<p>If you have used the libusb-0.1 before, this I/O style will seem familar to you. libusb-0.1 only offered a synchronous interface.</p>
+<p>In our input device example, to read button presses you might write code in the following style:</p>
+<pre class="highlight literal-block"><span></span><span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">actual_length</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="n">libusb_bulk_transfer</span><span class="p">(</span><span class="n">dev_handle</span><span class="p">,</span> <span class="n">LIBUSB_ENDPOINT_IN</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">actual_length</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">actual_length</span> <span class="o">==</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+    <span class="c1">// results of the transaction can now be found in the data buffer</span>
+    <span class="c1">// parse them here and report button press</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="n">error</span><span class="p">();</span>
+<span class="p">}</span></pre>
+<p>The main advantage of this model is simplicity: you did everything with a single simple function call.</p>
+<p>However, this interface has its limitations. Your application will sleep inside <a class="reference internal" href="group_libusb_syncio.html#doxid-group-libusb-syncio-1gab8ae853ab492c22d707241dc26c8a805"><span class="std std-ref">libusb_bulk_transfer()</span></a> until the transaction has completed. If it takes the user 3 hours to press the button, your application will be sleeping for that long. Execution will be tied up inside the library - the entire thread will be useless for that duration.</p>
+<p>Another issue is that by tieing up the thread with that single transaction there is no possibility of performing I/O with multiple endpoints and/or multiple devices simultaneously, unless you resort to creating one thread per transaction.</p>
+<p>Additionally, there is no opportunity to cancel the transfer after the request has been submitted.</p>
+<p>For details on how to use the synchronous API, see the <a class="reference internal" href="group_libusb_syncio.html#doxid-group-libusb-syncio"><span class="std std-ref">synchronous I/O API documentation</span></a> pages.</p>
+</section>
+<section id="the-asynchronous-interface">
+<span id="doxid-libusb-io-1async"></span><h2>The asynchronous interface</h2>
+<p>Asynchronous I/O is the most significant new feature in libusb-1.0. Although it is a more complex interface, it solves all the issues detailed above.</p>
+<p>Instead of providing which functions that block until the I/O has complete, libusb’s asynchronous interface presents non-blocking functions which begin a transfer and then return immediately. Your application passes a callback function pointer to this non-blocking function, which libusb will call with the results of the transaction when it has completed.</p>
+<p>Transfers which have been submitted through the non-blocking functions can be cancelled with a separate function call.</p>
+<p>The non-blocking nature of this interface allows you to be simultaneously performing I/O to multiple endpoints on multiple devices, without having to use threads.</p>
+<p>This added flexibility does come with some complications though:</p>
+<ul class="simple">
+<li><p>In the interest of being a lightweight library, libusb does not create threads and can only operate when your application is calling into it. Your application must call into libusb from it’s main loop when events are ready to be handled, or you must use some other scheme to allow libusb to undertake whatever work needs to be done.</p></li>
+<li><p>libusb also needs to be called into at certain fixed points in time in order to accurately handle transfer timeouts.</p></li>
+<li><p>Memory handling becomes more complex. You cannot use stack memory unless the function with that stack is guaranteed not to return until the transfer callback has finished executing.</p></li>
+<li><p>You generally lose some linearity from your code flow because submitting the transfer request is done in a separate function from where the transfer results are handled. This becomes particularly obvious when you want to submit a second transfer based on the results of an earlier transfer.</p></li>
+</ul>
+<p>Internally, libusb’s synchronous interface is expressed in terms of function calls to the asynchronous interface.</p>
+<p>For details on how to use the asynchronous API, see the <a class="reference internal" href="group_libusb_asyncio.html#doxid-group-libusb-asyncio"><span class="std std-ref">asynchronous I/O API</span></a> documentation pages.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="page_libusb_packetoverflow.html" class="btn btn-neutral float-left" title="Packets and overflows" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="global.html" class="btn btn-neutral float-right" title="Global Namespace" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2007-2017, LibUSB Maintainers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

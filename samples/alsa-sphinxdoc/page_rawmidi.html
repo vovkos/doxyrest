@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>RawMidi interface &#8212; ALSA Library Documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css?v=3785b6ce" />
+    <script src="_static/documentation_options.js?v=cb7bf70b"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Runtime arguments in configuration files" href="page_confarg.html" />
+    <link rel="prev" title="PCM External Plugin SDK" href="page_pcm_external_plugins.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="page_confarg.html" title="Runtime arguments in configuration files"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="page_pcm_external_plugins.html" title="PCM External Plugin SDK"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ALSA Library Documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">RawMidi interface</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="rawmidi-interface">
+<span id="doxid-rawmidi"></span><span id="index-0"></span><h1>RawMidi interface</h1>
+<p>RawMidi Interface is designed to write or read raw (unchanged) MIDI data over the MIDI line without any timestamps defined in interface. MIDI stands Musical Instrument Digital Interface and more information about this standard can be found at <a class="reference external" href="http://www.midi.org">http://www.midi.org</a>.</p>
+<section id="general-overview">
+<span id="doxid-rawmidi-1rawmidi-general-overview"></span><h2>General overview</h2>
+<p>The rawmidi implementation uses ring buffers to store outgoing and incoming MIDI stream. The buffer size is tunable and drivers report underruns for incoming stream as well.</p>
+</section>
+<section id="open-handling">
+<span id="doxid-rawmidi-1rawmidi-open"></span><h2>Open handling</h2>
+<p>RawMidi devices are opened exclusively for a selected direction. While more than one process may not open a given MIDI device in the same direction simultaneously, separate processes may open a single MIDI device in different directions (i.e. process one opens a MIDI device in write direction and process two opens the same device in read direction).</p>
+<section id="nonblocking-open-flag">
+<span id="doxid-rawmidi-1rawmidi-open-nonblock"></span><h3>Nonblocking open (flag)</h3>
+<p>Using <a class="reference internal" href="group_RawMidi.html#doxid-group-raw-midi-1ga31ee35659c82272382ccc3014c8a73f8"><span class="std std-ref">SND_RAWMIDI_NONBLOCK</span></a> flag for <a class="reference internal" href="group_RawMidi.html#doxid-group-raw-midi-1ga2ab783051deeb7eb37eb568b76448889"><span class="std std-ref">snd_rawmidi_open()</span></a> or <a class="reference internal" href="group_RawMidi.html#doxid-group-raw-midi-1gaa7e3daf5cf4dd36b2534d2f1d6309477"><span class="std std-ref">snd_rawmidi_open_lconf()</span></a> instruct device driver to return the -EBUSY error when device is already occupied with another application. This flag also changes behaviour of <a class="reference internal" href="group_RawMidi.html#doxid-group-raw-midi-1ga0a30e482efec57f4ea74c533a0f9b134"><span class="std std-ref">snd_rawmidi_write()</span></a> and <a class="reference internal" href="group_RawMidi.html#doxid-group-raw-midi-1ga9b0952fc04facda83cdf1521325ca475"><span class="std std-ref">snd_rawmidi_read()</span></a> returning -EAGAIN when no more bytes can be processed.</p>
+<p>Note: In opposite (default) behaviour, application is blocked until device resources are free.</p>
+</section>
+<section id="append-open-flag">
+<span id="doxid-rawmidi-1rawmidi-open-append"></span><h3>Append open (flag)</h3>
+<p>Using <a class="reference internal" href="group_RawMidi.html#doxid-group-raw-midi-1ga7060640f32abcd337239bde2c8749d23"><span class="std std-ref">SND_RAWMIDI_APPEND</span></a> flag (output only) instruct device driver to append contents of written buffer - passed by <a class="reference internal" href="group_RawMidi.html#doxid-group-raw-midi-1ga0a30e482efec57f4ea74c533a0f9b134"><span class="std std-ref">snd_rawmidi_write()</span></a> - atomically to output ring buffer in the kernel space. This flag also means that device is not opened exclusively, so more applications can share given rawmidi device. Note that applications must send the whole MIDI message including the running status, because another writing application might break the MIDI message in the output buffer.</p>
+</section>
+<section id="sync-open-flag">
+<span id="doxid-rawmidi-1rawmidi-open-sync"></span><h3>Sync open (flag)</h3>
+<p>Using <a class="reference internal" href="group_RawMidi.html#doxid-group-raw-midi-1gab1a659b38e5174d790d5671739995894"><span class="std std-ref">SND_RAWMIDI_SYNC</span></a> flag (output only) assures that the contents of output buffer specified using <a class="reference internal" href="group_RawMidi.html#doxid-group-raw-midi-1ga0a30e482efec57f4ea74c533a0f9b134"><span class="std std-ref">snd_rawmidi_write()</span></a> is always drained before the function exits. This behaviour is same like ‘ <a class="reference internal" href="group_RawMidi.html#doxid-group-raw-midi-1ga0a30e482efec57f4ea74c533a0f9b134"><span class="std std-ref">snd_rawmidi_write()</span></a> followed by <a class="reference internal" href="group_RawMidi.html#doxid-group-raw-midi-1gabfff7417ec957b7ee07882f91d73d7be"><span class="std std-ref">snd_rawmidi_drain()</span></a> immediately’.</p>
+</section>
+<section id="i-o-handling">
+<span id="doxid-rawmidi-1rawmidi-io"></span><h3>I/O handling</h3>
+<p>There is only standard read/write access to device internal ring buffer. Use <a class="reference internal" href="group_RawMidi.html#doxid-group-raw-midi-1ga9b0952fc04facda83cdf1521325ca475"><span class="std std-ref">snd_rawmidi_read()</span></a> and <a class="reference internal" href="group_RawMidi.html#doxid-group-raw-midi-1ga0a30e482efec57f4ea74c533a0f9b134"><span class="std std-ref">snd_rawmidi_write()</span></a> functions to obtain / write MIDI bytes.</p>
+</section>
+<section id="rawmidi-naming-conventions">
+<span id="doxid-rawmidi-1rawmidi-dev-names"></span><h3>RawMidi naming conventions</h3>
+<p>The ALSA library uses a generic string representation for names of devices. The devices might be virtual, physical or a mix of both. The generic string is passed to <a class="reference internal" href="group_RawMidi.html#doxid-group-raw-midi-1ga2ab783051deeb7eb37eb568b76448889"><span class="std std-ref">::snd_rawmidi_open()</span></a> or <a class="reference internal" href="group_RawMidi.html#doxid-group-raw-midi-1gaa7e3daf5cf4dd36b2534d2f1d6309477"><span class="std std-ref">::snd_rawmidi_open_lconf()</span></a>. It contains two parts: device name and arguments. Devices and arguments are described in configuration files. The usual place for default definitions is at /usr/share/alsa/alsa.conf.</p>
+</section>
+<section id="rawmidi-dev-names-default">
+<span id="doxid-rawmidi-1rawmidi-dev-names-default"></span><h3>rawmidi_dev_names_default</h3>
+<p>The default device is equal to hw device. The defaults are used:</p>
+<p>defaults.rawmidi.card 0 defaults.rawmidi.device 0 defaults.rawmidi.subdevice -1</p>
+<p>These defaults can be freely overwritten in local configuration files.</p>
+<p>Example:</p>
+<pre class="highlight literal-block"><span></span><span class="k">default</span></pre>
+</section>
+<section id="hw-device">
+<span id="doxid-rawmidi-1rawmidi-dev-names-hw"></span><h3>HW device</h3>
+<p>The hw device description uses the hw plugin. The three arguments (in order: CARD,DEV,SUBDEV) specify card number or identifier, device number and subdevice number (-1 means any).</p>
+<p>Example:</p>
+<pre class="highlight literal-block"><span></span><span class="n">hw</span>
+<span class="nl">hw</span><span class="p">:</span><span class="mi">0</span>
+<span class="nl">hw</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span>
+<span class="nl">hw</span><span class="p">:</span><span class="n">supersonic</span><span class="p">,</span><span class="mi">1</span>
+<span class="nl">hw</span><span class="p">:</span><span class="n">soundwave</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span>
+<span class="nl">hw</span><span class="p">:</span><span class="n">DEV</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">CARD</span><span class="o">=</span><span class="n">soundwave</span><span class="p">,</span><span class="n">SUBDEV</span><span class="o">=</span><span class="mi">2</span></pre>
+</section>
+</section>
+<section id="examples">
+<span id="doxid-rawmidi-1rawmidi-examples"></span><h2>Examples</h2>
+<p>The full featured examples with cross-links:</p>
+<p><a class="reference internal" href="example__test_rawmidi.c.html#doxid-home-vladimir-develop-alsa-lib-alsa-lib-1-1-3-src-rawmidi-rawmidi-c-1example-test-rawmidi"><span class="std std-ref">example code</span></a></p>
+<p>This example shows open and read/write rawmidi operations.</p>
+</section>
+<section id="virtual-rawmidi-interface">
+<span id="doxid-rawmidi-1rawmidi-virt"></span><h2>Virtual RawMidi interface</h2>
+<p>The “virtual” plugin creates a virtual RawMidi instance on the ALSA sequencer, which can be accessed through the connection of the sequencer ports. There is no connection established as default.</p>
+<p>For creating a virtual RawMidi instance, pass “virtual” as its name at creation.</p>
+<p>Example:</p>
+<pre class="highlight literal-block"><span></span><span class="n">snd_rawmidi_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">read_handle</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">write_handle</span><span class="p">,</span> <span class="s">&quot;virtual&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span></pre>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">RawMidi interface</a><ul>
+<li><a class="reference internal" href="#general-overview">General overview</a></li>
+<li><a class="reference internal" href="#open-handling">Open handling</a><ul>
+<li><a class="reference internal" href="#nonblocking-open-flag">Nonblocking open (flag)</a></li>
+<li><a class="reference internal" href="#append-open-flag">Append open (flag)</a></li>
+<li><a class="reference internal" href="#sync-open-flag">Sync open (flag)</a></li>
+<li><a class="reference internal" href="#i-o-handling">I/O handling</a></li>
+<li><a class="reference internal" href="#rawmidi-naming-conventions">RawMidi naming conventions</a></li>
+<li><a class="reference internal" href="#rawmidi-dev-names-default">rawmidi_dev_names_default</a></li>
+<li><a class="reference internal" href="#hw-device">HW device</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#virtual-rawmidi-interface">Virtual RawMidi interface</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="page_pcm_external_plugins.html"
+                          title="previous chapter">PCM External Plugin SDK</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="page_confarg.html"
+                          title="next chapter">Runtime arguments in configuration files</a></p>
+  </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="page_confarg.html" title="Runtime arguments in configuration files"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="page_pcm_external_plugins.html" title="PCM External Plugin SDK"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ALSA Library Documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">RawMidi interface</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 1998-2017, ALSA Library Maintainers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+  </body>
+</html>

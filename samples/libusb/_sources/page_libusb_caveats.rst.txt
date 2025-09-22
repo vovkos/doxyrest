@@ -1,0 +1,110 @@
+.. index:: pair: page; Caveats
+.. _doxid-libusb_caveats:
+
+Caveats
+=======
+
+
+
+.. _doxid-libusb_caveats_1devresets:
+
+Device resets
+~~~~~~~~~~~~~
+
+The :ref:`libusb_reset_device() <doxid-group__libusb__dev_1gafee9c4638f1713ca5faa867948878111>` function allows you to reset a device. If your program has to call such a function, it should obviously be aware that the reset will cause device state to change (e.g. register values may be reset).
+
+The problem is that any other program could reset the device your program is working with, at any time. libusb does not offer a mechanism to inform you when this has happened, so if someone else resets your device it will not be clear to your own program why the device state has changed.
+
+Ultimately, this is a limitation of writing drivers in userspace. Separation from the USB stack in the underlying kernel makes it difficult for the operating system to deliver such notifications to your program. The Linux kernel USB stack allows such reset notifications to be delivered to in-kernel USB drivers, but it is not clear how such notifications could be delivered to second-class drivers that live in userspace.
+
+
+
+
+
+.. _doxid-libusb_caveats_1blockonly:
+
+Blocking-only functionality
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The functionality listed below is only available through synchronous, blocking functions. There are no asynchronous/non-blocking alternatives, and no clear ways of implementing these.
+
+* Configuration activation (:ref:`libusb_set_configuration() <doxid-group__libusb__dev_1ga785ddea63a2b9bcb879a614ca4867bed>`)
+
+* Interface/alternate setting activation (:ref:`libusb_set_interface_alt_setting() <doxid-group__libusb__dev_1ga4858ad4f0f58fd1dc0afaead1fe6479a>`)
+
+* Releasing of interfaces (:ref:`libusb_release_interface() <doxid-group__libusb__dev_1ga49b5cb0d894f6807cd1693ef29aecbfa>`)
+
+* Clearing of halt/stall condition (:ref:`libusb_clear_halt() <doxid-group__libusb__dev_1gab794bbc0b055d140f186f5a4d39c0891>`)
+
+* Device resets (:ref:`libusb_reset_device() <doxid-group__libusb__dev_1gafee9c4638f1713ca5faa867948878111>`)
+
+
+
+
+
+.. _doxid-libusb_caveats_1configsel:
+
+Configuration selection and handling
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When libusb presents a device handle to an application, there is a chance that the corresponding device may be in unconfigured state. For devices with multiple configurations, there is also a chance that the configuration currently selected is not the one that the application wants to use.
+
+The obvious solution is to add a call to :ref:`libusb_set_configuration() <doxid-group__libusb__dev_1ga785ddea63a2b9bcb879a614ca4867bed>` early on during your device initialization routines, but there are caveats to be aware of:
+
+#. If the device is already in the desired configuration, calling :ref:`libusb_set_configuration() <doxid-group__libusb__dev_1ga785ddea63a2b9bcb879a614ca4867bed>` using the same configuration value will cause a lightweight device reset. This may not be desirable behaviour.
+
+#. In the case where the desired configuration is already active, libusb may not even be able to perform a lightweight device reset. For example, take my USB keyboard with fingerprint reader: I'm interested in driving the fingerprint reader interface through libusb, but the kernel's USB-HID driver will almost always have claimed the keyboard interface. Because the kernel has claimed an interface, it is not even possible to perform the lightweight device reset, so :ref:`libusb_set_configuration() <doxid-group__libusb__dev_1ga785ddea63a2b9bcb879a614ca4867bed>` will fail. (Luckily the device in question only has a single configuration.)
+
+#. libusb will be unable to set a configuration if other programs or drivers have claimed interfaces. In particular, this means that kernel drivers must be detached from all the interfaces before :ref:`libusb_set_configuration() <doxid-group__libusb__dev_1ga785ddea63a2b9bcb879a614ca4867bed>` may succeed.
+
+One solution to some of the above problems is to consider the currently active configuration. If the configuration we want is already active, then we don't have to select any configuration:
+
+.. ref-code-block:: c
+
+	cfg = -1;
+	libusb_get_configuration(dev, &cfg);
+	if (cfg != desired)
+	    libusb_set_configuration(dev, desired);
+
+This is probably suitable for most scenarios, but is inherently racy: another application or driver may change the selected configuration *after* the :ref:`libusb_get_configuration() <doxid-group__libusb__dev_1gae921014b888b105471a31d54c77c1c4d>` call.
+
+Even in cases where :ref:`libusb_set_configuration() <doxid-group__libusb__dev_1ga785ddea63a2b9bcb879a614ca4867bed>` succeeds, consider that other applications or drivers may change configuration after your application calls :ref:`libusb_set_configuration() <doxid-group__libusb__dev_1ga785ddea63a2b9bcb879a614ca4867bed>`.
+
+One possible way to lock your device into a specific configuration is as follows:
+
+#. Set the desired configuration (or use the logic above to realise that it is already in the desired configuration)
+
+#. Claim the interface that you wish to use
+
+#. Check that the currently active configuration is the one that you want to use.
+
+The above method works because once an interface is claimed, no application or driver is able to select another configuration.
+
+
+
+
+
+.. _doxid-libusb_caveats_1earlycomp:
+
+Early transfer completion
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+NOTE: This section is currently Linux-centric. I am not sure if any of these considerations apply to Darwin or other platforms.
+
+When a transfer completes early (i.e. when less data is received/sent in any one packet than the transfer buffer allows for) then libusb is designed to terminate the transfer immediately, not transferring or receiving any more data unless other transfers have been queued by the user.
+
+On legacy platforms, libusb is unable to do this in all situations. After the incomplete packet occurs, "surplus" data may be transferred. For recent versions of libusb, this information is kept (the data length of the transfer is updated) and, for device-to-host transfers, any surplus data was added to the buffer. Still, this is not a nice solution because it loses the information about the end of the short packet, and the user probably wanted that surplus data to arrive in the next logical transfer.
+
+
+
+
+
+.. _doxid-libusb_caveats_1zlp:
+
+Zero length packets
+~~~~~~~~~~~~~~~~~~~
+
+* libusb is able to send a packet of zero length to an endpoint simply by submitting a transfer of zero length.
+
+* The :ref:`LIBUSB_TRANSFER_ADD_ZERO_PACKET <doxid-group__libusb__asyncio_1gga1fb47dd0f7c209b60a3609ff0c03d56da26b66334b6ec0537c49841ca623d901f>` flag is currently only supported on Linux.
+

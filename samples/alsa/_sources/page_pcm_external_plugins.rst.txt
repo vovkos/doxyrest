@@ -1,0 +1,167 @@
+.. index:: pair: page; PCM External Plugin SDK
+.. _doxid-pcm_external_plugins:
+
+PCM External Plugin SDK
+=======================
+
+
+
+.. _doxid-pcm_external_plugins_1pcm_externals:
+
+External Plugins
+~~~~~~~~~~~~~~~~
+
+The external plugins are implemented in a shared object file located at /usr/lib/alsa-lib (the exact location depends on the build option and asoundrc configuration). It has to be the file like libasound_module_pcm_MYPLUGIN.so, where MYPLUGIN corresponds to your own plugin name.
+
+The entry point of the plugin is defined via :ref:`SND_PCM_PLUGIN_DEFINE_FUNC() <doxid-group___plugin___s_d_k_1ga3fd72ea47a7a921943b26c580b9d6c41>` macro. This macro defines the function with a proper name to be referred from alsa-lib. The function takes the following 6 arguments:
+
+.. ref-code-block:: cpp
+
+	int (snd_pcm_t **pcmp, const char *name, snd_config_t *root,
+	    snd_config_t *conf, snd_pcm_stream_t stream, int mode)
+
+The first argument, pcmp, is the pointer to store the resultant PCM handle. The arguments name, root, stream and mode are the parameters to be passed to the plugin constructor. The conf is the configuration tree for the plugin. The arguments above are defined in the macro itself, so don't use variables with the same names to shadow parameters.
+
+After parsing the configuration parameters in the given conf tree, usually you will call the external plugin API function, :ref:`snd_pcm_extplug_create() <doxid-group___p_c_m___ext_plug_1gab0b27889f74c83cd033062981320fd62>` or :ref:`snd_pcm_ioplug_create() <doxid-group___p_c_m___i_o_plug_1ga7fb5213a5e776246e2b4dc53ec8d7604>`, depending on the plugin type. The PCM handle must be filled \*pcmp in return. Then this function must return either a value 0 when succeeded, or a negative value as the error code.
+
+Finally, add :ref:`SND_PCM_PLUGIN_SYMBOL() <doxid-group___plugin___s_d_k_1ga73a613cc5b7b3642f53bbd5a1d78004b>` with the name of your plugin as the argument at the end. This defines the proper versioned symbol as the reference.
+
+The typical code would look like below:
+
+.. ref-code-block:: cpp
+
+	struct myplug_info {
+	    snd_pcm_extplug_t ext;
+	    int my_own_data;
+	    ...
+	};
+	
+	SND_PCM_PLUGIN_DEFINE_FUNC(myplug)
+	{
+	    snd_config_iterator_t i, next;
+	    snd_config_t *slave = NULL;
+	    struct myplug_info *myplug;
+	    int err;
+	
+	    snd_config_for_each(i, next, conf) {
+	        snd_config_t *n = snd_config_iterator_entry(i);
+	        const char *id;
+	        if (snd_config_get_id(n, &id) < 0)
+	            continue;
+	        if (strcmp(id, "comment") == 0 || strcmp(id, "type") == 0)
+	            continue;
+	        if (strcmp(id, "slave") == 0) {
+	            slave = n;
+	            continue;
+	        }
+	        if (strcmp(id, "my_own_parameter") == 0) {
+	            ....
+	            continue;
+	        }
+	        SNDERR("Unknown field %s", id);
+	        return -EINVAL;
+	    }
+	
+	    if (! slave) {
+	        SNDERR("No slave defined for myplug");
+	        return -EINVAL;
+	    }
+	
+	    myplug = calloc(1, sizeof(*myplug));
+	    if (myplug == NULL)
+	        return -ENOMEM;
+	
+	    myplug->ext.version = SND_PCM_EXTPLUG_VERSION;
+	    myplug->ext.name = "My Own Plugin";
+	    myplug->ext.callback = &my_own_callback;
+	    myplug->ext.private_data = myplug;
+	    ....
+	
+	    err = snd_pcm_extplug_create(&myplug->ext, name, root, conf, stream, mode);
+	    if (err < 0) {
+	        myplug_free(myplug);
+	        return err;
+	    }
+	
+	     *pcmp = myplug->ext.pcm;
+	    return 0;
+	}
+	
+	SND_PCM_PLUGIN_SYMBOL(myplug);
+
+Read the codes in alsa-plugins package for the real examples.
+
+
+
+
+
+.. _doxid-pcm_external_plugins_1pcm_extplug:
+
+External Plugin: Filter-Type Plugin
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The filter-type plugin is a plugin to convert the PCM signals from the input and feeds to the output. Thus, this plugin always needs a slave PCM as its output.
+
+The plugin can modify the format and the channels of the input/output PCM. It can *not* modify the sample rate (because of simplicity reason).
+
+The following fields have to be filled in extplug record before calling :ref:`snd_pcm_extplug_create() <doxid-group___p_c_m___ext_plug_1gab0b27889f74c83cd033062981320fd62>` : version, name, callback. Otherfields are optional and should be initialized with zero.
+
+The constant :ref:`SND_PCM_EXTPLUG_VERSION <doxid-group___p_c_m___ext_plug_1ga24d0ae71d106f08685d9ba8c6cf5fe78>` must be passed to the version field for the version check in alsa-lib. A non-NULL ASCII string has to be passed to the name field. The callback field contains the table of callback functions for this plugin (defined as :ref:`snd_pcm_extplug_callback_t <doxid-group___p_c_m___ext_plug_1ga0c554fce3192586b7a5ff51d45272f44>`).
+
+The driver can set an arbitrary value (pointer) to private_data field to refer its own data in the callbacks.
+
+The rest fields are filled by :ref:`snd_pcm_extplug_create() <doxid-group___p_c_m___ext_plug_1gab0b27889f74c83cd033062981320fd62>`. The pcm field is the resultant PCM handle. The others are the current status of the PCM.
+
+The callback functions in :ref:`snd_pcm_extplug_callback_t <doxid-group___p_c_m___ext_plug_1ga0c554fce3192586b7a5ff51d45272f44>` define the real behavior of the driver. At least, transfer callback must be given. This callback is called at each time certain size of data block is transfered to the slave PCM. Other callbacks are optional.
+
+The close callback is called when the PCM is closed. If the plugin allocates private resources, this is the place to release them again. The hw_params and hw_free callbacks are called at :ref:`snd_pcm_hw_params() <doxid-group___p_c_m_1ga1ca0dc120a484965e26cabf966502330>` and :ref:`snd_pcm_hw_free() <doxid-group___p_c_m_1ga242ad0a269c272830d30666220edbc2a>` API calls, respectively. The last, dump callback, is called for printing the information of the given plugin.
+
+The init callback is called when the PCM is at prepare state or any initialization is issued. Use this callback to reset the PCM instance to a sane initial state.
+
+The hw_params constraints can be defined via either :ref:`snd_pcm_extplug_set_param_minmax() <doxid-group___p_c_m___ext_plug_1gabef139bbe5db265433fd5310d0faad4d>` and :ref:`snd_pcm_extplug_set_param_list() <doxid-group___p_c_m___ext_plug_1gadbf27adba1a7cd0195b6ac750bb11bf7>` functions after calling :ref:`snd_pcm_extplug_create() <doxid-group___p_c_m___ext_plug_1gab0b27889f74c83cd033062981320fd62>`. The former defines the minimal and maximal acceptable values for the given hw_params parameter (SND_PCM_EXTPLUG_HW_XXX). This function can't be used for the format parameter. The latter function specifies the available parameter values as the list. As mentioned above, the rate can't be changed. Only changeable parameters are sample format and channels.
+
+To define the constraints of the slave PCM configuration, use either :ref:`snd_pcm_extplug_set_slave_param_minmax() <doxid-group___p_c_m___ext_plug_1gad3cac0ee15293f349220a75cce69a51e>` and :ref:`snd_pcm_extplug_set_slave_param_list() <doxid-group___p_c_m___ext_plug_1gad14f6746e36d556c7a7937633b965ca7>`. The arguments are as same as former functions.
+
+To clear the parameter constraints, call :ref:`snd_pcm_extplug_params_reset() <doxid-group___p_c_m___ext_plug_1gacef181565eb697397ce41c1aab381777>` function.
+
+
+
+
+
+.. _doxid-pcm_external_plugins_1pcm_ioplug:
+
+External Plugin: I/O Plugin
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The I/O-type plugin is a PCM plugin to work as the input or output terminal point, i.e. as a user-space PCM driver.
+
+The new plugin is created via :ref:`snd_pcm_ioplug_create() <doxid-group___p_c_m___i_o_plug_1ga7fb5213a5e776246e2b4dc53ec8d7604>` function. The first argument is a pointer of the pluging information. Some of this struct must be initialized in prior to call :ref:`snd_pcm_ioplug_create() <doxid-group___p_c_m___i_o_plug_1ga7fb5213a5e776246e2b4dc53ec8d7604>`. Then the function fills other fields in return. The rest arguments, name, stream and mode, are usually identical with the values passed from the ALSA plugin constructor.
+
+The following fields are mandatory: version, name, callback. Otherfields are optional and should be initialized with zero.
+
+The constant :ref:`SND_PCM_IOPLUG_VERSION <doxid-group___p_c_m___i_o_plug_1ga81a2273c4df9be29d91e6e2a0860d991>` must be passed to the version field for the version check in alsa-lib. A non-NULL ASCII string has to be passed to the name field. The callback field contains the table of callback functions for this plugin (defined as :ref:`snd_pcm_ioplug_callback_t <doxid-group___p_c_m___i_o_plug_1ga9bbf2927f689c96faa7b6c5c89286355>`).
+
+flags field specifies the optional bit-flags. poll_fd and poll_events specify the poll file descriptor and the corresponding poll events (POLLIN, POLLOUT) for the plugin. If the plugin requires multiple poll descriptors or poll descriptor(s) dynamically varying, set poll_descriptors and poll_descriptors_count callbacks to the callback table. Then the poll_fd and poll_events field are ignored.
+
+mmap_rw specifies whether the plugin behaves in the pseudo mmap mode. When this value is set to 1, the plugin creates always a local buffer and performs read/write calls using this buffer as if it's mmapped. The address of local buffer can be obtained via :ref:`snd_pcm_ioplug_mmap_areas() <doxid-group___p_c_m___i_o_plug_1gac3b666ff286745c9eb24de3e3930970a>` function. When poll_fd, poll_events and mmap_rw fields are changed after :ref:`snd_pcm_ioplug_create() <doxid-group___p_c_m___i_o_plug_1ga7fb5213a5e776246e2b4dc53ec8d7604>`, call :ref:`snd_pcm_ioplug_reinit_status() <doxid-group___p_c_m___i_o_plug_1gab223893226ecf78f675c89959a8c421a>` to reflect the changes.
+
+The driver can set an arbitrary value (pointer) to private_data field to refer its own data in the callbacks.
+
+The rest fields are filled by :ref:`snd_pcm_ioplug_create() <doxid-group___p_c_m___i_o_plug_1ga7fb5213a5e776246e2b4dc53ec8d7604>`. The pcm field is the resultant PCM handle. The others are the current status of the PCM.
+
+The callback functions in :ref:`snd_pcm_ioplug_callback_t <doxid-group___p_c_m___i_o_plug_1ga9bbf2927f689c96faa7b6c5c89286355>` define the real behavior of the driver. At least, start, stop and pointer callbacks must be given. Other callbacks are optional. The start and stop callbacks are called when the PCM stream is started and stopped, repsectively. The pointer callback returns the current DMA position, which may be called at any time.
+
+The transfer callback is called when any data transfer happens. It receives the area array, offset and the size to transfer. The area array contains the array of :ref:`snd_pcm_channel_area_t <doxid-structsnd__pcm__channel__area__t>` with the elements of number of channels.
+
+When the PCM is closed, close callback is called. If the driver allocates any internal buffers, they should be released in this callback. The hw_params and hw_free callbacks are called when hw_params are set and reset, respectively. Note that they may be called multiple times according to the application. Similarly, sw_params callback is called when sw_params is set or changed.
+
+The prepare, drain, pause and resume callbacks are called when :ref:`snd_pcm_prepare() <doxid-group___p_c_m_1ga788d05de75f2d536f8443cb0306754d0>`, :ref:`snd_pcm_drain() <doxid-group___p_c_m_1ga49afc5b8527f30c33fafa476533c9f86>`, :ref:`snd_pcm_pause() <doxid-group___p_c_m_1gad711b582c7066bd4fffa1d08a04316b5>`, and :ref:`snd_pcm_resume() <doxid-group___p_c_m_1ga13083ce2209aab9ea73831610bc61ab1>` are called. The poll_descriptors_count and poll_descriptors callbacks are used to return the multiple or dynamic poll descriptors as mentioned above. The poll_revents callback is used to modify poll events. If the driver needs to mangle the native poll events to proper poll events for PCM, you can do it in this callback.
+
+Finally, the dump callback is used to print the status of the plugin.
+
+Note that some callbacks (start, stop, pointer, transfer and pause) may be called inside the internal pthread mutex, and they shouldn't call the PCM functions again unnecessarily from the callback itself; otherwise it may lead to a deadlock.
+
+The hw_params constraints can be defined via either :ref:`snd_pcm_ioplug_set_param_minmax() <doxid-group___p_c_m___i_o_plug_1gab62d470b02661214319196394b55fb37>` and :ref:`snd_pcm_ioplug_set_param_list() <doxid-group___p_c_m___i_o_plug_1ga7d713552fb846ccdf4b7ec6a9fc1b562>` functions after calling :ref:`snd_pcm_ioplug_create() <doxid-group___p_c_m___i_o_plug_1ga7fb5213a5e776246e2b4dc53ec8d7604>`. The former defines the minimal and maximal acceptable values for the given hw_params parameter (SND_PCM_IOPLUG_HW_XXX). This function can't be used for the format parameter. The latter function specifies the available parameter values as the list.
+
+To clear the parameter constraints, call :ref:`snd_pcm_ioplug_params_reset() <doxid-group___p_c_m___i_o_plug_1gad74355dfaa56fae80d49181c83eeecc4>` function.
+

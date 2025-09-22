@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Runtime functions in configuration files &#8212; ALSA Library Documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css?v=3785b6ce" />
+    <script src="_static/documentation_options.js?v=cb7bf70b"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Sequencer interface" href="page_seq.html" />
+    <link rel="prev" title="Runtime arguments in configuration files" href="page_confarg.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="page_seq.html" title="Sequencer interface"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="page_confarg.html" title="Runtime arguments in configuration files"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ALSA Library Documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Runtime functions in configuration files</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="runtime-functions-in-configuration-files">
+<span id="doxid-conffunc"></span><span id="index-0"></span><h1>Runtime functions in configuration files</h1>
+<p>The ALSA library can modify the configuration at runtime. Several built-in functions are available.</p>
+<p>A function is defined with the id <code class="docutils literal notranslate"><span class="pre">&#64;func</span></code> and the function name. All other values in the current compound are used as configuration for the function. If the compound func.&lt;function_name&gt; is defined in the root node, then the library and function from this compound configuration are used, otherwise ‘snd_func_’ is prefixed to the string and code from the ALSA library is used. The definition of a function looks like:</p>
+<pre class="highlight literal-block"><span></span><span class="n">func</span><span class="p">.</span><span class="n">remove_first_char</span> <span class="p">{</span>
+    <span class="n">lib</span> <span class="s">&quot;/usr/lib/libasoundextend.so&quot;</span>
+    <span class="n">func</span> <span class="s">&quot;extend_remove_first_char&quot;</span>
+<span class="p">}</span></pre>
+<section id="function-reference">
+<span id="doxid-conffunc-1conffunc-ref"></span><h2>Function reference</h2>
+<ul class="simple">
+<li><p>The getenv function - <a class="reference internal" href="global.html#doxid-confmisc-8c-1a033eab97ee6619aeb8c5eca585acf6c0"><span class="std std-ref">snd_func_getenv()</span></a> - obtains an environment value. The result is a string.</p></li>
+<li><p>The igetenv function - <a class="reference internal" href="global.html#doxid-confmisc-8c-1a121864fba02478b9f605be44c97f5dc8"><span class="std std-ref">snd_func_igetenv()</span></a> - obtains an environment value. The result is an integer.</p></li>
+<li><p>The concat function - <a class="reference internal" href="global.html#doxid-confmisc-8c-1a43a3685d5e397fdc0e46af6d7b121616"><span class="std std-ref">snd_func_concat()</span></a> - merges all specified strings. The result is a string.</p></li>
+<li><p>The iadd function - <a class="reference internal" href="global.html#doxid-confmisc-8c-1a4e7acbc261ca8b6bf4602753ea5c17fe"><span class="std std-ref">snd_func_iadd()</span></a> - sum all specified integers. The result is an integer.</p></li>
+<li><p>The imul function - <a class="reference internal" href="global.html#doxid-confmisc-8c-1a12f4b8b67e0976a260859edb929f4d36"><span class="std std-ref">snd_func_imul()</span></a> - multiply all specified integers. The result is an integer.</p></li>
+<li><p>The datadir function - <a class="reference internal" href="global.html#doxid-confmisc-8c-1aa24c85e86b4c1f6c4d2d440e4782d098"><span class="std std-ref">snd_func_datadir()</span></a> - returns the ALSA data directory. The result is a string.</p></li>
+<li><p>The refer function - <a class="reference internal" href="global.html#doxid-confmisc-8c-1a8d91af8387a708c526bac3ee2c7ea10e"><span class="std std-ref">snd_func_refer()</span></a> - copies the referred configuration. The result has the same type as the referred node.</p></li>
+<li><p>The card_inum function - <a class="reference internal" href="global.html#doxid-confmisc-8c-1a023f9fd40df7c2c428a457b6ec7f8004"><span class="std std-ref">snd_func_card_inum()</span></a> - returns a card number (integers).</p></li>
+<li><p>The card_driver function - <a class="reference internal" href="global.html#doxid-confmisc-8c-1a2d147e387821449a8927d60ef4f8ff16"><span class="std std-ref">snd_func_card_driver()</span></a> - returns a driver identification. The result is a string.</p></li>
+<li><p>The card_id function - <a class="reference internal" href="global.html#doxid-confmisc-8c-1a9ccfc361f1bc1d81837335de02707ee8"><span class="std std-ref">snd_func_card_id()</span></a> - returns a card identification. The result is a string.</p></li>
+<li><p>The card_name function - <a class="reference internal" href="global.html#doxid-confmisc-8c-1aba1ae0185e2d3e9b50291b40e7048181"><span class="std std-ref">snd_func_card_name()</span></a> - returns a card’s name. The result is a string.</p></li>
+<li><p>The pcm_id function - snd_func_pcm_id() - returns a pcm identification. The result is a string.</p></li>
+<li><p>The private_string function - <a class="reference internal" href="global.html#doxid-confmisc-8c-1af14b528e2502f2037294301473389948"><span class="std std-ref">snd_func_private_string()</span></a> - returns the string from the private_data node.</p></li>
+<li><p>The private_card_driver function - <a class="reference internal" href="global.html#doxid-confmisc-8c-1a7bc4fec8cb3499997934a00210d34fe7"><span class="std std-ref">snd_func_private_card_driver()</span></a> - returns the driver identification from the private_data node. The result is a string.</p></li>
+<li><p>The private_pcm_subdevice function - snd_func_private_pcm_subdevice() - returns the PCM subdevice number from the private_data node. The result is a string.</p></li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Runtime functions in configuration files</a><ul>
+<li><a class="reference internal" href="#function-reference">Function reference</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="page_confarg.html"
+                          title="previous chapter">Runtime arguments in configuration files</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="page_seq.html"
+                          title="next chapter">Sequencer interface</a></p>
+  </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="page_seq.html" title="Sequencer interface"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="page_confarg.html" title="Runtime arguments in configuration files"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ALSA Library Documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Runtime functions in configuration files</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 1998-2017, ALSA Library Maintainers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+  </body>
+</html>

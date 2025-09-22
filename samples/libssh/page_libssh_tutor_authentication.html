@@ -1,0 +1,416 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 2: A deeper insight on authentication &mdash; LibSSH Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinx_rtd_theme.css?v=b6ca47bd" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=a674670e"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Chapter 3: Opening a remote shell" href="page_libssh_tutor_shell.html" />
+    <link rel="prev" title="Chapter 1: A typical SSH session" href="page_libssh_tutor_guided_tour.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            LibSSH Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="page_libssh_linking.html">The Linking HowTo</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="page_libssh_tutorial.html">The Tutorial</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="page_libssh_tutorial.html#introduction">Introduction</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_guided_tour.html">Chapter 1: A typical SSH session</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Chapter 2: A deeper insight on authentication</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#a-deeper-insight-on-authentication">A deeper insight on authentication</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_shell.html">Chapter 3: Opening a remote shell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_command.html">Chapter 4: Passing a remote command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_sftp.html">Chapter 5: The SFTP subsystem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_scp.html">Chapter 6: The SCP subsystem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_forwarding.html">Chapter 7: Forwarding connections (tunnel)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_threads.html">Chapter 8: Threads with libssh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_todo.html">To be done</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="group_libssh.html">The libssh API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_ssh_cpp.html">The libssh C++ wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libssh_sftp.html">The libssh SFTP API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libssh_server.html">The libssh server API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="page_bug.html">Bug List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_deprecated.html">Deprecated List</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LibSSH Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="page_libssh_tutorial.html">The Tutorial</a></li>
+      <li class="breadcrumb-item active">Chapter 2: A deeper insight on authentication</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="chapter-2-a-deeper-insight-on-authentication">
+<span id="doxid-libssh-tutor-authentication"></span><span id="index-0"></span><h1>Chapter 2: A deeper insight on authentication</h1>
+<section id="a-deeper-insight-on-authentication">
+<span id="doxid-libssh-tutor-authentication-1authentication-details"></span><h2>A deeper insight on authentication</h2>
+<p>In our guided tour, we merely mentioned that the user needed to authenticate. We didn’t explain much in detail how that was supposed to happen. This chapter explains better the four authentication methods: with public keys, with a password, with challenges and responses (keyboard-interactive), and with no authentication at all.</p>
+<p>If your software is supposed to connect to an arbitrary server, then you might need to support all authentication methods. If your software will connect only to a given server, then it might be enough for your software to support only the authentication methods used by that server. If you are the administrator of the server, it might be your call to choose those authentication methods.</p>
+<p>It is not the purpose of this document to review in detail the advantages and drawbacks of each authentication method. You are therefore invited to read the abundant documentation on this topic to fully understand the advantages and security risks linked to each method.</p>
+<section id="authenticating-with-public-keys">
+<span id="doxid-libssh-tutor-authentication-1pubkeys"></span><h3>Authenticating with public keys</h3>
+<p>libssh is fully compatible with the openssh public and private keys. You can either use the automatic public key authentication method provided by libssh, or roll your own using the public key functions.</p>
+<p>The process of authenticating by public key to a server is the following:</p>
+<ul class="simple">
+<li><p>you scan a list of files that contain public keys. each key is sent to the SSH server, until the server acknowledges a key (a key it knows can be used to authenticate the user).</p></li>
+<li><p>then, you retrieve the private key for this key and send a message proving that you know that private key.</p></li>
+</ul>
+<p>The function <a class="reference internal" href="global.html#doxid-legacy-8h-1aebc0160212f355d57e4c331e4650d53c"><span class="std std-ref">ssh_userauth_autopubkey()</span></a> does this using the available keys in “~/.ssh/”. The return values are the following:</p>
+<ul class="simple">
+<li><p>SSH_AUTH_ERROR: some serious error happened during authentication</p></li>
+<li><p>SSH_AUTH_DENIED: no key matched</p></li>
+<li><p>SSH_AUTH_SUCCESS: you are now authenticated</p></li>
+<li><p>SSH_AUTH_PARTIAL: some key matched but you still have to provide an other mean of authentication (like a password).</p></li>
+</ul>
+<p>The <a class="reference internal" href="group_libssh_auth.html#doxid-group-libssh-auth-1ga53e6771b250c061463ed98b6e5b6e0af"><span class="std std-ref">ssh_userauth_publickey_auto()</span></a> function also tries to authenticate using the SSH agent, if you have one running, or the “none” method otherwise.</p>
+<p>If you wish to authenticate with public key by your own, follow these steps:</p>
+<ul class="simple">
+<li><p>Retrieve the public key with ssh_import_pubkey_file().</p></li>
+<li><p>Offer the public key to the SSH server using <a class="reference internal" href="group_libssh_auth.html#doxid-group-libssh-auth-1ga592f673c4d417a6a46cd4876ac8287aa"><span class="std std-ref">ssh_userauth_try_publickey()</span></a>. If the return value is SSH_AUTH_SUCCESS, the SSH server accepts to authenticate using the public key and you can go to the next step.</p></li>
+<li><p>Retrieve the private key, using the <a class="reference internal" href="group_libssh_pki.html#doxid-group-libssh-pki-1ga1c8f84137606b1585006302499100ee0"><span class="std std-ref">ssh_pki_import_privkey_file()</span></a> function. If a passphrase is needed, either the passphrase specified as argument or a callback will be used.</p></li>
+<li><p>Authenticate using <a class="reference internal" href="group_libssh_auth.html#doxid-group-libssh-auth-1gaa38c4f3194ef36720da7eddb0aa99e23"><span class="std std-ref">ssh_userauth_publickey()</span></a> with your private key.</p></li>
+<li><p>Do not forget cleaning up memory using <a class="reference internal" href="group_libssh_pki.html#doxid-group-libssh-pki-1ga08808beb83a42ccd6f1c710ddeb1b4c2"><span class="std std-ref">ssh_key_free()</span></a>.</p></li>
+</ul>
+<p>Here is a minimalistic example of public key authentication:</p>
+<pre class="highlight literal-block"><span></span><span class="kt">int</span> <span class="nf">authenticate_pubkey</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">rc</span><span class="p">;</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_userauth_publickey_auto</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">==</span> <span class="n">SSH_AUTH_ERROR</span><span class="p">)</span>
+  <span class="p">{</span>
+     <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Authentication failed: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+       <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+     <span class="k">return</span> <span class="n">SSH_AUTH_ERROR</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+<span class="p">}</span></pre>
+</section>
+<section id="authenticating-with-a-password">
+<span id="doxid-libssh-tutor-authentication-1password"></span><h3>Authenticating with a password</h3>
+<p>The function <a class="reference internal" href="group_libssh_auth.html#doxid-group-libssh-auth-1ga50c0c150f8c4703e7ee49b3e3e3ca215"><span class="std std-ref">ssh_userauth_password()</span></a> serves the purpose of authenticating using a password. It will return SSH_AUTH_SUCCESS if the password worked, or one of other constants otherwise. It’s your work to ask the password and to deallocate it in a secure manner.</p>
+<p>If your server complains that the password is wrong, but you can still authenticate using openssh’s client (issuing password), it’s probably because openssh only accept keyboard-interactive. Switch to keyboard-interactive authentication, or try to configure plain text passwords on the SSH server.</p>
+<p>Here is a small example of password authentication:</p>
+<pre class="highlight literal-block"><span></span><span class="kt">int</span> <span class="nf">authenticate_password</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">password</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">rc</span><span class="p">;</span>
+
+  <span class="n">password</span> <span class="o">=</span> <span class="n">getpass</span><span class="p">(</span><span class="s">&quot;Enter your password: &quot;</span><span class="p">);</span>
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_userauth_password</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">password</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">==</span> <span class="n">SSH_AUTH_ERROR</span><span class="p">)</span>
+  <span class="p">{</span>
+     <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Authentication failed: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+       <span class="n">ssh_get_error</span><span class="p">(</span><span class="n">session</span><span class="p">));</span>
+     <span class="k">return</span> <span class="n">SSH_AUTH_ERROR</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+<span class="p">}</span></pre>
+</section>
+<section id="the-keyboard-interactive-authentication-method">
+<span id="doxid-libssh-tutor-authentication-1keyb-int"></span><h3>The keyboard-interactive authentication method</h3>
+<p>The keyboard-interactive method is, as its name tells, interactive. The server will issue one or more challenges that the user has to answer, until the server takes an authentication decision.</p>
+<p><a class="reference internal" href="group_libssh_auth.html#doxid-group-libssh-auth-1ga6b3b1c2a045286d9476b0252791a07d2"><span class="std std-ref">ssh_userauth_kbdint()</span></a> is the the main keyboard-interactive function. It will return SSH_AUTH_SUCCESS,SSH_AUTH_DENIED, SSH_AUTH_PARTIAL, SSH_AUTH_ERROR, or SSH_AUTH_INFO, depending on the result of the request.</p>
+<p>The keyboard-interactive authentication method of SSH2 is a feature that permits the server to ask a certain number of questions in an interactive manner to the client, until it decides to accept or deny the login.</p>
+<p>To begin, you call <a class="reference internal" href="group_libssh_auth.html#doxid-group-libssh-auth-1ga6b3b1c2a045286d9476b0252791a07d2"><span class="std std-ref">ssh_userauth_kbdint()</span></a> (just set user and submethods to NULL) and store the answer.</p>
+<p>If the answer is SSH_AUTH_INFO, it means that the server has sent a few questions that you should ask the user. You can retrieve these questions with the following functions: <a class="reference internal" href="group_libssh_auth.html#doxid-group-libssh-auth-1gacb996ff4979670db009a71a90172ece9"><span class="std std-ref">ssh_userauth_kbdint_getnprompts()</span></a>, <a class="reference internal" href="group_libssh_auth.html#doxid-group-libssh-auth-1gaf920b6f8ed1e3c53cc2a683230098657"><span class="std std-ref">ssh_userauth_kbdint_getname()</span></a>, <a class="reference internal" href="group_libssh_auth.html#doxid-group-libssh-auth-1gaa757fbdbd4f95261bbbbc12b1ec33078"><span class="std std-ref">ssh_userauth_kbdint_getinstruction()</span></a>, and <a class="reference internal" href="group_libssh_auth.html#doxid-group-libssh-auth-1ga4e7466c30852a3339003af7046fab396"><span class="std std-ref">ssh_userauth_kbdint_getprompt()</span></a>.</p>
+<p>Set the answer for each question in the challenge using <a class="reference internal" href="group_libssh_auth.html#doxid-group-libssh-auth-1ga75e44b1f27059a00080f80fac0107a20"><span class="std std-ref">ssh_userauth_kbdint_setanswer()</span></a>.</p>
+<p>Then, call again <a class="reference internal" href="group_libssh_auth.html#doxid-group-libssh-auth-1ga6b3b1c2a045286d9476b0252791a07d2"><span class="std std-ref">ssh_userauth_kbdint()</span></a> and start the process again until these functions returns something else than SSH_AUTH_INFO.</p>
+<p>Here are a few remarks:</p>
+<ul class="simple">
+<li><p>Even the first call can return SSH_AUTH_DENIED or SSH_AUTH_SUCCESS.</p></li>
+<li><p>The server can send an empty question set (this is the default behavior on my system) after you have sent the answers to the first questions. You must still parse the answer, it might contain some message from the server saying hello or such things. Just call <a class="reference internal" href="group_libssh_auth.html#doxid-group-libssh-auth-1ga6b3b1c2a045286d9476b0252791a07d2"><span class="std std-ref">ssh_userauth_kbdint()</span></a> until needed.</p></li>
+<li><p>The meaning of “name”, “prompt”, “instruction” may be a little confusing. An explanation is given in the RFC section that follows.</p></li>
+</ul>
+<p>Here is a little note about how to use the information from keyboard-interactive authentication, coming from the RFC itself (rfc4256):</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>3.3 User Interface Upon receiving a request message, the client SHOULD
+prompt the user as follows: A command line interface (CLI) client SHOULD
+print the name and instruction (if non-empty), adding newlines. Then for
+each prompt in turn, the client SHOULD display the prompt and read the
+user input.
+
+A graphical user interface (GUI) client has many choices on how to prompt
+the user. One possibility is to use the name field (possibly prefixed
+with the application&#39;s name) as the title of a dialog window in which
+the prompt(s) are presented. In that dialog window, the instruction field
+would be a text message, and the prompts would be labels for text entry
+fields. All fields SHOULD be presented to the user, for example an
+implementation SHOULD NOT discard the name field because its windows lack
+titles; it SHOULD instead find another way to display this information. If
+prompts are presented in a dialog window, then the client SHOULD NOT
+present each prompt in a separate window.
+
+All clients MUST properly handle an instruction field with embedded
+newlines. They SHOULD also be able to display at least 30 characters for
+the name and prompts. If the server presents names or prompts longer than 30
+characters, the client MAY truncate these fields to the length it can
+display. If the client does truncate any fields, there MUST be an obvious
+indication that such truncation has occured.
+
+The instruction field SHOULD NOT be truncated. Clients SHOULD use control
+character filtering as discussed in [SSH-ARCH] to avoid attacks by
+including terminal control characters in the fields to be displayed.
+
+For each prompt, the corresponding echo field indicates whether or not
+the user input should be echoed as characters are typed. Clients SHOULD
+correctly echo/mask user input for each prompt independently of other
+prompts in the request message. If a client does not honor the echo field
+for whatever reason, then the client MUST err on the side of
+masking input. A GUI client might like to have a checkbox toggling
+echo/mask. Clients SHOULD NOT add any additional characters to the prompt
+such as &quot;: &quot; (colon-space); the server is responsible for supplying all
+text to be displayed to the user. Clients MUST also accept empty responses
+from the user and pass them on as empty strings.
+</pre></div>
+</div>
+<p>The following example shows how to perform keyboard-interactive authentication:</p>
+<pre class="highlight literal-block"><span></span><span class="kt">int</span> <span class="nf">authenticate_kbdint</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">rc</span><span class="p">;</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_userauth_kbdint</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+  <span class="k">while</span> <span class="p">(</span><span class="n">rc</span> <span class="o">==</span> <span class="n">SSH_AUTH_INFO</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">instruction</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">nprompts</span><span class="p">,</span> <span class="n">iprompt</span><span class="p">;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">ssh_userauth_kbdint_getname</span><span class="p">(</span><span class="n">session</span><span class="p">);</span>
+    <span class="n">instruction</span> <span class="o">=</span> <span class="n">ssh_userauth_kbdint_getinstruction</span><span class="p">(</span><span class="n">session</span><span class="p">);</span>
+    <span class="n">nprompts</span> <span class="o">=</span> <span class="n">ssh_userauth_kbdint_getnprompts</span><span class="p">(</span><span class="n">session</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">strlen</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">strlen</span><span class="p">(</span><span class="n">instruction</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">instruction</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">iprompt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">iprompt</span> <span class="o">&lt;</span> <span class="n">nprompts</span><span class="p">;</span> <span class="n">iprompt</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">prompt</span><span class="p">;</span>
+      <span class="kt">char</span> <span class="n">echo</span><span class="p">;</span>
+
+      <span class="n">prompt</span> <span class="o">=</span> <span class="n">ssh_userauth_kbdint_getprompt</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">iprompt</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">echo</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">echo</span><span class="p">)</span>
+      <span class="p">{</span>
+        <span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span><span class="mi">128</span><span class="p">],</span> <span class="o">*</span><span class="n">ptr</span><span class="p">;</span>
+
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%s&quot;</span><span class="p">,</span> <span class="n">prompt</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">fgets</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">),</span> <span class="n">stdin</span><span class="p">)</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+          <span class="k">return</span> <span class="n">SSH_AUTH_ERROR</span><span class="p">;</span>
+        <span class="n">buffer</span><span class="p">[</span><span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;</span><span class="se">\0</span><span class="sc">&#39;</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">ptr</span> <span class="o">=</span> <span class="n">strchr</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="sc">&#39;</span><span class="se">\n</span><span class="sc">&#39;</span><span class="p">))</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span>
+          <span class="o">*</span><span class="n">ptr</span> <span class="o">=</span> <span class="sc">&#39;</span><span class="se">\0</span><span class="sc">&#39;</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ssh_userauth_kbdint_setanswer</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">iprompt</span><span class="p">,</span> <span class="n">buffer</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+          <span class="k">return</span> <span class="n">SSH_AUTH_ERROR</span><span class="p">;</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">strlen</span><span class="p">(</span><span class="n">buffer</span><span class="p">));</span>
+      <span class="p">}</span>
+      <span class="k">else</span>
+      <span class="p">{</span>
+        <span class="kt">char</span> <span class="o">*</span><span class="n">ptr</span><span class="p">;</span>
+
+        <span class="n">ptr</span> <span class="o">=</span> <span class="n">getpass</span><span class="p">(</span><span class="n">prompt</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ssh_userauth_kbdint_setanswer</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">iprompt</span><span class="p">,</span> <span class="n">ptr</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+          <span class="k">return</span> <span class="n">SSH_AUTH_ERROR</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_userauth_kbdint</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+<span class="p">}</span></pre>
+</section>
+<section id="authenticating-with-none-method">
+<span id="doxid-libssh-tutor-authentication-1none"></span><h3>Authenticating with “none” method</h3>
+<p>The primary purpose of the “none” method is to get authenticated <strong>without</strong> any credential. Don’t do that, use one of the other authentication methods, unless you really want to grant anonymous access.</p>
+<p>If the account has no password, and if the server is configured to let you pass, <a class="reference internal" href="group_libssh_auth.html#doxid-group-libssh-auth-1ga58e7c265236edbc97a2f117d3f23b4dd"><span class="std std-ref">ssh_userauth_none()</span></a> might answer SSH_AUTH_SUCCESS.</p>
+<p>The following example shows how to perform “none” authentication:</p>
+<pre class="highlight literal-block"><span></span><span class="kt">int</span> <span class="nf">authenticate_kbdint</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">rc</span><span class="p">;</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_userauth_none</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+<span class="p">}</span></pre>
+</section>
+<section id="getting-the-list-of-supported-authentications">
+<span id="doxid-libssh-tutor-authentication-1auth-list"></span><h3>Getting the list of supported authentications</h3>
+<p>You are not meant to choose a given authentication method, you can let the server tell you which methods are available. Once you know them, you try them one after the other.</p>
+<p>The following example shows how to get the list of available authentication methods with <a class="reference internal" href="group_libssh_auth.html#doxid-group-libssh-auth-1ga35d44897a44b4bb3b7c01108c1812a37"><span class="std std-ref">ssh_userauth_list()</span></a> and how to use the result:</p>
+<pre class="highlight literal-block"><span></span><span class="kt">int</span> <span class="nf">test_several_auth_methods</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">method</span><span class="p">,</span> <span class="n">rc</span><span class="p">;</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_userauth_none</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_AUTH_SUCCESS</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">method</span> <span class="o">=</span> <span class="n">ssh_userauth_list</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">method</span> <span class="o">&amp;</span> <span class="n">SSH_AUTH_METHOD_NONE</span><span class="p">)</span>
+  <span class="p">{</span> <span class="c1">// For the source code of function authenticate_none(),</span>
+    <span class="c1">// refer to the corresponding example</span>
+    <span class="n">rc</span> <span class="o">=</span> <span class="n">authenticate_none</span><span class="p">(</span><span class="n">session</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">==</span> <span class="n">SSH_AUTH_SUCCESS</span><span class="p">)</span> <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">method</span> <span class="o">&amp;</span> <span class="n">SSH_AUTH_METHOD_PUBLICKEY</span><span class="p">)</span>
+  <span class="p">{</span> <span class="c1">// For the source code of function authenticate_pubkey(),</span>
+    <span class="c1">// refer to the corresponding example</span>
+    <span class="n">rc</span> <span class="o">=</span> <span class="n">authenticate_pubkey</span><span class="p">(</span><span class="n">session</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">==</span> <span class="n">SSH_AUTH_SUCCESS</span><span class="p">)</span> <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">method</span> <span class="o">&amp;</span> <span class="n">SSH_AUTH_METHOD_INTERACTIVE</span><span class="p">)</span>
+  <span class="p">{</span> <span class="c1">// For the source code of function authenticate_kbdint(),</span>
+    <span class="c1">// refer to the corresponding example</span>
+    <span class="n">rc</span> <span class="o">=</span> <span class="n">authenticate_kbdint</span><span class="p">(</span><span class="n">session</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">==</span> <span class="n">SSH_AUTH_SUCCESS</span><span class="p">)</span> <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">method</span> <span class="o">&amp;</span> <span class="n">SSH_AUTH_METHOD_PASSWORD</span><span class="p">)</span>
+  <span class="p">{</span> <span class="c1">// For the source code of function authenticate_password(),</span>
+    <span class="c1">// refer to the corresponding example</span>
+    <span class="n">rc</span> <span class="o">=</span> <span class="n">authenticate_password</span><span class="p">(</span><span class="n">session</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">==</span> <span class="n">SSH_AUTH_SUCCESS</span><span class="p">)</span> <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="n">SSH_AUTH_ERROR</span><span class="p">;</span>
+<span class="p">}</span></pre>
+</section>
+<section id="getting-the-banner">
+<span id="doxid-libssh-tutor-authentication-1banner"></span><h3>Getting the banner</h3>
+<p>The SSH server might send a banner, which you can retrieve with <a class="reference internal" href="group_libssh_session.html#doxid-group-libssh-session-1ga89864d4d5cc6d3d6ef1c39652f2a688f"><span class="std std-ref">ssh_get_issue_banner()</span></a>, then display to the user.</p>
+<p>The following example shows how to retrieve and dispose the issue banner:</p>
+<pre class="highlight literal-block"><span></span><span class="kt">int</span> <span class="nf">display_banner</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">banner</span><span class="p">;</span>
+
+<span class="cm">/*</span>
+<span class="cm">   * Does not work without calling ssh_userauth_none() first ***</span>
+<span class="cm">   * That will be fixed ***</span>
+<span class="cm">*/</span>
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_userauth_none</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">==</span> <span class="n">SSH_AUTH_ERROR</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+
+  <span class="n">banner</span> <span class="o">=</span> <span class="n">ssh_get_issue_banner</span><span class="p">(</span><span class="n">session</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">banner</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">banner</span><span class="p">);</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">banner</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+<span class="p">}</span></pre>
+<p class="rubric">See also:</p>
+<p><a class="reference internal" href="group_libssh_auth.html#doxid-group-libssh-auth-1ga53e6771b250c061463ed98b6e5b6e0af"><span class="std std-ref">ssh_userauth_publickey_auto()</span></a></p>
+<p><a class="reference internal" href="group_libssh_auth.html#doxid-group-libssh-auth-1ga592f673c4d417a6a46cd4876ac8287aa"><span class="std std-ref">ssh_userauth_try_publickey()</span></a></p>
+<p><a class="reference internal" href="group_libssh_auth.html#doxid-group-libssh-auth-1gaa38c4f3194ef36720da7eddb0aa99e23"><span class="std std-ref">ssh_userauth_publickey()</span></a></p>
+<p><a class="reference internal" href="group_libssh_pki.html#doxid-group-libssh-pki-1gaffb08168b870fb9e86cc7649c8987eb0"><span class="std std-ref">ssh_pki_import_pubkey_file()</span></a></p>
+<p><a class="reference internal" href="group_libssh_pki.html#doxid-group-libssh-pki-1ga1c8f84137606b1585006302499100ee0"><span class="std std-ref">ssh_pki_import_privkey_file()</span></a></p>
+<p><a class="reference internal" href="group_libssh_pki.html#doxid-group-libssh-pki-1ga08808beb83a42ccd6f1c710ddeb1b4c2"><span class="std std-ref">ssh_key_free()</span></a></p>
+<p><a class="reference internal" href="group_libssh_auth.html#doxid-group-libssh-auth-1ga50c0c150f8c4703e7ee49b3e3e3ca215"><span class="std std-ref">ssh_userauth_password</span></a></p>
+<p><a class="reference internal" href="group_libssh_auth.html#doxid-group-libssh-auth-1ga6b3b1c2a045286d9476b0252791a07d2"><span class="std std-ref">ssh_userauth_kbdint()</span></a></p>
+<p><a class="reference internal" href="group_libssh_auth.html#doxid-group-libssh-auth-1gacb996ff4979670db009a71a90172ece9"><span class="std std-ref">ssh_userauth_kbdint_getnprompts()</span></a></p>
+<p><a class="reference internal" href="group_libssh_auth.html#doxid-group-libssh-auth-1gaf920b6f8ed1e3c53cc2a683230098657"><span class="std std-ref">ssh_userauth_kbdint_getname()</span></a></p>
+<p><a class="reference internal" href="group_libssh_auth.html#doxid-group-libssh-auth-1gaa757fbdbd4f95261bbbbc12b1ec33078"><span class="std std-ref">ssh_userauth_kbdint_getinstruction()</span></a></p>
+<p><a class="reference internal" href="group_libssh_auth.html#doxid-group-libssh-auth-1ga4e7466c30852a3339003af7046fab396"><span class="std std-ref">ssh_userauth_kbdint_getprompt()</span></a></p>
+<p><a class="reference internal" href="group_libssh_auth.html#doxid-group-libssh-auth-1ga75e44b1f27059a00080f80fac0107a20"><span class="std std-ref">ssh_userauth_kbdint_setanswer()</span></a></p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="page_libssh_tutor_guided_tour.html" class="btn btn-neutral float-left" title="Chapter 1: A typical SSH session" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="page_libssh_tutor_shell.html" class="btn btn-neutral float-right" title="Chapter 3: Opening a remote shell" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2003-2017, LibSSH Maintainers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

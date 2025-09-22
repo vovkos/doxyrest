@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>PCM (digital audio) plugins &#8212; ALSA Library Documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css?v=3785b6ce" />
+    <script src="_static/documentation_options.js?v=cb7bf70b"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="PCM External Plugin SDK" href="page_pcm_external_plugins.html" />
+    <link rel="prev" title="PCM (digital audio) interface" href="page_pcm.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="page_pcm_external_plugins.html" title="PCM External Plugin SDK"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="page_pcm.html" title="PCM (digital audio) interface"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ALSA Library Documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">PCM (digital audio) plugins</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="pcm-digital-audio-plugins">
+<span id="doxid-pcm-plugins"></span><span id="index-0"></span><h1>PCM (digital audio) plugins</h1>
+<p>PCM plugins extends functionality and features of PCM devices. The plugins take care about various sample conversions, sample copying among channels and so on.</p>
+<section id="slave-definition">
+<span id="doxid-pcm-plugins-1pcm-plugins-slave"></span><h2>Slave definition</h2>
+<p>The slave plugin can be specified directly with a string or the definition can be entered inside a compound configuration node. Some restrictions can be also specified (like static rate or count of channels).</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm_slave</span><span class="p">.</span><span class="n">NAME</span> <span class="p">{</span>
+    <span class="n">pcm</span> <span class="n">STR</span>     <span class="err">#</span> <span class="n">PCM</span> <span class="n">name</span>
+    <span class="cp"># or</span>
+    <span class="n">pcm</span> <span class="p">{</span> <span class="p">}</span>     <span class="err">#</span> <span class="n">PCM</span> <span class="n">definition</span>
+    <span class="n">format</span> <span class="n">STR</span>  <span class="err">#</span> <span class="n">Format</span> <span class="n">or</span> <span class="s">&quot;unchanged&quot;</span>
+    <span class="n">channels</span> <span class="n">INT</span>    <span class="err">#</span> <span class="n">Count</span> <span class="n">of</span> <span class="n">channels</span> <span class="n">or</span> <span class="s">&quot;unchanged&quot;</span> <span class="n">string</span>
+    <span class="n">rate</span> <span class="n">INT</span>    <span class="err">#</span> <span class="n">Rate</span> <span class="n">in</span> <span class="n">Hz</span> <span class="n">or</span> <span class="s">&quot;unchanged&quot;</span> <span class="n">string</span>
+    <span class="n">period_time</span> <span class="n">INT</span> <span class="err">#</span> <span class="n">Period</span> <span class="n">time</span> <span class="n">in</span> <span class="n">us</span> <span class="n">or</span> <span class="s">&quot;unchanged&quot;</span> <span class="n">string</span>
+    <span class="n">buffer_time</span> <span class="n">INT</span> <span class="err">#</span> <span class="n">Buffer</span> <span class="n">time</span> <span class="n">in</span> <span class="n">us</span> <span class="n">or</span> <span class="s">&quot;unchanged&quot;</span> <span class="n">string</span>
+<span class="p">}</span></pre>
+<p>Example:</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm_slave</span><span class="p">.</span><span class="n">slave_rate44100Hz</span> <span class="p">{</span>
+    <span class="n">pcm</span> <span class="s">&quot;hw:0,0&quot;</span>
+    <span class="n">rate</span> <span class="mi">44100</span>
+<span class="p">}</span>
+
+<span class="n">pcm</span><span class="p">.</span><span class="n">rate44100Hz</span> <span class="p">{</span>
+    <span class="n">type</span> <span class="n">plug</span>
+    <span class="n">slave</span> <span class="n">slave_rate44100Hz</span>
+<span class="p">}</span></pre>
+<p>The equivalent configuration (in one compound):</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">rate44100Hz</span> <span class="p">{</span>
+    <span class="n">type</span> <span class="n">plug</span>
+    <span class="n">slave</span> <span class="p">{</span>
+        <span class="n">pcm</span> <span class="s">&quot;hw:0,0&quot;</span>
+        <span class="n">rate</span> <span class="mi">44100</span>
+    <span class="p">}</span>
+<span class="p">}</span></pre>
+</section>
+<section id="plugin-hw">
+<span id="doxid-pcm-plugins-1pcm-plugins-hw"></span><h2>Plugin: hw</h2>
+<p>This plugin communicates directly with the ALSA kernel driver. It is a raw communication without any conversions. The emulation of mmap access can be optionally enabled, but expect worse latency in the case.</p>
+<p>The nonblock option specifies whether the device is opened in a non-blocking manner. Note that the blocking behavior for read/write access won’t be changed by this option. This influences only on the blocking behavior at opening the device. If you would like to keep the compatibility with the older ALSA stuff, turn this option off.</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">name</span> <span class="p">{</span>
+    <span class="n">type</span> <span class="n">hw</span>         <span class="err">#</span> <span class="n">Kernel</span> <span class="n">PCM</span>
+    <span class="n">card</span> <span class="n">INT</span><span class="o">/</span><span class="n">STR</span>        <span class="err">#</span> <span class="n">Card</span> <span class="n">name</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="n">or</span> <span class="n">number</span> <span class="p">(</span><span class="n">integer</span><span class="p">)</span>
+    <span class="p">[</span><span class="n">device</span> <span class="n">INT</span><span class="p">]</span>        <span class="err">#</span> <span class="n">Device</span> <span class="n">number</span> <span class="p">(</span><span class="k">default</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">[</span><span class="n">subdevice</span> <span class="n">INT</span><span class="p">]</span>     <span class="err">#</span> <span class="n">Subdevice</span> <span class="n">number</span> <span class="p">(</span><span class="k">default</span> <span class="o">-</span><span class="mi">1</span><span class="o">:</span> <span class="n">first</span> <span class="n">available</span><span class="p">)</span>
+    <span class="p">[</span><span class="n">sync_ptr_ioctl</span> <span class="n">BOOL</span><span class="p">]</span>   <span class="err">#</span> <span class="n">Use</span> <span class="n">SYNC_PTR</span> <span class="n">ioctl</span> <span class="n">rather</span> <span class="n">than</span> <span class="n">the</span> <span class="n">direct</span> <span class="n">mmap</span> <span class="n">access</span> <span class="k">for</span> <span class="n">control</span> <span class="n">structures</span>
+    <span class="p">[</span><span class="n">nonblock</span> <span class="n">BOOL</span><span class="p">]</span>     <span class="err">#</span> <span class="n">Force</span> <span class="n">non</span><span class="o">-</span><span class="n">blocking</span> <span class="n">open</span> <span class="n">mode</span>
+    <span class="p">[</span><span class="n">format</span> <span class="n">STR</span><span class="p">]</span>        <span class="err">#</span> <span class="n">Restrict</span> <span class="n">only</span> <span class="n">to</span> <span class="n">the</span> <span class="n">given</span> <span class="n">format</span>
+    <span class="p">[</span><span class="n">channels</span> <span class="n">INT</span><span class="p">]</span>      <span class="err">#</span> <span class="n">Restrict</span> <span class="n">only</span> <span class="n">to</span> <span class="n">the</span> <span class="n">given</span> <span class="n">channels</span>
+    <span class="p">[</span><span class="n">rate</span> <span class="n">INT</span><span class="p">]</span>      <span class="err">#</span> <span class="n">Restrict</span> <span class="n">only</span> <span class="n">to</span> <span class="n">the</span> <span class="n">given</span> <span class="n">rate</span>
+    <span class="p">[</span><span class="n">chmap</span> <span class="n">MAP</span><span class="p">]</span>     <span class="err">#</span> <span class="n">Override</span> <span class="n">channel</span> <span class="n">maps</span><span class="p">;</span> <span class="n">MAP</span> <span class="n">is</span> <span class="n">a</span> <span class="n">string</span> <span class="n">array</span>
+<span class="p">}</span></pre>
+<section id="function-reference">
+<span id="doxid-pcm-plugins-1pcm-plugins-hw-funcref"></span><h3>Function reference</h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="global.html#doxid-pcm-hw-8c-1a06abf5d78c26a9d8e79fd0428a5c7183"><span class="std std-ref">snd_pcm_hw_open()</span></a></p></li>
+<li><p><a class="reference internal" href="global.html#doxid-pcm-hw-8c-1a7687673b2a39b944c5693043446afaf9"><span class="std std-ref">_snd_pcm_hw_open()</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="plugin-mmap-emul">
+<span id="doxid-pcm-plugins-1pcm-plugins-mmap-emul"></span><h2>Plugin: mmap_emul</h2>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">name</span> <span class="p">{</span>
+    <span class="n">type</span> <span class="n">mmap_emul</span>
+    <span class="n">slave</span> <span class="n">PCM</span>
+<span class="p">}</span></pre>
+<section id="doxid-pcm-plugins-1pcm-plugins-mmap-emul-funcref">
+<span id="id1"></span><h3>Function reference</h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="global.html#doxid-pcm-hw-8c-1a7687673b2a39b944c5693043446afaf9"><span class="std std-ref">_snd_pcm_hw_open()</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="plugin-shm">
+<span id="doxid-pcm-plugins-1pcm-plugins-shm"></span><h2>Plugin: shm</h2>
+<p>This plugin communicates with aserver via shared memory. It is a raw communication without any conversions, but it can be expected worse performance.</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">name</span> <span class="p">{</span>
+        <span class="n">type</span> <span class="n">shm</span>                <span class="err">#</span> <span class="n">Shared</span> <span class="n">memory</span> <span class="n">PCM</span>
+    <span class="n">server</span> <span class="n">STR</span>      <span class="err">#</span> <span class="n">Server</span> <span class="n">name</span>
+    <span class="n">pcm</span> <span class="n">STR</span>         <span class="err">#</span> <span class="n">PCM</span> <span class="n">name</span>
+<span class="p">}</span></pre>
+<section id="doxid-pcm-plugins-1pcm-plugins-shm-funcref">
+<span id="id2"></span><h3>Function reference</h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="global.html#doxid-pcm-shm-8c-1a3684b5fb80a3549a9176cbc7ea9e5181"><span class="std std-ref">snd_pcm_shm_open()</span></a></p></li>
+<li><p><a class="reference internal" href="global.html#doxid-pcm-shm-8c-1adc046ce3ea6720d3545bb2158266bc75"><span class="std std-ref">_snd_pcm_shm_open()</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="plugin-null">
+<span id="doxid-pcm-plugins-1pcm-plugins-null"></span><h2>Plugin: Null</h2>
+<p>This plugin discards contents of a PCM stream or creates a stream with zero samples.</p>
+<p>Note: This implementation uses devices /dev/null (playback, must be writable) and /dev/full (capture, must be readable).</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">name</span> <span class="p">{</span>
+        <span class="n">type</span> <span class="n">null</span>               <span class="err">#</span> <span class="n">Null</span> <span class="n">PCM</span>
+    <span class="p">[</span><span class="n">chmap</span> <span class="n">MAP</span><span class="p">]</span>     <span class="err">#</span> <span class="n">Provide</span> <span class="n">channel</span> <span class="n">maps</span><span class="p">;</span> <span class="n">MAP</span> <span class="n">is</span> <span class="n">a</span> <span class="n">string</span> <span class="n">array</span>
+<span class="p">}</span></pre>
+<section id="doxid-pcm-plugins-1pcm-plugins-null-funcref">
+<span id="id3"></span><h3>Function reference</h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="global.html#doxid-pcm-null-8c-1ad1e47f314d908607cf908d9859359724"><span class="std std-ref">snd_pcm_null_open()</span></a></p></li>
+<li><p><a class="reference internal" href="global.html#doxid-pcm-null-8c-1af964b1e41d92a723748128014026ebd6"><span class="std std-ref">_snd_pcm_null_open()</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="plugin-copy">
+<span id="doxid-pcm-plugins-1pcm-plugins-copy"></span><h2>Plugin: copy</h2>
+<p>This plugin copies samples from master copy PCM to given slave PCM. The channel count, format and rate must match for both of them.</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">name</span> <span class="p">{</span>
+    <span class="n">type</span> <span class="n">copy</span>       <span class="err">#</span> <span class="n">Copy</span> <span class="n">PCM</span>
+    <span class="n">slave</span> <span class="n">STR</span>       <span class="err">#</span> <span class="n">Slave</span> <span class="n">name</span>
+    <span class="cp"># or</span>
+    <span class="n">slave</span> <span class="p">{</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">definition</span>
+        <span class="n">pcm</span> <span class="n">STR</span>     <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">name</span>
+        <span class="cp"># or</span>
+        <span class="n">pcm</span> <span class="p">{</span> <span class="p">}</span>     <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">definition</span>
+    <span class="p">}</span>
+<span class="p">}</span></pre>
+<section id="doxid-pcm-plugins-1pcm-plugins-copy-funcref">
+<span id="id4"></span><h3>Function reference</h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="global.html#doxid-pcm-copy-8c-1a97fb1b1587b7905bbc908cf7d03a727a"><span class="std std-ref">snd_pcm_copy_open()</span></a></p></li>
+<li><p><a class="reference internal" href="global.html#doxid-pcm-copy-8c-1a47dd871325fe6dfe7650443de19e31ba"><span class="std std-ref">_snd_pcm_copy_open()</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="plugin-linear">
+<span id="doxid-pcm-plugins-1pcm-plugins-linear"></span><h2>Plugin: linear</h2>
+<p>This plugin converts linear samples from master linear conversion PCM to given slave PCM. The channel count, format and rate must match for both of them.</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">name</span> <span class="p">{</span>
+        <span class="n">type</span> <span class="n">linear</span>             <span class="err">#</span> <span class="n">Linear</span> <span class="n">conversion</span> <span class="n">PCM</span>
+        <span class="n">slave</span> <span class="n">STR</span>               <span class="err">#</span> <span class="n">Slave</span> <span class="n">name</span>
+        <span class="cp"># or</span>
+        <span class="n">slave</span> <span class="p">{</span>                 <span class="err">#</span> <span class="n">Slave</span> <span class="n">definition</span>
+                <span class="n">pcm</span> <span class="n">STR</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">name</span>
+                <span class="cp"># or</span>
+                <span class="n">pcm</span> <span class="p">{</span> <span class="p">}</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">definition</span>
+                <span class="n">format</span> <span class="n">STR</span>      <span class="err">#</span> <span class="n">Slave</span> <span class="n">format</span>
+        <span class="p">}</span>
+<span class="p">}</span></pre>
+<section id="doxid-pcm-plugins-1pcm-plugins-linear-funcref">
+<span id="id5"></span><h3>Function reference</h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="global.html#doxid-pcm-linear-8c-1ad5aad633e536382e36d128aa074ae2d5"><span class="std std-ref">snd_pcm_linear_open()</span></a></p></li>
+<li><p><a class="reference internal" href="global.html#doxid-pcm-linear-8c-1a705b6ecd46bb7ceb0cfef986404686f8"><span class="std std-ref">_snd_pcm_linear_open()</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="plugin-linear-float">
+<span id="doxid-pcm-plugins-1pcm-plugins-lfloat"></span><h2>Plugin: linear&lt;-&gt;float</h2>
+<p>This plugin converts linear to float samples and float to linear samples from master linear&lt;-&gt;float conversion PCM to given slave PCM. The channel count, format and rate must match for both of them.</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">name</span> <span class="p">{</span>
+        <span class="n">type</span> <span class="n">lfloat</span>             <span class="err">#</span> <span class="n">Linear</span><span class="o">&lt;-&gt;</span><span class="n">Float</span> <span class="n">conversion</span> <span class="n">PCM</span>
+        <span class="n">slave</span> <span class="n">STR</span>               <span class="err">#</span> <span class="n">Slave</span> <span class="n">name</span>
+        <span class="cp"># or</span>
+        <span class="n">slave</span> <span class="p">{</span>                 <span class="err">#</span> <span class="n">Slave</span> <span class="n">definition</span>
+                <span class="n">pcm</span> <span class="n">STR</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">name</span>
+                <span class="cp"># or</span>
+                <span class="n">pcm</span> <span class="p">{</span> <span class="p">}</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">definition</span>
+                <span class="n">format</span> <span class="n">STR</span>      <span class="err">#</span> <span class="n">Slave</span> <span class="n">format</span>
+        <span class="p">}</span>
+<span class="p">}</span></pre>
+<section id="doxid-pcm-plugins-1pcm-plugins-lfloat-funcref">
+<span id="id6"></span><h3>Function reference</h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="global.html#doxid-pcm-lfloat-8c-1a1cf1d379cfe222a0205356e72ae1e460"><span class="std std-ref">snd_pcm_lfloat_open()</span></a></p></li>
+<li><p><a class="reference internal" href="global.html#doxid-pcm-lfloat-8c-1a073916f2bcb53f0020b5fd5c371f4fc8"><span class="std std-ref">_snd_pcm_lfloat_open()</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="plugin-mu-law">
+<span id="doxid-pcm-plugins-1pcm-plugins-mulaw"></span><h2>Plugin: Mu-Law</h2>
+<p>This plugin converts Mu-Law samples to linear or linear to Mu-Law samples from master Mu-Law conversion PCM to given slave PCM. The channel count, format and rate must match for both of them.</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">name</span> <span class="p">{</span>
+        <span class="n">type</span> <span class="n">mulaw</span>              <span class="err">#</span> <span class="n">Mu</span><span class="o">-</span><span class="n">Law</span> <span class="n">conversion</span> <span class="n">PCM</span>
+        <span class="n">slave</span> <span class="n">STR</span>               <span class="err">#</span> <span class="n">Slave</span> <span class="n">name</span>
+        <span class="cp"># or</span>
+        <span class="n">slave</span> <span class="p">{</span>                 <span class="err">#</span> <span class="n">Slave</span> <span class="n">definition</span>
+                <span class="n">pcm</span> <span class="n">STR</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">name</span>
+                <span class="cp"># or</span>
+                <span class="n">pcm</span> <span class="p">{</span> <span class="p">}</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">definition</span>
+                <span class="n">format</span> <span class="n">STR</span>      <span class="err">#</span> <span class="n">Slave</span> <span class="n">format</span>
+        <span class="p">}</span>
+<span class="p">}</span></pre>
+<section id="doxid-pcm-plugins-1pcm-plugins-mulaw-funcref">
+<span id="id7"></span><h3>Function reference</h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="global.html#doxid-pcm-mulaw-8c-1a5180265fc0f22f9eeabaa15555bcd072"><span class="std std-ref">snd_pcm_mulaw_open()</span></a></p></li>
+<li><p><a class="reference internal" href="global.html#doxid-pcm-mulaw-8c-1aac8ed7d538562e09d0b8bbfe08df3665"><span class="std std-ref">_snd_pcm_mulaw_open()</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="plugin-a-law">
+<span id="doxid-pcm-plugins-1pcm-plugins-alaw"></span><h2>Plugin: A-Law</h2>
+<p>This plugin converts A-Law samples to linear or linear to A-Law samples from master A-Law conversion PCM to given slave PCM. The channel count, format and rate must match for both of them.</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">name</span> <span class="p">{</span>
+        <span class="n">type</span> <span class="n">alaw</span>               <span class="err">#</span> <span class="n">A</span><span class="o">-</span><span class="n">Law</span> <span class="n">conversion</span> <span class="n">PCM</span>
+        <span class="n">slave</span> <span class="n">STR</span>               <span class="err">#</span> <span class="n">Slave</span> <span class="n">name</span>
+        <span class="cp"># or</span>
+        <span class="n">slave</span> <span class="p">{</span>                 <span class="err">#</span> <span class="n">Slave</span> <span class="n">definition</span>
+                <span class="n">pcm</span> <span class="n">STR</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">name</span>
+                <span class="cp"># or</span>
+                <span class="n">pcm</span> <span class="p">{</span> <span class="p">}</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">definition</span>
+                <span class="n">format</span> <span class="n">STR</span>      <span class="err">#</span> <span class="n">Slave</span> <span class="n">format</span>
+        <span class="p">}</span>
+<span class="p">}</span></pre>
+<section id="doxid-pcm-plugins-1pcm-plugins-alaw-funcref">
+<span id="id8"></span><h3>Function reference</h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="global.html#doxid-pcm-alaw-8c-1adfc7fc62627b564e1a6e0a3069730a56"><span class="std std-ref">snd_pcm_alaw_open()</span></a></p></li>
+<li><p><a class="reference internal" href="global.html#doxid-pcm-alaw-8c-1a033d4c03b15175509e960689b5d515b0"><span class="std std-ref">_snd_pcm_alaw_open()</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="plugin-ima-adpcm">
+<span id="doxid-pcm-plugins-1pcm-plugins-adpcm"></span><h2>Plugin: Ima-ADPCM</h2>
+<p>This plugin converts Ima-ADPCM samples to linear or linear to Ima-ADPCM samples from master Ima-ADPCM conversion PCM to given slave PCM. The channel count, format and rate must match for both of them.</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">name</span> <span class="p">{</span>
+        <span class="n">type</span> <span class="n">adpcm</span>              <span class="err">#</span> <span class="n">Ima</span><span class="o">-</span><span class="n">ADPCM</span> <span class="n">conversion</span> <span class="n">PCM</span>
+        <span class="n">slave</span> <span class="n">STR</span>               <span class="err">#</span> <span class="n">Slave</span> <span class="n">name</span>
+        <span class="cp"># or</span>
+        <span class="n">slave</span> <span class="p">{</span>                 <span class="err">#</span> <span class="n">Slave</span> <span class="n">definition</span>
+                <span class="n">pcm</span> <span class="n">STR</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">name</span>
+                <span class="cp"># or</span>
+                <span class="n">pcm</span> <span class="p">{</span> <span class="p">}</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">definition</span>
+                <span class="n">format</span> <span class="n">STR</span>      <span class="err">#</span> <span class="n">Slave</span> <span class="n">format</span>
+        <span class="p">}</span>
+<span class="p">}</span></pre>
+<section id="doxid-pcm-plugins-1pcm-plugins-adpcm-funcref">
+<span id="id9"></span><h3>Function reference</h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="global.html#doxid-pcm-adpcm-8c-1afc781f794b0c705552491b6707bf2c86"><span class="std std-ref">snd_pcm_adpcm_open()</span></a></p></li>
+<li><p><a class="reference internal" href="global.html#doxid-pcm-adpcm-8c-1a71eccece5048625c5648aa4b1077c271"><span class="std std-ref">_snd_pcm_adpcm_open()</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="plugin-route-volume">
+<span id="doxid-pcm-plugins-1pcm-plugins-route"></span><h2>Plugin: Route &amp; Volume</h2>
+<p>This plugin converts channels and applies volume during the conversion. The format and rate must match for both of them.</p>
+<p>SCHANNEL can be a channel name instead of a number (e g FL, LFE). If so, a matching channel map will be selected for the slave.</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">name</span> <span class="p">{</span>
+        <span class="n">type</span> <span class="n">route</span>              <span class="err">#</span> <span class="n">Route</span> <span class="o">&amp;</span> <span class="n">Volume</span> <span class="n">conversion</span> <span class="n">PCM</span>
+        <span class="n">slave</span> <span class="n">STR</span>               <span class="err">#</span> <span class="n">Slave</span> <span class="n">name</span>
+        <span class="cp"># or</span>
+        <span class="n">slave</span> <span class="p">{</span>                 <span class="err">#</span> <span class="n">Slave</span> <span class="n">definition</span>
+                <span class="n">pcm</span> <span class="n">STR</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">name</span>
+                <span class="cp"># or</span>
+                <span class="n">pcm</span> <span class="p">{</span> <span class="p">}</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">definition</span>
+                <span class="p">[</span><span class="n">format</span> <span class="n">STR</span><span class="p">]</span>    <span class="err">#</span> <span class="n">Slave</span> <span class="n">format</span>
+                <span class="p">[</span><span class="n">channels</span> <span class="n">INT</span><span class="p">]</span>  <span class="err">#</span> <span class="n">Slave</span> <span class="n">channels</span>
+        <span class="p">}</span>
+        <span class="n">ttable</span> <span class="p">{</span>                <span class="err">#</span> <span class="n">Transfer</span> <span class="n">table</span> <span class="p">(</span><span class="n">bi</span><span class="o">-</span><span class="n">dimensional</span> <span class="n">compound</span> <span class="n">of</span> <span class="n">cchannels</span> <span class="o">*</span> <span class="n">schannels</span> <span class="n">numbers</span><span class="p">)</span>
+                <span class="n">CCHANNEL</span> <span class="p">{</span>
+                        <span class="n">SCHANNEL</span> <span class="n">REAL</span>   <span class="err">#</span> <span class="n">route</span> <span class="n">value</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
+                <span class="p">}</span>
+        <span class="p">}</span>
+<span class="p">}</span></pre>
+<section id="doxid-pcm-plugins-1pcm-plugins-route-funcref">
+<span id="id10"></span><h3>Function reference</h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="global.html#doxid-pcm-route-8c-1ae19a77e8ec26dc93b8be5a93e7391550"><span class="std std-ref">snd_pcm_route_open()</span></a></p></li>
+<li><p><a class="reference internal" href="global.html#doxid-pcm-route-8c-1abee47f3c05e74d83bf2a96559de9a262"><span class="std std-ref">_snd_pcm_route_open()</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="plugin-rate">
+<span id="doxid-pcm-plugins-1pcm-plugins-rate"></span><h2>Plugin: Rate</h2>
+<p>This plugin converts a stream rate. The input and output formats must be linear.</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">name</span> <span class="p">{</span>
+    <span class="n">type</span> <span class="n">rate</span>               <span class="err">#</span> <span class="n">Rate</span> <span class="n">PCM</span>
+        <span class="n">slave</span> <span class="n">STR</span>               <span class="err">#</span> <span class="n">Slave</span> <span class="n">name</span>
+        <span class="cp"># or</span>
+        <span class="n">slave</span> <span class="p">{</span>                 <span class="err">#</span> <span class="n">Slave</span> <span class="n">definition</span>
+                <span class="n">pcm</span> <span class="n">STR</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">name</span>
+                <span class="cp"># or</span>
+                <span class="n">pcm</span> <span class="p">{</span> <span class="p">}</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">definition</span>
+                <span class="n">rate</span> <span class="n">INT</span>        <span class="err">#</span> <span class="n">Slave</span> <span class="n">rate</span>
+                <span class="p">[</span><span class="n">format</span> <span class="n">STR</span><span class="p">]</span>    <span class="err">#</span> <span class="n">Slave</span> <span class="n">format</span>
+        <span class="p">}</span>
+    <span class="n">converter</span> <span class="n">STR</span>           <span class="err">#</span> <span class="n">optional</span>
+    <span class="cp"># or</span>
+    <span class="n">converter</span> <span class="p">[</span> <span class="n">STR1</span> <span class="n">STR2</span> <span class="p">...</span> <span class="p">]</span> <span class="err">#</span> <span class="n">optional</span>
+                <span class="cp"># Converter type, default is taken from</span>
+                <span class="cp"># defaults.pcm.rate_converter</span>
+<span class="p">}</span></pre>
+<section id="doxid-pcm-plugins-1pcm-plugins-rate-funcref">
+<span id="id11"></span><h3>Function reference</h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="global.html#doxid-pcm-rate-8c-1acbc33a01e5c38505fb8777e8a3cb808f"><span class="std std-ref">snd_pcm_rate_open()</span></a></p></li>
+<li><p><a class="reference internal" href="global.html#doxid-pcm-rate-8c-1aa2b39b0460f63d709b2244be669c479b"><span class="std std-ref">_snd_pcm_rate_open()</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="automatic-conversion-plugin">
+<span id="doxid-pcm-plugins-1pcm-plugins-plug"></span><h2>Automatic conversion plugin</h2>
+<p>This plugin converts channels, rate and format on request.</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">name</span> <span class="p">{</span>
+        <span class="n">type</span> <span class="n">plug</span>               <span class="err">#</span> <span class="n">Automatic</span> <span class="n">conversion</span> <span class="n">PCM</span>
+        <span class="n">slave</span> <span class="n">STR</span>               <span class="err">#</span> <span class="n">Slave</span> <span class="n">name</span>
+        <span class="cp"># or</span>
+        <span class="n">slave</span> <span class="p">{</span>                 <span class="err">#</span> <span class="n">Slave</span> <span class="n">definition</span>
+                <span class="n">pcm</span> <span class="n">STR</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">name</span>
+                <span class="cp"># or</span>
+                <span class="n">pcm</span> <span class="p">{</span> <span class="p">}</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">definition</span>
+        <span class="p">[</span><span class="n">format</span> <span class="n">STR</span><span class="p">]</span>    <span class="err">#</span> <span class="n">Slave</span> <span class="n">format</span> <span class="p">(</span><span class="k">default</span> <span class="n">nearest</span><span class="p">)</span> <span class="n">or</span> <span class="s">&quot;unchanged&quot;</span>
+        <span class="p">[</span><span class="n">channels</span> <span class="n">INT</span><span class="p">]</span>  <span class="err">#</span> <span class="n">Slave</span> <span class="n">channels</span> <span class="p">(</span><span class="k">default</span> <span class="n">nearest</span><span class="p">)</span> <span class="n">or</span> <span class="s">&quot;unchanged&quot;</span>
+        <span class="p">[</span><span class="n">rate</span> <span class="n">INT</span><span class="p">]</span>  <span class="err">#</span> <span class="n">Slave</span> <span class="n">rate</span> <span class="p">(</span><span class="k">default</span> <span class="n">nearest</span><span class="p">)</span> <span class="n">or</span> <span class="s">&quot;unchanged&quot;</span>
+        <span class="p">}</span>
+    <span class="n">route_policy</span> <span class="n">STR</span>    <span class="err">#</span> <span class="n">route</span> <span class="n">policy</span> <span class="k">for</span> <span class="n">automatic</span> <span class="n">ttable</span> <span class="n">generation</span>
+                <span class="cp"># STR can be &#39;default&#39;, &#39;average&#39;, &#39;copy&#39;, &#39;duplicate&#39;</span>
+                <span class="cp"># average: result is average of input channels</span>
+                <span class="cp"># copy: only first channels are copied to destination</span>
+                <span class="cp"># duplicate: duplicate first set of channels</span>
+                <span class="cp"># default: copy policy, except for mono capture - sum</span>
+    <span class="n">ttable</span> <span class="p">{</span>        <span class="err">#</span> <span class="n">Transfer</span> <span class="n">table</span> <span class="p">(</span><span class="n">bi</span><span class="o">-</span><span class="n">dimensional</span> <span class="n">compound</span> <span class="n">of</span> <span class="n">cchannels</span> <span class="o">*</span> <span class="n">schannels</span> <span class="n">numbers</span><span class="p">)</span>
+        <span class="n">CCHANNEL</span> <span class="p">{</span>
+            <span class="n">SCHANNEL</span> <span class="n">REAL</span>   <span class="err">#</span> <span class="n">route</span> <span class="n">value</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">rate_converter</span> <span class="n">STR</span>  <span class="err">#</span> <span class="n">type</span> <span class="n">of</span> <span class="n">rate</span> <span class="n">converter</span>
+    <span class="cp"># or</span>
+    <span class="n">rate_converter</span> <span class="p">[</span> <span class="n">STR1</span> <span class="n">STR2</span> <span class="p">...</span> <span class="p">]</span>
+                <span class="cp"># type of rate converter</span>
+                <span class="cp"># default value is taken from defaults.pcm.rate_converter</span>
+<span class="p">}</span></pre>
+<section id="doxid-pcm-plugins-1pcm-plugins-plug-funcref">
+<span id="id12"></span><h3>Function reference</h3>
+<ul class="simple">
+<li><p>snd_pcm_plug_open()</p></li>
+<li><p>_snd_pcm_plug_open()</p></li>
+</ul>
+</section>
+</section>
+<section id="plugin-file">
+<span id="doxid-pcm-plugins-1pcm-plugins-file"></span><h2>Plugin: File</h2>
+<p>This plugin stores contents of a PCM stream to file or pipes the stream to a command, and optionally uses an existing file as an input data source (i.e., “virtual mic”)</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">name</span> <span class="p">{</span>
+        <span class="n">type</span> <span class="n">file</span>               <span class="err">#</span> <span class="n">File</span> <span class="n">PCM</span>
+        <span class="n">slave</span> <span class="n">STR</span>               <span class="err">#</span> <span class="n">Slave</span> <span class="n">name</span>
+        <span class="cp"># or</span>
+        <span class="n">slave</span> <span class="p">{</span>                 <span class="err">#</span> <span class="n">Slave</span> <span class="n">definition</span>
+                <span class="n">pcm</span> <span class="n">STR</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">name</span>
+                <span class="cp"># or</span>
+                <span class="n">pcm</span> <span class="p">{</span> <span class="p">}</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">definition</span>
+        <span class="p">}</span>
+    <span class="n">file</span> <span class="n">STR</span>        <span class="err">#</span> <span class="n">Output</span> <span class="n">filename</span> <span class="p">(</span><span class="n">or</span> <span class="n">shell</span> <span class="n">command</span> <span class="n">the</span> <span class="n">stream</span>
+                <span class="cp"># will be piped to if STR starts with the pipe</span>
+                <span class="cp"># char).</span>
+                <span class="cp"># STR can contain format keys, replaced by</span>
+                <span class="cp"># real values corresponding to the stream:</span>
+                <span class="cp"># %r    rate (replaced with: 48000)</span>
+                <span class="cp"># %c    channels (replaced with: 2)</span>
+                <span class="cp"># %b    bits per sample (replaced with: 16)</span>
+                <span class="cp"># %f    sample format string</span>
+                <span class="cp">#           (replaced with: S16_LE)</span>
+                <span class="cp"># %%    replaced with %</span>
+    <span class="n">or</span>
+    <span class="n">file</span> <span class="n">INT</span>        <span class="err">#</span> <span class="n">Output</span> <span class="n">file</span> <span class="n">descriptor</span> <span class="n">number</span>
+    <span class="n">infile</span> <span class="n">STR</span>      <span class="err">#</span> <span class="n">Input</span> <span class="n">filename</span> <span class="o">-</span> <span class="n">only</span> <span class="n">raw</span> <span class="n">format</span>
+    <span class="n">or</span>
+    <span class="n">infile</span> <span class="n">INT</span>      <span class="err">#</span> <span class="n">Input</span> <span class="n">file</span> <span class="n">descriptor</span> <span class="n">number</span>
+    <span class="p">[</span><span class="n">format</span> <span class="n">STR</span><span class="p">]</span>        <span class="err">#</span> <span class="n">File</span> <span class="n">format</span> <span class="p">(</span><span class="s">&quot;raw&quot;</span> <span class="n">or</span> <span class="s">&quot;wav&quot;</span><span class="p">)</span>
+    <span class="p">[</span><span class="n">perm</span> <span class="n">INT</span><span class="p">]</span>      <span class="err">#</span> <span class="n">Output</span> <span class="n">file</span> <span class="n">permission</span> <span class="p">(</span><span class="n">octal</span><span class="p">,</span> <span class="n">def</span><span class="p">.</span> <span class="mo">0600</span><span class="p">)</span>
+<span class="p">}</span></pre>
+<section id="doxid-pcm-plugins-1pcm-plugins-file-funcref">
+<span id="id13"></span><h3>Function reference</h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="global.html#doxid-pcm-file-8c-1a2d295a1bebec45e0541de03b86de0703"><span class="std std-ref">snd_pcm_file_open()</span></a></p></li>
+<li><p><a class="reference internal" href="global.html#doxid-pcm-file-8c-1a3732156e2f368386a89f2f200c496b0a"><span class="std std-ref">_snd_pcm_file_open()</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="plugin-multiple-streams-to-one">
+<span id="doxid-pcm-plugins-1pcm-plugins-multi"></span><h2>Plugin: Multiple streams to One</h2>
+<p>This plugin converts multiple streams to one.</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">name</span> <span class="p">{</span>
+        <span class="n">type</span> <span class="n">multi</span>              <span class="err">#</span> <span class="n">Multiple</span> <span class="n">streams</span> <span class="n">conversion</span> <span class="n">PCM</span>
+        <span class="n">slaves</span> <span class="p">{</span>        <span class="err">#</span> <span class="n">Slaves</span> <span class="n">definition</span>
+        <span class="n">ID</span> <span class="n">STR</span>      <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">name</span>
+        <span class="cp"># or</span>
+        <span class="n">ID</span> <span class="p">{</span>
+            <span class="n">pcm</span> <span class="n">STR</span>     <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">name</span>
+            <span class="cp"># or</span>
+            <span class="n">pcm</span> <span class="p">{</span> <span class="p">}</span>     <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">definition</span>
+            <span class="n">channels</span> <span class="n">INT</span>    <span class="err">#</span> <span class="n">Slave</span> <span class="n">channels</span>
+        <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="n">bindings</span> <span class="p">{</span>      <span class="err">#</span> <span class="n">Bindings</span> <span class="n">table</span>
+        <span class="n">N</span> <span class="p">{</span>
+            <span class="n">slave</span> <span class="n">STR</span>   <span class="err">#</span> <span class="n">Slave</span> <span class="n">key</span>
+            <span class="n">channel</span> <span class="n">INT</span> <span class="err">#</span> <span class="n">Slave</span> <span class="n">channel</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="p">[</span><span class="n">master</span> <span class="n">INT</span><span class="p">]</span>        <span class="err">#</span> <span class="n">Define</span> <span class="n">the</span> <span class="n">master</span> <span class="n">slave</span>
+<span class="p">}</span></pre>
+<p>For example, to bind two PCM streams with two-channel stereo (hw:0,0 and hw:0,1) as one 4-channel stereo PCM stream, define like this:</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">quad</span> <span class="p">{</span>
+    <span class="n">type</span> <span class="n">multi</span>
+
+    <span class="n">slaves</span><span class="p">.</span><span class="n">a</span><span class="p">.</span><span class="n">pcm</span> <span class="s">&quot;hw:0,0&quot;</span>
+    <span class="n">slaves</span><span class="p">.</span><span class="n">a</span><span class="p">.</span><span class="n">channels</span> <span class="mi">2</span>
+    <span class="n">slaves</span><span class="p">.</span><span class="n">b</span><span class="p">.</span><span class="n">pcm</span> <span class="s">&quot;hw:0,1&quot;</span>
+    <span class="n">slaves</span><span class="p">.</span><span class="n">b</span><span class="p">.</span><span class="n">channels</span> <span class="mi">2</span>
+
+    <span class="n">bindings</span><span class="mf">.0</span><span class="p">.</span><span class="n">slave</span> <span class="n">a</span>
+    <span class="n">bindings</span><span class="mf">.0</span><span class="p">.</span><span class="n">channel</span> <span class="mi">0</span>
+    <span class="n">bindings</span><span class="mf">.1</span><span class="p">.</span><span class="n">slave</span> <span class="n">a</span>
+    <span class="n">bindings</span><span class="mf">.1</span><span class="p">.</span><span class="n">channel</span> <span class="mi">1</span>
+    <span class="n">bindings</span><span class="mf">.2</span><span class="p">.</span><span class="n">slave</span> <span class="n">b</span>
+    <span class="n">bindings</span><span class="mf">.2</span><span class="p">.</span><span class="n">channel</span> <span class="mi">0</span>
+    <span class="n">bindings</span><span class="mf">.3</span><span class="p">.</span><span class="n">slave</span> <span class="n">b</span>
+    <span class="n">bindings</span><span class="mf">.3</span><span class="p">.</span><span class="n">channel</span> <span class="mi">1</span>
+<span class="p">}</span></pre>
+<p>Note that the resultant pcm “quad” is not in the interleaved format but in the “complex” format. Hence, it’s not accessible by applications which can handle only the interleaved (or the non-interleaved) format. In such a case, wrap this PCM with <a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-route"><span class="std std-ref">route</span></a> or <a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-plug"><span class="std std-ref">plug</span></a> plugin.</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">quad2</span> <span class="p">{</span>
+    <span class="n">type</span> <span class="n">route</span>
+    <span class="n">slave</span><span class="p">.</span><span class="n">pcm</span> <span class="s">&quot;quad&quot;</span>
+    <span class="n">ttable</span><span class="mf">.0.0</span> <span class="mi">1</span>
+    <span class="n">ttable</span><span class="mf">.1.1</span> <span class="mi">1</span>
+    <span class="n">ttable</span><span class="mf">.2.2</span> <span class="mi">1</span>
+    <span class="n">ttable</span><span class="mf">.3.3</span> <span class="mi">1</span>
+<span class="p">}</span></pre>
+<section id="doxid-pcm-plugins-1pcm-plugins-multi-funcref">
+<span id="id14"></span><h3>Function reference</h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="global.html#doxid-pcm-multi-8c-1a9cd9738f81265d5255a9c28bbccb8bb4"><span class="std std-ref">snd_pcm_multi_open()</span></a></p></li>
+<li><p><a class="reference internal" href="global.html#doxid-pcm-multi-8c-1aeb0fcef35d9f9bf598384cfe46e163a5"><span class="std std-ref">_snd_pcm_multi_open()</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="plugin-share">
+<span id="doxid-pcm-plugins-1pcm-plugins-share"></span><h2>Plugin: Share</h2>
+<p>This plugin allows sharing of multiple channels with more clients. The access to each channel is exlusive (samples are not mixed together). It means, if the channel zero is used with first client, the channel cannot be used with second one. If you are looking for a mixing plugin, use the <a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-dmix"><span class="std std-ref">dmix plugin</span></a>.</p>
+<p>The difference from <a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-dshare"><span class="std std-ref">dshare plugin</span></a> is that share plugin requires the server program “aserver”, while dshare plugin doesn’t need the explicit server but access to the shared buffer.</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">name</span> <span class="p">{</span>
+        <span class="n">type</span> <span class="n">share</span>              <span class="err">#</span> <span class="n">Share</span> <span class="n">PCM</span>
+        <span class="n">slave</span> <span class="n">STR</span>               <span class="err">#</span> <span class="n">Slave</span> <span class="n">name</span>
+        <span class="cp"># or</span>
+        <span class="n">slave</span> <span class="p">{</span>                 <span class="err">#</span> <span class="n">Slave</span> <span class="n">definition</span>
+                <span class="n">pcm</span> <span class="n">STR</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">name</span>
+                <span class="p">[</span><span class="n">format</span> <span class="n">STR</span><span class="p">]</span>    <span class="err">#</span> <span class="n">Slave</span> <span class="n">format</span>
+                <span class="p">[</span><span class="n">channels</span> <span class="n">INT</span><span class="p">]</span>  <span class="err">#</span> <span class="n">Slave</span> <span class="n">channels</span>
+                <span class="p">[</span><span class="n">rate</span> <span class="n">INT</span><span class="p">]</span>      <span class="err">#</span> <span class="n">Slave</span> <span class="n">rate</span>
+                <span class="p">[</span><span class="n">period_time</span> <span class="n">INT</span><span class="p">]</span> <span class="err">#</span> <span class="n">Slave</span> <span class="n">period</span> <span class="n">time</span> <span class="n">in</span> <span class="n">us</span>
+                <span class="p">[</span><span class="n">buffer_time</span> <span class="n">INT</span><span class="p">]</span> <span class="err">#</span> <span class="n">Slave</span> <span class="n">buffer</span> <span class="n">time</span> <span class="n">in</span> <span class="n">us</span>
+        <span class="p">}</span>
+    <span class="n">bindings</span> <span class="p">{</span>
+        <span class="n">N</span> <span class="n">INT</span>       <span class="err">#</span> <span class="n">Slave</span> <span class="n">channel</span> <span class="n">INT</span> <span class="k">for</span> <span class="n">client</span> <span class="n">channel</span> <span class="n">N</span>
+    <span class="p">}</span>
+<span class="p">}</span></pre>
+<section id="doxid-pcm-plugins-1pcm-plugins-share-funcref">
+<span id="id15"></span><h3>Function reference</h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="global.html#doxid-pcm-share-8c-1ab7c7e88e681d727250e67b6fbd11e245"><span class="std std-ref">snd_pcm_share_open()</span></a></p></li>
+<li><p><a class="reference internal" href="global.html#doxid-pcm-share-8c-1a201ff59d8aad291bfd324fef114bf2d9"><span class="std std-ref">_snd_pcm_share_open()</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="plugin-hooks">
+<span id="doxid-pcm-plugins-1pcm-plugins-hooks"></span><h2>Plugin: hooks</h2>
+<p>This plugin is used to call some ‘hook’ function when this plugin is opened, modified or closed. Typically, it is used to change control values for a certain state specially for the PCM (see the example below).</p>
+<pre class="highlight literal-block"><span></span><span class="cp"># Hook arguments definition</span>
+<span class="n">hook_args</span><span class="p">.</span><span class="n">NAME</span> <span class="p">{</span>
+    <span class="p">...</span>         <span class="err">#</span> <span class="n">Arbitrary</span> <span class="n">arguments</span>
+<span class="p">}</span>
+
+<span class="cp"># PCM hook type</span>
+<span class="n">pcm_hook_type</span><span class="p">.</span><span class="n">NAME</span> <span class="p">{</span>
+    <span class="p">[</span><span class="n">lib</span> <span class="n">STR</span><span class="p">]</span>       <span class="err">#</span> <span class="n">Library</span> <span class="n">file</span> <span class="p">(</span><span class="k">default</span> <span class="n">libasound</span><span class="p">.</span><span class="n">so</span><span class="p">)</span>
+    <span class="p">[</span><span class="n">install</span> <span class="n">STR</span><span class="p">]</span>       <span class="err">#</span> <span class="n">Install</span> <span class="n">function</span> <span class="p">(</span><span class="k">default</span> <span class="n">_snd_pcm_hook_NAME_install</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="cp"># PCM hook definition</span>
+<span class="n">pcm_hook</span><span class="p">.</span><span class="n">NAME</span> <span class="p">{</span>
+    <span class="n">type</span> <span class="n">STR</span>        <span class="err">#</span> <span class="n">PCM</span> <span class="n">Hook</span> <span class="n">type</span> <span class="p">(</span><span class="n">see</span> <span class="n">pcm_hook_type</span><span class="p">)</span>
+    <span class="p">[</span><span class="n">args</span> <span class="n">STR</span><span class="p">]</span>      <span class="err">#</span> <span class="n">Arguments</span> <span class="k">for</span> <span class="n">install</span> <span class="n">function</span> <span class="p">(</span><span class="n">see</span> <span class="n">hook_args</span><span class="p">)</span>
+    <span class="cp"># or</span>
+    <span class="p">[</span><span class="n">args</span> <span class="p">{</span> <span class="p">}]</span>      <span class="err">#</span> <span class="n">Arguments</span> <span class="k">for</span> <span class="n">install</span> <span class="n">function</span>
+<span class="p">}</span>
+
+<span class="cp"># PCM hook plugin</span>
+<span class="n">pcm</span><span class="p">.</span><span class="n">NAME</span> <span class="p">{</span>
+    <span class="n">type</span> <span class="n">hooks</span>      <span class="err">#</span> <span class="n">PCM</span> <span class="n">with</span> <span class="n">hooks</span>
+    <span class="n">slave</span> <span class="n">STR</span>       <span class="err">#</span> <span class="n">Slave</span> <span class="n">name</span>
+    <span class="cp"># or</span>
+    <span class="n">slave</span> <span class="p">{</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">definition</span>
+        <span class="n">pcm</span> <span class="n">STR</span>     <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">name</span>
+        <span class="cp"># or</span>
+        <span class="n">pcm</span> <span class="p">{</span> <span class="p">}</span>     <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">definition</span>
+    <span class="p">}</span>
+    <span class="n">hooks</span> <span class="p">{</span>
+        <span class="n">ID</span> <span class="n">STR</span>      <span class="err">#</span> <span class="n">Hook</span> <span class="n">name</span> <span class="p">(</span><span class="n">see</span> <span class="n">pcm_hook</span><span class="p">)</span>
+        <span class="cp"># or</span>
+        <span class="n">ID</span> <span class="p">{</span> <span class="p">}</span>      <span class="err">#</span> <span class="n">Hook</span> <span class="n">definition</span> <span class="p">(</span><span class="n">see</span> <span class="n">pcm_hook</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span></pre>
+<p>Example:</p>
+<pre class="highlight literal-block"><span></span><span class="n">hooks</span><span class="mf">.0</span> <span class="p">{</span>
+    <span class="n">type</span> <span class="n">ctl_elems</span>
+    <span class="n">hook_args</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="n">name</span> <span class="s">&quot;Wave Surround Playback Volume&quot;</span>
+            <span class="n">preserve</span> <span class="nb">true</span>
+            <span class="n">lock</span> <span class="nb">true</span>
+            <span class="n">optional</span> <span class="nb">true</span>
+            <span class="n">value</span> <span class="p">[</span> <span class="mi">0</span> <span class="mi">0</span> <span class="p">]</span>
+        <span class="p">}</span>
+        <span class="p">{</span>
+            <span class="n">name</span> <span class="s">&quot;EMU10K1 PCM Send Volume&quot;</span>
+            <span class="n">index</span> <span class="p">{</span> <span class="err">@</span><span class="n">func</span> <span class="n">private_pcm_subdevice</span> <span class="p">}</span>
+            <span class="n">lock</span> <span class="nb">true</span>
+            <span class="n">value</span> <span class="p">[</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">255</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">255</span> <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span></pre>
+<p>Here, the controls “Wave Surround Playback Volume” and “EMU10K1 PCM Send Volume” are set to the given values when this pcm is accessed. Since these controls take multi-dimensional values, the <code class="docutils literal notranslate"><span class="pre">value</span></code> field is written as an array. When <code class="docutils literal notranslate"><span class="pre">preserve</span></code> is true, the old values are saved and restored when the pcm is closed. The <code class="docutils literal notranslate"><span class="pre">lock</span></code> means that the control is locked during this pcm is opened, and cannot be changed by others. When <code class="docutils literal notranslate"><span class="pre">optional</span></code> is set, no error is returned but ignored even if the specified control doesn’t exist.</p>
+<section id="doxid-pcm-plugins-1pcm-plugins-hooks-funcref">
+<span id="id16"></span><h3>Function reference</h3>
+<ul class="simple">
+<li><p>The function ctl_elems - <a class="reference internal" href="global.html#doxid-pcm-hooks-8c-1abfd89c986184f010df8646b46e623490"><span class="std std-ref">_snd_pcm_hook_ctl_elems_install()</span></a> - installs CTL settings described by given configuration.</p></li>
+<li><p><a class="reference internal" href="global.html#doxid-pcm-hooks-8c-1a0355f8ca87a7361b1c3fdd36baf05175"><span class="std std-ref">snd_pcm_hooks_open()</span></a></p></li>
+<li><p><a class="reference internal" href="global.html#doxid-pcm-hooks-8c-1a4d7e604b82a739945aefde32395bea24"><span class="std std-ref">_snd_pcm_hooks_open()</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="plugin-dmix">
+<span id="doxid-pcm-plugins-1pcm-plugins-dmix"></span><h2>Plugin: dmix</h2>
+<p>This plugin provides direct mixing of multiple streams. The resolution for 32-bit mixing is only 24-bit. The low significant byte is filled with zeros. The extra 8 bits are used for the saturation.</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">name</span> <span class="p">{</span>
+    <span class="n">type</span> <span class="n">dmix</span>       <span class="err">#</span> <span class="n">Direct</span> <span class="n">mix</span>
+    <span class="n">ipc_key</span> <span class="n">INT</span>     <span class="err">#</span> <span class="n">unique</span> <span class="n">IPC</span> <span class="n">key</span>
+    <span class="n">ipc_key_add_uid</span> <span class="n">BOOL</span>    <span class="err">#</span> <span class="n">add</span> <span class="n">current</span> <span class="n">uid</span> <span class="n">to</span> <span class="n">unique</span> <span class="n">IPC</span> <span class="n">key</span>
+    <span class="n">ipc_perm</span> <span class="n">INT</span>        <span class="err">#</span> <span class="n">IPC</span> <span class="n">permissions</span> <span class="p">(</span><span class="n">octal</span><span class="p">,</span> <span class="k">default</span> <span class="mo">0600</span><span class="p">)</span>
+    <span class="n">slave</span> <span class="n">STR</span>
+    <span class="cp"># or</span>
+    <span class="n">slave</span> <span class="p">{</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">definition</span>
+        <span class="n">pcm</span> <span class="n">STR</span>     <span class="err">#</span> <span class="n">slave</span> <span class="n">PCM</span> <span class="n">name</span>
+        <span class="cp"># or</span>
+        <span class="n">pcm</span> <span class="p">{</span> <span class="p">}</span>     <span class="err">#</span> <span class="n">slave</span> <span class="n">PCM</span> <span class="n">definition</span>
+        <span class="n">format</span> <span class="n">STR</span>  <span class="err">#</span> <span class="n">format</span> <span class="n">definition</span>
+        <span class="n">rate</span> <span class="n">INT</span>    <span class="err">#</span> <span class="n">rate</span> <span class="n">definition</span>
+        <span class="n">channels</span> <span class="n">INT</span>
+        <span class="n">period_time</span> <span class="n">INT</span> <span class="err">#</span> <span class="n">in</span> <span class="n">usec</span>
+        <span class="cp"># or</span>
+        <span class="n">period_size</span> <span class="n">INT</span> <span class="err">#</span> <span class="n">in</span> <span class="n">bytes</span>
+        <span class="n">buffer_time</span> <span class="n">INT</span> <span class="err">#</span> <span class="n">in</span> <span class="n">usec</span>
+        <span class="cp"># or</span>
+        <span class="n">buffer_size</span> <span class="n">INT</span> <span class="err">#</span> <span class="n">in</span> <span class="n">bytes</span>
+        <span class="n">periods</span> <span class="n">INT</span> <span class="err">#</span> <span class="n">when</span> <span class="n">buffer_size</span> <span class="n">or</span> <span class="n">buffer_time</span> <span class="n">is</span> <span class="n">not</span> <span class="n">specified</span>
+    <span class="p">}</span>
+    <span class="n">bindings</span> <span class="p">{</span>      <span class="err">#</span> <span class="nl">note</span><span class="p">:</span> <span class="k">this</span> <span class="n">is</span> <span class="n">client</span> <span class="n">independent</span><span class="o">!!!</span>
+        <span class="n">N</span> <span class="n">INT</span>       <span class="err">#</span> <span class="n">maps</span> <span class="n">slave</span> <span class="n">channel</span> <span class="n">to</span> <span class="n">client</span> <span class="n">channel</span> <span class="n">N</span>
+    <span class="p">}</span>
+    <span class="n">slowptr</span> <span class="n">BOOL</span>        <span class="err">#</span> <span class="n">slow</span> <span class="n">but</span> <span class="n">more</span> <span class="n">precise</span> <span class="n">pointer</span> <span class="n">updates</span>
+<span class="p">}</span></pre>
+<p><code class="docutils literal notranslate"><span class="pre">ipc_key</span></code> specfies the unique IPC key in integer. This number must be unique for each different dmix definition, since the shared memory is created with this key number. When <code class="docutils literal notranslate"><span class="pre">ipc_key_add_uid</span></code> is set true, the uid value is added to the value set in <code class="docutils literal notranslate"><span class="pre">ipc_key</span></code>. This will avoid the confliction of the same IPC key with different users concurrently.</p>
+<p>Note that the dmix plugin itself supports only a single configuration. That is, it supports only the fixed rate (default 48000), format (<code class="docutils literal notranslate"><span class="pre">S16</span></code>), channels (2), and period_time (125000). For using other configuration, you have to set the value explicitly in the slave PCM definition. The rate, format and channels can be covered by an additional <a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-dmix"><span class="std std-ref">plug plugin</span></a>, but there is only one base configuration, anyway.</p>
+<p>An example configuration for setting 44100 Hz, <code class="docutils literal notranslate"><span class="pre">S32_LE</span></code> format as the slave PCM of “hw:0” is like below:</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">dmix_44</span> <span class="p">{</span>
+    <span class="n">type</span> <span class="n">dmix</span>
+    <span class="n">ipc_key</span> <span class="mi">321456</span>  <span class="err">#</span> <span class="n">any</span> <span class="n">unique</span> <span class="n">value</span>
+    <span class="n">ipc_key_add_uid</span> <span class="nb">true</span>
+    <span class="n">slave</span> <span class="p">{</span>
+        <span class="n">pcm</span> <span class="s">&quot;hw:0&quot;</span>
+        <span class="n">format</span> <span class="n">S32_LE</span>
+        <span class="n">rate</span> <span class="mi">44100</span>
+    <span class="p">}</span>
+<span class="p">}</span></pre>
+<p>You can hear 48000 Hz samples still using this dmix pcm via plug plugin like:</p>
+<pre class="highlight literal-block"><span></span><span class="o">%</span> <span class="n">aplay</span> <span class="o">-</span><span class="nl">Dplug</span><span class="p">:</span><span class="n">dmix_44</span> <span class="n">foo_48k</span><span class="p">.</span><span class="n">wav</span></pre>
+<p>For using the dmix plugin for OSS emulation device, you have to set the period and the buffer sizes in power of two. For example,</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">dmixoss</span> <span class="p">{</span>
+    <span class="n">type</span> <span class="n">dmix</span>
+    <span class="n">ipc_key</span> <span class="mi">321456</span>  <span class="err">#</span> <span class="n">any</span> <span class="n">unique</span> <span class="n">value</span>
+    <span class="n">ipc_key_add_uid</span> <span class="nb">true</span>
+    <span class="n">slave</span> <span class="p">{</span>
+        <span class="n">pcm</span> <span class="s">&quot;hw:0&quot;</span>
+        <span class="n">period_time</span> <span class="mi">0</span>
+        <span class="n">period_size</span> <span class="mi">1024</span>  <span class="err">#</span> <span class="n">must</span> <span class="n">be</span> <span class="n">power</span> <span class="n">of</span> <span class="mi">2</span>
+        <span class="n">buffer_size</span> <span class="mi">8192</span>  <span class="err">#</span> <span class="n">ditto</span>
+    <span class="p">}</span>
+<span class="p">}</span></pre>
+<p><code class="docutils literal notranslate"><span class="pre">period_time</span> <span class="pre">0</span></code> must be set, too, for resetting the default value. In the case of soundcards with multi-channel IO, adding the bindings would help</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">dmixoss</span> <span class="p">{</span>
+    <span class="p">...</span>
+    <span class="n">bindings</span> <span class="p">{</span>
+        <span class="mi">0</span> <span class="mi">0</span>   <span class="err">#</span> <span class="n">map</span> <span class="n">from</span> <span class="mi">0</span> <span class="n">to</span> <span class="mi">0</span>
+        <span class="mi">1</span> <span class="mi">1</span>   <span class="err">#</span> <span class="n">map</span> <span class="n">from</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">1</span>
+    <span class="p">}</span>
+<span class="p">}</span></pre>
+<p>so that only the first two channels are used by dmix. Also, note that ICE1712 have the limited buffer size, 5513 frames (corresponding to 640 kB). In this case, reduce the buffer_size to 4096.</p>
+<section id="doxid-pcm-plugins-1pcm-plugins-dmix-funcref">
+<span id="id17"></span><h3>Function reference</h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="global.html#doxid-pcm-dmix-8c-1ae31120062bceb47f24d18e672f728b4f"><span class="std std-ref">snd_pcm_dmix_open()</span></a></p></li>
+<li><p><a class="reference internal" href="global.html#doxid-pcm-dmix-8c-1a98332eee00abd086c486bc63ade4484e"><span class="std std-ref">_snd_pcm_dmix_open()</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="plugin-dshare">
+<span id="doxid-pcm-plugins-1pcm-plugins-dshare"></span><h2>Plugin: dshare</h2>
+<p>This plugin provides sharing channels. Unlike <a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-share"><span class="std std-ref">share plugin</span></a>, this plugin doesn’t need the explicit server program but accesses the shared buffer concurrently from each client as well as <a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-dmix"><span class="std std-ref">dmix</span></a> and <a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-dsnoop"><span class="std std-ref">dsnoop</span></a> plugins do. The parameters below are almost identical with these plugins.</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">name</span> <span class="p">{</span>
+    <span class="n">type</span> <span class="n">dshare</span>     <span class="err">#</span> <span class="n">Direct</span> <span class="n">sharing</span>
+    <span class="n">ipc_key</span> <span class="n">INT</span>     <span class="err">#</span> <span class="n">unique</span> <span class="n">IPC</span> <span class="n">key</span>
+    <span class="n">ipc_key_add_uid</span> <span class="n">BOOL</span>    <span class="err">#</span> <span class="n">add</span> <span class="n">current</span> <span class="n">uid</span> <span class="n">to</span> <span class="n">unique</span> <span class="n">IPC</span> <span class="n">key</span>
+    <span class="n">ipc_perm</span> <span class="n">INT</span>        <span class="err">#</span> <span class="n">IPC</span> <span class="n">permissions</span> <span class="p">(</span><span class="n">octal</span><span class="p">,</span> <span class="k">default</span> <span class="mo">0600</span><span class="p">)</span>
+    <span class="n">slave</span> <span class="n">STR</span>
+    <span class="cp"># or</span>
+    <span class="n">slave</span> <span class="p">{</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">definition</span>
+        <span class="n">pcm</span> <span class="n">STR</span>     <span class="err">#</span> <span class="n">slave</span> <span class="n">PCM</span> <span class="n">name</span>
+        <span class="cp"># or</span>
+        <span class="n">pcm</span> <span class="p">{</span> <span class="p">}</span>     <span class="err">#</span> <span class="n">slave</span> <span class="n">PCM</span> <span class="n">definition</span>
+        <span class="n">format</span> <span class="n">STR</span>  <span class="err">#</span> <span class="n">format</span> <span class="n">definition</span>
+        <span class="n">rate</span> <span class="n">INT</span>    <span class="err">#</span> <span class="n">rate</span> <span class="n">definition</span>
+        <span class="n">channels</span> <span class="n">INT</span>
+        <span class="n">period_time</span> <span class="n">INT</span> <span class="err">#</span> <span class="n">in</span> <span class="n">usec</span>
+        <span class="cp"># or</span>
+        <span class="n">period_size</span> <span class="n">INT</span> <span class="err">#</span> <span class="n">in</span> <span class="n">bytes</span>
+        <span class="n">buffer_time</span> <span class="n">INT</span> <span class="err">#</span> <span class="n">in</span> <span class="n">usec</span>
+        <span class="cp"># or</span>
+        <span class="n">buffer_size</span> <span class="n">INT</span> <span class="err">#</span> <span class="n">in</span> <span class="n">bytes</span>
+        <span class="n">periods</span> <span class="n">INT</span> <span class="err">#</span> <span class="n">when</span> <span class="n">buffer_size</span> <span class="n">or</span> <span class="n">buffer_time</span> <span class="n">is</span> <span class="n">not</span> <span class="n">specified</span>
+    <span class="p">}</span>
+    <span class="n">bindings</span> <span class="p">{</span>      <span class="err">#</span> <span class="nl">note</span><span class="p">:</span> <span class="k">this</span> <span class="n">is</span> <span class="n">client</span> <span class="n">independent</span><span class="o">!!!</span>
+        <span class="n">N</span> <span class="n">INT</span>       <span class="err">#</span> <span class="n">maps</span> <span class="n">slave</span> <span class="n">channel</span> <span class="n">to</span> <span class="n">client</span> <span class="n">channel</span> <span class="n">N</span>
+    <span class="p">}</span>
+    <span class="n">slowptr</span> <span class="n">BOOL</span>        <span class="err">#</span> <span class="n">slow</span> <span class="n">but</span> <span class="n">more</span> <span class="n">precise</span> <span class="n">pointer</span> <span class="n">updates</span>
+<span class="p">}</span></pre>
+<section id="doxid-pcm-plugins-1pcm-plugins-dshare-funcref">
+<span id="id18"></span><h3>Function reference</h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="global.html#doxid-pcm-dshare-8c-1a88bec432614f2a75100c33ed8dfd97b6"><span class="std std-ref">snd_pcm_dshare_open()</span></a></p></li>
+<li><p><a class="reference internal" href="global.html#doxid-pcm-dshare-8c-1ae837c9fab4f6e2e0b08aa7864c19901b"><span class="std std-ref">_snd_pcm_dshare_open()</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="plugin-dsnoop">
+<span id="doxid-pcm-plugins-1pcm-plugins-dsnoop"></span><h2>Plugin: dsnoop</h2>
+<p>This plugin splits one capture stream to more. It works the reverse way of <a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-dmix"><span class="std std-ref">dmix plugin</span></a>, reading the shared capture buffer from many clients concurrently. The meaning of parameters below are almost identical with dmix plugin.</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">name</span> <span class="p">{</span>
+    <span class="n">type</span> <span class="n">dsnoop</span>     <span class="err">#</span> <span class="n">Direct</span> <span class="n">snoop</span>
+    <span class="n">ipc_key</span> <span class="n">INT</span>     <span class="err">#</span> <span class="n">unique</span> <span class="n">IPC</span> <span class="n">key</span>
+    <span class="n">ipc_key_add_uid</span> <span class="n">BOOL</span>    <span class="err">#</span> <span class="n">add</span> <span class="n">current</span> <span class="n">uid</span> <span class="n">to</span> <span class="n">unique</span> <span class="n">IPC</span> <span class="n">key</span>
+    <span class="n">ipc_perm</span> <span class="n">INT</span>        <span class="err">#</span> <span class="n">IPC</span> <span class="n">permissions</span> <span class="p">(</span><span class="n">octal</span><span class="p">,</span> <span class="k">default</span> <span class="mo">0600</span><span class="p">)</span>
+    <span class="n">slave</span> <span class="n">STR</span>
+    <span class="cp"># or</span>
+    <span class="n">slave</span> <span class="p">{</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">definition</span>
+        <span class="n">pcm</span> <span class="n">STR</span>     <span class="err">#</span> <span class="n">slave</span> <span class="n">PCM</span> <span class="n">name</span>
+        <span class="cp"># or</span>
+        <span class="n">pcm</span> <span class="p">{</span> <span class="p">}</span>     <span class="err">#</span> <span class="n">slave</span> <span class="n">PCM</span> <span class="n">definition</span>
+        <span class="n">format</span> <span class="n">STR</span>  <span class="err">#</span> <span class="n">format</span> <span class="n">definition</span>
+        <span class="n">rate</span> <span class="n">INT</span>    <span class="err">#</span> <span class="n">rate</span> <span class="n">definition</span>
+        <span class="n">channels</span> <span class="n">INT</span>
+        <span class="n">period_time</span> <span class="n">INT</span> <span class="err">#</span> <span class="n">in</span> <span class="n">usec</span>
+        <span class="cp"># or</span>
+        <span class="n">period_size</span> <span class="n">INT</span> <span class="err">#</span> <span class="n">in</span> <span class="n">bytes</span>
+        <span class="n">buffer_time</span> <span class="n">INT</span> <span class="err">#</span> <span class="n">in</span> <span class="n">usec</span>
+        <span class="cp"># or</span>
+        <span class="n">buffer_size</span> <span class="n">INT</span> <span class="err">#</span> <span class="n">in</span> <span class="n">bytes</span>
+        <span class="n">periods</span> <span class="n">INT</span> <span class="err">#</span> <span class="n">when</span> <span class="n">buffer_size</span> <span class="n">or</span> <span class="n">buffer_time</span> <span class="n">is</span> <span class="n">not</span> <span class="n">specified</span>
+    <span class="p">}</span>
+    <span class="n">bindings</span> <span class="p">{</span>      <span class="err">#</span> <span class="nl">note</span><span class="p">:</span> <span class="k">this</span> <span class="n">is</span> <span class="n">client</span> <span class="n">independent</span><span class="o">!!!</span>
+        <span class="n">N</span> <span class="n">INT</span>       <span class="err">#</span> <span class="n">maps</span> <span class="n">slave</span> <span class="n">channel</span> <span class="n">to</span> <span class="n">client</span> <span class="n">channel</span> <span class="n">N</span>
+    <span class="p">}</span>
+    <span class="n">slowptr</span> <span class="n">BOOL</span>        <span class="err">#</span> <span class="n">slow</span> <span class="n">but</span> <span class="n">more</span> <span class="n">precise</span> <span class="n">pointer</span> <span class="n">updates</span>
+<span class="p">}</span></pre>
+<section id="doxid-pcm-plugins-1pcm-plugins-dsnoop-funcref">
+<span id="id19"></span><h3>Function reference</h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="global.html#doxid-pcm-dsnoop-8c-1a8cb7e3979f25d99e74e7a1e6d016436e"><span class="std std-ref">snd_pcm_dsnoop_open()</span></a></p></li>
+<li><p><a class="reference internal" href="global.html#doxid-pcm-dsnoop-8c-1a6f504effb6bc99326e94e3450602cd37"><span class="std std-ref">_snd_pcm_dsnoop_open()</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="plugin-ladspa-alsa">
+<span id="doxid-pcm-plugins-1pcm-plugins-ladpsa"></span><h2>Plugin: LADSPA &lt;-&gt; ALSA</h2>
+<p>This plugin allows to apply a set of LADPSA plugins. The input and output format is always <a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1ggaa14b7f26877a812acbb39811364177f8a7d9fd83c6ff5be7a9cde4b0673b64bf0"><span class="std std-ref">SND_PCM_FORMAT_FLOAT</span></a> (note: this type can be either little or big-endian depending on architecture).</p>
+<p>The policy duplicate means that there must be only one binding definition for channel zero. This definition is automatically duplicated for all channels. If the LADSPA plugin has multiple audio inputs or outputs the policy duplicate is automatically switched to policy none.</p>
+<p>The plugin serialization works as expected. You can eventually use more channels (inputs / outputs) inside the LADPSA plugin chain than processed in the ALSA plugin chain. If ALSA channel does not exist for given LADSPA input audio port, zero samples are given to this LADSPA port. On the output side (ALSA next plugin input), the valid channels are checked, too. If specific ALSA channel does not exist, the LADSPA output port is connected to a dummy sample area.</p>
+<p>Instances of LADSPA plugins are created dynamically.</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">name</span> <span class="p">{</span>
+        <span class="n">type</span> <span class="n">ladspa</span>             <span class="err">#</span> <span class="n">ALSA</span><span class="o">&lt;-&gt;</span><span class="n">LADSPA</span> <span class="n">PCM</span>
+        <span class="n">slave</span> <span class="n">STR</span>               <span class="err">#</span> <span class="n">Slave</span> <span class="n">name</span>
+        <span class="cp"># or</span>
+        <span class="n">slave</span> <span class="p">{</span>                 <span class="err">#</span> <span class="n">Slave</span> <span class="n">definition</span>
+                <span class="n">pcm</span> <span class="n">STR</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">name</span>
+                <span class="cp"># or</span>
+                <span class="n">pcm</span> <span class="p">{</span> <span class="p">}</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">definition</span>
+        <span class="p">}</span>
+        <span class="p">[</span><span class="n">channels</span> <span class="n">INT</span><span class="p">]</span>      <span class="err">#</span> <span class="n">count</span> <span class="n">input</span> <span class="n">channels</span> <span class="p">(</span><span class="n">input</span> <span class="n">to</span> <span class="n">LADSPA</span> <span class="n">plugin</span> <span class="n">chain</span><span class="p">)</span>
+    <span class="p">[</span><span class="n">path</span> <span class="n">STR</span><span class="p">]</span>      <span class="err">#</span> <span class="n">Path</span> <span class="p">(</span><span class="n">directory</span><span class="p">)</span> <span class="n">with</span> <span class="n">LADSPA</span> <span class="n">plugins</span>
+    <span class="n">plugins</span> <span class="o">|</span>       <span class="err">#</span> <span class="n">Definition</span> <span class="k">for</span> <span class="n">both</span> <span class="n">directions</span>
+        <span class="n">playback_plugins</span> <span class="o">|</span>  <span class="err">#</span> <span class="n">Definition</span> <span class="k">for</span> <span class="n">playback</span> <span class="n">direction</span>
+    <span class="n">capture_plugins</span> <span class="p">{</span>   <span class="err">#</span> <span class="n">Definition</span> <span class="k">for</span> <span class="n">capture</span> <span class="n">direction</span>
+        <span class="n">N</span> <span class="p">{</span>     <span class="err">#</span> <span class="n">Configuration</span> <span class="k">for</span> <span class="n">LADPSA</span> <span class="n">plugin</span> <span class="n">N</span>
+            <span class="p">[</span><span class="n">id</span> <span class="n">INT</span><span class="p">]</span>    <span class="err">#</span> <span class="n">LADSPA</span> <span class="n">plugin</span> <span class="n">ID</span> <span class="p">(</span><span class="k">for</span> <span class="n">example</span> <span class="mi">1043</span><span class="p">)</span>
+            <span class="p">[</span><span class="n">label</span> <span class="n">STR</span><span class="p">]</span> <span class="err">#</span> <span class="n">LADSPA</span> <span class="n">plugin</span> <span class="n">label</span> <span class="p">(</span><span class="k">for</span> <span class="n">example</span> <span class="sc">&#39;delay_5s&#39;</span><span class="p">)</span>
+            <span class="p">[</span><span class="n">filename</span> <span class="n">STR</span><span class="p">]</span>  <span class="err">#</span> <span class="n">Full</span> <span class="n">filename</span> <span class="n">of</span> <span class="p">.</span><span class="n">so</span> <span class="n">library</span> <span class="n">with</span> <span class="n">LADSPA</span> <span class="n">plugin</span> <span class="n">code</span>
+            <span class="p">[</span><span class="n">policy</span> <span class="n">STR</span><span class="p">]</span>    <span class="err">#</span> <span class="n">Policy</span> <span class="n">can</span> <span class="n">be</span> <span class="sc">&#39;none&#39;</span> <span class="n">or</span> <span class="sc">&#39;duplicate&#39;</span>
+            <span class="n">input</span> <span class="o">|</span> <span class="n">output</span> <span class="p">{</span>
+                <span class="n">bindings</span> <span class="p">{</span>
+                    <span class="n">C</span> <span class="n">INT</span> <span class="n">or</span> <span class="n">STR</span>    <span class="err">#</span> <span class="n">C</span> <span class="o">-</span> <span class="n">channel</span><span class="p">,</span> <span class="n">INT</span> <span class="o">-</span> <span class="n">audio</span> <span class="n">port</span> <span class="n">index</span><span class="p">,</span> <span class="n">STR</span> <span class="o">-</span> <span class="n">audio</span> <span class="n">port</span> <span class="n">name</span>
+                <span class="p">}</span>
+                <span class="n">controls</span> <span class="p">{</span>
+                        <span class="cp"># valid only in the input block</span>
+                    <span class="n">I</span> <span class="n">INT</span> <span class="n">or</span> <span class="n">REAL</span>   <span class="err">#</span> <span class="n">I</span> <span class="o">-</span> <span class="n">control</span> <span class="n">port</span> <span class="n">index</span><span class="p">,</span> <span class="n">INT</span> <span class="n">or</span> <span class="n">REAL</span> <span class="o">-</span> <span class="n">control</span> <span class="n">value</span>
+                    <span class="cp"># or</span>
+                    <span class="n">STR</span> <span class="n">INT</span> <span class="n">or</span> <span class="n">REAL</span> <span class="err">#</span> <span class="n">STR</span> <span class="o">-</span> <span class="n">control</span> <span class="n">port</span> <span class="n">name</span><span class="p">,</span> <span class="n">INT</span> <span class="n">or</span> <span class="n">REAL</span> <span class="o">-</span> <span class="n">control</span> <span class="n">value</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></pre>
+<section id="doxid-pcm-plugins-1pcm-plugins-ladspa-funcref">
+<span id="id20"></span><h3>Function reference</h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="global.html#doxid-pcm-ladspa-8c-1adcc43e9aeb068d3f8e1cd17d7f8a92cc"><span class="std std-ref">snd_pcm_ladspa_open()</span></a></p></li>
+<li><p><a class="reference internal" href="global.html#doxid-pcm-ladspa-8c-1af310f491d26253256cdf8589334a64d2"><span class="std std-ref">_snd_pcm_ladspa_open()</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="plugin-asym">
+<span id="doxid-pcm-plugins-1pcm-plugins-asym"></span><h2>Plugin: asym</h2>
+<p>This plugin is a combination of playback and capture PCM streams. Slave PCMs can be defined asymmetrically for both directions.</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">name</span> <span class="p">{</span>
+        <span class="n">type</span> <span class="n">asym</span>               <span class="err">#</span> <span class="n">Asym</span> <span class="n">PCM</span>
+        <span class="n">playback</span> <span class="n">STR</span>            <span class="err">#</span> <span class="n">Playback</span> <span class="n">slave</span> <span class="n">name</span>
+        <span class="cp"># or</span>
+        <span class="n">playback</span> <span class="p">{</span>              <span class="err">#</span> <span class="n">Playback</span> <span class="n">slave</span> <span class="n">definition</span>
+                <span class="n">pcm</span> <span class="n">STR</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">name</span>
+                <span class="cp"># or</span>
+                <span class="n">pcm</span> <span class="p">{</span> <span class="p">}</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">definition</span>
+        <span class="p">}</span>
+        <span class="n">capture</span> <span class="n">STR</span>             <span class="err">#</span> <span class="n">Capture</span> <span class="n">slave</span> <span class="n">name</span>
+        <span class="cp"># or</span>
+        <span class="n">capture</span> <span class="p">{</span>               <span class="err">#</span> <span class="n">Capture</span> <span class="n">slave</span> <span class="n">definition</span>
+                <span class="n">pcm</span> <span class="n">STR</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">name</span>
+                <span class="cp"># or</span>
+                <span class="n">pcm</span> <span class="p">{</span> <span class="p">}</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">definition</span>
+        <span class="p">}</span>
+<span class="p">}</span></pre>
+<p>For example, you can combine a dmix plugin and a dsnoop plugin as as a single PCM for playback and capture directions, respectively.</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">duplex</span> <span class="p">{</span>
+    <span class="n">type</span> <span class="n">asym</span>
+    <span class="n">playback</span><span class="p">.</span><span class="n">pcm</span> <span class="s">&quot;dmix&quot;</span>
+    <span class="n">capture</span><span class="p">.</span><span class="n">pcm</span> <span class="s">&quot;dsnoop&quot;</span>
+<span class="p">}</span></pre>
+<p>By defining only a single direction, the resultant PCM becomes half-duplex.</p>
+<section id="doxid-pcm-plugins-1pcm-plugins-asym-funcref">
+<span id="id21"></span><h3>Function reference</h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="global.html#doxid-pcm-asym-8c-1a39d690db97257936622f800f1d81d306"><span class="std std-ref">_snd_pcm_asym_open()</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="plugin-iec958">
+<span id="doxid-pcm-plugins-1pcm-plugins-iec958"></span><h2>Plugin: IEC958</h2>
+<p>This plugin converts 32bit IEC958 subframe samples to linear, or linear to 32bit IEC958 subframe samples.</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">name</span> <span class="p">{</span>
+        <span class="n">type</span> <span class="n">iec958</span>             <span class="err">#</span> <span class="n">IEC958</span> <span class="n">subframe</span> <span class="n">conversion</span> <span class="n">PCM</span>
+        <span class="n">slave</span> <span class="n">STR</span>               <span class="err">#</span> <span class="n">Slave</span> <span class="n">name</span>
+        <span class="cp"># or</span>
+        <span class="n">slave</span> <span class="p">{</span>                 <span class="err">#</span> <span class="n">Slave</span> <span class="n">definition</span>
+                <span class="n">pcm</span> <span class="n">STR</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">name</span>
+                <span class="cp"># or</span>
+                <span class="n">pcm</span> <span class="p">{</span> <span class="p">}</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">definition</span>
+        <span class="p">}</span>
+    <span class="p">[</span><span class="n">status</span> <span class="n">status</span><span class="o">-</span><span class="n">bytes</span><span class="p">]</span>   <span class="err">#</span> <span class="n">IEC958</span> <span class="n">status</span> <span class="n">bits</span> <span class="p">(</span><span class="n">given</span> <span class="n">in</span> <span class="n">byte</span> <span class="n">array</span><span class="p">)</span>
+    <span class="cp"># IEC958 preamble bits definitions</span>
+    <span class="cp"># B/M/W or Z/X/Y, B = block start, M = even subframe, W = odd subframe</span>
+    <span class="cp"># As default, Z = 0x08, Y = 0x04, X = 0x02</span>
+    <span class="p">[</span><span class="n">preamble</span><span class="p">.</span><span class="n">z</span> <span class="n">or</span> <span class="n">preamble</span><span class="p">.</span><span class="n">b</span> <span class="n">val</span><span class="p">]</span>
+    <span class="p">[</span><span class="n">preamble</span><span class="p">.</span><span class="n">x</span> <span class="n">or</span> <span class="n">preamble</span><span class="p">.</span><span class="n">m</span> <span class="n">val</span><span class="p">]</span>
+    <span class="p">[</span><span class="n">preamble</span><span class="p">.</span><span class="n">y</span> <span class="n">or</span> <span class="n">preamble</span><span class="p">.</span><span class="n">w</span> <span class="n">val</span><span class="p">]</span>
+<span class="p">}</span></pre>
+<section id="doxid-pcm-plugins-1pcm-plugins-iec958-funcref">
+<span id="id22"></span><h3>Function reference</h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="global.html#doxid-pcm-iec958-8c-1a5838de1fbcdbbc2debfd3995aa8f402b"><span class="std std-ref">snd_pcm_iec958_open()</span></a></p></li>
+<li><p><a class="reference internal" href="global.html#doxid-pcm-iec958-8c-1aa2e0ac89b0b3190b5cf4c31c97e77620"><span class="std std-ref">_snd_pcm_iec958_open()</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="plugin-soft-volume">
+<span id="doxid-pcm-plugins-1pcm-plugins-softvol"></span><h2>Plugin: Soft Volume</h2>
+<p>This plugin applies the software volume attenuation. The format, rate and channels must match for both of source and destination.</p>
+<p>When the control is stereo (count=2), the channels are assumed to be either mono, 2.0, 2.1, 4.0, 4.1, 5.1 or 7.1.</p>
+<p>If the control already exists and it’s a system control (i.e. no user-defined control), the plugin simply passes its slave without any changes.</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">name</span> <span class="p">{</span>
+        <span class="n">type</span> <span class="n">softvol</span>            <span class="err">#</span> <span class="n">Soft</span> <span class="n">Volume</span> <span class="n">conversion</span> <span class="n">PCM</span>
+        <span class="n">slave</span> <span class="n">STR</span>               <span class="err">#</span> <span class="n">Slave</span> <span class="n">name</span>
+        <span class="cp"># or</span>
+        <span class="n">slave</span> <span class="p">{</span>                 <span class="err">#</span> <span class="n">Slave</span> <span class="n">definition</span>
+                <span class="n">pcm</span> <span class="n">STR</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">name</span>
+                <span class="cp"># or</span>
+                <span class="n">pcm</span> <span class="p">{</span> <span class="p">}</span>         <span class="err">#</span> <span class="n">Slave</span> <span class="n">PCM</span> <span class="n">definition</span>
+                <span class="p">[</span><span class="n">format</span> <span class="n">STR</span><span class="p">]</span>    <span class="err">#</span> <span class="n">Slave</span> <span class="n">format</span>
+        <span class="p">}</span>
+        <span class="n">control</span> <span class="p">{</span>
+            <span class="n">name</span> <span class="n">STR</span>        <span class="err">#</span> <span class="n">control</span> <span class="n">element</span> <span class="n">id</span> <span class="n">string</span>
+        <span class="p">[</span><span class="n">card</span> <span class="n">STR</span><span class="p">]</span>      <span class="err">#</span> <span class="n">control</span> <span class="n">card</span> <span class="n">index</span>
+        <span class="p">[</span><span class="n">iface</span> <span class="n">STR</span><span class="p">]</span>     <span class="err">#</span> <span class="n">interface</span> <span class="n">of</span> <span class="n">the</span> <span class="n">element</span>
+        <span class="p">[</span><span class="n">index</span> <span class="n">INT</span><span class="p">]</span>     <span class="err">#</span> <span class="n">index</span> <span class="n">of</span> <span class="n">the</span> <span class="n">element</span>
+        <span class="p">[</span><span class="n">device</span> <span class="n">INT</span><span class="p">]</span>    <span class="err">#</span> <span class="n">device</span> <span class="n">number</span> <span class="n">of</span> <span class="n">the</span> <span class="n">element</span>
+        <span class="p">[</span><span class="n">subdevice</span> <span class="n">INT</span><span class="p">]</span> <span class="err">#</span> <span class="n">subdevice</span> <span class="n">number</span> <span class="n">of</span> <span class="n">the</span> <span class="n">element</span>
+        <span class="p">[</span><span class="n">count</span> <span class="n">INT</span><span class="p">]</span>     <span class="err">#</span> <span class="n">control</span> <span class="n">channels</span> <span class="mi">1</span> <span class="n">or</span> <span class="mi">2</span> <span class="p">(</span><span class="k">default</span><span class="o">:</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="p">[</span><span class="n">min_dB</span> <span class="n">REAL</span><span class="p">]</span>           <span class="err">#</span> <span class="n">minimal</span> <span class="n">dB</span> <span class="n">value</span> <span class="p">(</span><span class="k">default</span><span class="o">:</span> <span class="o">-</span><span class="mf">51.0</span><span class="p">)</span>
+    <span class="p">[</span><span class="n">max_dB</span> <span class="n">REAL</span><span class="p">]</span>           <span class="err">#</span> <span class="n">maximal</span> <span class="n">dB</span> <span class="n">value</span> <span class="p">(</span><span class="k">default</span><span class="o">:</span>   <span class="mf">0.0</span><span class="p">)</span>
+    <span class="p">[</span><span class="n">resolution</span> <span class="n">INT</span><span class="p">]</span>        <span class="err">#</span> <span class="n">resolution</span> <span class="p">(</span><span class="k">default</span><span class="o">:</span> <span class="mi">256</span><span class="p">)</span>
+                <span class="cp"># resolution = 2 means a mute switch</span>
+<span class="p">}</span></pre>
+<section id="doxid-pcm-plugins-1pcm-plugins-softvol-funcref">
+<span id="id23"></span><h3>Function reference</h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="global.html#doxid-pcm-softvol-8c-1ad569db39824bb0a31c73dd9d4948a4b7"><span class="std std-ref">snd_pcm_softvol_open()</span></a></p></li>
+<li><p><a class="reference internal" href="global.html#doxid-pcm-softvol-8c-1a4347460ac616c9a323681021c6498d0d"><span class="std std-ref">_snd_pcm_softvol_open()</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="id24">
+<span id="id25"></span><h2>Plugin: Null</h2>
+<p>This plugin discards contents of a PCM stream or creates a stream with zero samples.</p>
+<p>Note: This implementation uses devices /dev/null (playback, must be writable) and /dev/full (capture, must be readable).</p>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">name</span> <span class="p">{</span>
+        <span class="n">type</span> <span class="n">null</span>               <span class="err">#</span> <span class="n">Null</span> <span class="n">PCM</span>
+<span class="p">}</span></pre>
+<section id="id26">
+<span id="id27"></span><h3>Function reference</h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="global.html#doxid-pcm-empty-8c-1a55df6f9b1b71d37ea91557cc26e8ab3a"><span class="std std-ref">_snd_pcm_empty_open()</span></a></p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">PCM (digital audio) plugins</a><ul>
+<li><a class="reference internal" href="#slave-definition">Slave definition</a></li>
+<li><a class="reference internal" href="#plugin-hw">Plugin: hw</a><ul>
+<li><a class="reference internal" href="#function-reference">Function reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plugin-mmap-emul">Plugin: mmap_emul</a><ul>
+<li><a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-mmap-emul-funcref">Function reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plugin-shm">Plugin: shm</a><ul>
+<li><a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-shm-funcref">Function reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plugin-null">Plugin: Null</a><ul>
+<li><a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-null-funcref">Function reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plugin-copy">Plugin: copy</a><ul>
+<li><a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-copy-funcref">Function reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plugin-linear">Plugin: linear</a><ul>
+<li><a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-linear-funcref">Function reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plugin-linear-float">Plugin: linear&lt;-&gt;float</a><ul>
+<li><a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-lfloat-funcref">Function reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plugin-mu-law">Plugin: Mu-Law</a><ul>
+<li><a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-mulaw-funcref">Function reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plugin-a-law">Plugin: A-Law</a><ul>
+<li><a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-alaw-funcref">Function reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plugin-ima-adpcm">Plugin: Ima-ADPCM</a><ul>
+<li><a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-adpcm-funcref">Function reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plugin-route-volume">Plugin: Route &amp; Volume</a><ul>
+<li><a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-route-funcref">Function reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plugin-rate">Plugin: Rate</a><ul>
+<li><a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-rate-funcref">Function reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#automatic-conversion-plugin">Automatic conversion plugin</a><ul>
+<li><a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-plug-funcref">Function reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plugin-file">Plugin: File</a><ul>
+<li><a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-file-funcref">Function reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plugin-multiple-streams-to-one">Plugin: Multiple streams to One</a><ul>
+<li><a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-multi-funcref">Function reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plugin-share">Plugin: Share</a><ul>
+<li><a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-share-funcref">Function reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plugin-hooks">Plugin: hooks</a><ul>
+<li><a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-hooks-funcref">Function reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plugin-dmix">Plugin: dmix</a><ul>
+<li><a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-dmix-funcref">Function reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plugin-dshare">Plugin: dshare</a><ul>
+<li><a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-dshare-funcref">Function reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plugin-dsnoop">Plugin: dsnoop</a><ul>
+<li><a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-dsnoop-funcref">Function reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plugin-ladspa-alsa">Plugin: LADSPA &lt;-&gt; ALSA</a><ul>
+<li><a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-ladspa-funcref">Function reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plugin-asym">Plugin: asym</a><ul>
+<li><a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-asym-funcref">Function reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plugin-iec958">Plugin: IEC958</a><ul>
+<li><a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-iec958-funcref">Function reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plugin-soft-volume">Plugin: Soft Volume</a><ul>
+<li><a class="reference internal" href="#doxid-pcm-plugins-1pcm-plugins-softvol-funcref">Function reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id24">Plugin: Null</a><ul>
+<li><a class="reference internal" href="#id26">Function reference</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="page_pcm.html"
+                          title="previous chapter">PCM (digital audio) interface</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="page_pcm_external_plugins.html"
+                          title="next chapter">PCM External Plugin SDK</a></p>
+  </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="page_pcm_external_plugins.html" title="PCM External Plugin SDK"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="page_pcm.html" title="PCM (digital audio) interface"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ALSA Library Documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">PCM (digital audio) plugins</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 1998-2017, ALSA Library Maintainers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+  </body>
+</html>

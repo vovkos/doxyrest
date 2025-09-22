@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Chapter 4: Passing a remote command &#8212; LibSSH Documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css?v=3785b6ce" />
+    <script src="_static/documentation_options.js?v=a674670e"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Chapter 5: The SFTP subsystem" href="page_libssh_tutor_sftp.html" />
+    <link rel="prev" title="Chapter 3: Opening a remote shell" href="page_libssh_tutor_shell.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="page_libssh_tutor_sftp.html" title="Chapter 5: The SFTP subsystem"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="page_libssh_tutor_shell.html" title="Chapter 3: Opening a remote shell"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LibSSH Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="page_libssh_tutorial.html" accesskey="U">The Tutorial</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Chapter 4: Passing a remote command</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="chapter-4-passing-a-remote-command">
+<span id="doxid-libssh-tutor-command"></span><span id="index-0"></span><h1>Chapter 4: Passing a remote command</h1>
+<section id="passing-a-remote-command">
+<span id="doxid-libssh-tutor-command-1remote-command"></span><h2>Passing a remote command</h2>
+<p>Previous chapter has shown how to open a full shell session, with an attached terminal or not. If you only need to execute a command on the remote end, you don’t need all that complexity.</p>
+<p>The method described here is suited for executing only one remote command. If you need to issue several commands in a row, you should consider using a non-interactive remote shell, as explained in previous chapter.</p>
+<section id="executing-a-remote-command">
+<span id="doxid-libssh-tutor-command-1exec-remote"></span><h3>Executing a remote command</h3>
+<p>The first steps for executing a remote command are identical to those for opening remote shells. You first need a SSH channel, and then a SSH session that uses this channel:</p>
+<pre class="highlight literal-block"><span></span><span class="kt">int</span> <span class="nf">show_remote_files</span><span class="p">(</span><span class="n">ssh_session</span> <span class="n">session</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">ssh_channel</span> <span class="n">channel</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">rc</span><span class="p">;</span>
+
+  <span class="n">channel</span> <span class="o">=</span> <span class="n">ssh_channel_new</span><span class="p">(</span><span class="n">session</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">channel</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+
+  <span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_channel_open_session</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_OK</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">ssh_channel_free</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <span class="p">}</span></pre>
+<p>Once a session is open, you can start the remote command with <a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1ga567d509183ade0a77190f390e2b5747d"><span class="std std-ref">ssh_channel_request_exec()</span></a> :</p>
+<pre class="highlight literal-block"><span></span><span class="n">rc</span> <span class="o">=</span> <span class="n">ssh_channel_request_exec</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="s">&quot;ls -l&quot;</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">!=</span> <span class="n">SSH_OK</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">ssh_channel_close</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+  <span class="n">ssh_channel_free</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+<span class="p">}</span></pre>
+<p>If the remote command displays data, you get them with <a class="reference internal" href="group_libssh_channel.html#doxid-group-libssh-channel-1gac92381c4c5d4a7eab35f6e84686f033d"><span class="std std-ref">ssh_channel_read()</span></a>. This function returns the number of bytes read. If there is no more data to read on the channel, this function returns 0, and you can go to next step. If an error has been encountered, it returns a negative value:</p>
+<pre class="highlight literal-block"><span></span><span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">nbytes</span><span class="p">;</span>
+
+<span class="n">nbytes</span> <span class="o">=</span> <span class="n">ssh_channel_read</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">),</span> <span class="mi">0</span><span class="p">);</span>
+<span class="k">while</span> <span class="p">(</span><span class="n">nbytes</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">fwrite</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nbytes</span><span class="p">,</span> <span class="n">stdout</span><span class="p">)</span> <span class="o">!=</span> <span class="n">nbytes</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">ssh_channel_close</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+    <span class="n">ssh_channel_free</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="n">nbytes</span> <span class="o">=</span> <span class="n">ssh_channel_read</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">),</span> <span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">nbytes</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">ssh_channel_close</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+  <span class="n">ssh_channel_free</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+  <span class="k">return</span> <span class="n">SSH_ERROR</span><span class="p">;</span>
+<span class="p">}</span></pre>
+<p>Once you read the result of the remote command, you send an end-of-file to the channel, close it, and free the memory that it used:</p>
+<pre class="highlight literal-block"><span></span>  <span class="n">ssh_channel_send_eof</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+  <span class="n">ssh_channel_close</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+  <span class="n">ssh_channel_free</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+
+  <span class="k">return</span> <span class="n">SSH_OK</span><span class="p">;</span>
+<span class="p">}</span></pre>
+<p class="rubric">See also:</p>
+<p>shell</p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Chapter 4: Passing a remote command</a><ul>
+<li><a class="reference internal" href="#passing-a-remote-command">Passing a remote command</a><ul>
+<li><a class="reference internal" href="#executing-a-remote-command">Executing a remote command</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="page_libssh_tutor_shell.html"
+                          title="previous chapter">Chapter 3: Opening a remote shell</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="page_libssh_tutor_sftp.html"
+                          title="next chapter">Chapter 5: The SFTP subsystem</a></p>
+  </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="page_libssh_tutor_sftp.html" title="Chapter 5: The SFTP subsystem"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="page_libssh_tutor_shell.html" title="Chapter 3: Opening a remote shell"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LibSSH Documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="page_libssh_tutorial.html" >The Tutorial</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Chapter 4: Passing a remote command</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2003-2017, LibSSH Maintainers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+  </body>
+</html>

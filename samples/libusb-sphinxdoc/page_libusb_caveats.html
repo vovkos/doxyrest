@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Caveats &#8212; LibUSB Documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css?v=3785b6ce" />
+    <script src="_static/documentation_options.js?v=3e568265"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contexts" href="page_libusb_contexts.html" />
+    <link rel="prev" title="Application Programming Interface" href="page_libusb_api.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="page_libusb_contexts.html" title="Contexts"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="page_libusb_api.html" title="Application Programming Interface"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LibUSB Documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Caveats</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="caveats">
+<span id="doxid-libusb-caveats"></span><span id="index-0"></span><h1>Caveats</h1>
+<section id="device-resets">
+<span id="doxid-libusb-caveats-1devresets"></span><h2>Device resets</h2>
+<p>The <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1gafee9c4638f1713ca5faa867948878111"><span class="std std-ref">libusb_reset_device()</span></a> function allows you to reset a device. If your program has to call such a function, it should obviously be aware that the reset will cause device state to change (e.g. register values may be reset).</p>
+<p>The problem is that any other program could reset the device your program is working with, at any time. libusb does not offer a mechanism to inform you when this has happened, so if someone else resets your device it will not be clear to your own program why the device state has changed.</p>
+<p>Ultimately, this is a limitation of writing drivers in userspace. Separation from the USB stack in the underlying kernel makes it difficult for the operating system to deliver such notifications to your program. The Linux kernel USB stack allows such reset notifications to be delivered to in-kernel USB drivers, but it is not clear how such notifications could be delivered to second-class drivers that live in userspace.</p>
+</section>
+<section id="blocking-only-functionality">
+<span id="doxid-libusb-caveats-1blockonly"></span><h2>Blocking-only functionality</h2>
+<p>The functionality listed below is only available through synchronous, blocking functions. There are no asynchronous/non-blocking alternatives, and no clear ways of implementing these.</p>
+<ul class="simple">
+<li><p>Configuration activation (<a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga785ddea63a2b9bcb879a614ca4867bed"><span class="std std-ref">libusb_set_configuration()</span></a>)</p></li>
+<li><p>Interface/alternate setting activation (<a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga4858ad4f0f58fd1dc0afaead1fe6479a"><span class="std std-ref">libusb_set_interface_alt_setting()</span></a>)</p></li>
+<li><p>Releasing of interfaces (<a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga49b5cb0d894f6807cd1693ef29aecbfa"><span class="std std-ref">libusb_release_interface()</span></a>)</p></li>
+<li><p>Clearing of halt/stall condition (<a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1gab794bbc0b055d140f186f5a4d39c0891"><span class="std std-ref">libusb_clear_halt()</span></a>)</p></li>
+<li><p>Device resets (<a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1gafee9c4638f1713ca5faa867948878111"><span class="std std-ref">libusb_reset_device()</span></a>)</p></li>
+</ul>
+</section>
+<section id="configuration-selection-and-handling">
+<span id="doxid-libusb-caveats-1configsel"></span><h2>Configuration selection and handling</h2>
+<p>When libusb presents a device handle to an application, there is a chance that the corresponding device may be in unconfigured state. For devices with multiple configurations, there is also a chance that the configuration currently selected is not the one that the application wants to use.</p>
+<p>The obvious solution is to add a call to <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga785ddea63a2b9bcb879a614ca4867bed"><span class="std std-ref">libusb_set_configuration()</span></a> early on during your device initialization routines, but there are caveats to be aware of:</p>
+<ol class="arabic simple">
+<li><p>If the device is already in the desired configuration, calling <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga785ddea63a2b9bcb879a614ca4867bed"><span class="std std-ref">libusb_set_configuration()</span></a> using the same configuration value will cause a lightweight device reset. This may not be desirable behaviour.</p></li>
+<li><p>In the case where the desired configuration is already active, libusb may not even be able to perform a lightweight device reset. For example, take my USB keyboard with fingerprint reader: I’m interested in driving the fingerprint reader interface through libusb, but the kernel’s USB-HID driver will almost always have claimed the keyboard interface. Because the kernel has claimed an interface, it is not even possible to perform the lightweight device reset, so <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga785ddea63a2b9bcb879a614ca4867bed"><span class="std std-ref">libusb_set_configuration()</span></a> will fail. (Luckily the device in question only has a single configuration.)</p></li>
+<li><p>libusb will be unable to set a configuration if other programs or drivers have claimed interfaces. In particular, this means that kernel drivers must be detached from all the interfaces before <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga785ddea63a2b9bcb879a614ca4867bed"><span class="std std-ref">libusb_set_configuration()</span></a> may succeed.</p></li>
+</ol>
+<p>One solution to some of the above problems is to consider the currently active configuration. If the configuration we want is already active, then we don’t have to select any configuration:</p>
+<pre class="highlight literal-block"><span></span><span class="n">cfg</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="n">libusb_get_configuration</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">cfg</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">cfg</span> <span class="o">!=</span> <span class="n">desired</span><span class="p">)</span>
+    <span class="n">libusb_set_configuration</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">desired</span><span class="p">);</span></pre>
+<p>This is probably suitable for most scenarios, but is inherently racy: another application or driver may change the selected configuration <em>after</em> the <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1gae921014b888b105471a31d54c77c1c4d"><span class="std std-ref">libusb_get_configuration()</span></a> call.</p>
+<p>Even in cases where <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga785ddea63a2b9bcb879a614ca4867bed"><span class="std std-ref">libusb_set_configuration()</span></a> succeeds, consider that other applications or drivers may change configuration after your application calls <a class="reference internal" href="group_libusb_dev.html#doxid-group-libusb-dev-1ga785ddea63a2b9bcb879a614ca4867bed"><span class="std std-ref">libusb_set_configuration()</span></a>.</p>
+<p>One possible way to lock your device into a specific configuration is as follows:</p>
+<ol class="arabic simple">
+<li><p>Set the desired configuration (or use the logic above to realise that it is already in the desired configuration)</p></li>
+<li><p>Claim the interface that you wish to use</p></li>
+<li><p>Check that the currently active configuration is the one that you want to use.</p></li>
+</ol>
+<p>The above method works because once an interface is claimed, no application or driver is able to select another configuration.</p>
+</section>
+<section id="early-transfer-completion">
+<span id="doxid-libusb-caveats-1earlycomp"></span><h2>Early transfer completion</h2>
+<p>NOTE: This section is currently Linux-centric. I am not sure if any of these considerations apply to Darwin or other platforms.</p>
+<p>When a transfer completes early (i.e. when less data is received/sent in any one packet than the transfer buffer allows for) then libusb is designed to terminate the transfer immediately, not transferring or receiving any more data unless other transfers have been queued by the user.</p>
+<p>On legacy platforms, libusb is unable to do this in all situations. After the incomplete packet occurs, “surplus” data may be transferred. For recent versions of libusb, this information is kept (the data length of the transfer is updated) and, for device-to-host transfers, any surplus data was added to the buffer. Still, this is not a nice solution because it loses the information about the end of the short packet, and the user probably wanted that surplus data to arrive in the next logical transfer.</p>
+</section>
+<section id="zero-length-packets">
+<span id="doxid-libusb-caveats-1zlp"></span><h2>Zero length packets</h2>
+<ul class="simple">
+<li><p>libusb is able to send a packet of zero length to an endpoint simply by submitting a transfer of zero length.</p></li>
+<li><p>The <a class="reference internal" href="enum_libusb_transfer_flags.html#doxid-group-libusb-asyncio-1gga1fb47dd0f7c209b60a3609ff0c03d56da26b66334b6ec0537c49841ca623d901f"><span class="std std-ref">LIBUSB_TRANSFER_ADD_ZERO_PACKET</span></a> flag is currently only supported on Linux.</p></li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Caveats</a><ul>
+<li><a class="reference internal" href="#device-resets">Device resets</a></li>
+<li><a class="reference internal" href="#blocking-only-functionality">Blocking-only functionality</a></li>
+<li><a class="reference internal" href="#configuration-selection-and-handling">Configuration selection and handling</a></li>
+<li><a class="reference internal" href="#early-transfer-completion">Early transfer completion</a></li>
+<li><a class="reference internal" href="#zero-length-packets">Zero length packets</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="page_libusb_api.html"
+                          title="previous chapter">Application Programming Interface</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="page_libusb_contexts.html"
+                          title="next chapter">Contexts</a></p>
+  </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="page_libusb_contexts.html" title="Contexts"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="page_libusb_api.html" title="Application Programming Interface"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LibUSB Documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Caveats</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2007-2017, LibUSB Maintainers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+  </body>
+</html>

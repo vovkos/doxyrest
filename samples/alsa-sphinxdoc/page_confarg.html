@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Runtime arguments in configuration files &#8212; ALSA Library Documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css?v=3785b6ce" />
+    <script src="_static/documentation_options.js?v=cb7bf70b"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Runtime functions in configuration files" href="page_conffunc.html" />
+    <link rel="prev" title="RawMidi interface" href="page_rawmidi.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="page_conffunc.html" title="Runtime functions in configuration files"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="page_rawmidi.html" title="RawMidi interface"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ALSA Library Documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Runtime arguments in configuration files</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="runtime-arguments-in-configuration-files">
+<span id="doxid-confarg"></span><span id="index-0"></span><h1>Runtime arguments in configuration files</h1>
+<p>The ALSA library can accept runtime arguments for some configuration blocks. This extension is built on top of the basic configuration file syntax.</p>
+<section id="defining-arguments">
+<span id="doxid-confarg-1confarg-define"></span><h2>Defining arguments</h2>
+<p>Arguments are defined using the id (key) <code class="docutils literal notranslate"><span class="pre">&#64;args</span></code> and array values containing the string names of the arguments:</p>
+<pre class="highlight literal-block"><span></span><span class="err">@</span><span class="n">args</span> <span class="p">[</span> <span class="n">CARD</span> <span class="p">]</span>  <span class="err">#</span> <span class="n">or</span>
+<span class="err">@</span><span class="n">args</span><span class="mf">.0</span> <span class="n">CARD</span></pre>
+</section>
+<section id="defining-argument-types-and-default-values">
+<span id="doxid-confarg-1confarg-type"></span><h2>Defining argument types and default values</h2>
+<p>An argument’s type is specified with the id (key) <code class="docutils literal notranslate"><span class="pre">&#64;args</span></code> and the argument name. The type and the default value are specified in the compound block:</p>
+<pre class="highlight literal-block"><span></span><span class="err">@</span><span class="n">args</span><span class="p">.</span><span class="n">CARD</span> <span class="p">{</span>
+  <span class="n">type</span> <span class="n">string</span>
+  <span class="k">default</span> <span class="s">&quot;abcd&quot;</span>
+<span class="p">}</span></pre>
+</section>
+<section id="referring-to-arguments">
+<span id="doxid-confarg-1confarg-refer"></span><h2>Referring to arguments</h2>
+<p>Arguments are referred to with a dollar-sign ($) and the name of the argument:</p>
+<pre class="highlight literal-block"><span></span><span class="n">card</span> <span class="err">$</span><span class="n">CARD</span></pre>
+</section>
+<section id="usage">
+<span id="doxid-confarg-1confarg-usage"></span><h2>Usage</h2>
+<p>To use a block with arguments, write the argument values after the key, separated with a colon (:). For example, all these names for PCM interfaces give the same result:</p>
+<pre class="highlight literal-block"><span></span><span class="nl">hw</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span>
+<span class="nl">hw</span><span class="p">:</span><span class="n">CARD</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">DEV</span><span class="o">=</span><span class="mi">1</span>
+<span class="nl">hw</span><span class="p">:{</span><span class="n">CARD</span> <span class="mi">0</span> <span class="n">DEV</span> <span class="mi">1</span><span class="p">}</span>
+<span class="nl">plug</span><span class="p">:</span><span class="s">&quot;hw:0,1&quot;</span>
+<span class="nl">plug</span><span class="p">:{</span><span class="n">SLAVE</span><span class="o">=</span><span class="s">&quot;hw:{CARD 0 DEV 1}&quot;</span><span class="p">}</span></pre>
+<p>As you see, arguments can be specified in their proper order or by name. Note that arguments enclosed in braces are parsed in the same way as in configuration files, but using the override method by default.</p>
+</section>
+<section id="example">
+<span id="doxid-confarg-1confarg-example"></span><h2>Example</h2>
+<pre class="highlight literal-block"><span></span><span class="n">pcm</span><span class="p">.</span><span class="n">demo</span> <span class="p">{</span>
+    <span class="err">@</span><span class="n">args</span> <span class="p">[</span> <span class="n">CARD</span> <span class="n">DEVICE</span> <span class="p">]</span>
+    <span class="err">@</span><span class="n">args</span><span class="p">.</span><span class="n">CARD</span> <span class="p">{</span>
+        <span class="n">type</span> <span class="n">string</span>
+        <span class="k">default</span> <span class="s">&quot;supersonic&quot;</span>
+    <span class="p">}</span>
+    <span class="err">@</span><span class="n">args</span><span class="p">.</span><span class="n">DEVICE</span> <span class="p">{</span>
+        <span class="n">type</span> <span class="n">integer</span>
+        <span class="k">default</span> <span class="mi">0</span>
+    <span class="p">}</span>
+    <span class="n">type</span> <span class="n">hw</span>
+    <span class="n">card</span> <span class="err">$</span><span class="n">CARD</span>
+    <span class="n">device</span> <span class="err">$</span><span class="n">DEVICE</span>
+<span class="p">}</span></pre>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Runtime arguments in configuration files</a><ul>
+<li><a class="reference internal" href="#defining-arguments">Defining arguments</a></li>
+<li><a class="reference internal" href="#defining-argument-types-and-default-values">Defining argument types and default values</a></li>
+<li><a class="reference internal" href="#referring-to-arguments">Referring to arguments</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="page_rawmidi.html"
+                          title="previous chapter">RawMidi interface</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="page_conffunc.html"
+                          title="next chapter">Runtime functions in configuration files</a></p>
+  </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="page_conffunc.html" title="Runtime functions in configuration files"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="page_rawmidi.html" title="RawMidi interface"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ALSA Library Documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Runtime arguments in configuration files</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 1998-2017, ALSA Library Maintainers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+  </body>
+</html>

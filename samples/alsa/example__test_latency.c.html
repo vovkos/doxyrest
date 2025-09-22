@@ -1,0 +1,858 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>/test/latency.c &mdash; ALSA Library Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinx_rtd_theme.css?v=b6ca47bd" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=cb7bf70b"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="/test/pcm.c" href="example__test_pcm.c.html" />
+    <link rel="prev" title="Timer interface" href="page_timer.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            ALSA Library Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="group_Config.html">Configuration Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Digital_Audio_Interface.html">Constants for Digital Audio Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_MIDI_Interface.html">Constants for MIDI v1.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Control.html">Control Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Error.html">Error handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_CtlPlugin_SDK.html">External Control Plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Plugin_SDK.html">External PCM plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Global.html">Global defines and functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_HwDep.html">Hardware Dependant Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Input.html">Input Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Sequencer.html">MIDI Sequencer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Mixer.html">Mixer Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Output.html">Output Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_PCM.html">PCM Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_RawMidi.html">RawMidi Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_Timer.html">Timer Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_topology.html">Topology Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_ucm.html">Use Case Interface</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="page_topology.html">ALSA Topology Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_Usecase.html">ALSA Use Case Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_bug.html">Bug List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_conf.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_control.html">Control interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_deprecated.html">Deprecated List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_ctl_external_plugins.html">External Control Plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_hcontrol.html">High level control interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_confhooks.html">Hooks in configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_mixer.html">Mixer interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_pcm.html">PCM (digital audio) interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_pcm_plugins.html">PCM (digital audio) plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_pcm_external_plugins.html">PCM External Plugin SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_rawmidi.html">RawMidi interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_confarg.html">Runtime arguments in configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_conffunc.html">Runtime functions in configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_seq.html">Sequencer interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_timer.html">Timer interface</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">/test/latency.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_pcm.c.html">/test/pcm.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_pcm_min.c.html">/test/pcm_min.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_rawmidi.c.html">/test/rawmidi.c</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example__test_timer.c.html">/test/timer.c</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ALSA Library Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">/test/latency.c</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="test-latency-c">
+<span id="doxid-2test-2latency-8c-example"></span><span id="index-0"></span><h1>/test/latency.c</h1>
+<pre class="highlight literal-block"><span></span><span class="cm">/*</span>
+<span class="cm"> *  Latency test program</span>
+<span class="cm"> *</span>
+<span class="cm"> *     Author: Jaroslav Kysela &lt;perex@perex.cz&gt;</span>
+<span class="cm"> *</span>
+<span class="cm"> *     Author of bandpass filter sweep effect:</span>
+<span class="cm"> *         Maarten de Boer &lt;mdeboer@iua.upf.es&gt;</span>
+<span class="cm"> *</span>
+<span class="cm"> *  This small demo program can be used for measuring latency between</span>
+<span class="cm"> *  capture and playback. This latency is measured from driver (diff when</span>
+<span class="cm"> *  playback and capture was started). Scheduler is set to SCHED_RR.</span>
+<span class="cm"> *</span>
+<span class="cm"> *</span>
+<span class="cm"> *   This program is free software; you can redistribute it and/or modify</span>
+<span class="cm"> *   it under the terms of the GNU General Public License as published by</span>
+<span class="cm"> *   the Free Software Foundation; either version 2 of the License, or</span>
+<span class="cm"> *   (at your option) any later version.</span>
+<span class="cm"> *</span>
+<span class="cm"> *   This program is distributed in the hope that it will be useful,</span>
+<span class="cm"> *   but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="cm"> *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="cm"> *   GNU General Public License for more details.</span>
+<span class="cm"> *</span>
+<span class="cm"> *   You should have received a copy of the GNU General Public License</span>
+<span class="cm"> *   along with this program; if not, write to the Free Software</span>
+<span class="cm"> *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA</span>
+<span class="cm"> *</span>
+<span class="cm"> */</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span>
+<span class="cp">#include</span> <span class="cpf">&lt;sched.h&gt;</span>
+<span class="cp">#include</span> <span class="cpf">&lt;errno.h&gt;</span>
+<span class="cp">#include</span> <span class="cpf">&lt;getopt.h&gt;</span>
+<span class="cp">#include</span> <span class="cpf">&quot;../include/asoundlib.h&quot;</span>
+<span class="cp">#include</span> <span class="cpf">&lt;sys/time.h&gt;</span>
+<span class="cp">#include</span> <span class="cpf">&lt;math.h&gt;</span>
+
+<span class="kt">char</span> <span class="o">*</span><span class="n">pdevice</span> <span class="o">=</span> <span class="s">&quot;hw:0,0&quot;</span><span class="p">;</span>
+<span class="kt">char</span> <span class="o">*</span><span class="n">cdevice</span> <span class="o">=</span> <span class="s">&quot;hw:0,0&quot;</span><span class="p">;</span>
+<a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1gaa14b7f26877a812acbb39811364177f8"><span class="std std-ref">snd_pcm_format_t</span></a><span></span> <span class="n">format</span> <span class="o">=</span> <a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1ggaa14b7f26877a812acbb39811364177f8a8b66a29293c62df9d1678c609fab76c0"><span class="std std-ref">SND_PCM_FORMAT_S16_LE</span></a><span></span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">rate</span> <span class="o">=</span> <span class="mi">22050</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">channels</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">buffer_size</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>        <span class="cm">/* auto */</span>
+<span class="kt">int</span> <span class="n">period_size</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>        <span class="cm">/* auto */</span>
+<span class="kt">int</span> <span class="n">latency_min</span> <span class="o">=</span> <span class="mi">32</span><span class="p">;</span>       <span class="cm">/* in frames / 2 */</span>
+<span class="kt">int</span> <span class="n">latency_max</span> <span class="o">=</span> <span class="mi">2048</span><span class="p">;</span>     <span class="cm">/* in frames / 2 */</span>
+<span class="kt">int</span> <span class="n">loop_sec</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;</span>      <span class="cm">/* seconds */</span>
+<span class="kt">int</span> <span class="n">block</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>          <span class="cm">/* block mode */</span>
+<span class="kt">int</span> <span class="n">use_poll</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">resample</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">loop_limit</span><span class="p">;</span>
+
+<a class="reference internal" href="group_Output.html#doxid-group-output-1ga49729cc6454539495c1f5b6e95cd474a"><span class="std std-ref">snd_output_t</span></a><span></span> <span class="o">*</span><span class="n">output</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="n">setparams_stream</span><span class="p">(</span><a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga919e634deecd855b6e2e15174e70d3ea"><span class="std std-ref">snd_pcm_t</span></a><span></span> <span class="o">*</span><span class="n">handle</span><span class="p">,</span>
+             <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga65c737127994f0a980edad744e36dc40"><span class="std std-ref">snd_pcm_hw_params_t</span></a><span></span> <span class="o">*</span><span class="n">params</span><span class="p">,</span>
+             <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">id</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">err</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">rrate</span><span class="p">;</span>
+
+    <span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_PCM_HW_Params.html#doxid-group-p-c-m-h-w-params-1ga6e2dd8efbb7a4084bd05e6cc458d84f7"><span class="std std-ref">snd_pcm_hw_params_any</span></a><span></span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">params</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">err</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Broken configuration for %s PCM: no configurations available: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">),</span> <span class="n">id</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">err</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_PCM_HW_Params.html#doxid-group-p-c-m-h-w-params-1ga82eecc0e27a94ce0caa195cc3765536c"><span class="std std-ref">snd_pcm_hw_params_set_rate_resample</span></a><span></span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">resample</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">err</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Resample setup failed for %s (val %i): %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <span class="n">resample</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="k">return</span> <span class="n">err</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_PCM_HW_Params.html#doxid-group-p-c-m-h-w-params-1ga4c8f1c632931923531ca68ee048a8de8"><span class="std std-ref">snd_pcm_hw_params_set_access</span></a><span></span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <a class="reference internal" href="enum_snd_pcm_access_t.html#doxid-group-p-c-m-1gga661221ba5e8f1d6eaf4ab8e2da57cc1aa72a970ed6e676ab0fd9f3c3d36737e0a"><span class="std std-ref">SND_PCM_ACCESS_RW_INTERLEAVED</span></a><span></span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">err</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Access type not available for %s: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="k">return</span> <span class="n">err</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_PCM_HW_Params.html#doxid-group-p-c-m-h-w-params-1ga6014e0e1ec7934f8c745290e83e59199"><span class="std std-ref">snd_pcm_hw_params_set_format</span></a><span></span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">format</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">err</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Sample format not available for %s: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="k">return</span> <span class="n">err</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_PCM_HW_Params.html#doxid-group-p-c-m-h-w-params-1ga3a5b2a05c5d9869cc743dac71c0d270a"><span class="std std-ref">snd_pcm_hw_params_set_channels</span></a><span></span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">channels</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">err</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Channels count (%i) not available for %s: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="k">return</span> <span class="n">err</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">rrate</span> <span class="o">=</span> <span class="n">rate</span><span class="p">;</span>
+    <span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_PCM_HW_Params.html#doxid-group-p-c-m-h-w-params-1ga39124280d06ce63092a77e3f25ddd6ee"><span class="std std-ref">snd_pcm_hw_params_set_rate_near</span></a><span></span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">rrate</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">err</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Rate %iHz not available for %s: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">rate</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="k">return</span> <span class="n">err</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="n">rrate</span> <span class="o">!=</span> <span class="n">rate</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Rate doesn&#39;t match (requested %iHz, get %iHz)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">rate</span><span class="p">,</span> <span class="n">err</span><span class="p">);</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">EINVAL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">setparams_bufsize</span><span class="p">(</span><a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga919e634deecd855b6e2e15174e70d3ea"><span class="std std-ref">snd_pcm_t</span></a><span></span> <span class="o">*</span><span class="n">handle</span><span class="p">,</span>
+              <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga65c737127994f0a980edad744e36dc40"><span class="std std-ref">snd_pcm_hw_params_t</span></a><span></span> <span class="o">*</span><span class="n">params</span><span class="p">,</span>
+              <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga65c737127994f0a980edad744e36dc40"><span class="std std-ref">snd_pcm_hw_params_t</span></a><span></span> <span class="o">*</span><span class="n">tparams</span><span class="p">,</span>
+              <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gab01fcfe9b97382a8d3f2027c664b8b8a"><span class="std std-ref">snd_pcm_uframes_t</span></a><span></span> <span class="n">bufsize</span><span class="p">,</span>
+              <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">id</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">err</span><span class="p">;</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gab01fcfe9b97382a8d3f2027c664b8b8a"><span class="std std-ref">snd_pcm_uframes_t</span></a><span></span> <span class="n">periodsize</span><span class="p">;</span>
+
+    <a class="reference internal" href="group_PCM_HW_Params.html#doxid-group-p-c-m-h-w-params-1ga9bcedf4bb4b21527a584846a5986a1f4"><span class="std std-ref">snd_pcm_hw_params_copy</span></a><span></span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">tparams</span><span class="p">);</span>
+    <span class="n">periodsize</span> <span class="o">=</span> <span class="n">bufsize</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_PCM_HW_Params.html#doxid-group-p-c-m-h-w-params-1ga2c00cb635d374030595dbc27b7a983a7"><span class="std std-ref">snd_pcm_hw_params_set_buffer_size_near</span></a><span></span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">periodsize</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">err</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Unable to set buffer size %li for %s: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">bufsize</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="k">return</span> <span class="n">err</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">period_size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">periodsize</span> <span class="o">=</span> <span class="n">period_size</span><span class="p">;</span>
+    <span class="k">else</span>
+        <span class="n">periodsize</span> <span class="o">/=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_PCM_HW_Params.html#doxid-group-p-c-m-h-w-params-1ga9162045265f283c532634506456cab09"><span class="std std-ref">snd_pcm_hw_params_set_period_size_near</span></a><span></span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">periodsize</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">err</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Unable to set period size %li for %s: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">periodsize</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="k">return</span> <span class="n">err</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">setparams_set</span><span class="p">(</span><a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga919e634deecd855b6e2e15174e70d3ea"><span class="std std-ref">snd_pcm_t</span></a><span></span> <span class="o">*</span><span class="n">handle</span><span class="p">,</span>
+          <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga65c737127994f0a980edad744e36dc40"><span class="std std-ref">snd_pcm_hw_params_t</span></a><span></span> <span class="o">*</span><span class="n">params</span><span class="p">,</span>
+          <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga7e082d9ea701709270b0674a0be23b09"><span class="std std-ref">snd_pcm_sw_params_t</span></a><span></span> <span class="o">*</span><span class="n">swparams</span><span class="p">,</span>
+          <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">id</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">err</span><span class="p">;</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gab01fcfe9b97382a8d3f2027c664b8b8a"><span class="std std-ref">snd_pcm_uframes_t</span></a><span></span> <span class="n">val</span><span class="p">;</span>
+
+    <span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga1ca0dc120a484965e26cabf966502330"><span class="std std-ref">snd_pcm_hw_params</span></a><span></span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">params</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">err</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Unable to set hw params for %s: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="k">return</span> <span class="n">err</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga61c5495ffb44c75aaa595e85512d28de"><span class="std std-ref">snd_pcm_sw_params_current</span></a><span></span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">swparams</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">err</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Unable to determine current swparams for %s: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="k">return</span> <span class="n">err</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_PCM_SW_Params.html#doxid-group-p-c-m-s-w-params-1ga1d338f1f7e33b7a6d0f9a8f61f87f057"><span class="std std-ref">snd_pcm_sw_params_set_start_threshold</span></a><span></span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">swparams</span><span class="p">,</span> <span class="mh">0x7fffffff</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">err</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Unable to set start threshold mode for %s: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="k">return</span> <span class="n">err</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">block</span><span class="p">)</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+    <span class="k">else</span>
+        <a class="reference internal" href="group_PCM_HW_Params.html#doxid-group-p-c-m-h-w-params-1gaba48ea189171536f9793e0d99e6db5e0"><span class="std std-ref">snd_pcm_hw_params_get_period_size</span></a><span></span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">val</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_PCM_SW_Params.html#doxid-group-p-c-m-s-w-params-1ga79b12cbbd309750156261e7f5a39167b"><span class="std std-ref">snd_pcm_sw_params_set_avail_min</span></a><span></span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">swparams</span><span class="p">,</span> <span class="n">val</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">err</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Unable to set avail min for %s: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="k">return</span> <span class="n">err</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga891ccaeea2c685a533b61b5fa0493974"><span class="std std-ref">snd_pcm_sw_params</span></a><span></span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">swparams</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">err</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Unable to set sw params for %s: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="k">return</span> <span class="n">err</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">setparams</span><span class="p">(</span><a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga919e634deecd855b6e2e15174e70d3ea"><span class="std std-ref">snd_pcm_t</span></a><span></span> <span class="o">*</span><span class="n">phandle</span><span class="p">,</span> <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga919e634deecd855b6e2e15174e70d3ea"><span class="std std-ref">snd_pcm_t</span></a><span></span> <span class="o">*</span><span class="n">chandle</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span><span class="n">bufsize</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">err</span><span class="p">,</span> <span class="n">last_bufsize</span> <span class="o">=</span> <span class="o">*</span><span class="n">bufsize</span><span class="p">;</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga65c737127994f0a980edad744e36dc40"><span class="std std-ref">snd_pcm_hw_params_t</span></a><span></span> <span class="o">*</span><span class="n">pt_params</span><span class="p">,</span> <span class="o">*</span><span class="n">ct_params</span><span class="p">;</span> <span class="cm">/* templates with rate, format and channels */</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga65c737127994f0a980edad744e36dc40"><span class="std std-ref">snd_pcm_hw_params_t</span></a><span></span> <span class="o">*</span><span class="n">p_params</span><span class="p">,</span> <span class="o">*</span><span class="n">c_params</span><span class="p">;</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga7e082d9ea701709270b0674a0be23b09"><span class="std std-ref">snd_pcm_sw_params_t</span></a><span></span> <span class="o">*</span><span class="n">p_swparams</span><span class="p">,</span> <span class="o">*</span><span class="n">c_swparams</span><span class="p">;</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gab01fcfe9b97382a8d3f2027c664b8b8a"><span class="std std-ref">snd_pcm_uframes_t</span></a><span></span> <span class="n">p_size</span><span class="p">,</span> <span class="n">c_size</span><span class="p">,</span> <span class="n">p_psize</span><span class="p">,</span> <span class="n">c_psize</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">p_time</span><span class="p">,</span> <span class="n">c_time</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">val</span><span class="p">;</span>
+
+    <a class="reference internal" href="group_PCM_HW_Params.html#doxid-group-p-c-m-h-w-params-1ga06b83cb9a788f99b7b09b570b4355cee"><span class="std std-ref">snd_pcm_hw_params_alloca</span></a><span></span><span class="p">(</span><span class="o">&amp;</span><span class="n">p_params</span><span class="p">);</span>
+    <a class="reference internal" href="group_PCM_HW_Params.html#doxid-group-p-c-m-h-w-params-1ga06b83cb9a788f99b7b09b570b4355cee"><span class="std std-ref">snd_pcm_hw_params_alloca</span></a><span></span><span class="p">(</span><span class="o">&amp;</span><span class="n">c_params</span><span class="p">);</span>
+    <a class="reference internal" href="group_PCM_HW_Params.html#doxid-group-p-c-m-h-w-params-1ga06b83cb9a788f99b7b09b570b4355cee"><span class="std std-ref">snd_pcm_hw_params_alloca</span></a><span></span><span class="p">(</span><span class="o">&amp;</span><span class="n">pt_params</span><span class="p">);</span>
+    <a class="reference internal" href="group_PCM_HW_Params.html#doxid-group-p-c-m-h-w-params-1ga06b83cb9a788f99b7b09b570b4355cee"><span class="std std-ref">snd_pcm_hw_params_alloca</span></a><span></span><span class="p">(</span><span class="o">&amp;</span><span class="n">ct_params</span><span class="p">);</span>
+    <a class="reference internal" href="group_PCM_SW_Params.html#doxid-group-p-c-m-s-w-params-1ga8e564553bdc89948c918729e3cc7beb0"><span class="std std-ref">snd_pcm_sw_params_alloca</span></a><span></span><span class="p">(</span><span class="o">&amp;</span><span class="n">p_swparams</span><span class="p">);</span>
+    <a class="reference internal" href="group_PCM_SW_Params.html#doxid-group-p-c-m-s-w-params-1ga8e564553bdc89948c918729e3cc7beb0"><span class="std std-ref">snd_pcm_sw_params_alloca</span></a><span></span><span class="p">(</span><span class="o">&amp;</span><span class="n">c_swparams</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">err</span> <span class="o">=</span> <span class="n">setparams_stream</span><span class="p">(</span><span class="n">phandle</span><span class="p">,</span> <span class="n">pt_params</span><span class="p">,</span> <span class="s">&quot;playback&quot;</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Unable to set parameters for playback stream: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">err</span> <span class="o">=</span> <span class="n">setparams_stream</span><span class="p">(</span><span class="n">chandle</span><span class="p">,</span> <span class="n">ct_params</span><span class="p">,</span> <span class="s">&quot;capture&quot;</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Unable to set parameters for playback stream: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">buffer_size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="o">*</span><span class="n">bufsize</span> <span class="o">=</span> <span class="n">buffer_size</span><span class="p">;</span>
+        <span class="k">goto</span> <span class="n">__set_it</span><span class="p">;</span>
+    <span class="p">}</span>
+
+      <span class="nl">__again</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">buffer_size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">last_bufsize</span> <span class="o">==</span> <span class="o">*</span><span class="n">bufsize</span><span class="p">)</span>
+        <span class="o">*</span><span class="n">bufsize</span> <span class="o">+=</span> <span class="mi">4</span><span class="p">;</span>
+    <span class="n">last_bufsize</span> <span class="o">=</span> <span class="o">*</span><span class="n">bufsize</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">bufsize</span> <span class="o">&gt;</span> <span class="n">latency_max</span><span class="p">)</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+      <span class="nl">__set_it</span><span class="p">:</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">err</span> <span class="o">=</span> <span class="n">setparams_bufsize</span><span class="p">(</span><span class="n">phandle</span><span class="p">,</span> <span class="n">p_params</span><span class="p">,</span> <span class="n">pt_params</span><span class="p">,</span> <span class="o">*</span><span class="n">bufsize</span><span class="p">,</span> <span class="s">&quot;playback&quot;</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Unable to set sw parameters for playback stream: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">err</span> <span class="o">=</span> <span class="n">setparams_bufsize</span><span class="p">(</span><span class="n">chandle</span><span class="p">,</span> <span class="n">c_params</span><span class="p">,</span> <span class="n">ct_params</span><span class="p">,</span> <span class="o">*</span><span class="n">bufsize</span><span class="p">,</span> <span class="s">&quot;capture&quot;</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Unable to set sw parameters for playback stream: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <a class="reference internal" href="group_PCM_HW_Params.html#doxid-group-p-c-m-h-w-params-1gaba48ea189171536f9793e0d99e6db5e0"><span class="std std-ref">snd_pcm_hw_params_get_period_size</span></a><span></span><span class="p">(</span><span class="n">p_params</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">p_psize</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">p_psize</span> <span class="o">&gt;</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">)</span><span class="o">*</span><span class="n">bufsize</span><span class="p">)</span>
+        <span class="o">*</span><span class="n">bufsize</span> <span class="o">=</span> <span class="n">p_psize</span><span class="p">;</span>
+    <a class="reference internal" href="group_PCM_HW_Params.html#doxid-group-p-c-m-h-w-params-1gaba48ea189171536f9793e0d99e6db5e0"><span class="std std-ref">snd_pcm_hw_params_get_period_size</span></a><span></span><span class="p">(</span><span class="n">c_params</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">c_psize</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">c_psize</span> <span class="o">&gt;</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">)</span><span class="o">*</span><span class="n">bufsize</span><span class="p">)</span>
+        <span class="o">*</span><span class="n">bufsize</span> <span class="o">=</span> <span class="n">c_psize</span><span class="p">;</span>
+    <a class="reference internal" href="group_PCM_HW_Params.html#doxid-group-p-c-m-h-w-params-1ga71f5d43bf63dc7292b8b58f17acccf89"><span class="std std-ref">snd_pcm_hw_params_get_period_time</span></a><span></span><span class="p">(</span><span class="n">p_params</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">p_time</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <a class="reference internal" href="group_PCM_HW_Params.html#doxid-group-p-c-m-h-w-params-1ga71f5d43bf63dc7292b8b58f17acccf89"><span class="std std-ref">snd_pcm_hw_params_get_period_time</span></a><span></span><span class="p">(</span><span class="n">c_params</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">c_time</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">p_time</span> <span class="o">!=</span> <span class="n">c_time</span><span class="p">)</span>
+        <span class="k">goto</span> <span class="n">__again</span><span class="p">;</span>
+
+    <a class="reference internal" href="group_PCM_HW_Params.html#doxid-group-p-c-m-h-w-params-1gab6556fcaaf926360d2064044a6f6cfb4"><span class="std std-ref">snd_pcm_hw_params_get_buffer_size</span></a><span></span><span class="p">(</span><span class="n">p_params</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">p_size</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">p_psize</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">&lt;</span> <span class="n">p_size</span><span class="p">)</span> <span class="p">{</span>
+                <a class="reference internal" href="group_PCM_HW_Params.html#doxid-group-p-c-m-h-w-params-1ga17f3826360b0fe1f47c696388d25ac93"><span class="std std-ref">snd_pcm_hw_params_get_periods_min</span></a><span></span><span class="p">(</span><span class="n">p_params</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">val</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">val</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;playback device does not support 2 periods per buffer</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+            <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">goto</span> <span class="n">__again</span><span class="p">;</span>
+    <span class="p">}</span>
+    <a class="reference internal" href="group_PCM_HW_Params.html#doxid-group-p-c-m-h-w-params-1gab6556fcaaf926360d2064044a6f6cfb4"><span class="std std-ref">snd_pcm_hw_params_get_buffer_size</span></a><span></span><span class="p">(</span><span class="n">c_params</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">c_size</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">c_psize</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">&lt;</span> <span class="n">c_size</span><span class="p">)</span> <span class="p">{</span>
+                <a class="reference internal" href="group_PCM_HW_Params.html#doxid-group-p-c-m-h-w-params-1ga17f3826360b0fe1f47c696388d25ac93"><span class="std std-ref">snd_pcm_hw_params_get_periods_min</span></a><span></span><span class="p">(</span><span class="n">c_params</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">val</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">val</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;capture device does not support 2 periods per buffer</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+            <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">goto</span> <span class="n">__again</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">err</span> <span class="o">=</span> <span class="n">setparams_set</span><span class="p">(</span><span class="n">phandle</span><span class="p">,</span> <span class="n">p_params</span><span class="p">,</span> <span class="n">p_swparams</span><span class="p">,</span> <span class="s">&quot;playback&quot;</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Unable to set sw parameters for playback stream: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">err</span> <span class="o">=</span> <span class="n">setparams_set</span><span class="p">(</span><span class="n">chandle</span><span class="p">,</span> <span class="n">c_params</span><span class="p">,</span> <span class="n">c_swparams</span><span class="p">,</span> <span class="s">&quot;capture&quot;</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Unable to set sw parameters for playback stream: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">((</span><span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga788d05de75f2d536f8443cb0306754d0"><span class="std std-ref">snd_pcm_prepare</span></a><span></span><span class="p">(</span><span class="n">phandle</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Prepare error: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <a class="reference internal" href="group_PCM_Dump.html#doxid-group-p-c-m-dump-1ga9c5c879409c504e155e234905d031d8d"><span class="std std-ref">snd_pcm_dump</span></a><span></span><span class="p">(</span><span class="n">phandle</span><span class="p">,</span> <span class="n">output</span><span class="p">);</span>
+    <a class="reference internal" href="group_PCM_Dump.html#doxid-group-p-c-m-dump-1ga9c5c879409c504e155e234905d031d8d"><span class="std std-ref">snd_pcm_dump</span></a><span></span><span class="p">(</span><span class="n">chandle</span><span class="p">,</span> <span class="n">output</span><span class="p">);</span>
+    <span class="n">fflush</span><span class="p">(</span><span class="n">stdout</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">showstat</span><span class="p">(</span><a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga919e634deecd855b6e2e15174e70d3ea"><span class="std std-ref">snd_pcm_t</span></a><span></span> <span class="o">*</span><span class="n">handle</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">frames</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">err</span><span class="p">;</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga902b87281c46910b469d5f7aaafc1890"><span class="std std-ref">snd_pcm_status_t</span></a><span></span> <span class="o">*</span><span class="n">status</span><span class="p">;</span>
+
+    <a class="reference internal" href="group_PCM_Status.html#doxid-group-p-c-m-status-1ga046c09e5d14b684d9fefd70a12cdde1a"><span class="std std-ref">snd_pcm_status_alloca</span></a><span></span><span class="p">(</span><span class="o">&amp;</span><span class="n">status</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga32891eaac37741728a9b23027012c892"><span class="std std-ref">snd_pcm_status</span></a><span></span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">status</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Stream status error: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;*** frames = %li ***</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="kt">long</span><span class="p">)</span><span class="n">frames</span><span class="p">);</span>
+    <a class="reference internal" href="group_PCM_Dump.html#doxid-group-p-c-m-dump-1gaf2427b186609ad502666273342467a51"><span class="std std-ref">snd_pcm_status_dump</span></a><span></span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="n">output</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">showlatency</span><span class="p">(</span><span class="kt">size_t</span> <span class="n">latency</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">double</span> <span class="n">d</span><span class="p">;</span>
+    <span class="n">latency</span> <span class="o">*=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">latency</span> <span class="o">/</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">rate</span><span class="p">;</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Trying latency %li frames, %.3fus, %.6fms (%.4fHz)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="kt">long</span><span class="p">)</span><span class="n">latency</span><span class="p">,</span> <span class="n">d</span> <span class="o">*</span> <span class="mi">1000000</span><span class="p">,</span> <span class="n">d</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="mi">1</span> <span class="o">/</span> <span class="n">d</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">showinmax</span><span class="p">(</span><span class="kt">size_t</span> <span class="n">in_max</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">double</span> <span class="n">d</span><span class="p">;</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Maximum read: %li frames</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="kt">long</span><span class="p">)</span><span class="n">in_max</span><span class="p">);</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">in_max</span> <span class="o">/</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">rate</span><span class="p">;</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Maximum read latency: %.3fus, %.6fms (%.4fHz)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">d</span> <span class="o">*</span> <span class="mi">1000000</span><span class="p">,</span> <span class="n">d</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="mi">1</span> <span class="o">/</span> <span class="n">d</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">gettimestamp</span><span class="p">(</span><a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga919e634deecd855b6e2e15174e70d3ea"><span class="std std-ref">snd_pcm_t</span></a><span></span> <span class="o">*</span><span class="n">handle</span><span class="p">,</span> <a class="reference internal" href="group_Global.html#doxid-group-global-1gadd377862d568809fb0e32c9faddf99a4"><span class="std std-ref">snd_timestamp_t</span></a><span></span> <span class="o">*</span><span class="n">timestamp</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">err</span><span class="p">;</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga902b87281c46910b469d5f7aaafc1890"><span class="std std-ref">snd_pcm_status_t</span></a><span></span> <span class="o">*</span><span class="n">status</span><span class="p">;</span>
+
+    <a class="reference internal" href="group_PCM_Status.html#doxid-group-p-c-m-status-1ga046c09e5d14b684d9fefd70a12cdde1a"><span class="std std-ref">snd_pcm_status_alloca</span></a><span></span><span class="p">(</span><span class="o">&amp;</span><span class="n">status</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga32891eaac37741728a9b23027012c892"><span class="std std-ref">snd_pcm_status</span></a><span></span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">status</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Stream status error: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+    <a class="reference internal" href="group_PCM_Status.html#doxid-group-p-c-m-status-1ga5eaeff98814e96c2ffd5f04c95b22c8d"><span class="std std-ref">snd_pcm_status_get_trigger_tstamp</span></a><span></span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">setscheduler</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="n">sched_param</span> <span class="n">sched_param</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">sched_getparam</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sched_param</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Scheduler getparam failed...</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">sched_param</span><span class="p">.</span><span class="n">sched_priority</span> <span class="o">=</span> <span class="n">sched_get_priority_max</span><span class="p">(</span><span class="n">SCHED_RR</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">sched_setscheduler</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">SCHED_RR</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sched_param</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Scheduler set to Round Robin with priority %i...</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">sched_param</span><span class="p">.</span><span class="n">sched_priority</span><span class="p">);</span>
+        <span class="n">fflush</span><span class="p">(</span><span class="n">stdout</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;!!!Scheduler set to Round Robin with priority %i FAILED!!!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">sched_param</span><span class="p">.</span><span class="n">sched_priority</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">long</span> <span class="n">timediff</span><span class="p">(</span><a class="reference internal" href="group_Global.html#doxid-group-global-1gadd377862d568809fb0e32c9faddf99a4"><span class="std std-ref">snd_timestamp_t</span></a><span></span> <span class="n">t1</span><span class="p">,</span> <a class="reference internal" href="group_Global.html#doxid-group-global-1gadd377862d568809fb0e32c9faddf99a4"><span class="std std-ref">snd_timestamp_t</span></a><span></span> <span class="n">t2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">signed</span> <span class="kt">long</span> <span class="n">l</span><span class="p">;</span>
+
+    <span class="n">t1</span><span class="p">.</span><span class="n">tv_sec</span> <span class="o">-=</span> <span class="n">t2</span><span class="p">.</span><span class="n">tv_sec</span><span class="p">;</span>
+    <span class="n">l</span> <span class="o">=</span> <span class="p">(</span><span class="kt">signed</span> <span class="kt">long</span><span class="p">)</span> <span class="n">t1</span><span class="p">.</span><span class="n">tv_usec</span> <span class="o">-</span> <span class="p">(</span><span class="kt">signed</span> <span class="kt">long</span><span class="p">)</span> <span class="n">t2</span><span class="p">.</span><span class="n">tv_usec</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">t1</span><span class="p">.</span><span class="n">tv_sec</span><span class="o">--</span><span class="p">;</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="mi">1000000</span> <span class="o">+</span> <span class="n">l</span><span class="p">;</span>
+        <span class="n">l</span> <span class="o">%=</span> <span class="mi">1000000</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">t1</span><span class="p">.</span><span class="n">tv_sec</span> <span class="o">*</span> <span class="mi">1000000</span><span class="p">)</span> <span class="o">+</span> <span class="n">l</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">long</span> <span class="n">readbuf</span><span class="p">(</span><a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga919e634deecd855b6e2e15174e70d3ea"><span class="std std-ref">snd_pcm_t</span></a><span></span> <span class="o">*</span><span class="n">handle</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">buf</span><span class="p">,</span> <span class="kt">long</span> <a class="reference internal" href="global.html#doxid-seq-event-8h-1a77124bd5f7e31e6fffc19f335da0c23f"><span class="std std-ref">len</span></a><span></span><span class="p">,</span> <span class="kt">size_t</span> <span class="o">*</span><span class="n">frames</span><span class="p">,</span> <span class="kt">size_t</span> <span class="o">*</span><span class="n">max</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">long</span> <span class="n">r</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">block</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">do</span> <span class="p">{</span>
+            <span class="n">r</span> <span class="o">=</span> <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga4c2c7bd26cf221268d59dc3bbeb9c048"><span class="std std-ref">snd_pcm_readi</span></a><span></span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">r</span> <span class="o">==</span> <span class="o">-</span><span class="n">EAGAIN</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">*</span><span class="n">frames</span> <span class="o">+=</span> <span class="n">r</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">((</span><span class="kt">long</span><span class="p">)</span><span class="o">*</span><span class="n">max</span> <span class="o">&lt;</span> <span class="n">r</span><span class="p">)</span>
+                <span class="o">*</span><span class="n">max</span> <span class="o">=</span> <span class="n">r</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">// printf(&quot;read = %li\n&quot;, r);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">frame_bytes</span> <span class="o">=</span> <span class="p">(</span><a class="reference internal" href="group_PCM_Helpers.html#doxid-group-p-c-m-helpers-1ga8d4e07f2d68cc16f607857ed8a222a29"><span class="std std-ref">snd_pcm_format_width</span></a><span></span><span class="p">(</span><span class="n">format</span><span class="p">)</span> <span class="o">/</span> <span class="mi">8</span><span class="p">)</span> <span class="o">*</span> <span class="n">channels</span><span class="p">;</span>
+        <span class="k">do</span> <span class="p">{</span>
+            <span class="n">r</span> <span class="o">=</span> <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga4c2c7bd26cf221268d59dc3bbeb9c048"><span class="std std-ref">snd_pcm_readi</span></a><span></span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">buf</span> <span class="o">+=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">frame_bytes</span><span class="p">;</span>
+                <span class="n">len</span> <span class="o">-=</span> <span class="n">r</span><span class="p">;</span>
+                <span class="o">*</span><span class="n">frames</span> <span class="o">+=</span> <span class="n">r</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">((</span><span class="kt">long</span><span class="p">)</span><span class="o">*</span><span class="n">max</span> <span class="o">&lt;</span> <span class="n">r</span><span class="p">)</span>
+                    <span class="o">*</span><span class="n">max</span> <span class="o">=</span> <span class="n">r</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="c1">// printf(&quot;r = %li, len = %li\n&quot;, r, len);</span>
+        <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">r</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">len</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="c1">// showstat(handle, 0);</span>
+    <span class="k">return</span> <span class="n">r</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">long</span> <span class="n">writebuf</span><span class="p">(</span><a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga919e634deecd855b6e2e15174e70d3ea"><span class="std std-ref">snd_pcm_t</span></a><span></span> <span class="o">*</span><span class="n">handle</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">buf</span><span class="p">,</span> <span class="kt">long</span> <span class="n">len</span><span class="p">,</span> <span class="kt">size_t</span> <span class="o">*</span><span class="n">frames</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">long</span> <span class="n">r</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">len</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">r</span> <span class="o">=</span> <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gabc748a500743713eafa960c7d104ca6f"><span class="std std-ref">snd_pcm_writei</span></a><span></span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">==</span> <span class="o">-</span><span class="n">EAGAIN</span><span class="p">)</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="c1">// printf(&quot;write = %li\n&quot;, r);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">r</span><span class="p">;</span>
+        <span class="c1">// showstat(handle, 0);</span>
+        <span class="n">buf</span> <span class="o">+=</span> <span class="n">r</span> <span class="o">*</span> <span class="mi">4</span><span class="p">;</span>
+        <span class="n">len</span> <span class="o">-=</span> <span class="n">r</span><span class="p">;</span>
+        <span class="o">*</span><span class="n">frames</span> <span class="o">+=</span> <span class="n">r</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cp">#define FILTERSWEEP_LFO_CENTER 2000.</span>
+<span class="cp">#define FILTERSWEEP_LFO_DEPTH 1800.</span>
+<span class="cp">#define FILTERSWEEP_LFO_FREQ 0.2</span>
+<span class="cp">#define FILTER_BANDWIDTH 50</span>
+
+<span class="cm">/* filter the sweep variables */</span>
+<span class="kt">float</span> <span class="n">lfo</span><span class="p">,</span><span class="n">dlfo</span><span class="p">,</span><span class="n">fs</span><span class="p">,</span><span class="n">fc</span><span class="p">,</span><span class="n">BW</span><span class="p">,</span><span class="n">C</span><span class="p">,</span><span class="n">D</span><span class="p">,</span><span class="n">a0</span><span class="p">,</span><span class="n">a1</span><span class="p">,</span><span class="n">a2</span><span class="p">,</span><span class="n">b1</span><span class="p">,</span><span class="n">b2</span><span class="p">,</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span><span class="o">*</span><span class="n">y</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+
+<span class="kt">void</span> <span class="nf">applyeffect</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span><span class="kt">int</span> <span class="n">r</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">short</span><span class="o">*</span> <span class="n">samples</span> <span class="o">=</span> <span class="p">(</span><span class="kt">short</span><span class="o">*</span><span class="p">)</span> <span class="n">buffer</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">r</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">chn</span><span class="p">;</span>
+
+        <span class="n">fc</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">lfo</span><span class="p">)</span><span class="o">*</span><span class="n">FILTERSWEEP_LFO_DEPTH</span><span class="o">+</span><span class="n">FILTERSWEEP_LFO_CENTER</span><span class="p">;</span>
+        <span class="n">lfo</span> <span class="o">+=</span> <span class="n">dlfo</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">lfo</span><span class="o">&gt;</span><span class="mf">2.</span><span class="o">*</span><span class="n">M_PI</span><span class="p">)</span> <span class="n">lfo</span> <span class="o">-=</span> <span class="mf">2.</span><span class="o">*</span><span class="n">M_PI</span><span class="p">;</span>
+        <span class="n">C</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">tan</span><span class="p">(</span><span class="n">M_PI</span><span class="o">*</span><span class="n">BW</span><span class="o">/</span><span class="n">fs</span><span class="p">);</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="mf">2.</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">M_PI</span><span class="o">*</span><span class="n">fc</span><span class="o">/</span><span class="n">fs</span><span class="p">);</span>
+        <span class="n">a0</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">C</span><span class="p">);</span>
+        <span class="n">a1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">a2</span> <span class="o">=</span> <span class="o">-</span><span class="n">a0</span><span class="p">;</span>
+        <span class="n">b1</span> <span class="o">=</span> <span class="o">-</span><span class="n">C</span><span class="o">*</span><span class="n">D</span><span class="o">*</span><span class="n">a0</span><span class="p">;</span>
+        <span class="n">b2</span> <span class="o">=</span> <span class="p">(</span><span class="n">C</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">a0</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">chn</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">chn</span><span class="o">&lt;</span><span class="n">channels</span><span class="p">;</span><span class="n">chn</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">x</span><span class="p">[</span><span class="n">chn</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">chn</span><span class="p">][</span><span class="mi">1</span><span class="p">];</span>
+            <span class="n">x</span><span class="p">[</span><span class="n">chn</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">chn</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
+
+            <span class="n">y</span><span class="p">[</span><span class="n">chn</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">chn</span><span class="p">][</span><span class="mi">1</span><span class="p">];</span>
+            <span class="n">y</span><span class="p">[</span><span class="n">chn</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">chn</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
+
+            <span class="n">x</span><span class="p">[</span><span class="n">chn</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">samples</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="n">channels</span><span class="o">+</span><span class="n">chn</span><span class="p">];</span>
+            <span class="n">y</span><span class="p">[</span><span class="n">chn</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">a0</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="n">chn</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">a1</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="n">chn</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">a2</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="n">chn</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+                <span class="o">-</span> <span class="n">b1</span><span class="o">*</span><span class="n">y</span><span class="p">[</span><span class="n">chn</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">b2</span><span class="o">*</span><span class="n">y</span><span class="p">[</span><span class="n">chn</span><span class="p">][</span><span class="mi">2</span><span class="p">];</span>
+            <span class="n">samples</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="n">channels</span><span class="o">+</span><span class="n">chn</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">chn</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">help</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">k</span><span class="p">;</span>
+    <span class="n">printf</span><span class="p">(</span>
+<span class="s">&quot;Usage: latency [OPTION]... [FILE]...</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;-h,--help      help</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;-P,--pdevice   playback device</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;-C,--cdevice   capture device</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;-m,--min       minimum latency in frames</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;-M,--max       maximum latency in frames</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;-F,--frames    frames to transfer</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;-f,--format    sample format</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;-c,--channels  channels</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;-r,--rate      rate</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;-B,--buffer    buffer size in frames</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;-E,--period    period size in frames</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;-s,--seconds   duration of test in seconds</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;-b,--block     block mode</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;-p,--poll      use poll (wait for event - reduces CPU usage)</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;-e,--effect    apply an effect (bandpass filter sweep)</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Recognized sample formats are:&quot;</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">SND_PCM_FORMAT_LAST</span><span class="p">;</span> <span class="o">++</span><span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">s</span> <span class="o">=</span> <a class="reference internal" href="group_PCM_Description.html#doxid-group-p-c-m-description-1ga2ca258b8ac569ca35f283e48d2181e45"><span class="std std-ref">snd_pcm_format_name</span></a><span></span><span class="p">(</span><span class="n">k</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">)</span>
+                        <span class="n">printf</span><span class="p">(</span><span class="s">&quot; %s&quot;</span><span class="p">,</span> <span class="n">s</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span>
+<span class="s">&quot;Tip #1 (usable latency with large periods, non-blocking mode, good CPU usage,</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;        superb xrun prevention):</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;  latency -m 8192 -M 8192 -t 1 -p</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;Tip #2 (superb latency, non-blocking mode, but heavy CPU usage):</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="s">&quot;  latency -m 128 -M 128</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="n">option</span> <span class="n">long_option</span><span class="p">[]</span> <span class="o">=</span>
+    <span class="p">{</span>
+        <span class="p">{</span><span class="s">&quot;help&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="sc">&#39;h&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&quot;pdevice&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="sc">&#39;P&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&quot;cdevice&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="sc">&#39;C&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&quot;min&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="sc">&#39;m&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&quot;max&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="sc">&#39;M&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&quot;frames&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="sc">&#39;F&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&quot;format&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="sc">&#39;f&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&quot;channels&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="sc">&#39;c&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&quot;rate&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="sc">&#39;r&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&quot;buffer&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="sc">&#39;B&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&quot;period&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="sc">&#39;E&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&quot;seconds&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="sc">&#39;s&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&quot;block&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="sc">&#39;b&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&quot;poll&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="sc">&#39;p&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&quot;effect&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="sc">&#39;e&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">},</span>
+    <span class="p">};</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga919e634deecd855b6e2e15174e70d3ea"><span class="std std-ref">snd_pcm_t</span></a><span></span> <span class="o">*</span><span class="n">phandle</span><span class="p">,</span> <span class="o">*</span><span class="n">chandle</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">buffer</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">err</span><span class="p">,</span> <span class="n">latency</span><span class="p">,</span> <span class="n">morehelp</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">ok</span><span class="p">;</span>
+    <a class="reference internal" href="group_Global.html#doxid-group-global-1gadd377862d568809fb0e32c9faddf99a4"><span class="std std-ref">snd_timestamp_t</span></a><span></span> <span class="n">p_tstamp</span><span class="p">,</span> <span class="n">c_tstamp</span><span class="p">;</span>
+    <span class="kt">ssize_t</span> <span class="n">r</span><span class="p">;</span>
+    <span class="kt">size_t</span> <span class="n">frames_in</span><span class="p">,</span> <span class="n">frames_out</span><span class="p">,</span> <span class="n">in_max</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">effect</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">morehelp</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">c</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">c</span> <span class="o">=</span> <span class="n">getopt_long</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">,</span> <span class="s">&quot;hP:C:m:M:F:f:c:r:B:E:s:bpen&quot;</span><span class="p">,</span> <span class="n">long_option</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">switch</span> <span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="sc">&#39;h&#39;</span><span class="o">:</span>
+            <span class="n">morehelp</span><span class="o">++</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">&#39;P&#39;</span><span class="o">:</span>
+            <span class="n">pdevice</span> <span class="o">=</span> <span class="n">strdup</span><span class="p">(</span><span class="n">optarg</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">&#39;C&#39;</span><span class="o">:</span>
+            <span class="n">cdevice</span> <span class="o">=</span> <span class="n">strdup</span><span class="p">(</span><span class="n">optarg</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">&#39;m&#39;</span><span class="o">:</span>
+            <span class="n">err</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">optarg</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="n">latency_min</span> <span class="o">=</span> <span class="n">err</span> <span class="o">&gt;=</span> <span class="mi">4</span> <span class="o">?</span> <span class="nl">err</span> <span class="p">:</span> <span class="mi">4</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">latency_max</span> <span class="o">&lt;</span> <span class="n">latency_min</span><span class="p">)</span>
+                <span class="n">latency_max</span> <span class="o">=</span> <span class="n">latency_min</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">&#39;M&#39;</span><span class="o">:</span>
+            <span class="n">err</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">optarg</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="n">latency_max</span> <span class="o">=</span> <span class="n">latency_min</span> <span class="o">&gt;</span> <span class="n">err</span> <span class="o">?</span> <span class="nl">latency_min</span> <span class="p">:</span> <span class="n">err</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">&#39;f&#39;</span><span class="o">:</span>
+            <span class="n">format</span> <span class="o">=</span> <a class="reference internal" href="group_PCM_Description.html#doxid-group-p-c-m-description-1ga59f99dd9647315a7312d1f2b6204b7bc"><span class="std std-ref">snd_pcm_format_value</span></a><span></span><span class="p">(</span><span class="n">optarg</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">format</span> <span class="o">==</span> <a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1ggaa14b7f26877a812acbb39811364177f8ab1e118ecdccf628639b5c85bc3a48999"><span class="std std-ref">SND_PCM_FORMAT_UNKNOWN</span></a><span></span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Unknown format, setting to default S16_LE</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+                <span class="n">format</span> <span class="o">=</span> <a class="reference internal" href="enum_snd_pcm_format_t.html#doxid-group-p-c-m-1ggaa14b7f26877a812acbb39811364177f8a8b66a29293c62df9d1678c609fab76c0"><span class="std std-ref">SND_PCM_FORMAT_S16_LE</span></a><span></span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">&#39;c&#39;</span><span class="o">:</span>
+            <span class="n">err</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">optarg</span><span class="p">);</span>
+            <span class="n">channels</span> <span class="o">=</span> <span class="n">err</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">err</span> <span class="o">&lt;</span> <span class="mi">1024</span> <span class="o">?</span> <span class="nl">err</span> <span class="p">:</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">&#39;r&#39;</span><span class="o">:</span>
+            <span class="n">err</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">optarg</span><span class="p">);</span>
+            <span class="n">rate</span> <span class="o">=</span> <span class="n">err</span> <span class="o">&gt;=</span> <span class="mi">4000</span> <span class="o">&amp;&amp;</span> <span class="n">err</span> <span class="o">&lt;</span> <span class="mi">200000</span> <span class="o">?</span> <span class="nl">err</span> <span class="p">:</span> <span class="mi">44100</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">&#39;B&#39;</span><span class="o">:</span>
+            <span class="n">err</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">optarg</span><span class="p">);</span>
+            <span class="n">buffer_size</span> <span class="o">=</span> <span class="n">err</span> <span class="o">&gt;=</span> <span class="mi">32</span> <span class="o">&amp;&amp;</span> <span class="n">err</span> <span class="o">&lt;</span> <span class="mi">200000</span> <span class="o">?</span> <span class="nl">err</span> <span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">&#39;E&#39;</span><span class="o">:</span>
+            <span class="n">err</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">optarg</span><span class="p">);</span>
+            <span class="n">period_size</span> <span class="o">=</span> <span class="n">err</span> <span class="o">&gt;=</span> <span class="mi">32</span> <span class="o">&amp;&amp;</span> <span class="n">err</span> <span class="o">&lt;</span> <span class="mi">200000</span> <span class="o">?</span> <span class="nl">err</span> <span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">&#39;s&#39;</span><span class="o">:</span>
+            <span class="n">err</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">optarg</span><span class="p">);</span>
+            <span class="n">loop_sec</span> <span class="o">=</span> <span class="n">err</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">err</span> <span class="o">&lt;=</span> <span class="mi">100000</span> <span class="o">?</span> <span class="nl">err</span> <span class="p">:</span> <span class="mi">30</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">&#39;b&#39;</span><span class="o">:</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">&#39;p&#39;</span><span class="o">:</span>
+            <span class="n">use_poll</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">&#39;e&#39;</span><span class="o">:</span>
+            <span class="n">effect</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">&#39;n&#39;</span><span class="o">:</span>
+            <span class="n">resample</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">morehelp</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">help</span><span class="p">();</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_Output.html#doxid-group-output-1gaca78d01bf6d081274650794861373c7d"><span class="std std-ref">snd_output_stdio_attach</span></a><span></span><span class="p">(</span><span class="o">&amp;</span><span class="n">output</span><span class="p">,</span> <span class="n">stdout</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">err</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Output failed: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">loop_limit</span> <span class="o">=</span> <span class="n">loop_sec</span> <span class="o">*</span> <span class="n">rate</span><span class="p">;</span>
+    <span class="n">latency</span> <span class="o">=</span> <span class="n">latency_min</span> <span class="o">-</span> <span class="mi">4</span><span class="p">;</span>
+    <span class="n">buffer</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">((</span><span class="n">latency_max</span> <span class="o">*</span> <a class="reference internal" href="group_PCM_Helpers.html#doxid-group-p-c-m-helpers-1ga8d4e07f2d68cc16f607857ed8a222a29"><span class="std std-ref">snd_pcm_format_width</span></a><span></span><span class="p">(</span><span class="n">format</span><span class="p">)</span> <span class="o">/</span> <span class="mi">8</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">);</span>
+
+    <span class="n">setscheduler</span><span class="p">();</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Playback device is %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">pdevice</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Capture device is %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">cdevice</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Parameters are %iHz, %s, %i channels, %s mode</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">rate</span><span class="p">,</span> <a class="reference internal" href="group_PCM_Description.html#doxid-group-p-c-m-description-1ga2ca258b8ac569ca35f283e48d2181e45"><span class="std std-ref">snd_pcm_format_name</span></a><span></span><span class="p">(</span><span class="n">format</span><span class="p">),</span> <span class="n">channels</span><span class="p">,</span> <span class="n">block</span> <span class="o">?</span> <span class="s">&quot;blocking&quot;</span> <span class="o">:</span> <span class="s">&quot;non-blocking&quot;</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Poll mode: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">use_poll</span> <span class="o">?</span> <span class="s">&quot;yes&quot;</span> <span class="o">:</span> <span class="s">&quot;no&quot;</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Loop limit is %li frames, minimum latency = %i, maximum latency = %i</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">loop_limit</span><span class="p">,</span> <span class="n">latency_min</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">latency_max</span> <span class="o">*</span> <span class="mi">2</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">((</span><span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga8340c7dc0ac37f37afe5e7c21d6c528b"><span class="std std-ref">snd_pcm_open</span></a><span></span><span class="p">(</span><span class="o">&amp;</span><span class="n">phandle</span><span class="p">,</span> <span class="n">pdevice</span><span class="p">,</span> <a class="reference internal" href="enum_snd_pcm_stream_t.html#doxid-group-p-c-m-1ggac23b43ff55add78638e503b9cc892c24a57a2b920dbc34173479fc9036cfc78a1"><span class="std std-ref">SND_PCM_STREAM_PLAYBACK</span></a><span></span><span class="p">,</span> <span class="n">block</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga6bd90de1d1527b5804090dcce51079ad"><span class="std std-ref">SND_PCM_NONBLOCK</span></a><span></span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Playback open error: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga8340c7dc0ac37f37afe5e7c21d6c528b"><span class="std std-ref">snd_pcm_open</span></a><span></span><span class="p">(</span><span class="o">&amp;</span><span class="n">chandle</span><span class="p">,</span> <span class="n">cdevice</span><span class="p">,</span> <a class="reference internal" href="enum_snd_pcm_stream_t.html#doxid-group-p-c-m-1ggac23b43ff55add78638e503b9cc892c24af07834f756b4f95cb61987f4811073c4"><span class="std std-ref">SND_PCM_STREAM_CAPTURE</span></a><span></span><span class="p">,</span> <span class="n">block</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="n">SND_PCM_NONBLOCK</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Record open error: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* initialize the filter sweep variables */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">effect</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fs</span> <span class="o">=</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span> <span class="n">rate</span><span class="p">;</span>
+        <span class="n">BW</span> <span class="o">=</span> <span class="n">FILTER_BANDWIDTH</span><span class="p">;</span>
+
+        <span class="n">lfo</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">dlfo</span> <span class="o">=</span> <span class="mf">2.</span><span class="o">*</span><span class="n">M_PI</span><span class="o">*</span><span class="n">FILTERSWEEP_LFO_FREQ</span><span class="o">/</span><span class="n">fs</span><span class="p">;</span>
+
+        <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">float</span><span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="n">channels</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">));</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">float</span><span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="n">channels</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">));</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">float</span><span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="n">channels</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">));</span>
+        <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">float</span><span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="n">channels</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">));</span>
+        <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">float</span><span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="n">channels</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">));</span>
+        <span class="n">y</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">float</span><span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="n">channels</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">frames_in</span> <span class="o">=</span> <span class="n">frames_out</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">setparams</span><span class="p">(</span><span class="n">phandle</span><span class="p">,</span> <span class="n">chandle</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">latency</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="n">showlatency</span><span class="p">(</span><span class="n">latency</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gac6c33091b049985baa6466e8fe93917e"><span class="std std-ref">snd_pcm_link</span></a><span></span><span class="p">(</span><span class="n">chandle</span><span class="p">,</span> <span class="n">phandle</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Streams link error: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+            <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><a class="reference internal" href="group_PCM_Helpers.html#doxid-group-p-c-m-helpers-1ga82631361cf1c1d13af207beb59cf97ac"><span class="std std-ref">snd_pcm_format_set_silence</span></a><span></span><span class="p">(</span><span class="n">format</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">latency</span><span class="o">*</span><span class="n">channels</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;silence error</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">writebuf</span><span class="p">(</span><span class="n">phandle</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">latency</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">frames_out</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;write error</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">writebuf</span><span class="p">(</span><span class="n">phandle</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">latency</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">frames_out</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;write error</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">((</span><span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga6bdb88b68a9d9e66015d770f600c6aea"><span class="std std-ref">snd_pcm_start</span></a><span></span><span class="p">(</span><span class="n">chandle</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Go error: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+            <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">gettimestamp</span><span class="p">(</span><span class="n">phandle</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">p_tstamp</span><span class="p">);</span>
+        <span class="n">gettimestamp</span><span class="p">(</span><span class="n">chandle</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">c_tstamp</span><span class="p">);</span>
+<span class="cp">#if 0</span>
+<span class="c">        printf(&quot;Playback:\n&quot;);</span>
+<span class="c">        showstat(phandle, frames_out);</span>
+<span class="c">        printf(&quot;Capture:\n&quot;);</span>
+<span class="c">        showstat(chandle, frames_in);</span>
+<span class="cp">#endif</span>
+
+        <span class="n">ok</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">in_max</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">ok</span> <span class="o">&amp;&amp;</span> <span class="n">frames_in</span> <span class="o">&lt;</span> <span class="n">loop_limit</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">use_poll</span><span class="p">)</span> <span class="p">{</span>
+                <span class="cm">/* use poll to wait for next event */</span>
+                <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1gad4d53d58b996a7cd9a5cbf1710b90375"><span class="std std-ref">snd_pcm_wait</span></a><span></span><span class="p">(</span><span class="n">chandle</span><span class="p">,</span> <span class="mi">1000</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">((</span><span class="n">r</span> <span class="o">=</span> <span class="n">readbuf</span><span class="p">(</span><span class="n">chandle</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">latency</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">frames_in</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">in_max</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">ok</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">effect</span><span class="p">)</span>
+                    <span class="n">applyeffect</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span><span class="n">r</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">writebuf</span><span class="p">(</span><span class="n">phandle</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">frames_out</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+                    <span class="n">ok</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ok</span><span class="p">)</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Success</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="k">else</span>
+            <span class="nf">printf</span><span class="p">(</span><span class="s">&quot;Failure</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Playback:</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="n">showstat</span><span class="p">(</span><span class="n">phandle</span><span class="p">,</span> <span class="n">frames_out</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Capture:</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="n">showstat</span><span class="p">(</span><span class="n">chandle</span><span class="p">,</span> <span class="n">frames_in</span><span class="p">);</span>
+        <span class="n">showinmax</span><span class="p">(</span><span class="n">in_max</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">p_tstamp</span><span class="p">.</span><span class="n">tv_sec</span> <span class="o">==</span> <span class="n">p_tstamp</span><span class="p">.</span><span class="n">tv_sec</span> <span class="o">&amp;&amp;</span>
+            <span class="n">p_tstamp</span><span class="p">.</span><span class="n">tv_usec</span> <span class="o">==</span> <span class="n">c_tstamp</span><span class="p">.</span><span class="n">tv_usec</span><span class="p">)</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Hardware sync</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga7000ca6010a1a2739daddff8e2fbb440"><span class="std std-ref">snd_pcm_drop</span></a><span></span><span class="p">(</span><span class="n">chandle</span><span class="p">);</span>
+        <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga8d9ed4a62c17402de0389fd31fc7dc1f"><span class="std std-ref">snd_pcm_nonblock</span></a><span></span><span class="p">(</span><span class="n">phandle</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga49afc5b8527f30c33fafa476533c9f86"><span class="std std-ref">snd_pcm_drain</span></a><span></span><span class="p">(</span><span class="n">phandle</span><span class="p">);</span>
+        <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga8d9ed4a62c17402de0389fd31fc7dc1f"><span class="std std-ref">snd_pcm_nonblock</span></a><span></span><span class="p">(</span><span class="n">phandle</span><span class="p">,</span> <span class="o">!</span><span class="n">block</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ok</span><span class="p">)</span> <span class="p">{</span>
+<span class="cp">#if 1</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Playback time = %li.%i, Record time = %li.%i, diff = %li</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+                   <span class="n">p_tstamp</span><span class="p">.</span><span class="n">tv_sec</span><span class="p">,</span>
+                   <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">p_tstamp</span><span class="p">.</span><span class="n">tv_usec</span><span class="p">,</span>
+                   <span class="n">c_tstamp</span><span class="p">.</span><span class="n">tv_sec</span><span class="p">,</span>
+                   <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">c_tstamp</span><span class="p">.</span><span class="n">tv_usec</span><span class="p">,</span>
+                   <span class="n">timediff</span><span class="p">(</span><span class="n">p_tstamp</span><span class="p">,</span> <span class="n">c_tstamp</span><span class="p">));</span>
+<span class="cp">#endif</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga0d3af5e30593dae857b4308aab5035cd"><span class="std std-ref">snd_pcm_unlink</span></a><span></span><span class="p">(</span><span class="n">chandle</span><span class="p">);</span>
+        <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga242ad0a269c272830d30666220edbc2a"><span class="std std-ref">snd_pcm_hw_free</span></a><span></span><span class="p">(</span><span class="n">phandle</span><span class="p">);</span>
+        <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga242ad0a269c272830d30666220edbc2a"><span class="std std-ref">snd_pcm_hw_free</span></a><span></span><span class="p">(</span><span class="n">chandle</span><span class="p">);</span>
+    <span class="p">}</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga042aba7262a4cbb4d444b6fc08cb7124"><span class="std std-ref">snd_pcm_close</span></a><span></span><span class="p">(</span><span class="n">phandle</span><span class="p">);</span>
+    <a class="reference internal" href="group_PCM.html#doxid-group-p-c-m-1ga042aba7262a4cbb4d444b6fc08cb7124"><span class="std std-ref">snd_pcm_close</span></a><span></span><span class="p">(</span><span class="n">chandle</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span></pre>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="page_timer.html" class="btn btn-neutral float-left" title="Timer interface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="example__test_pcm.c.html" class="btn btn-neutral float-right" title="/test/pcm.c" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 1998-2017, ALSA Library Maintainers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

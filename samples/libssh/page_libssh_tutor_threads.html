@@ -1,0 +1,183 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 8: Threads with libssh &mdash; LibSSH Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+      <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinx_rtd_theme.css?v=b6ca47bd" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=a674670e"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="To be done" href="page_libssh_tutor_todo.html" />
+    <link rel="prev" title="Chapter 7: Forwarding connections (tunnel)" href="page_libssh_tutor_forwarding.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            LibSSH Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="page_libssh_linking.html">The Linking HowTo</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="page_libssh_tutorial.html">The Tutorial</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="page_libssh_tutorial.html#introduction">Introduction</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_guided_tour.html">Chapter 1: A typical SSH session</a></li>
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_authentication.html">Chapter 2: A deeper insight on authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_shell.html">Chapter 3: Opening a remote shell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_command.html">Chapter 4: Passing a remote command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_sftp.html">Chapter 5: The SFTP subsystem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_scp.html">Chapter 6: The SCP subsystem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_forwarding.html">Chapter 7: Forwarding connections (tunnel)</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Chapter 8: Threads with libssh</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#how-to-use-libssh-with-threads">How to use libssh with threads</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="page_libssh_tutor_todo.html">To be done</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="group_libssh.html">The libssh API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_ssh_cpp.html">The libssh C++ wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libssh_sftp.html">The libssh SFTP API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group_libssh_server.html">The libssh server API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="page_bug.html">Bug List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="page_deprecated.html">Deprecated List</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="global.html">Global Namespace</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LibSSH Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="page_libssh_tutorial.html">The Tutorial</a></li>
+      <li class="breadcrumb-item active">Chapter 8: Threads with libssh</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="chapter-8-threads-with-libssh">
+<span id="doxid-libssh-tutor-threads"></span><span id="index-0"></span><h1>Chapter 8: Threads with libssh</h1>
+<section id="how-to-use-libssh-with-threads">
+<span id="doxid-libssh-tutor-threads-1threads-with-libssh"></span><h2>How to use libssh with threads</h2>
+<p>libssh may be used in multithreaded applications, but under several conditions :</p>
+<ul class="simple">
+<li><p>Threading must be initialized during the initialization of libssh. This initialization must be done outside of any threading context.</p></li>
+<li><p>If pthreads is being used by your application (or your framework’s backend), you must link with libssh_threads dynamic library and initialize threading with the ssh_threads_pthreads threading object.</p></li>
+<li><p>If an other threading library is being used by your application, you must implement all the methods of the <a class="reference internal" href="struct_ssh_threads_callbacks_struct.html#doxid-structssh-threads-callbacks-struct"><span class="std std-ref">ssh_threads_callbacks_struct</span></a> structure and initialize libssh with it.</p></li>
+<li><p>At all times, you may use different sessions inside threads, make parallel connections, read/write on different sessions and so on. You <em>cannot</em> use a single session (or channels for a single session) in several threads at the same time. This will most likely lead to internal state corruption. This limitation is being worked out and will maybe disappear later.</p></li>
+</ul>
+<section id="initialization-of-threads">
+<span id="doxid-libssh-tutor-threads-1threads-init"></span><h3>Initialization of threads</h3>
+<p>To initialize threading, you must first select the threading model you want to use, using <a class="reference internal" href="group_libssh_threads.html#doxid-group-libssh-threads-1gaf473af3fbae6f1bb0e249fd1d079ff68"><span class="std std-ref">ssh_threads_set_callbacks()</span></a>, then call <a class="reference internal" href="group_libssh.html#doxid-group-libssh-1ga3ebf8d6920e563f3b032e3cd5277598e"><span class="std std-ref">ssh_init()</span></a>.</p>
+<pre class="highlight literal-block"><span></span><span class="cp">#include</span> <span class="cpf">&lt;libssh/callbacks.h&gt;</span>
+<span class="p">...</span>
+<span class="n">ssh_threads_set_callbacks</span><span class="p">(</span><span class="n">ssh_threads_get_noop</span><span class="p">());</span>
+<span class="n">ssh_init</span><span class="p">();</span></pre>
+<p>ssh_threads_noop is the threading structure that does nothing. It’s the threading callbacks being used by default when you’re not using threading.</p>
+</section>
+<section id="using-libpthread-with-libssh">
+<span id="doxid-libssh-tutor-threads-1threads-pthread"></span><h3>Using libpthread with libssh</h3>
+<p>If your application is using libpthread, you may simply use the libpthread threading backend:</p>
+<pre class="highlight literal-block"><span></span><span class="cp">#include</span> <span class="cpf">&lt;libssh/callbacks.h&gt;</span>
+<span class="p">...</span>
+<span class="n">ssh_threads_set_callbacks</span><span class="p">(</span><span class="n">ssh_threads_get_pthread</span><span class="p">());</span>
+<span class="n">ssh_init</span><span class="p">();</span></pre>
+<p>However, you must be sure to link with the library ssh_threads. If you’re using gcc, you must use the commandline</p>
+<pre class="highlight literal-block"><span></span><span class="n">gcc</span> <span class="o">-</span><span class="n">o</span> <span class="n">output</span> <span class="n">input</span><span class="p">.</span><span class="n">c</span> <span class="o">-</span><span class="n">lssh</span> <span class="o">-</span><span class="n">lssh_threads</span></pre>
+</section>
+<section id="using-another-threading-library">
+<span id="doxid-libssh-tutor-threads-1threads-other"></span><h3>Using another threading library</h3>
+<p>You must find your way in the <a class="reference internal" href="struct_ssh_threads_callbacks_struct.html#doxid-structssh-threads-callbacks-struct"><span class="std std-ref">ssh_threads_callbacks_struct</span></a> structure. You must implement the following methods :</p>
+<ul class="simple">
+<li><p>mutex_lock</p></li>
+<li><p>mutex_unlock</p></li>
+<li><p>mutex_init</p></li>
+<li><p>mutex_destroy</p></li>
+<li><p>thread_id</p></li>
+</ul>
+<p>libgcrypt 1.6 and bigger backend does not support custom callback. Using anything else than pthreads (<a class="reference internal" href="global.html#doxid-callbacks-8h-1a117f2dff40905608871165129de1fbf7"><span class="std std-ref">ssh_threads_get_pthread()</span></a>) here will fail. Good luck !</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="page_libssh_tutor_forwarding.html" class="btn btn-neutral float-left" title="Chapter 7: Forwarding connections (tunnel)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="page_libssh_tutor_todo.html" class="btn btn-neutral float-right" title="To be done" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2003-2017, LibSSH Maintainers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

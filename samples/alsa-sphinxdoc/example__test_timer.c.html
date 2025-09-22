@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>/test/timer.c &#8212; ALSA Library Documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css?v=3785b6ce" />
+    <script src="_static/documentation_options.js?v=cb7bf70b"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Global Namespace" href="global.html" />
+    <link rel="prev" title="/test/rawmidi.c" href="example__test_rawmidi.c.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="global.html" title="Global Namespace"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="example__test_rawmidi.c.html" title="/test/rawmidi.c"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ALSA Library Documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">/test/timer.c</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="test-timer-c">
+<span id="doxid-2test-2timer-8c-example"></span><span id="index-0"></span><h1>/test/timer.c</h1>
+<p><span class="target" id="doxid-home-vladimir-develop-alsa-lib-alsa-lib-1-1-3-src-timer-timer-c-1example-test-timer"></span></p>
+<pre class="highlight literal-block"><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span>
+<span class="cp">#include</span> <span class="cpf">&lt;sys/time.h&gt;</span>
+<span class="cp">#include</span> <span class="cpf">&quot;../include/asoundlib.h&quot;</span>
+
+<span class="kt">void</span> <span class="nf">show_status</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">handle</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">err</span><span class="p">;</span>
+    <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga6fe20f2c0d1535e3a200944b1244f855"><span class="std std-ref">snd_timer_status_t</span></a><span></span> <span class="o">*</span><span class="n">status</span><span class="p">;</span>
+
+    <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga6597b8f73b30a3f2bf2aa9f3590b92f2"><span class="std std-ref">snd_timer_status_alloca</span></a><span></span><span class="p">(</span><span class="o">&amp;</span><span class="n">status</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_Timer.html#doxid-group-timer-1gaa78c7089909252ee0ca69f7552fa2804"><span class="std std-ref">snd_timer_status</span></a><span></span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">status</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;timer status %i (%s)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">err</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;STATUS:</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;  resolution = %li</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <a class="reference internal" href="group_Timer.html#doxid-group-timer-1gaaab668cc548b6c4a24236504d63da0a0"><span class="std std-ref">snd_timer_status_get_resolution</span></a><span></span><span class="p">(</span><span class="n">status</span><span class="p">));</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;  lost = %li</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <a class="reference internal" href="group_Timer.html#doxid-group-timer-1gaa7ad78e8af9855e71d4951147869693b"><span class="std std-ref">snd_timer_status_get_lost</span></a><span></span><span class="p">(</span><span class="n">status</span><span class="p">));</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;  overrun = %li</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <a class="reference internal" href="group_Timer.html#doxid-group-timer-1gaf3a83c122c2e19059297599d3486c04d"><span class="std std-ref">snd_timer_status_get_overrun</span></a><span></span><span class="p">(</span><span class="n">status</span><span class="p">));</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;  queue = %li</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga6edb10e32b6b485ecccef73d862ca648"><span class="std std-ref">snd_timer_status_get_queue</span></a><span></span><span class="p">(</span><span class="n">status</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">read_loop</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">handle</span><span class="p">,</span> <span class="kt">int</span> <span class="n">master_ticks</span><span class="p">,</span> <span class="kt">int</span> <span class="n">timeout</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">count</span><span class="p">,</span> <span class="n">err</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">pollfd</span> <span class="o">*</span><span class="n">fds</span><span class="p">;</span>
+    <a class="reference internal" href="struct_snd_timer_read_t.html#doxid-structsnd-timer-read-t"><span class="std std-ref">snd_timer_read_t</span></a><span></span> <span class="n">tr</span><span class="p">;</span>
+
+    <span class="n">count</span> <span class="o">=</span> <a class="reference internal" href="group_Timer.html#doxid-group-timer-1gaf035c37343afed7f13c60e950e461cdf"><span class="std std-ref">snd_timer_poll_descriptors_count</span></a><span></span><span class="p">(</span><span class="n">handle</span><span class="p">);</span>
+    <span class="n">fds</span> <span class="o">=</span> <span class="n">calloc</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">pollfd</span><span class="p">));</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">fds</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;malloc error</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">master_ticks</span><span class="o">--</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga89ec000a41fa7dd1269e332324663f61"><span class="std std-ref">snd_timer_poll_descriptors</span></a><span></span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">fds</span><span class="p">,</span> <span class="n">count</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;snd_timer_poll_descriptors error: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+            <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">err</span> <span class="o">=</span> <span class="n">poll</span><span class="p">(</span><span class="n">fds</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">timeout</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;poll error %i (%s)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">err</span><span class="p">,</span> <span class="n">strerror</span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+            <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">err</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;timer time out!!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+            <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">while</span> <span class="p">(</span><a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga724ada94d0bc3564ad77973c0a084682"><span class="std std-ref">snd_timer_read</span></a><span></span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tr</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">tr</span><span class="p">))</span> <span class="o">==</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">tr</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;TIMER: resolution = %uns, ticks = %u</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+                <span class="n">tr</span><span class="p">.</span><a class="reference internal" href="struct_snd_timer_read_t.html#doxid-structsnd-timer-read-t-1a74c2d329a2a2c9c3bc53d5678b0fafe9"><span class="std std-ref">resolution</span></a><span></span><span class="p">,</span> <span class="n">tr</span><span class="p">.</span><a class="reference internal" href="struct_snd_timer_read_t.html#doxid-structsnd-timer-read-t-1a6f1deb447c21188ac4590e872358edd9"><span class="std std-ref">ticks</span></a><span></span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">fds</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="n">async_callback</span><span class="p">(</span><a class="reference internal" href="group_Global.html#doxid-group-global-1ga8cd9a1d441e9219ca5f2ff04094c7c6d"><span class="std std-ref">snd_async_handler_t</span></a><span></span> <span class="o">*</span><span class="n">ahandler</span><span class="p">)</span>
+<span class="p">{</span>
+    <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span> <span class="o">*</span><span class="n">handle</span> <span class="o">=</span> <a class="reference internal" href="group_Timer.html#doxid-group-timer-1gaa497b2873abd234df7e932ecdefad5e0"><span class="std std-ref">snd_async_handler_get_timer</span></a><span></span><span class="p">(</span><span class="n">ahandler</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">acount</span> <span class="o">=</span> <a class="reference internal" href="group_Global.html#doxid-group-global-1gad9c76588a87918901c6273e6bc98a1bc"><span class="std std-ref">snd_async_handler_get_callback_private</span></a><span></span><span class="p">(</span><span class="n">ahandler</span><span class="p">);</span>
+    <a class="reference internal" href="struct_snd_timer_read_t.html#doxid-structsnd-timer-read-t"><span class="std std-ref">snd_timer_read_t</span></a><span></span> <span class="n">tr</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga724ada94d0bc3564ad77973c0a084682"><span class="std std-ref">snd_timer_read</span></a><span></span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tr</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">tr</span><span class="p">))</span> <span class="o">==</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">tr</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;TIMER: resolution = %uns, ticks = %u</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="n">tr</span><span class="p">.</span><a class="reference internal" href="struct_snd_timer_read_t.html#doxid-structsnd-timer-read-t-1a74c2d329a2a2c9c3bc53d5678b0fafe9"><span class="std std-ref">resolution</span></a><span></span><span class="p">,</span> <span class="n">tr</span><span class="p">.</span><a class="reference internal" href="struct_snd_timer_read_t.html#doxid-structsnd-timer-read-t-1a6f1deb447c21188ac4590e872358edd9"><span class="std std-ref">ticks</span></a><span></span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="p">(</span><span class="o">*</span><span class="n">acount</span><span class="p">)</span><span class="o">++</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">idx</span><span class="p">,</span> <span class="n">err</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="k">class</span> <span class="o">=</span> <a class="reference internal" href="enum_snd_timer_class_t.html#doxid-group-timer-1ggafcf09894847cdee6925ab6e405c358d9ae7a63ed172c4c38199e4d6b3ed9fd728"><span class="std std-ref">SND_TIMER_CLASS_GLOBAL</span></a><span></span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">sclass</span> <span class="o">=</span> <a class="reference internal" href="enum_snd_timer_class_t.html#doxid-group-timer-1ggafcf09894847cdee6925ab6e405c358d9a678ee4a7108ad3653fc49a6fe07ae45f"><span class="std std-ref">SND_TIMER_CLASS_NONE</span></a><span></span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">card</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">device</span> <span class="o">=</span> <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga1cda350fb4de9a2f7a137c5649e3793c"><span class="std std-ref">SND_TIMER_GLOBAL_SYSTEM</span></a><span></span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">subdevice</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">list</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">async</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">acount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga7f514d85bfd93e1e5853a5fded89b668"><span class="std std-ref">snd_timer_t</span></a><span></span> <span class="o">*</span><span class="n">handle</span><span class="p">;</span>
+    <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga87c7e9656e171a76dada7e7e2da37136"><span class="std std-ref">snd_timer_id_t</span></a><span></span> <span class="o">*</span><span class="n">id</span><span class="p">;</span>
+    <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga8d2a9e26d1f38ce65160d3cd71a2bce3"><span class="std std-ref">snd_timer_info_t</span></a><span></span> <span class="o">*</span><span class="n">info</span><span class="p">;</span>
+    <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga3450759fce8e0863ebce3221e82bafca"><span class="std std-ref">snd_timer_params_t</span></a><span></span> <span class="o">*</span><span class="n">params</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">timername</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+    <a class="reference internal" href="group_Global.html#doxid-group-global-1ga8cd9a1d441e9219ca5f2ff04094c7c6d"><span class="std std-ref">snd_async_handler_t</span></a><span></span> <span class="o">*</span><span class="n">ahandler</span><span class="p">;</span>
+
+    <a class="reference internal" href="group_Timer.html#doxid-group-timer-1gaef1895685cb2f65d1a40cc46fa5a7eb2"><span class="std std-ref">snd_timer_id_alloca</span></a><span></span><span class="p">(</span><span class="o">&amp;</span><span class="n">id</span><span class="p">);</span>
+    <a class="reference internal" href="group_Timer.html#doxid-group-timer-1gafad2100b7f0478b8c3c59f0f4aced23e"><span class="std std-ref">snd_timer_info_alloca</span></a><span></span><span class="p">(</span><span class="o">&amp;</span><span class="n">info</span><span class="p">);</span>
+    <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga2e76b7b6f7fe340b4a06935f080fbbbd"><span class="std std-ref">snd_timer_params_alloca</span></a><span></span><span class="p">(</span><span class="o">&amp;</span><span class="n">params</span><span class="p">);</span>
+
+    <span class="n">idx</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">idx</span> <span class="o">&lt;</span> <span class="n">argc</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strncmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="s">&quot;class=&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">class</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">+</span><span class="mi">6</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strncmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="s">&quot;sclass=&quot;</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">sclass</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">+</span><span class="mi">7</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strncmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="s">&quot;card=&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">card</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">+</span><span class="mi">5</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strncmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="s">&quot;device=&quot;</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">device</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">+</span><span class="mi">7</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strncmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="s">&quot;subdevice=&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">subdevice</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">+</span><span class="mi">10</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="s">&quot;list&quot;</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">list</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="s">&quot;async&quot;</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">async</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">idx</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">class</span> <span class="o">==</span> <a class="reference internal" href="enum_snd_timer_class_t.html#doxid-group-timer-1ggafcf09894847cdee6925ab6e405c358d9a532f7292aafb8e4eaa8fce3bb42b7ea1"><span class="std std-ref">SND_TIMER_CLASS_SLAVE</span></a><span></span> <span class="o">&amp;&amp;</span> <span class="n">sclass</span> <span class="o">==</span> <a class="reference internal" href="enum_snd_timer_slave_class_t.html#doxid-group-timer-1ggad834b328331c3a4a4fb42041e2e61298a93c410a46bba52d680058f0718a32879"><span class="std std-ref">SND_TIMER_SCLASS_NONE</span></a><span></span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;slave class is not set</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">list</span><span class="p">)</span> <span class="p">{</span>
+        <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga279f189051eba2c5e072c30198deb81a"><span class="std std-ref">snd_timer_query_t</span></a><span></span> <span class="o">*</span><span class="n">qhandle</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga54f6d3838ff4680fcda97952a60376ff"><span class="std std-ref">snd_timer_query_open</span></a><span></span><span class="p">(</span><span class="o">&amp;</span><span class="n">qhandle</span><span class="p">,</span> <span class="s">&quot;hw&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;snd_timer_query_open error: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+            <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+        <span class="p">}</span>
+        <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga93bce2afe5e3f40f9f7adc17339273c4"><span class="std std-ref">snd_timer_id_set_class</span></a><span></span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <a class="reference internal" href="enum_snd_timer_class_t.html#doxid-group-timer-1ggafcf09894847cdee6925ab6e405c358d9a678ee4a7108ad3653fc49a6fe07ae45f"><span class="std std-ref">SND_TIMER_CLASS_NONE</span></a><span></span><span class="p">);</span>
+        <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">((</span><span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga5c10a9b8dc5f4442908fa3d15ab79169"><span class="std std-ref">snd_timer_query_next_device</span></a><span></span><span class="p">(</span><span class="n">qhandle</span><span class="p">,</span> <span class="n">id</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;timer next device error: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga42ea98dbaf720519453c0110bd06fb8b"><span class="std std-ref">snd_timer_id_get_class</span></a><span></span><span class="p">(</span><span class="n">id</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Timer device: class %i, sclass %i, card %i, device %i, subdevice %i</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+                    <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga42ea98dbaf720519453c0110bd06fb8b"><span class="std std-ref">snd_timer_id_get_class</span></a><span></span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
+                    <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga82e2754532fa2b5b28733820eab4d600"><span class="std std-ref">snd_timer_id_get_sclass</span></a><span></span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
+                    <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga305324f73fc12e7e42891598613a2d29"><span class="std std-ref">snd_timer_id_get_card</span></a><span></span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
+                    <a class="reference internal" href="group_Timer.html#doxid-group-timer-1gaa864bb9270989329f8acc86c5aec2093"><span class="std std-ref">snd_timer_id_get_device</span></a><span></span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
+                    <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga7f52f12140cd97f267143cbcd0832d02"><span class="std std-ref">snd_timer_id_get_subdevice</span></a><span></span><span class="p">(</span><span class="n">id</span><span class="p">));</span>
+        <span class="p">}</span>
+        <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga13063464032aae91ab4e72dfdb57cb10"><span class="std std-ref">snd_timer_query_close</span></a><span></span><span class="p">(</span><span class="n">qhandle</span><span class="p">);</span>
+        <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_SUCCESS</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">sprintf</span><span class="p">(</span><span class="n">timername</span><span class="p">,</span> <span class="s">&quot;hw:CLASS=%i,SCLASS=%i,CARD=%i,DEV=%i,SUBDEV=%i&quot;</span><span class="p">,</span> <span class="k">class</span><span class="p">,</span> <span class="n">sclass</span><span class="p">,</span> <span class="n">card</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">subdevice</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga9fa22f49745d1e383f0d6e5d9e795e2e"><span class="std std-ref">snd_timer_open</span></a><span></span><span class="p">(</span><span class="o">&amp;</span><span class="n">handle</span><span class="p">,</span> <span class="n">timername</span><span class="p">,</span> <a class="reference internal" href="group_Timer.html#doxid-group-timer-1gac2c50bf6045560bc13aab81f25b2b740"><span class="std std-ref">SND_TIMER_OPEN_NONBLOCK</span></a><span></span><span class="p">))</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;timer open %i (%s)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">err</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Using timer class %i, slave class %i, card %i, device %i, subdevice %i</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="k">class</span><span class="p">,</span> <span class="n">sclass</span><span class="p">,</span> <span class="n">card</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">subdevice</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga608cb266bf1cfd8f3796e6e55a2d5fe8"><span class="std std-ref">snd_timer_info</span></a><span></span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">info</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;timer info %i (%s)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">err</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Timer info:</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;  slave = %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <a class="reference internal" href="group_Timer.html#doxid-group-timer-1gaccf0a207b91965e7200355a0daaac6ce"><span class="std std-ref">snd_timer_info_is_slave</span></a><span></span><span class="p">(</span><span class="n">info</span><span class="p">)</span> <span class="o">?</span> <span class="s">&quot;yes&quot;</span> <span class="o">:</span> <span class="s">&quot;no&quot;</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;  card = %i</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <a class="reference internal" href="group_Timer.html#doxid-group-timer-1gaddb757aa65e9532ced42ff7e9146ff34"><span class="std std-ref">snd_timer_info_get_card</span></a><span></span><span class="p">(</span><span class="n">info</span><span class="p">));</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;  id = &#39;%s&#39;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <a class="reference internal" href="group_Timer.html#doxid-group-timer-1gaf46477b4ca62a7c2bd87926a45ecbd50"><span class="std std-ref">snd_timer_info_get_id</span></a><span></span><span class="p">(</span><span class="n">info</span><span class="p">));</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;  name = &#39;%s&#39;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga9360acea37a3351ab9d2c17b7a264395"><span class="std std-ref">snd_timer_info_get_name</span></a><span></span><span class="p">(</span><span class="n">info</span><span class="p">));</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;  average resolution = %li</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga3b33c3f0af5c93461e9493b0d4a3b81c"><span class="std std-ref">snd_timer_info_get_resolution</span></a><span></span><span class="p">(</span><span class="n">info</span><span class="p">));</span>
+    <a class="reference internal" href="group_Timer.html#doxid-group-timer-1gac39b36fdcc72cbb05adb909673df04f0"><span class="std std-ref">snd_timer_params_set_auto_start</span></a><span></span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><a class="reference internal" href="group_Timer.html#doxid-group-timer-1gaccf0a207b91965e7200355a0daaac6ce"><span class="std std-ref">snd_timer_info_is_slave</span></a><span></span><span class="p">(</span><span class="n">info</span><span class="p">))</span> <span class="p">{</span>
+        <a class="reference internal" href="group_Timer.html#doxid-group-timer-1gaa7101edb9ec33fdbbb94e04256388caa"><span class="std std-ref">snd_timer_params_set_ticks</span></a><span></span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="p">(</span><span class="mi">1000000000</span> <span class="o">/</span> <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga3b33c3f0af5c93461e9493b0d4a3b81c"><span class="std std-ref">snd_timer_info_get_resolution</span></a><span></span><span class="p">(</span><span class="n">info</span><span class="p">))</span> <span class="o">/</span> <span class="mi">50</span><span class="p">);</span> <span class="cm">/* 50Hz */</span>
+        <span class="k">if</span> <span class="p">(</span><a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga298418a42230f305c3c4efdf14da3403"><span class="std std-ref">snd_timer_params_get_ticks</span></a><span></span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span>
+            <a class="reference internal" href="group_Timer.html#doxid-group-timer-1gaa7101edb9ec33fdbbb94e04256388caa"><span class="std std-ref">snd_timer_params_set_ticks</span></a><span></span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Using %li tick(s)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga298418a42230f305c3c4efdf14da3403"><span class="std std-ref">snd_timer_params_get_ticks</span></a><span></span><span class="p">(</span><span class="n">params</span><span class="p">));</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <a class="reference internal" href="group_Timer.html#doxid-group-timer-1gaa7101edb9ec33fdbbb94e04256388caa"><span class="std std-ref">snd_timer_params_set_ticks</span></a><span></span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga3fd358a410688c3aba3e2d69acf027a8"><span class="std std-ref">snd_timer_params</span></a><span></span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">params</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;timer params %i (%s)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">err</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">show_status</span><span class="p">(</span><span class="n">handle</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">async</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga076a6bbae3bfdb956b0a1a6ea9daa0a2"><span class="std std-ref">snd_async_add_timer_handler</span></a><span></span><span class="p">(</span><span class="o">&amp;</span><span class="n">ahandler</span><span class="p">,</span> <span class="n">handle</span><span class="p">,</span> <span class="n">async_callback</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">acount</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">err</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;unable to add async handler %i (%s)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">err</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+            <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">err</span> <span class="o">=</span> <a class="reference internal" href="group_Timer.html#doxid-group-timer-1gafc990117a12e19a729ff10ef217fe2f9"><span class="std std-ref">snd_timer_start</span></a><span></span><span class="p">(</span><span class="n">handle</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;timer start %i (%s)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">err</span><span class="p">,</span> <a class="reference internal" href="group_Error.html#doxid-group-error-1ga182bbadf2349e11602bc531e8cf22f7e"><span class="std std-ref">snd_strerror</span></a><span></span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+        <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">async</span><span class="p">)</span> <span class="p">{</span>
+        <span class="cm">/* because all other work is done in the signal handler,</span>
+<span class="cm">           suspend the process */</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">acount</span> <span class="o">&lt;</span> <span class="mi">25</span><span class="p">)</span>
+            <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+        <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga6f8147c0679c820a77f98b1dd5b664a5"><span class="std std-ref">snd_timer_stop</span></a><span></span><span class="p">(</span><span class="n">handle</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">read_loop</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <a class="reference internal" href="group_Timer.html#doxid-group-timer-1gaccf0a207b91965e7200355a0daaac6ce"><span class="std std-ref">snd_timer_info_is_slave</span></a><span></span><span class="p">(</span><span class="n">info</span><span class="p">)</span> <span class="o">?</span> <span class="mi">10000</span> <span class="o">:</span> <span class="mi">25</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">show_status</span><span class="p">(</span><span class="n">handle</span><span class="p">);</span>
+    <a class="reference internal" href="group_Timer.html#doxid-group-timer-1ga155e0b5c831a3140f49c04932da9404f"><span class="std std-ref">snd_timer_close</span></a><span></span><span class="p">(</span><span class="n">handle</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Done</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">EXIT_SUCCESS</span><span class="p">;</span>
+<span class="p">}</span></pre>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="example__test_rawmidi.c.html"
+                          title="previous chapter">/test/rawmidi.c</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="global.html"
+                          title="next chapter">Global Namespace</a></p>
+  </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="global.html" title="Global Namespace"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="example__test_rawmidi.c.html" title="/test/rawmidi.c"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ALSA Library Documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">/test/timer.c</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 1998-2017, ALSA Library Maintainers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Sequencer interface &#8212; ALSA Library Documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-pygments.css?v=ff3f4257" />
+    <link rel="stylesheet" type="text/css" href="_static/doxyrest-sphinxdoc.css?v=3785b6ce" />
+    <script src="_static/documentation_options.js?v=cb7bf70b"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/target-highlight.js?v=df7d332b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Timer interface" href="page_timer.html" />
+    <link rel="prev" title="Runtime functions in configuration files" href="page_conffunc.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="page_timer.html" title="Timer interface"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="page_conffunc.html" title="Runtime functions in configuration files"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ALSA Library Documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Sequencer interface</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="sequencer-interface">
+<span id="doxid-seq"></span><span id="index-0"></span><h1>Sequencer interface</h1>
+<section id="general">
+<span id="doxid-seq-1seq-general"></span><h2>General</h2>
+<p>The ALSA sequencer interface is designed to deliver the MIDI-like events between clients/ports. A typical usage is the MIDI patch-bay. A MIDI application can be connected arbitrarily from/to the other MIDI clients. The routing between clients can be changed dynamically, so the application can handle incoming or outgoing MIDI events regardless of the devices or the application connections.</p>
+<p>The sequencer core stuff only takes care of two things: scheduling events and dispatching them to the destination at the right time. All processing of MIDI events has to be done within the clients. The event can be dispatched immediately without queueing, too. The event scheduling can be done either on a MIDI tempo queue or on a wallclock-time queue.</p>
+</section>
+<section id="client-and-port">
+<span id="doxid-seq-1seq-client"></span><h2>Client and Port</h2>
+<p>A <em>client</em> is created at each time <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1ga95462dc59c0319e186cda713ecfb4ed3"><span class="std std-ref">snd_seq_open()</span></a> is called. Later on, the attributes of client such as its name string can be changed via <a class="reference internal" href="group_SeqClient.html#doxid-group-seq-client-1ga109f62fb356c322533ddde4a6ce2c587"><span class="std std-ref">snd_seq_set_client_info()</span></a>. There are helper functions for ease of use, e.g. <a class="reference internal" href="group_SeqMiddle.html#doxid-group-seq-middle-1gaec3acab3bfb3df3f0c9ccc4903570b9d"><span class="std std-ref">snd_seq_set_client_name()</span></a> and <a class="reference internal" href="group_SeqMiddle.html#doxid-group-seq-middle-1ga888bf17bbc8141d1624f7bbef52dddce"><span class="std std-ref">snd_seq_set_client_event_filter()</span></a>. A typical code would be like below:</p>
+<pre class="highlight literal-block"><span></span><span class="c1">// create a new client</span>
+<span class="n">snd_seq_t</span> <span class="o">*</span><span class="nf">open_client</span><span class="p">()</span>
+<span class="p">{</span>
+        <span class="n">snd_seq_t</span> <span class="o">*</span><span class="n">handle</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">err</span><span class="p">;</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">snd_seq_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">handle</span><span class="p">,</span> <span class="s">&quot;default&quot;</span><span class="p">,</span> <span class="n">SND_SEQ_OPEN_INPUT</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">err</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+        <span class="n">snd_seq_set_client_name</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="s">&quot;My Client&quot;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">handle</span><span class="p">;</span>
+<span class="p">}</span></pre>
+<p>You’ll need to know the id number of the client eventually, for example, when accessing to a certain port (see the section <a class="reference internal" href="#doxid-seq-1seq-subs"><span class="std std-ref">Subscription</span></a>). The client id can be obtained by <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1ga2cdaded101f041b9a0930b665ac44b93"><span class="std std-ref">snd_seq_client_id()</span></a> function.</p>
+<p>A client can have one or more <em>ports</em> to communicate between other clients. A port is corresponding to the MIDI port in the case of MIDI device, but in general it is nothing but the access point between other clients. Each port may have capability flags, which specify the read/write accessibility and subscription permissions of the port. For creation of a port, call <a class="reference internal" href="group_SeqPort.html#doxid-group-seq-port-1gab40867ed02d9d6e40a75f929b5adf24d"><span class="std std-ref">snd_seq_create_port()</span></a> with the appropriate port attribute specified in <a class="reference internal" href="group_SeqPort.html#doxid-group-seq-port-1ga122b704fdab734223ef90b5e26f358e9"><span class="std std-ref">snd_seq_port_info_t</span></a> record.</p>
+<p>For creating a port for the normal use, there is a helper function <a class="reference internal" href="group_SeqMiddle.html#doxid-group-seq-middle-1ga9368266bde7b5c0f8d5ddeaf64914719"><span class="std std-ref">snd_seq_create_simple_port()</span></a>. An example with this function is like below.</p>
+<pre class="highlight literal-block"><span></span><span class="c1">// create a new port; return the port id</span>
+<span class="c1">// port will be writable and accept the write-subscription.</span>
+<span class="kt">int</span> <span class="nf">my_new_port</span><span class="p">(</span><span class="n">snd_seq_t</span> <span class="o">*</span><span class="n">handle</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">snd_seq_create_simple_port</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="s">&quot;my port&quot;</span><span class="p">,</span>
+            <span class="n">SND_SEQ_PORT_CAP_WRITE</span><span class="o">|</span><span class="n">SND_SEQ_PORT_CAP_SUBS_WRITE</span><span class="p">,</span>
+            <span class="n">SND_SEQ_PORT_TYPE_MIDI_GENERIC</span><span class="p">);</span>
+<span class="p">}</span></pre>
+</section>
+<section id="memory-pool">
+<span id="doxid-seq-1seq-memory"></span><h2>Memory Pool</h2>
+<p>Each client owns memory pools on kernel space for each input and output events. Here, input and output mean input (read) from other clients and output (write) to others, respectively. Since memory pool of each client is independent from others, it avoids such a situation that a client eats the whole events pool and interfere other clients’ response.</p>
+<p>The all scheduled output events or input events from dispatcher are stored on these pools until delivered to other clients or extracted to user space. The size of input/output pools can be changed independently. The output pool has also a room size, which is used to wake up the thread when it falls into sleep in blocking write mode.</p>
+<p>Note that ports on the same client share the same memory pool. If a port fills the memory pool, another can’t use it any more. For avoiding this, multiple clients can be used.</p>
+<p>For chancing the pool size and the condition, access to <a class="reference internal" href="group_SeqClient.html#doxid-group-seq-client-1gadc7ce8adaec84d42695492f0ba2515af"><span class="std std-ref">snd_seq_client_pool_t</span></a> record. There are helper functions, <a class="reference internal" href="group_SeqMiddle.html#doxid-group-seq-middle-1ga38e40d84154122798c9fad8e56c60a0f"><span class="std std-ref">snd_seq_set_client_pool_output()</span></a>, <a class="reference internal" href="group_SeqMiddle.html#doxid-group-seq-middle-1ga597d2417e0fd512f56d31464cc2ea7d7"><span class="std std-ref">snd_seq_set_client_pool_output_room()</span></a> and <a class="reference internal" href="group_SeqMiddle.html#doxid-group-seq-middle-1ga1344c7aadb847bd409093c179557732d"><span class="std std-ref">snd_seq_set_client_pool_input()</span></a>, for setting the total output-pool size, the output-room size and the input-pool size, respectively.</p>
+</section>
+<section id="subscription">
+<span id="doxid-seq-1seq-subs"></span><h2>Subscription</h2>
+<p>One of the new features in ALSA sequencer system is <em>subscription</em> of ports. In general, subscription is a connection between two sequencer ports. Even though an event can be delivered to a port without subscription using an explicit destination address, the subscription mechanism provides us more abstraction.</p>
+<p>Suppose a MIDI input device which sends events from a keyboard. The port associated with this device has READ capability - which means this port is readable from other ports. If a user program wants to capture events from keyboard and store them as MIDI stream, this program must subscribe itself to the MIDI port for read. Then, a connection from MIDI input port to this program is established. From this time, events from keyboard are automatically sent to this program. Timestamps will be updated according to the subscribed queue.</p>
+<pre class="highlight literal-block"><span></span><span class="n">MIDI</span> <span class="n">input</span> <span class="n">port</span> <span class="p">(</span><span class="n">keyboard</span><span class="p">)</span>
+    <span class="o">|</span>
+    <span class="n">V</span>
+<span class="n">ALSA</span> <span class="n">sequencer</span> <span class="o">-</span> <span class="n">update</span> <span class="n">timestamp</span>
+    <span class="o">|</span>
+    <span class="n">V</span>
+<span class="n">application</span> <span class="n">port</span></pre>
+<p>There is another subscription type for opposite direction: Suppose a MIDI sequencer program which sends events to a MIDI output device. In ALSA system, MIDI device is not opened until the associated MIDI port is accessed. Thus, in order to activate MIDI device, we have to subscribe to MIDI port for write. After this connection is established, events will be properly sent to MIDI output device.</p>
+<pre class="highlight literal-block"><span></span><span class="n">application</span> <span class="n">port</span>
+    <span class="o">|</span>
+    <span class="n">V</span>
+<span class="n">ALSA</span> <span class="n">sequencer</span> <span class="o">-</span> <span class="n">events</span> <span class="n">are</span> <span class="n">scheduled</span>
+    <span class="o">|</span>
+    <span class="n">V</span>
+<span class="n">MIDI</span> <span class="n">output</span> <span class="n">port</span> <span class="p">(</span><span class="n">WaveTable</span> <span class="n">etc</span><span class="p">.)</span></pre>
+<p>From the viewpoint of subscription, the examples above are special cases. Basically, subscription means the connection between two arbitrary ports. For example, imagine a filter application which modifies the MIDI events like program, velocity or chorus effects. This application can accept arbitrary MIDI input and send to arbitrary port, just like a Unix pipe application using stdin and stdout files. We can even connect several filter applications which work individually in order to process the MIDI events. Subscription can be used for this purpose. The connection between ports can be done also by the “third” client. Thus, filter applications have to manage only input and output events regardless of receiver/sender addresses.</p>
+<pre class="highlight literal-block"><span></span><span class="n">sequencer</span> <span class="n">port</span> <span class="err">#</span><span class="mi">1</span>
+    <span class="o">|</span>
+    <span class="n">V</span>
+<span class="n">ALSA</span> <span class="n">sequencer</span> <span class="p">(</span><span class="n">scheduled</span> <span class="n">or</span> <span class="n">real</span><span class="o">-</span><span class="n">time</span><span class="p">)</span>
+    <span class="o">|</span>
+    <span class="n">V</span>
+<span class="n">sequencer</span> <span class="n">port</span> <span class="err">#</span><span class="mi">2</span></pre>
+<p>For the detail about subscription, see the section <a class="reference internal" href="#doxid-seq-1seq-subs-more"><span class="std std-ref">More inside the subscription</span></a>.</p>
+</section>
+<section id="sequencer-events">
+<span id="doxid-seq-1seq-events"></span><h2>Sequencer Events</h2>
+<p>Messaging between clients is performed by sending events from one client to another. These events contain high-level MIDI oriented messages or sequencer specific messages.</p>
+<p>All the sequencer events are stored in a sequencer event record, <a class="reference internal" href="struct_snd_seq_event_t.html#doxid-structsnd-seq-event-t"><span class="std std-ref">snd_seq_event_t</span></a> type. Application can send and receive these event records to/from other clients via sequencer. An event has several storage types according to its usage. For example, a SYSEX message is stored on the variable length event, and a large synth sample data is delivered using a user-space data pointer.</p>
+<section id="structure-of-an-event">
+<span id="doxid-seq-1seq-ev-struct"></span><h3>Structure of an event</h3>
+<p>An event consists of the following items:</p>
+<ul class="simple">
+<li><p>The type of the event</p></li>
+<li><p>Event flags. It describes various conditions:</p>
+<ul>
+<li><p>time stamp; “real time” / “song ticks”</p></li>
+<li><p>time mode; “absolute” / “relative to current time”</p></li>
+</ul>
+</li>
+<li><p>Timestamp of the event.</p></li>
+<li><p>Scheduling queue id.</p></li>
+<li><p>Source address of the event, given by the combination of client id and port id numbers.</p></li>
+<li><p>Destination address of the event.</p></li>
+<li><p>The actual event data. (up to 12 bytes)</p></li>
+</ul>
+<p>The actual record is shown in <a class="reference internal" href="struct_snd_seq_event_t.html#doxid-structsnd-seq-event-t"><span class="std std-ref">snd_seq_event_t</span></a>. The type field contains the type of the event (1 byte). The flags field consists of bit flags which describe several conditions of the event (1 byte). It includes the time-stamp mode, data storage type, and scheduling priority. The tag field is an arbitrary tag. This tag can used for removing a distinct event from the event queue via <a class="reference internal" href="group_SeqEvent.html#doxid-group-seq-event-1ga7ed1109642fdb8dbd9f8a20564e40362"><span class="std std-ref">snd_seq_remove_events()</span></a>. The queue field is the queue id for scheduling. The source and dest fields are source and destination addresses. The data field is a union of event data.</p>
+</section>
+<section id="scheduling-queue">
+<span id="doxid-seq-1seq-ev-queue"></span><h3>Scheduling queue</h3>
+<p>An event can be delivered either on scheduled or direct dispatch mode. On the scheduling mode, an event is once stored on the priority queue and delivered later (or even immediately) to the destination, whereas on the direct dispatch mode, an event is passed to the destination without any queue.</p>
+<p>For a scheduled delivery, a queue to process the event must exist. Usually, a client creates its own queue by <a class="reference internal" href="group_SeqQueue.html#doxid-group-seq-queue-1ga036e62b321b56bee2e8d2e8280a6416a"><span class="std std-ref">snd_seq_alloc_queue()</span></a> function. Alternatively, a queue may be shared among several clients. For scheduling an event on the specified queue, a client needs to fill queue field with the preferred queue id.</p>
+<p>Meanwhile, for dispatching an event directly, just use <a class="reference internal" href="group_SeqQueue.html#doxid-group-seq-queue-1ga2a5be7ea9ad68adc9a7288ba25850245"><span class="std std-ref">SND_SEQ_QUEUE_DIRECT</span></a> as the target queue id. A macro <a class="reference internal" href="group_SeqMiddle.html#doxid-group-seq-middle-1gae2674210b5601e8aa3e787c1ddbdcb62"><span class="std std-ref">snd_seq_ev_set_direct()</span></a> is provided for ease and compatibility.</p>
+<p>Note that scheduling at the current or earlier time is different from the direct dispatch mode even though the event is delivered immediately. On the former scheme, an event is once stored on priority queue, then delivered actually. Thus, it acquires a space from memory pool. On the other hand, the latter is passed without using memory pool. Although the direct dispatched event needs less memory, it means also that the event cannot be resent if the destination is unable to receive it momentarily.</p>
+</section>
+<section id="time-stamp">
+<span id="doxid-seq-1seq-ev-time"></span><h3>Time stamp</h3>
+<p>The timestamp of the event can either specified in <em>real time</em> or in <em>song ticks</em>. The former means the wallclock time while the latter corresponds to the MIDI ticks. Which format is used is determined by the event flags.</p>
+<p>The resolution of real-time value is in nano second. Since 64 bit length is required for the actual time calculation, it is represented by a structure of pair of second and nano second defined as <a class="reference internal" href="struct_snd_seq_real_time_t.html#doxid-structsnd-seq-real-time-t"><span class="std std-ref">snd_seq_real_time_t</span></a> type. The song tick is defined simply as a 32 bit integer, defined as <a class="reference internal" href="group_SeqEvents.html#doxid-group-seq-events-1gaa6a1e0c4394f9b26cc55e0181a5e2cb8"><span class="std std-ref">snd_seq_tick_time_t</span></a> type. The time stored in an event record is a union of these two different time values.</p>
+<p>Note that the time format used for real time events is very similar to timeval struct used for Unix system time. The absurd resolution of the timestamps allows us to perform very accurate conversions between songposition and real time. Round-off errors can be neglected.</p>
+<p>If a timestamp with a <em>relative</em> timestamp is delivered to ALSA, the specified timestamp will be used as an offset to the current time of the queue the event is sent into. An <em>absolute</em> timestamp is on the contrary the time counted from the moment when the queue started.</p>
+<p>An client that relies on these relative timestamps is the MIDI input port. As each sequencer queue has it’s own clock the only way to deliver events at the right time is by using the relative timestamp format. When the event arrives at the queue it is normalized to absolute format.</p>
+<p>The timestamp format is specified in the flag bitfield masked by <a class="reference internal" href="group_SeqEvents.html#doxid-group-seq-events-1gac7da1e1965e86a68f663babec22a99ba"><span class="std std-ref">SND_SEQ_TIME_STAMP_MASK</span></a>. To schedule the event in a real-time queue or in a tick queue, macros <a class="reference internal" href="group_SeqMiddle.html#doxid-group-seq-middle-1ga713370bf29736477532e791b4ad92530"><span class="std std-ref">snd_seq_ev_schedule_real()</span></a> and <a class="reference internal" href="group_SeqMiddle.html#doxid-group-seq-middle-1ga589469c27715bfae205ce26d5801d8b1"><span class="std std-ref">snd_seq_ev_schedule_tick()</span></a> are provided, respectively.</p>
+</section>
+<section id="source-and-destination-addresses">
+<span id="doxid-seq-1seq-ev-addr"></span><h3>Source and destination addresses</h3>
+<p>To identify the source and destination of an event, the addressing field contains a combination of client id and port id numbers, defined as <a class="reference internal" href="struct_snd_seq_addr_t.html#doxid-structsnd-seq-addr-t"><span class="std std-ref">snd_seq_addr_t</span></a> type. When an event is passed to sequencer from a client, sequencer fills source.client field with the sender’s id automatically. It is the responsibility of sender client to fill the port id of source.port and both client and port of dest field.</p>
+<p>If an existing address is set to the destination, the event is simply delivered to it. When <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1ga383b235d2afbe48704952edfd3a33eed"><span class="std std-ref">SND_SEQ_ADDRESS_SUBSCRIBERS</span></a> is set to the destination client id, the event is delivered to all the clients connected to the source port.</p>
+<p>A sequencer core has two pre-defined system ports on the system client <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1ga5437f98c59679c92ee4d940ac643169e"><span class="std std-ref">SND_SEQ_CLIENT_SYSTEM</span></a> : <a class="reference internal" href="group_SeqPort.html#doxid-group-seq-port-1ga02870ceddec24d3cc5609ec728b0cb92"><span class="std std-ref">SND_SEQ_PORT_SYSTEM_TIMER</span></a> and <a class="reference internal" href="group_SeqPort.html#doxid-group-seq-port-1gaf12ff6ca6077edc7c6027a3fb1d0664b"><span class="std std-ref">SND_SEQ_PORT_SYSTEM_ANNOUNCE</span></a>. The <a class="reference internal" href="group_SeqPort.html#doxid-group-seq-port-1ga02870ceddec24d3cc5609ec728b0cb92"><span class="std std-ref">SND_SEQ_PORT_SYSTEM_TIMER</span></a> is the system timer port, and <a class="reference internal" href="group_SeqPort.html#doxid-group-seq-port-1gaf12ff6ca6077edc7c6027a3fb1d0664b"><span class="std std-ref">SND_SEQ_PORT_SYSTEM_ANNOUNCE</span></a> is the system announce port. In order to control a queue from a client, client should send a queue-control event like start, stop and continue queue, change tempo, etc. to the system timer port. Then the sequencer system handles the queue according to the received event. This port supports subscription. The received timer events are broadcasted to all subscribed clients.</p>
+<p>The latter port does not receive messages but supports subscription. When each client or port is attached, detached or modified, an announcement is sent to subscribers from this port.</p>
+</section>
+<section id="data-storage-type">
+<span id="doxid-seq-1seq-ev-data"></span><h3>Data storage type</h3>
+<p>Some events like SYSEX message, however, need larger data space than the standard data. For such events, ALSA sequencer provides several different data storage types. The data type is specified in the flag bits masked by <a class="reference internal" href="group_SeqEvents.html#doxid-group-seq-events-1ga69fa938ef7ebc12e3d1b8758b39b7967"><span class="std std-ref">SND_SEQ_EVENT_LENGTH_MASK</span></a>. The following data types are available:</p>
+<p>Normal events stores their parameters on data field (12 byte). The flag-bit type is <a class="reference internal" href="group_SeqEvents.html#doxid-group-seq-events-1ga35b6aacb44080053e0ca0eeaefbe8dc2"><span class="std std-ref">SND_SEQ_EVENT_LENGTH_FIXED</span></a>. A macro <a class="reference internal" href="group_SeqMiddle.html#doxid-group-seq-middle-1ga8c949038f36fd3e27de8b8e419978793"><span class="std std-ref">snd_seq_ev_set_fixed()</span></a> is provided to set this type.</p>
+<p>SYSEX or a returned error use this type. The actual data is stored on an extra allocated space. On sequencer kernel, the whole extra-data is duplicated, so that the event can be scheduled on queue. The data contains only the length and the pointer of extra-data. The flag-bit type is <a class="reference internal" href="group_SeqEvents.html#doxid-group-seq-events-1ga273f82dce70a0284a4dcabd34f1bfe7d"><span class="std std-ref">SND_SEQ_EVENT_LENGTH_VARIABLE</span></a>. A macro <a class="reference internal" href="group_SeqMiddle.html#doxid-group-seq-middle-1ga12ac15c961d96d3122f7c2f6a0849fb1"><span class="std std-ref">snd_seq_ev_set_variable()</span></a> is provided to set this type.</p>
+<p>This type refers also an extra data space like variable length data, but the extra-data is not duplicated but but referred as a user-space data on kernel, so that it reduces the time and resource for transferring large bulk of data like synth sample wave. This data type, however, can be used only for direct dispatch mode, and supposed to be used only for a special purpose like a bulk data transfer. The data length and pointer are stored also in data.ext field as well as variable length data. The flag-bit type is <a class="reference internal" href="group_SeqEvents.html#doxid-group-seq-events-1ga5e38e6cf87f023332b797c30b74223b1"><span class="std std-ref">SND_SEQ_EVENT_LENGTH_VARUSR</span></a>. A macro <a class="reference internal" href="group_SeqMiddle.html#doxid-group-seq-middle-1ga993e1f46d8122a227fa0072a73af813e"><span class="std std-ref">snd_seq_ev_set_varusr()</span></a> is provided to set this type.</p>
+</section>
+<section id="scheduling-priority">
+<span id="doxid-seq-1seq-ev-sched"></span><h3>Scheduling priority</h3>
+<p>There are two priorities for scheduling: If an event with the same scheduling time is already present on the queue, the new event is appended to the older.</p>
+<p>If an event with the same scheduling time is already present on the queue, the new event is inserted before others.</p>
+<p>The scheduling priority is set in the flag bitfeld masked by <a class="reference internal" href="group_SeqEvents.html#doxid-group-seq-events-1gaea7b84a517451282036dad991a45239c"><span class="std std-ref">SND_SEQ_PRIORITY_MASK</span></a>. A macro <a class="reference internal" href="group_SeqMiddle.html#doxid-group-seq-middle-1ga9b6fba99052fb11977559f15192581d4"><span class="std std-ref">snd_seq_ev_set_priority()</span></a> is provided to set the mode type.</p>
+</section>
+</section>
+<section id="event-queues">
+<span id="doxid-seq-1seq-queue"></span><h2>Event Queues</h2>
+<section id="creation-of-a-queue">
+<span id="doxid-seq-1seq-ev-control"></span><h3>Creation of a queue</h3>
+<p>Creating a queue is done usually by calling <a class="reference internal" href="group_SeqQueue.html#doxid-group-seq-queue-1ga036e62b321b56bee2e8d2e8280a6416a"><span class="std std-ref">snd_seq_alloc_queue</span></a>. You can create a queue with a certain name by <a class="reference internal" href="group_SeqQueue.html#doxid-group-seq-queue-1ga8efa821e0fc96fd05460306808e8fb7d"><span class="std std-ref">snd_seq_alloc_named_queue()</span></a>, too.</p>
+<pre class="highlight literal-block"><span></span><span class="c1">// create a queue and return its id</span>
+<span class="kt">int</span> <span class="nf">my_queue</span><span class="p">(</span><span class="n">snd_seq_t</span> <span class="o">*</span><span class="n">handle</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">snd_seq_alloc_named_queue</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="s">&quot;my queue&quot;</span><span class="p">);</span>
+<span class="p">}</span></pre>
+<p>These functions are the wrapper to the function <a class="reference internal" href="group_SeqQueue.html#doxid-group-seq-queue-1ga05fc43229e94aecbb4379909200aeeae"><span class="std std-ref">snd_seq_create_queue()</span></a>. For releasing the allocated queue, call <a class="reference internal" href="group_SeqQueue.html#doxid-group-seq-queue-1ga5b2cf5082861776ac9f7f986459cbccf"><span class="std std-ref">snd_seq_free_queue()</span></a> with the obtained queue id.</p>
+<p>Once when a queue is created, the two queues are associated to that queue record in fact: one is the realtime queue and another is the tick queue. These two queues are bound together to work synchronously. Hence, when you schedule an event, you have to choose which queue type is used as described in the section <a class="reference internal" href="#doxid-seq-1seq-ev-time"><span class="std std-ref">Time stamp</span></a>.</p>
+</section>
+<section id="setting-queue-tempo">
+<span id="doxid-seq-1seq-ev-tempo"></span><h3>Setting queue tempo</h3>
+<p>The tempo (or the speed) of the scheduling queue is variable. In the case of <em>tick</em> queue, the tempo is controlled in the manner of MIDI. There are two parameters to define the actual tempo, PPQ (pulse per quarter note) and MIDI tempo. The former defines the base resolution of the ticks, while the latter defines the beat tempo in microseconds. As default, 96 PPQ and 120 BPM are used, respectively. That is, the tempo is set to 500000 (= 60 * 1000000 / 120). Note that PPQ cannot be changed while the queue is running. It must be set before the queue is started.</p>
+<p>On the other hand, in the case of <em>realtime</em> queue, the time resolution is fixed to nanoseconds. There is, however, a parameter to change the speed of this queue, called <em>skew</em>. You can make the queue faster or slower by setting the skew value bigger or smaller. In the API, the skew is defined by two values, the skew base and the skew value. The actual skew is the fraction of them, <em>value/base</em>. As default, the skew base is set to 16bit (0x10000) and the skew value is the identical, so that the queue is processed as well as in the real world.</p>
+<p>When the tempo of realtime queue is changed, the tempo of the associated tick queue is changed together, too. That’s the reason why two queues are created always. This feature can be used to synchronize the event queue with the external synchronization source like SMPTE. In such a case, the realtime queue is skewed to match with the external source, so that both the realtime timestamp and the MIDI timestamp are synchronized.</p>
+<p>For setting these tempo parameters, use <a class="reference internal" href="group_SeqQueue.html#doxid-group-seq-queue-1ga8cef04796cda140f86f8e6298f26b4da"><span class="std std-ref">snd_seq_queue_tempo_t</span></a> record. For example, to set the tempo of the queue <code class="docutils literal notranslate"><span class="pre">q</span></code> to 48 PPQ, 60 BPM,</p>
+<pre class="highlight literal-block"><span></span><span class="kt">void</span> <span class="nf">set_tempo</span><span class="p">(</span><span class="n">snd_seq_t</span> <span class="o">*</span><span class="n">handle</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="n">snd_seq_queue_tempo_t</span> <span class="o">*</span><span class="n">tempo</span><span class="p">;</span>
+        <span class="n">snd_seq_queue_tempo_alloca</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tempo</span><span class="p">);</span>
+        <span class="n">snd_seq_queue_tempo_set_tempo</span><span class="p">(</span><span class="n">tempo</span><span class="p">,</span> <span class="mi">1000000</span><span class="p">);</span> <span class="c1">// 60 BPM</span>
+        <span class="n">snd_seq_queue_tempo_set_ppq</span><span class="p">(</span><span class="n">tempo</span><span class="p">,</span> <span class="mi">48</span><span class="p">);</span> <span class="c1">// 48 PPQ</span>
+        <span class="n">snd_seq_set_queue_tempo</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">tempo</span><span class="p">);</span>
+<span class="p">}</span></pre>
+<p>For changing the (running) queue’s tempo on the fly, you can either set the tempo via <a class="reference internal" href="group_SeqQueue.html#doxid-group-seq-queue-1ga84793898d689520441a4c1164a8c0c77"><span class="std std-ref">snd_seq_set_queue_tempo()</span></a> or send a MIDI tempo event to the system timer port. For example,</p>
+<pre class="highlight literal-block"><span></span><span class="kt">int</span> <span class="nf">change_tempo</span><span class="p">(</span><span class="n">snd_seq_t</span> <span class="o">*</span><span class="n">handle</span><span class="p">,</span> <span class="kt">int</span> <span class="n">q</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">tempo</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">snd_seq_event_t</span> <span class="n">ev</span><span class="p">;</span>
+    <span class="n">snd_seq_ev_clear</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ev</span><span class="p">);</span>
+    <span class="n">ev</span><span class="p">.</span><span class="n">dest</span><span class="p">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">SND_SEQ_CLIENT_SYSTEM</span><span class="p">;</span>
+    <span class="n">ev</span><span class="p">.</span><span class="n">dest</span><span class="p">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">SND_SEQ_PORT_SYSTEM_TIMER</span><span class="p">;</span>
+    <span class="n">ev</span><span class="p">.</span><span class="n">source</span><span class="p">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">my_client_id</span><span class="p">;</span>
+    <span class="n">ev</span><span class="p">.</span><span class="n">source</span><span class="p">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">my_port_id</span><span class="p">;</span>
+    <span class="n">ev</span><span class="p">.</span><span class="n">queue</span> <span class="o">=</span> <span class="n">SND_SEQ_QUEUE_DIRECT</span><span class="p">;</span> <span class="c1">// no scheduling</span>
+    <span class="n">ev</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">queue</span><span class="p">.</span><span class="n">queue</span> <span class="o">=</span> <span class="n">q</span><span class="p">;</span>    <span class="c1">// affected queue id</span>
+    <span class="n">ev</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">queue</span><span class="p">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">tempo</span><span class="p">;</span>    <span class="c1">// new tempo in microsec.</span>
+    <span class="k">return</span> <span class="n">snd_seq_event_output</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ev</span><span class="p">);</span>
+<span class="p">}</span></pre>
+<p>There is a helper function to do this easily, <a class="reference internal" href="group_SeqMiddle.html#doxid-group-seq-middle-1gab77f13c0b39dec12ef983eb706925d00"><span class="std std-ref">snd_seq_change_queue_tempo()</span></a>. Set NULL to the last argument, if you don’t need any special settings.</p>
+<p>In the above example, the tempo is changed immediately after the buffer is flushed by <a class="reference internal" href="group_SeqEvent.html#doxid-group-seq-event-1ga64a0ed5488504ef91b5b6b92172bc0aa"><span class="std std-ref">snd_seq_drain_output()</span></a> call. You can schedule the event in a certain queue so that the tempo change happens at the scheduled time, too.</p>
+</section>
+<section id="starting-and-stopping-a-queue">
+<span id="doxid-seq-1seq-ev-start"></span><h3>Starting and stopping a queue</h3>
+<p>To start, stop, or continue a queue, you need to send a queue-control event to the system timer port as well. There are helper functions, <a class="reference internal" href="group_SeqMiddle.html#doxid-group-seq-middle-1ga0c7a86bb19188a00c5a3b4907d558058"><span class="std std-ref">snd_seq_start_queue()</span></a>, <a class="reference internal" href="group_SeqMiddle.html#doxid-group-seq-middle-1gab62a2e964135fdff96d21835d4cddad6"><span class="std std-ref">snd_seq_stop_queue()</span></a> and <a class="reference internal" href="group_SeqMiddle.html#doxid-group-seq-middle-1gad6b0c90be37eeb583318c9077f095b86"><span class="std std-ref">snd_seq_continue_queue()</span></a>. Note that if the last argument of these functions is NULL, the event is sent (i.e. operated) immediately after the buffer flush. If you want to schedule the event at the certain time, set up the event record and provide the pointer of that event record as the argument.</p>
+<p>Only calling these functions doesn’t deliver the event to the sequencer core but only put to the output buffer. You’ll need to call <a class="reference internal" href="group_SeqEvent.html#doxid-group-seq-event-1ga64a0ed5488504ef91b5b6b92172bc0aa"><span class="std std-ref">snd_seq_drain_output()</span></a> eventually.</p>
+</section>
+</section>
+<section id="more-inside-the-subscription">
+<span id="doxid-seq-1seq-subs-more"></span><h2>More inside the subscription</h2>
+<section id="permissions">
+<span id="doxid-seq-1seq-subs-perm"></span><h3>Permissions</h3>
+<p>Each ALSA port can have capability flags. The most basic capability flags are <a class="reference internal" href="group_SeqPort.html#doxid-group-seq-port-1ga81a7a5385af746364b757eb7911ec2f0"><span class="std std-ref">SND_SEQ_PORT_CAP_READ</span></a> and <a class="reference internal" href="group_SeqPort.html#doxid-group-seq-port-1gae8afb5ac8f546461b4bab25454972aeb"><span class="std std-ref">SND_SEQ_PORT_CAP_WRITE</span></a>. The former means that the port allows to send events to other ports, whereas the latter capability means that the port allows to receive events from other ports. You may have noticed that meanings of <code class="docutils literal notranslate"><span class="pre">READ</span></code> and <code class="docutils literal notranslate"><span class="pre">WRITE</span></code> are permissions of the port from the viewpoint of other ports.</p>
+<p>For allowing subscription from/to other clients, another capability flags must be set together with read/write capabilities above. For allowing read and write subscriptions, <a class="reference internal" href="group_SeqPort.html#doxid-group-seq-port-1ga4b8aa6cbeb3c99c3ad033f4ce69c06e2"><span class="std std-ref">SND_SEQ_PORT_CAP_SUBS_READ</span></a> and <a class="reference internal" href="group_SeqPort.html#doxid-group-seq-port-1ga52ff1c51578166e67936cfb826c966c0"><span class="std std-ref">SND_SEQ_PORT_CAP_SUBS_WRITE</span></a> are used, respectively. For example, the port with MIDI input device always has <a class="reference internal" href="group_SeqPort.html#doxid-group-seq-port-1ga4b8aa6cbeb3c99c3ad033f4ce69c06e2"><span class="std std-ref">SND_SEQ_PORT_CAP_SUBS_READ</span></a> capability, and the port with MIDI output device always has <a class="reference internal" href="group_SeqPort.html#doxid-group-seq-port-1ga52ff1c51578166e67936cfb826c966c0"><span class="std std-ref">SND_SEQ_PORT_CAP_SUBS_WRITE</span></a> capability together with <a class="reference internal" href="group_SeqPort.html#doxid-group-seq-port-1ga81a7a5385af746364b757eb7911ec2f0"><span class="std std-ref">SND_SEQ_PORT_CAP_READ</span></a> and <a class="reference internal" href="group_SeqPort.html#doxid-group-seq-port-1gae8afb5ac8f546461b4bab25454972aeb"><span class="std std-ref">SND_SEQ_PORT_CAP_WRITE</span></a> capabilities, respectively. Obviously, these flags have no influence if <code class="docutils literal notranslate"><span class="pre">READ</span></code> or <code class="docutils literal notranslate"><span class="pre">WRITE&gt;</span></code> capability is not set.</p>
+<p>Note that these flags are not necessary if the client subscribes itself to the specified port. For example, when a port makes READ subscription to MIDI input port, this port must have <a class="reference internal" href="group_SeqPort.html#doxid-group-seq-port-1gae8afb5ac8f546461b4bab25454972aeb"><span class="std std-ref">SND_SEQ_PORT_CAP_WRITE</span></a> capability, but no <a class="reference internal" href="group_SeqPort.html#doxid-group-seq-port-1ga52ff1c51578166e67936cfb826c966c0"><span class="std std-ref">SND_SEQ_PORT_CAP_SUBS_WRITE</span></a> capability is required. Only MIDI input port must have <a class="reference internal" href="group_SeqPort.html#doxid-group-seq-port-1ga4b8aa6cbeb3c99c3ad033f4ce69c06e2"><span class="std std-ref">SND_SEQ_PORT_CAP_SUBS_READ</span></a> capability.</p>
+<p>As default, the connection of ports via the third client is always allowed if proper read and write (subscription) capabilities are set both to the source and destination ports. For prohibiting this behavior, set a capability <a class="reference internal" href="group_SeqPort.html#doxid-group-seq-port-1gaa0a63e34744ed9faedf64fe0b364bfd4"><span class="std std-ref">SND_SEQ_PORT_CAP_NO_EXPORT</span></a> to the port. If this flag is set, subscription must be done by sender or receiver client itself. It is useful to avoid unexpected disconnection. The ports which won’t accept subscription should have this capability for better security.</p>
+</section>
+<section id="subscription-handlers">
+<span id="doxid-seq-1seq-subs-handle"></span><h3>Subscription handlers</h3>
+<p>In ALSA library, subscription is done via <a class="reference internal" href="group_SeqSubscribe.html#doxid-group-seq-subscribe-1ga2b216ec66cd724af31d376398e7b4863"><span class="std std-ref">snd_seq_subscribe_port()</span></a> function. It takes the argument of <a class="reference internal" href="group_SeqSubscribe.html#doxid-group-seq-subscribe-1gafdf1b5614ce0d591c86bfcd3f369fa38"><span class="std std-ref">snd_seq_port_subscribe_t</span></a> record pointer. Suppose that you have a client which will receive data from a MIDI input device. The source and destination addresses are like the below;</p>
+<pre class="highlight literal-block"><span></span><span class="n">snd_seq_addr_t</span> <span class="n">sender</span><span class="p">,</span> <span class="n">dest</span><span class="p">;</span>
+<span class="n">sender</span><span class="p">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">MIDI_input_client</span><span class="p">;</span>
+<span class="n">sender</span><span class="p">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">MIDI_input_port</span><span class="p">;</span>
+<span class="n">dest</span><span class="p">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">my_client</span><span class="p">;</span>
+<span class="n">dest</span><span class="p">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">my_port</span><span class="p">;</span></pre>
+<p>To set these values as the connection call like this.</p>
+<pre class="highlight literal-block"><span></span><span class="n">snd_seq_port_subscribe_t</span> <span class="o">*</span><span class="n">subs</span><span class="p">;</span>
+<span class="n">snd_seq_port_subscribe_alloca</span><span class="p">(</span><span class="o">&amp;</span><span class="n">subs</span><span class="p">);</span>
+<span class="n">snd_seq_port_subscribe_set_sender</span><span class="p">(</span><span class="n">subs</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sender</span><span class="p">);</span>
+<span class="n">snd_seq_port_subscribe_set_dest</span><span class="p">(</span><span class="n">subs</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">dest</span><span class="p">);</span>
+<span class="n">snd_seq_subscribe_port</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">subs</span><span class="p">);</span></pre>
+<p>When the connection should be exclusively done only between a certain pair, set <em>exclusive</em> attribute to the subscription record before calling <a class="reference internal" href="group_SeqSubscribe.html#doxid-group-seq-subscribe-1ga2b216ec66cd724af31d376398e7b4863"><span class="std std-ref">snd_seq_subscribe_port</span></a>.</p>
+<pre class="highlight literal-block"><span></span><span class="n">snd_seq_port_subscribe_set_exclusive</span><span class="p">(</span><span class="n">subs</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span></pre>
+<p>The succeeding subscriptions will be refused.</p>
+<p>The timestamp can be updated independently on each connection. When set up, the timestamp of incoming queue to the destination port is updated automatically to the time of the specified queue.</p>
+<pre class="highlight literal-block"><span></span><span class="n">snd_seq_port_subscribe_set_time_update</span><span class="p">(</span><span class="n">subs</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+<span class="n">snd_seq_port_subscribe_set_queue</span><span class="p">(</span><span class="n">subs</span><span class="p">,</span> <span class="n">q</span><span class="p">);</span></pre>
+<p>For getting the wallclock time (sec/nsec pair), set <em>real</em> attribute:</p>
+<pre class="highlight literal-block"><span></span><span class="n">snd_seq_port_subscribe_set_time_real</span><span class="p">(</span><span class="n">subs</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span></pre>
+<p>Otherwise, the timestamp is stored in tick unit. This feature is useful when receiving events from MIDI input device. The event time is automatically set in the event record.</p>
+<p>Note that an outsider client may connect other ports. In this case, however, the subscription may be refused if <a class="reference internal" href="group_SeqPort.html#doxid-group-seq-port-1gaa0a63e34744ed9faedf64fe0b364bfd4"><span class="std std-ref">SND_SEQ_PORT_CAP_NO_EXPORT</span></a> capability is set in either sender or receiver port.</p>
+</section>
+</section>
+<section id="examples-of-subscription">
+<span id="doxid-seq-1seq-subs-ex"></span><h2>Examples of subscription</h2>
+<section id="capture-from-keyboard">
+<span id="doxid-seq-1seq-subs-ex-capt"></span><h3>Capture from keyboard</h3>
+<p>Assume MIDI input port = 64:0, application port = 128:0, and queue for timestamp = 1 with real-time stamp. The application port must have capability <a class="reference internal" href="group_SeqPort.html#doxid-group-seq-port-1gae8afb5ac8f546461b4bab25454972aeb"><span class="std std-ref">SND_SEQ_PORT_CAP_WRITE</span></a>.</p>
+<pre class="highlight literal-block"><span></span><span class="kt">void</span> <span class="nf">capture_keyboard</span><span class="p">(</span><span class="n">snd_seq_t</span> <span class="o">*</span><span class="n">seq</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="n">snd_seq_addr_t</span> <span class="n">sender</span><span class="p">,</span> <span class="n">dest</span><span class="p">;</span>
+        <span class="n">snd_seq_port_subscribe_t</span> <span class="o">*</span><span class="n">subs</span><span class="p">;</span>
+        <span class="n">sender</span><span class="p">.</span><span class="n">client</span> <span class="o">=</span> <span class="mi">64</span><span class="p">;</span>
+        <span class="n">sender</span><span class="p">.</span><span class="n">port</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">dest</span><span class="p">.</span><span class="n">client</span> <span class="o">=</span> <span class="mi">128</span><span class="p">;</span>
+        <span class="n">dest</span><span class="p">.</span><span class="n">port</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">snd_seq_port_subscribe_alloca</span><span class="p">(</span><span class="o">&amp;</span><span class="n">subs</span><span class="p">);</span>
+        <span class="n">snd_seq_port_subscribe_set_sender</span><span class="p">(</span><span class="n">subs</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sender</span><span class="p">);</span>
+        <span class="n">snd_seq_port_subscribe_set_dest</span><span class="p">(</span><span class="n">subs</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">dest</span><span class="p">);</span>
+        <span class="n">snd_seq_port_subscribe_set_queue</span><span class="p">(</span><span class="n">subs</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">snd_seq_port_subscribe_set_time_update</span><span class="p">(</span><span class="n">subs</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">snd_seq_port_subscribe_set_time_real</span><span class="p">(</span><span class="n">subs</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">snd_seq_subscribe_port</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">subs</span><span class="p">);</span>
+<span class="p">}</span></pre>
+</section>
+<section id="output-to-midi-device">
+<span id="doxid-seq-1seq-subs-ex-out"></span><h3>Output to MIDI device</h3>
+<p>Assume MIDI output port = 65:1 and application port = 128:0. The application port must have capability <a class="reference internal" href="group_SeqPort.html#doxid-group-seq-port-1ga81a7a5385af746364b757eb7911ec2f0"><span class="std std-ref">SND_SEQ_PORT_CAP_READ</span></a>.</p>
+<pre class="highlight literal-block"><span></span><span class="kt">void</span> <span class="nf">subscribe_output</span><span class="p">(</span><span class="n">snd_seq_t</span> <span class="o">*</span><span class="n">seq</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="n">snd_seq_addr_t</span> <span class="n">sender</span><span class="p">,</span> <span class="n">dest</span><span class="p">;</span>
+        <span class="n">snd_seq_port_subscribe_t</span> <span class="o">*</span><span class="n">subs</span><span class="p">;</span>
+        <span class="n">sender</span><span class="p">.</span><span class="n">client</span> <span class="o">=</span> <span class="mi">128</span><span class="p">;</span>
+        <span class="n">sender</span><span class="p">.</span><span class="n">port</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">dest</span><span class="p">.</span><span class="n">client</span> <span class="o">=</span> <span class="mi">65</span><span class="p">;</span>
+        <span class="n">dest</span><span class="p">.</span><span class="n">port</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">snd_seq_port_subscribe_alloca</span><span class="p">(</span><span class="o">&amp;</span><span class="n">subs</span><span class="p">);</span>
+        <span class="n">snd_seq_port_subscribe_set_sender</span><span class="p">(</span><span class="n">subs</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sender</span><span class="p">);</span>
+        <span class="n">snd_seq_port_subscribe_set_dest</span><span class="p">(</span><span class="n">subs</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">dest</span><span class="p">);</span>
+        <span class="n">snd_seq_subscribe_port</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">subs</span><span class="p">);</span>
+<span class="p">}</span></pre>
+<p>This example can be simplified by using <a class="reference internal" href="group_SeqMiddle.html#doxid-group-seq-middle-1gab39e210c5d93e96c241644f334c6c9ca"><span class="std std-ref">snd_seq_connect_to()</span></a> function.</p>
+<pre class="highlight literal-block"><span></span><span class="kt">void</span> <span class="nf">subscribe_output</span><span class="p">(</span><span class="n">snd_seq_t</span> <span class="o">*</span><span class="n">seq</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="n">snd_seq_connect_to</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">65</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span></pre>
+</section>
+<section id="arbitrary-connection">
+<span id="doxid-seq-1seq-subs-ex-arbit"></span><h3>Arbitrary connection</h3>
+<p>Assume connection from application 128:0 to 129:0, and that subscription is done by the third application (130:0). The sender must have capabilities both <a class="reference internal" href="group_SeqPort.html#doxid-group-seq-port-1ga81a7a5385af746364b757eb7911ec2f0"><span class="std std-ref">SND_SEQ_PORT_CAP_READ</span></a> and <a class="reference internal" href="group_SeqPort.html#doxid-group-seq-port-1ga4b8aa6cbeb3c99c3ad033f4ce69c06e2"><span class="std std-ref">SND_SEQ_PORT_CAP_SUBS_READ</span></a>, and the receiver <a class="reference internal" href="group_SeqPort.html#doxid-group-seq-port-1gae8afb5ac8f546461b4bab25454972aeb"><span class="std std-ref">SND_SEQ_PORT_CAP_WRITE</span></a> and <a class="reference internal" href="group_SeqPort.html#doxid-group-seq-port-1ga52ff1c51578166e67936cfb826c966c0"><span class="std std-ref">SND_SEQ_PORT_CAP_SUBS_WRITE</span></a>, respectively.</p>
+<pre class="highlight literal-block"><span></span><span class="c1">// ..in the third application (130:0) ..</span>
+<span class="kt">void</span> <span class="nf">coupling</span><span class="p">(</span><span class="n">snd_seq_t</span> <span class="o">*</span><span class="n">seq</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="n">snd_seq_addr_t</span> <span class="n">sender</span><span class="p">,</span> <span class="n">dest</span><span class="p">;</span>
+        <span class="n">snd_seq_port_subscribe_t</span> <span class="o">*</span><span class="n">subs</span><span class="p">;</span>
+        <span class="n">sender</span><span class="p">.</span><span class="n">client</span> <span class="o">=</span> <span class="mi">128</span><span class="p">;</span>
+        <span class="n">sender</span><span class="p">.</span><span class="n">port</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">dest</span><span class="p">.</span><span class="n">client</span> <span class="o">=</span> <span class="mi">129</span><span class="p">;</span>
+        <span class="n">dest</span><span class="p">.</span><span class="n">port</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">snd_seq_port_subscribe_alloca</span><span class="p">(</span><span class="o">&amp;</span><span class="n">subs</span><span class="p">);</span>
+        <span class="n">snd_seq_port_subscribe_set_sender</span><span class="p">(</span><span class="n">subs</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sender</span><span class="p">);</span>
+        <span class="n">snd_seq_port_subscribe_set_dest</span><span class="p">(</span><span class="n">subs</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">dest</span><span class="p">);</span>
+        <span class="n">snd_seq_subscribe_port</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">subs</span><span class="p">);</span>
+<span class="p">}</span></pre>
+</section>
+</section>
+<section id="event-processing">
+<span id="doxid-seq-1seq-ex-event"></span><h2>Event Processing</h2>
+<section id="addressing">
+<span id="doxid-seq-1seq-ex-address"></span><h3>Addressing</h3>
+<p>Now, two ports are connected by subscription. Then how to send events?</p>
+<p>The subscribed port doesn’t have to know the exact sender address. Instead, there is a special address for subscribers, <a class="reference internal" href="group_Sequencer.html#doxid-group-sequencer-1ga383b235d2afbe48704952edfd3a33eed"><span class="std std-ref">SND_SEQ_ADDRESS_SUBSCRIBERS</span></a>. The sender must set this value as the destination client. Destination port is ignored.</p>
+<p>The other values in source and destination addresses are identical with the normal event record. If the event is scheduled, proper queue and timestamp values must be set.</p>
+<p>There is a convenient function to set the address in an event record. In order to set destination as subscribers, use <a class="reference internal" href="group_SeqMiddle.html#doxid-group-seq-middle-1ga1eb546b3a1a23044d0ba7818731ed6d7"><span class="std std-ref">snd_seq_ev_set_subs()</span></a>.</p>
+</section>
+<section id="delivery">
+<span id="doxid-seq-1scheduled"></span><h3>Delivery</h3>
+<p>If we send an event at the scheduled time <code class="docutils literal notranslate"><span class="pre">t</span></code> (tick) on the queue <code class="docutils literal notranslate"><span class="pre">Q</span></code>, the sender must set both schedule queue and time in the event record. The program appears like this:</p>
+<pre class="highlight literal-block"><span></span><span class="kt">void</span> <span class="nf">schedule_event</span><span class="p">(</span><span class="n">snd_seq_t</span> <span class="o">*</span><span class="n">seq</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="n">snd_seq_event_t</span> <span class="n">ev</span><span class="p">;</span>
+
+        <span class="n">snd_seq_ev_clear</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ev</span><span class="p">);</span>
+        <span class="n">snd_seq_ev_set_source</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ev</span><span class="p">,</span> <span class="n">my_port</span><span class="p">);</span>
+        <span class="n">snd_seq_ev_set_subs</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ev</span><span class="p">);</span>
+        <span class="n">snd_seq_ev_schedule_tick</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ev</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">t</span><span class="p">);</span>
+        <span class="p">...</span> <span class="c1">// set event type, data, so on..</span>
+
+        <span class="n">snd_seq_event_output</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ev</span><span class="p">);</span>
+        <span class="p">...</span>
+        <span class="n">snd_seq_drain_output</span><span class="p">(</span><span class="n">seq</span><span class="p">);</span>  <span class="c1">// if necessary</span>
+<span class="p">}</span></pre>
+<p>Of course, you can use realtime stamp, too.</p>
+</section>
+<section id="direct-delivery">
+<span id="doxid-seq-1seq-ex-direct"></span><h3>Direct Delivery</h3>
+<p>If the event is sent immediately without enqueued, the sender doesn’t take care of queue and timestamp. As well as the case above, there is a function to set the direct delivery, <a class="reference internal" href="group_SeqMiddle.html#doxid-group-seq-middle-1gae2674210b5601e8aa3e787c1ddbdcb62"><span class="std std-ref">snd_seq_ev_set_direct()</span></a>. The program can be more simplified as follows:</p>
+<pre class="highlight literal-block"><span></span><span class="kt">void</span> <span class="nf">direct_delivery</span><span class="p">(</span><span class="n">snd_seq_t</span> <span class="o">*</span><span class="n">seq</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="n">snd_seq_event_t</span> <span class="n">ev</span><span class="p">;</span>
+
+        <span class="n">snd_seq_ev_clear</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ev</span><span class="p">);</span>
+        <span class="n">snd_seq_ev_set_source</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ev</span><span class="p">,</span> <span class="n">port</span><span class="p">);</span>
+        <span class="n">snd_seq_ev_set_subs</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ev</span><span class="p">);</span>
+        <span class="n">snd_seq_ev_set_direct</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ev</span><span class="p">);</span>
+        <span class="p">...</span> <span class="c1">// set event type, data, so on..</span>
+
+        <span class="n">snd_seq_event_output</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ev</span><span class="p">);</span>
+        <span class="n">snd_seq_drain_output</span><span class="p">(</span><span class="n">seq</span><span class="p">);</span>
+<span class="p">}</span></pre>
+<p>You should flush event soon after output event. Otherwise, the event is enqueued on output queue of ALSA library (not in the kernel!), and will be never processed until this queue becomes full.</p>
+</section>
+<section id="filter-application">
+<span id="doxid-seq-1seq-ex-filter"></span><h3>Filter Application</h3>
+<p>A typical filter program, which receives an event and sends it immediately after some modification, will appear as following:</p>
+<pre class="highlight literal-block"><span></span><span class="kt">void</span> <span class="nf">event_filter</span><span class="p">(</span><span class="n">snd_seq_t</span> <span class="o">*</span><span class="n">seq</span><span class="p">,</span> <span class="n">snd_seq_event_t</span> <span class="o">*</span><span class="n">ev</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">snd_seq_event_input</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ev</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c1">//.. modify input event ..</span>
+
+                <span class="n">snd_seq_ev_set_source</span><span class="p">(</span><span class="n">ev</span><span class="p">,</span> <span class="n">my_port</span><span class="p">);</span>
+                <span class="n">snd_seq_ev_set_subs</span><span class="p">(</span><span class="n">ev</span><span class="p">);</span>
+                <span class="n">snd_seq_ev_set_direct</span><span class="p">(</span><span class="n">ev</span><span class="p">);</span>
+                <span class="n">snd_seq_event_output</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">ev</span><span class="p">);</span>
+                <span class="n">snd_seq_drain_output</span><span class="p">(</span><span class="n">seq</span><span class="p">);</span>
+        <span class="p">}</span>
+<span class="p">}</span></pre>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Sequencer interface</a><ul>
+<li><a class="reference internal" href="#general">General</a></li>
+<li><a class="reference internal" href="#client-and-port">Client and Port</a></li>
+<li><a class="reference internal" href="#memory-pool">Memory Pool</a></li>
+<li><a class="reference internal" href="#subscription">Subscription</a></li>
+<li><a class="reference internal" href="#sequencer-events">Sequencer Events</a><ul>
+<li><a class="reference internal" href="#structure-of-an-event">Structure of an event</a></li>
+<li><a class="reference internal" href="#scheduling-queue">Scheduling queue</a></li>
+<li><a class="reference internal" href="#time-stamp">Time stamp</a></li>
+<li><a class="reference internal" href="#source-and-destination-addresses">Source and destination addresses</a></li>
+<li><a class="reference internal" href="#data-storage-type">Data storage type</a></li>
+<li><a class="reference internal" href="#scheduling-priority">Scheduling priority</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#event-queues">Event Queues</a><ul>
+<li><a class="reference internal" href="#creation-of-a-queue">Creation of a queue</a></li>
+<li><a class="reference internal" href="#setting-queue-tempo">Setting queue tempo</a></li>
+<li><a class="reference internal" href="#starting-and-stopping-a-queue">Starting and stopping a queue</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#more-inside-the-subscription">More inside the subscription</a><ul>
+<li><a class="reference internal" href="#permissions">Permissions</a></li>
+<li><a class="reference internal" href="#subscription-handlers">Subscription handlers</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples-of-subscription">Examples of subscription</a><ul>
+<li><a class="reference internal" href="#capture-from-keyboard">Capture from keyboard</a></li>
+<li><a class="reference internal" href="#output-to-midi-device">Output to MIDI device</a></li>
+<li><a class="reference internal" href="#arbitrary-connection">Arbitrary connection</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#event-processing">Event Processing</a><ul>
+<li><a class="reference internal" href="#addressing">Addressing</a></li>
+<li><a class="reference internal" href="#delivery">Delivery</a></li>
+<li><a class="reference internal" href="#direct-delivery">Direct Delivery</a></li>
+<li><a class="reference internal" href="#filter-application">Filter Application</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="page_conffunc.html"
+                          title="previous chapter">Runtime functions in configuration files</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="page_timer.html"
+                          title="next chapter">Timer interface</a></p>
+  </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="page_timer.html" title="Timer interface"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="page_conffunc.html" title="Runtime functions in configuration files"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ALSA Library Documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Sequencer interface</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 1998-2017, ALSA Library Maintainers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+  </body>
+</html>

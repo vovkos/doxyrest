@@ -1,0 +1,346 @@
+.. index:: pair: page; Configuration files
+.. _doxid-conf:
+
+Configuration files
+===================
+
+Configuration files use a simple format allowing modern data description like nesting and array assignments.
+
+
+
+.. _doxid-conf_1conf_whitespace:
+
+Whitespace
+~~~~~~~~~~
+
+Whitespace is the collective name given to spaces (blanks), horizontal and vertical tabs, newline characters, and comments. Whitespace can indicate where configuration tokens start and end, but beyond this function, any surplus whitespace is discarded. For example, the two sequences
+
+.. ref-code-block:: cpp
+
+	a 1 b 2
+
+and
+
+.. ref-code-block:: cpp
+
+	a 1 
+	   b 2
+
+are lexically equivalent and parse identically to give the four tokens:
+
+.. ref-code-block:: cpp
+
+	a
+	1
+	b
+	2
+
+The ASCII characters representing whitespace can occur within literal strings, in which case they are protected from the normal parsing process (they remain as part of the string). For example:
+
+.. ref-code-block:: cpp
+
+	name "John Smith"
+
+parses to two tokens, including the single literal-string token "John
+Smith".
+
+
+
+
+
+.. _doxid-conf_1conf_linesplicing:
+
+Line continuation with
+~~~~~~~~~~~~~~~~~~~~~~
+
+A special case occurs if a newline character in a string is preceded by a backslash (). The backslash and the new line are both discarded, allowing two physical lines of text to be treated as one unit.
+
+.. ref-code-block:: cpp
+
+	"John \
+	Smith"
+
+is parsed as "John Smith".
+
+
+
+
+
+.. _doxid-conf_1conf_comments:
+
+Comments
+~~~~~~~~
+
+A single-line comment begins with the character #. The comment can start at any position, and extends to the end of the line.
+
+.. ref-code-block:: cpp
+
+	a 1  # this is a comment
+
+
+
+
+
+.. _doxid-conf_1conf_include:
+
+Including configuration files
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To include another configuration file, write the file name in angle brackets. The prefix ``confdir:`` will reference the global configuration directory.
+
+.. ref-code-block:: cpp
+
+	</etc/alsa1.conf>
+	<confdir:pcm/surround.conf>
+
+
+
+
+
+.. _doxid-conf_1conf_punctuators:
+
+Punctuators
+~~~~~~~~~~~
+
+The configuration punctuators (also known as separators) are:
+
+.. ref-code-block:: cpp
+
+	{} [] , ; = . ' " new-line form-feed carriage-return whitespace
+
+
+
+.. _doxid-conf_1conf_braces:
+
+Braces
+------
+
+Opening and closing braces { } indicate the start and end of a compound statement:
+
+.. ref-code-block:: cpp
+
+	a {
+	  b 1
+	}
+
+
+
+
+
+.. _doxid-conf_1conf_brackets:
+
+Brackets
+--------
+
+Opening and closing brackets indicate a single array definition. The identifiers are automatically generated starting with zero.
+
+.. ref-code-block:: cpp
+
+	a [
+	  "first"
+	  "second"
+	]
+
+The above code is equal to
+
+.. ref-code-block:: cpp
+
+	a.0 "first"
+	a.1 "second"
+
+
+
+
+
+.. _doxid-conf_1conf_comma_semicolon:
+
+Comma and semicolon
+-------------------
+
+The comma (,) or semicolon (;) can separate value assignments. It is not strictly required to use these separators because whitespace suffices to separate tokens.
+
+.. ref-code-block:: cpp
+
+	a 1;
+	b 1,
+
+
+
+
+
+.. _doxid-conf_1conf_equal:
+
+Equal sign
+----------
+
+The equal sign (=) can separate variable declarations from initialization lists:
+
+.. ref-code-block:: cpp
+
+	a=1
+	b=2
+
+Using equal signs is not required because whitespace suffices to separate tokens.
+
+
+
+
+
+
+
+.. _doxid-conf_1conf_assigns:
+
+Assignments
+~~~~~~~~~~~
+
+The configuration file defines id (key) and value pairs. The id (key) can be composed from ASCII digits, characters from a to z and A to Z, and the underscore (\_). The value can be either a string, an integer, a real number, or a compound statement.
+
+
+
+.. _doxid-conf_1conf_single:
+
+Single assignments
+------------------
+
+.. ref-code-block:: cpp
+
+	a 1 # is equal to
+	a=1 # is equal to
+	a=1;    # is equal to
+	a 1,
+
+
+
+
+
+.. _doxid-conf_1conf_compound:
+
+Compound assignments (definitions using braces)
+-----------------------------------------------
+
+.. ref-code-block:: cpp
+
+	a {
+	  b = 1
+	}
+	a={
+	  b 1,
+	}
+
+
+
+
+
+
+
+.. _doxid-conf_1conf_compound1:
+
+Compound assignments (one key definitions)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. ref-code-block:: cpp
+
+	a.b 1
+	a.b=1
+
+
+
+.. _doxid-conf_1conf_array:
+
+Array assignments (definitions using brackets)
+----------------------------------------------
+
+.. ref-code-block:: cpp
+
+	a [
+	  "first"
+	  "second"
+	]
+
+
+
+
+
+.. _doxid-conf_1conf_array1:
+
+Array assignments (one key definitions)
+---------------------------------------
+
+.. ref-code-block:: cpp
+
+	a.0 "first"
+	a.1 "second"
+
+
+
+
+
+
+
+.. _doxid-conf_1conf_mode:
+
+Operation modes for parsing nodes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+By default, the node operation mode is 'merge+create', i.e., if a configuration node is not present a new one is created, otherwise the latest assignment is merged (if possible - type checking). The 'merge+create' operation mode is specified with the prefix character plus (+).
+
+The operation mode 'merge' merges the node with the old one (which must exist). Type checking is done, so strings cannot be assigned to integers and so on. This mode is specified with the prefix character minus (-).
+
+The operation mode 'do not override' ignores a new configuration node if a configuration node with the same name exists. This mode is specified with the prefix character question mark (?).
+
+The operation mode 'override' always overrides the old configuration node with new contents. This mode is specified with the prefix character exclamation mark (!).
+
+.. ref-code-block:: cpp
+
+	defaults.pcm.!device 1
+
+
+
+
+
+.. _doxid-conf_1conf_syntax_summary:
+
+Syntax summary
+~~~~~~~~~~~~~~
+
+.. ref-code-block:: cpp
+
+	# Configuration file syntax
+	
+	# Include a new configuration file
+	<filename>
+	
+	# Simple assignment
+	name [=] value [,|;]
+	
+	# Compound assignment (first style)
+	name [=] {
+	        name1 [=] value [,|;]
+	        ...
+	}
+	
+	# Compound assignment (second style)
+	name.name1 [=] value [,|;]
+	
+	# Array assignment (first style)
+	name [
+	        value0 [,|;]
+	        value1 [,|;]
+	        ...
+	]
+	
+	# Array assignment (second style)
+	name.0 [=] value0 [,|;]
+	name.1 [=] value1 [,|;]
+
+
+
+
+
+.. _doxid-conf_1conf_syntax_ref:
+
+References
+~~~~~~~~~~
+
+:ref:`Runtime arguments in configuration files <doxid-confarg>` :ref:`Runtime functions in configuration files <doxid-conffunc>` :ref:`Hooks in configuration files <doxid-confhooks>`
+

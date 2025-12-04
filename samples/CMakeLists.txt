@@ -11,7 +11,7 @@
 
 option(
 	BUILD_DOXYREST_SAMPLES
-	"Build example documentation for a bunch of opensource projects(used for testing as well)"
+	"Build example documentation for a bunch of opensource projects (used for testing as well)"
 	ON
 )
 

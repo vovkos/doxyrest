@@ -183,17 +183,7 @@ if(WIN32)
 	endif()
 
 	if(_DLL_LIST)
-		add_custom_command(
-			TARGET doxyrest
-			POST_BUILD
-			COMMAND
-				echo Copying DLL files for doxyrest...
-			COMMAND
-				${CMAKE_COMMAND} -E copy
-				${_DLL_LIST}
-				${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CONFIGURATION}
-			)
-
+		axl_copy_dlls_for_target(doxyrest ${_DLL_LIST})
 		axl_replace_configuration_for_install(_INSTALL_DLL_LIST ${_DLL_LIST})
 
 		install(

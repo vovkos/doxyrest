@@ -76,10 +76,8 @@ DoxygenIndexType::onCompound(
 		attributes += 2;
 	}
 
-	if (refId.isEmpty()) {
-		err::setError("missing 'refid' attribute");
-		return false;
-	}
+	if (refId.isEmpty())
+		return err::fail("missing 'refid' attribute");
 
 	return parseCompound(refId);
 }

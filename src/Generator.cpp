@@ -57,10 +57,8 @@ Generator::create(const CmdLine* cmdLine) {
 	if (m_frameFileName.isEmpty())
 		m_frameFileName = g_defaultFrameFileName;
 
-	if (!io::findFilePath(m_frameFileName, &m_frameDirList)) {
-		err::setFormatStringError("master frame file %s name missing", m_frameFileName.sz());
-		return false;
-	}
+	if (!io::findFilePath(m_frameFileName, &m_frameDirList))
+		return err::fail("master frame file %s name missing", m_frameFileName.sz());
 
 	m_outputFileName = !cmdLine->m_outputFileName.isEmpty() ?
 		cmdLine->m_outputFileName :
@@ -109,10 +107,8 @@ Generator::generate(
 	bool result;
 
 	sl::String frameFilePath = io::findFilePath(frameFileName, &m_frameDirList);
-	if (frameFilePath.isEmpty()) {
-		err::setFormatStringError("frame file '%s' not found", frameFileName.sz());
-		return false;
-	}
+	if (frameFilePath.isEmpty())
+		return err::fail("frame file '%s' not found", frameFileName.sz());
 
 	sl::String targetDir = io::getDir(targetFileName);
 	result = io::ensureDirExists(targetDir);
@@ -139,10 +135,8 @@ Generator::processFile(
 	bool result;
 
 	sl::String frameFilePath = io::findFilePath(frameFileName, m_frameDir, &m_frameDirList);
-	if (frameFilePath.isEmpty()) {
-		err::setFormatStringError("frame '%s' not found", frameFileName.sz());
-		return false;
-	}
+	if (frameFilePath.isEmpty())
+		return err::fail("frame '%s' not found", frameFileName.sz());
 
 	sl::String prevFrameDir = m_stringTemplate.m_luaState.getGlobalString("g_frameDir");
 

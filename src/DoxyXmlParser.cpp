@@ -38,7 +38,7 @@ DoxyXmlParser::parseFile(
 
 	bool result = xml::ExpatParser<DoxyXmlParser>::parseFile(fileName);
 	if (!result)
-		err::pushFormatStringError("%s(%d)", m_filePath.sz(), getLineNumber());
+		err::pushError("%s(%d)", m_filePath.sz(), getLineNumber());
 
 	return result;
 }

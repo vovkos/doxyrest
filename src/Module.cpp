@@ -1172,10 +1172,8 @@ GlobalNamespace::build(
 				module->m_compoundList.insertTail(baseCompound);
 			} else {
 				baseCompound = module->m_compoundMap.findValue(refIt->m_id, NULL);
-				if (!baseCompound) {
-					err::setFormatStringError("can't find base compound refid: %s\n", refIt->m_id.sz());
-					return false;
-				}
+				if (!baseCompound)
+					return err::fail("can't find base compound refid: %s\n", refIt->m_id.sz());
 
 				baseCompound->m_derivedTypeArray_auto.append(compound);
 			}

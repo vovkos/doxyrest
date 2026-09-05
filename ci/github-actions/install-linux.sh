@@ -26,12 +26,6 @@ else
 	# install g++-multilib -- in the end, after i386 packages!
 
 	sudo apt-get install -y g++-multilib
-
-	# CMake fails to properly switch between 32-bit and 64-bit libraries on Ubuntu
-	
-	echo "set (EXPAT_LIB_DIR /usr/lib/i386-linux-gnu)" >> paths.cmake
-	echo "set (LUA_LIB_DIR /usr/lib/i386-linux-gnu)" >> paths.cmake
-	echo "set (OPENSSL_INC_DIR DISABLED)" >> paths.cmake
 fi
 
 sudo apt-get install -y ragel

@@ -1,0 +1,239 @@
+.. index:: pair: group; Error handling
+.. _doxid-group___error:
+
+Error handling
+==============
+
+.. toctree::
+	:hidden:
+
+Overview
+~~~~~~~~
+
+Error handling macros and functions. :ref:`More...<details-group___error>`
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	
+	// typedefs
+
+	typedef void (*:ref:`snd_lib_error_handler_t<doxid-group___error_1gae71d39953bf482ba487d811a69a9175c>`)(
+		const char *file,
+		int line,
+		const char *function,
+		int err,
+		const char *fmt,
+		...
+		);
+
+	// global variables
+
+	:ref:`snd_lib_error_handler_t<doxid-group___error_1gae71d39953bf482ba487d811a69a9175c>` :ref:`snd_lib_error<doxid-group___error_1gad6a605072dcc056de5f86d67687d90a6>`;
+
+	// global functions
+
+	const char*
+	:ref:`snd_strerror<doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(int errnum);
+
+	int
+	:ref:`snd_lib_error_set_handler<doxid-group___error_1ga6ba1f0aa6c6bc5d335ab297d6019cb03>`(:ref:`snd_lib_error_handler_t<doxid-group___error_1gae71d39953bf482ba487d811a69a9175c>` handler);
+
+	// macros
+
+	#define :ref:`SNDERR<doxid-group___error_1ga281420eb1344fe9f01d67d20c92457f0>`(args...)
+	#define :ref:`SND_ERROR_ALISP_NIL<doxid-group___error_1ga07b06f3c54db1c1d382e02b59b4fb652>`
+	#define :ref:`SND_ERROR_BEGIN<doxid-group___error_1ga4e74ed65daac8e1737b7ec7b38d11ab4>`
+	#define :ref:`SND_ERROR_INCOMPATIBLE_VERSION<doxid-group___error_1gae24d4fe06c0a7478ebdaeeeca55d34c5>`
+	#define :ref:`SYSERR<doxid-group___error_1ga6a6d50d5d5c51d971732e9925a226435>`(args...)
+
+.. _details-group___error:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+Error handling macros and functions.
+
+Typedefs
+--------
+
+.. index:: pair: typedef; snd_lib_error_handler_t
+.. _doxid-group___error_1gae71d39953bf482ba487d811a69a9175c:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	typedef void (*snd_lib_error_handler_t)(
+		const char *file,
+		int line,
+		const char *function,
+		int err,
+		const char *fmt,
+		...
+		)
+
+Error handler callback.
+
+A function of this type is called by the ALSA library when an error occurs. This function usually shows the message on the screen, and/or logs it.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- file
+
+		- Source file name.
+
+	*
+		- line
+
+		- Line number.
+
+	*
+		- function
+
+		- Function name.
+
+	*
+		- err
+
+		- Value of ``errno``, or 0 if not relevant.
+
+	*
+		- fmt
+
+		- ``printf(3)`` format.
+
+	*
+		- ...
+
+		- ``printf(3)`` arguments.
+
+Global Variables
+----------------
+
+.. index:: pair: variable; snd_lib_error
+.. _doxid-group___error_1gad6a605072dcc056de5f86d67687d90a6:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`snd_lib_error_handler_t<doxid-group___error_1gae71d39953bf482ba487d811a69a9175c>` snd_lib_error
+
+Pointer to the error handler function. For internal use only.
+
+Global Functions
+----------------
+
+.. index:: pair: function; snd_strerror
+.. _doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	const char*
+	snd_strerror(int errnum)
+
+Returns the message for an error code.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- errnum
+
+		- The error code number, which must be a system error code or an ALSA error code.
+
+
+
+.. rubric:: Returns:
+
+The ASCII description of the given numeric error code.
+
+.. index:: pair: function; snd_lib_error_set_handler
+.. _doxid-group___error_1ga6ba1f0aa6c6bc5d335ab297d6019cb03:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	int
+	snd_lib_error_set_handler(:ref:`snd_lib_error_handler_t<doxid-group___error_1gae71d39953bf482ba487d811a69a9175c>` handler)
+
+Sets the error handler.
+
+This function sets a new error handler, or (if ``handler`` is ``NULL``) the default one which prints the error messages to ``stderr``.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- handler
+
+		- The pointer to the new error handler function.
+
+Macros
+------
+
+.. index:: pair: define; SNDERR
+.. _doxid-group___error_1ga281420eb1344fe9f01d67d20c92457f0:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SNDERR(args...)
+
+Shows a sound error message.
+
+.. index:: pair: define; SND_ERROR_ALISP_NIL
+.. _doxid-group___error_1ga07b06f3c54db1c1d382e02b59b4fb652:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_ERROR_ALISP_NIL
+
+Lisp encountered an error during acall.
+
+.. index:: pair: define; SND_ERROR_BEGIN
+.. _doxid-group___error_1ga4e74ed65daac8e1737b7ec7b38d11ab4:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_ERROR_BEGIN
+
+Lower boundary of sound error codes.
+
+.. index:: pair: define; SND_ERROR_INCOMPATIBLE_VERSION
+.. _doxid-group___error_1gae24d4fe06c0a7478ebdaeeeca55d34c5:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SND_ERROR_INCOMPATIBLE_VERSION
+
+Kernel/library protocols are not compatible.
+
+.. index:: pair: define; SYSERR
+.. _doxid-group___error_1ga6a6d50d5d5c51d971732e9925a226435:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	#define SYSERR(args...)
+
+Shows a system error message (related to ``errno``).
+

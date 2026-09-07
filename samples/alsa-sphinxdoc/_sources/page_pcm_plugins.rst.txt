@@ -1,0 +1,1297 @@
+.. index:: pair: page; PCM (digital audio) plugins
+.. _doxid-pcm_plugins:
+
+PCM (digital audio) plugins
+===========================
+
+PCM plugins extends functionality and features of PCM devices. The plugins take care about various sample conversions, sample copying among channels and so on.
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_slave:
+
+Slave definition
+~~~~~~~~~~~~~~~~
+
+The slave plugin can be specified directly with a string or the definition can be entered inside a compound configuration node. Some restrictions can be also specified (like static rate or count of channels).
+
+.. ref-code-block:: cpp
+
+	pcm_slave.NAME {
+	    pcm STR     # PCM name
+	    # or
+	    pcm { }     # PCM definition
+	    format STR  # Format or "unchanged"
+	    channels INT    # Count of channels or "unchanged" string
+	    rate INT    # Rate in Hz or "unchanged" string
+	    period_time INT # Period time in us or "unchanged" string
+	    buffer_time INT # Buffer time in us or "unchanged" string
+	}
+
+Example:
+
+.. ref-code-block:: cpp
+
+	pcm_slave.slave_rate44100Hz {
+	    pcm "hw:0,0"
+	    rate 44100
+	}
+	
+	pcm.rate44100Hz {
+	    type plug
+	    slave slave_rate44100Hz
+	}
+
+The equivalent configuration (in one compound):
+
+.. ref-code-block:: cpp
+
+	pcm.rate44100Hz {
+	    type plug
+	    slave {
+	        pcm "hw:0,0"
+	        rate 44100
+	    }
+	}
+
+
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_hw:
+
+Plugin: hw
+~~~~~~~~~~
+
+This plugin communicates directly with the ALSA kernel driver. It is a raw communication without any conversions. The emulation of mmap access can be optionally enabled, but expect worse latency in the case.
+
+The nonblock option specifies whether the device is opened in a non-blocking manner. Note that the blocking behavior for read/write access won't be changed by this option. This influences only on the blocking behavior at opening the device. If you would like to keep the compatibility with the older ALSA stuff, turn this option off.
+
+.. ref-code-block:: cpp
+
+	pcm.name {
+	    type hw         # Kernel PCM
+	    card INT/STR        # Card name (string) or number (integer)
+	    [device INT]        # Device number (default 0)
+	    [subdevice INT]     # Subdevice number (default -1: first available)
+	    [sync_ptr_ioctl BOOL]   # Use SYNC_PTR ioctl rather than the direct mmap access for control structures
+	    [nonblock BOOL]     # Force non-blocking open mode
+	    [format STR]        # Restrict only to the given format
+	    [channels INT]      # Restrict only to the given channels
+	    [rate INT]      # Restrict only to the given rate
+	    [chmap MAP]     # Override channel maps; MAP is a string array
+	}
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_hw_funcref:
+
+Function reference
+------------------
+
+* :ref:`snd_pcm_hw_open() <doxid-pcm__hw_8c_1a06abf5d78c26a9d8e79fd0428a5c7183>`
+
+* :ref:`_snd_pcm_hw_open() <doxid-pcm__hw_8c_1a7687673b2a39b944c5693043446afaf9>`
+
+
+
+
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_mmap_emul:
+
+Plugin: mmap_emul
+~~~~~~~~~~~~~~~~~
+
+.. ref-code-block:: cpp
+
+	pcm.name {
+	    type mmap_emul
+	    slave PCM
+	}
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_mmap_emul_funcref:
+
+Function reference
+------------------
+
+* :ref:`_snd_pcm_hw_open() <doxid-pcm__hw_8c_1a7687673b2a39b944c5693043446afaf9>`
+
+
+
+
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_shm:
+
+Plugin: shm
+~~~~~~~~~~~
+
+This plugin communicates with aserver via shared memory. It is a raw communication without any conversions, but it can be expected worse performance.
+
+.. ref-code-block:: cpp
+
+	pcm.name {
+	        type shm                # Shared memory PCM
+	    server STR      # Server name
+	    pcm STR         # PCM name
+	}
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_shm_funcref:
+
+Function reference
+------------------
+
+* :ref:`snd_pcm_shm_open() <doxid-pcm__shm_8c_1a3684b5fb80a3549a9176cbc7ea9e5181>`
+
+* :ref:`_snd_pcm_shm_open() <doxid-pcm__shm_8c_1adc046ce3ea6720d3545bb2158266bc75>`
+
+
+
+
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_null:
+
+Plugin: Null
+~~~~~~~~~~~~
+
+This plugin discards contents of a PCM stream or creates a stream with zero samples.
+
+Note: This implementation uses devices /dev/null (playback, must be writable) and /dev/full (capture, must be readable).
+
+.. ref-code-block:: cpp
+
+	pcm.name {
+	        type null               # Null PCM
+	    [chmap MAP]     # Provide channel maps; MAP is a string array
+	}
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_null_funcref:
+
+Function reference
+------------------
+
+* :ref:`snd_pcm_null_open() <doxid-pcm__null_8c_1ad1e47f314d908607cf908d9859359724>`
+
+* :ref:`_snd_pcm_null_open() <doxid-pcm__null_8c_1af964b1e41d92a723748128014026ebd6>`
+
+
+
+
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_copy:
+
+Plugin: copy
+~~~~~~~~~~~~
+
+This plugin copies samples from master copy PCM to given slave PCM. The channel count, format and rate must match for both of them.
+
+.. ref-code-block:: cpp
+
+	pcm.name {
+	    type copy       # Copy PCM
+	    slave STR       # Slave name
+	    # or
+	    slave {         # Slave definition
+	        pcm STR     # Slave PCM name
+	        # or
+	        pcm { }     # Slave PCM definition
+	    }
+	}
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_copy_funcref:
+
+Function reference
+------------------
+
+* :ref:`snd_pcm_copy_open() <doxid-pcm__copy_8c_1a97fb1b1587b7905bbc908cf7d03a727a>`
+
+* :ref:`_snd_pcm_copy_open() <doxid-pcm__copy_8c_1a47dd871325fe6dfe7650443de19e31ba>`
+
+
+
+
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_linear:
+
+Plugin: linear
+~~~~~~~~~~~~~~
+
+This plugin converts linear samples from master linear conversion PCM to given slave PCM. The channel count, format and rate must match for both of them.
+
+.. ref-code-block:: cpp
+
+	pcm.name {
+	        type linear             # Linear conversion PCM
+	        slave STR               # Slave name
+	        # or
+	        slave {                 # Slave definition
+	                pcm STR         # Slave PCM name
+	                # or
+	                pcm { }         # Slave PCM definition
+	                format STR      # Slave format
+	        }
+	}
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_linear_funcref:
+
+Function reference
+------------------
+
+* :ref:`snd_pcm_linear_open() <doxid-pcm__linear_8c_1ad5aad633e536382e36d128aa074ae2d5>`
+
+* :ref:`_snd_pcm_linear_open() <doxid-pcm__linear_8c_1a705b6ecd46bb7ceb0cfef986404686f8>`
+
+
+
+
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_lfloat:
+
+Plugin: linear<->float
+~~~~~~~~~~~~~~~~~~~~~~
+
+This plugin converts linear to float samples and float to linear samples from master linear<->float conversion PCM to given slave PCM. The channel count, format and rate must match for both of them.
+
+.. ref-code-block:: cpp
+
+	pcm.name {
+	        type lfloat             # Linear<->Float conversion PCM
+	        slave STR               # Slave name
+	        # or
+	        slave {                 # Slave definition
+	                pcm STR         # Slave PCM name
+	                # or
+	                pcm { }         # Slave PCM definition
+	                format STR      # Slave format
+	        }
+	}
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_lfloat_funcref:
+
+Function reference
+------------------
+
+* :ref:`snd_pcm_lfloat_open() <doxid-pcm__lfloat_8c_1a1cf1d379cfe222a0205356e72ae1e460>`
+
+* :ref:`_snd_pcm_lfloat_open() <doxid-pcm__lfloat_8c_1a073916f2bcb53f0020b5fd5c371f4fc8>`
+
+
+
+
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_mulaw:
+
+Plugin: Mu-Law
+~~~~~~~~~~~~~~
+
+This plugin converts Mu-Law samples to linear or linear to Mu-Law samples from master Mu-Law conversion PCM to given slave PCM. The channel count, format and rate must match for both of them.
+
+.. ref-code-block:: cpp
+
+	pcm.name {
+	        type mulaw              # Mu-Law conversion PCM
+	        slave STR               # Slave name
+	        # or
+	        slave {                 # Slave definition
+	                pcm STR         # Slave PCM name
+	                # or
+	                pcm { }         # Slave PCM definition
+	                format STR      # Slave format
+	        }
+	}
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_mulaw_funcref:
+
+Function reference
+------------------
+
+* :ref:`snd_pcm_mulaw_open() <doxid-pcm__mulaw_8c_1a5180265fc0f22f9eeabaa15555bcd072>`
+
+* :ref:`_snd_pcm_mulaw_open() <doxid-pcm__mulaw_8c_1aac8ed7d538562e09d0b8bbfe08df3665>`
+
+
+
+
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_alaw:
+
+Plugin: A-Law
+~~~~~~~~~~~~~
+
+This plugin converts A-Law samples to linear or linear to A-Law samples from master A-Law conversion PCM to given slave PCM. The channel count, format and rate must match for both of them.
+
+.. ref-code-block:: cpp
+
+	pcm.name {
+	        type alaw               # A-Law conversion PCM
+	        slave STR               # Slave name
+	        # or
+	        slave {                 # Slave definition
+	                pcm STR         # Slave PCM name
+	                # or
+	                pcm { }         # Slave PCM definition
+	                format STR      # Slave format
+	        }
+	}
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_alaw_funcref:
+
+Function reference
+------------------
+
+* :ref:`snd_pcm_alaw_open() <doxid-pcm__alaw_8c_1adfc7fc62627b564e1a6e0a3069730a56>`
+
+* :ref:`_snd_pcm_alaw_open() <doxid-pcm__alaw_8c_1a033d4c03b15175509e960689b5d515b0>`
+
+
+
+
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_adpcm:
+
+Plugin: Ima-ADPCM
+~~~~~~~~~~~~~~~~~
+
+This plugin converts Ima-ADPCM samples to linear or linear to Ima-ADPCM samples from master Ima-ADPCM conversion PCM to given slave PCM. The channel count, format and rate must match for both of them.
+
+.. ref-code-block:: cpp
+
+	pcm.name {
+	        type adpcm              # Ima-ADPCM conversion PCM
+	        slave STR               # Slave name
+	        # or
+	        slave {                 # Slave definition
+	                pcm STR         # Slave PCM name
+	                # or
+	                pcm { }         # Slave PCM definition
+	                format STR      # Slave format
+	        }
+	}
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_adpcm_funcref:
+
+Function reference
+------------------
+
+* :ref:`snd_pcm_adpcm_open() <doxid-pcm__adpcm_8c_1afc781f794b0c705552491b6707bf2c86>`
+
+* :ref:`_snd_pcm_adpcm_open() <doxid-pcm__adpcm_8c_1a71eccece5048625c5648aa4b1077c271>`
+
+
+
+
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_route:
+
+Plugin: Route & Volume
+~~~~~~~~~~~~~~~~~~~~~~
+
+This plugin converts channels and applies volume during the conversion. The format and rate must match for both of them.
+
+SCHANNEL can be a channel name instead of a number (e g FL, LFE). If so, a matching channel map will be selected for the slave.
+
+.. ref-code-block:: cpp
+
+	pcm.name {
+	        type route              # Route & Volume conversion PCM
+	        slave STR               # Slave name
+	        # or
+	        slave {                 # Slave definition
+	                pcm STR         # Slave PCM name
+	                # or
+	                pcm { }         # Slave PCM definition
+	                [format STR]    # Slave format
+	                [channels INT]  # Slave channels
+	        }
+	        ttable {                # Transfer table (bi-dimensional compound of cchannels * schannels numbers)
+	                CCHANNEL {
+	                        SCHANNEL REAL   # route value (0.0 - 1.0)
+	                }
+	        }
+	}
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_route_funcref:
+
+Function reference
+------------------
+
+* :ref:`snd_pcm_route_open() <doxid-pcm__route_8c_1ae19a77e8ec26dc93b8be5a93e7391550>`
+
+* :ref:`_snd_pcm_route_open() <doxid-pcm__route_8c_1abee47f3c05e74d83bf2a96559de9a262>`
+
+
+
+
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_rate:
+
+Plugin: Rate
+~~~~~~~~~~~~
+
+This plugin converts a stream rate. The input and output formats must be linear.
+
+.. ref-code-block:: cpp
+
+	pcm.name {
+	    type rate               # Rate PCM
+	        slave STR               # Slave name
+	        # or
+	        slave {                 # Slave definition
+	                pcm STR         # Slave PCM name
+	                # or
+	                pcm { }         # Slave PCM definition
+	                rate INT        # Slave rate
+	                [format STR]    # Slave format
+	        }
+	    converter STR           # optional
+	    # or
+	    converter [ STR1 STR2 ... ] # optional
+	                # Converter type, default is taken from
+	                # defaults.pcm.rate_converter
+	}
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_rate_funcref:
+
+Function reference
+------------------
+
+* :ref:`snd_pcm_rate_open() <doxid-pcm__rate_8c_1acbc33a01e5c38505fb8777e8a3cb808f>`
+
+* :ref:`_snd_pcm_rate_open() <doxid-pcm__rate_8c_1aa2b39b0460f63d709b2244be669c479b>`
+
+
+
+
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_plug:
+
+Automatic conversion plugin
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This plugin converts channels, rate and format on request.
+
+.. ref-code-block:: cpp
+
+	pcm.name {
+	        type plug               # Automatic conversion PCM
+	        slave STR               # Slave name
+	        # or
+	        slave {                 # Slave definition
+	                pcm STR         # Slave PCM name
+	                # or
+	                pcm { }         # Slave PCM definition
+	        [format STR]    # Slave format (default nearest) or "unchanged"
+	        [channels INT]  # Slave channels (default nearest) or "unchanged"
+	        [rate INT]  # Slave rate (default nearest) or "unchanged"
+	        }
+	    route_policy STR    # route policy for automatic ttable generation
+	                # STR can be 'default', 'average', 'copy', 'duplicate'
+	                # average: result is average of input channels
+	                # copy: only first channels are copied to destination
+	                # duplicate: duplicate first set of channels
+	                # default: copy policy, except for mono capture - sum
+	    ttable {        # Transfer table (bi-dimensional compound of cchannels * schannels numbers)
+	        CCHANNEL {
+	            SCHANNEL REAL   # route value (0.0 - 1.0)
+	        }
+	    }
+	    rate_converter STR  # type of rate converter
+	    # or
+	    rate_converter [ STR1 STR2 ... ]
+	                # type of rate converter
+	                # default value is taken from defaults.pcm.rate_converter
+	}
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_plug_funcref:
+
+Function reference
+------------------
+
+* snd_pcm_plug_open()
+
+* _snd_pcm_plug_open()
+
+
+
+
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_file:
+
+Plugin: File
+~~~~~~~~~~~~
+
+This plugin stores contents of a PCM stream to file or pipes the stream to a command, and optionally uses an existing file as an input data source (i.e., "virtual mic")
+
+.. ref-code-block:: cpp
+
+	pcm.name {
+	        type file               # File PCM
+	        slave STR               # Slave name
+	        # or
+	        slave {                 # Slave definition
+	                pcm STR         # Slave PCM name
+	                # or
+	                pcm { }         # Slave PCM definition
+	        }
+	    file STR        # Output filename (or shell command the stream
+	                # will be piped to if STR starts with the pipe
+	                # char).
+	                # STR can contain format keys, replaced by
+	                # real values corresponding to the stream:
+	                # %r    rate (replaced with: 48000)
+	                # %c    channels (replaced with: 2)
+	                # %b    bits per sample (replaced with: 16)
+	                # %f    sample format string
+	                #           (replaced with: S16_LE)
+	                # %%    replaced with %
+	    or
+	    file INT        # Output file descriptor number
+	    infile STR      # Input filename - only raw format
+	    or
+	    infile INT      # Input file descriptor number
+	    [format STR]        # File format ("raw" or "wav")
+	    [perm INT]      # Output file permission (octal, def. 0600)
+	}
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_file_funcref:
+
+Function reference
+------------------
+
+* :ref:`snd_pcm_file_open() <doxid-pcm__file_8c_1a2d295a1bebec45e0541de03b86de0703>`
+
+* :ref:`_snd_pcm_file_open() <doxid-pcm__file_8c_1a3732156e2f368386a89f2f200c496b0a>`
+
+
+
+
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_multi:
+
+Plugin: Multiple streams to One
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This plugin converts multiple streams to one.
+
+.. ref-code-block:: cpp
+
+	pcm.name {
+	        type multi              # Multiple streams conversion PCM
+	        slaves {        # Slaves definition
+	        ID STR      # Slave PCM name
+	        # or
+	        ID {
+	            pcm STR     # Slave PCM name
+	            # or
+	            pcm { }     # Slave PCM definition
+	            channels INT    # Slave channels
+	        }
+	        }
+	    bindings {      # Bindings table
+	        N {
+	            slave STR   # Slave key
+	            channel INT # Slave channel
+	        }
+	    }
+	    [master INT]        # Define the master slave
+	}
+
+For example, to bind two PCM streams with two-channel stereo (hw:0,0 and hw:0,1) as one 4-channel stereo PCM stream, define like this:
+
+.. ref-code-block:: cpp
+
+	pcm.quad {
+	    type multi
+	
+	    slaves.a.pcm "hw:0,0"
+	    slaves.a.channels 2
+	    slaves.b.pcm "hw:0,1"
+	    slaves.b.channels 2
+	
+	    bindings.0.slave a
+	    bindings.0.channel 0
+	    bindings.1.slave a
+	    bindings.1.channel 1
+	    bindings.2.slave b
+	    bindings.2.channel 0
+	    bindings.3.slave b
+	    bindings.3.channel 1
+	}
+
+Note that the resultant pcm "quad" is not in the interleaved format but in the "complex" format. Hence, it's not accessible by applications which can handle only the interleaved (or the non-interleaved) format. In such a case, wrap this PCM with :ref:`route <doxid-pcm_plugins_1pcm_plugins_route>` or :ref:`plug <doxid-pcm_plugins_1pcm_plugins_plug>` plugin.
+
+.. ref-code-block:: cpp
+
+	pcm.quad2 {
+	    type route
+	    slave.pcm "quad"
+	    ttable.0.0 1
+	    ttable.1.1 1
+	    ttable.2.2 1
+	    ttable.3.3 1
+	}
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_multi_funcref:
+
+Function reference
+------------------
+
+* :ref:`snd_pcm_multi_open() <doxid-pcm__multi_8c_1a9cd9738f81265d5255a9c28bbccb8bb4>`
+
+* :ref:`_snd_pcm_multi_open() <doxid-pcm__multi_8c_1aeb0fcef35d9f9bf598384cfe46e163a5>`
+
+
+
+
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_share:
+
+Plugin: Share
+~~~~~~~~~~~~~
+
+This plugin allows sharing of multiple channels with more clients. The access to each channel is exlusive (samples are not mixed together). It means, if the channel zero is used with first client, the channel cannot be used with second one. If you are looking for a mixing plugin, use the :ref:`dmix plugin <doxid-pcm_plugins_1pcm_plugins_dmix>`.
+
+The difference from :ref:`dshare plugin <doxid-pcm_plugins_1pcm_plugins_dshare>` is that share plugin requires the server program "aserver", while dshare plugin doesn't need the explicit server but access to the shared buffer.
+
+.. ref-code-block:: cpp
+
+	pcm.name {
+	        type share              # Share PCM
+	        slave STR               # Slave name
+	        # or
+	        slave {                 # Slave definition
+	                pcm STR         # Slave PCM name
+	                [format STR]    # Slave format
+	                [channels INT]  # Slave channels
+	                [rate INT]      # Slave rate
+	                [period_time INT] # Slave period time in us
+	                [buffer_time INT] # Slave buffer time in us
+	        }
+	    bindings {
+	        N INT       # Slave channel INT for client channel N
+	    }
+	}
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_share_funcref:
+
+Function reference
+------------------
+
+* :ref:`snd_pcm_share_open() <doxid-pcm__share_8c_1ab7c7e88e681d727250e67b6fbd11e245>`
+
+* :ref:`_snd_pcm_share_open() <doxid-pcm__share_8c_1a201ff59d8aad291bfd324fef114bf2d9>`
+
+
+
+
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_hooks:
+
+Plugin: hooks
+~~~~~~~~~~~~~
+
+This plugin is used to call some 'hook' function when this plugin is opened, modified or closed. Typically, it is used to change control values for a certain state specially for the PCM (see the example below).
+
+.. ref-code-block:: cpp
+
+	# Hook arguments definition
+	hook_args.NAME {
+	    ...         # Arbitrary arguments
+	}
+	
+	# PCM hook type
+	pcm_hook_type.NAME {
+	    [lib STR]       # Library file (default libasound.so)
+	    [install STR]       # Install function (default _snd_pcm_hook_NAME_install)
+	}
+	
+	# PCM hook definition
+	pcm_hook.NAME {
+	    type STR        # PCM Hook type (see pcm_hook_type)
+	    [args STR]      # Arguments for install function (see hook_args)
+	    # or
+	    [args { }]      # Arguments for install function
+	}
+	
+	# PCM hook plugin
+	pcm.NAME {
+	    type hooks      # PCM with hooks
+	    slave STR       # Slave name
+	    # or
+	    slave {         # Slave definition
+	        pcm STR     # Slave PCM name
+	        # or
+	        pcm { }     # Slave PCM definition
+	    }
+	    hooks {
+	        ID STR      # Hook name (see pcm_hook)
+	        # or
+	        ID { }      # Hook definition (see pcm_hook)
+	    }
+	}
+
+Example:
+
+.. ref-code-block:: cpp
+
+	hooks.0 {
+	    type ctl_elems
+	    hook_args [
+	        {
+	            name "Wave Surround Playback Volume"
+	            preserve true
+	            lock true
+	            optional true
+	            value [ 0 0 ]
+	        }
+	        {
+	            name "EMU10K1 PCM Send Volume"
+	            index { @func private_pcm_subdevice }
+	            lock true
+	            value [ 0 0 0 0 0 0 255 0 0 0 0 255 ]
+	        }
+	    ]
+	}
+
+Here, the controls "Wave Surround Playback Volume" and "EMU10K1 PCM Send Volume" are set to the given values when this pcm is accessed. Since these controls take multi-dimensional values, the ``value`` field is written as an array. When ``preserve`` is true, the old values are saved and restored when the pcm is closed. The ``lock`` means that the control is locked during this pcm is opened, and cannot be changed by others. When ``optional`` is set, no error is returned but ignored even if the specified control doesn't exist.
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_hooks_funcref:
+
+Function reference
+------------------
+
+* The function ctl_elems - :ref:`_snd_pcm_hook_ctl_elems_install() <doxid-pcm__hooks_8c_1abfd89c986184f010df8646b46e623490>` - installs CTL settings described by given configuration.
+
+* :ref:`snd_pcm_hooks_open() <doxid-pcm__hooks_8c_1a0355f8ca87a7361b1c3fdd36baf05175>`
+
+* :ref:`_snd_pcm_hooks_open() <doxid-pcm__hooks_8c_1a4d7e604b82a739945aefde32395bea24>`
+
+
+
+
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_dmix:
+
+Plugin: dmix
+~~~~~~~~~~~~
+
+This plugin provides direct mixing of multiple streams. The resolution for 32-bit mixing is only 24-bit. The low significant byte is filled with zeros. The extra 8 bits are used for the saturation.
+
+.. ref-code-block:: cpp
+
+	pcm.name {
+	    type dmix       # Direct mix
+	    ipc_key INT     # unique IPC key
+	    ipc_key_add_uid BOOL    # add current uid to unique IPC key
+	    ipc_perm INT        # IPC permissions (octal, default 0600)
+	    slave STR
+	    # or
+	    slave {         # Slave definition
+	        pcm STR     # slave PCM name
+	        # or
+	        pcm { }     # slave PCM definition
+	        format STR  # format definition
+	        rate INT    # rate definition
+	        channels INT
+	        period_time INT # in usec
+	        # or
+	        period_size INT # in bytes
+	        buffer_time INT # in usec
+	        # or
+	        buffer_size INT # in bytes
+	        periods INT # when buffer_size or buffer_time is not specified
+	    }
+	    bindings {      # note: this is client independent!!!
+	        N INT       # maps slave channel to client channel N
+	    }
+	    slowptr BOOL        # slow but more precise pointer updates
+	}
+
+``ipc_key`` specfies the unique IPC key in integer. This number must be unique for each different dmix definition, since the shared memory is created with this key number. When ``ipc_key_add_uid`` is set true, the uid value is added to the value set in ``ipc_key``. This will avoid the confliction of the same IPC key with different users concurrently.
+
+Note that the dmix plugin itself supports only a single configuration. That is, it supports only the fixed rate (default 48000), format (``S16``), channels (2), and period_time (125000). For using other configuration, you have to set the value explicitly in the slave PCM definition. The rate, format and channels can be covered by an additional :ref:`plug plugin <doxid-pcm_plugins_1pcm_plugins_dmix>`, but there is only one base configuration, anyway.
+
+An example configuration for setting 44100 Hz, ``S32_LE`` format as the slave PCM of "hw:0" is like below:
+
+.. ref-code-block:: cpp
+
+	pcm.dmix_44 {
+	    type dmix
+	    ipc_key 321456  # any unique value
+	    ipc_key_add_uid true
+	    slave {
+	        pcm "hw:0"
+	        format S32_LE
+	        rate 44100
+	    }
+	}
+
+You can hear 48000 Hz samples still using this dmix pcm via plug plugin like:
+
+.. ref-code-block:: cpp
+
+	% aplay -Dplug:dmix_44 foo_48k.wav
+
+For using the dmix plugin for OSS emulation device, you have to set the period and the buffer sizes in power of two. For example,
+
+.. ref-code-block:: cpp
+
+	pcm.dmixoss {
+	    type dmix
+	    ipc_key 321456  # any unique value
+	    ipc_key_add_uid true
+	    slave {
+	        pcm "hw:0"
+	        period_time 0
+	        period_size 1024  # must be power of 2
+	        buffer_size 8192  # ditto
+	    }
+	}
+
+``period_time 0`` must be set, too, for resetting the default value. In the case of soundcards with multi-channel IO, adding the bindings would help
+
+.. ref-code-block:: cpp
+
+	pcm.dmixoss {
+	    ...
+	    bindings {
+	        0 0   # map from 0 to 0
+	        1 1   # map from 1 to 1
+	    }
+	}
+
+so that only the first two channels are used by dmix. Also, note that ICE1712 have the limited buffer size, 5513 frames (corresponding to 640 kB). In this case, reduce the buffer_size to 4096.
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_dmix_funcref:
+
+Function reference
+------------------
+
+* :ref:`snd_pcm_dmix_open() <doxid-pcm__dmix_8c_1ae31120062bceb47f24d18e672f728b4f>`
+
+* :ref:`_snd_pcm_dmix_open() <doxid-pcm__dmix_8c_1a98332eee00abd086c486bc63ade4484e>`
+
+
+
+
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_dshare:
+
+Plugin: dshare
+~~~~~~~~~~~~~~
+
+This plugin provides sharing channels. Unlike :ref:`share plugin <doxid-pcm_plugins_1pcm_plugins_share>`, this plugin doesn't need the explicit server program but accesses the shared buffer concurrently from each client as well as :ref:`dmix <doxid-pcm_plugins_1pcm_plugins_dmix>` and :ref:`dsnoop <doxid-pcm_plugins_1pcm_plugins_dsnoop>` plugins do. The parameters below are almost identical with these plugins.
+
+.. ref-code-block:: cpp
+
+	pcm.name {
+	    type dshare     # Direct sharing
+	    ipc_key INT     # unique IPC key
+	    ipc_key_add_uid BOOL    # add current uid to unique IPC key
+	    ipc_perm INT        # IPC permissions (octal, default 0600)
+	    slave STR
+	    # or
+	    slave {         # Slave definition
+	        pcm STR     # slave PCM name
+	        # or
+	        pcm { }     # slave PCM definition
+	        format STR  # format definition
+	        rate INT    # rate definition
+	        channels INT
+	        period_time INT # in usec
+	        # or
+	        period_size INT # in bytes
+	        buffer_time INT # in usec
+	        # or
+	        buffer_size INT # in bytes
+	        periods INT # when buffer_size or buffer_time is not specified
+	    }
+	    bindings {      # note: this is client independent!!!
+	        N INT       # maps slave channel to client channel N
+	    }
+	    slowptr BOOL        # slow but more precise pointer updates
+	}
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_dshare_funcref:
+
+Function reference
+------------------
+
+* :ref:`snd_pcm_dshare_open() <doxid-pcm__dshare_8c_1a88bec432614f2a75100c33ed8dfd97b6>`
+
+* :ref:`_snd_pcm_dshare_open() <doxid-pcm__dshare_8c_1ae837c9fab4f6e2e0b08aa7864c19901b>`
+
+
+
+
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_dsnoop:
+
+Plugin: dsnoop
+~~~~~~~~~~~~~~
+
+This plugin splits one capture stream to more. It works the reverse way of :ref:`dmix plugin <doxid-pcm_plugins_1pcm_plugins_dmix>`, reading the shared capture buffer from many clients concurrently. The meaning of parameters below are almost identical with dmix plugin.
+
+.. ref-code-block:: cpp
+
+	pcm.name {
+	    type dsnoop     # Direct snoop
+	    ipc_key INT     # unique IPC key
+	    ipc_key_add_uid BOOL    # add current uid to unique IPC key
+	    ipc_perm INT        # IPC permissions (octal, default 0600)
+	    slave STR
+	    # or
+	    slave {         # Slave definition
+	        pcm STR     # slave PCM name
+	        # or
+	        pcm { }     # slave PCM definition
+	        format STR  # format definition
+	        rate INT    # rate definition
+	        channels INT
+	        period_time INT # in usec
+	        # or
+	        period_size INT # in bytes
+	        buffer_time INT # in usec
+	        # or
+	        buffer_size INT # in bytes
+	        periods INT # when buffer_size or buffer_time is not specified
+	    }
+	    bindings {      # note: this is client independent!!!
+	        N INT       # maps slave channel to client channel N
+	    }
+	    slowptr BOOL        # slow but more precise pointer updates
+	}
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_dsnoop_funcref:
+
+Function reference
+------------------
+
+* :ref:`snd_pcm_dsnoop_open() <doxid-pcm__dsnoop_8c_1a8cb7e3979f25d99e74e7a1e6d016436e>`
+
+* :ref:`_snd_pcm_dsnoop_open() <doxid-pcm__dsnoop_8c_1a6f504effb6bc99326e94e3450602cd37>`
+
+
+
+
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_ladpsa:
+
+Plugin: LADSPA <-> ALSA
+~~~~~~~~~~~~~~~~~~~~~~~
+
+This plugin allows to apply a set of LADPSA plugins. The input and output format is always :ref:`SND_PCM_FORMAT_FLOAT <doxid-group___p_c_m_1ggaa14b7f26877a812acbb39811364177f8a7d9fd83c6ff5be7a9cde4b0673b64bf0>` (note: this type can be either little or big-endian depending on architecture).
+
+The policy duplicate means that there must be only one binding definition for channel zero. This definition is automatically duplicated for all channels. If the LADSPA plugin has multiple audio inputs or outputs the policy duplicate is automatically switched to policy none.
+
+The plugin serialization works as expected. You can eventually use more channels (inputs / outputs) inside the LADPSA plugin chain than processed in the ALSA plugin chain. If ALSA channel does not exist for given LADSPA input audio port, zero samples are given to this LADSPA port. On the output side (ALSA next plugin input), the valid channels are checked, too. If specific ALSA channel does not exist, the LADSPA output port is connected to a dummy sample area.
+
+Instances of LADSPA plugins are created dynamically.
+
+.. ref-code-block:: cpp
+
+	pcm.name {
+	        type ladspa             # ALSA<->LADSPA PCM
+	        slave STR               # Slave name
+	        # or
+	        slave {                 # Slave definition
+	                pcm STR         # Slave PCM name
+	                # or
+	                pcm { }         # Slave PCM definition
+	        }
+	        [channels INT]      # count input channels (input to LADSPA plugin chain)
+	    [path STR]      # Path (directory) with LADSPA plugins
+	    plugins |       # Definition for both directions
+	        playback_plugins |  # Definition for playback direction
+	    capture_plugins {   # Definition for capture direction
+	        N {     # Configuration for LADPSA plugin N
+	            [id INT]    # LADSPA plugin ID (for example 1043)
+	            [label STR] # LADSPA plugin label (for example 'delay_5s')
+	            [filename STR]  # Full filename of .so library with LADSPA plugin code
+	            [policy STR]    # Policy can be 'none' or 'duplicate'
+	            input | output {
+	                bindings {
+	                    C INT or STR    # C - channel, INT - audio port index, STR - audio port name
+	                }
+	                controls {
+	                        # valid only in the input block
+	                    I INT or REAL   # I - control port index, INT or REAL - control value
+	                    # or
+	                    STR INT or REAL # STR - control port name, INT or REAL - control value
+	                }
+	            }
+	        }
+	    }
+	}
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_ladspa_funcref:
+
+Function reference
+------------------
+
+* :ref:`snd_pcm_ladspa_open() <doxid-pcm__ladspa_8c_1adcc43e9aeb068d3f8e1cd17d7f8a92cc>`
+
+* :ref:`_snd_pcm_ladspa_open() <doxid-pcm__ladspa_8c_1af310f491d26253256cdf8589334a64d2>`
+
+
+
+
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_asym:
+
+Plugin: asym
+~~~~~~~~~~~~
+
+This plugin is a combination of playback and capture PCM streams. Slave PCMs can be defined asymmetrically for both directions.
+
+.. ref-code-block:: cpp
+
+	pcm.name {
+	        type asym               # Asym PCM
+	        playback STR            # Playback slave name
+	        # or
+	        playback {              # Playback slave definition
+	                pcm STR         # Slave PCM name
+	                # or
+	                pcm { }         # Slave PCM definition
+	        }
+	        capture STR             # Capture slave name
+	        # or
+	        capture {               # Capture slave definition
+	                pcm STR         # Slave PCM name
+	                # or
+	                pcm { }         # Slave PCM definition
+	        }
+	}
+
+For example, you can combine a dmix plugin and a dsnoop plugin as as a single PCM for playback and capture directions, respectively.
+
+.. ref-code-block:: cpp
+
+	pcm.duplex {
+	    type asym
+	    playback.pcm "dmix"
+	    capture.pcm "dsnoop"
+	}
+
+By defining only a single direction, the resultant PCM becomes half-duplex.
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_asym_funcref:
+
+Function reference
+------------------
+
+* :ref:`_snd_pcm_asym_open() <doxid-pcm__asym_8c_1a39d690db97257936622f800f1d81d306>`
+
+
+
+
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_iec958:
+
+Plugin: IEC958
+~~~~~~~~~~~~~~
+
+This plugin converts 32bit IEC958 subframe samples to linear, or linear to 32bit IEC958 subframe samples.
+
+.. ref-code-block:: cpp
+
+	pcm.name {
+	        type iec958             # IEC958 subframe conversion PCM
+	        slave STR               # Slave name
+	        # or
+	        slave {                 # Slave definition
+	                pcm STR         # Slave PCM name
+	                # or
+	                pcm { }         # Slave PCM definition
+	        }
+	    [status status-bytes]   # IEC958 status bits (given in byte array)
+	    # IEC958 preamble bits definitions
+	    # B/M/W or Z/X/Y, B = block start, M = even subframe, W = odd subframe
+	    # As default, Z = 0x08, Y = 0x04, X = 0x02
+	    [preamble.z or preamble.b val]
+	    [preamble.x or preamble.m val]
+	    [preamble.y or preamble.w val]
+	}
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_iec958_funcref:
+
+Function reference
+------------------
+
+* :ref:`snd_pcm_iec958_open() <doxid-pcm__iec958_8c_1a5838de1fbcdbbc2debfd3995aa8f402b>`
+
+* :ref:`_snd_pcm_iec958_open() <doxid-pcm__iec958_8c_1aa2e0ac89b0b3190b5cf4c31c97e77620>`
+
+
+
+
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_softvol:
+
+Plugin: Soft Volume
+~~~~~~~~~~~~~~~~~~~
+
+This plugin applies the software volume attenuation. The format, rate and channels must match for both of source and destination.
+
+When the control is stereo (count=2), the channels are assumed to be either mono, 2.0, 2.1, 4.0, 4.1, 5.1 or 7.1.
+
+If the control already exists and it's a system control (i.e. no user-defined control), the plugin simply passes its slave without any changes.
+
+.. ref-code-block:: cpp
+
+	pcm.name {
+	        type softvol            # Soft Volume conversion PCM
+	        slave STR               # Slave name
+	        # or
+	        slave {                 # Slave definition
+	                pcm STR         # Slave PCM name
+	                # or
+	                pcm { }         # Slave PCM definition
+	                [format STR]    # Slave format
+	        }
+	        control {
+	            name STR        # control element id string
+	        [card STR]      # control card index
+	        [iface STR]     # interface of the element
+	        [index INT]     # index of the element
+	        [device INT]    # device number of the element
+	        [subdevice INT] # subdevice number of the element
+	        [count INT]     # control channels 1 or 2 (default: 2)
+	    }
+	    [min_dB REAL]           # minimal dB value (default: -51.0)
+	    [max_dB REAL]           # maximal dB value (default:   0.0)
+	    [resolution INT]        # resolution (default: 256)
+	                # resolution = 2 means a mute switch
+	}
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_softvol_funcref:
+
+Function reference
+------------------
+
+* :ref:`snd_pcm_softvol_open() <doxid-pcm__softvol_8c_1ad569db39824bb0a31c73dd9d4948a4b7>`
+
+* :ref:`_snd_pcm_softvol_open() <doxid-pcm__softvol_8c_1a4347460ac616c9a323681021c6498d0d>`
+
+
+
+
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_null:
+
+Plugin: Null
+~~~~~~~~~~~~
+
+This plugin discards contents of a PCM stream or creates a stream with zero samples.
+
+Note: This implementation uses devices /dev/null (playback, must be writable) and /dev/full (capture, must be readable).
+
+.. ref-code-block:: cpp
+
+	pcm.name {
+	        type null               # Null PCM
+	}
+
+
+
+.. _doxid-pcm_plugins_1pcm_plugins_null_funcref:
+
+Function reference
+------------------
+
+* :ref:`_snd_pcm_empty_open() <doxid-pcm__empty_8c_1a55df6f9b1b71d37ea91557cc26e8ab3a>`
+

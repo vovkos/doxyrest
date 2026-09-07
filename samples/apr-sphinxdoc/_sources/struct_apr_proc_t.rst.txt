@@ -1,0 +1,102 @@
+.. index:: pair: struct; apr_proc_t
+.. _doxid-structapr__proc__t:
+
+struct apr_proc_t
+=================
+
+.. toctree::
+	:hidden:
+
+Overview
+~~~~~~~~
+
+The APR process type :ref:`More...<details-structapr__proc__t>`
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	#include <apr_thread_proc.h>
+	
+	struct apr_proc_t {
+		// fields
+	
+		pid_t :ref:`pid<doxid-structapr__proc__t_1a8a8ee4b234156485a72497023e7482e5>`;
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* :ref:`in<doxid-structapr__proc__t_1a914bda8939f9d17c9e2f238683fb994b>`;
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* :ref:`out<doxid-structapr__proc__t_1acb7d7c5226217946d761f0e90ff70d24>`;
+		:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* :ref:`err<doxid-structapr__proc__t_1ad087f812b5c69ce937db4cf6e8cd5a0b>`;
+		char* :ref:`invoked<doxid-structapr__proc__t_1a72ed1c58c3f08ffa7202fa80e870cd54>`;
+		HANDLE :ref:`hproc<doxid-structapr__proc__t_1aa1f17cce2b442d92893b9c63053b6771>`;
+	};
+.. _details-structapr__proc__t:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+The APR process type
+
+Fields
+------
+
+.. index:: pair: variable; pid
+.. _doxid-structapr__proc__t_1a8a8ee4b234156485a72497023e7482e5:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	pid_t pid
+
+The process ID
+
+.. index:: pair: variable; in
+.. _doxid-structapr__proc__t_1a914bda8939f9d17c9e2f238683fb994b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* in
+
+Parent's side of pipe to child's stdin
+
+.. index:: pair: variable; out
+.. _doxid-structapr__proc__t_1acb7d7c5226217946d761f0e90ff70d24:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* out
+
+Parent's side of pipe to child's stdout
+
+.. index:: pair: variable; err
+.. _doxid-structapr__proc__t_1ad087f812b5c69ce937db4cf6e8cd5a0b:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_file_t<doxid-group__apr__file__io_1gaa46e4763ac375ea3c7a43ba6f6099e22>`* err
+
+Parent's side of pipe to child's stdouterr
+
+.. index:: pair: variable; invoked
+.. _doxid-structapr__proc__t_1a72ed1c58c3f08ffa7202fa80e870cd54:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	char* invoked
+
+Diagnositics/debugging string of the command invoked for this process [only present if APR_HAS_PROC_INVOKED is true] Only enabled on Win32 by default.
+
+Bug This should either always or never be present in release builds - since it breaks binary compatibility. We may enable it always in APR 1.0 yet leave it undefined in most cases.
+
+.. index:: pair: variable; hproc
+.. _doxid-structapr__proc__t_1aa1f17cce2b442d92893b9c63053b6771:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	HANDLE hproc
+
+(Win32 only) Creator's handle granting access to the process This handle is closed and reset to NULL in every case corresponding to a waitpid() on Unix which returns the exit status. Therefore Win32 correspond's to Unix's zombie reaping characteristics and avoids potential handle leaks.
+

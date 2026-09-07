@@ -1,0 +1,378 @@
+.. index:: pair: group; Miscellaneous
+.. _doxid-group__libusb__misc:
+
+Miscellaneous
+=============
+
+.. toctree::
+	:hidden:
+
+	enum_libusb_capability.rst
+	enum_libusb_error.rst
+	enum_libusb_request_recipient.rst
+	enum_libusb_request_type.rst
+	enum_libusb_standard_request.rst
+
+Overview
+~~~~~~~~
+
+
+
+
+.. ref-code-block:: c
+	:class: doxyrest-overview-code-block
+
+	
+	// enums
+
+	enum :ref:`libusb_capability<doxid-group__libusb__misc_1gaab1b3fa0728c06fafbee897795889bd5>`;
+	enum :ref:`libusb_error<doxid-group__libusb__misc_1gab2323aa0f04bc22038e7e1740b2f29ef>`;
+	enum :ref:`libusb_request_recipient<doxid-group__libusb__misc_1ga20a4e8a729aa543fa742a5086596cbae>`;
+	enum :ref:`libusb_request_type<doxid-group__libusb__misc_1ga0b0933ae70744726cde11254c39fac91>`;
+	enum :ref:`libusb_standard_request<doxid-group__libusb__misc_1ga5b5912057c2d7e23b3ed5aa0c20236df>`;
+
+	// global variables
+
+	static const char* :ref:`usbi_locale_supported<doxid-group__libusb__misc_1ga611b1f878eda4efa11cf722970380994>`[] = { "en", "nl", "fr", "ru" };
+
+	// global functions
+
+	int
+	:ref:`libusb_has_capability<doxid-group__libusb__misc_1ga9b8e324d28c624cd0b8e7ba21607b8db>`(uint32_t capability);
+
+	const char*
+	:ref:`libusb_error_name<doxid-group__libusb__misc_1gacf319b823a1a1a25cc934d80db2f28c7>`(int error_code);
+
+	const struct :ref:`libusb_version<doxid-structlibusb__version>`*
+	:ref:`libusb_get_version<doxid-group__libusb__misc_1ga61d07b01404fdea080cd16c1ed8be93d>`(void);
+
+	static
+	uint16_t
+	:ref:`libusb_cpu_to_le16<doxid-group__libusb__misc_1gae3b1162b8e69b49bbf74dcbbdeeadbda>`(const uint16_t x);
+
+	int
+	:ref:`libusb_setlocale<doxid-group__libusb__misc_1ga0badebde406e5f1874fb72ec6d1b60f4>`(const char* locale);
+
+	const char*
+	:ref:`libusb_strerror<doxid-group__libusb__misc_1gab977153d03d867a8b228a5921edaf457>`(enum :ref:`libusb_error<doxid-group__libusb__misc_1gab2323aa0f04bc22038e7e1740b2f29ef>` errcode);
+
+	// macros
+
+	#define :ref:`LIBUSB_API_VERSION<doxid-group__libusb__misc_1gaabe4bc36a83358685d36a6c853cbb4de>`
+	#define :ref:`LIBUSB_CALL<doxid-group__libusb__misc_1gaa7d6035eb2692d455d27144560a0f68d>`
+	#define :ref:`libusb_le16_to_cpu<doxid-group__libusb__misc_1ga22961bb8cb0d6a9b22c88079efb59b8b>`
+
+.. _details-group__libusb__misc:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+Global Variables
+----------------
+
+.. index:: pair: variable; usbi_locale_supported
+.. _doxid-group__libusb__misc_1ga611b1f878eda4efa11cf722970380994:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	static const char* usbi_locale_supported[] = { "en", "nl", "fr", "ru" }
+
+How to add a new :ref:`libusb_strerror() <doxid-group__libusb__misc_1gab977153d03d867a8b228a5921edaf457>` translation:
+
+#. Download the latest ``strerror.c`` from:
+   
+   `https://raw.github.com/libusb/libusb/master/libusb/sterror.c <https://raw.github.com/libusb/libusb/master/libusb/sterror.c>`__
+
+#. Open the file in an UTF-8 capable editor
+
+#. Add the 2 letter `ISO 639-1 <http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes>`__ code for your locale at the end of ``usbi_locale_supported`` []
+   
+   Eg. for Chinese, you would add "zh" so that:
+   
+   .. ref-code-block:: c
+   
+   	... usbi_locale_supported[] = { "en", "nl", "fr" };
+   
+   becomes:
+   
+   .. ref-code-block:: c
+   
+   	... usbi_locale_supported[] = { "en", "nl", "fr", "zh" };
+
+#. Copy the ``{ / * English (en) * / ... }`` section and add it at the end of ``usbi_localized_errors``
+   
+   Eg. for Chinese, the last section of ``usbi_localized_errors`` could look like:
+   
+   .. ref-code-block:: c
+   
+   	    }, { / * Chinese (zh) * /
+   	        "Success",
+   	        ...
+   	        "Other error",
+   	    }
+   	};
+
+#. Translate each of the English messages from the section you copied into your language
+
+#. Save the file (in UTF-8 format) and send it to ``libusb-devel@lists.sourceforge.net``
+
+Global Functions
+----------------
+
+.. index:: pair: function; libusb_has_capability
+.. _doxid-group__libusb__misc_1ga9b8e324d28c624cd0b8e7ba21607b8db:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_has_capability(uint32_t capability)
+
+Check at runtime if the loaded library has a given capability.
+
+This call should be performed after :ref:`libusb_init() <doxid-group__libusb__lib_1ga9517c37281bba0b51cc62eba728be48b>`, to ensure the backend has updated its capability set.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- capability
+
+		- the :ref:`libusb_capability <doxid-group__libusb__misc_1gaab1b3fa0728c06fafbee897795889bd5>` to check for
+
+
+
+.. rubric:: Returns:
+
+nonzero if the running library has the capability, 0 otherwise
+
+.. index:: pair: function; libusb_error_name
+.. _doxid-group__libusb__misc_1gacf319b823a1a1a25cc934d80db2f28c7:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	const char*
+	libusb_error_name(int error_code)
+
+Returns a constant NULL-terminated string with the ASCII name of a libusb error or transfer status code.
+
+The caller must not free() the returned string.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- error_code
+
+		- The :ref:`libusb_error <doxid-group__libusb__misc_1gab2323aa0f04bc22038e7e1740b2f29ef>` or libusb_transfer_status code to return the name of.
+
+
+
+.. rubric:: Returns:
+
+The error name, or the string **UNKNOWN** if the value of error_code is not a known error / status code.
+
+.. index:: pair: function; libusb_get_version
+.. _doxid-group__libusb__misc_1ga61d07b01404fdea080cd16c1ed8be93d:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	const struct :ref:`libusb_version<doxid-structlibusb__version>`*
+	libusb_get_version(void)
+
+Returns a pointer to const struct :ref:`libusb_version <doxid-structlibusb__version>` with the version (major, minor, micro, nano and rc) of the running library.
+
+.. index:: pair: function; libusb_cpu_to_le16
+.. _doxid-group__libusb__misc_1gae3b1162b8e69b49bbf74dcbbdeeadbda:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	static
+	uint16_t
+	libusb_cpu_to_le16(const uint16_t x)
+
+Convert a 16-bit value from host-endian to little-endian format.
+
+On little endian systems, this function does nothing. On big endian systems, the bytes are swapped.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- x
+
+		- the host-endian value to convert
+
+
+
+.. rubric:: Returns:
+
+the value in little-endian byte order
+
+.. index:: pair: function; libusb_setlocale
+.. _doxid-group__libusb__misc_1ga0badebde406e5f1874fb72ec6d1b60f4:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int
+	libusb_setlocale(const char* locale)
+
+Set the language, and only the language, not the encoding! used for translatable libusb messages.
+
+This takes a locale string in the default setlocale format: lang[-region] or lang[_country_region][.codeset]. Only the lang part of the string is used, and only 2 letter ISO 639-1 codes are accepted for it, such as "de". The optional region, country_region or codeset parts are ignored. This means that functions which return translatable strings will NOT honor the specified encoding. All strings returned are encoded as UTF-8 strings.
+
+If :ref:`libusb_setlocale() <doxid-group__libusb__misc_1ga0badebde406e5f1874fb72ec6d1b60f4>` is not called, all messages will be in English.
+
+The following functions return translatable strings: :ref:`libusb_strerror() <doxid-group__libusb__misc_1gab977153d03d867a8b228a5921edaf457>`. Note that the libusb log messages controlled through :ref:`libusb_set_debug() <doxid-group__libusb__lib_1ga5f8376b7a863a5a8d5b8824feb8a427a>` are not translated, they are always in English.
+
+For POSIX UTF-8 environments if you want libusb to follow the standard locale settings, call libusb_setlocale(setlocale(LC_MESSAGES, NULL)), after your app has done its locale setup.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- locale
+
+		- locale-string in the form of lang[_country_region][.codeset] or lang[-region], where lang is a 2 letter ISO 639-1 code
+
+
+
+.. rubric:: Returns:
+
+LIBUSB_SUCCESS on success
+
+LIBUSB_ERROR_INVALID_PARAM if the locale doesn't meet the requirements
+
+LIBUSB_ERROR_NOT_FOUND if the requested language is not supported
+
+a LIBUSB_ERROR code on other errors
+
+.. index:: pair: function; libusb_strerror
+.. _doxid-group__libusb__misc_1gab977153d03d867a8b228a5921edaf457:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	const char*
+	libusb_strerror(enum :ref:`libusb_error<doxid-group__libusb__misc_1gab2323aa0f04bc22038e7e1740b2f29ef>` errcode)
+
+Returns a constant string with a short description of the given error code, this description is intended for displaying to the end user and will be in the language set by :ref:`libusb_setlocale() <doxid-group__libusb__misc_1ga0badebde406e5f1874fb72ec6d1b60f4>`.
+
+The returned string is encoded in UTF-8.
+
+The messages always start with a capital letter and end without any dot. The caller must not free() the returned string.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- errcode
+
+		- the error code whose description is desired
+
+
+
+.. rubric:: Returns:
+
+a short description of the error code in UTF-8 encoding
+
+Macros
+------
+
+.. index:: pair: define; LIBUSB_API_VERSION
+.. _doxid-group__libusb__misc_1gaabe4bc36a83358685d36a6c853cbb4de:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	#define LIBUSB_API_VERSION
+
+libusb's API version.
+
+Since version 1.0.13, to help with feature detection, libusb defines a LIBUSB_API_VERSION macro that gets increased every time there is a significant change to the API, such as the introduction of a new call, the definition of a new macro/enum member, or any other element that libusb applications may want to detect at compilation time.
+
+The macro is typically used in an application as follows:
+
+.. ref-code-block:: c
+
+	#if defined(LIBUSB_API_VERSION) && (LIBUSB_API_VERSION >= 0x01001234)
+	// Use one of the newer features from the libusb API
+	#endif
+
+Internally, LIBUSB_API_VERSION is defined as follows: (libusb major << 24) | (libusb minor << 16) | (16 bit incremental)
+
+.. index:: pair: define; LIBUSB_CALL
+.. _doxid-group__libusb__misc_1gaa7d6035eb2692d455d27144560a0f68d:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	#define LIBUSB_CALL
+
+libusb's Windows calling convention.
+
+Under Windows, the selection of available compilers and configurations means that, unlike other platforms, there is not *one true calling convention* (calling convention: the manner in which parameters are passed to functions in the generated assembly code).
+
+Matching the Windows API itself, libusb uses the WINAPI convention (which translates to the ``stdcall`` convention) and guarantees that the library is compiled in this way. The public header file also includes appropriate annotations so that your own software will use the right convention, even if another convention is being used by default within your codebase.
+
+The one consideration that you must apply in your software is to mark all functions which you use as libusb callbacks with this LIBUSB_CALL annotation, so that they too get compiled for the correct calling convention.
+
+On non-Windows operating systems, this macro is defined as nothing. This means that you can apply it to your code without worrying about cross-platform compatibility.
+
+.. index:: pair: define; libusb_le16_to_cpu
+.. _doxid-group__libusb__misc_1ga22961bb8cb0d6a9b22c88079efb59b8b:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	#define libusb_le16_to_cpu
+
+Convert a 16-bit value from little-endian to host-endian format.
+
+On little endian systems, this function does nothing. On big endian systems, the bytes are swapped.
+
+
+
+.. rubric:: Parameters:
+
+.. list-table::
+	:widths: 20 80
+
+	*
+		- x
+
+		- the little-endian value to convert
+
+
+
+.. rubric:: Returns:
+
+the value in host-endian byte order
+

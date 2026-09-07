@@ -1,0 +1,709 @@
+.. index:: pair: example; /test/latency.c
+.. _doxid-_2test_2latency_8c-example:
+
+/test/latency.c
+===============
+
+.. ref-code-block:: cpp
+
+	/*
+	 *  Latency test program
+	 *
+	 *     Author: Jaroslav Kysela <perex@perex.cz>
+	 *
+	 *     Author of bandpass filter sweep effect:
+	 *         Maarten de Boer <mdeboer@iua.upf.es>
+	 *
+	 *  This small demo program can be used for measuring latency between
+	 *  capture and playback. This latency is measured from driver (diff when
+	 *  playback and capture was started). Scheduler is set to SCHED_RR.
+	 *
+	 *
+	 *   This program is free software; you can redistribute it and/or modify
+	 *   it under the terms of the GNU General Public License as published by
+	 *   the Free Software Foundation; either version 2 of the License, or
+	 *   (at your option) any later version.
+	 *
+	 *   This program is distributed in the hope that it will be useful,
+	 *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+	 *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	 *   GNU General Public License for more details.
+	 *
+	 *   You should have received a copy of the GNU General Public License
+	 *   along with this program; if not, write to the Free Software
+	 *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+	 *
+	 */
+	
+	#include <stdio.h>
+	#include <stdlib.h>
+	#include <string.h>
+	#include <sched.h>
+	#include <errno.h>
+	#include <getopt.h>
+	#include "../include/asoundlib.h"
+	#include <sys/time.h>
+	#include <math.h>
+	
+	char *pdevice = "hw:0,0";
+	char *cdevice = "hw:0,0";
+	:ref:`snd_pcm_format_t <doxid-group___p_c_m_1gaa14b7f26877a812acbb39811364177f8>` format = :ref:`SND_PCM_FORMAT_S16_LE <doxid-group___p_c_m_1ggaa14b7f26877a812acbb39811364177f8a8b66a29293c62df9d1678c609fab76c0>`;
+	int rate = 22050;
+	int channels = 2;
+	int buffer_size = 0;        /* auto */
+	int period_size = 0;        /* auto */
+	int latency_min = 32;       /* in frames / 2 */
+	int latency_max = 2048;     /* in frames / 2 */
+	int loop_sec = 30;      /* seconds */
+	int block = 0;          /* block mode */
+	int use_poll = 0;
+	int resample = 1;
+	unsigned long loop_limit;
+	
+	:ref:`snd_output_t <doxid-group___output_1ga49729cc6454539495c1f5b6e95cd474a>` *output = NULL;
+	
+	int setparams_stream(:ref:`snd_pcm_t <doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>` *handle,
+	             :ref:`snd_pcm_hw_params_t <doxid-group___p_c_m_1ga65c737127994f0a980edad744e36dc40>` *params,
+	             const char *id)
+	{
+	    int err;
+	    unsigned int rrate;
+	
+	    err = :ref:`snd_pcm_hw_params_any <doxid-group___p_c_m___h_w___params_1ga6e2dd8efbb7a4084bd05e6cc458d84f7>`(handle, params);
+	    if (err < 0) {
+	        printf("Broken configuration for %s PCM: no configurations available: %s\n", :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err), id);
+	        return err;
+	    }
+	    err = :ref:`snd_pcm_hw_params_set_rate_resample <doxid-group___p_c_m___h_w___params_1ga82eecc0e27a94ce0caa195cc3765536c>`(handle, params, resample);
+	    if (err < 0) {
+	        printf("Resample setup failed for %s (val %i): %s\n", id, resample, :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err));
+	        return err;
+	    }
+	    err = :ref:`snd_pcm_hw_params_set_access <doxid-group___p_c_m___h_w___params_1ga4c8f1c632931923531ca68ee048a8de8>`(handle, params, :ref:`SND_PCM_ACCESS_RW_INTERLEAVED <doxid-group___p_c_m_1gga661221ba5e8f1d6eaf4ab8e2da57cc1aa72a970ed6e676ab0fd9f3c3d36737e0a>`);
+	    if (err < 0) {
+	        printf("Access type not available for %s: %s\n", id, :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err));
+	        return err;
+	    }
+	    err = :ref:`snd_pcm_hw_params_set_format <doxid-group___p_c_m___h_w___params_1ga6014e0e1ec7934f8c745290e83e59199>`(handle, params, format);
+	    if (err < 0) {
+	        printf("Sample format not available for %s: %s\n", id, :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err));
+	        return err;
+	    }
+	    err = :ref:`snd_pcm_hw_params_set_channels <doxid-group___p_c_m___h_w___params_1ga3a5b2a05c5d9869cc743dac71c0d270a>`(handle, params, channels);
+	    if (err < 0) {
+	        printf("Channels count (%i) not available for %s: %s\n", channels, id, :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err));
+	        return err;
+	    }
+	    rrate = rate;
+	    err = :ref:`snd_pcm_hw_params_set_rate_near <doxid-group___p_c_m___h_w___params_1ga39124280d06ce63092a77e3f25ddd6ee>`(handle, params, &rrate, 0);
+	    if (err < 0) {
+	        printf("Rate %iHz not available for %s: %s\n", rate, id, :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err));
+	        return err;
+	    }
+	    if ((int)rrate != rate) {
+	        printf("Rate doesn't match (requested %iHz, get %iHz)\n", rate, err);
+	        return -EINVAL;
+	    }
+	    return 0;
+	}
+	
+	int setparams_bufsize(:ref:`snd_pcm_t <doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>` *handle,
+	              :ref:`snd_pcm_hw_params_t <doxid-group___p_c_m_1ga65c737127994f0a980edad744e36dc40>` *params,
+	              :ref:`snd_pcm_hw_params_t <doxid-group___p_c_m_1ga65c737127994f0a980edad744e36dc40>` *tparams,
+	              :ref:`snd_pcm_uframes_t <doxid-group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a>` bufsize,
+	              const char *id)
+	{
+	    int err;
+	    :ref:`snd_pcm_uframes_t <doxid-group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a>` periodsize;
+	
+	    :ref:`snd_pcm_hw_params_copy <doxid-group___p_c_m___h_w___params_1ga9bcedf4bb4b21527a584846a5986a1f4>`(params, tparams);
+	    periodsize = bufsize * 2;
+	    err = :ref:`snd_pcm_hw_params_set_buffer_size_near <doxid-group___p_c_m___h_w___params_1ga2c00cb635d374030595dbc27b7a983a7>`(handle, params, &periodsize);
+	    if (err < 0) {
+	        printf("Unable to set buffer size %li for %s: %s\n", bufsize * 2, id, :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err));
+	        return err;
+	    }
+	    if (period_size > 0)
+	        periodsize = period_size;
+	    else
+	        periodsize /= 2;
+	    err = :ref:`snd_pcm_hw_params_set_period_size_near <doxid-group___p_c_m___h_w___params_1ga9162045265f283c532634506456cab09>`(handle, params, &periodsize, 0);
+	    if (err < 0) {
+	        printf("Unable to set period size %li for %s: %s\n", periodsize, id, :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err));
+	        return err;
+	    }
+	    return 0;
+	}
+	
+	int setparams_set(:ref:`snd_pcm_t <doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>` *handle,
+	          :ref:`snd_pcm_hw_params_t <doxid-group___p_c_m_1ga65c737127994f0a980edad744e36dc40>` *params,
+	          :ref:`snd_pcm_sw_params_t <doxid-group___p_c_m_1ga7e082d9ea701709270b0674a0be23b09>` *swparams,
+	          const char *id)
+	{
+	    int err;
+	    :ref:`snd_pcm_uframes_t <doxid-group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a>` val;
+	
+	    err = :ref:`snd_pcm_hw_params <doxid-group___p_c_m_1ga1ca0dc120a484965e26cabf966502330>`(handle, params);
+	    if (err < 0) {
+	        printf("Unable to set hw params for %s: %s\n", id, :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err));
+	        return err;
+	    }
+	    err = :ref:`snd_pcm_sw_params_current <doxid-group___p_c_m_1ga61c5495ffb44c75aaa595e85512d28de>`(handle, swparams);
+	    if (err < 0) {
+	        printf("Unable to determine current swparams for %s: %s\n", id, :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err));
+	        return err;
+	    }
+	    err = :ref:`snd_pcm_sw_params_set_start_threshold <doxid-group___p_c_m___s_w___params_1ga1d338f1f7e33b7a6d0f9a8f61f87f057>`(handle, swparams, 0x7fffffff);
+	    if (err < 0) {
+	        printf("Unable to set start threshold mode for %s: %s\n", id, :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err));
+	        return err;
+	    }
+	    if (!block)
+	        val = 4;
+	    else
+	        :ref:`snd_pcm_hw_params_get_period_size <doxid-group___p_c_m___h_w___params_1gaba48ea189171536f9793e0d99e6db5e0>`(params, &val, NULL);
+	    err = :ref:`snd_pcm_sw_params_set_avail_min <doxid-group___p_c_m___s_w___params_1ga79b12cbbd309750156261e7f5a39167b>`(handle, swparams, val);
+	    if (err < 0) {
+	        printf("Unable to set avail min for %s: %s\n", id, :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err));
+	        return err;
+	    }
+	    err = :ref:`snd_pcm_sw_params <doxid-group___p_c_m_1ga891ccaeea2c685a533b61b5fa0493974>`(handle, swparams);
+	    if (err < 0) {
+	        printf("Unable to set sw params for %s: %s\n", id, :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err));
+	        return err;
+	    }
+	    return 0;
+	}
+	
+	int setparams(:ref:`snd_pcm_t <doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>` *phandle, :ref:`snd_pcm_t <doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>` *chandle, int *bufsize)
+	{
+	    int err, last_bufsize = *bufsize;
+	    :ref:`snd_pcm_hw_params_t <doxid-group___p_c_m_1ga65c737127994f0a980edad744e36dc40>` *pt_params, *ct_params; /* templates with rate, format and channels */
+	    :ref:`snd_pcm_hw_params_t <doxid-group___p_c_m_1ga65c737127994f0a980edad744e36dc40>` *p_params, *c_params;
+	    :ref:`snd_pcm_sw_params_t <doxid-group___p_c_m_1ga7e082d9ea701709270b0674a0be23b09>` *p_swparams, *c_swparams;
+	    :ref:`snd_pcm_uframes_t <doxid-group___p_c_m_1gab01fcfe9b97382a8d3f2027c664b8b8a>` p_size, c_size, p_psize, c_psize;
+	    unsigned int p_time, c_time;
+	    unsigned int val;
+	
+	    :ref:`snd_pcm_hw_params_alloca <doxid-group___p_c_m___h_w___params_1ga06b83cb9a788f99b7b09b570b4355cee>`(&p_params);
+	    :ref:`snd_pcm_hw_params_alloca <doxid-group___p_c_m___h_w___params_1ga06b83cb9a788f99b7b09b570b4355cee>`(&c_params);
+	    :ref:`snd_pcm_hw_params_alloca <doxid-group___p_c_m___h_w___params_1ga06b83cb9a788f99b7b09b570b4355cee>`(&pt_params);
+	    :ref:`snd_pcm_hw_params_alloca <doxid-group___p_c_m___h_w___params_1ga06b83cb9a788f99b7b09b570b4355cee>`(&ct_params);
+	    :ref:`snd_pcm_sw_params_alloca <doxid-group___p_c_m___s_w___params_1ga8e564553bdc89948c918729e3cc7beb0>`(&p_swparams);
+	    :ref:`snd_pcm_sw_params_alloca <doxid-group___p_c_m___s_w___params_1ga8e564553bdc89948c918729e3cc7beb0>`(&c_swparams);
+	    if ((err = setparams_stream(phandle, pt_params, "playback")) < 0) {
+	        printf("Unable to set parameters for playback stream: %s\n", :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err));
+	        exit(0);
+	    }
+	    if ((err = setparams_stream(chandle, ct_params, "capture")) < 0) {
+	        printf("Unable to set parameters for playback stream: %s\n", :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err));
+	        exit(0);
+	    }
+	
+	    if (buffer_size > 0) {
+	        *bufsize = buffer_size;
+	        goto __set_it;
+	    }
+	
+	      __again:
+	        if (buffer_size > 0)
+	            return -1;
+	        if (last_bufsize == *bufsize)
+	        *bufsize += 4;
+	    last_bufsize = *bufsize;
+	    if (*bufsize > latency_max)
+	        return -1;
+	      __set_it:
+	    if ((err = setparams_bufsize(phandle, p_params, pt_params, *bufsize, "playback")) < 0) {
+	        printf("Unable to set sw parameters for playback stream: %s\n", :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err));
+	        exit(0);
+	    }
+	    if ((err = setparams_bufsize(chandle, c_params, ct_params, *bufsize, "capture")) < 0) {
+	        printf("Unable to set sw parameters for playback stream: %s\n", :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err));
+	        exit(0);
+	    }
+	
+	    :ref:`snd_pcm_hw_params_get_period_size <doxid-group___p_c_m___h_w___params_1gaba48ea189171536f9793e0d99e6db5e0>`(p_params, &p_psize, NULL);
+	    if (p_psize > (unsigned int)*bufsize)
+	        *bufsize = p_psize;
+	    :ref:`snd_pcm_hw_params_get_period_size <doxid-group___p_c_m___h_w___params_1gaba48ea189171536f9793e0d99e6db5e0>`(c_params, &c_psize, NULL);
+	    if (c_psize > (unsigned int)*bufsize)
+	        *bufsize = c_psize;
+	    :ref:`snd_pcm_hw_params_get_period_time <doxid-group___p_c_m___h_w___params_1ga71f5d43bf63dc7292b8b58f17acccf89>`(p_params, &p_time, NULL);
+	    :ref:`snd_pcm_hw_params_get_period_time <doxid-group___p_c_m___h_w___params_1ga71f5d43bf63dc7292b8b58f17acccf89>`(c_params, &c_time, NULL);
+	    if (p_time != c_time)
+	        goto __again;
+	
+	    :ref:`snd_pcm_hw_params_get_buffer_size <doxid-group___p_c_m___h_w___params_1gab6556fcaaf926360d2064044a6f6cfb4>`(p_params, &p_size);
+	    if (p_psize * 2 < p_size) {
+	                :ref:`snd_pcm_hw_params_get_periods_min <doxid-group___p_c_m___h_w___params_1ga17f3826360b0fe1f47c696388d25ac93>`(p_params, &val, NULL);
+	                if (val > 2) {
+	            printf("playback device does not support 2 periods per buffer\n");
+	            exit(0);
+	        }
+	        goto __again;
+	    }
+	    :ref:`snd_pcm_hw_params_get_buffer_size <doxid-group___p_c_m___h_w___params_1gab6556fcaaf926360d2064044a6f6cfb4>`(c_params, &c_size);
+	    if (c_psize * 2 < c_size) {
+	                :ref:`snd_pcm_hw_params_get_periods_min <doxid-group___p_c_m___h_w___params_1ga17f3826360b0fe1f47c696388d25ac93>`(c_params, &val, NULL);
+	        if (val > 2 ) {
+	            printf("capture device does not support 2 periods per buffer\n");
+	            exit(0);
+	        }
+	        goto __again;
+	    }
+	    if ((err = setparams_set(phandle, p_params, p_swparams, "playback")) < 0) {
+	        printf("Unable to set sw parameters for playback stream: %s\n", :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err));
+	        exit(0);
+	    }
+	    if ((err = setparams_set(chandle, c_params, c_swparams, "capture")) < 0) {
+	        printf("Unable to set sw parameters for playback stream: %s\n", :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err));
+	        exit(0);
+	    }
+	
+	    if ((err = :ref:`snd_pcm_prepare <doxid-group___p_c_m_1ga788d05de75f2d536f8443cb0306754d0>`(phandle)) < 0) {
+	        printf("Prepare error: %s\n", :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err));
+	        exit(0);
+	    }
+	
+	    :ref:`snd_pcm_dump <doxid-group___p_c_m___dump_1ga9c5c879409c504e155e234905d031d8d>`(phandle, output);
+	    :ref:`snd_pcm_dump <doxid-group___p_c_m___dump_1ga9c5c879409c504e155e234905d031d8d>`(chandle, output);
+	    fflush(stdout);
+	    return 0;
+	}
+	
+	void showstat(:ref:`snd_pcm_t <doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>` *handle, size_t frames)
+	{
+	    int err;
+	    :ref:`snd_pcm_status_t <doxid-group___p_c_m_1ga902b87281c46910b469d5f7aaafc1890>` *status;
+	
+	    :ref:`snd_pcm_status_alloca <doxid-group___p_c_m___status_1ga046c09e5d14b684d9fefd70a12cdde1a>`(&status);
+	    if ((err = :ref:`snd_pcm_status <doxid-group___p_c_m_1ga32891eaac37741728a9b23027012c892>`(handle, status)) < 0) {
+	        printf("Stream status error: %s\n", :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err));
+	        exit(0);
+	    }
+	    printf("*** frames = %li ***\n", (long)frames);
+	    :ref:`snd_pcm_status_dump <doxid-group___p_c_m___dump_1gaf2427b186609ad502666273342467a51>`(status, output);
+	}
+	
+	void showlatency(size_t latency)
+	{
+	    double d;
+	    latency *= 2;
+	    d = (double)latency / (double)rate;
+	    printf("Trying latency %li frames, %.3fus, %.6fms (%.4fHz)\n", (long)latency, d * 1000000, d * 1000, (double)1 / d);
+	}
+	
+	void showinmax(size_t in_max)
+	{
+	    double d;
+	
+	    printf("Maximum read: %li frames\n", (long)in_max);
+	    d = (double)in_max / (double)rate;
+	    printf("Maximum read latency: %.3fus, %.6fms (%.4fHz)\n", d * 1000000, d * 1000, (double)1 / d);
+	}
+	
+	void gettimestamp(:ref:`snd_pcm_t <doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>` *handle, :ref:`snd_timestamp_t <doxid-group___global_1gadd377862d568809fb0e32c9faddf99a4>` *timestamp)
+	{
+	    int err;
+	    :ref:`snd_pcm_status_t <doxid-group___p_c_m_1ga902b87281c46910b469d5f7aaafc1890>` *status;
+	
+	    :ref:`snd_pcm_status_alloca <doxid-group___p_c_m___status_1ga046c09e5d14b684d9fefd70a12cdde1a>`(&status);
+	    if ((err = :ref:`snd_pcm_status <doxid-group___p_c_m_1ga32891eaac37741728a9b23027012c892>`(handle, status)) < 0) {
+	        printf("Stream status error: %s\n", :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err));
+	        exit(0);
+	    }
+	    :ref:`snd_pcm_status_get_trigger_tstamp <doxid-group___p_c_m___status_1ga5eaeff98814e96c2ffd5f04c95b22c8d>`(status, timestamp);
+	}
+	
+	void setscheduler(void)
+	{
+	    struct sched_param sched_param;
+	
+	    if (sched_getparam(0, &sched_param) < 0) {
+	        printf("Scheduler getparam failed...\n");
+	        return;
+	    }
+	    sched_param.sched_priority = sched_get_priority_max(SCHED_RR);
+	    if (!sched_setscheduler(0, SCHED_RR, &sched_param)) {
+	        printf("Scheduler set to Round Robin with priority %i...\n", sched_param.sched_priority);
+	        fflush(stdout);
+	        return;
+	    }
+	    printf("!!!Scheduler set to Round Robin with priority %i FAILED!!!\n", sched_param.sched_priority);
+	}
+	
+	long timediff(:ref:`snd_timestamp_t <doxid-group___global_1gadd377862d568809fb0e32c9faddf99a4>` t1, :ref:`snd_timestamp_t <doxid-group___global_1gadd377862d568809fb0e32c9faddf99a4>` t2)
+	{
+	    signed long l;
+	
+	    t1.tv_sec -= t2.tv_sec;
+	    l = (signed long) t1.tv_usec - (signed long) t2.tv_usec;
+	    if (l < 0) {
+	        t1.tv_sec--;
+	        l = 1000000 + l;
+	        l %= 1000000;
+	    }
+	    return (t1.tv_sec * 1000000) + l;
+	}
+	
+	long readbuf(:ref:`snd_pcm_t <doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>` *handle, char *buf, long :ref:`len <doxid-seq__event_8h_1a77124bd5f7e31e6fffc19f335da0c23f>`, size_t *frames, size_t *max)
+	{
+	    long r;
+	
+	    if (!block) {
+	        do {
+	            r = :ref:`snd_pcm_readi <doxid-group___p_c_m_1ga4c2c7bd26cf221268d59dc3bbeb9c048>`(handle, buf, len);
+	        } while (r == -EAGAIN);
+	        if (r > 0) {
+	            *frames += r;
+	            if ((long)*max < r)
+	                *max = r;
+	        }
+	        // printf("read = %li\n", r);
+	    } else {
+	        int frame_bytes = (:ref:`snd_pcm_format_width <doxid-group___p_c_m___helpers_1ga8d4e07f2d68cc16f607857ed8a222a29>`(format) / 8) * channels;
+	        do {
+	            r = :ref:`snd_pcm_readi <doxid-group___p_c_m_1ga4c2c7bd26cf221268d59dc3bbeb9c048>`(handle, buf, len);
+	            if (r > 0) {
+	                buf += r * frame_bytes;
+	                len -= r;
+	                *frames += r;
+	                if ((long)*max < r)
+	                    *max = r;
+	            }
+	            // printf("r = %li, len = %li\n", r, len);
+	        } while (r >= 1 && len > 0);
+	    }
+	    // showstat(handle, 0);
+	    return r;
+	}
+	
+	long writebuf(:ref:`snd_pcm_t <doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>` *handle, char *buf, long len, size_t *frames)
+	{
+	    long r;
+	
+	    while (len > 0) {
+	        r = :ref:`snd_pcm_writei <doxid-group___p_c_m_1gabc748a500743713eafa960c7d104ca6f>`(handle, buf, len);
+	        if (r == -EAGAIN)
+	            continue;
+	        // printf("write = %li\n", r);
+	        if (r < 0)
+	            return r;
+	        // showstat(handle, 0);
+	        buf += r * 4;
+	        len -= r;
+	        *frames += r;
+	    }
+	    return 0;
+	}
+	            
+	#define FILTERSWEEP_LFO_CENTER 2000.
+	#define FILTERSWEEP_LFO_DEPTH 1800.
+	#define FILTERSWEEP_LFO_FREQ 0.2
+	#define FILTER_BANDWIDTH 50
+	
+	/* filter the sweep variables */
+	float lfo,dlfo,fs,fc,BW,C,D,a0,a1,a2,b1,b2,*x[3],*y[3];
+	
+	void applyeffect(char* buffer,int r)
+	{
+	    short* samples = (short*) buffer;
+	    int i;
+	    for (i=0;i<r;i++)
+	    {
+	        int chn;
+	
+	        fc = sin(lfo)*FILTERSWEEP_LFO_DEPTH+FILTERSWEEP_LFO_CENTER;
+	        lfo += dlfo;
+	        if (lfo>2.*M_PI) lfo -= 2.*M_PI;
+	        C = 1./tan(M_PI*BW/fs);
+	        D = 2.*cos(2*M_PI*fc/fs);
+	        a0 = 1./(1.+C);
+	        a1 = 0;
+	        a2 = -a0;
+	        b1 = -C*D*a0;
+	        b2 = (C-1)*a0;
+	
+	        for (chn=0;chn<channels;chn++)
+	        {
+	            x[chn][2] = x[chn][1];
+	            x[chn][1] = x[chn][0];
+	
+	            y[chn][2] = y[chn][1];
+	            y[chn][1] = y[chn][0];
+	
+	            x[chn][0] = samples[i*channels+chn];
+	            y[chn][0] = a0*x[chn][0] + a1*x[chn][1] + a2*x[chn][2] 
+	                - b1*y[chn][1] - b2*y[chn][2];
+	            samples[i*channels+chn] = y[chn][0];
+	        }
+	    }
+	}
+	
+	void help(void)
+	{
+	    int k;
+	    printf(
+	"Usage: latency [OPTION]... [FILE]...\n"
+	"-h,--help      help\n"
+	"-P,--pdevice   playback device\n"
+	"-C,--cdevice   capture device\n"
+	"-m,--min       minimum latency in frames\n"
+	"-M,--max       maximum latency in frames\n"
+	"-F,--frames    frames to transfer\n"
+	"-f,--format    sample format\n"
+	"-c,--channels  channels\n"
+	"-r,--rate      rate\n"
+	"-B,--buffer    buffer size in frames\n"
+	"-E,--period    period size in frames\n"
+	"-s,--seconds   duration of test in seconds\n"
+	"-b,--block     block mode\n"
+	"-p,--poll      use poll (wait for event - reduces CPU usage)\n"
+	"-e,--effect    apply an effect (bandpass filter sweep)\n"
+	);
+	        printf("Recognized sample formats are:");
+	        for (k = 0; k < SND_PCM_FORMAT_LAST; ++k) {
+	                const char *s = :ref:`snd_pcm_format_name <doxid-group___p_c_m___description_1ga2ca258b8ac569ca35f283e48d2181e45>`(k);
+	                if (s)
+	                        printf(" %s", s);
+	        }
+	        printf("\n\n");
+	        printf(
+	"Tip #1 (usable latency with large periods, non-blocking mode, good CPU usage,\n"
+	"        superb xrun prevention):\n"
+	"  latency -m 8192 -M 8192 -t 1 -p\n"
+	"Tip #2 (superb latency, non-blocking mode, but heavy CPU usage):\n"
+	"  latency -m 128 -M 128\n"
+	);
+	}
+	
+	int main(int argc, char *argv[])
+	{
+	    struct option long_option[] =
+	    {
+	        {"help", 0, NULL, 'h'},
+	        {"pdevice", 1, NULL, 'P'},
+	        {"cdevice", 1, NULL, 'C'},
+	        {"min", 1, NULL, 'm'},
+	        {"max", 1, NULL, 'M'},
+	        {"frames", 1, NULL, 'F'},
+	        {"format", 1, NULL, 'f'},
+	        {"channels", 1, NULL, 'c'},
+	        {"rate", 1, NULL, 'r'},
+	        {"buffer", 1, NULL, 'B'},
+	        {"period", 1, NULL, 'E'},
+	        {"seconds", 1, NULL, 's'},
+	        {"block", 0, NULL, 'b'},
+	        {"poll", 0, NULL, 'p'},
+	        {"effect", 0, NULL, 'e'},
+	        {NULL, 0, NULL, 0},
+	    };
+	    :ref:`snd_pcm_t <doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>` *phandle, *chandle;
+	    char *buffer;
+	    int err, latency, morehelp;
+	    int ok;
+	    :ref:`snd_timestamp_t <doxid-group___global_1gadd377862d568809fb0e32c9faddf99a4>` p_tstamp, c_tstamp;
+	    ssize_t r;
+	    size_t frames_in, frames_out, in_max;
+	    int effect = 0;
+	    morehelp = 0;
+	    while (1) {
+	        int c;
+	        if ((c = getopt_long(argc, argv, "hP:C:m:M:F:f:c:r:B:E:s:bpen", long_option, NULL)) < 0)
+	            break;
+	        switch (c) {
+	        case 'h':
+	            morehelp++;
+	            break;
+	        case 'P':
+	            pdevice = strdup(optarg);
+	            break;
+	        case 'C':
+	            cdevice = strdup(optarg);
+	            break;
+	        case 'm':
+	            err = atoi(optarg) / 2;
+	            latency_min = err >= 4 ? err : 4;
+	            if (latency_max < latency_min)
+	                latency_max = latency_min;
+	            break;
+	        case 'M':
+	            err = atoi(optarg) / 2;
+	            latency_max = latency_min > err ? latency_min : err;
+	            break;
+	        case 'f':
+	            format = :ref:`snd_pcm_format_value <doxid-group___p_c_m___description_1ga59f99dd9647315a7312d1f2b6204b7bc>`(optarg);
+	            if (format == :ref:`SND_PCM_FORMAT_UNKNOWN <doxid-group___p_c_m_1ggaa14b7f26877a812acbb39811364177f8ab1e118ecdccf628639b5c85bc3a48999>`) {
+	                printf("Unknown format, setting to default S16_LE\n");
+	                format = :ref:`SND_PCM_FORMAT_S16_LE <doxid-group___p_c_m_1ggaa14b7f26877a812acbb39811364177f8a8b66a29293c62df9d1678c609fab76c0>`;
+	            }
+	            break;
+	        case 'c':
+	            err = atoi(optarg);
+	            channels = err >= 1 && err < 1024 ? err : 1;
+	            break;
+	        case 'r':
+	            err = atoi(optarg);
+	            rate = err >= 4000 && err < 200000 ? err : 44100;
+	            break;
+	        case 'B':
+	            err = atoi(optarg);
+	            buffer_size = err >= 32 && err < 200000 ? err : 0;
+	            break;
+	        case 'E':
+	            err = atoi(optarg);
+	            period_size = err >= 32 && err < 200000 ? err : 0;
+	            break;
+	        case 's':
+	            err = atoi(optarg);
+	            loop_sec = err >= 1 && err <= 100000 ? err : 30;
+	            break;
+	        case 'b':
+	            block = 1;
+	            break;
+	        case 'p':
+	            use_poll = 1;
+	            break;
+	        case 'e':
+	            effect = 1;
+	            break;
+	        case 'n':
+	            resample = 0;
+	            break;
+	        }
+	    }
+	
+	    if (morehelp) {
+	        help();
+	        return 0;
+	    }
+	    err = :ref:`snd_output_stdio_attach <doxid-group___output_1gaca78d01bf6d081274650794861373c7d>`(&output, stdout, 0);
+	    if (err < 0) {
+	        printf("Output failed: %s\n", :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err));
+	        return 0;
+	    }
+	
+	    loop_limit = loop_sec * rate;
+	    latency = latency_min - 4;
+	    buffer = malloc((latency_max * :ref:`snd_pcm_format_width <doxid-group___p_c_m___helpers_1ga8d4e07f2d68cc16f607857ed8a222a29>`(format) / 8) * 2);
+	
+	    setscheduler();
+	
+	    printf("Playback device is %s\n", pdevice);
+	    printf("Capture device is %s\n", cdevice);
+	    printf("Parameters are %iHz, %s, %i channels, %s mode\n", rate, :ref:`snd_pcm_format_name <doxid-group___p_c_m___description_1ga2ca258b8ac569ca35f283e48d2181e45>`(format), channels, block ? "blocking" : "non-blocking");
+	    printf("Poll mode: %s\n", use_poll ? "yes" : "no");
+	    printf("Loop limit is %li frames, minimum latency = %i, maximum latency = %i\n", loop_limit, latency_min * 2, latency_max * 2);
+	
+	    if ((err = :ref:`snd_pcm_open <doxid-group___p_c_m_1ga8340c7dc0ac37f37afe5e7c21d6c528b>`(&phandle, pdevice, :ref:`SND_PCM_STREAM_PLAYBACK <doxid-group___p_c_m_1ggac23b43ff55add78638e503b9cc892c24a57a2b920dbc34173479fc9036cfc78a1>`, block ? 0 : :ref:`SND_PCM_NONBLOCK <doxid-group___p_c_m_1ga6bd90de1d1527b5804090dcce51079ad>`)) < 0) {
+	        printf("Playback open error: %s\n", :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err));
+	        return 0;
+	    }
+	    if ((err = :ref:`snd_pcm_open <doxid-group___p_c_m_1ga8340c7dc0ac37f37afe5e7c21d6c528b>`(&chandle, cdevice, :ref:`SND_PCM_STREAM_CAPTURE <doxid-group___p_c_m_1ggac23b43ff55add78638e503b9cc892c24af07834f756b4f95cb61987f4811073c4>`, block ? 0 : SND_PCM_NONBLOCK)) < 0) {
+	        printf("Record open error: %s\n", :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err));
+	        return 0;
+	    }
+	
+	    /* initialize the filter sweep variables */
+	    if (effect) {
+	        fs = (float) rate;
+	        BW = FILTER_BANDWIDTH;
+	
+	        lfo = 0;
+	        dlfo = 2.*M_PI*FILTERSWEEP_LFO_FREQ/fs;
+	
+	        x[0] = (float*) malloc(channels*sizeof(float));     
+	        x[1] = (float*) malloc(channels*sizeof(float));     
+	        x[2] = (float*) malloc(channels*sizeof(float));     
+	        y[0] = (float*) malloc(channels*sizeof(float));     
+	        y[1] = (float*) malloc(channels*sizeof(float));     
+	        y[2] = (float*) malloc(channels*sizeof(float));     
+	    }
+	              
+	    while (1) {
+	        frames_in = frames_out = 0;
+	        if (setparams(phandle, chandle, &latency) < 0)
+	            break;
+	        showlatency(latency);
+	        if ((err = :ref:`snd_pcm_link <doxid-group___p_c_m_1gac6c33091b049985baa6466e8fe93917e>`(chandle, phandle)) < 0) {
+	            printf("Streams link error: %s\n", :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err));
+	            exit(0);
+	        }
+	        if (:ref:`snd_pcm_format_set_silence <doxid-group___p_c_m___helpers_1ga82631361cf1c1d13af207beb59cf97ac>`(format, buffer, latency*channels) < 0) {
+	            fprintf(stderr, "silence error\n");
+	            break;
+	        }
+	        if (writebuf(phandle, buffer, latency, &frames_out) < 0) {
+	            fprintf(stderr, "write error\n");
+	            break;
+	        }
+	        if (writebuf(phandle, buffer, latency, &frames_out) < 0) {
+	            fprintf(stderr, "write error\n");
+	            break;
+	        }
+	
+	        if ((err = :ref:`snd_pcm_start <doxid-group___p_c_m_1ga6bdb88b68a9d9e66015d770f600c6aea>`(chandle)) < 0) {
+	            printf("Go error: %s\n", :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err));
+	            exit(0);
+	        }
+	        gettimestamp(phandle, &p_tstamp);
+	        gettimestamp(chandle, &c_tstamp);
+	#if 0
+	        printf("Playback:\n");
+	        showstat(phandle, frames_out);
+	        printf("Capture:\n");
+	        showstat(chandle, frames_in);
+	#endif
+	
+	        ok = 1;
+	        in_max = 0;
+	        while (ok && frames_in < loop_limit) {
+	            if (use_poll) {
+	                /* use poll to wait for next event */
+	                :ref:`snd_pcm_wait <doxid-group___p_c_m_1gad4d53d58b996a7cd9a5cbf1710b90375>`(chandle, 1000);
+	            }
+	            if ((r = readbuf(chandle, buffer, latency, &frames_in, &in_max)) < 0)
+	                ok = 0;
+	            else {
+	                if (effect)
+	                    applyeffect(buffer,r);
+	                if (writebuf(phandle, buffer, r, &frames_out) < 0)
+	                    ok = 0;
+	            }
+	        }
+	        if (ok)
+	            printf("Success\n");
+	        else
+	            printf("Failure\n");
+	        printf("Playback:\n");
+	        showstat(phandle, frames_out);
+	        printf("Capture:\n");
+	        showstat(chandle, frames_in);
+	        showinmax(in_max);
+	        if (p_tstamp.tv_sec == p_tstamp.tv_sec &&
+	            p_tstamp.tv_usec == c_tstamp.tv_usec)
+	            printf("Hardware sync\n");
+	        :ref:`snd_pcm_drop <doxid-group___p_c_m_1ga7000ca6010a1a2739daddff8e2fbb440>`(chandle);
+	        :ref:`snd_pcm_nonblock <doxid-group___p_c_m_1ga8d9ed4a62c17402de0389fd31fc7dc1f>`(phandle, 0);
+	        :ref:`snd_pcm_drain <doxid-group___p_c_m_1ga49afc5b8527f30c33fafa476533c9f86>`(phandle);
+	        :ref:`snd_pcm_nonblock <doxid-group___p_c_m_1ga8d9ed4a62c17402de0389fd31fc7dc1f>`(phandle, !block ? 1 : 0);
+	        if (ok) {
+	#if 1
+	            printf("Playback time = %li.%i, Record time = %li.%i, diff = %li\n",
+	                   p_tstamp.tv_sec,
+	                   (int)p_tstamp.tv_usec,
+	                   c_tstamp.tv_sec,
+	                   (int)c_tstamp.tv_usec,
+	                   timediff(p_tstamp, c_tstamp));
+	#endif
+	            break;
+	        }
+	        :ref:`snd_pcm_unlink <doxid-group___p_c_m_1ga0d3af5e30593dae857b4308aab5035cd>`(chandle);
+	        :ref:`snd_pcm_hw_free <doxid-group___p_c_m_1ga242ad0a269c272830d30666220edbc2a>`(phandle);
+	        :ref:`snd_pcm_hw_free <doxid-group___p_c_m_1ga242ad0a269c272830d30666220edbc2a>`(chandle);
+	    }
+	    :ref:`snd_pcm_close <doxid-group___p_c_m_1ga042aba7262a4cbb4d444b6fc08cb7124>`(phandle);
+	    :ref:`snd_pcm_close <doxid-group___p_c_m_1ga042aba7262a4cbb4d444b6fc08cb7124>`(chandle);
+	    return 0;
+	}

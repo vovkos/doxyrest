@@ -1,0 +1,84 @@
+.. index:: pair: struct; apr_mmap_t
+.. _doxid-structapr__mmap__t:
+
+struct apr_mmap_t
+=================
+
+.. toctree::
+	:hidden:
+
+Overview
+~~~~~~~~
+
+As far as I can tell the only really sane way to store an MMAP is as a void \* and a length. :ref:`More...<details-structapr__mmap__t>`
+
+
+.. ref-code-block:: cpp
+	:class: doxyrest-overview-code-block
+
+	#include <apr_mmap.h>
+	
+	struct apr_mmap_t {
+		// fields
+	
+		:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* :ref:`cntxt<doxid-structapr__mmap__t_1a42d01080278bbc9bad26728f9a71c492>`;
+		void* :ref:`mm<doxid-structapr__mmap__t_1abcc62d7e7c8187311e6619faf0d44f19>`;
+		apr_size_t :ref:`size<doxid-structapr__mmap__t_1a274aea0906a4b674e1642ac9e81966c7>`;
+
+		// methods
+	
+		:ref:`APR_RING_ENTRY<doxid-structapr__mmap__t_1aeca30aed7539548d31b7c0115020af62>`(apr_mmap_t);
+	};
+.. _details-structapr__mmap__t:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+As far as I can tell the only really sane way to store an MMAP is as a void \* and a length. BeOS requires this area_id, but that's just a little something extra. I am exposing this type, because it doesn't make much sense to keep it private, and opening it up makes some stuff easier in Apache.The MMAP structure
+
+Fields
+------
+
+.. index:: pair: variable; cntxt
+.. _doxid-structapr__mmap__t_1a42d01080278bbc9bad26728f9a71c492:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	:ref:`apr_pool_t<doxid-group__apr__pools_1gaf137f28edcf9a086cd6bc36c20d7cdfb>`* cntxt
+
+The pool the mmap structure was allocated out of.
+
+.. index:: pair: variable; mm
+.. _doxid-structapr__mmap__t_1abcc62d7e7c8187311e6619faf0d44f19:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	void* mm
+
+The start of the memory mapped area
+
+.. index:: pair: variable; size
+.. _doxid-structapr__mmap__t_1a274aea0906a4b674e1642ac9e81966c7:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	apr_size_t size
+
+The amount of data in the mmap
+
+Methods
+-------
+
+.. index:: pair: function; APR_RING_ENTRY
+.. _doxid-structapr__mmap__t_1aeca30aed7539548d31b7c0115020af62:
+
+.. ref-code-block:: cpp
+	:class: doxyrest-title-code-block
+
+	APR_RING_ENTRY(apr_mmap_t)
+
+ring of :ref:`apr_mmap_t <doxid-structapr__mmap__t>` 's that reference the same mmap'ed region; acts in place of a reference count
+

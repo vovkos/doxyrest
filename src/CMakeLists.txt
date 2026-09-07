@@ -158,7 +158,7 @@ target_link_libraries(
 	axl_xml
 	axl_io
 	axl_core
-	expat
+	${EXPAT_LIB_NAME}
 	${LUA_LIB_NAME}
 )
 

@@ -7,7 +7,7 @@ on:
 jobs:
     windowsBuild:
         name: Windows Build
-        runs-on: windows-2022
+        runs-on: ${{matrix.TARGET_CPU == 'arm64' && 'windows-11-arm' || 'windows-2022'}}
 
         strategy:
             fail-fast: false
@@ -19,6 +19,7 @@ jobs:
                 TARGET_CPU:
                 -   x86
                 -   amd64
+                -   arm64
 
         env:
             RELEASE: ${{ startsWith(github.ref, 'refs/tags/') && matrix.CONFIGURATION == 'Release' }}
@@ -97,7 +98,7 @@ jobs:
 
     linuxBuild:
         name: Linux Build
-        runs-on: ubuntu-24.04
+        runs-on: ${{matrix.TARGET_CPU == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04'}}
 
         strategy:
             fail-fast: false
@@ -109,6 +110,7 @@ jobs:
                 TARGET_CPU:
                 -   x86
                 -   amd64
+                -   arm64
 
                 COMPILER:
                 -   gcc

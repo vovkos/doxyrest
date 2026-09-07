@@ -22,6 +22,8 @@ if /i "%1" == "i386" goto :x86
 if /i "%1" == "amd64" goto :amd64
 if /i "%1" == "x86_64" goto :amd64
 if /i "%1" == "x64" goto :amd64
+if /i "%1" == "arm64" goto :arm64
+if /i "%1" == "aarch64" goto :arm64
 
 echo Invalid argument: '%1'
 exit -1
@@ -68,6 +70,13 @@ set CMAKE_ARCH_OPTIONS=-A x64
 shift
 goto :loop
 
+:arm64
+set TARGET_CPU=arm64
+set CMAKE_ARCH_SUFFIX=
+set CMAKE_ARCH_OPTIONS=-A ARM64
+shift
+goto :loop
+
 :: . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 :finalize
@@ -78,19 +87,23 @@ if "%CONFIGURATION%" == "" (set CONFIGURATION=Release)
 if "%CMAKE_USE_ARCH_OPTIONS%" == "" (set CMAKE_GENERATOR=%CMAKE_GENERATOR%%CMAKE_ARCH_SUFFIX%)
 if not "%CMAKE_USE_ARCH_OPTIONS%" == "" (set CMAKE_OPTIONS=%CMAKE_OPTIONS%%CMAKE_ARCH_OPTIONS%)
 
-set LUA_VERSION=5.4.5
+set LUA_VERSION=5.4.7
 set LUA_DOWNLOAD_URL=https://github.com/walterschell/Lua/archive/refs/tags/v%LUA_VERSION%.zip
 
-set EXPAT_VERSION=2.1.0
-set EXPAT_VERSION_TAG=R_2_1_0
+set EXPAT_VERSION=2.7.5
+set EXPAT_VERSION_TAG=R_2_7_5
 set EXPAT_DOWNLOAD_FILE=expat-%EXPAT_VERSION%.tar.gz
 set EXPAT_DOWNLOAD_URL=https://github.com/libexpat/libexpat/releases/download/%EXPAT_VERSION_TAG%/%EXPAT_DOWNLOAD_FILE%
 
 set EXPAT_CMAKE_FLAGS= ^
-	-DBUILD_shared=OFF ^
-	-DBUILD_examples=OFF ^
-	-DBUILD_tests=OFF ^
-	-DBUILD_tools=OFF
+	-DEXPAT_SHARED_LIBS=OFF ^
+	-DEXPAT_BUILD_EXAMPLES=OFF ^
+	-DEXPAT_BUILD_TESTS=OFF ^
+	-DEXPAT_BUILD_TOOLS=OFF ^
+	-DEXPAT_BUILD_DOCS=OFF ^
+	-DEXPAT_BUILD_PKGCONFIG=OFF ^
+	-DEXPAT_DEBUG_POSTFIX= ^
+	-DEXPAT_RELEASE_POSTFIX=
 
 set RAGEL_DOWNLOAD_URL=https://github.com/eloraiby/ragel-windows/raw/master/ragel.exe
 

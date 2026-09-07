@@ -85,7 +85,7 @@ jobs:
                 for /f "usebackq tokens=*" %%i in (`cmake -P print-package-file-name.cmake 2^>^&1`) do (set CPACK_PACKAGE_FILE_NAME=%%i)
                 set DEPLOY_FILE=build/%CPACK_PACKAGE_FILE_NAME%.7z
 
-                echo ::set-output name=DEPLOY_FILE::%DEPLOY_FILE%
+                echo DEPLOY_FILE=%DEPLOY_FILE%>>%GITHUB_OUTPUT%
 
         -   name: Deploy to GitHub Releases
             uses: softprops/action-gh-release@v1
@@ -234,7 +234,7 @@ jobs:
                 echo CPACK_PACKAGE_FILE_NAME: $CPACK_PACKAGE_FILE_NAME
                 echo DEPLOY_FILE: $DEPLOY_FILE
 
-                echo ::set-output name=DEPLOY_FILE::$DEPLOY_FILE
+                echo DEPLOY_FILE=$DEPLOY_FILE >> $GITHUB_OUTPUT
 
         -   name: Deploy to GitHub Releases
             if: ${{ env.RELEASE == 'true' }}
@@ -315,7 +315,7 @@ jobs:
                 echo CPACK_PACKAGE_FILE_NAME: $CPACK_PACKAGE_FILE_NAME
                 echo DEPLOY_FILE: $DEPLOY_FILE
 
-                echo ::set-output name=DEPLOY_FILE::$DEPLOY_FILE
+                echo DEPLOY_FILE=$DEPLOY_FILE >> $GITHUB_OUTPUT
 
         -   name: Deploy to GitHub Releases
             if: ${{ env.RELEASE == 'true' }}

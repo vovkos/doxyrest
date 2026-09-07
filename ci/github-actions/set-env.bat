@@ -33,7 +33,6 @@ exit -1
 :msvc15
 set TOOLCHAIN=msvc15
 set CMAKE_GENERATOR=Visual Studio 15 2017
-set LUA_TOOLCHAIN=dll15
 shift
 goto :loop
 
@@ -41,7 +40,6 @@ goto :loop
 set TOOLCHAIN=msvc16
 set CMAKE_GENERATOR=Visual Studio 16 2019
 set CMAKE_USE_ARCH_OPTIONS=true
-set LUA_TOOLCHAIN=dll16
 shift
 goto :loop
 
@@ -49,7 +47,6 @@ goto :loop
 set TOOLCHAIN=msvc17
 set CMAKE_GENERATOR=Visual Studio 17 2022
 set CMAKE_USE_ARCH_OPTIONS=true
-set LUA_TOOLCHAIN=dll16
 shift
 goto :loop
 
@@ -61,9 +58,6 @@ goto :loop
 set TARGET_CPU=x86
 set CMAKE_ARCH_SUFFIX=
 set CMAKE_ARCH_OPTIONS=-A Win32
-set LUA_PLATFORM=Win32
-set CHOCO_PLATFORM=--x86
-set PROGRAM_FILES_DIR_SUFFIX= (x86)
 shift
 goto :loop
 
@@ -71,9 +65,6 @@ goto :loop
 set TARGET_CPU=amd64
 set CMAKE_ARCH_SUFFIX= Win64
 set CMAKE_ARCH_OPTIONS=-A x64
-set LUA_PLATFORM=Win64
-set CHOCO_PLATFORM=
-set PROGRAM_FILES_DIR_SUFFIX=
 shift
 goto :loop
 

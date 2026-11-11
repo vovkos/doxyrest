@@ -1,0 +1,87 @@
+.. index:: pair: enum; libusb_transfer_flags
+.. _doxid-group__libusb__asyncio_1ga1fb47dd0f7c209b60a3609ff0c03d56d:
+
+enum libusb_transfer_flags
+==========================
+
+Overview
+~~~~~~~~
+
+:ref:`libusb_transfer.flags <doxid-structlibusb__transfer_1ae26c063df30c2e29835212aad98c6e06>` values :ref:`More...<details-group__libusb__asyncio_1ga1fb47dd0f7c209b60a3609ff0c03d56d>`
+
+.. ref-code-block:: c
+	:class: doxyrest-overview-code-block
+
+	#include <libusb.h>
+
+	enum libusb_transfer_flags {
+	    :ref:`LIBUSB_TRANSFER_SHORT_NOT_OK<doxid-group__libusb__asyncio_1gga1fb47dd0f7c209b60a3609ff0c03d56dae4c0697c266819c51c1734b3456e7276>`    = 1<<0,
+	    :ref:`LIBUSB_TRANSFER_FREE_BUFFER<doxid-group__libusb__asyncio_1gga1fb47dd0f7c209b60a3609ff0c03d56dae993a26f495ac9949118e23eafa19e86>`     = 1<<1,
+	    :ref:`LIBUSB_TRANSFER_FREE_TRANSFER<doxid-group__libusb__asyncio_1gga1fb47dd0f7c209b60a3609ff0c03d56dacf3f064997b283a14097c9f4d6f8ccc1>`   = 1<<2,
+	    :ref:`LIBUSB_TRANSFER_ADD_ZERO_PACKET<doxid-group__libusb__asyncio_1gga1fb47dd0f7c209b60a3609ff0c03d56da26b66334b6ec0537c49841ca623d901f>` = 1<<3,
+	};
+
+.. _details-group__libusb__asyncio_1ga1fb47dd0f7c209b60a3609ff0c03d56d:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+:ref:`libusb_transfer.flags <doxid-structlibusb__transfer_1ae26c063df30c2e29835212aad98c6e06>` values
+
+Enum Values
+-----------
+
+.. index:: pair: enumvalue; LIBUSB_TRANSFER_SHORT_NOT_OK
+.. _doxid-group__libusb__asyncio_1gga1fb47dd0f7c209b60a3609ff0c03d56dae4c0697c266819c51c1734b3456e7276:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	LIBUSB_TRANSFER_SHORT_NOT_OK
+
+Report short frames as errors.
+
+.. index:: pair: enumvalue; LIBUSB_TRANSFER_FREE_BUFFER
+.. _doxid-group__libusb__asyncio_1gga1fb47dd0f7c209b60a3609ff0c03d56dae993a26f495ac9949118e23eafa19e86:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	LIBUSB_TRANSFER_FREE_BUFFER
+
+Automatically free() transfer buffer during :ref:`libusb_free_transfer() <doxid-group__libusb__asyncio_1ga6ab8b2cff4de9091298a06b2f4b86cd6>`.
+
+Note that buffers allocated with :ref:`libusb_dev_mem_alloc() <doxid-group__libusb__asyncio_1ga47c492e750197f1a28874c7a0dee40e3>` should not be attempted freed in this way, since free() is not an appropriate way to release such memory.
+
+.. index:: pair: enumvalue; LIBUSB_TRANSFER_FREE_TRANSFER
+.. _doxid-group__libusb__asyncio_1gga1fb47dd0f7c209b60a3609ff0c03d56dacf3f064997b283a14097c9f4d6f8ccc1:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	LIBUSB_TRANSFER_FREE_TRANSFER
+
+Automatically call :ref:`libusb_free_transfer() <doxid-group__libusb__asyncio_1ga6ab8b2cff4de9091298a06b2f4b86cd6>` after callback returns.
+
+If this flag is set, it is illegal to call :ref:`libusb_free_transfer() <doxid-group__libusb__asyncio_1ga6ab8b2cff4de9091298a06b2f4b86cd6>` from your transfer callback, as this will result in a double-free when this flag is acted upon.
+
+.. index:: pair: enumvalue; LIBUSB_TRANSFER_ADD_ZERO_PACKET
+.. _doxid-group__libusb__asyncio_1gga1fb47dd0f7c209b60a3609ff0c03d56da26b66334b6ec0537c49841ca623d901f:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	LIBUSB_TRANSFER_ADD_ZERO_PACKET
+
+Terminate transfers that are a multiple of the endpoint's wMaxPacketSize with an extra zero length packet.
+
+This is useful when a device protocol mandates that each logical request is terminated by an incomplete packet (i.e. the logical requests are not separated by other means).
+
+This flag only affects host-to-device transfers to bulk and interrupt endpoints. In other situations, it is ignored.
+
+This flag only affects transfers with a length that is a multiple of the endpoint's wMaxPacketSize. On transfers of other lengths, this flag has no effect. Therefore, if you are working with a device that needs a ZLP whenever the end of the logical request falls on a packet boundary, then it is sensible to set this flag on *every* transfer (you do not have to worry about only setting it on transfers that end on the boundary).
+
+This flag is currently only supported on Linux. On other systems, :ref:`libusb_submit_transfer() <doxid-group__libusb__asyncio_1gabb0932601f2c7dad2fee4b27962848ce>` will return LIBUSB_ERROR_NOT_SUPPORTED for every transfer where this flag is set.
+
+Available since libusb-1.0.9.
+

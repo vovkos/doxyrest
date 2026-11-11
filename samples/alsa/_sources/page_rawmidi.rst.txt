@@ -1,0 +1,162 @@
+.. index:: pair: page; RawMidi interface
+.. _doxid-rawmidi:
+
+RawMidi interface
+=================
+
+RawMidi Interface is designed to write or read raw (unchanged) MIDI data over the MIDI line without any timestamps defined in interface. MIDI stands Musical Instrument Digital Interface and more information about this standard can be found at `http://www.midi.org <http://www.midi.org>`__.
+
+
+
+.. _doxid-rawmidi_1rawmidi_general_overview:
+
+General overview
+~~~~~~~~~~~~~~~~
+
+The rawmidi implementation uses ring buffers to store outgoing and incoming MIDI stream. The buffer size is tunable and drivers report underruns for incoming stream as well.
+
+
+
+
+
+.. _doxid-rawmidi_1rawmidi_open:
+
+Open handling
+~~~~~~~~~~~~~
+
+RawMidi devices are opened exclusively for a selected direction. While more than one process may not open a given MIDI device in the same direction simultaneously, separate processes may open a single MIDI device in different directions (i.e. process one opens a MIDI device in write direction and process two opens the same device in read direction).
+
+
+
+.. _doxid-rawmidi_1rawmidi_open_nonblock:
+
+Nonblocking open (flag)
+-----------------------
+
+Using :ref:`SND_RAWMIDI_NONBLOCK <doxid-group___raw_midi_1ga31ee35659c82272382ccc3014c8a73f8>` flag for :ref:`snd_rawmidi_open() <doxid-group___raw_midi_1ga2ab783051deeb7eb37eb568b76448889>` or :ref:`snd_rawmidi_open_lconf() <doxid-group___raw_midi_1gaa7e3daf5cf4dd36b2534d2f1d6309477>` instruct device driver to return the -EBUSY error when device is already occupied with another application. This flag also changes behaviour of :ref:`snd_rawmidi_write() <doxid-group___raw_midi_1ga0a30e482efec57f4ea74c533a0f9b134>` and :ref:`snd_rawmidi_read() <doxid-group___raw_midi_1ga9b0952fc04facda83cdf1521325ca475>` returning -EAGAIN when no more bytes can be processed.
+
+Note: In opposite (default) behaviour, application is blocked until device resources are free.
+
+
+
+
+
+.. _doxid-rawmidi_1rawmidi_open_append:
+
+Append open (flag)
+------------------
+
+Using :ref:`SND_RAWMIDI_APPEND <doxid-group___raw_midi_1ga7060640f32abcd337239bde2c8749d23>` flag (output only) instruct device driver to append contents of written buffer - passed by :ref:`snd_rawmidi_write() <doxid-group___raw_midi_1ga0a30e482efec57f4ea74c533a0f9b134>` - atomically to output ring buffer in the kernel space. This flag also means that device is not opened exclusively, so more applications can share given rawmidi device. Note that applications must send the whole MIDI message including the running status, because another writing application might break the MIDI message in the output buffer.
+
+
+
+
+
+.. _doxid-rawmidi_1rawmidi_open_sync:
+
+Sync open (flag)
+----------------
+
+Using :ref:`SND_RAWMIDI_SYNC <doxid-group___raw_midi_1gab1a659b38e5174d790d5671739995894>` flag (output only) assures that the contents of output buffer specified using :ref:`snd_rawmidi_write() <doxid-group___raw_midi_1ga0a30e482efec57f4ea74c533a0f9b134>` is always drained before the function exits. This behaviour is same like ' :ref:`snd_rawmidi_write() <doxid-group___raw_midi_1ga0a30e482efec57f4ea74c533a0f9b134>` followed by :ref:`snd_rawmidi_drain() <doxid-group___raw_midi_1gabfff7417ec957b7ee07882f91d73d7be>` immediately'.
+
+
+
+
+
+.. _doxid-rawmidi_1rawmidi_io:
+
+I/O handling
+------------
+
+There is only standard read/write access to device internal ring buffer. Use :ref:`snd_rawmidi_read() <doxid-group___raw_midi_1ga9b0952fc04facda83cdf1521325ca475>` and :ref:`snd_rawmidi_write() <doxid-group___raw_midi_1ga0a30e482efec57f4ea74c533a0f9b134>` functions to obtain / write MIDI bytes.
+
+
+
+
+
+.. _doxid-rawmidi_1rawmidi_dev_names:
+
+RawMidi naming conventions
+--------------------------
+
+The ALSA library uses a generic string representation for names of devices. The devices might be virtual, physical or a mix of both. The generic string is passed to :ref:`::snd_rawmidi_open() <doxid-group___raw_midi_1ga2ab783051deeb7eb37eb568b76448889>` or :ref:`::snd_rawmidi_open_lconf() <doxid-group___raw_midi_1gaa7e3daf5cf4dd36b2534d2f1d6309477>`. It contains two parts: device name and arguments. Devices and arguments are described in configuration files. The usual place for default definitions is at /usr/share/alsa/alsa.conf.
+
+
+
+
+
+.. _doxid-rawmidi_1rawmidi_dev_names_default:
+
+rawmidi_dev_names_default
+-------------------------
+
+The default device is equal to hw device. The defaults are used:
+
+defaults.rawmidi.card 0 defaults.rawmidi.device 0 defaults.rawmidi.subdevice -1
+
+These defaults can be freely overwritten in local configuration files.
+
+Example:
+
+.. ref-code-block:: cpp
+
+	default
+
+
+
+
+
+.. _doxid-rawmidi_1rawmidi_dev_names_hw:
+
+HW device
+---------
+
+The hw device description uses the hw plugin. The three arguments (in order: CARD,DEV,SUBDEV) specify card number or identifier, device number and subdevice number (-1 means any).
+
+Example:
+
+.. ref-code-block:: cpp
+
+	hw
+	hw:0
+	hw:0,0
+	hw:supersonic,1
+	hw:soundwave,1,2
+	hw:DEV=1,CARD=soundwave,SUBDEV=2
+
+
+
+
+
+
+
+.. _doxid-rawmidi_1rawmidi_examples:
+
+Examples
+~~~~~~~~
+
+The full featured examples with cross-links:
+
+:ref:`example code <doxid-/home/vladimir/Develop/alsa-lib/alsa-lib-1.1.3/src/rawmidi/rawmidi.c_1example_test_rawmidi>`
+
+This example shows open and read/write rawmidi operations.
+
+
+
+
+
+.. _doxid-rawmidi_1rawmidi_virt:
+
+Virtual RawMidi interface
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The "virtual" plugin creates a virtual RawMidi instance on the ALSA sequencer, which can be accessed through the connection of the sequencer ports. There is no connection established as default.
+
+For creating a virtual RawMidi instance, pass "virtual" as its name at creation.
+
+Example:
+
+.. ref-code-block:: cpp
+
+	snd_rawmidi_open(&read_handle, &write_handle, "virtual", 0);
+

@@ -1,0 +1,59 @@
+.. index:: pair: example; /test/pcm_min.c
+.. _doxid-_2test_2pcm_min_8c-example:
+
+/test/pcm_min.c
+===============
+
+.. ref-code-block:: cpp
+
+	/*
+	 *  This extra small demo sends a random samples to your speakers.
+	 */
+	
+	#include "../include/asoundlib.h"
+	
+	static char *device = "default";            /* playback device */
+	
+	:ref:`snd_output_t <doxid-group___output_1ga49729cc6454539495c1f5b6e95cd474a>` *output = NULL;
+	unsigned char buffer[16*1024];              /* some random data */
+	
+	int main(void)
+	{
+	        int err;
+	        unsigned int i;
+	        :ref:`snd_pcm_t <doxid-group___p_c_m_1ga919e634deecd855b6e2e15174e70d3ea>` *handle;
+	        :ref:`snd_pcm_sframes_t <doxid-group___p_c_m_1ga71cdfa37e258d2210b8bd0216bf0c36c>` frames;
+	
+	        for (i = 0; i < sizeof(buffer); i++)
+	                buffer[i] = random() & 0xff;
+	
+	    if ((err = :ref:`snd_pcm_open <doxid-group___p_c_m_1ga8340c7dc0ac37f37afe5e7c21d6c528b>`(&handle, device, :ref:`SND_PCM_STREAM_PLAYBACK <doxid-group___p_c_m_1ggac23b43ff55add78638e503b9cc892c24a57a2b920dbc34173479fc9036cfc78a1>`, 0)) < 0) {
+	        printf("Playback open error: %s\n", :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err));
+	        exit(EXIT_FAILURE);
+	    }
+	    if ((err = :ref:`snd_pcm_set_params <doxid-group___p_c_m_1ga45d50841b307f2156fce1857bfac228c>`(handle,
+	                                  :ref:`SND_PCM_FORMAT_U8 <doxid-group___p_c_m_1ggaa14b7f26877a812acbb39811364177f8ad5856f97113926836a7c6651cb8864a3>`,
+	                                  :ref:`SND_PCM_ACCESS_RW_INTERLEAVED <doxid-group___p_c_m_1gga661221ba5e8f1d6eaf4ab8e2da57cc1aa72a970ed6e676ab0fd9f3c3d36737e0a>`,
+	                                  1,
+	                                  48000,
+	                                  1,
+	                                  500000)) < 0) {   /* 0.5sec */
+	        printf("Playback open error: %s\n", :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(err));
+	        exit(EXIT_FAILURE);
+	    }
+	
+	        for (i = 0; i < 16; i++) {
+	                frames = :ref:`snd_pcm_writei <doxid-group___p_c_m_1gabc748a500743713eafa960c7d104ca6f>`(handle, buffer, sizeof(buffer));
+	                if (frames < 0)
+	                        frames = :ref:`snd_pcm_recover <doxid-group___p_c_m_1ga2157aaeb6fc14da3f040d76591f9d3b1>`(handle, frames, 0);
+	                if (frames < 0) {
+	                        printf("snd_pcm_writei failed: %s\n", :ref:`snd_strerror <doxid-group___error_1ga182bbadf2349e11602bc531e8cf22f7e>`(frames));
+	                        break;
+	                }
+	                if (frames > 0 && frames < (long)sizeof(buffer))
+	                        printf("Short write (expected %li, wrote %li)\n", (long)sizeof(buffer), frames);
+	        }
+	
+	    :ref:`snd_pcm_close <doxid-group___p_c_m_1ga042aba7262a4cbb4d444b6fc08cb7124>`(handle);
+	    return 0;
+	}

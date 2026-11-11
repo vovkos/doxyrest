@@ -1,0 +1,191 @@
+.. index:: pair: struct; libusb_transfer
+.. _doxid-structlibusb__transfer:
+
+struct libusb_transfer
+======================
+
+.. toctree::
+	:hidden:
+
+Overview
+~~~~~~~~
+
+The generic USB transfer structure. :ref:`More...<details-structlibusb__transfer>`
+
+
+.. ref-code-block:: c
+	:class: doxyrest-overview-code-block
+
+	#include <libusb.h>
+	
+	struct libusb_transfer {
+		// fields
+	
+		:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* :ref:`dev_handle<doxid-structlibusb__transfer_1adaaf06aeb5ab2a8819e75310ec253f7a>`;
+		uint8_t :ref:`flags<doxid-structlibusb__transfer_1ae26c063df30c2e29835212aad98c6e06>`;
+		unsigned char :ref:`endpoint<doxid-structlibusb__transfer_1a0fcfd057f53b0e1bff6f1567761c231a>`;
+		unsigned char :ref:`type<doxid-structlibusb__transfer_1a7c9fa575986fe9f23bbecb26b766dff1>`;
+		unsigned int :ref:`timeout<doxid-structlibusb__transfer_1a9a12af15ca5b482f5dcaebd26a848cbb>`;
+		enum :ref:`libusb_transfer_status<doxid-group__libusb__asyncio_1ga9fcb2aa23d342060ebda1d0cf7478856>` :ref:`status<doxid-structlibusb__transfer_1a64b2e70e76d52a7cd23daa3cd4fb397e>`;
+		int :ref:`length<doxid-structlibusb__transfer_1a68c023e1f40b50aa8604a2495b6a391e>`;
+		int :ref:`actual_length<doxid-structlibusb__transfer_1a7e858f07c48a271a62209d11376ae607>`;
+		:ref:`libusb_transfer_cb_fn<doxid-group__libusb__asyncio_1gac74874519794cd7aa40c0814702b0c88>` :ref:`callback<doxid-structlibusb__transfer_1a69c6df011ec23ff3e481cc98bfff0623>`;
+		void* :ref:`user_data<doxid-structlibusb__transfer_1ab75ab3e7185f08e07a1ae858a35ebb7b>`;
+		unsigned char* :ref:`buffer<doxid-structlibusb__transfer_1a7fa594567e074191ce8f28b5fb4a3bea>`;
+		int :ref:`num_iso_packets<doxid-structlibusb__transfer_1a87d725a5521c26832fdc13611220014d>`;
+		struct :ref:`libusb_iso_packet_descriptor<doxid-structlibusb__iso__packet__descriptor>` :ref:`iso_packet_desc<doxid-structlibusb__transfer_1a0de0b13dfae411fc36217d35eb89b138>`[0];
+	};
+.. _details-structlibusb__transfer:
+
+Detailed Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+The generic USB transfer structure.
+
+The user populates this structure and then submits it in order to request a transfer. After the transfer has completed, the library populates the transfer with the results and passes it back to the user.
+
+Fields
+------
+
+.. index:: pair: variable; dev_handle
+.. _doxid-structlibusb__transfer_1adaaf06aeb5ab2a8819e75310ec253f7a:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	:ref:`libusb_device_handle<doxid-group__libusb__dev_1ga7df95821d20d27b5597f1d783749d6a4>`* dev_handle
+
+Handle of the device that this transfer will be submitted to.
+
+.. index:: pair: variable; flags
+.. _doxid-structlibusb__transfer_1ae26c063df30c2e29835212aad98c6e06:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	uint8_t flags
+
+A bitwise OR combination of :ref:`libusb_transfer_flags <doxid-group__libusb__asyncio_1ga1fb47dd0f7c209b60a3609ff0c03d56d>`.
+
+.. index:: pair: variable; endpoint
+.. _doxid-structlibusb__transfer_1a0fcfd057f53b0e1bff6f1567761c231a:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	unsigned char endpoint
+
+Address of the endpoint where this transfer will be sent.
+
+.. index:: pair: variable; type
+.. _doxid-structlibusb__transfer_1a7c9fa575986fe9f23bbecb26b766dff1:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	unsigned char type
+
+Type of the endpoint from :ref:`libusb_transfer_type <doxid-group__libusb__desc_1gacb52027036a07de6ecc6c2bf07d07c71>`.
+
+.. index:: pair: variable; timeout
+.. _doxid-structlibusb__transfer_1a9a12af15ca5b482f5dcaebd26a848cbb:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	unsigned int timeout
+
+Timeout for this transfer in millseconds.
+
+A value of 0 indicates no timeout.
+
+.. index:: pair: variable; status
+.. _doxid-structlibusb__transfer_1a64b2e70e76d52a7cd23daa3cd4fb397e:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	enum :ref:`libusb_transfer_status<doxid-group__libusb__asyncio_1ga9fcb2aa23d342060ebda1d0cf7478856>` status
+
+The status of the transfer.
+
+Read-only, and only for use within transfer callback function.
+
+If this is an isochronous transfer, this field may read COMPLETED even if there were errors in the frames. Use the :ref:`status <doxid-structlibusb__iso__packet__descriptor_1aab21ee2a5835a0e53d7ac5844ee34371>` field in each packet to determine if errors occurred.
+
+.. index:: pair: variable; length
+.. _doxid-structlibusb__transfer_1a68c023e1f40b50aa8604a2495b6a391e:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int length
+
+Length of the data buffer.
+
+.. index:: pair: variable; actual_length
+.. _doxid-structlibusb__transfer_1a7e858f07c48a271a62209d11376ae607:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int actual_length
+
+Actual length of data that was transferred.
+
+Read-only, and only for use within transfer callback function. Not valid for isochronous endpoint transfers.
+
+.. index:: pair: variable; callback
+.. _doxid-structlibusb__transfer_1a69c6df011ec23ff3e481cc98bfff0623:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	:ref:`libusb_transfer_cb_fn<doxid-group__libusb__asyncio_1gac74874519794cd7aa40c0814702b0c88>` callback
+
+Callback function.
+
+This will be invoked when the transfer completes, fails, or is cancelled.
+
+.. index:: pair: variable; user_data
+.. _doxid-structlibusb__transfer_1ab75ab3e7185f08e07a1ae858a35ebb7b:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	void* user_data
+
+User context data to pass to the callback function.
+
+.. index:: pair: variable; buffer
+.. _doxid-structlibusb__transfer_1a7fa594567e074191ce8f28b5fb4a3bea:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	unsigned char* buffer
+
+Data buffer.
+
+.. index:: pair: variable; num_iso_packets
+.. _doxid-structlibusb__transfer_1a87d725a5521c26832fdc13611220014d:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	int num_iso_packets
+
+Number of isochronous packets.
+
+Only used for I/O with isochronous endpoints.
+
+.. index:: pair: variable; iso_packet_desc
+.. _doxid-structlibusb__transfer_1a0de0b13dfae411fc36217d35eb89b138:
+
+.. ref-code-block:: c
+	:class: doxyrest-title-code-block
+
+	struct :ref:`libusb_iso_packet_descriptor<doxid-structlibusb__iso__packet__descriptor>` iso_packet_desc[0]
+
+Isochronous packet descriptors, for isochronous transfers only.
+

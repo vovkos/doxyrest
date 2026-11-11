@@ -16,6 +16,20 @@ set DOWNLOAD_DIR_CMAKE=%DOWNLOAD_DIR:\=/%
 
 :: . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
+:: Dependency versions
+
+set LUA_VERSION=5.4.7
+set LUA_DOWNLOAD_URL=https://github.com/walterschell/Lua/archive/refs/tags/v%LUA_VERSION%.zip
+
+set EXPAT_VERSION=2.7.5
+set EXPAT_VERSION_TAG=R_2_7_5
+set EXPAT_DOWNLOAD_FILE=expat-%EXPAT_VERSION%.tar.gz
+set EXPAT_DOWNLOAD_URL=https://github.com/libexpat/libexpat/releases/download/%EXPAT_VERSION_TAG%/%EXPAT_DOWNLOAD_FILE%
+
+set RAGEL_DOWNLOAD_URL=https://github.com/eloraiby/ragel-windows/raw/master/ragel.exe
+
+:: . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
 :: Ragel
 
 echo Downloading Ragel...
@@ -42,7 +56,7 @@ ren Lua-%LUA_VERSION% lua
 
 powershell "Invoke-WebRequest -Uri %EXPAT_DOWNLOAD_URL% -OutFile %DOWNLOAD_DIR%\%EXPAT_DOWNLOAD_FILE%"
 7z x -y %DOWNLOAD_DIR%\%EXPAT_DOWNLOAD_FILE% -o%DOWNLOAD_DIR%
-7z x -y %DOWNLOAD_DIR%\expat-%EXPAT_VERSION%.tar -o%DOWNLOAD_DIR%
-ren %DOWNLOAD_DIR%\expat-%EXPAT_VERSION% expat
+7z x -y %DOWNLOAD_DIR%\expat-%EXPAT_VERSION%.tar
+ren expat-%EXPAT_VERSION% expat
 
 ::..............................................................................
